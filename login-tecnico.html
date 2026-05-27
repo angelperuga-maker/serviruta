@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Serviruta · Técnico</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--rojo-d:#B01A08;--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--azul:#60A5FA;}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:460px;margin:0 auto;}
+.screen{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:36px 24px;position:relative;overflow:hidden;}
+.screen::before{content:"";position:absolute;top:-80px;right:-80px;width:320px;height:320px;background:radial-gradient(circle,rgba(96,165,250,0.15) 0%,transparent 65%);pointer-events:none;}
+.logo{display:flex;align-items:center;gap:12px;margin-bottom:44px;}
+.logo-mark{width:46px;height:46px;background:var(--azul);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;}
+.logo-brand{font-family:"Syne",sans-serif;font-weight:800;font-size:22px;}
+.logo-brand span{color:var(--azul);}
+.logo-sub{font-size:11px;color:var(--txt3);margin-top:1px;}
+.badge{display:inline-block;background:rgba(96,165,250,0.1);color:var(--azul);border:1px solid rgba(96,165,250,0.3);font-family:"Syne",sans-serif;font-weight:700;font-size:11px;padding:5px 12px;border-radius:20px;margin-bottom:16px;letter-spacing:0.5px;}
+h1{font-family:"Syne",sans-serif;font-weight:800;font-size:28px;line-height:1.1;letter-spacing:-0.8px;margin-bottom:8px;}
+h1 em{color:var(--azul);font-style:normal;}
+.desc{font-size:14px;color:var(--txt3);margin-bottom:32px;line-height:1.6;}
+.lbl{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--txt3);margin-bottom:7px;display:block;}
+.inp{width:100%;background:var(--c2);border:1px solid var(--borde);border-radius:8px;color:var(--txt);font-family:"DM Sans",sans-serif;font-size:16px;padding:14px 16px;outline:none;transition:border-color 0.2s;-webkit-appearance:none;margin-bottom:12px;}
+.inp:focus{border-color:var(--azul);}
+.inp::placeholder{color:var(--txt3);}
+.btn{width:100%;background:var(--azul);border:none;border-radius:8px;color:#000;font-family:"Syne",sans-serif;font-weight:800;font-size:16px;padding:15px;cursor:pointer;transition:background 0.2s;margin-top:4px;}
+.btn:active{transform:scale(0.98);}
+.back{display:block;text-align:center;margin-top:16px;font-size:13px;color:var(--txt3);cursor:pointer;background:none;border:none;font-family:"DM Sans",sans-serif;width:100%;}
+.back:hover{color:var(--txt);}
+.error{background:rgba(232,33,10,0.1);border:1px solid rgba(232,33,10,0.3);color:#f87171;font-size:13px;padding:10px 14px;border-radius:8px;margin-bottom:12px;display:none;}
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="logo">
+    <div class="logo-mark">🔧</div>
+    <div>
+      <div class="logo-brand">SERVI<span>RUTA</span></div>
+      <div class="logo-sub">Portal Técnico</div>
+    </div>
+  </div>
+  <div class="badge">🔧 TÉCNICO</div>
+  <h1>Acceso <em>técnico</em></h1>
+  <p class="desc">Ingresa tu nombre y PIN para acceder a tus herramientas.</p>
+
+  <label class="lbl">Tu nombre</label>
+  <select class="inp" id="nombre">
+    <option value="">Selecciona tu nombre...</option>
+    <option value="Jorge Ramirez">Jorge Ramírez</option>
+    <option value="Felipe Mora">Felipe Mora</option>
+    <option value="Carlos Vega">Carlos Vega</option>
+    <option value="Reynaldo Aguas">Reynaldo Aguas</option>
+  </select>
+
+  <label class="lbl">PIN de acceso</label>
+  <input class="inp" type="password" id="pin" placeholder="••••" maxlength="6" inputmode="numeric">
+
+  <div class="error" id="error">PIN incorrecto. Contacta al coordinador.</div>
+
+  <button class="btn" onclick="entrar()">Entrar →</button>
+  <button class="back" onclick="location.href='index.html'">← Volver al inicio</button>
+</div>
+<script>
+const PINS = {
+  "Jorge Ramirez": "1234",
+  "Felipe Mora": "1234",
+  "Carlos Vega": "1234",
+  "Reynaldo Aguas": "1324"
+}
+function entrar() {
+  const nombre = document.getElementById("nombre").value
+  const pin = document.getElementById("pin").value.trim()
+  const err = document.getElementById("error")
+  if (!nombre) { err.textContent = "Selecciona tu nombre."; err.style.display = "block"; return }
+  if (!pin) { err.textContent = "Ingresa tu PIN."; err.style.display = "block"; return }
+  if (PINS[nombre] !== pin) { err.textContent = "PIN incorrecto."; err.style.display = "block"; return }
+  sessionStorage.setItem("tecnico_nombre", nombre)
+  location.href = "tecnico.html"
+}
+document.getElementById("pin").addEventListener("keydown", e => { if(e.key==="Enter") entrar() })
+</script>
+</body>
+</html>

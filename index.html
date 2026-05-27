@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Serviruta · Acceso</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--rojo-d:#B01A08;--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:460px;margin:0 auto;}
+.screen{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:36px 24px;position:relative;overflow:hidden;}
+.screen::before{content:"";position:absolute;top:-80px;right:-80px;width:320px;height:320px;background:radial-gradient(circle,rgba(232,33,10,0.15) 0%,transparent 65%);pointer-events:none;}
+.logo{display:flex;align-items:center;gap:12px;margin-bottom:44px;}
+.logo-mark{width:46px;height:46px;background:var(--rojo);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:"Syne",sans-serif;font-weight:800;font-size:15px;color:#fff;}
+.logo-brand{font-family:"Syne",sans-serif;font-weight:800;font-size:22px;}
+.logo-brand span{color:var(--rojo);}
+.logo-sub{font-size:11px;color:var(--txt3);margin-top:1px;}
+h1{font-family:"Syne",sans-serif;font-weight:800;font-size:28px;line-height:1.1;letter-spacing:-0.8px;margin-bottom:8px;}
+h1 em{color:var(--amarillo);font-style:normal;}
+.desc{font-size:14px;color:var(--txt3);margin-bottom:32px;line-height:1.6;}
+.roles{display:flex;flex-direction:column;gap:12px;}
+.rol{background:var(--c2);border:1px solid var(--borde);border-radius:12px;padding:18px 20px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:16px;text-decoration:none;color:var(--txt);}
+.rol:hover{transform:translateX(4px);}
+.rol.tec:hover{border-color:var(--azul);background:rgba(96,165,250,0.06);}
+.rol.coo:hover{border-color:var(--rojo);background:rgba(232,33,10,0.06);}
+.rol.ali:hover{border-color:var(--verde);background:rgba(34,197,94,0.06);}
+.rol-icon{width:46px;height:46px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.rol-icon.tec{background:rgba(96,165,250,0.1);}
+.rol-icon.coo{background:rgba(232,33,10,0.08);}
+.rol-icon.ali{background:rgba(34,197,94,0.1);}
+.rol-info{flex:1;}
+.rol-name{font-family:"Syne",sans-serif;font-weight:700;font-size:16px;margin-bottom:3px;}
+.rol-desc{font-size:12px;color:var(--txt3);line-height:1.4;}
+.rol-apps{font-size:11px;color:var(--txt3);margin-top:4px;}
+.arrow{font-size:20px;color:var(--txt3);}
+</style>
+</head>
+<body>
+<div class="screen">
+  <div class="logo">
+    <div class="logo-mark">SRV</div>
+    <div>
+      <div class="logo-brand">SERVI<span>RUTA</span></div>
+      <div class="logo-sub">Hub Digital · Santiago RM</div>
+    </div>
+  </div>
+  <h1>¿Cómo<br>ingresas <em>hoy?</em></h1>
+  <p class="desc">Selecciona tu rol para acceder a tus herramientas.</p>
+  <div class="roles">
+    <a class="rol tec" href="login-tecnico.html">
+      <div class="rol-icon tec">🔧</div>
+      <div class="rol-info">
+        <div class="rol-name">Soy Técnico</div>
+        <div class="rol-desc">Herramientas de trabajo en terreno</div>
+        <div class="rol-apps">Presupuestos · Inspección · Stock</div>
+      </div>
+      <span class="arrow">›</span>
+    </a>
+    <a class="rol coo" href="login-coordinador.html">
+      <div class="rol-icon coo">📊</div>
+      <div class="rol-info">
+        <div class="rol-name">Soy Coordinador</div>
+        <div class="rol-desc">Panel completo de operaciones</div>
+        <div class="rol-apps">Panel · Servicios · Aliados · Stock</div>
+      </div>
+      <span class="arrow">›</span>
+    </a>
+    <a class="rol ali" href="aliados.html">
+      <div class="rol-icon ali">🤝</div>
+      <div class="rol-info">
+        <div class="rol-name">Soy Aliado</div>
+        <div class="rol-desc">Comisiones y referidos en tiempo real</div>
+        <div class="rol-apps">Comisiones · Referidos · Ranking</div>
+      </div>
+      <span class="arrow">›</span>
+    </a>
+  </div>
+</div>
+</body>
+</html>

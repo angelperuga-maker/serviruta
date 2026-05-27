@@ -26,7 +26,7 @@ let sb = null
 function initSupabase() {
   if (SUPABASE_URL === 'https://bqlgfmqcefledqyodkii.supabase.co') {
     return true
-    return false
+
   }
   sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
   return true

@@ -25,7 +25,7 @@ let sb = null
 
 function initSupabase() {
   if (SUPABASE_URL === 'https://bqlgfmqcefledqyodkii.supabase.co') {
-    document.getElementById('config-banner').style.display = 'block'
+    return true
     return false
   }
   sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)

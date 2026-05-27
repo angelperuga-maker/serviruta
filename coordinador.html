@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta · Panel Coordinador</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+// ============================================================
+// 🔧 PASO 1: PEGA AQUÍ TUS CREDENCIALES DE SUPABASE
+// Ve a: supabase.com → tu proyecto → Settings → API
+// ============================================================
+
+const SUPABASE_URL  = 'https://bqlgfmqcefledqyodkii.supabase.co'
+const SUPABASE_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+
+// ============================================================
+// NO TOCAR NADA DEBAJO DE ESTA LÍNEA
+// ============================================================
+
+const COMISION = 13000
+let sb = null
+
+function initSupabase() {
+  if (SUPABASE_URL === 'https://bqlgfmqcefledqyodkii.supabase.co') {
+    document.getElementById('config-banner').style.display = 'flex'
+    return false
+  }
+  sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
+  return true
+}
+</script>
+
+<style>
+:root {
+  --rojo:#E8210A;--rojo-d:#B01A08;--rojo-g:rgba(232,33,10,0.08);
+  --negro:#070709;--s1:#0F0F12;--s2:#161619;--s3:#1E1E22;--s4:#26262B;
+  --borde:#2C2C32;--borde2:#363640;
+  --txt:#E8E6DF;--txt2:#9996A0;--txt3:#5A5865;
+  --verde:#22C55E;--verde-g:rgba(34,197,94,0.1);
+  --amarillo:#F5C518;--amarillo-g:rgba(245,197,24,0.08);
+  --azul:#60A5FA;--azul-g:rgba(96,165,250,0.08);
+  --naranja:#FB923C;--naranja-g:rgba(251,146,60,0.08);
+  --sidebar:220px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--negro);color:var(--txt);font-family:'DM Sans',sans-serif;font-size:14px;display:flex;min-height:100vh;}
+
+/* CONFIG BANNER */
+#config-banner{display:none;position:fixed;top:0;left:0;right:0;z-index:999;background:#1a0a00;border-bottom:2px solid var(--rojo);padding:14px 24px;align-items:center;gap:16px;}
+.banner-icon{font-size:22px;flex-shrink:0;}
+.banner-text{flex:1;}
+.banner-title{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:var(--rojo);}
+.banner-sub{font-size:12px;color:#aaa;margin-top:2px;}
+.banner-code{font-family:'DM Mono',monospace;background:var(--s3);border:1px solid var(--borde);border-radius:4px;padding:3px 8px;font-size:11px;color:var(--amarillo);}
+
+/* SIDEBAR */
+.sidebar{width:var(--sidebar);background:var(--s1);border-right:1px solid var(--borde);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:50;}
+.sidebar-logo{padding:20px 18px 16px;border-bottom:1px solid var(--borde);display:flex;align-items:center;gap:10px;}
+.logo-mark{width:32px;height:32px;background:var(--rojo);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:11px;color:#fff;flex-shrink:0;}
+.logo-text{font-family:'Syne',sans-serif;font-weight:800;font-size:14px;letter-spacing:-0.3px;}
+.logo-text span{color:var(--rojo);}
+.logo-sub{font-size:9px;color:var(--txt3);letter-spacing:1px;text-transform:uppercase;margin-top:1px;}
+.nav-section{padding:16px 10px 8px;}
+.nav-label{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);padding:0 8px;margin-bottom:6px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:6px;cursor:pointer;transition:background 0.15s;color:var(--txt2);font-size:13px;font-weight:500;margin-bottom:2px;}
+.nav-item:hover{background:var(--s3);color:var(--txt);}
+.nav-item.active{background:var(--rojo-g);color:var(--rojo);}
+.nav-item .ni{font-size:16px;width:20px;text-align:center;}
+.nav-badge{margin-left:auto;background:var(--rojo);color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;}
+.sidebar-bottom{margin-top:auto;padding:14px 10px;border-top:1px solid var(--borde);}
+.user-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;}
+.user-av{width:30px;height:30px;background:var(--rojo);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:11px;color:#fff;flex-shrink:0;}
+.user-name{font-size:12px;font-weight:600;}
+.user-role{font-size:10px;color:var(--txt3);}
+
+/* MAIN */
+.main{margin-left:var(--sidebar);flex:1;display:flex;flex-direction:column;}
+.topbar{background:var(--s1);border-bottom:1px solid var(--borde);padding:14px 28px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40;}
+.topbar-title{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.tb-date{font-size:12px;color:var(--txt3);font-family:'DM Mono',monospace;}
+.tb-btn{background:var(--s3);border:1px solid var(--borde);color:var(--txt);font-size:12px;font-weight:600;padding:7px 14px;border-radius:6px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;display:flex;align-items:center;gap:6px;}
+.tb-btn:hover{background:var(--s4);}
+.tb-btn.primary{background:var(--rojo);border-color:var(--rojo);color:#fff;}
+.tb-btn.primary:hover{background:var(--rojo-d);}
+.content{padding:24px 28px;flex:1;}
+.page{display:none;}.page.active{display:block;}
+
+/* KPI */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px;}
+.kpi{background:var(--s2);border:1px solid var(--borde);border-radius:10px;padding:18px 20px;position:relative;overflow:hidden;}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--ac,var(--borde));}
+.kpi-label{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--txt3);margin-bottom:10px;}
+.kpi-val{font-family:'Syne',sans-serif;font-weight:800;font-size:28px;line-height:1;color:var(--ac,var(--txt));margin-bottom:6px;}
+.kpi-sub{font-size:12px;color:var(--txt3);}
+.kpi-icon{position:absolute;bottom:14px;right:16px;font-size:28px;opacity:0.1;}
+
+/* PANEL */
+.two-col{display:grid;grid-template-columns:1fr 360px;gap:16px;margin-bottom:16px;}
+.full-col{margin-bottom:16px;}
+.panel{background:var(--s2);border:1px solid var(--borde);border-radius:10px;overflow:hidden;}
+.panel-head{padding:14px 18px;border-bottom:1px solid var(--borde);display:flex;align-items:center;justify-content:space-between;}
+.panel-title{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;}
+.panel-body{padding:16px 18px;}
+
+/* TABLE */
+.table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;}
+th{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--txt3);padding:8px 12px;text-align:left;border-bottom:1px solid var(--borde);white-space:nowrap;}
+td{padding:11px 12px;border-bottom:1px solid var(--borde);font-size:13px;color:var(--txt);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:rgba(255,255,255,0.015);}
+.td-mono{font-family:'DM Mono',monospace;font-size:12px;color:var(--txt2);}
+.td-bold{font-weight:600;}
+
+/* BADGE */
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 9px;border-radius:20px;}
+.badge.verde{background:var(--verde-g);color:var(--verde);}
+.badge.amarillo{background:var(--amarillo-g);color:var(--amarillo);}
+.badge.azul{background:var(--azul-g);color:var(--azul);}
+.badge.rojo{background:var(--rojo-g);color:var(--rojo);}
+.badge.naranja{background:var(--naranja-g);color:var(--naranja);}
+
+/* BTNS */
+.act-btn{background:var(--s3);border:1px solid var(--borde);color:var(--txt2);font-size:11px;font-weight:600;padding:5px 10px;border-radius:5px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.15s;white-space:nowrap;}
+.act-btn:hover{background:var(--s4);color:var(--txt);}
+.act-btn.verde:hover{background:var(--verde-g);border-color:rgba(34,197,94,0.3);color:var(--verde);}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);backdrop-filter:blur(4px);z-index:200;display:none;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--s2);border:1px solid var(--borde);border-radius:12px;width:100%;max-width:480px;overflow:hidden;animation:mIn 0.25s ease;}
+@keyframes mIn{from{opacity:0;transform:scale(0.96);}to{opacity:1;transform:scale(1);}}
+.modal-head{padding:18px 22px;border-bottom:1px solid var(--borde);display:flex;align-items:center;justify-content:space-between;}
+.modal-title{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;}
+.modal-close{background:none;border:none;color:var(--txt3);font-size:20px;cursor:pointer;}
+.modal-body{padding:22px;}
+.form-group{margin-bottom:16px;}
+.form-label{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--txt3);margin-bottom:7px;display:block;}
+.form-input,.form-select{width:100%;background:var(--s3);border:1px solid var(--borde);border-radius:6px;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:14px;padding:10px 13px;outline:none;transition:border-color 0.2s;}
+.form-input:focus,.form-select:focus{border-color:var(--rojo);}
+.form-input::placeholder{color:var(--txt3);}
+.form-select option{background:var(--s3);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.modal-footer{padding:14px 22px;border-top:1px solid var(--borde);display:flex;justify-content:flex-end;gap:8px;}
+.btn-cancel{background:var(--s3);border:1px solid var(--borde);color:var(--txt2);font-family:'Syne',sans-serif;font-weight:700;font-size:13px;padding:9px 18px;border-radius:6px;cursor:pointer;}
+.btn-save{background:var(--rojo);border:none;color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;padding:9px 20px;border-radius:6px;cursor:pointer;}
+.btn-save:hover{background:var(--rojo-d);}
+
+/* LOADING */
+.loading{display:flex;align-items:center;justify-content:center;padding:40px;gap:10px;color:var(--txt3);font-size:13px;}
+.spinner{width:18px;height:18px;border:2px solid var(--borde);border-top-color:var(--rojo);border-radius:50%;animation:spin 0.7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* TOAST */
+.toast{position:fixed;bottom:28px;right:28px;background:var(--s3);border:1px solid var(--borde);border-radius:8px;padding:12px 18px;font-size:13px;font-weight:500;z-index:999;opacity:0;transform:translateY(8px);transition:all 0.3s;pointer-events:none;}
+.toast.show{opacity:1;transform:translateY(0);}
+.toast.success{border-color:rgba(34,197,94,0.4);color:var(--verde);}
+.toast.error{border-color:rgba(232,33,10,0.4);color:var(--rojo);}
+
+/* ALIADO DETALLE */
+.al-card{background:var(--s3);border:1px solid var(--borde);border-radius:8px;padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;margin-bottom:8px;transition:border-color 0.15s;}
+.al-card:hover{border-color:var(--borde2);}
+.al-av{width:36px;height:36px;border-radius:50%;background:var(--rojo);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:13px;color:#fff;flex-shrink:0;}
+.al-info{flex:1;}
+.al-name{font-weight:600;font-size:13px;}
+.al-code{font-family:'DM Mono',monospace;font-size:11px;color:var(--txt3);}
+.al-right{text-align:right;}
+.al-amount{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:var(--verde);}
+.al-refs{font-size:11px;color:var(--txt3);}
+
+.pago-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--borde);}
+.pago-row:last-child{border-bottom:none;}
+
+@media(max-width:1100px){.kpi-grid{grid-template-columns:repeat(2,1fr);}.two-col{grid-template-columns:1fr;}}
+@media(max-width:768px){.sidebar{display:none;}.main{margin-left:0;}.content{padding:16px;}}
+</style>
+</head>
+<body>
+
+<!-- CONFIG BANNER -->
+<div id="config-banner">
+  <div class="banner-icon">⚠️</div>
+  <div class="banner-text">
+    <div class="banner-title">Faltan las credenciales de Supabase</div>
+    <div class="banner-sub">Abre este archivo en un editor de texto y reemplaza <span class="banner-code">PEGA_AQUI_TU_PROJECT_URL</span> y <span class="banner-code">PEGA_AQUI_TU_ANON_KEY</span> con tus valores reales.</div>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-mark">SRV</div>
+    <div><div class="logo-text">SERVI<span>RUTA</span></div><div class="logo-sub">Coordinador</div></div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Principal</div>
+    <div class="nav-item active" onclick="goPage('pg-dashboard',this)"><span class="ni">📊</span> Dashboard</div>
+    <div class="nav-item" onclick="goPage('pg-servicios',this)"><span class="ni">🔧</span> Servicios <span class="nav-badge" id="nb-pendientes">…</span></div>
+    <div class="nav-item" onclick="goPage('pg-aliados',this)"><span class="ni">🤝</span> Aliados</div>
+    <div class="nav-item" onclick="goPage('pg-pagos',this)"><span class="ni">💸</span> Pagos</div>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Operaciones</div>
+    <div class="nav-item" onclick="goPage('pg-tecnicos',this)"><span class="ni">👷</span> Técnicos</div>
+    <div class="nav-item" onclick="goPage('pg-stock',this)"><span class="ni">📦</span> Stock <span class="nav-badge" id="nb-stock-alerta" style="display:none;background:var(--naranja)">⚠</span></div>
+  </div>
+  <div class="sidebar-bottom">
+    <div class="user-row">
+      <div class="user-av">CR</div>
+      <div><div class="user-name">Coordinador</div><div class="user-role">serviruta.cl</div></div>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-title" id="page-heading">Dashboard</div>
+    <div class="topbar-right">
+      <div class="tb-date" id="fecha-hoy"></div>
+      <button class="tb-btn" onclick="loadAll()">↻ Actualizar</button>
+      <button class="tb-btn" onclick="openModal('modal-servicio')">＋ Servicio</button>
+      <button class="tb-btn primary" onclick="openModal('modal-aliado')">＋ Aliado</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div class="page active" id="pg-dashboard">
+      <div class="kpi-grid">
+        <div class="kpi" style="--ac:var(--verde)"><div class="kpi-label">Servicios cerrados</div><div class="kpi-val" id="kpi-cerrados">…</div><div class="kpi-sub">Este mes</div><div class="kpi-icon">🔧</div></div>
+        <div class="kpi" style="--ac:var(--amarillo)"><div class="kpi-label">Comisiones a pagar</div><div class="kpi-val" id="kpi-comisiones">…</div><div class="kpi-sub">Próximo corte</div><div class="kpi-icon">💰</div></div>
+        <div class="kpi" style="--ac:var(--azul)"><div class="kpi-label">Aliados activos</div><div class="kpi-val" id="kpi-aliados">…</div><div class="kpi-sub">En la red</div><div class="kpi-icon">🤝</div></div>
+        <div class="kpi" style="--ac:var(--naranja,#FB923C)"><div class="kpi-label">Pendientes</div><div class="kpi-val" id="kpi-pendientes" style="color:#FB923C">…</div><div class="kpi-sub">Requieren acción</div><div class="kpi-icon">⏳</div></div>
+      </div>
+      <div class="two-col">
+        <div class="panel">
+          <div class="panel-head"><div class="panel-title">Servicios recientes</div><span style="font-size:12px;color:var(--rojo);cursor:pointer" onclick="goPage('pg-servicios',null)">Ver todos →</span></div>
+          <div class="table-wrap"><table id="tbl-recientes"><tr><td><div class="loading"><div class="spinner"></div> Cargando...</div></td></tr></table></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><div class="panel-title">Top aliados</div></div>
+          <div class="panel-body" id="top-aliados"><div class="loading"><div class="spinner"></div></div></div>
+        </div>
+      </div>
+      <div class="panel full-col">
+        <div class="panel-head">
+          <div class="panel-title">💸 Próximo corte — <span style="color:var(--amarillo)">Viernes 30 de mayo</span></div>
+          <button class="tb-btn primary" onclick="procesarPagos()">Procesar todos</button>
+        </div>
+        <div class="panel-body" id="proximos-pagos"><div class="loading"><div class="spinner"></div></div></div>
+      </div>
+
+      <!-- MINI STOCK DASHBOARD -->
+      <div class="panel full-col">
+        <div class="panel-head">
+          <div class="panel-title">📦 Estado del stock</div>
+          <span style="font-size:12px;color:var(--rojo);cursor:pointer" onclick="goPage('pg-stock',null)">Ver todo →</span>
+        </div>
+        <div class="panel-body" id="mini-stock-wrap">
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px">
+            <div style="background:var(--s3);border:1px solid var(--borde);border-radius:8px;padding:12px;text-align:center">
+              <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--verde)" id="dash-stock-ok">—</div>
+              <div style="font-size:11px;color:var(--txt3)">Con stock</div>
+            </div>
+            <div style="background:var(--s3);border:1px solid var(--borde);border-radius:8px;padding:12px;text-align:center">
+              <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--naranja)" id="dash-stock-bajo">—</div>
+              <div style="font-size:11px;color:var(--txt3)">Stock bajo</div>
+            </div>
+            <div style="background:var(--s3);border:1px solid var(--borde);border-radius:8px;padding:12px;text-align:center">
+              <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:22px;color:var(--rojo)" id="dash-stock-vacio">—</div>
+              <div style="font-size:11px;color:var(--txt3)">Sin stock</div>
+            </div>
+          </div>
+          <div id="dash-stock-alertas"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SERVICIOS -->
+    <div class="page" id="pg-servicios">
+      <div class="panel full-col">
+        <div class="panel-head">
+          <div class="panel-title">Todos los servicios</div>
+          <div style="display:flex;gap:8px">
+            <select class="form-select" style="width:auto;padding:6px 10px;font-size:12px" onchange="loadServicios(this.value)">
+              <option value="">Todos</option>
+              <option value="cerrado">Cerrados</option>
+              <option value="pendiente">Pendientes</option>
+              <option value="contactado">Contactados</option>
+            </select>
+            <button class="tb-btn primary" onclick="openModal('modal-servicio')">＋ Nuevo</button>
+          </div>
+        </div>
+        <div class="table-wrap"><table id="tbl-servicios"><tr><td><div class="loading"><div class="spinner"></div> Cargando...</div></td></tr></table></div>
+      </div>
+    </div>
+
+    <!-- ALIADOS -->
+    <div class="page" id="pg-aliados">
+      <div class="two-col">
+        <div class="panel">
+          <div class="panel-head">
+            <div class="panel-title">Red de aliados</div>
+            <button class="tb-btn primary" onclick="openModal('modal-aliado')">＋ Nuevo</button>
+          </div>
+          <div class="table-wrap"><table id="tbl-aliados"><tr><td><div class="loading"><div class="spinner"></div></div></td></tr></table></div>
+        </div>
+        <div class="panel">
+          <div class="panel-head"><div class="panel-title">Detalle</div></div>
+          <div class="panel-body" id="detalle-aliado"><div style="text-align:center;padding:40px;color:var(--txt3)">👆 Selecciona un aliado</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGOS -->
+    <div class="page" id="pg-pagos">
+      <div class="panel full-col">
+        <div class="panel-head"><div class="panel-title">Historial de pagos</div></div>
+        <div class="table-wrap"><table id="tbl-pagos"><tr><td><div class="loading"><div class="spinner"></div></div></td></tr></table></div>
+      </div>
+    </div>
+
+    <!-- TÉCNICOS -->
+    <div class="page" id="pg-tecnicos">
+      <div class="panel full-col">
+        <div class="panel-head"><div class="panel-title">Técnicos</div></div>
+        <div class="table-wrap"><table id="tbl-tecnicos"><tr><td><div class="loading"><div class="spinner"></div></div></td></tr></table></div>
+      </div>
+    </div>
+
+    <!-- STOCK -->
+    <div class="page" id="pg-stock">
+      <div class="full-col" style="display:flex;gap:12px;margin-bottom:16px">
+        <div class="panel" style="flex:1">
+          <div class="panel-head">
+            <div class="panel-title">📦 Inventario completo</div>
+            <div style="display:flex;gap:8px">
+              <select class="form-select" style="width:auto;padding:6px 10px;font-size:12px" onchange="renderStockPanel(this.value)">
+                <option value="">Todas las categorías</option>
+                <option value="aceites">Aceites</option>
+                <option value="baterias">Baterías</option>
+                <option value="luces">Luces</option>
+                <option value="filtros">Filtros</option>
+                <option value="frenos">Frenos</option>
+                <option value="otros">Otros</option>
+              </select>
+              <button class="tb-btn primary" onclick="openModalStock()">＋ Producto</button>
+            </div>
+          </div>
+          <div class="table-wrap"><table id="tbl-stock"></table></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- MODAL SERVICIO -->
+<div class="modal-overlay" id="modal-servicio">
+  <div class="modal">
+    <div class="modal-head"><div class="modal-title">Registrar servicio</div><button class="modal-close" onclick="closeModal('modal-servicio')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Cliente</label><input class="form-input" id="f-cliente" placeholder="Nombre"></div>
+        <div class="form-group"><label class="form-label">Teléfono</label><input class="form-input" id="f-tel" placeholder="+56 9 XXXX XXXX"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Servicio</label>
+          <select class="form-select" id="f-servicio">
+            <option>Vulcanización</option><option>Cambio de aceite</option><option>Scanner</option>
+            <option>Batería</option><option>Frenos</option><option>Electricidad</option>
+            <option>Embrague</option><option>Servicio pesado</option><option>Otro</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Estado</label>
+          <select class="form-select" id="f-estado">
+            <option value="contactado">Contactado</option>
+            <option value="pendiente">Pendiente</option>
+            <option value="cerrado">Cerrado ✅</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Aliado</label><select class="form-select" id="f-aliado"><option value="">Sin aliado</option></select></div>
+        <div class="form-group"><label class="form-label">Técnico</label><select class="form-select" id="f-tecnico"><option value="">Sin asignar</option></select></div>
+      </div>
+      <div class="form-group"><label class="form-label">Dirección</label><input class="form-input" id="f-dir" placeholder="Calle, número, comuna"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('modal-servicio')">Cancelar</button>
+      <button class="btn-save" onclick="guardarServicio()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL ALIADO -->
+<div class="modal-overlay" id="modal-aliado">
+  <div class="modal">
+    <div class="modal-head"><div class="modal-title">Nuevo aliado</div><button class="modal-close" onclick="closeModal('modal-aliado')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Nombre</label><input class="form-input" id="a-nombre" placeholder="Juan Pérez"></div>
+        <div class="form-group"><label class="form-label">Teléfono</label><input class="form-input" id="a-tel" placeholder="+56 9 XXXX XXXX"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Tipo</label>
+          <select class="form-select" id="a-tipo">
+            <option>Gruero</option><option>Vendedor batería</option><option>Repuestera</option>
+            <option>Conserje</option><option>Conductor app</option><option>Otro</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Código único</label><input class="form-input" id="a-codigo" placeholder="GRU-NOMBRE01" style="font-family:'DM Mono',monospace"></div>
+      </div>
+      <div class="form-group"><label class="form-label">PIN (4 dígitos)</label><input class="form-input" id="a-pin" placeholder="1234" maxlength="4" inputmode="numeric"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal('modal-aliado')">Cancelar</button>
+      <button class="btn-save" onclick="guardarAliado()">Crear aliado</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ════════════════════════════════
+// HELPERS
+// ════════════════════════════════
+const badge = (e) => {
+  const m={cerrado:'verde',pendiente:'amarillo',contactado:'azul',activo:'verde',disponible:'azul',pagado:'verde'}
+  const l={cerrado:'✓ Cerrado',pendiente:'⏳ Pendiente',contactado:'📞 Contactado',activo:'● Activo',disponible:'◎ Disponible',pagado:'✓ Pagado'}
+  return `<span class="badge ${m[e]||'azul'}">${l[e]||e}</span>`
+}
+
+function toast(msg, type='') {
+  const t = document.getElementById('toast')
+  t.textContent = msg; t.className = 'toast' + (type ? ' '+type : '')
+  t.classList.add('show')
+  setTimeout(() => t.classList.remove('show'), 3000)
+}
+
+function openModal(id) { document.getElementById(id).classList.add('open') }
+function closeModal(id) { document.getElementById(id).classList.remove('open') }
+document.querySelectorAll('.modal-overlay').forEach(m =>
+  m.addEventListener('click', e => { if(e.target===m) m.classList.remove('open') }))
+
+const PAGE_TITLES = {
+  'pg-dashboard':'Dashboard','pg-servicios':'Servicios',
+  'pg-aliados':'Red de Aliados','pg-pagos':'Pagos',
+  'pg-tecnicos':'Técnicos','pg-stock':'Stock & Inventario'
+}
+
+function goPage(id, navEl) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'))
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'))
+  document.getElementById(id).classList.add('active')
+  if(navEl) navEl.classList.add('active')
+  document.getElementById('page-heading').textContent = PAGE_TITLES[id] || ''
+  if(id==='pg-servicios') loadServicios()
+  if(id==='pg-aliados') loadAliados()
+  if(id==='pg-pagos') loadPagos()
+  if(id==='pg-tecnicos') loadTecnicos()
+  if(id==='pg-stock') renderStockPanel()
+}
+
+// ════════════════════════════════
+// CARGAR DATOS DESDE SUPABASE
+// ════════════════════════════════
+async function loadAll() {
+  if(!initSupabase()) return
+  await Promise.all([loadKPIs(), loadRecientes(), loadTopAliados(), loadProximosPagos()])
+}
+
+async function loadKPIs() {
+  const [{ data: svcs }, { data: als }] = await Promise.all([
+    sb.from('servicios').select('estado, aliado_id, comision_pagada'),
+    sb.from('aliados').select('activo')
+  ])
+  const cerrados  = svcs?.filter(s => s.estado === 'cerrado').length || 0
+  const pendientes= svcs?.filter(s => s.estado !== 'cerrado').length || 0
+  const sinPagar  = svcs?.filter(s => s.estado === 'cerrado' && !s.comision_pagada && s.aliado_id).length || 0
+  const activos   = als?.filter(a => a.activo).length || 0
+
+  document.getElementById('kpi-cerrados').textContent   = cerrados
+  document.getElementById('kpi-comisiones').textContent = '$' + (sinPagar * 13000).toLocaleString('es-CL')
+  document.getElementById('kpi-aliados').textContent    = activos
+  document.getElementById('kpi-pendientes').textContent = pendientes
+  document.getElementById('nb-pendientes').textContent  = pendientes
+}
+
+async function loadRecientes() {
+  const { data } = await sb.from('servicios_detalle').select('*').order('created_at',{ascending:false}).limit(6)
+  const el = document.getElementById('tbl-recientes')
+  if(!data?.length){ el.innerHTML='<tr><td style="color:var(--txt3);padding:20px">Sin servicios aún</td></tr>'; return }
+  el.innerHTML = `<thead><tr><th>Cliente</th><th>Servicio</th><th>Aliado</th><th>Estado</th><th></th></tr></thead><tbody>` +
+    data.map(s => `<tr>
+      <td><div class="td-bold">${s.cliente}</div><div class="td-mono">${s.fecha_servicio||''}</div></td>
+      <td>${s.tipo_servicio}</td>
+      <td class="td-mono">${s.aliado_codigo||'—'}</td>
+      <td>${badge(s.estado)}</td>
+      <td>${s.estado!=='cerrado'?`<button class="act-btn verde" onclick="cerrarServicio('${s.id}','${s.aliado_id||''}')">✓ Cerrar</button>`:''}</td>
+    </tr>`).join('') + `</tbody>`
+}
+
+async function loadServicios(filtro='') {
+  let q = sb.from('servicios_detalle').select('*').order('created_at',{ascending:false})
+  if(filtro) q = q.eq('estado', filtro)
+  const { data } = await q
+  const el = document.getElementById('tbl-servicios')
+  if(!data?.length){ el.innerHTML='<tr><td style="color:var(--txt3);padding:20px">Sin servicios</td></tr>'; return }
+  el.innerHTML = `<thead><tr><th>#</th><th>Cliente</th><th>Servicio</th><th>Técnico</th><th>Aliado</th><th>Fecha</th><th>Estado</th><th>Comisión</th><th></th></tr></thead><tbody>` +
+    data.map(s => `<tr>
+      <td class="td-mono">${s.id.substring(0,8)}</td>
+      <td><div class="td-bold">${s.cliente}</div><div style="font-size:11px;color:var(--txt3)">${s.direccion||''}</div></td>
+      <td>${s.tipo_servicio}</td>
+      <td>${s.tecnico_nombre||'—'}</td>
+      <td class="td-mono">${s.aliado_codigo||'—'}</td>
+      <td class="td-mono">${s.fecha_servicio||''}</td>
+      <td>${badge(s.estado)}</td>
+      <td style="font-family:'Syne',sans-serif;font-weight:700;color:${s.estado==='cerrado'?'var(--verde)':'var(--txt3)'}">${s.estado==='cerrado'?'$13.000':'—'}</td>
+      <td>${s.estado!=='cerrado'?`<button class="act-btn verde" onclick="cerrarServicio('${s.id}','${s.aliado_id||''}')">✓ Cerrar</button>`:''}</td>
+    </tr>`).join('') + `</tbody>`
+}
+
+async function loadTopAliados() {
+  const { data } = await sb.from('resumen_aliados').select('*').order('refs_cerrados',{ascending:false}).limit(5)
+  const el = document.getElementById('top-aliados')
+  if(!data?.length){ el.innerHTML='<div style="color:var(--txt3);text-align:center;padding:20px">Sin aliados aún</div>'; return }
+  el.innerHTML = data.map(a => `
+    <div class="al-card" onclick="goPage('pg-aliados',null)">
+      <div class="al-av">${a.nombre.split(' ').map(x=>x[0]).join('')}</div>
+      <div class="al-info"><div class="al-name">${a.nombre}</div><div class="al-code">${a.codigo} · ${a.tipo}</div></div>
+      <div class="al-right">
+        <div class="al-amount">$${(a.comision_pendiente||0).toLocaleString('es-CL')}</div>
+        <div class="al-refs">${a.refs_cerrados||0} servicios</div>
+      </div>
+    </div>`).join('')
+}
+
+async function loadProximosPagos() {
+  const { data } = await sb.from('resumen_aliados').select('*').gt('comision_pendiente',0)
+  const el = document.getElementById('proximos-pagos')
+  if(!data?.length){ el.innerHTML='<div style="color:var(--txt3);text-align:center;padding:20px">✅ Sin pagos pendientes</div>'; return }
+  el.innerHTML = data.map(a => `
+    <div class="pago-row">
+      <div>
+        <div style="font-weight:600">${a.nombre} <span class="td-mono">${a.codigo}</span></div>
+        <div style="font-size:11px;color:var(--txt3)">${a.refs_cerrados} servicios × $13.000</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="font-family:'Syne',sans-serif;font-weight:700;color:var(--amarillo)">$${(a.comision_pendiente||0).toLocaleString('es-CL')}</div>
+        <button class="act-btn verde" onclick="pagarAliado('${a.id}','${a.nombre}',${a.comision_pendiente})">Pagar ✓</button>
+      </div>
+    </div>`).join('')
+}
+
+async function loadAliados() {
+  const { data } = await sb.from('resumen_aliados').select('*').order('refs_cerrados',{ascending:false})
+  const el = document.getElementById('tbl-aliados')
+  if(!data?.length){ el.innerHTML='<tr><td style="color:var(--txt3);padding:20px">Sin aliados aún</td></tr>'; return }
+  el.innerHTML = `<thead><tr><th>Nombre</th><th>Tipo</th><th>Código</th><th>Cerrados</th><th>Pendiente</th><th>Estado</th><th></th></tr></thead><tbody>` +
+    data.map(a => `<tr style="cursor:pointer" onclick="verDetalleAliado('${a.id}')">
+      <td class="td-bold">${a.nombre}</td>
+      <td>${a.tipo}</td>
+      <td class="td-mono">${a.codigo}</td>
+      <td style="font-family:'Syne',sans-serif;font-weight:700">${a.refs_cerrados||0}</td>
+      <td style="font-family:'Syne',sans-serif;font-weight:700;color:var(--verde)">$${(a.comision_pendiente||0).toLocaleString('es-CL')}</td>
+      <td>${badge(a.activo?'activo':'contactado')}</td>
+      <td><button class="act-btn" onclick="event.stopPropagation();waAliado('${a.telefono}','${a.nombre}',${a.refs_cerrados||0},${a.comision_pendiente||0})">💬 WA</button></td>
+    </tr>`).join('') + `</tbody>`
+  // poblar select modal
+  const sel = document.getElementById('f-aliado')
+  sel.innerHTML = '<option value="">Sin aliado</option>' + data.map(a=>`<option value="${a.id}">${a.nombre} (${a.codigo})</option>`).join('')
+}
+
+async function verDetalleAliado(id) {
+  const { data: a } = await sb.from('resumen_aliados').select('*').eq('id',id).single()
+  const { data: refs } = await sb.from('servicios_detalle').select('*').eq('aliado_id',id).order('created_at',{ascending:false}).limit(5)
+  document.getElementById('detalle-aliado').innerHTML = `
+    <div style="text-align:center;margin-bottom:16px">
+      <div style="width:52px;height:52px;background:var(--rojo);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:17px;color:#fff;margin:0 auto 10px">${a.nombre.split(' ').map(x=>x[0]).join('')}</div>
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px">${a.nombre}</div>
+      <div style="font-size:12px;color:var(--txt3);margin-top:2px">${a.tipo}</div>
+      <div style="font-family:'DM Mono',monospace;font-size:12px;color:var(--amarillo);margin-top:6px">${a.codigo}</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px">
+      <div style="background:var(--s3);border:1px solid var(--borde);border-radius:6px;padding:10px;text-align:center">
+        <div style="font-family:'Syne',sans-serif;font-weight:800;color:var(--verde)">${a.refs_cerrados||0}</div>
+        <div style="font-size:10px;color:var(--txt3)">Cerrados</div>
+      </div>
+      <div style="background:var(--s3);border:1px solid var(--borde);border-radius:6px;padding:10px;text-align:center">
+        <div style="font-family:'Syne',sans-serif;font-weight:800;color:var(--amarillo)">$${(a.comision_pendiente||0).toLocaleString('es-CL')}</div>
+        <div style="font-size:10px;color:var(--txt3)">Pendiente</div>
+      </div>
+      <div style="background:var(--s3);border:1px solid var(--borde);border-radius:6px;padding:10px;text-align:center">
+        <div style="font-family:'Syne',sans-serif;font-weight:800">${a.refs_pendientes||0}</div>
+        <div style="font-size:10px;color:var(--txt3)">En proceso</div>
+      </div>
+    </div>
+    <div style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--txt3);margin-bottom:8px">Últimos referidos</div>
+    ${(refs||[]).map(s=>`
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--borde)">
+        <div><div style="font-size:13px;font-weight:500">${s.cliente}</div><div style="font-size:11px;color:var(--txt3)">${s.tipo_servicio} · ${s.fecha_servicio||''}</div></div>
+        ${badge(s.estado)}
+      </div>`).join('')}
+    <button onclick="waAliado('${a.telefono}','${a.nombre}',${a.refs_cerrados||0},${a.comision_pendiente||0})" style="width:100%;margin-top:14px;background:var(--verde-g);border:1px solid rgba(34,197,94,0.25);color:var(--verde);font-family:'Syne',sans-serif;font-weight:700;font-size:13px;padding:11px;border-radius:8px;cursor:pointer">💬 WhatsApp</button>`
+}
+
+async function loadPagos() {
+  const { data } = await sb.from('pagos').select('*, aliados(nombre,codigo)').order('created_at',{ascending:false})
+  const el = document.getElementById('tbl-pagos')
+  if(!data?.length){ el.innerHTML='<tr><td style="color:var(--txt3);padding:20px">Sin pagos registrados</td></tr>'; return }
+  el.innerHTML = `<thead><tr><th>Aliado</th><th>Fecha</th><th>Servicios</th><th>Monto</th><th>Estado</th></tr></thead><tbody>` +
+    data.map(p=>`<tr>
+      <td><div class="td-bold">${p.aliados?.nombre||'—'}</div><div class="td-mono">${p.aliados?.codigo||''}</div></td>
+      <td class="td-mono">${p.fecha_pago}</td>
+      <td>${p.servicios_count}</td>
+      <td style="font-family:'Syne',sans-serif;font-weight:700;color:var(--verde)">$${p.monto.toLocaleString('es-CL')}</td>
+      <td>${badge(p.estado)}</td>
+    </tr>`).join('') + `</tbody>`
+}
+
+async function loadTecnicos() {
+  const { data } = await sb.from('tecnicos').select('*')
+  const el = document.getElementById('tbl-tecnicos')
+  if(!data?.length){ el.innerHTML='<tr><td style="color:var(--txt3);padding:20px">Sin técnicos</td></tr>'; return }
+  el.innerHTML = `<thead><tr><th>Nombre</th><th>Teléfono</th><th>Zona</th><th>Estado</th></tr></thead><tbody>` +
+    data.map(t=>`<tr>
+      <td class="td-bold">${t.nombre}</td>
+      <td class="td-mono">${t.telefono||'—'}</td>
+      <td>${t.zona||'—'}</td>
+      <td>${badge(t.activo?'activo':'contactado')}</td>
+    </tr>`).join('') + `</tbody>`
+  // poblar select
+  const sel = document.getElementById('f-tecnico')
+  sel.innerHTML = '<option value="">Sin asignar</option>' + data.map(t=>`<option value="${t.id}">${t.nombre}</option>`).join('')
+}
+
+// ════════════════════════════════
+// ACCIONES
+// ════════════════════════════════
+async function cerrarServicio(id, aliadoId) {
+  const { error } = await sb.from('servicios').update({estado:'cerrado'}).eq('id',id)
+  if(error){ toast('❌ Error al cerrar servicio','error'); return }
+  toast('✅ Servicio cerrado · +$13.000 para el aliado','success')
+  await loadAll()
+  loadServicios()
+}
+
+async function guardarServicio() {
+  const cliente = document.getElementById('f-cliente').value.trim()
+  if(!cliente){ toast('⚠️ Ingresa el nombre del cliente','error'); return }
+  const { error } = await sb.from('servicios').insert({
+    cliente,
+    telefono: document.getElementById('f-tel').value,
+    tipo_servicio: document.getElementById('f-servicio').value,
+    estado: document.getElementById('f-estado').value,
+    aliado_id: document.getElementById('f-aliado').value || null,
+    tecnico_id: document.getElementById('f-tecnico').value || null,
+    direccion: document.getElementById('f-dir').value
+  })
+  if(error){ toast('❌ Error: '+error.message,'error'); return }
+  closeModal('modal-servicio')
+  toast('✅ Servicio registrado','success')
+  ;['f-cliente','f-tel','f-dir'].forEach(id=>document.getElementById(id).value='')
+  await loadAll()
+}
+
+async function guardarAliado() {
+  const nombre = document.getElementById('a-nombre').value.trim()
+  const codigo = document.getElementById('a-codigo').value.trim().toUpperCase()
+  if(!nombre||!codigo){ toast('⚠️ Nombre y código son obligatorios','error'); return }
+  const { error } = await sb.from('aliados').insert({
+    nombre, codigo,
+    tipo: document.getElementById('a-tipo').value,
+    telefono: document.getElementById('a-tel').value,
+    pin: document.getElementById('a-pin').value
+  })
+  if(error){ toast('❌ Error: '+error.message,'error'); return }
+  closeModal('modal-aliado')
+  toast(`✅ Aliado ${nombre} creado · ${codigo}`,'success')
+  ;['a-nombre','a-tel','a-codigo','a-pin'].forEach(id=>document.getElementById(id).value='')
+  await loadAll()
+}
+
+async function pagarAliado(aliadoId, nombre, monto) {
+  // Registrar pago
+  const count = Math.round(monto/13000)
+  const { error: e1 } = await sb.from('pagos').insert({ aliado_id:aliadoId, monto, servicios_count:count, estado:'pagado' })
+  // Marcar servicios como comision_pagada
+  const { error: e2 } = await sb.from('servicios').update({comision_pagada:true}).eq('aliado_id',aliadoId).eq('estado','cerrado').eq('comision_pagada',false)
+  if(e1||e2){ toast('❌ Error al procesar pago','error'); return }
+  toast(`💸 Pago de $${monto.toLocaleString('es-CL')} a ${nombre}`, 'success')
+  await loadAll()
+}
+
+async function procesarPagos() {
+  const { data } = await sb.from('resumen_aliados').select('*').gt('comision_pendiente',0)
+  if(!data?.length){ toast('✅ No hay pagos pendientes'); return }
+  for(const a of data) await pagarAliado(a.id, a.nombre, a.comision_pendiente)
+  toast(`✅ ${data.length} aliados pagados`, 'success')
+}
+
+function waAliado(tel, nombre, refs, monto) {
+  const msg = `Hola ${nombre.split(' ')[0]} 👋\n\nTe confirmamos *${refs} servicio(s)* cerrado(s).\n💰 Comisión: *$${monto.toLocaleString('es-CL')}*\n📅 Próximo pago: viernes 30 de mayo\n\n¡Gracias por ser parte de Serviruta! 🔧`
+  window.open(`https://wa.me/${(tel||'').replace(/\D/g,'')}?text=${encodeURIComponent(msg)}`, '_blank')
+}
+
+
+// ════════════════════════════════
+// MÓDULO STOCK (local + sincronizado)
+// ════════════════════════════════
+let PRODUCTOS_STOCK = [
+  {id:1,nombre:'Aceite 5W-30 1L',cat:'aceites',precio:12000,stock:8,minimo:3,unidad:'L',sku:'ACE-5W30'},
+  {id:2,nombre:'Aceite 10W-40 1L',cat:'aceites',precio:10000,stock:6,minimo:3,unidad:'L',sku:'ACE-10W40'},
+  {id:3,nombre:'Aceite Diesel 15W-40',cat:'aceites',precio:11000,stock:2,minimo:3,unidad:'L',sku:'ACE-DSL'},
+  {id:4,nombre:'Filtro de aceite',cat:'filtros',precio:8000,stock:5,minimo:2,unidad:'un',sku:'FIL-ACE'},
+  {id:5,nombre:'Filtro de aire',cat:'filtros',precio:12000,stock:3,minimo:2,unidad:'un',sku:'FIL-AIR'},
+  {id:6,nombre:'Bateria 40Ah',cat:'baterias',precio:85000,stock:2,minimo:1,unidad:'un',sku:'BAT-40AH'},
+  {id:7,nombre:'Bateria 60Ah',cat:'baterias',precio:110000,stock:1,minimo:1,unidad:'un',sku:'BAT-60AH'},
+  {id:8,nombre:'Bateria 90Ah',cat:'baterias',precio:145000,stock:0,minimo:1,unidad:'un',sku:'BAT-90AH'},
+  {id:9,nombre:'Ampolleta H4',cat:'luces',precio:6000,stock:10,minimo:4,unidad:'un',sku:'LUZ-H4'},
+  {id:10,nombre:'Ampolleta H7',cat:'luces',precio:7000,stock:8,minimo:4,unidad:'un',sku:'LUZ-H7'},
+  {id:11,nombre:'Kit LED par',cat:'luces',precio:22000,stock:3,minimo:2,unidad:'par',sku:'LED-PAR'},
+  {id:12,nombre:'Pastillas freno del.',cat:'frenos',precio:25000,stock:4,minimo:2,unidad:'par',sku:'PAS-DEL'},
+  {id:13,nombre:'Pastillas freno tras.',cat:'frenos',precio:22000,stock:2,minimo:2,unidad:'par',sku:'PAS-TRA'},
+  {id:14,nombre:'Refrigerante 1L',cat:'otros',precio:7000,stock:5,minimo:2,unidad:'L',sku:'REF-1L'},
+  {id:15,nombre:'Liquido frenos DOT4',cat:'frenos',precio:8000,stock:3,minimo:2,unidad:'L',sku:'DOT4'},
+]
+
+let editStockId = null
+
+function getStockBadge(p) {
+  if (p.stock === 0) return '<span class="badge rojo">Sin stock</span>'
+  if (p.stock <= p.minimo) return '<span class="badge naranja">Stock bajo</span>'
+  return '<span class="badge verde">OK</span>'
+}
+
+function getCatIconS(cat) {
+  const m = {aceites:'🛢️',baterias:'🔋',luces:'💡',filtros:'🔩',frenos:'🔧',otros:'📦'}
+  return m[cat]||'📦'
+}
+
+function renderStockPanel(filtro='') {
+  const lista = filtro ? PRODUCTOS_STOCK.filter(p=>p.cat===filtro) : PRODUCTOS_STOCK
+  const el = document.getElementById('tbl-stock')
+  if (!el) return
+  el.innerHTML = '<thead><tr><th>Producto</th><th>Categoría</th><th>SKU</th><th>Precio</th><th>Stock</th><th>Estado</th><th></th></tr></thead><tbody>' +
+    lista.map(p=>`<tr>
+      <td class="td-bold">${getCatIconS(p.cat)} ${p.nombre}</td>
+      <td style="color:var(--txt2);font-size:12px;text-transform:capitalize">${p.cat}</td>
+      <td class="td-mono">${p.sku}</td>
+      <td style="font-family:'Syne',sans-serif;font-weight:700;color:var(--amarillo)">$${p.precio.toLocaleString('es-CL')}</td>
+      <td>
+        <div style="display:flex;align-items:center;gap:6px">
+          <button onclick="ajustarStockPanel(${p.id},-1)" style="width:22px;height:22px;border-radius:4px;border:1px solid var(--borde);background:var(--s3);color:var(--txt2);cursor:pointer;font-size:13px">−</button>
+          <span style="font-family:'Syne',sans-serif;font-weight:800;font-size:15px;color:${p.stock===0?'var(--rojo)':p.stock<=p.minimo?'var(--naranja)':'var(--verde)'};min-width:24px;text-align:center">${p.stock}</span>
+          <button onclick="ajustarStockPanel(${p.id},1)" style="width:22px;height:22px;border-radius:4px;border:1px solid var(--borde);background:var(--s3);color:var(--txt2);cursor:pointer;font-size:13px">+</button>
+          <span style="font-size:11px;color:var(--txt3)">${p.unidad}</span>
+        </div>
+      </td>
+      <td>${getStockBadge(p)}</td>
+      <td><button class="act-btn" onclick="openModalStock(${p.id})">✏️ Editar</button></td>
+    </tr>`).join('') + '</tbody>'
+
+  actualizarMiniStock()
+}
+
+function ajustarStockPanel(id, delta) {
+  const p = PRODUCTOS_STOCK.find(x=>x.id===id)
+  if (!p) return
+  p.stock = Math.max(0, p.stock + delta)
+  renderStockPanel()
+  toast(delta>0?'📥 +1 '+p.nombre:'📤 -1 '+p.nombre, delta>0?'success':'')
+}
+
+function actualizarMiniStock() {
+  const ok    = PRODUCTOS_STOCK.filter(p=>p.stock>p.minimo).length
+  const bajo  = PRODUCTOS_STOCK.filter(p=>p.stock>0&&p.stock<=p.minimo).length
+  const vacio = PRODUCTOS_STOCK.filter(p=>p.stock===0).length
+
+  const elOk = document.getElementById('dash-stock-ok')
+  const elBajo = document.getElementById('dash-stock-bajo')
+  const elVacio = document.getElementById('dash-stock-vacio')
+  if (elOk) elOk.textContent = ok
+  if (elBajo) elBajo.textContent = bajo
+  if (elVacio) elVacio.textContent = vacio
+
+  const alertasEl = document.getElementById('dash-stock-alertas')
+  const nb = document.getElementById('nb-stock-alerta')
+  const criticos = PRODUCTOS_STOCK.filter(p=>p.stock===0||p.stock<=p.minimo)
+
+  if (nb) {
+    if (criticos.length > 0) { nb.style.display='inline'; nb.textContent='⚠ '+criticos.length }
+    else { nb.style.display='none' }
+  }
+
+  if (alertasEl) {
+    if (criticos.length === 0) {
+      alertasEl.innerHTML = '<div style="color:var(--verde);font-size:13px">✅ Todo el stock en niveles normales</div>'
+    } else {
+      alertasEl.innerHTML = criticos.map(p=>`
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--borde);font-size:13px">
+          <span>${getCatIconS(p.cat)} ${p.nombre}</span>
+          <span style="font-family:'Syne',sans-serif;font-weight:700;color:${p.stock===0?'var(--rojo)':'var(--naranja)'}">
+            ${p.stock===0?'SIN STOCK':p.stock+' '+p.unidad+' (bajo mín.)'}
+          </span>
+        </div>`).join('')
+    }
+  }
+}
+
+function openModalStock(id) {
+  editStockId = id || null
+  const p = id ? PRODUCTOS_STOCK.find(x=>x.id===id) : null
+  
+  // Crear modal dinámico si no existe
+  let m = document.getElementById('modal-stock')
+  if (!m) {
+    m = document.createElement('div')
+    m.id = 'modal-stock'
+    m.className = 'modal-overlay'
+    m.innerHTML = `
+      <div class="modal" style="max-width:480px">
+        <div class="modal-head"><div class="modal-title" id="ms-titulo">Nuevo producto</div>
+          <button class="modal-close" onclick="document.getElementById('modal-stock').classList.remove('open')">✕</button></div>
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Nombre</label><input class="form-input" id="ms-nombre" placeholder="Ej: Aceite 5W-30"></div>
+            <div class="form-group"><label class="form-label">SKU</label><input class="form-input" id="ms-sku" placeholder="ACE-5W30" style="font-family:monospace;font-size:12px"></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Categoría</label>
+              <select class="form-select" id="ms-cat">
+                <option value="aceites">Aceites</option><option value="baterias">Baterias</option>
+                <option value="luces">Luces</option><option value="filtros">Filtros</option>
+                <option value="frenos">Frenos</option><option value="otros">Otros</option>
+              </select></div>
+            <div class="form-group"><label class="form-label">Unidad</label>
+              <select class="form-select" id="ms-unidad">
+                <option value="un">Unidad</option><option value="L">Litro</option>
+                <option value="par">Par</option><option value="kg">Kilo</option>
+              </select></div>
+          </div>
+          <div class="form-row">
+            <div class="form-group"><label class="form-label">Precio venta ($)</label><input class="form-input" id="ms-precio" type="number" placeholder="15000"></div>
+            <div class="form-group"><label class="form-label">Stock actual</label><input class="form-input" id="ms-stock" type="number" placeholder="10"></div>
+          </div>
+          <div class="form-group"><label class="form-label">Stock mínimo (alerta)</label><input class="form-input" id="ms-minimo" type="number" placeholder="2"></div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-cancel" onclick="document.getElementById('modal-stock').classList.remove('open')">Cancelar</button>
+          <button class="btn-save" onclick="guardarProductoStock()">Guardar</button>
+        </div>
+      </div>`
+    document.body.appendChild(m)
+    m.addEventListener('click', e=>{ if(e.target===m) m.classList.remove('open') })
+  }
+
+  document.getElementById('ms-titulo').textContent = p ? 'Editar producto' : 'Nuevo producto'
+  document.getElementById('ms-nombre').value = p ? p.nombre : ''
+  document.getElementById('ms-sku').value = p ? p.sku : ''
+  document.getElementById('ms-cat').value = p ? p.cat : 'aceites'
+  document.getElementById('ms-unidad').value = p ? p.unidad : 'un'
+  document.getElementById('ms-precio').value = p ? p.precio : ''
+  document.getElementById('ms-stock').value = p ? p.stock : ''
+  document.getElementById('ms-minimo').value = p ? p.minimo : '2'
+  m.classList.add('open')
+}
+
+function guardarProductoStock() {
+  const nombre = document.getElementById('ms-nombre').value.trim()
+  if (!nombre) { toast('Ingresa el nombre','error'); return }
+  const data = {
+    nombre,
+    cat:    document.getElementById('ms-cat').value,
+    unidad: document.getElementById('ms-unidad').value,
+    precio: parseInt(document.getElementById('ms-precio').value)||0,
+    stock:  parseInt(document.getElementById('ms-stock').value)||0,
+    minimo: parseInt(document.getElementById('ms-minimo').value)||2,
+    sku:    document.getElementById('ms-sku').value.trim()||nombre.substring(0,6).toUpperCase(),
+  }
+  if (editStockId) {
+    const idx = PRODUCTOS_STOCK.findIndex(x=>x.id===editStockId)
+    if (idx>=0) PRODUCTOS_STOCK[idx] = { ...PRODUCTOS_STOCK[idx], ...data }
+    toast('✅ Producto actualizado','success')
+  } else {
+    data.id = Date.now()
+    PRODUCTOS_STOCK.push(data)
+    toast('✅ Producto agregado','success')
+  }
+  document.getElementById('modal-stock').classList.remove('open')
+  renderStockPanel()
+  actualizarMiniStock()
+}
+
+// ════════════════════════════════
+// INIT
+// ════════════════════════════════
+document.getElementById('fecha-hoy').textContent = new Date().toLocaleDateString('es-CL',{weekday:'long',day:'numeric',month:'long'})
+
+window.addEventListener('load', () => {
+  if(initSupabase()) loadAll()
+  actualizarMiniStock()
+})
+</script>
+</body>
+</html>

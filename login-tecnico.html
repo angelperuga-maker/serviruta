@@ -76,7 +76,7 @@ function entrar() {
   if (!pin) { err.textContent = "Ingresa tu PIN."; err.style.display = "block"; return }
   if (PINS[nombre] !== pin) { err.textContent = "PIN incorrecto."; err.style.display = "block"; return }
   sessionStorage.setItem("tecnico_nombre", nombre)
-  location.href = "tecnico.html"
+  location.href = "tecnico-v2.html"
 }
 document.getElementById("pin").addEventListener("keydown", e => { if(e.key==="Enter") entrar() })
 </script>

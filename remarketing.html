@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta - Remarketing</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--rojo-g:rgba(232,33,10,0.08);--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--verde-g:rgba(34,197,94,0.1);--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:600px;margin:0 auto;}
+.top{background:var(--c1);border-bottom:1px solid var(--borde);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.top-title{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
+.top-back{background:none;border:1px solid var(--borde);color:var(--txt3);font-size:11px;padding:5px 12px;border-radius:6px;cursor:pointer;}
+.body{padding:14px 16px 80px;}
+.filtros{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px;}
+.filtro{flex-shrink:0;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--borde);background:var(--c2);color:var(--txt3);}
+.filtro.active{background:var(--rojo);border-color:var(--rojo);color:#fff;}
+.card{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin-bottom:10px;}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px;}
+.card-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
+.card-sub{font-size:11px;color:var(--txt3);margin-top:2px;}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
+.tag{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;border:1px solid;}
+.tag.frenos-urgentes{background:rgba(232,33,10,0.1);color:var(--rojo);border-color:rgba(232,33,10,0.3);}
+.tag.cambio-aceite{background:rgba(245,197,24,0.1);color:var(--amarillo);border-color:rgba(245,197,24,0.3);}
+.tag.bateria-cambiar{background:rgba(96,165,250,0.1);color:var(--azul);border-color:rgba(96,165,250,0.3);}
+.tag.neumaticos{background:rgba(251,146,60,0.1);color:var(--naranja);border-color:rgba(251,146,60,0.3);}
+.tag.revision-general{background:var(--verde-g);color:var(--verde);border-color:rgba(34,197,94,0.3);}
+.tag.cliente-vip{background:rgba(167,139,250,0.1);color:#A78BFA;border-color:rgba(167,139,250,0.3);}
+.actions{display:flex;gap:8px;}
+.btn{padding:8px 14px;border-radius:8px;font-family:"Syne",sans-serif;font-weight:700;font-size:11px;cursor:pointer;border:none;}
+.btn-wa{background:#25D366;color:#fff;}
+.btn-sec{background:var(--c3);border:1px solid var(--borde);color:var(--txt2);}
+.empty{text-align:center;padding:48px;color:var(--txt3);}
+.loading{text-align:center;padding:48px;color:var(--txt3);}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;}
+.stat{background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:10px;text-align:center;}
+.sv{font-family:"Syne",sans-serif;font-weight:800;font-size:20px;}
+.sl{font-size:9px;color:var(--txt3);margin-top:2px;text-transform:uppercase;}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--c3);border:1px solid var(--borde);border-radius:8px;padding:11px 18px;font-size:13px;opacity:0;transition:all 0.25s;pointer-events:none;white-space:nowrap;z-index:999;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+<div class="top">
+  <button class="top-back" onclick="location.href='menu-coordinador.html'">← Volver</button>
+  <div class="top-title">🏷️ Remarketing</div>
+  <button onclick="load()" style="background:none;border:none;color:var(--txt3);cursor:pointer;font-size:20px;">&#8635;</button>
+</div>
+<div class="body">
+  <div class="stats">
+    <div class="stat"><div class="sv" id="st-total" style="color:var(--rojo)">0</div><div class="sl">Clientes</div></div>
+    <div class="stat"><div class="sv" id="st-urgentes" style="color:var(--naranja)">0</div><div class="sl">Urgentes</div></div>
+    <div class="stat"><div class="sv" id="st-vip" style="color:#A78BFA">0</div><div class="sl">VIP</div></div>
+  </div>
+  <div class="filtros">
+    <div class="filtro active" onclick="filtrar('todos',this)">Todos</div>
+    <div class="filtro" onclick="filtrar('frenos-urgentes',this)">🔴 Frenos</div>
+    <div class="filtro" onclick="filtrar('cambio-aceite',this)">🛢️ Aceite</div>
+    <div class="filtro" onclick="filtrar('bateria-cambiar',this)">🔋 Batería</div>
+    <div class="filtro" onclick="filtrar('neumaticos',this)">🛞 Neumáticos</div>
+    <div class="filtro" onclick="filtrar('revision-general',this)">🔧 Revisión</div>
+    <div class="filtro" onclick="filtrar('cliente-vip',this)">⭐ VIP</div>
+  </div>
+  <div id="lista"><div class="loading">Cargando...</div></div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co';
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s';
+var db=null,insp=[],filtroActual='todos';
+var TAG_LABELS={'frenos-urgentes':'🔴 Frenos urgentes','cambio-aceite':'🛢️ Cambio aceite','bateria-cambiar':'🔋 Batería','neumaticos':'🛞 Neumáticos','revision-general':'🔧 Revisión general','cliente-vip':'⭐ Cliente VIP'};
+function getDB(){if(!db)db=supabase.createClient(SB_URL,SB_KEY);return db;}
+async function load(){
+  document.getElementById('lista').innerHTML='<div class="loading">Cargando...</div>';
+  var r=await getDB().from('inspecciones').select('*').order('created_at',{ascending:false});
+  insp=r.data||[];
+  document.getElementById('st-total').textContent=insp.length;
+  document.getElementById('st-urgentes').textContent=insp.filter(function(i){return (i.etiquetas||[]).indexOf('frenos-urgentes')>=0;}).length;
+  document.getElementById('st-vip').textContent=insp.filter(function(i){return (i.etiquetas||[]).indexOf('cliente-vip')>=0;}).length;
+  render();
+}
+function render(){
+  var lista=insp;
+  if(filtroActual!=='todos')lista=insp.filter(function(i){return (i.etiquetas||[]).indexOf(filtroActual)>=0;});
+  var el=document.getElementById('lista');
+  if(!lista.length){el.innerHTML='<div class="empty">Sin clientes con esta etiqueta</div>';return;}
+  el.innerHTML=lista.map(function(i){
+    var tags=(i.etiquetas||[]).map(function(t){return '<span class="tag '+t+'">'+(TAG_LABELS[t]||t)+'</span>';}).join('');
+    var fecha=i.fecha?new Date(i.fecha).toLocaleDateString('es-CL'):'';
+    return '<div class="card"><div class="card-top"><div><div class="card-nombre">'+(i.cliente||'Sin nombre')+'</div><div class="card-sub">'+(i.vehiculo||'')+' · '+i.tecnico+' · '+fecha+'</div></div></div>'+
+    (tags?'<div class="tags">'+tags+'</div>':'')+
+    '<div class="actions">'+
+    (i.telefono?'<button class="btn btn-wa" onclick="enviarWA(\''+i.telefono+'\',\''+i.cliente+'\','+JSON.stringify(i.etiquetas||[]).replace(/'/g,'')+')" >💬 WhatsApp</button>':'')+
+    '</div></div>';
+  }).join('');
+}
+function filtrar(f,el){filtroActual=f;document.querySelectorAll('.filtro').forEach(function(x){x.classList.remove('active');});el.classList.add('active');render();}
+function enviarWA(tel,cliente,tags){
+  var msgs={
+    'frenos-urgentes':'Hola '+cliente+' te escribe Serviruta. En la ultima revision de tu vehiculo notamos que tus frenos requieren atencion urgente. Podemos visitarte cuando lo necesites. +56 9 8505 8250',
+    'cambio-aceite':'Hola '+cliente+' te escribe Serviruta. Es momento de hacer el cambio de aceite de tu vehiculo para mantenerlo en optimas condiciones. Coordinamos la visita cuando quieras. +56 9 8505 8250',
+    'bateria-cambiar':'Hola '+cliente+' te escribe Serviruta. La bateria de tu vehiculo esta proxima a requerir cambio. Te lo hacemos a domicilio sin que muevas el auto. +56 9 8505 8250',
+    'neumaticos':'Hola '+cliente+' te escribe Serviruta. Los neumaticos de tu vehiculo estan desgastados. Podemos asesorarte y cambiarlos donde estes. +56 9 8505 8250',
+    'revision-general':'Hola '+cliente+' te escribe Serviruta. Tu vehiculo esta listo para su proxima revision general. Coordinamos cuando te quede bien. +56 9 8505 8250',
+    'cliente-vip':'Hola '+cliente+' te escribe Serviruta. Como cliente VIP queriamos avisarte que tenemos disponibilidad para visitarte esta semana. +56 9 8505 8250'
+  };
+  var tag=Array.isArray(tags)&&tags.length?tags[0]:'revision-general';
+  var msg=msgs[tag]||('Hola '+cliente+' te escribe Serviruta. Estamos disponibles para visitarte. +56 9 8505 8250');
+  window.open('https://wa.me/56'+tel.replace(/\D/g,'')+'?text='+encodeURIComponent(msg),'_blank');
+}
+function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2500);}
+load();
+</script>
+</body>
+</html>

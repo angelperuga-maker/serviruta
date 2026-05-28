@@ -207,6 +207,7 @@ body{background:var(--negro);color:var(--txt);font-family:'DM Sans',sans-serif;m
 .toast.err{border-color:rgba(232,33,10,0.4);color:var(--rojo);}
 
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
 </head>
 <body>
 <div class="srv-back-bar">
@@ -290,6 +291,16 @@ body{background:var(--negro);color:var(--txt);font-family:'DM Sans',sans-serif;m
      APP COORDINADOR
 ══════════════════════════════ -->
 <script>
+
+// SUPABASE
+const SB_URL = 'https://bqlgfmqcefledqyodkii.supabase.co'
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+let sbClient = null
+function getSB() {
+  if (!sbClient) sbClient = supabase.createClient(SB_URL, SB_KEY)
+  return sbClient
+}
+
 // Auto-entrar como técnico
 
 // ════════════════════════════════
@@ -349,7 +360,7 @@ function tDelItem(id) {
   tRenderItems()
 }
 
-function tEnviar() {
+async function tEnviar() {
   const nombre = document.getElementById('t-nombre').value.trim()
   const tel    = document.getElementById('t-tel').value.trim()
   if (!nombre) { toast('⚠️ Ingresa el nombre del cliente','err'); return }
@@ -370,6 +381,21 @@ function tEnviar() {
     pptoNum: pptoNum++,
     fecha: new Date().toLocaleDateString('es-CL')
   }
+  // Guardar en Supabase
+  try {
+    if (!sbClient) sbClient = supabase.createClient('""" + SUPA_URL + """', '""" + SUPA_KEY + """')
+    await sbClient.from('presupuestos').insert({
+      numero: sol.pptoNum,
+      tecnico: sol.tecnico,
+      cliente: sol.cliente,
+      telefono: sol.tel,
+      vehiculo: sol.veh,
+      auto: sol.auto,
+      items: sol.items,
+      obs: sol.obs,
+      estado: 'nueva'
+    })
+  } catch(e) { console.warn('Supabase error:', e.message) }
   solicitudes.unshift(sol)
 
   // Mostrar estado

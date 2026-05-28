@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta · Presupuestos</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script>
+if (!sessionStorage.getItem("tecnico_nombre")) { location.href = "login-tecnico.html"; }
+</script>
+<style>
+.srv-back-bar{position:sticky;top:0;z-index:1000;background:#0F0F12;border-bottom:1px solid #2C2C32;padding:10px 16px;display:flex;align-items:center;gap:10px;}
+.srv-back-btn{background:none;border:1px solid #2C2C32;color:#9996A0;font-size:12px;font-weight:600;padding:6px 14px;border-radius:6px;cursor:pointer;font-family:"DM Sans",sans-serif;}
+.srv-back-title{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;color:#F0EDE6;}
+
+:root{
+  --rojo:#E8210A;--rojo-d:#B01A08;--rojo-g:rgba(232,33,10,0.08);
+  --negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--c4:#282830;
+  --borde:#2C2C32;--borde2:#3A3A42;
+  --txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;
+  --verde:#22C55E;--verde-g:rgba(34,197,94,0.1);
+  --amarillo:#F5C518;--amarillo-g:rgba(245,197,24,0.08);
+  --azul:#60A5FA;--naranja:#FB923C;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{background:var(--negro);color:var(--txt);font-family:'DM Sans',sans-serif;min-height:100vh;max-width:460px;margin:0 auto;}
+
+/* ── SELECTOR DE ROL ── */
+#role-screen{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:36px 24px;position:relative;overflow:hidden;}
+#role-screen::before{content:'';position:absolute;top:-80px;right:-80px;width:300px;height:300px;background:radial-gradient(circle,rgba(232,33,10,0.15) 0%,transparent 65%);pointer-events:none;}
+.role-logo{display:flex;align-items:center;gap:12px;margin-bottom:52px;}
+.role-mark{width:46px;height:46px;background:var(--rojo);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:15px;color:#fff;}
+.role-brand{font-family:'Syne',sans-serif;font-weight:800;font-size:22px;}
+.role-brand span{color:var(--rojo);}
+.role-eyebrow{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--rojo);margin-bottom:10px;}
+.role-title{font-family:'Syne',sans-serif;font-weight:800;font-size:30px;line-height:1.1;letter-spacing:-0.8px;margin-bottom:8px;}
+.role-sub{font-size:14px;color:var(--txt3);margin-bottom:36px;line-height:1.6;}
+.role-cards{display:flex;flex-direction:column;gap:12px;}
+.role-card{background:var(--c2);border:1px solid var(--borde);border-radius:12px;padding:20px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:16px;}
+.role-card:hover{border-color:var(--borde2);transform:translateX(4px);}
+.role-card.tecnico:hover{border-color:rgba(96,165,250,0.5);background:rgba(96,165,250,0.05);}
+.role-card.coord:hover{border-color:rgba(232,33,10,0.5);background:var(--rojo-g);}
+.role-icon{width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.role-icon.t{background:rgba(96,165,250,0.1);}
+.role-icon.c{background:var(--rojo-g);}
+.role-info{}
+.role-name{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;margin-bottom:3px;}
+.role-desc{font-size:12px;color:var(--txt3);line-height:1.5;}
+.role-arrow{margin-left:auto;font-size:20px;color:var(--txt3);}
+
+/* ── HEADER ── */
+.hdr{background:var(--c1);border-bottom:1px solid var(--borde);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.hdr-left{display:flex;align-items:center;gap:9px;}
+.hdr-mark{width:30px;height:30px;background:var(--rojo);border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:9px;color:#fff;}
+.hdr-title{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;}
+.hdr-badge{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;font-family:'Syne',sans-serif;}
+.hdr-badge.azul{background:rgba(96,165,250,0.12);color:var(--azul);border:1px solid rgba(96,165,250,0.25);}
+.hdr-badge.rojo{background:var(--rojo-g);color:var(--rojo);border:1px solid rgba(232,33,10,0.25);}
+.hdr-back{background:none;border:none;color:var(--txt3);font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.hdr-back:hover{color:var(--txt);}
+
+/* ── APPS ── */
+#app-tecnico,#app-coord{display:none;}
+.page{display:none;padding:18px;}.page.active{display:block;animation:fu 0.2s ease;}
+@keyframes fu{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── FORM BASE ── */
+.sec{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);margin:16px 0 10px;display:flex;align-items:center;gap:8px;}
+.sec::after{content:'';flex:1;height:1px;background:var(--borde);}
+.lbl{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--txt3);margin-bottom:6px;display:block;}
+.inp{width:100%;background:var(--c2);border:1px solid var(--borde);border-radius:8px;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:15px;padding:11px 13px;outline:none;transition:border-color 0.2s;-webkit-appearance:none;margin-bottom:10px;}
+.inp:focus{border-color:var(--rojo);}
+.inp::placeholder{color:var(--txt3);}
+.inp-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+
+/* ── ÍTEMS TÉCNICO (sin precios) ── */
+.items-wrap{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
+.item-t{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:12px 14px;display:flex;gap:10px;align-items:center;}
+.item-t-num{font-family:'Syne',sans-serif;font-weight:800;font-size:12px;color:var(--txt3);min-width:18px;}
+.item-t-inp{flex:1;background:var(--c3);border:1px solid var(--borde);border-radius:6px;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:14px;padding:10px 12px;outline:none;transition:border-color 0.2s;}
+.item-t-inp:focus{border-color:var(--azul);}
+.item-t-inp::placeholder{color:var(--txt3);}
+.item-t-cant{width:50px;background:var(--c3);border:1px solid var(--borde);border-radius:6px;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:14px;padding:10px 8px;outline:none;text-align:center;}
+.item-del{background:none;border:none;color:var(--txt3);font-size:17px;cursor:pointer;padding:4px;}
+.item-del:hover{color:var(--rojo);}
+
+.btn-add{width:100%;background:var(--c2);border:1px dashed var(--borde);border-radius:10px;color:var(--txt2);font-family:'Syne',sans-serif;font-weight:700;font-size:13px;padding:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:14px;transition:all 0.2s;}
+.btn-add:hover{background:var(--c3);color:var(--txt);}
+
+/* ESTADO TÉCNICO */
+.estado-card{border-radius:12px;padding:20px;text-align:center;margin-bottom:14px;}
+.estado-card.pendiente{background:var(--amarillo-g);border:1px solid rgba(245,197,24,0.25);}
+.estado-card.enviado{background:var(--verde-g);border:1px solid rgba(34,197,94,0.25);}
+.estado-card.aceptado{background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.4);}
+.estado-card.rechazado{background:var(--rojo-g);border:1px solid rgba(232,33,10,0.3);}
+.estado-icon{font-size:36px;margin-bottom:10px;}
+.estado-title{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;margin-bottom:4px;}
+.estado-sub{font-size:13px;color:var(--txt2);line-height:1.5;}
+
+/* ── ÍTEMS COORDINADOR (con precios) ── */
+.item-c{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:12px 14px;margin-bottom:8px;}
+.item-c-top{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.item-c-num{font-family:'Syne',sans-serif;font-weight:800;font-size:11px;color:var(--txt3);min-width:18px;}
+.item-c-desc{flex:1;font-size:14px;color:var(--txt);font-weight:500;}
+.item-c-cant{font-size:11px;color:var(--txt3);}
+.item-c-precio-row{display:flex;align-items:center;gap:8px;}
+.price-wrap{flex:1;display:flex;align-items:center;background:var(--c3);border:1px solid var(--borde);border-radius:6px;overflow:hidden;transition:border-color 0.2s;}
+.price-wrap:focus-within{border-color:var(--amarillo);}
+.price-prefix{padding:8px 8px 8px 12px;font-size:13px;color:var(--txt3);}
+.price-inp{flex:1;background:transparent;border:none;color:var(--amarillo);font-family:'Syne',sans-serif;font-weight:700;font-size:15px;padding:8px 10px 8px 0;outline:none;}
+.price-inp::placeholder{color:var(--txt3);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:400;}
+.item-c-sub{font-size:11px;color:var(--verde);font-family:'Syne',sans-serif;font-weight:700;margin-left:auto;}
+.item-c-nota{width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:6px;color:var(--txt2);font-family:'DM Sans',sans-serif;font-size:12px;padding:7px 10px;outline:none;margin-top:6px;}
+.item-c-nota:focus{border-color:var(--borde2);}
+.item-c-nota::placeholder{color:var(--txt3);}
+
+/* TOTAL CARD */
+.total-card{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin-bottom:14px;}
+.total-row{display:flex;justify-content:space-between;font-size:13px;color:var(--txt2);padding:3px 0;}
+.total-row.verde{color:var(--verde);}
+.total-final{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--borde);padding-top:10px;margin-top:6px;}
+.total-final .tl{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;}
+.total-final .tv{font-family:'Syne',sans-serif;font-weight:800;font-size:24px;color:var(--verde);}
+
+/* DESCUENTO */
+.desc-row{display:flex;gap:8px;margin-bottom:12px;}
+.desc-inp{flex:1;background:var(--c2);border:1px solid var(--borde);border-radius:8px;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:14px;padding:10px 12px;outline:none;}
+.desc-inp:focus{border-color:var(--verde);}
+.desc-sel{background:var(--c2);border:1px solid var(--borde);border-radius:8px;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:13px;padding:10px 12px;outline:none;-webkit-appearance:none;}
+
+/* NOTAS */
+.notas{width:100%;background:var(--c2);border:1px solid var(--borde);border-radius:8px;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:14px;padding:11px 13px;outline:none;resize:none;min-height:68px;margin-bottom:14px;}
+.notas:focus{border-color:var(--rojo);}
+.notas::placeholder{color:var(--txt3);}
+
+/* SOLICITUDES LIST (coordinador) */
+.soli-card{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin-bottom:10px;cursor:pointer;transition:all 0.15s;}
+.soli-card:hover{border-color:var(--borde2);}
+.soli-card.nueva{border-left:3px solid var(--naranja);}
+.soli-card.valorizada{border-left:3px solid var(--amarillo);}
+.soli-card.enviada{border-left:3px solid var(--verde);}
+.soli-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px;}
+.soli-cliente{font-weight:600;font-size:14px;}
+.soli-veh{font-size:11px;color:var(--txt3);margin-top:2px;}
+.soli-badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;font-family:'Syne',sans-serif;white-space:nowrap;}
+.soli-badge.nueva{background:rgba(251,146,60,0.1);color:var(--naranja);border:1px solid rgba(251,146,60,0.25);}
+.soli-badge.valorizada{background:var(--amarillo-g);color:var(--amarillo);border:1px solid rgba(245,197,24,0.25);}
+.soli-badge.enviada{background:var(--verde-g);color:var(--verde);border:1px solid rgba(34,197,94,0.25);}
+.soli-items{font-size:12px;color:var(--txt2);margin-top:4px;line-height:1.5;}
+.soli-tecnico{font-size:11px;color:var(--txt3);margin-top:6px;display:flex;align-items:center;gap:4px;}
+
+/* PREVIEW PPTO */
+.ppto{background:#fff;border-radius:12px;overflow:hidden;margin-bottom:16px;box-shadow:0 4px 24px rgba(0,0,0,0.4);}
+.ph{background:linear-gradient(135deg,var(--rojo),var(--rojo-d));padding:18px 20px;}
+.ph-top{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.ph-mark{width:36px;height:36px;background:rgba(255,255,255,0.2);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:11px;color:#fff;}
+.ph-brand{font-family:'Syne',sans-serif;font-weight:800;font-size:16px;color:#fff;}
+.ph-sub{font-size:10px;color:rgba(255,255,255,0.7);}
+.ph-meta{display:flex;justify-content:space-between;align-items:flex-end;}
+.ph-num{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;color:#fff;}
+.ph-fecha{font-size:10px;color:rgba(255,255,255,0.75);text-align:right;line-height:1.5;}
+.pc{padding:12px 18px;background:#F8F8F8;border-bottom:1px solid #EEE;}
+.pc-lbl{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#AAA;margin-bottom:3px;}
+.pc-name{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:#111;}
+.pc-det{font-size:11px;color:#666;margin-top:2px;}
+.pb{padding:12px 18px;}
+.pb-sec{font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#AAA;padding-bottom:7px;border-bottom:1px solid #EEE;margin-bottom:8px;}
+.pi{display:flex;justify-content:space-between;align-items:flex-start;padding:6px 0;border-bottom:1px dashed #EEE;}
+.pi:last-child{border-bottom:none;}
+.pi-name{font-size:13px;font-weight:600;color:#222;}
+.pi-det{font-size:11px;color:#999;margin-top:1px;}
+.pi-price{font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:#111;text-align:right;flex-shrink:0;padding-left:10px;}
+.pt{padding:12px 18px;background:#F8F8F8;border-top:1px solid #EEE;}
+.pt-row{display:flex;justify-content:space-between;font-size:12px;color:#888;padding:2px 0;}
+.pt-final{display:flex;justify-content:space-between;border-top:2px solid #DDD;margin-top:6px;padding-top:7px;}
+.pt-final span:first-child{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:#111;}
+.pt-final span:last-child{font-family:'Syne',sans-serif;font-weight:800;font-size:20px;color:var(--rojo);}
+.pn{padding:10px 18px;border-top:1px solid #EEE;}
+.pn-lbl{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#AAA;margin-bottom:4px;}
+.pn-txt{font-size:12px;color:#555;line-height:1.6;}
+.pv{padding:8px 18px;background:#FFF7ED;border-top:1px solid #FDDCAA;display:flex;align-items:center;gap:6px;}
+.pv p{font-size:11px;color:#92400E;}
+.pf{padding:10px 18px;background:var(--rojo);text-align:center;}
+.pf p{font-size:11px;color:rgba(255,255,255,0.85);}
+.pf strong{color:#fff;}
+
+/* BTNS */
+.btn{width:100%;padding:13px;border-radius:10px;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;cursor:pointer;border:none;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:8px;transition:all 0.15s;letter-spacing:0.3px;}
+.btn:active{transform:scale(0.98);}
+.btn-rojo{background:var(--rojo);color:#fff;}
+.btn-rojo:hover{background:var(--rojo-d);}
+.btn-azul{background:var(--azul);color:#000;}
+.btn-wa{background:#25D366;color:#fff;}
+.btn-wa:hover{background:#1DAF5C;}
+.btn-sec{background:var(--c2);border:1px solid var(--borde);color:var(--txt2);}
+.btn-sec:hover{background:var(--c3);color:var(--txt);}
+.btn-row{display:flex;gap:8px;}.btn-row .btn{margin-bottom:0;}
+
+/* EMPTY */
+.empty{text-align:center;padding:48px 20px;color:var(--txt3);}
+.empty-icon{font-size:40px;margin-bottom:12px;}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--c3);border:1px solid var(--borde);border-radius:8px;padding:11px 18px;font-size:13px;font-weight:500;z-index:999;opacity:0;transition:all 0.25s;pointer-events:none;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.ok{border-color:rgba(34,197,94,0.4);color:var(--verde);}
+.toast.err{border-color:rgba(232,33,10,0.4);color:var(--rojo);}
+
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+</head>
+<body>
+<div class="srv-back-bar">
+  <button class="srv-back-btn" onclick="location.href='tecnico-menu.html'">← Volver</button>
+  <span class="srv-back-title">📋 Presupuestos</span>
+</div>
+<div id="app-tecnico" style="display:block!important">
+  <div class="hdr">
+    <div class="hdr-left">
+      <div class="hdr-mark">SRV</div>
+      <div class="hdr-title" id="tec-hdr-title">Nuevo trabajo</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <div class="hdr-badge azul">TÉCNICO</div>
+      <button class="hdr-back" onclick="volver()">Salir</button>
+    </div>
+  </div>
+
+  <!-- Formulario -->
+  <div class="page active" id="tec-form">
+    <div class="sec">Cliente y vehículo</div>
+    <label class="lbl">Nombre del cliente</label>
+    <input class="inp" id="t-nombre" placeholder="Ej: Carlos Medina" autocomplete="off">
+    <label class="lbl">Teléfono</label>
+    <input class="inp" id="t-tel" placeholder="+56 9 XXXX XXXX" type="tel">
+    <div class="inp-row">
+      <div>
+        <label class="lbl">Vehículo</label>
+        <select class="inp" id="t-veh" style="margin-bottom:0">
+          <option>Auto</option><option>Camioneta</option><option>Camión</option>
+          <option>Moto</option><option>Bus</option><option>Maquinaria</option>
+        </select>
+      </div>
+      <div>
+        <label class="lbl">Marca y modelo</label>
+        <input class="inp" id="t-auto" placeholder="Ej: Hyundai Tucson" style="margin-bottom:0">
+      </div>
+    </div>
+    <div style="height:4px"></div>
+    <label class="lbl" style="margin-top:10px">Tu nombre</label>
+    <select class="inp" id="t-tecnico">
+      <option>Jorge Ramírez</option>
+      <option>Felipe Mora</option>
+      <option>Carlos Vega</option>
+    </select>
+
+    <div class="sec">Trabajos realizados</div>
+    <p style="font-size:12px;color:var(--txt3);margin-bottom:12px;line-height:1.6">Escribe cada trabajo o repuesto instalado. <strong style="color:var(--txt2)">No incluyas precios</strong> — el coordinador los asigna.</p>
+
+    <div class="items-wrap" id="t-items"></div>
+    <button class="btn-add" onclick="tAddItem()">＋ Agregar trabajo o repuesto</button>
+
+    <label class="lbl">Observaciones adicionales</label>
+    <textarea class="notas" id="t-obs" placeholder="Ej: Se recomienda revisar amortiguadores en próxima visita..."></textarea>
+
+    <button class="btn btn-azul" onclick="tEnviar()">
+      📤 Enviar al coordinador
+    </button>
+  </div>
+
+  <!-- Estado después de enviar -->
+  <div class="page" id="tec-estado">
+    <div style="height:20px"></div>
+    <div class="estado-card pendiente" id="estado-card">
+      <div class="estado-icon">⏳</div>
+      <div class="estado-title">Enviado al coordinador</div>
+      <div class="estado-sub">El coordinador está revisando y asignando precios. Te avisaremos cuando el cliente responda.</div>
+    </div>
+
+    <div style="background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin-bottom:16px">
+      <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--txt3);margin-bottom:10px">Resumen del trabajo enviado</div>
+      <div id="tec-resumen"></div>
+    </div>
+
+    <button class="btn btn-azul" onclick="tNuevo()">＋ Nuevo trabajo</button>
+    <button class="btn btn-sec" onclick="tRefresh()">↻ Actualizar estado</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     APP COORDINADOR
+══════════════════════════════ -->
+<script>
+
+// SUPABASE
+const SB_URL = 'https://bqlgfmqcefledqyodkii.supabase.co'
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+let sbClient = null
+function getSB() {
+  if (!sbClient) sbClient = supabase.createClient(SB_URL, SB_KEY)
+  return sbClient
+}
+
+// Auto-entrar como técnico
+
+// ════════════════════════════════
+// ESTADO GLOBAL (simula base de datos)
+// ════════════════════════════════
+let solicitudes = []  // [{id, cliente, tel, veh, auto, tecnico, obs, items, estado, ppto}]
+let tItems = []
+let tItemId = 0
+let solicActual = null
+let pptoNum = Math.floor(Math.random()*9000)+1000
+
+// ════════════════════════════════
+// NAVEGACIÓN ROLES
+// ════════════════════════════════
+function entrar(rol) {
+  document.getElementById('role-screen').style.display = 'none'
+  document.getElementById('app-' + (rol==='tecnico'?'tecnico':'coord')).style.display = 'block'
+  if (rol === 'coord') cRenderLista()
+}
+
+function volver() {
+  document.getElementById('role-screen').style.display = 'flex'
+  document.getElementById('app-tecnico').style.display = 'none'
+  document.getElementById('app-coord').style.display = 'none'
+}
+
+// ════════════════════════════════
+// APP TÉCNICO
+// ════════════════════════════════
+function tAddItem(desc='', cant=1) {
+  tItems.push({ id: ++tItemId, desc, cant })
+  tRenderItems()
+}
+
+function tRenderItems() {
+  const wrap = document.getElementById('t-items')
+  wrap.innerHTML = tItems.map((item,i) => `
+    <div class="item-t">
+      <span class="item-t-num">${i+1}</span>
+      <input class="item-t-inp" placeholder="Ej: Cambio correa accesorios"
+        value="${item.desc}" oninput="tUpdateItem(${item.id},'desc',this.value)">
+      <input class="item-t-cant" type="number" min="1" value="${item.cant}" title="Cantidad"
+        oninput="tUpdateItem(${item.id},'cant',this.value)">
+      <button class="item-del" onclick="tDelItem(${item.id})">🗑</button>
+    </div>`).join('')
+}
+
+function tUpdateItem(id, campo, val) {
+  const item = tItems.find(x=>x.id===id)
+  if (!item) return
+  if (campo==='desc') item.desc = val
+  if (campo==='cant') item.cant = Math.max(1, parseInt(val)||1)
+}
+
+function tDelItem(id) {
+  tItems = tItems.filter(x=>x.id!==id)
+  tRenderItems()
+}
+
+async function tEnviar() {
+  const nombre = document.getElementById('t-nombre').value.trim()
+  const tel    = document.getElementById('t-tel').value.trim()
+  if (!nombre) { toast('⚠️ Ingresa el nombre del cliente','err'); return }
+  if (!tel)    { toast('⚠️ Ingresa el teléfono','err'); return }
+  if (tItems.filter(i=>i.desc.trim()).length === 0) { toast('⚠️ Agrega al menos un trabajo','err'); return }
+
+  const sol = {
+    id: Date.now(),
+    cliente: nombre,
+    tel: tel,
+    veh: document.getElementById('t-veh').value,
+    auto: document.getElementById('t-auto').value.trim(),
+    tecnico: document.getElementById('t-tecnico').value,
+    obs: document.getElementById('t-obs').value.trim(),
+    items: tItems.filter(i=>i.desc.trim()).map(i=>({...i})),
+    estado: 'nueva',
+    ppto: null,
+    pptoNum: pptoNum++,
+    fecha: new Date().toLocaleDateString('es-CL')
+  }
+  // Guardar en Supabase
+  try {
+    if (!sbClient) sbClient = supabase.createClient('https://bqlgfmqcefledqyodkii.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s')
+    await sbClient.from('presupuestos').insert({
+      numero: sol.pptoNum,
+      tecnico: sol.tecnico,
+      cliente: sol.cliente,
+      telefono: sol.tel,
+      vehiculo: sol.veh,
+      auto: sol.auto,
+      items: sol.items,
+      obs: sol.obs,
+      estado: 'nueva'
+    })
+  } catch(e) { console.warn('Supabase error:', e.message) }
+  solicitudes.unshift(sol)
+
+  // Mostrar estado
+  document.getElementById('tec-resumen').innerHTML = sol.items.map((it,i)=>
+    `<div style="display:flex;gap:8px;padding:5px 0;border-bottom:1px solid var(--borde);font-size:13px">
+      <span style="color:var(--txt3)">${i+1}.</span>
+      <span>${it.desc}${it.cant>1?` ×${it.cant}`:''}</span>
+    </div>`).join('') +
+    (sol.obs ? `<div style="font-size:12px;color:var(--txt3);margin-top:8px">📋 ${sol.obs}</div>` : '')
+
+  tPg('tec-estado')
+  document.getElementById('tec-hdr-title').textContent = 'Estado del trabajo'
+  toast('✅ Enviado al coordinador','ok')
+}
+
+function tRefresh() {
+  const id = solicitudes.find(s => s.tecnico === document.getElementById('t-tecnico')?.value)?.id
+  const sol = solicitudes.find(s => s.cliente === document.getElementById('t-nombre')?.value)
+  if (!sol) { toast('Sin novedades aún'); return }
+
+  const card  = document.getElementById('estado-card')
+  const icon  = card.querySelector('.estado-icon')
+  const title = card.querySelector('.estado-title')
+  const sub   = card.querySelector('.estado-sub')
+
+  if (sol.estado === 'enviada') {
+    card.className = 'estado-card enviado'
+    icon.textContent = '📤'
+    title.textContent = 'Presupuesto enviado al cliente'
+    sub.textContent = 'El coordinador envió el presupuesto. Esperando respuesta del cliente.'
+  } else if (sol.estado === 'aceptada') {
+    card.className = 'estado-card aceptado'
+    icon.textContent = '✅'
+    title.textContent = '¡El cliente aceptó!'
+    sub.textContent = 'El presupuesto fue aceptado. Coordina con el equipo para proceder.'
+  } else if (sol.estado === 'rechazada') {
+    card.className = 'estado-card rechazado'
+    icon.textContent = '❌'
+    title.textContent = 'El cliente no aceptó'
+    sub.textContent = 'El cliente decidió no continuar con el servicio.'
+  } else {
+    toast('⏳ Aún en revisión por el coordinador')
+    return
+  }
+  toast('↻ Estado actualizado')
+}
+
+function tNuevo() {
+  tItems = []
+  tRenderItems()
+  ;['t-nombre','t-tel','t-auto','t-obs'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value='' })
+  document.getElementById('tec-hdr-title').textContent = 'Nuevo trabajo'
+  tPg('tec-form')
+}
+
+function tPg(id) {
+  document.querySelectorAll('#app-tecnico .page').forEach(p=>p.classList.remove('active'))
+  document.getElementById(id).classList.add('active')
+  window.scrollTo(0,0)
+}
+
+// ════════════════════════════════
+// APP COORDINADOR
+// ════════════════════════════════
+let filtroActivo = 'todas'
+
+function cFiltrar(filtro, btn) {
+  filtroActivo = filtro
+  cRenderLista()
+}
+
+function cRenderLista() {
+  const el = document.getElementById('coord-solicitudes')
+  const lista = filtroActivo === 'todas' ? solicitudes : solicitudes.filter(s=>s.estado===filtroActivo)
+
+  if (lista.length === 0) {
+    el.innerHTML = `<div class="empty">
+      <div class="empty-icon">${filtroActivo==='nueva'?'🔔':'📋'}</div>
+      <p>${filtroActivo==='nueva'?'No hay solicitudes nuevas':'Sin solicitudes aún'}</p>
+    </div>`
+    return
+  }
+
+  el.innerHTML = lista.map(s => {
+    const badgeText = {nueva:'🔴 Nueva',valorizada:'🟡 Valorizada',enviada:'🟢 Enviada',aceptada:'✅ Aceptada',rechazada:'❌ Rechazada'}
+    return `<div class="soli-card ${s.estado}" onclick="cAbrirSolicitud(${s.id})">
+      <div class="soli-top">
+        <div>
+          <div class="soli-cliente">${s.cliente}</div>
+          <div class="soli-veh">🚗 ${s.veh}${s.auto?' · '+s.auto:''}</div>
+        </div>
+        <span class="soli-badge ${s.estado}">${badgeText[s.estado]||s.estado}</span>
+      </div>
+      <div class="soli-items">${s.items.slice(0,3).map(i=>'• '+i.desc+(i.cant>1?` ×${i.cant}`:'')).join(' · ')}${s.items.length>3?` +${s.items.length-3} más`:''}</div>
+      <div class="soli-tecnico">👷 ${s.tecnico} · ${s.fecha}</div>
+    </div>`}).join('')
+}
+
+function cAbrirSolicitud(id) {
+  solicActual = solicitudes.find(s=>s.id===id)
+  if (!solicActual) return
+
+  // Info cliente
+  document.getElementById('coord-cli-info').innerHTML = `
+    <div style="font-weight:600;font-size:15px;margin-bottom:4px">${solicActual.cliente}</div>
+    <div style="font-size:12px;color:var(--txt2)">📞 ${solicActual.tel}</div>
+    <div style="font-size:12px;color:var(--txt2)">🚗 ${solicActual.veh}${solicActual.auto?' · '+solicActual.auto:''}</div>
+    <div style="font-size:12px;color:var(--txt2)">👷 ${solicActual.tecnico} · ${solicActual.fecha}</div>
+    ${solicActual.obs?`<div style="font-size:12px;color:var(--txt3);margin-top:6px;padding-top:6px;border-top:1px solid var(--borde)">📋 ${solicActual.obs}</div>`:''}
+  `
+
+  // Ítems para valorizar
+  const el = document.getElementById('coord-items-val')
+  el.innerHTML = solicActual.items.map((item,i) => `
+    <div class="item-c" id="citem-${item.id}">
+      <div class="item-c-top">
+        <span class="item-c-num">${i+1}</span>
+        <span class="item-c-desc">${item.desc}</span>
+        ${item.cant>1?`<span class="item-c-cant">×${item.cant}</span>`:''}
+      </div>
+      <div class="item-c-precio-row">
+        <div class="price-wrap">
+          <span class="price-prefix">$</span>
+          <input class="price-inp" type="number" min="0" placeholder="Precio de venta"
+            value="${item.precio_venta||''}"
+            oninput="cUpdatePrecio(${item.id}, this.value)">
+        </div>
+        <span class="item-c-sub" id="csub-${item.id}">${item.precio_venta&&item.cant>1?'$'+(item.precio_venta*item.cant).toLocaleString('es-CL'):''}</span>
+      </div>
+      <input class="item-c-nota" placeholder="Nota interna (opcional, no visible al cliente)"
+        value="${item.nota_coord||''}"
+        oninput="cUpdateNota(${item.id}, this.value)">
+    </div>`).join('')
+
+  // Restaurar descuento y notas si ya tenía ppto
+  if (solicActual.ppto) {
+    document.getElementById('c-desc-val').value = solicActual.ppto.descVal||''
+    document.getElementById('c-desc-tipo').value = solicActual.ppto.descTipo||'pct'
+    document.getElementById('c-notas').value = solicActual.ppto.notas||''
+  } else {
+    document.getElementById('c-desc-val').value = ''
+    document.getElementById('c-notas').value = ''
+  }
+
+  cActualizarTotal()
+  document.getElementById('coord-hdr-title').textContent = solicActual.cliente
+  cPg('coord-detalle')
+}
+
+function cUpdatePrecio(id, val) {
+  const item = solicActual.items.find(x=>x.id===id)
+  if (!item) return
+  item.precio_venta = parseFloat(val)||0
+  const sub = document.getElementById('csub-'+id)
+  if (sub) sub.textContent = item.cant>1&&item.precio_venta>0 ? '$'+(item.precio_venta*item.cant).toLocaleString('es-CL') : ''
+  cActualizarTotal()
+}
+
+function cUpdateNota(id, val) {
+  const item = solicActual.items.find(x=>x.id===id)
+  if (item) item.nota_coord = val
+}
+
+function cCalcTotal() {
+  if (!solicActual) return {sub:0,dm:0,dv:0,dt:'pct',iva:0,total:0}
+  const sub = solicActual.items.reduce((s,i)=>s+((i.precio_venta||0)*(i.cant||1)),0)
+  const dv  = parseFloat(document.getElementById('c-desc-val')?.value)||0
+  const dt  = document.getElementById('c-desc-tipo')?.value||'pct'
+  const dm  = Math.min(dt==='pct'?Math.round(sub*dv/100):dv, sub)
+  const neto = sub - dm
+  const aplicaIva = document.getElementById('c-aplica-iva')?.checked !== false
+  const iva = aplicaIva ? Math.round(neto * 0.19) : 0
+  return {sub, dm, dv, dt, iva, neto, total: neto + iva}
+}
+
+function cActualizarTotal() {
+  const {sub, dm, dv, dt, iva, neto, total} = cCalcTotal()
+  const el = document.getElementById('c-total-live')
+  if (el) el.textContent = '$'+total.toLocaleString('es-CL')
+  // Mostrar desglose IVA en el card
+  const card = document.getElementById('c-total-card')
+  if (card) {
+    card.innerHTML = `
+      <div class="total-row"><span>Subtotal</span><span>$${sub.toLocaleString('es-CL')}</span></div>
+      ${dm>0?`<div class="total-row verde"><span>Descuento (${dv}${dt==='pct'?'%':' $'})</span><span>−$${dm.toLocaleString('es-CL')}</span></div>`:''}
+      <div class="total-row"><span>Neto</span><span>$${neto.toLocaleString('es-CL')}</span></div>
+      ${iva>0?`<div class="total-row" style="color:var(--naranja)"><span>IVA (19%)</span><span>+$${iva.toLocaleString('es-CL')}</span></div>`:''}
+      <div class="total-final"><span class="tl">TOTAL</span><span class="tv" id="c-total-live">$${total.toLocaleString('es-CL')}</span></div>`
+  }
+}
+
+function cVerPreview() {
+  const {sub,dm,dv,dt,total} = cCalcTotal()
+  if (total === 0) { toast('⚠️ Asigna al menos un precio','err'); return }
+
+  const notas = document.getElementById('c-notas').value.trim()
+  const hoy   = new Date().toLocaleDateString('es-CL',{day:'numeric',month:'long',year:'numeric'})
+
+  // Guardar en la solicitud
+  solicActual.ppto = {sub,dm,dv,dt,iva,neto,total,notas}
+  solicActual.estado = 'valorizada'
+
+  document.getElementById('coord-ppto-render').innerHTML = `
+    <div class="ppto">
+      <div class="ph">
+        <div class="ph-top">
+          <div class="ph-mark">SRV</div>
+          <div>
+            <div class="ph-brand">SERVIRUTA</div>
+            <div class="ph-sub">Taller Mecánico a Domicilio · Santiago RM</div>
+          </div>
+        </div>
+        <div class="ph-meta">
+          <div class="ph-num">N° ${solicActual.pptoNum}</div>
+          <div class="ph-fecha">${hoy}<br>${solicActual.tecnico}</div>
+        </div>
+      </div>
+      <div class="pc">
+        <div class="pc-lbl">Cliente</div>
+        <div class="pc-name">${solicActual.cliente}</div>
+        <div class="pc-det">📞 ${solicActual.tel}</div>
+        <div class="pc-det">🚗 ${solicActual.veh}${solicActual.auto?' · '+solicActual.auto:''}</div>
+      </div>
+      <div class="pb">
+        <div class="pb-sec">Detalle de servicios</div>
+        ${solicActual.items.map(item=>`
+          <div class="pi">
+            <div>
+              <div class="pi-name">${item.desc}</div>
+              ${item.cant>1?`<div class="pi-det">Cantidad: ${item.cant}</div>`:''}
+            </div>
+            <div class="pi-price">$${((item.precio_venta||0)*(item.cant||1)).toLocaleString('es-CL')}</div>
+          </div>`).join('')}
+      </div>
+      <div class="pt">
+        <div class="pt-row"><span>Subtotal</span><span>$${sub.toLocaleString('es-CL')}</span></div>
+        ${dm>0?`<div class="pt-row" style="color:#16A34A"><span>Descuento (${dv}${dt==='pct'?'%':' $'})</span><span>−$${dm.toLocaleString('es-CL')}</span></div>`:''}
+        ${neto!==sub?`<div class="pt-row"><span>Neto</span><span>$${neto.toLocaleString('es-CL')}</span></div>`:''}
+        ${iva>0?`<div class="pt-row" style="color:#EA580C"><span>IVA (19%)</span><span>+$${iva.toLocaleString('es-CL')}</span></div>`:''}
+        <div class="pt-final"><span>TOTAL</span><span>$${total.toLocaleString('es-CL')}</span></div>
+      </div>
+      ${notas?`<div class="pn"><div class="pn-lbl">Notas</div><div class="pn-txt">${notas}</div></div>`:''}
+      <div class="pv"><span>⏰</span><p>Válido por <strong>48 horas</strong>.</p></div>
+      <div class="pf"><p><strong>+56 9 8505 8250</strong> · 24/7 · serviruta.cl</p></div>
+    </div>`
+
+  cPg('coord-preview')
+}
+
+function cEnviarWA() {
+  if (!solicActual?.ppto) return
+  const {sub,dm,dv,dt,total,notas} = solicActual.ppto
+  const tel = solicActual.tel.replace(/\D/g,'')
+
+  let msg = `*PRESUPUESTO SERVIRUTA N° ${solicActual.pptoNum}*\n`
+  msg += `_Taller Mecánico a Domicilio · Santiago RM_\n`
+  msg += `━━━━━━━━━━━━━━━━━━\n\n`
+  msg += `👤 *${solicActual.cliente}*\n`
+  msg += `🚗 ${solicActual.veh}${solicActual.auto?' · '+solicActual.auto:''}\n`
+  msg += `📅 ${new Date().toLocaleDateString('es-CL')}\n\n`
+  msg += `*SERVICIOS:*\n`
+  solicActual.items.forEach((item,i)=>{
+    const st = (item.precio_venta||0)*(item.cant||1)
+    msg += `${i+1}. ${item.desc}${item.cant>1?` ×${item.cant}`:''}: *$${st.toLocaleString('es-CL')}*\n`
+  })
+  msg += `\n`
+  if (dm>0) {
+    msg += `Subtotal: $${sub.toLocaleString('es-CL')}\n`
+    msg += `Descuento (${dv}${dt==='pct'?'%':' $'}): −$${dm.toLocaleString('es-CL')}\n`
+    if(iva>0) msg += `Neto: $${neto.toLocaleString('es-CL')}\nIVA (19%): +$${iva.toLocaleString('es-CL')}\n`
+  }
+  msg += `━━━━━━━━━━━━━━━━━━\n`
+  msg += `💰 *TOTAL: $${total.toLocaleString('es-CL')}*\n`
+  msg += `━━━━━━━━━━━━━━━━━━\n`
+  if (notas) msg += `\n📋 ${notas}\n`
+  msg += `\n⏰ Válido 48 hrs\n`
+  msg += `Para aceptar responda *ACEPTO* · Consultas: +56 9 8505 8250`
+
+  const destino = tel ? `56${tel.replace(/^0?56/,'')}` : ''
+  window.open(`https://wa.me/${destino}?text=${encodeURIComponent(msg)}`, '_blank')
+
+  solicActual.estado = 'enviada'
+  toast('✅ WhatsApp abierto — presupuesto enviado','ok')
+}
+
+function cMarcarAceptado() {
+  if (!solicActual) return
+  solicActual.estado = 'aceptada'
+  toast('✅ Marcado como aceptado','ok')
+  setTimeout(()=>{ cVolver() },1200)
+}
+
+function cVolver() {
+  cRenderLista()
+  document.getElementById('coord-hdr-title').textContent = 'Solicitudes'
+  cPg('coord-lista')
+  solicActual = null
+}
+
+function cVolvera(id) {
+  document.querySelectorAll('#app-coord .page').forEach(p=>p.classList.remove('active'))
+  document.getElementById(id).classList.add('active')
+  window.scrollTo(0,0)
+}
+
+function cPg(id) {
+  document.querySelectorAll('#app-coord .page').forEach(p=>p.classList.remove('active'))
+  document.getElementById(id).classList.add('active')
+  window.scrollTo(0,0)
+}
+
+// ── UTILS ──
+function toast(msg, type='') {
+  const t = document.getElementById('toast')
+  t.textContent = msg; t.className = 'toast'+(type?' '+type:'')
+  t.classList.add('show')
+  setTimeout(()=>t.classList.remove('show'), 2800)
+}
+
+// INIT — un ítem vacío en técnico
+tAddItem()
+
+window.addEventListener("load", function() {
+  if (typeof entrar === "function") entrar("tecnico");
+});
+</script>
+</body>
+</html>

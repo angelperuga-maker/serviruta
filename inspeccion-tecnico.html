@@ -495,6 +495,7 @@ const VENTAS = {
 // Estado
 let estados = {}   // {check_id: 'ok'|'alerta'|'critico'}
 let ventasOn = {}  // {venta_id: true}
+let cantVenta = {}  // {venta_id: cantidad}
 let timerInterval = null
 let timerSecs = 0
 let pasoActual = 0
@@ -563,16 +564,31 @@ function renderVentas() {
         <div class="vi-icon">${elId.includes('aceite')?'🛢️':elId.includes('bater')?'🔋':'💡'}</div>
         <div class="vi-info">
           <div class="vi-name">${item.nombre}</div>
-          <div class="vi-precio">$${item.precio.toLocaleString('es-CL')}</div>
+          <div class="vi-precio">$${item.precio.toLocaleString('es-CL')} c/u</div>
         </div>
-        <div class="vi-check ${ventasOn[item.id]?'on':''}" id="vc-${item.id}" onclick="toggleVenta('${item.id}',this)">
-          ${ventasOn[item.id]?'✓':''}
+        <div style="display:flex;align-items:center;gap:8px;margin-left:auto">
+          ${ventasOn[item.id] ? `
+          <div style="display:flex;align-items:center;gap:6px">
+            <button onclick="cambiarCantVenta('${item.id}',-1)" style="width:26px;height:26px;border-radius:6px;border:1px solid var(--borde);background:var(--c3);color:var(--txt);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;">−</button>
+            <span style="font-family:'Syne',sans-serif;font-weight:800;font-size:14px;min-width:20px;text-align:center">${cantVenta[item.id]||1}</span>
+            <button onclick="cambiarCantVenta('${item.id}',1)" style="width:26px;height:26px;border-radius:6px;border:1px solid var(--borde);background:var(--c3);color:var(--txt);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;">+</button>
+          </div>` : ''}
+          <div class="vi-check ${ventasOn[item.id]?'on':''}" id="vc-${item.id}" onclick="toggleVenta('${item.id}',this)">
+            ${ventasOn[item.id]?'✓':''}
+          </div>
         </div>
       </div>`).join('')
   })
 }
 
+function cambiarCantVenta(id, delta) {
+  if (!ventasOn[id]) return
+  cantVenta[id] = Math.max(1, (cantVenta[id]||1) + delta)
+  renderVentas()
+}
+
 function toggleVenta(id, el) {
+  if (!ventasOn[id]) cantVenta[id] = 1
   ventasOn[id] = !ventasOn[id]
   el.className = 'vi-check' + (ventasOn[id]?' on':'')
   el.textContent = ventasOn[id]?'✓':''
@@ -693,7 +709,7 @@ function generarResumen() {
   if (ventasActivas.length === 0) {
     ventasEl.innerHTML = '<div style="font-size:13px;color:var(--txt2)">No se marcaron oportunidades de venta</div>'
   } else {
-    const total = ventasActivas.reduce((s,v)=>s+v.precio,0)
+    const total = ventasActivas.reduce((s,v)=>s+(v.precio*(cantVenta[v.id]||1)),0)
     ventasEl.innerHTML = ventasActivas.map(v=>`
       <div class="op-item">
         <span class="op-nombre">${v.nombre}</span>

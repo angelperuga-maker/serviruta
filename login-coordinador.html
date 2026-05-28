@@ -59,7 +59,7 @@ function entrar() {
   const err = document.getElementById("error")
   if (!pin) { err.textContent = "Ingresa tu PIN."; err.style.display = "block"; return }
   if (pin !== "9999") { err.textContent = "PIN incorrecto."; err.style.display = "block"; return }
-  sessionStorage.setItem("coord_auth","1"); location.href = "coordinador.html"
+  sessionStorage.setItem("coord_auth","1"); location.href = "menu-coordinador.html"
 }
 document.getElementById("pin").addEventListener("keydown", e => { if(e.key==="Enter") entrar() })
 </script>

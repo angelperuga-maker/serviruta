@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Serviruta · Inspección</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --rojo:#E8210A;--rojo-d:#B01A08;--rojo-g:rgba(232,33,10,0.08);
+  --negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--c4:#282830;
+  --borde:#2C2C32;--borde2:#3A3A42;
+  --txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;
+  --verde:#22C55E;--verde-g:rgba(34,197,94,0.1);
+  --amarillo:#F5C518;--amarillo-g:rgba(245,197,24,0.1);
+  --naranja:#FB923C;--naranja-g:rgba(251,146,60,0.1);
+  --azul:#60A5FA;--azul-g:rgba(96,165,250,0.1);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{background:var(--negro);color:var(--txt);font-family:'DM Sans',sans-serif;min-height:100vh;max-width:460px;margin:0 auto;}
+
+/* HEADER */
+.hdr{background:var(--c1);border-bottom:1px solid var(--borde);padding:13px 18px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.hdr-logo{display:flex;align-items:center;gap:9px;}
+.hdr-mark{width:30px;height:30px;background:var(--rojo);border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:9px;color:#fff;}
+.hdr-title{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;}
+.timer-wrap{display:flex;align-items:center;gap:6px;background:var(--c2);border:1px solid var(--borde);border-radius:20px;padding:5px 12px;}
+.timer-dot{width:7px;height:7px;border-radius:50%;background:var(--verde);animation:pulse 1.2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+.timer-val{font-family:'Syne',sans-serif;font-weight:800;font-size:14px;color:var(--amarillo);}
+.timer-lbl{font-size:10px;color:var(--txt3);}
+
+/* PROGRESS */
+.progress-bar{height:3px;background:var(--borde);}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--rojo),var(--amarillo));transition:width 0.4s ease;border-radius:0 2px 2px 0;}
+
+/* STEPS NAV */
+.steps-nav{display:flex;overflow-x:auto;gap:0;background:var(--c1);border-bottom:1px solid var(--borde);padding:0 6px;}
+.step-tab{flex-shrink:0;padding:10px 14px;cursor:pointer;font-size:11px;font-weight:600;color:var(--txt3);border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap;font-family:'DM Sans',sans-serif;}
+.step-tab.active{color:var(--rojo);border-bottom-color:var(--rojo);}
+.step-tab.done{color:var(--verde);}
+.step-tab.done::before{content:'✓ ';}
+
+/* PÁGINAS */
+.page{display:none;padding:16px 18px 100px;}.page.active{display:block;animation:fu 0.2s ease;}
+@keyframes fu{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:translateY(0);}}
+
+/* SECCIÓN */
+.sec{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);margin:14px 0 10px;display:flex;align-items:center;gap:8px;}
+.sec::after{content:'';flex:1;height:1px;background:var(--borde);}
+.sec-icon{font-size:14px;}
+
+/* INPUTS */
+.lbl{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--txt3);margin-bottom:5px;display:block;}
+.inp{width:100%;background:var(--c2);border:1px solid var(--borde);border-radius:8px;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:15px;padding:11px 13px;outline:none;transition:border-color 0.2s;-webkit-appearance:none;margin-bottom:10px;}
+.inp:focus{border-color:var(--rojo);}
+.inp::placeholder{color:var(--txt3);}
+.inp-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.inp-sel{width:100%;background:var(--c2);border:1px solid var(--borde);border-radius:8px;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:14px;padding:11px 13px;outline:none;-webkit-appearance:none;margin-bottom:10px;}
+.inp-sel option{background:var(--c3);}
+
+/* CHECK ITEMS — el core de la app */
+.check-group{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+.check-item{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all 0.15s;user-select:none;}
+.check-item:active{transform:scale(0.98);}
+.check-item.ok{background:var(--verde-g);border-color:rgba(34,197,94,0.35);}
+.check-item.alerta{background:var(--amarillo-g);border-color:rgba(245,197,24,0.35);}
+.check-item.critico{background:var(--rojo-g);border-color:rgba(232,33,10,0.35);}
+.check-item.venta{background:var(--azul-g);border-color:rgba(96,165,250,0.35);}
+.ci-icon{font-size:20px;flex-shrink:0;width:28px;text-align:center;}
+.ci-info{flex:1;}
+.ci-name{font-size:13px;font-weight:500;color:var(--txt);margin-bottom:2px;}
+.ci-desc{font-size:11px;color:var(--txt3);line-height:1.4;}
+.ci-estado{margin-left:auto;flex-shrink:0;}
+.estado-pills{display:flex;gap:4px;}
+.pill{font-size:10px;font-weight:700;padding:4px 9px;border-radius:20px;cursor:pointer;border:1px solid transparent;transition:all 0.15s;font-family:'Syne',sans-serif;letter-spacing:0.3px;}
+.pill.ok{background:var(--verde-g);color:var(--verde);border-color:rgba(34,197,94,0.3);}
+.pill.alerta{background:var(--amarillo-g);color:var(--amarillo);border-color:rgba(245,197,24,0.3);}
+.pill.critico{background:var(--rojo-g);color:var(--rojo);border-color:rgba(232,33,10,0.3);}
+.pill.selected-ok{background:var(--verde);color:#000;}
+.pill.selected-alerta{background:var(--amarillo);color:#000;}
+.pill.selected-critico{background:var(--rojo);color:#fff;}
+
+/* VENTA DIRECTA */
+.venta-item{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+.vi-icon{font-size:22px;flex-shrink:0;}
+.vi-info{flex:1;}
+.vi-name{font-size:13px;font-weight:600;color:var(--txt);}
+.vi-precio{font-size:11px;color:var(--amarillo);margin-top:2px;font-family:'Syne',sans-serif;font-weight:700;}
+.vi-check{width:26px;height:26px;border-radius:6px;border:2px solid var(--borde);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.15s;flex-shrink:0;font-size:14px;}
+.vi-check.on{background:var(--verde);border-color:var(--verde);color:#000;}
+
+/* NOTA CAMPO */
+.nota-inp{width:100%;background:var(--c2);border:1px solid var(--borde);border-radius:8px;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:13px;padding:10px 12px;outline:none;resize:none;min-height:56px;margin-top:6px;transition:border-color 0.2s;}
+.nota-inp:focus{border-color:var(--amarillo);}
+.nota-inp::placeholder{color:var(--txt3);}
+
+/* RESUMEN FINAL */
+.resumen-card{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin-bottom:12px;}
+.rc-title{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.alerta-item{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--borde);font-size:13px;}
+.alerta-item:last-child{border-bottom:none;}
+.ai-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+.ai-dot.critico{background:var(--rojo);}
+.ai-dot.alerta{background:var(--amarillo);}
+.ai-dot.venta{background:var(--azul);}
+.ai-txt{flex:1;line-height:1.5;}
+.ai-txt strong{color:var(--txt);}
+.ai-txt span{color:var(--txt2);font-size:11px;}
+
+/* OPORTUNIDADES DE VENTA */
+.op-card{background:var(--azul-g);border:1px solid rgba(96,165,250,0.25);border-radius:10px;padding:14px;margin-bottom:12px;}
+.op-title{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--azul);margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.op-item{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(96,165,250,0.1);font-size:13px;}
+.op-item:last-child{border-bottom:none;}
+.op-nombre{color:var(--txt);}
+.op-precio{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--amarillo);}
+
+/* SCORE */
+.score-wrap{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:16px;margin-bottom:12px;text-align:center;}
+.score-num{font-family:'Syne',sans-serif;font-weight:800;font-size:48px;line-height:1;}
+.score-lbl{font-size:12px;color:var(--txt3);margin-top:6px;}
+.score-bar{height:8px;background:var(--c3);border-radius:4px;overflow:hidden;margin:12px 0 8px;}
+.score-fill{height:100%;border-radius:4px;transition:width 0.6s ease;}
+
+/* BTNS */
+.btn{width:100%;padding:13px;border-radius:10px;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;cursor:pointer;border:none;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:8px;transition:all 0.15s;letter-spacing:0.3px;}
+.btn:active{transform:scale(0.98);}
+.btn-rojo{background:var(--rojo);color:#fff;}
+.btn-rojo:hover{background:var(--rojo-d);}
+.btn-verde{background:var(--verde);color:#000;}
+.btn-wa{background:#25D366;color:#fff;}
+.btn-sec{background:var(--c2);border:1px solid var(--borde);color:var(--txt2);}
+.btn-row{display:flex;gap:8px;}.btn-row .btn{margin-bottom:0;}
+
+/* BOTTOM FIXED NAV */
+.bottom-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:460px;background:var(--c1);border-top:1px solid var(--borde);padding:12px 18px 20px;z-index:50;}
+
+/* TOAST */
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--c3);border:1px solid var(--borde);border-radius:8px;padding:11px 18px;font-size:13px;font-weight:500;z-index:999;opacity:0;transition:all 0.25s;pointer-events:none;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.ok{border-color:rgba(34,197,94,0.4);color:var(--verde);}
+.toast.warn{border-color:rgba(245,197,24,0.4);color:var(--amarillo);}
+</style>
+</head>
+<body><script>
+if (!sessionStorage.getItem("tecnico_nombre")) { location.href = "login-tecnico.html"; }
+</script>
+<style>
+.srv-back-bar{position:sticky;top:0;z-index:1000;background:#0F0F12;border-bottom:1px solid #2C2C32;padding:10px 16px;display:flex;align-items:center;gap:10px;}
+.srv-back-btn{background:none;border:1px solid #2C2C32;color:#9996A0;font-size:12px;font-weight:600;padding:6px 14px;border-radius:6px;cursor:pointer;font-family:"DM Sans",sans-serif;}
+.srv-back-title{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;color:#F0EDE6;}
+</style>
+<div class="srv-back-bar">
+  <button class="srv-back-btn" onclick="location.href='tecnico-menu.html'">← Volver</button>
+  <span class="srv-back-title">🔍 Inspección</span>
+</div>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-logo">
+    <div class="hdr-mark">SRV</div>
+    <div class="hdr-title">Inspección Inicial</div>
+  </div>
+  <div class="timer-wrap">
+    <div class="timer-dot"></div>
+    <div>
+      <div class="timer-val" id="timer-display">10:00</div>
+      <div class="timer-lbl">objetivo</div>
+    </div>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-bar">
+  <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+</div>
+
+<!-- STEPS NAV -->
+<div class="steps-nav">
+  <div class="step-tab active" id="tab-0" onclick="irPaso(0)">1. Datos</div>
+  <div class="step-tab" id="tab-1" onclick="irPaso(1)">2. Motor</div>
+  <div class="step-tab" id="tab-2" onclick="irPaso(2)">3. Eléctrico</div>
+  <div class="step-tab" id="tab-3" onclick="irPaso(3)">4. Seguridad</div>
+  <div class="step-tab" id="tab-4" onclick="irPaso(4)">5. Venta</div>
+  <div class="step-tab" id="tab-5" onclick="irPaso(5)">6. Resumen</div>
+</div>
+
+<!-- ══════════════════════════
+     PASO 0: DATOS DEL VEHÍCULO
+══════════════════════════ -->
+<div class="page active" id="pg-0">
+
+  <div class="sec"><span class="sec-icon">🚗</span> Identificación del vehículo</div>
+
+  <label class="lbl">Cliente</label>
+  <input class="inp" id="d-cliente" placeholder="Nombre del cliente" autocomplete="off">
+
+  <div class="inp-row">
+    <div>
+      <label class="lbl">Teléfono</label>
+      <input class="inp" id="d-tel" placeholder="+56 9..." type="tel" style="margin-bottom:0">
+    </div>
+    <div>
+      <label class="lbl">Tipo</label>
+      <select class="inp-sel" id="d-tipo" style="margin-bottom:0">
+        <option>Auto</option><option>Camioneta</option><option>Camión</option>
+        <option>Moto</option><option>Bus</option><option>Maquinaria</option>
+      </select>
+    </div>
+  </div>
+  <div style="height:4px"></div>
+
+  <div class="inp-row">
+    <div>
+      <label class="lbl">Marca</label>
+      <input class="inp" id="d-marca" placeholder="Ej: Hyundai" style="margin-bottom:0">
+    </div>
+    <div>
+      <label class="lbl">Modelo</label>
+      <input class="inp" id="d-modelo" placeholder="Ej: Tucson" style="margin-bottom:0">
+    </div>
+  </div>
+  <div style="height:4px"></div>
+
+  <div class="inp-row">
+    <div>
+      <label class="lbl">Año</label>
+      <input class="inp" id="d-anio" placeholder="2018" type="number" style="margin-bottom:0">
+    </div>
+    <div>
+      <label class="lbl">Kilometraje</label>
+      <input class="inp" id="d-km" placeholder="85.000" type="number" style="margin-bottom:0">
+    </div>
+  </div>
+  <div style="height:4px"></div>
+
+  <label class="lbl" style="margin-top:10px">Patente</label>
+  <input class="inp" id="d-patente" placeholder="XXXX-XX" style="text-transform:uppercase">
+
+  <div class="sec"><span class="sec-icon">📋</span> Motivo de la visita</div>
+  <label class="lbl">Servicio solicitado</label>
+  <input class="inp" id="d-motivo" placeholder="Ej: Cambio de aceite, falla eléctrica...">
+
+  <label class="lbl">¿Último servicio hace cuánto?</label>
+  <select class="inp-sel" id="d-ultimo">
+    <option value="">No sabe</option>
+    <option value="<3">Menos de 3 meses</option>
+    <option value="3-6">3 a 6 meses</option>
+    <option value="6-12">6 a 12 meses</option>
+    <option value=">12">Más de 1 año</option>
+    <option value="nunca">Nunca lo ha hecho</option>
+  </select>
+
+  <label class="lbl">Técnico que atiende</label>
+  <select class="inp-sel" id="d-tecnico">
+    <option>Jorge Ramírez</option>
+    <option>Felipe Mora</option>
+    <option>Carlos Vega</option>
+  </select>
+
+  <div class="bottom-bar">
+    <button class="btn btn-rojo" onclick="irPaso(1)">Siguiente — Motor y fluidos →</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════
+     PASO 1: MOTOR Y FLUIDOS
+══════════════════════════ -->
+<div class="page" id="pg-1">
+
+  <div class="sec"><span class="sec-icon">🛢️</span> Motor y fluidos</div>
+  <p style="font-size:12px;color:var(--txt3);margin-bottom:12px">Toca cada punto para marcar su estado</p>
+
+  <div class="check-group" id="motor-checks"></div>
+
+  <div class="sec"><span class="sec-icon">💧</span> Nivel de fluidos</div>
+  <div class="check-group" id="fluidos-checks"></div>
+
+  <div class="bottom-bar">
+    <div class="btn-row">
+      <button class="btn btn-sec" onclick="irPaso(0)">← Volver</button>
+      <button class="btn btn-rojo" onclick="irPaso(2)">Siguiente →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════
+     PASO 2: ELÉCTRICO
+══════════════════════════ -->
+<div class="page" id="pg-2">
+
+  <div class="sec"><span class="sec-icon">⚡</span> Sistema eléctrico</div>
+  <div class="check-group" id="electrico-checks"></div>
+
+  <div class="sec"><span class="sec-icon">💡</span> Luces</div>
+  <div class="check-group" id="luces-checks"></div>
+
+  <div class="bottom-bar">
+    <div class="btn-row">
+      <button class="btn btn-sec" onclick="irPaso(1)">← Volver</button>
+      <button class="btn btn-rojo" onclick="irPaso(3)">Siguiente →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════
+     PASO 3: SEGURIDAD
+══════════════════════════ -->
+<div class="page" id="pg-3">
+
+  <div class="sec"><span class="sec-icon">🔧</span> Frenos y suspensión</div>
+  <div class="check-group" id="frenos-checks"></div>
+
+  <div class="sec"><span class="sec-icon">🛞</span> Neumáticos</div>
+  <div class="check-group" id="neumaticos-checks"></div>
+
+  <div class="bottom-bar">
+    <div class="btn-row">
+      <button class="btn btn-sec" onclick="irPaso(2)">← Volver</button>
+      <button class="btn btn-rojo" onclick="irPaso(4)">Siguiente →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════
+     PASO 4: VENTA DIRECTA
+══════════════════════════ -->
+<div class="page" id="pg-4">
+
+  <div style="background:var(--azul-g);border:1px solid rgba(96,165,250,0.25);border-radius:10px;padding:13px 14px;margin-bottom:14px;display:flex;align-items:flex-start;gap:10px">
+    <span style="font-size:20px">💡</span>
+    <div>
+      <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--azul);margin-bottom:3px">Oportunidades de venta inmediata</div>
+      <div style="font-size:12px;color:var(--txt3);line-height:1.5">Marca los productos que puedes ofrecer o llevas en el vehículo ahora mismo. El cliente decide en el momento.</div>
+    </div>
+  </div>
+
+  <div class="sec"><span class="sec-icon">🛢️</span> Aceites y lubricantes</div>
+  <div id="venta-aceites"></div>
+
+  <div class="sec"><span class="sec-icon">🔋</span> Baterías</div>
+  <div id="venta-baterias"></div>
+
+  <div class="sec"><span class="sec-icon">💡</span> Luces y consumibles</div>
+  <div id="venta-luces"></div>
+
+  <div class="sec"><span class="sec-icon">📝</span> Notas de venta</div>
+  <textarea class="nota-inp" id="nota-venta" placeholder="Ej: Cliente interesado en cambio de aceite la próxima visita, pidió cotización de batería..."></textarea>
+
+  <div class="bottom-bar">
+    <div class="btn-row">
+      <button class="btn btn-sec" onclick="irPaso(3)">← Volver</button>
+      <button class="btn btn-verde" onclick="irPaso(5)">Ver resumen →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════
+     PASO 5: RESUMEN
+══════════════════════════ -->
+<div class="page" id="pg-5">
+
+  <!-- Score -->
+  <div class="score-wrap" id="score-wrap">
+    <div class="score-lbl" style="margin-bottom:4px;font-size:11px">Estado general del vehículo</div>
+    <div class="score-num" id="score-num">—</div>
+    <div class="score-bar"><div class="score-fill" id="score-fill" style="width:0%"></div></div>
+    <div class="score-lbl" id="score-texto">Calculando...</div>
+  </div>
+
+  <!-- Alertas -->
+  <div class="resumen-card" id="resumen-alertas">
+    <div class="rc-title">🔴 Puntos críticos y alertas</div>
+    <div id="alertas-body"><div style="font-size:13px;color:var(--txt3)">Sin alertas registradas</div></div>
+  </div>
+
+  <!-- Oportunidades de venta -->
+  <div class="op-card" id="resumen-ventas">
+    <div class="op-title">💰 Oportunidades de venta detectadas</div>
+    <div id="ventas-body"><div style="font-size:13px;color:var(--txt2)">Sin oportunidades marcadas</div></div>
+  </div>
+
+  <!-- Info vehículo -->
+  <div class="resumen-card">
+    <div class="rc-title">🚗 Vehículo inspeccionado</div>
+    <div id="resumen-vehiculo" style="font-size:13px;color:var(--txt2);line-height:1.8"></div>
+  </div>
+
+  <!-- Próximas recomendaciones -->
+  <div class="resumen-card" id="resumen-proximos">
+    <div class="rc-title">📅 Servicios recomendados (próxima visita)</div>
+    <div id="proximos-body" style="font-size:13px;color:var(--txt2)">Basado en la inspección...</div>
+  </div>
+
+  <div class="bottom-bar">
+    <button class="btn btn-wa" onclick="enviarWA()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.112.549 4.094 1.508 5.814L.057 23.214c-.059.223.139.421.362.362l5.4-1.451A11.946 11.946 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.943 0-3.772-.524-5.346-1.44l-.383-.228-3.978 1.069 1.07-3.977-.228-.384A9.955 9.955 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+      Enviar informe al cliente
+    </button>
+    <button class="btn btn-sec" onclick="nueva()">＋ Nueva inspección</button>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ════════════════════════════════
+// DATOS DE INSPECCIÓN
+// ════════════════════════════════
+const CHECKS = {
+  motor: [
+    { id:'aceite_nivel',    nombre:'Nivel de aceite',         desc:'Dipstick — verificar nivel y color',      peso:3 },
+    { id:'aceite_color',    nombre:'Color del aceite',        desc:'Negro = cambio urgente / Miel = ok',      peso:2 },
+    { id:'correa_accesorios',nombre:'Correa de accesorios',  desc:'Grietas, desgaste o tensión incorrecta',  peso:3 },
+    { id:'correa_distribucion',nombre:'Correa distribución', desc:'Verificar estado si es accesible',        peso:3 },
+    { id:'refrigerante_nivel',nombre:'Nivel refrigerante',   desc:'Depósito de expansión — mín/máx',        peso:2 },
+    { id:'mangueras',       nombre:'Mangueras y conexiones',  desc:'Fisuras, fugas o ablandamiento',         peso:2 },
+  ],
+  fluidos: [
+    { id:'liquido_frenos',  nombre:'Líquido de frenos',      desc:'Nivel y color — oscuro = cambiar',       peso:3 },
+    { id:'direccion',       nombre:'Líquido dirección',      desc:'Solo si es dirección hidráulica',        peso:1 },
+    { id:'limpiaparabrisas',nombre:'Limpiaparabrisas',       desc:'Nivel del depósito',                     peso:1 },
+  ],
+  electrico: [
+    { id:'bateria_voltaje', nombre:'Batería — voltaje',      desc:'Medir con multímetro: 12.4V+ ok',        peso:3 },
+    { id:'bateria_bornes',  nombre:'Bornes de batería',      desc:'Sulfatación o corrosión visible',        peso:2 },
+    { id:'alternador',      nombre:'Alternador',             desc:'Medir carga: 13.8-14.4V al ralentí',     peso:3 },
+    { id:'fusibles',        nombre:'Fusibles principales',   desc:'Revisar caja de fusibles',               peso:2 },
+  ],
+  luces: [
+    { id:'luces_bajas',     nombre:'Luces bajas (ambas)',    desc:'Encendido y alineación',                 peso:2 },
+    { id:'luces_altas',     nombre:'Luces altas',            desc:'Funcionamiento correcto',                peso:1 },
+    { id:'luces_freno',     nombre:'Luces de freno',         desc:'Probar con asistencia',                  peso:3 },
+    { id:'luz_reversa',     nombre:'Luz de reversa',         desc:'Funcionamiento al meter reversa',        peso:1 },
+    { id:'luces_tablero',   nombre:'Luces tablero',          desc:'Testigos encendidos (motor, freno, etc)',peso:3 },
+    { id:'intermitentes',   nombre:'Intermitentes',          desc:'Todos funcionando incluyendo emergencia',peso:2 },
+  ],
+  frenos: [
+    { id:'pastillas_del',   nombre:'Pastillas delanteras',   desc:'Grosor visual o por apertura de rueda',  peso:3 },
+    { id:'pastillas_tras',  nombre:'Pastillas traseras',     desc:'Verificar desgaste',                     peso:3 },
+    { id:'discos',          nombre:'Discos de freno',        desc:'Rayado excesivo o deformación',          peso:3 },
+    { id:'suspension',      nombre:'Amortiguadores',         desc:'Golpe en capó — rebote excesivo',        peso:2 },
+  ],
+  neumaticos: [
+    { id:'neu_del_izq',     nombre:'Neumático del. izquierdo', desc:'Profundidad banda y presión',         peso:2 },
+    { id:'neu_del_der',     nombre:'Neumático del. derecho',   desc:'Profundidad banda y presión',         peso:2 },
+    { id:'neu_tras_izq',    nombre:'Neumático tras. izquierdo',desc:'Profundidad banda y presión',         peso:2 },
+    { id:'neu_tras_der',    nombre:'Neumático tras. derecho',  desc:'Profundidad banda y presión',         peso:2 },
+    { id:'neu_repuesto',    nombre:'Neumático de repuesto',    desc:'Presión y estado general',            peso:1 },
+  ]
+}
+
+const VENTAS = {
+  aceites: [
+    { id:'v_aceite_5w30', nombre:'Aceite 5W-30 (1L)',    precio:12000 },
+    { id:'v_aceite_10w40',nombre:'Aceite 10W-40 (1L)',   precio:10000 },
+    { id:'v_aceite_diesel',nombre:'Aceite Diesel 15W-40',precio:11000 },
+    { id:'v_filtro_aceite',nombre:'Filtro de aceite',     precio:8000  },
+    { id:'v_refrigerante', nombre:'Refrigerante (1L)',    precio:7000  },
+  ],
+  baterias: [
+    { id:'v_bat_40ah',  nombre:'Batería 40Ah (autos chicos)',  precio:85000 },
+    { id:'v_bat_60ah',  nombre:'Batería 60Ah (autos medianos)',precio:110000},
+    { id:'v_bat_90ah',  nombre:'Batería 90Ah (camionetas)',    precio:145000},
+    { id:'v_bat_pesado',nombre:'Batería pesada (camiones)',    precio:220000},
+  ],
+  luces: [
+    { id:'v_h4',       nombre:'Ampolleta H4 (luz baja/alta)',  precio:6000  },
+    { id:'v_h7',       nombre:'Ampolleta H7 (luz baja)',       precio:7000  },
+    { id:'v_led',      nombre:'Kit LED (par)',                  precio:22000 },
+    { id:'v_stop',     nombre:'Ampolleta freno/trasera',       precio:3000  },
+    { id:'v_intermit', nombre:'Ampolleta intermitente',        precio:2000  },
+  ]
+}
+
+// Estado
+let estados = {}   // {check_id: 'ok'|'alerta'|'critico'}
+let ventasOn = {}  // {venta_id: true}
+let timerInterval = null
+let timerSecs = 0
+let pasoActual = 0
+const TOTAL_PASOS = 6
+
+// ════════════════════════════════
+// RENDER CHECKS
+// ════════════════════════════════
+function renderCheckGroup(containerId, items) {
+  const el = document.getElementById(containerId)
+  el.innerHTML = items.map(item => `
+    <div class="check-item" id="ci-${item.id}">
+      <div class="ci-icon">${getEstadoIcon(estados[item.id])}</div>
+      <div class="ci-info">
+        <div class="ci-name">${item.nombre}</div>
+        <div class="ci-desc">${item.desc}</div>
+      </div>
+      <div class="ci-estado">
+        <div class="estado-pills">
+          <span class="pill ok ${estados[item.id]==='ok'?'selected-ok':''}" onclick="setEstado('${item.id}','ok',this)">OK</span>
+          <span class="pill alerta ${estados[item.id]==='alerta'?'selected-alerta':''}" onclick="setEstado('${item.id}','alerta',this)">⚠</span>
+          <span class="pill critico ${estados[item.id]==='critico'?'selected-critico':''}" onclick="setEstado('${item.id}','critico',this)">✕</span>
+        </div>
+        <textarea class="nota-inp" id="nota-${item.id}" placeholder="Nota..." style="min-height:36px;font-size:11px;padding:5px 8px;margin-top:6px;display:${estados[item.id]&&estados[item.id]!=='ok'?'block':'none'}">${document.getElementById('nota-'+item.id)?.value||''}</textarea>
+      </div>
+    </div>`).join('')
+}
+
+function getEstadoIcon(estado) {
+  if (estado==='ok') return '✅'
+  if (estado==='alerta') return '⚠️'
+  if (estado==='critico') return '🔴'
+  return '○'
+}
+
+function setEstado(id, estado, pillEl) {
+  estados[id] = estado
+  // Re-render solo el item
+  const ci = document.getElementById('ci-'+id)
+  if (!ci) return
+  // Actualizar clases del check-item
+  ci.className = 'check-item ' + (estado!=='ok'?estado:'')
+  // Actualizar icono
+  ci.querySelector('.ci-icon').textContent = getEstadoIcon(estado)
+  // Actualizar pills
+  ci.querySelectorAll('.pill').forEach(p => {
+    p.className = p.className.replace(/selected-\w+/g,'').trim()
+    if (p.classList.contains(estado)) p.classList.add('selected-'+estado)
+  })
+  // Mostrar nota si es alerta o crítico
+  const nota = ci.querySelector('textarea')
+  if (nota) nota.style.display = estado==='ok'?'none':'block'
+}
+
+// ════════════════════════════════
+// RENDER VENTAS
+// ════════════════════════════════
+function renderVentas() {
+  ;[
+    ['venta-aceites', VENTAS.aceites],
+    ['venta-baterias', VENTAS.baterias],
+    ['venta-luces', VENTAS.luces],
+  ].forEach(([elId, items]) => {
+    document.getElementById(elId).innerHTML = items.map(item => `
+      <div class="venta-item">
+        <div class="vi-icon">${elId.includes('aceite')?'🛢️':elId.includes('bater')?'🔋':'💡'}</div>
+        <div class="vi-info">
+          <div class="vi-name">${item.nombre}</div>
+          <div class="vi-precio">$${item.precio.toLocaleString('es-CL')}</div>
+        </div>
+        <div class="vi-check ${ventasOn[item.id]?'on':''}" id="vc-${item.id}" onclick="toggleVenta('${item.id}',this)">
+          ${ventasOn[item.id]?'✓':''}
+        </div>
+      </div>`).join('')
+  })
+}
+
+function toggleVenta(id, el) {
+  ventasOn[id] = !ventasOn[id]
+  el.className = 'vi-check' + (ventasOn[id]?' on':'')
+  el.textContent = ventasOn[id]?'✓':''
+  toast(ventasOn[id]?'✅ Agregado a oportunidades':'Removido','ok')
+}
+
+// ════════════════════════════════
+// NAVEGACIÓN
+// ════════════════════════════════
+function irPaso(n) {
+  // Marcar tab anterior como done si tenía checks
+  if (n > pasoActual) marcarDone(pasoActual)
+
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'))
+  document.querySelectorAll('.step-tab').forEach((t,i)=>{
+    t.classList.remove('active')
+    if (i < n) t.classList.add('done')
+    if (i===n) { t.classList.add('active'); t.classList.remove('done'); }
+  })
+
+  document.getElementById('pg-'+n).classList.add('active')
+  pasoActual = n
+
+  // Progress
+  const pct = Math.round((n / (TOTAL_PASOS-1)) * 100)
+  document.getElementById('progress-fill').style.width = pct + '%'
+
+  window.scrollTo(0,0)
+
+  if (n===5) generarResumen()
+  if (n===4) renderVentas()
+}
+
+function marcarDone(n) {
+  const tab = document.getElementById('tab-'+n)
+  if (tab) { tab.classList.add('done'); tab.classList.remove('active'); }
+}
+
+// ════════════════════════════════
+// TIMER
+// ════════════════════════════════
+function iniciarTimer() {
+  if (timerInterval) return
+  const start = Date.now()
+  timerInterval = setInterval(() => {
+    timerSecs = Math.floor((Date.now()-start)/1000)
+    const mins = Math.floor(timerSecs/60)
+    const secs = timerSecs % 60
+    const display = document.getElementById('timer-display')
+    if (display) {
+      display.textContent = `${String(mins).padStart(2,'0')}:${String(secs).padStart(2,'0')}`
+      display.style.color = timerSecs > 600 ? 'var(--rojo)' : timerSecs > 480 ? 'var(--naranja)' : 'var(--amarillo)'
+    }
+  }, 1000)
+}
+
+// ════════════════════════════════
+// RESUMEN Y SCORE
+// ════════════════════════════════
+function generarResumen() {
+  const allChecks = [
+    ...CHECKS.motor, ...CHECKS.fluidos,
+    ...CHECKS.electrico, ...CHECKS.luces,
+    ...CHECKS.frenos, ...CHECKS.neumaticos
+  ]
+
+  // Score
+  let totalPeso = 0, pesoOk = 0
+  allChecks.forEach(c => {
+    totalPeso += c.peso
+    if (estados[c.id]==='ok') pesoOk += c.peso
+    else if (estados[c.id]==='alerta') pesoOk += c.peso * 0.5
+  })
+  const respondidos = allChecks.filter(c=>estados[c.id]).length
+  const score = respondidos === 0 ? 0 : Math.round((pesoOk/totalPeso)*100)
+
+  document.getElementById('score-num').textContent = score > 0 ? score + '%' : '—'
+  document.getElementById('score-fill').style.width = score + '%'
+  document.getElementById('score-fill').style.background =
+    score >= 80 ? 'var(--verde)' : score >= 60 ? 'var(--amarillo)' : 'var(--rojo)'
+  document.getElementById('score-texto').textContent =
+    score === 0 ? 'Inspección sin completar' :
+    score >= 80 ? 'Vehículo en buen estado general' :
+    score >= 60 ? 'Requiere atención en algunos puntos' :
+    'Vehículo requiere intervención urgente'
+
+  // Alertas
+  const criticos = allChecks.filter(c=>estados[c.id]==='critico')
+  const alertas  = allChecks.filter(c=>estados[c.id]==='alerta')
+  const alertasEl = document.getElementById('alertas-body')
+
+  if (criticos.length===0 && alertas.length===0) {
+    alertasEl.innerHTML = '<div style="font-size:13px;color:var(--verde)">✅ Sin puntos críticos ni alertas</div>'
+  } else {
+    alertasEl.innerHTML = [
+      ...criticos.map(c=>`
+        <div class="alerta-item">
+          <div class="ai-dot critico"></div>
+          <div class="ai-txt"><strong>${c.nombre}</strong><br>
+            <span>${getNota(c.id)||'Requiere atención inmediata'}</span>
+          </div>
+        </div>`),
+      ...alertas.map(c=>`
+        <div class="alerta-item">
+          <div class="ai-dot alerta"></div>
+          <div class="ai-txt"><strong>${c.nombre}</strong><br>
+            <span>${getNota(c.id)||'Monitorear en próxima visita'}</span>
+          </div>
+        </div>`)
+    ].join('')
+  }
+
+  // Ventas
+  const todasVentas = [...VENTAS.aceites, ...VENTAS.baterias, ...VENTAS.luces]
+  const ventasActivas = todasVentas.filter(v=>ventasOn[v.id])
+  const ventasEl = document.getElementById('ventas-body')
+
+  if (ventasActivas.length === 0) {
+    ventasEl.innerHTML = '<div style="font-size:13px;color:var(--txt2)">No se marcaron oportunidades de venta</div>'
+  } else {
+    const total = ventasActivas.reduce((s,v)=>s+v.precio,0)
+    ventasEl.innerHTML = ventasActivas.map(v=>`
+      <div class="op-item">
+        <span class="op-nombre">${v.nombre}</span>
+        <span class="op-precio">$${v.precio.toLocaleString('es-CL')}</span>
+      </div>`).join('') +
+      `<div style="border-top:1px solid rgba(96,165,250,0.2);margin-top:8px;padding-top:8px;display:flex;justify-content:space-between;font-family:'Syne',sans-serif;font-weight:800;font-size:14px">
+        <span style="color:var(--txt)">Total potencial</span>
+        <span style="color:var(--amarillo)">$${total.toLocaleString('es-CL')}</span>
+      </div>`
+  }
+
+  // Info vehículo
+  const km = parseInt(document.getElementById('d-km').value)||0
+  document.getElementById('resumen-vehiculo').innerHTML = `
+    ${document.getElementById('d-cliente').value||'—'}<br>
+    ${document.getElementById('d-tipo').value} ${document.getElementById('d-marca').value} ${document.getElementById('d-modelo').value} ${document.getElementById('d-anio').value}<br>
+    Patente: ${document.getElementById('d-patente').value||'—'} · ${km?km.toLocaleString('es-CL')+' km':'km no registrado'}<br>
+    Técnico: ${document.getElementById('d-tecnico').value}<br>
+    Tiempo inspección: ${formatTimer()}
+  `
+
+  // Próximos servicios recomendados
+  const proximos = []
+  const ultimo = document.getElementById('d-ultimo').value
+  if (km > 80000 || ultimo==='>12' || ultimo==='nunca') proximos.push('Mantención completa (aceite + filtros + revisión general)')
+  if (estados['pastillas_del']==='alerta'||estados['pastillas_tras']==='alerta') proximos.push('Revisión y cambio de pastillas de freno')
+  if (estados['neu_del_izq']==='alerta'||estados['neu_del_der']==='alerta') proximos.push('Revisión de neumáticos + alineación y balanceo')
+  if (estados['bateria_voltaje']==='alerta') proximos.push('Prueba de carga de batería — posible reemplazo próximo')
+  if (estados['correa_distribucion']==='alerta') proximos.push('Cambio preventivo de correa de distribución')
+  if (estados['aceite_color']==='alerta') proximos.push('Cambio de aceite y filtro')
+
+  document.getElementById('proximos-body').innerHTML = proximos.length === 0
+    ? '<div style="color:var(--verde)">✅ Vehículo al día — próxima mantención según km del fabricante</div>'
+    : proximos.map((p,i)=>`
+        <div style="display:flex;gap:8px;padding:6px 0;border-bottom:1px solid var(--borde);font-size:13px;color:var(--txt2)">
+          <span style="color:var(--rojo);flex-shrink:0">${i+1}.</span>${p}
+        </div>`).join('')
+}
+
+function getNota(id) {
+  const el = document.getElementById('nota-'+id)
+  return el?.value?.trim()||''
+}
+
+function formatTimer() {
+  const m = Math.floor(timerSecs/60), s = timerSecs%60
+  return `${m}m ${s}s`
+}
+
+// ════════════════════════════════
+// ENVIAR POR WHATSAPP
+// ════════════════════════════════
+function enviarWA() {
+  const cliente = document.getElementById('d-cliente').value.trim()
+  const tel     = document.getElementById('d-tel').value.trim().replace(/\D/g,'')
+  const tipo    = document.getElementById('d-tipo').value
+  const marca   = document.getElementById('d-marca').value.trim()
+  const modelo  = document.getElementById('d-modelo').value.trim()
+  const anio    = document.getElementById('d-anio').value
+  const km      = parseInt(document.getElementById('d-km').value)||0
+  const patente = document.getElementById('d-patente').value.trim()
+  const tecnico = document.getElementById('d-tecnico').value
+
+  const allChecks = [...CHECKS.motor,...CHECKS.fluidos,...CHECKS.electrico,...CHECKS.luces,...CHECKS.frenos,...CHECKS.neumaticos]
+  const criticos  = allChecks.filter(c=>estados[c.id]==='critico')
+  const alertas   = allChecks.filter(c=>estados[c.id]==='alerta')
+  const todasV    = [...VENTAS.aceites,...VENTAS.baterias,...VENTAS.luces]
+  const ventasA   = todasV.filter(v=>ventasOn[v.id])
+  const respondidos = allChecks.filter(c=>estados[c.id]).length
+  const totalPeso = allChecks.reduce((s,c)=>s+c.peso,0)
+  const pesoOk    = allChecks.reduce((s,c)=> estados[c.id]==='ok'?s+c.peso:estados[c.id]==='alerta'?s+c.peso*0.5:s,0)
+  const score     = respondidos?Math.round((pesoOk/totalPeso)*100):0
+
+  let msg = `🔧 *INFORME DE INSPECCIÓN SERVIRUTA*\n`
+  msg += `_Taller Mecánico a Domicilio · ${new Date().toLocaleDateString('es-CL')}_\n`
+  msg += `━━━━━━━━━━━━━━━━━━\n\n`
+  msg += `👤 *${cliente||'Cliente'}*\n`
+  msg += `🚗 ${tipo} ${marca} ${modelo}${anio?' '+anio:''}\n`
+  if (patente) msg += `📋 Patente: ${patente}\n`
+  if (km) msg += `📍 Kilometraje: ${km.toLocaleString('es-CL')} km\n`
+  msg += `👷 Técnico: ${tecnico}\n`
+  msg += `⏱ Tiempo inspección: ${formatTimer()}\n\n`
+
+  msg += `*ESTADO GENERAL: ${score}%*\n`
+  const estado_txt = score>=80?'✅ Bueno':score>=60?'⚠️ Requiere atención':'🔴 Urgente'
+  msg += `${estado_txt}\n\n`
+
+  if (criticos.length > 0) {
+    msg += `🔴 *PUNTOS CRÍTICOS:*\n`
+    criticos.forEach(c => { msg += `• ${c.nombre}${getNota(c.id)?': '+getNota(c.id):''}\n` })
+    msg += `\n`
+  }
+
+  if (alertas.length > 0) {
+    msg += `⚠️ *ALERTAS:*\n`
+    alertas.forEach(c => { msg += `• ${c.nombre}${getNota(c.id)?': '+getNota(c.id):''}\n` })
+    msg += `\n`
+  }
+
+  if (ventasA.length > 0) {
+    msg += `💰 *PRODUCTOS DISPONIBLES HOY:*\n`
+    ventasA.forEach(v => { msg += `• ${v.nombre}: $${v.precio.toLocaleString('es-CL')}\n` })
+    msg += `\n`
+  }
+
+  msg += `━━━━━━━━━━━━━━━━━━\n`
+  msg += `Para agendar el siguiente servicio o consultar:\n`
+  msg += `📞 *+56 9 8505 8250* · serviruta.cl`
+
+  const destino = tel ? `56${tel.replace(/^0?56/,'')}` : ''
+  window.open(`https://wa.me/${destino}?text=${encodeURIComponent(msg)}`,'_blank')
+  toast('✅ Informe enviado por WhatsApp','ok')
+}
+
+function nueva() {
+  if (!confirm('¿Iniciar nueva inspección? Se perderán los datos actuales.')) return
+  estados = {}; ventasOn = {}; timerSecs = 0
+  clearInterval(timerInterval); timerInterval = null
+  document.querySelectorAll('input:not([type=radio]):not([type=checkbox]),textarea,select').forEach(el=>{ if(el.tagName!=='SELECT') el.value=''; })
+  document.getElementById('timer-display').textContent = '00:00'
+  iniciarTimer()
+  irPaso(0)
+  renderChecks()
+}
+
+// ════════════════════════════════
+// TOAST
+// ════════════════════════════════
+function toast(msg, type='') {
+  const t = document.getElementById('toast')
+  t.textContent=msg; t.className='toast'+(type?' '+type:'')
+  t.classList.add('show')
+  setTimeout(()=>t.classList.remove('show'),2500)
+}
+
+// ════════════════════════════════
+// INIT
+// ════════════════════════════════
+function renderChecks() {
+  renderCheckGroup('motor-checks',     CHECKS.motor)
+  renderCheckGroup('fluidos-checks',   CHECKS.fluidos)
+  renderCheckGroup('electrico-checks', CHECKS.electrico)
+  renderCheckGroup('luces-checks',     CHECKS.luces)
+  renderCheckGroup('frenos-checks',    CHECKS.frenos)
+  renderCheckGroup('neumaticos-checks',CHECKS.neumaticos)
+}
+
+renderChecks()
+renderVentas()
+iniciarTimer()
+</script>
+</body>
+</html>

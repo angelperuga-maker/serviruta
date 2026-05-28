@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta - Aliados</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--rojo-d:#B01A08;--rojo-g:rgba(232,33,10,0.08);--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--verde-g:rgba(34,197,94,0.1);--amarillo:#F5C518;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:600px;margin:0 auto;}
+.top{background:var(--c1);border-bottom:1px solid var(--borde);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.top-title{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
+.top-back{background:none;border:1px solid var(--borde);color:var(--txt3);font-size:11px;padding:5px 12px;border-radius:6px;cursor:pointer;}
+.body{padding:14px 16px 80px;}
+.btn-nuevo{width:100%;background:var(--rojo);border:none;border-radius:8px;color:#fff;font-family:"Syne",sans-serif;font-weight:700;font-size:14px;padding:13px;cursor:pointer;margin-bottom:14px;}
+.card{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin-bottom:10px;}
+.card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.card-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;}
+.card-codigo{font-size:11px;color:var(--txt3);margin-top:2px;font-family:monospace;}
+.badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;font-family:"Syne",sans-serif;}
+.badge.activo{background:var(--verde-g);color:var(--verde);border:1px solid rgba(34,197,94,0.3);}
+.badge.inactivo{background:var(--rojo-g);color:var(--rojo);border:1px solid rgba(232,33,10,0.3);}
+.card-info{font-size:12px;color:var(--txt3);margin-bottom:10px;}
+.actions{display:flex;gap:8px;}
+.btn{padding:8px 14px;border-radius:8px;font-family:"Syne",sans-serif;font-weight:700;font-size:11px;cursor:pointer;border:none;}
+.btn-wa{background:#25D366;color:#fff;}
+.btn-sec{background:var(--c3);border:1px solid var(--borde);color:var(--txt2);}
+.btn-del{background:var(--rojo-g);border:1px solid rgba(232,33,10,0.3);color:var(--rojo);}
+.empty{text-align:center;padding:48px;color:var(--txt3);}
+.loading{text-align:center;padding:48px;color:var(--txt3);}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:200;display:none;align-items:flex-end;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--c2);border:1px solid var(--borde);border-radius:16px 16px 0 0;width:100%;max-width:600px;padding:20px 20px 36px;}
+.modal-handle{width:36px;height:4px;background:var(--borde);border-radius:2px;margin:0 auto 16px;}
+.modal-title{font-family:"Syne",sans-serif;font-weight:700;font-size:16px;margin-bottom:16px;}
+.lbl{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--txt3);margin-bottom:6px;display:block;}
+.inp{width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:8px;color:var(--txt);font-family:"DM Sans",sans-serif;font-size:15px;padding:11px 13px;outline:none;margin-bottom:10px;}
+.inp:focus{border-color:var(--rojo);}
+.sel{width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:8px;color:var(--txt);font-family:"DM Sans",sans-serif;font-size:14px;padding:11px 13px;outline:none;margin-bottom:10px;}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.btn-save{width:100%;background:var(--rojo);border:none;border-radius:8px;color:#fff;font-family:"Syne",sans-serif;font-weight:700;font-size:14px;padding:13px;cursor:pointer;margin-top:4px;}
+.btn-cancel{width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:8px;color:var(--txt2);font-family:"Syne",sans-serif;font-weight:700;font-size:14px;padding:13px;cursor:pointer;margin-bottom:8px;}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--c3);border:1px solid var(--borde);border-radius:8px;padding:11px 18px;font-size:13px;opacity:0;transition:all 0.25s;pointer-events:none;white-space:nowrap;z-index:999;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.ok{border-color:rgba(34,197,94,0.4);color:var(--verde);}
+</style>
+</head>
+<body>
+<div class="top">
+  <button class="top-back" onclick="location.href='menu-coordinador.html'">← Volver</button>
+  <div class="top-title">🤝 Gestión de Aliados</div>
+  <button onclick="load()" style="background:none;border:none;color:var(--txt3);cursor:pointer;font-size:20px;">&#8635;</button>
+</div>
+<div class="body">
+  <button class="btn-nuevo" onclick="openModal()">＋ Agregar nuevo aliado</button>
+  <div id="lista"><div class="loading">Cargando...</div></div>
+</div>
+
+<div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modal-title">Nuevo aliado</div>
+    <label class="lbl">Nombre completo</label>
+    <input class="inp" id="m-nombre" placeholder="Pedro Soto">
+    <div class="row">
+      <div>
+        <label class="lbl">Tipo</label>
+        <select class="sel" id="m-tipo">
+          <option value="Gruero">Gruero</option>
+          <option value="Conserje">Conserje</option>
+          <option value="Repuestera">Repuestera</option>
+          <option value="Conductor">Conductor app</option>
+          <option value="Otro">Otro</option>
+        </select>
+      </div>
+      <div>
+        <label class="lbl">Teléfono</label>
+        <input class="inp" id="m-tel" placeholder="+56 9 XXXX XXXX" type="tel" style="margin-bottom:0">
+      </div>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <div>
+        <label class="lbl">Código único</label>
+        <input class="inp" id="m-codigo" placeholder="GRU-PEDRO01" style="font-family:monospace;font-size:13px;margin-bottom:0" oninput="this.value=this.value.toUpperCase()">
+      </div>
+      <div>
+        <label class="lbl">PIN (4 dígitos)</label>
+        <input class="inp" id="m-pin" placeholder="1234" maxlength="4" type="password" style="margin-bottom:0">
+      </div>
+    </div>
+    <div style="margin-top:10px;margin-bottom:14px">
+      <label class="lbl">Activo</label>
+      <select class="sel" id="m-activo" style="margin-bottom:0">
+        <option value="true">Sí</option>
+        <option value="false">No</option>
+      </select>
+    </div>
+    <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+    <button class="btn-save" onclick="guardar()">Guardar aliado</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co';
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s';
+var db=null,aliados=[],editId=null;
+function getDB(){if(!db)db=supabase.createClient(SB_URL,SB_KEY);return db;}
+
+async function load(){
+  document.getElementById('lista').innerHTML='<div class="loading">Cargando...</div>';
+  var r=await getDB().from('aliados').select('*').order('created_at',{ascending:false});
+  aliados=r.data||[];
+  render();
+}
+
+function render(){
+  var el=document.getElementById('lista');
+  if(!aliados.length){el.innerHTML='<div class="empty">Sin aliados registrados</div>';return;}
+  el.innerHTML=aliados.map(function(a){
+    return '<div class="card">'+
+      '<div class="card-top">'+
+        '<div><div class="card-nombre">'+a.nombre+'</div><div class="card-codigo">'+a.codigo+' · PIN: '+a.pin+'</div></div>'+
+        '<span class="badge '+(a.activo?'activo':'inactivo')+'">'+(a.activo?'Activo':'Inactivo')+'</span>'+
+      '</div>'+
+      '<div class="card-info">'+a.tipo+(a.telefono?' · '+a.telefono:'')+'</div>'+
+      '<div class="actions">'+
+        (a.telefono?'<button class="btn btn-wa" onclick="enviarCredenciales(\''+a.telefono+'\',\''+a.nombre+'\',\''+a.codigo+'\',\''+a.pin+'\')">💬 Enviar acceso</button>':'')+
+        '<button class="btn btn-sec" onclick="editar(\''+a.id+'\')">✏️ Editar</button>'+
+        '<button class="btn btn-del" onclick="eliminar(\''+a.id+'\')">🗑</button>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+
+function openModal(id){
+  editId=id||null;
+  var a=id?aliados.find(function(x){return x.id===id;}):null;
+  document.getElementById('modal-title').textContent=a?'Editar aliado':'Nuevo aliado';
+  document.getElementById('m-nombre').value=a?a.nombre:'';
+  document.getElementById('m-tipo').value=a?a.tipo:'Gruero';
+  document.getElementById('m-tel').value=a?a.telefono:'';
+  document.getElementById('m-codigo').value=a?a.codigo:'';
+  document.getElementById('m-pin').value=a?a.pin:'';
+  document.getElementById('m-activo').value=a?(a.activo?'true':'false'):'true';
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal(){document.getElementById('modal').classList.remove('open');}
+
+function editar(id){openModal(id);}
+
+async function guardar(){
+  var nombre=document.getElementById('m-nombre').value.trim();
+  var codigo=document.getElementById('m-codigo').value.trim();
+  var pin=document.getElementById('m-pin').value.trim();
+  if(!nombre||!codigo||!pin){toast('Completa nombre, código y PIN');return;}
+  var data={
+    nombre:nombre,
+    tipo:document.getElementById('m-tipo').value,
+    telefono:document.getElementById('m-tel').value.trim(),
+    codigo:codigo,
+    pin:pin,
+    activo:document.getElementById('m-activo').value==='true'
+  };
+  var r;
+  if(editId){
+    r=await getDB().from('aliados').update(data).eq('id',editId);
+  }else{
+    r=await getDB().from('aliados').insert(data);
+  }
+  if(r.error){toast('Error: '+r.error.message);return;}
+  toast(editId?'Aliado actualizado':'Aliado creado','ok');
+  closeModal();
+  load();
+}
+
+async function eliminar(id){
+  if(!confirm('Eliminar este aliado?'))return;
+  await getDB().from('aliados').delete().eq('id',id);
+  toast('Aliado eliminado');
+  load();
+}
+
+function enviarCredenciales(tel,nombre,codigo,pin){
+  var msg='Hola '+nombre+' bienvenido a la red Serviruta!\n\nYa tienes acceso a tu portal de comisiones:\nhttps://angelperuga-maker.github.io/serviruta/aliados-v2.html\n\nTu codigo: '+codigo+'\nTu PIN: '+pin+'\n\nCualquier consulta escribe al +56 9 8505 8250';
+  window.open('https://wa.me/56'+tel.replace(/\D/g,'')+'?text='+encodeURIComponent(msg),'_blank');
+}
+
+function toast(msg,type){var t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(type?' '+type:'');t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2500);}
+load();
+</script>
+</body>
+</html>

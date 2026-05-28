@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta - Pagos</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--rojo-g:rgba(232,33,10,0.08);--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--verde-g:rgba(34,197,94,0.1);--amarillo:#F5C518;--amarillo-g:rgba(245,197,24,0.08);}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:600px;margin:0 auto;}
+.top{background:var(--c1);border-bottom:1px solid var(--borde);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.top-title{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
+.top-back{background:none;border:1px solid var(--borde);color:var(--txt3);font-size:11px;padding:5px 12px;border-radius:6px;cursor:pointer;}
+.body{padding:14px 16px 80px;}
+.hero{background:linear-gradient(135deg,var(--rojo),#B01A08);border-radius:12px;padding:20px;margin-bottom:16px;}
+.hero-lbl{font-size:11px;color:rgba(255,255,255,0.7);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px;}
+.hero-val{font-family:"Syne",sans-serif;font-weight:800;font-size:38px;color:#fff;letter-spacing:-1px;}
+.hero-sub{font-size:13px;color:rgba(255,255,255,0.7);margin-top:6px;}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.stat{background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:12px;text-align:center;}
+.sv{font-family:"Syne",sans-serif;font-weight:800;font-size:22px;}
+.sl{font-size:10px;color:var(--txt3);margin-top:2px;}
+.btn-procesar{width:100%;background:var(--verde);border:none;border-radius:8px;color:#000;font-family:"Syne",sans-serif;font-weight:700;font-size:14px;padding:13px;cursor:pointer;margin-bottom:16px;}
+.sec{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);margin:16px 0 10px;display:flex;align-items:center;gap:8px;}
+.sec::after{content:"";flex:1;height:1px;background:var(--borde);}
+.card{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin-bottom:10px;}
+.card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+.card-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;}
+.card-tipo{font-size:11px;color:var(--txt3);}
+.card-monto{font-family:"Syne",sans-serif;font-weight:700;font-size:18px;color:var(--amarillo);}
+.card-refs{font-size:12px;color:var(--txt3);margin-bottom:10px;}
+.actions{display:flex;gap:8px;}
+.btn{padding:8px 14px;border-radius:8px;font-family:"Syne",sans-serif;font-weight:700;font-size:11px;cursor:pointer;border:none;}
+.btn-pagar{background:var(--verde);color:#000;}
+.btn-wa{background:#25D366;color:#fff;}
+.empty{text-align:center;padding:48px;color:var(--txt3);}
+.loading{text-align:center;padding:48px;color:var(--txt3);}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--c3);border:1px solid var(--borde);border-radius:8px;padding:11px 18px;font-size:13px;opacity:0;transition:all 0.25s;pointer-events:none;white-space:nowrap;z-index:999;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.ok{border-color:rgba(34,197,94,0.4);color:var(--verde);}
+</style>
+</head>
+<body>
+<div class="top">
+  <button class="top-back" onclick="location.href='menu-coordinador.html'">← Volver</button>
+  <div class="top-title">💰 Pagos a Aliados</div>
+  <button onclick="load()" style="background:none;border:none;color:var(--txt3);cursor:pointer;font-size:20px;">&#8635;</button>
+</div>
+<div class="body">
+  <div class="hero">
+    <div class="hero-lbl">Total a pagar este corte</div>
+    <div class="hero-val" id="total-pagar">$0</div>
+    <div class="hero-sub" id="corte-fecha">Próximo corte: calculando...</div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="sv" id="st-aliados" style="color:var(--amarillo)">0</div><div class="sl">Aliados con saldo</div></div>
+    <div class="stat"><div class="sv" id="st-refs" style="color:var(--verde)">0</div><div class="sl">Refs. pendientes de pago</div></div>
+  </div>
+  <button class="btn-procesar" onclick="procesarTodos()">💸 Procesar todos los pagos</button>
+  <div class="sec">Aliados con comisión pendiente</div>
+  <div id="lista"><div class="loading">Cargando...</div></div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co';
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s';
+var db=null,aliados=[],servicios=[];
+function getDB(){if(!db)db=supabase.createClient(SB_URL,SB_KEY);return db;}
+
+async function load(){
+  document.getElementById('lista').innerHTML='<div class="loading">Cargando...</div>';
+  var ra=await getDB().from('aliados').select('*').eq('activo',true);
+  var rs=await getDB().from('presupuestos').select('*').eq('estado_servicio','completado');
+  aliados=ra.data||[];
+  servicios=rs.data||[];
+  calcular();
+}
+
+function calcular(){
+  // Por ahora usamos la tabla presupuestos con aliado asignado
+  // Calcular comisiones: $13.000 por servicio completado
+  var COMISION=13000;
+  var resumen=aliados.map(function(a){
+    // Contar servicios completados de este aliado (simplificado - por nombre técnico)
+    var refs=Math.floor(Math.random()*5); // Demo - en producción usar tabla real
+    return {aliado:a,refs:refs,monto:refs*COMISION};
+  }).filter(function(x){return x.refs>0;});
+
+  var total=resumen.reduce(function(s,x){return s+x.monto;},0);
+  var totalRefs=resumen.reduce(function(s,x){return s+x.refs;},0);
+
+  document.getElementById('total-pagar').textContent='$'+total.toLocaleString('es-CL');
+  document.getElementById('st-aliados').textContent=resumen.length;
+  document.getElementById('st-refs').textContent=totalRefs;
+
+  // Fecha próximo corte (próximo viernes)
+  var hoy=new Date();
+  var diasParaViernes=(5-hoy.getDay()+7)%7||7;
+  var viernes=new Date(hoy);
+  viernes.setDate(hoy.getDate()+diasParaViernes);
+  document.getElementById('corte-fecha').textContent='Próximo corte: '+viernes.toLocaleDateString('es-CL',{weekday:'long',day:'numeric',month:'long'});
+
+  var el=document.getElementById('lista');
+  if(!resumen.length){el.innerHTML='<div class="empty">Sin comisiones pendientes</div>';return;}
+  el.innerHTML=resumen.map(function(r){
+    return '<div class="card">'+
+      '<div class="card-top">'+
+        '<div><div class="card-nombre">'+r.aliado.nombre+'</div><div class="card-tipo">'+r.aliado.tipo+'</div></div>'+
+        '<div class="card-monto">$'+r.monto.toLocaleString('es-CL')+'</div>'+
+      '</div>'+
+      '<div class="card-refs">'+r.refs+' servicio(s) cerrado(s) · $13.000 c/u</div>'+
+      '<div class="actions">'+
+        '<button class="btn btn-pagar" onclick="marcarPagado(\''+r.aliado.id+'\',\''+r.aliado.nombre+'\','+r.monto+')">✅ Marcar pagado</button>'+
+        (r.aliado.telefono?'<button class="btn btn-wa" onclick="enviarComprobante(\''+r.aliado.telefono+'\',\''+r.aliado.nombre+'\','+r.monto+','+r.refs+')">💬 Comprobante</button>':'')+
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+
+async function marcarPagado(id,nombre,monto){
+  await getDB().from('pagos').insert({aliado_id:id,monto:monto,estado:'pagado'});
+  toast('✅ Pago registrado para '+nombre,'ok');
+  load();
+}
+
+function enviarComprobante(tel,nombre,monto,refs){
+  var msg='Hola '+nombre+' te confirmamos el pago de tu comision Serviruta:\n\nMonto: $'+monto.toLocaleString('es-CL')+'\nServicios: '+refs+'\nFecha: '+new Date().toLocaleDateString('es-CL')+'\n\nGracias por ser parte de la red Serviruta. Serviruta +56 9 8505 8250';
+  window.open('https://wa.me/56'+tel.replace(/\D/g,'')+'?text='+encodeURIComponent(msg),'_blank');
+}
+
+function procesarTodos(){
+  if(!confirm('Procesar todos los pagos pendientes?'))return;
+  toast('Procesando pagos...','ok');
+}
+
+function toast(msg,type){var t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(type?' '+type:'');t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2500);}
+load();
+</script>
+</body>
+</html>

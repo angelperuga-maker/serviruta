@@ -383,7 +383,7 @@ async function tEnviar() {
   }
   // Guardar en Supabase
   try {
-    if (!sbClient) sbClient = supabase.createClient('""" + SUPA_URL + """', '""" + SUPA_KEY + """')
+    if (!sbClient) sbClient = supabase.createClient('https://bqlgfmqcefledqyodkii.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s')
     await sbClient.from('presupuestos').insert({
       numero: sol.pptoNum,
       tecnico: sol.tecnico,

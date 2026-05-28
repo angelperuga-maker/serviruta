@@ -526,10 +526,16 @@ body{background:var(--negro);color:var(--txt);font-family:'DM Sans',sans-serif;m
 </head>
 <body>
 <script>
+(function(){
+try {
+
 if (!sessionStorage.getItem("tecnico_nombre")) {
   location.href = "login-tecnico.html";
 }
 var tecnicoNombre = sessionStorage.getItem("tecnico_nombre") || "Técnico";
+
+} catch(e) { console.warn("Script 0 error:", e.message); }
+})();
 </script>
 <div class="top">
   <div class="top-left">
@@ -874,6 +880,9 @@ var tecnicoNombre = sessionStorage.getItem("tecnico_nombre") || "Técnico";
 <div class="toast" id="toast"></div>
 
 <script>
+(function(){
+try {
+
 // ════════════════════════════════
 // DATOS DE INSPECCIÓN
 // ════════════════════════════════
@@ -1295,6 +1304,9 @@ function renderChecks() {
 renderChecks()
 renderVentas()
 iniciarTimer()
+
+} catch(e) { console.warn("Script 1 error:", e.message); }
+})();
 </script>
 </div>
 <div class="ttab" id="ttab2">
@@ -1485,6 +1497,9 @@ iniciarTimer()
 <div class="toast" id="toast"></div>
 
 <script>
+(function(){
+try {
+
 // ════════════════════════════════
 // DATOS
 // ════════════════════════════════
@@ -1905,10 +1920,16 @@ function toast(msg, type='') {
 
 // INIT
 renderStock()
+
+} catch(e) { console.warn("Script 2 error:", e.message); }
+})();
 </script>
 </div>
 
 <script>
+(function(){
+try {
+
 function showTab(n) {
   document.querySelectorAll(".ttab").forEach((t,i)=>t.classList.toggle("active",i===n));
   document.querySelectorAll(".tnav").forEach((t,i)=>t.classList.toggle("active",i===n));
@@ -1919,9 +1940,15 @@ document.getElementById("top-nombre").textContent = sessionStorage.getItem("tecn
 setTimeout(function() {
   if (typeof entrar === 'function') entrar('tecnico');
 }, 100);
+
+} catch(e) { console.warn("Script 3 error:", e.message); }
+})();
 </script>
 
 <script>
+(function(){
+try {
+
 // Presupuestos
 
 // ════════════════════════════════
@@ -2324,9 +2351,15 @@ function toast(msg, type='') {
 // INIT — un ítem vacío en técnico
 tAddItem()
 
+
+} catch(e) { console.warn("Script 4 error:", e.message); }
+})();
 </script>
 
 <script>
+(function(){
+try {
+
 // 🔍 Inspección
 
 // ════════════════════════════════
@@ -2751,9 +2784,15 @@ renderChecks()
 renderVentas()
 iniciarTimer()
 
+
+} catch(e) { console.warn("Script 5 error:", e.message); }
+})();
 </script>
 
 <script>
+(function(){
+try {
+
 // 📦 Stock
 
 // ════════════════════════════════
@@ -3177,6 +3216,9 @@ function toast(msg, type='') {
 // INIT
 renderStock()
 
+
+} catch(e) { console.warn("Script 6 error:", e.message); }
+})();
 </script>
 
 </body>

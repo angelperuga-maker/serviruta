@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Presupuesto Técnico</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #181b24;
+    --surface2: #1e2230;
+    --border: #2a2f42;
+    --accent: #f0a500;
+    --accent2: #ff6b35;
+    --text: #e8eaf0;
+    --muted: #6b7280;
+    --success: #22c55e;
+    --danger: #ef4444;
+    --radius: 10px;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    padding-bottom: 60px;
+  }
+
+  /* Header */
+  header {
+    background: var(--surface);
+    border-bottom: 2px solid var(--accent);
+    padding: 16px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .header-icon {
+    width: 38px; height: 38px;
+    background: var(--accent);
+    border-radius: 8px;
+    display: flex; align-items:center; justify-content:center;
+    font-size: 18px;
+  }
+  header h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+  }
+  header span {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 300;
+  }
+
+  /* Main */
+  main { padding: 20px; max-width: 600px; margin: 0 auto; }
+
+  /* Section titles */
+  .section-label {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 12px;
+    margin-top: 28px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Cards */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 12px;
+  }
+
+  /* Form fields */
+  .field { margin-bottom: 14px; }
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    margin-bottom: 6px;
+    letter-spacing: 0.3px;
+  }
+  input, textarea, select {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 13px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(240,165,0,0.12);
+  }
+  textarea { resize: vertical; min-height: 80px; }
+  select option { background: var(--surface2); }
+
+  /* Row layout */
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  /* Items */
+  #items-list { display: flex; flex-direction: column; gap: 8px; }
+  .item-row {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 12px;
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    gap: 8px;
+    align-items: center;
+    animation: slideIn 0.2s ease;
+  }
+  @keyframes slideIn {
+    from { opacity:0; transform: translateY(-6px); }
+    to { opacity:1; transform: translateY(0); }
+  }
+  .item-row .item-desc {
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .item-row .item-qty {
+    font-size: 12px;
+    color: var(--accent);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .item-row .item-unit {
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .remove-btn {
+    background: none;
+    border: none;
+    color: var(--danger);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 2px 4px;
+    border-radius: 4px;
+    transition: background 0.15s;
+  }
+  .remove-btn:hover { background: rgba(239,68,68,0.15); }
+
+  /* Add item form */
+  .add-item-form {
+    background: var(--surface2);
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 8px;
+  }
+  .add-item-form .row3 {
+    display: grid;
+    grid-template-columns: 1fr 80px 80px;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .btn-add-item {
+    width: 100%;
+    background: rgba(240,165,0,0.12);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    color: var(--accent);
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 9px;
+    cursor: pointer;
+    transition: background 0.2s;
+    letter-spacing: 0.5px;
+  }
+  .btn-add-item:hover { background: rgba(240,165,0,0.22); }
+
+  /* Empty state */
+  .empty-items {
+    text-align: center;
+    padding: 20px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  /* Fotos */
+  .foto-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  .foto-thumb {
+    width: 72px; height: 72px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid var(--border);
+    position: relative;
+  }
+  .foto-wrap {
+    position: relative;
+  }
+  .foto-remove {
+    position: absolute;
+    top: -6px; right: -6px;
+    width: 18px; height: 18px;
+    background: var(--danger);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    font-size: 11px;
+    cursor: pointer;
+    display: flex; align-items:center; justify-content:center;
+    line-height: 1;
+  }
+  .upload-btn {
+    width: 72px; height: 72px;
+    background: var(--surface2);
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    display: flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    cursor: pointer;
+    font-size: 22px;
+    color: var(--muted);
+    transition: border-color 0.2s;
+  }
+  .upload-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .upload-btn span { font-size: 10px; margin-top: 3px; }
+  #foto-input { display: none; }
+
+  /* Submit */
+  .btn-submit {
+    width: 100%;
+    background: var(--accent);
+    border: none;
+    border-radius: var(--radius);
+    padding: 16px;
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    color: #0f1117;
+    cursor: pointer;
+    margin-top: 28px;
+    letter-spacing: 0.5px;
+    transition: all 0.2s;
+    display: flex; align-items:center; justify-content:center; gap: 8px;
+  }
+  .btn-submit:hover { background: #ffc320; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(240,165,0,0.3); }
+  .btn-submit:active { transform: translateY(0); }
+  .btn-submit:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+
+  /* Toast */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 500;
+    display: flex; align-items:center; gap: 10px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    z-index: 999;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.success { border-color: var(--success); color: var(--success); }
+  .toast.error { border-color: var(--danger); color: var(--danger); }
+
+  /* Spinner */
+  .spinner {
+    width: 18px; height: 18px;
+    border: 2px solid rgba(15,17,23,0.3);
+    border-top-color: #0f1117;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Counter badge */
+  .badge {
+    background: var(--accent);
+    color: #0f1117;
+    font-size: 10px;
+    font-weight: 800;
+    border-radius: 20px;
+    padding: 2px 7px;
+    margin-left: 6px;
+    font-family: 'Syne', sans-serif;
+  }
+
+  /* Urgencia */
+  .urgencia-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+  }
+  .urgencia-opt {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  .urgencia-opt .emoji { font-size: 18px; display: block; margin-bottom: 4px; }
+  .urgencia-opt:hover { border-color: var(--accent); }
+  .urgencia-opt.selected {
+    border-color: var(--accent);
+    background: rgba(240,165,0,0.12);
+    color: var(--accent);
+  }
+  .urgencia-opt[data-val="alta"].selected {
+    border-color: var(--danger);
+    background: rgba(239,68,68,0.12);
+    color: var(--danger);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-icon">🔧</div>
+  <div>
+    <h1>Nuevo Presupuesto</h1>
+    <span>Módulo Técnico</span>
+  </div>
+</header>
+
+<main>
+
+  <!-- DATOS CLIENTE -->
+  <div class="section-label">Datos del cliente</div>
+  <div class="card">
+    <div class="field">
+      <label>NOMBRE COMPLETO</label>
+      <input type="text" id="cliente" placeholder="Ej: María González" autocomplete="off">
+    </div>
+    <div class="field">
+      <label>TELÉFONO / WHATSAPP</label>
+      <input type="tel" id="telefono" placeholder="+56 9 xxxx xxxx">
+    </div>
+    <div class="field">
+      <label>DIRECCIÓN</label>
+      <input type="text" id="direccion" placeholder="Calle, número, comuna">
+    </div>
+    <div class="row">
+      <div class="field">
+        <label>FECHA VISITA</label>
+        <input type="date" id="fecha">
+      </div>
+      <div class="field">
+        <label>TÉCNICO</label>
+        <input type="text" id="tecnico" placeholder="Tu nombre">
+      </div>
+    </div>
+  </div>
+
+  <!-- DIAGNÓSTICO -->
+  <div class="section-label">Diagnóstico</div>
+  <div class="card">
+    <div class="field">
+      <label>DESCRIPCIÓN DEL PROBLEMA</label>
+      <textarea id="descripcion" placeholder="Describe el problema encontrado en detalle..."></textarea>
+    </div>
+    <div class="field">
+      <label>URGENCIA</label>
+      <div class="urgencia-grid">
+        <div class="urgencia-opt selected" data-val="normal" onclick="selectUrgencia(this)">
+          <span class="emoji">🟢</span>Normal
+        </div>
+        <div class="urgencia-opt" data-val="media" onclick="selectUrgencia(this)">
+          <span class="emoji">🟡</span>Media
+        </div>
+        <div class="urgencia-opt" data-val="alta" onclick="selectUrgencia(this)">
+          <span class="emoji">🔴</span>Alta
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MATERIALES / TRABAJOS -->
+  <div class="section-label">
+    Materiales y trabajos
+    <span class="badge" id="items-count">0</span>
+  </div>
+
+  <div id="items-list">
+    <div class="empty-items" id="empty-msg">📦 Aún no hay ítems agregados</div>
+  </div>
+
+  <div class="add-item-form">
+    <div class="add-item-form .row3" style="display:grid;grid-template-columns:1fr 80px 90px;gap:8px;margin-bottom:8px;">
+      <div>
+        <label>DESCRIPCIÓN</label>
+        <input type="text" id="item-desc" placeholder="Ej: Tubería 1/2&quot;" autocomplete="off">
+      </div>
+      <div>
+        <label>CANTIDAD</label>
+        <input type="number" id="item-qty" placeholder="1" min="0.1" step="0.1">
+      </div>
+      <div>
+        <label>UNIDAD</label>
+        <select id="item-unit">
+          <option value="un">un</option>
+          <option value="m">m</option>
+          <option value="m²">m²</option>
+          <option value="kg">kg</option>
+          <option value="hr">hr</option>
+          <option value="gl">gl</option>
+          <option value="lt">lt</option>
+          <option value="ml">ml</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn-add-item" onclick="addItem()">+ AGREGAR ÍTEM</button>
+  </div>
+
+  <!-- FOTOS -->
+  <div class="section-label">Registro fotográfico</div>
+  <div class="card">
+    <div class="foto-preview" id="foto-preview">
+      <label class="upload-btn" for="foto-input">
+        📷<span>Foto</span>
+      </label>
+    </div>
+    <input type="file" id="foto-input" accept="image/*" multiple onchange="addFotos(this)">
+    <p style="font-size:11px;color:var(--muted);margin-top:10px;">Las fotos se adjuntarán como URLs base64 al presupuesto</p>
+  </div>
+
+  <!-- OBSERVACIONES -->
+  <div class="section-label">Observaciones adicionales</div>
+  <div class="card">
+    <textarea id="observaciones" placeholder="Notas adicionales, condiciones especiales, materiales alternativos..." style="min-height:70px;"></textarea>
+  </div>
+
+  <button class="btn-submit" id="btn-submit" onclick="guardarPresupuesto()">
+    <span>GUARDAR PRESUPUESTO</span>
+  </button>
+
+</main>
+
+<div class="toast" id="toast">
+  <span id="toast-icon">✓</span>
+  <span id="toast-msg">Guardado</span>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://bqlgfmqcefledqyodkii.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s';
+
+let items = [];
+let fotos = [];
+let urgencia = 'normal';
+
+// Set today's date
+document.getElementById('fecha').value = new Date().toISOString().split('T')[0];
+
+// Restore tecnico from localStorage
+const savedTecnico = localStorage.getItem('tecnico_nombre');
+if (savedTecnico) document.getElementById('tecnico').value = savedTecnico;
+
+function selectUrgencia(el) {
+  document.querySelectorAll('.urgencia-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  urgencia = el.dataset.val;
+}
+
+function addItem() {
+  const desc = document.getElementById('item-desc').value.trim();
+  const qty = parseFloat(document.getElementById('item-qty').value);
+  const unit = document.getElementById('item-unit').value;
+
+  if (!desc) { showToast('Ingresa la descripción del ítem', 'error'); return; }
+  if (!qty || qty <= 0) { showToast('Ingresa una cantidad válida', 'error'); return; }
+
+  items.push({ desc, qty, unit });
+  renderItems();
+
+  document.getElementById('item-desc').value = '';
+  document.getElementById('item-qty').value = '';
+  document.getElementById('item-desc').focus();
+}
+
+// Allow Enter on item-desc to add
+document.getElementById('item-desc').addEventListener('keydown', e => {
+  if (e.key === 'Enter') { e.preventDefault(); document.getElementById('item-qty').focus(); }
+});
+document.getElementById('item-qty').addEventListener('keydown', e => {
+  if (e.key === 'Enter') { e.preventDefault(); addItem(); }
+});
+
+function removeItem(idx) {
+  items.splice(idx, 1);
+  renderItems();
+}
+
+function renderItems() {
+  const list = document.getElementById('items-list');
+  const empty = document.getElementById('empty-msg');
+  document.getElementById('items-count').textContent = items.length;
+
+  if (items.length === 0) {
+    list.innerHTML = '<div class="empty-items" id="empty-msg">📦 Aún no hay ítems agregados</div>';
+    return;
+  }
+
+  list.innerHTML = items.map((it, i) => `
+    <div class="item-row">
+      <div>
+        <div class="item-desc">${escHTML(it.desc)}</div>
+      </div>
+      <div>
+        <span class="item-qty">${it.qty}</span>
+        <span class="item-unit"> ${it.unit}</span>
+      </div>
+      <button class="remove-btn" onclick="removeItem(${i})" title="Eliminar">✕</button>
+    </div>
+  `).join('');
+}
+
+function escHTML(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function addFotos(input) {
+  const files = Array.from(input.files);
+  files.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      fotos.push(e.target.result);
+      renderFotos();
+    };
+    reader.readAsDataURL(file);
+  });
+  input.value = '';
+}
+
+function removeFoto(idx) {
+  fotos.splice(idx, 1);
+  renderFotos();
+}
+
+function renderFotos() {
+  const preview = document.getElementById('foto-preview');
+  const thumbs = fotos.map((src, i) => `
+    <div class="foto-wrap">
+      <img class="foto-thumb" src="${src}" alt="foto">
+      <button class="foto-remove" onclick="removeFoto(${i})">✕</button>
+    </div>
+  `).join('');
+  preview.innerHTML = thumbs + `
+    <label class="upload-btn" for="foto-input">📷<span>Foto</span></label>
+  `;
+}
+
+async function guardarPresupuesto() {
+  const cliente = document.getElementById('cliente').value.trim();
+  const telefono = document.getElementById('telefono').value.trim();
+  const direccion = document.getElementById('direccion').value.trim();
+  const fecha = document.getElementById('fecha').value;
+  const tecnico = document.getElementById('tecnico').value.trim();
+  const descripcion = document.getElementById('descripcion').value.trim();
+  const observaciones = document.getElementById('observaciones').value.trim();
+
+  if (!cliente) { showToast('Ingresa el nombre del cliente', 'error'); return; }
+  if (!direccion) { showToast('Ingresa la dirección', 'error'); return; }
+  if (!tecnico) { showToast('Ingresa tu nombre como técnico', 'error'); return; }
+  if (!descripcion) { showToast('Describe el problema', 'error'); return; }
+  if (items.length === 0) { showToast('Agrega al menos un ítem', 'error'); return; }
+
+  localStorage.setItem('tecnico_nombre', tecnico);
+
+  const btn = document.getElementById('btn-submit');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div><span>GUARDANDO...</span>';
+
+  const payload = {
+    cliente,
+    telefono,
+    direccion,
+    fecha,
+    tecnico,
+    descripcion,
+    urgencia,
+    items,
+    observaciones,
+    fotos: fotos.length > 0 ? fotos : [],
+    estado: 'pendiente',
+    created_at: new Date().toISOString()
+  };
+
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/presupuestos`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Prefer': 'return=representation'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.message || `HTTP ${res.status}`);
+    }
+
+    showToast('✓ Presupuesto guardado exitosamente', 'success');
+    setTimeout(() => resetForm(), 1800);
+  } catch (err) {
+    console.error(err);
+    showToast('Error al guardar: ' + err.message, 'error');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '<span>GUARDAR PRESUPUESTO</span>';
+  }
+}
+
+function resetForm() {
+  document.getElementById('cliente').value = '';
+  document.getElementById('telefono').value = '';
+  document.getElementById('direccion').value = '';
+  document.getElementById('fecha').value = new Date().toISOString().split('T')[0];
+  document.getElementById('descripcion').value = '';
+  document.getElementById('observaciones').value = '';
+  items = [];
+  fotos = [];
+  urgencia = 'normal';
+  renderItems();
+  renderFotos();
+  document.querySelectorAll('.urgencia-opt').forEach(o => o.classList.remove('selected'));
+  document.querySelector('[data-val="normal"]').classList.add('selected');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showToast(msg, type = 'success') {
+  const toast = document.getElementById('toast');
+  const toastMsg = document.getElementById('toast-msg');
+  const toastIcon = document.getElementById('toast-icon');
+  toast.className = 'toast ' + type;
+  toastMsg.textContent = msg;
+  toastIcon.textContent = type === 'success' ? '✓' : '✕';
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+</script>
+</body>
+</html>

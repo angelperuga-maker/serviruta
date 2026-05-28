@@ -138,6 +138,7 @@ input::placeholder{color:#444;}
           <div class="code-text" id="mi-codigo">—</div>
           <button class="copy-btn" onclick="copiarCodigo()">Copiar</button>
         </div>
+        <button class="share-btn" onclick="enviarLead()" style="margin-bottom:8px;background:rgba(251,146,60,0.1);border-color:rgba(251,146,60,0.3);color:var(--naranja)">📥 Registrar lead directamente</button>
         <button class="share-btn" onclick="compartir()">💬 Compartir por WhatsApp</button>
       </div>
     </div>
@@ -201,9 +202,9 @@ async function iniciarApp() {
 
 async function loadDashboard() {
   const client = getDB()
-  const { data: refs } = await client.from('servicios').select('*').eq('aliado_id', aliado.id)
-  const cerrados   = (refs||[]).filter(r=>r.estado==='cerrado')
-  const pendientes = (refs||[]).filter(r=>r.estado!=='cerrado')
+  const { data: refs } = await client.from('presupuestos').select('*').eq('aliado_codigo', aliado.codigo)
+  const cerrados   = (refs||[]).filter(r=>r.estado_servicio==='completado')
+  const pendientes = (refs||[]).filter(r=>r.estado_servicio!=='completado')
   const ganado = cerrados.filter(r=>!r.comision_pagada).length * 13000
   document.getElementById('hamount').textContent = '$' + ganado.toLocaleString('es-CL')
   document.getElementById('hbadge').textContent = cerrados.length + ' servicios'
@@ -248,8 +249,33 @@ function copiarCodigo() {
 
 function compartir() {
   if (!aliado) return
-  const msg = `Hola! Te recomiendo a Serviruta, mecanicos a domicilio 24/7 en Santiago.\n\nEscribeles y diles que te manda ${aliado.nombre} (codigo: ${aliado.codigo})\n👉 wa.me/56985058250`
+  const msg = 'Hola! Te recomiendo a Serviruta, mecanicos a domicilio 24/7 en Santiago.\n\nEscribeles y diles que te manda ' + aliado.nombre + ' (codigo: ' + aliado.codigo + ')\n👉 wa.me/56985058250'
   window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank')
+}
+
+function enviarLead() {
+  if (!aliado) return
+  const nombre = prompt('Nombre del cliente que refieres:')
+  if (!nombre) return
+  const tel = prompt('Telefono del cliente:')
+  if (!tel) return
+  const problema = prompt('Que problema tiene el auto:')
+  if (!problema) return
+  const sbL = supabase.createClient('https://bqlgfmqcefledqyodkii.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s')
+  sbL.from('leads').insert({
+    cliente: nombre,
+    telefono: tel,
+    problema: problema,
+    aliado_codigo: aliado.codigo,
+    aliado_nombre: aliado.nombre,
+    estado: 'nuevo'
+  }).then(function(r) {
+    if (r.error) { showToast('Error al registrar'); return }
+    showToast('Lead enviado a Serviruta!')
+    // Notificar a Serviruta
+    const msg = 'NUEVO LEAD de aliado\n\nAliado: ' + aliado.nombre + ' (' + aliado.codigo + ')\nCliente: ' + nombre + '\nTel: ' + tel + '\nProblema: ' + problema
+    window.open('https://wa.me/56985058250?text=' + encodeURIComponent(msg), '_blank')
+  })
 }
 
 function doLogout() {

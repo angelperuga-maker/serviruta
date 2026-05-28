@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta - Leads</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--rojo-d:#B01A08;--rojo-g:rgba(232,33,10,0.08);--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--verde-g:rgba(34,197,94,0.1);--amarillo:#F5C518;--amarillo-g:rgba(245,197,24,0.08);--azul:#60A5FA;--naranja:#FB923C;}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:600px;margin:0 auto;}
+.top{background:var(--c1);border-bottom:1px solid var(--borde);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.top-title{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
+.top-back{background:none;border:1px solid var(--borde);color:var(--txt3);font-size:11px;padding:5px 12px;border-radius:6px;cursor:pointer;}
+.body{padding:14px 16px 80px;}
+.btn-nuevo{width:100%;background:var(--rojo);border:none;border-radius:8px;color:#fff;font-family:"Syne",sans-serif;font-weight:700;font-size:14px;padding:13px;cursor:pointer;margin-bottom:14px;display:flex;align-items:center;justify-content:center;gap:8px;}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+.stat{background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:10px;text-align:center;}
+.sv{font-family:"Syne",sans-serif;font-weight:800;font-size:20px;}
+.sl{font-size:9px;color:var(--txt3);margin-top:2px;text-transform:uppercase;}
+.filtros{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px;}
+.filtro{flex-shrink:0;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--borde);background:var(--c2);color:var(--txt3);}
+.filtro.active{background:var(--rojo);border-color:var(--rojo);color:#fff;}
+.card{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin-bottom:10px;}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px;}
+.card-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;}
+.card-tel{font-size:12px;color:var(--txt3);margin-top:2px;}
+.badge{font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;font-family:"Syne",sans-serif;white-space:nowrap;}
+.b-nuevo{background:var(--rojo-g);color:var(--rojo);border:1px solid rgba(232,33,10,0.3);}
+.b-contactado{background:var(--amarillo-g);color:var(--amarillo);border:1px solid rgba(245,197,24,0.3);}
+.b-asignado{background:rgba(96,165,250,0.1);color:var(--azul);border:1px solid rgba(96,165,250,0.3);}
+.b-convertido{background:var(--verde-g);color:var(--verde);border:1px solid rgba(34,197,94,0.3);}
+.card-problema{font-size:13px;color:var(--txt);margin-bottom:6px;padding:8px 10px;background:var(--c3);border-radius:6px;}
+.card-aliado{font-size:11px;color:var(--naranja);margin-bottom:10px;display:flex;align-items:center;gap:5px;}
+.actions{display:flex;gap:8px;flex-wrap:wrap;}
+.btn{padding:8px 14px;border-radius:8px;font-family:"Syne",sans-serif;font-weight:700;font-size:11px;cursor:pointer;border:none;}
+.btn-asignar{background:var(--azul);color:#000;}
+.btn-convertir{background:var(--verde);color:#000;}
+.btn-wa{background:#25D366;color:#fff;}
+.btn-sec{background:var(--c3);border:1px solid var(--borde);color:var(--txt2);}
+.empty{text-align:center;padding:48px;color:var(--txt3);}
+.loading{text-align:center;padding:48px;color:var(--txt3);}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:200;display:none;align-items:flex-end;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--c2);border:1px solid var(--borde);border-radius:16px 16px 0 0;width:100%;max-width:600px;padding:20px 20px 36px;max-height:90vh;overflow-y:auto;}
+.modal-handle{width:36px;height:4px;background:var(--borde);border-radius:2px;margin:0 auto 16px;}
+.modal-title{font-family:"Syne",sans-serif;font-weight:700;font-size:16px;margin-bottom:16px;}
+.lbl{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--txt3);margin-bottom:6px;display:block;}
+.inp{width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:8px;color:var(--txt);font-family:"DM Sans",sans-serif;font-size:15px;padding:11px 13px;outline:none;margin-bottom:10px;}
+.inp:focus{border-color:var(--rojo);}
+.inp::placeholder{color:var(--txt3);}
+.sel{width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:8px;color:var(--txt);font-family:"DM Sans",sans-serif;font-size:14px;padding:11px 13px;outline:none;margin-bottom:10px;}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.btn-save{width:100%;background:var(--rojo);border:none;border-radius:8px;color:#fff;font-family:"Syne",sans-serif;font-weight:700;font-size:14px;padding:13px;cursor:pointer;margin-top:4px;}
+.btn-cancel{width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:8px;color:var(--txt2);font-family:"Syne",sans-serif;font-weight:700;font-size:14px;padding:13px;cursor:pointer;margin-bottom:8px;}
+.aliado-info{background:var(--verde-g);border:1px solid rgba(34,197,94,0.3);border-radius:8px;padding:10px 12px;margin-bottom:10px;font-size:12px;color:var(--verde);display:none;}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--c3);border:1px solid var(--borde);border-radius:8px;padding:11px 18px;font-size:13px;opacity:0;transition:all 0.25s;pointer-events:none;white-space:nowrap;z-index:999;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.ok{border-color:rgba(34,197,94,0.4);color:var(--verde);}
+</style>
+</head>
+<body>
+<div class="top">
+  <button class="top-back" onclick="location.href='menu-coordinador.html'">← Volver</button>
+  <div class="top-title">📥 Leads recibidos</div>
+  <button onclick="load()" style="background:none;border:none;color:var(--txt3);cursor:pointer;font-size:20px;">&#8635;</button>
+</div>
+<div class="body">
+  <button class="btn-nuevo" onclick="openModal()">＋ Registrar nuevo lead</button>
+  <div class="stats">
+    <div class="stat"><div class="sv" id="st-nuevos" style="color:var(--rojo)">0</div><div class="sl">Nuevos</div></div>
+    <div class="stat"><div class="sv" id="st-aliados" style="color:var(--naranja)">0</div><div class="sl">De aliados</div></div>
+    <div class="stat"><div class="sv" id="st-convertidos" style="color:var(--verde)">0</div><div class="sl">Convertidos</div></div>
+  </div>
+  <div class="filtros">
+    <div class="filtro active" onclick="filtrar('todos',this)">Todos</div>
+    <div class="filtro" onclick="filtrar('nuevo',this)">🔴 Nuevos</div>
+    <div class="filtro" onclick="filtrar('contactado',this)">📞 Contactados</div>
+    <div class="filtro" onclick="filtrar('asignado',this)">👷 Asignados</div>
+    <div class="filtro" onclick="filtrar('convertido',this)">✅ Convertidos</div>
+  </div>
+  <div id="lista"><div class="loading">Cargando...</div></div>
+</div>
+
+<!-- MODAL NUEVO LEAD -->
+<div class="modal-overlay" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Registrar lead</div>
+
+    <div class="row">
+      <div>
+        <label class="lbl">Nombre cliente</label>
+        <input class="inp" id="m-nombre" placeholder="Pedro González">
+      </div>
+      <div>
+        <label class="lbl">Teléfono</label>
+        <input class="inp" id="m-tel" placeholder="+56 9 XXXX XXXX" type="tel">
+      </div>
+    </div>
+
+    <label class="lbl">¿Qué problema tiene el auto?</label>
+    <input class="inp" id="m-problema" placeholder="Ej: No enciende, frenada rara, ruido motor...">
+
+    <label class="lbl">Código del aliado que lo refirió</label>
+    <input class="inp" id="m-aliado" placeholder="Ej: GRU-PEDRO01 — dejar vacío si llegó solo" 
+      style="font-family:monospace;font-size:13px;text-transform:uppercase" 
+      oninput="this.value=this.value.toUpperCase();buscarAliado(this.value)">
+    <div class="aliado-info" id="aliado-info">✅ Aliado encontrado: <span id="aliado-nombre-info">—</span></div>
+
+    <div class="row">
+      <div>
+        <label class="lbl">Comuna</label>
+        <input class="inp" id="m-comuna" placeholder="Ej: Maipú" style="margin-bottom:0">
+      </div>
+      <div>
+        <label class="lbl">Vehículo</label>
+        <input class="inp" id="m-vehiculo" placeholder="Ej: Hyundai Tucson" style="margin-bottom:0">
+      </div>
+    </div>
+    <div style="height:10px"></div>
+
+    <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+    <button class="btn-save" onclick="guardar()">Registrar lead</button>
+  </div>
+</div>
+
+<!-- MODAL ASIGNAR TÉCNICO -->
+<div class="modal-overlay" id="modal-asignar" onclick="if(event.target===this)document.getElementById('modal-asignar').classList.remove('open')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Asignar técnico</div>
+    <label class="lbl">Técnico</label>
+    <select class="sel" id="as-tecnico">
+      <option value="Jorge Ramirez">Jorge Ramírez — Zona Poniente</option>
+      <option value="Felipe Mora">Felipe Mora — Zona Centro-Sur</option>
+      <option value="Carlos Vega">Carlos Vega — Zona Oriente</option>
+      <option value="Reynaldo Aguas Bertel">Reynaldo Aguas — Zona Norte</option>
+    </select>
+    <button class="btn-cancel" onclick="document.getElementById('modal-asignar').classList.remove('open')">Cancelar</button>
+    <button class="btn-save" onclick="confirmarAsignacion()">Asignar y notificar</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co';
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s';
+var db=null,leads=[],aliados=[],filtroActual='todos',leadAsignarId=null;
+var TELS={'Jorge Ramirez':'+56912345678','Felipe Mora':'+56923456789','Carlos Vega':'+56934567890','Reynaldo Aguas Bertel':'+56935287199'};
+
+function getDB(){if(!db)db=supabase.createClient(SB_URL,SB_KEY);return db;}
+
+async function load(){
+  document.getElementById('lista').innerHTML='<div class="loading">Cargando...</div>';
+  var rl=await getDB().from('leads').select('*').order('created_at',{ascending:false});
+  var ra=await getDB().from('aliados').select('codigo,nombre,telefono').eq('activo',true);
+  leads=rl.data||[];
+  aliados=ra.data||[];
+  document.getElementById('st-nuevos').textContent=leads.filter(function(l){return l.estado==='nuevo';}).length;
+  document.getElementById('st-aliados').textContent=leads.filter(function(l){return l.aliado_codigo;}).length;
+  document.getElementById('st-convertidos').textContent=leads.filter(function(l){return l.estado==='convertido';}).length;
+  render();
+}
+
+function render(){
+  var lista=leads;
+  if(filtroActual!=='todos')lista=leads.filter(function(l){return l.estado===filtroActual;});
+  var el=document.getElementById('lista');
+  if(!lista.length){el.innerHTML='<div class="empty">Sin leads en este estado</div>';return;}
+  var badgeMap={nuevo:'b-nuevo',contactado:'b-contactado',asignado:'b-asignado',convertido:'b-convertido'};
+  var badgeLabel={nuevo:'🔴 Nuevo',contactado:'📞 Contactado',asignado:'👷 Asignado',convertido:'✅ Convertido'};
+  el.innerHTML=lista.map(function(l){
+    var bClass=badgeMap[l.estado]||'b-nuevo';
+    var bLabel=badgeLabel[l.estado]||l.estado;
+    var fecha=l.created_at?new Date(l.created_at).toLocaleDateString('es-CL'):'';
+    var aliadoInfo=l.aliado_codigo?'<div class="card-aliado">🤝 Referido por: <strong>'+l.aliado_codigo+(l.aliado_nombre?' — '+l.aliado_nombre:'')+'</strong></div>':'';
+    var btns='';
+    if(l.estado==='nuevo')btns+='<button class="btn btn-wa" onclick="contactarCliente(\''+l.telefono+'\',\''+l.cliente+'\',\''+l.problema+'\')">📞 Contactar</button>';
+    if(l.estado!=='convertido')btns+='<button class="btn btn-asignar" onclick="abrirAsignar(\''+l.id+'\')">👷 Asignar técnico</button>';
+    if(l.estado==='asignado')btns+='<button class="btn btn-convertir" onclick="convertir(\''+l.id+'\')">✅ Convertir a servicio</button>';
+    return '<div class="card">'+
+      '<div class="card-top">'+
+        '<div><div class="card-nombre">'+l.cliente+'</div><div class="card-tel">📞 '+l.telefono+(l.comuna?' · 📍 '+l.comuna:'')+(l.vehiculo?' · 🚗 '+l.vehiculo:'')+'</div></div>'+
+        '<span class="badge '+bClass+'">'+bLabel+'</span>'+
+      '</div>'+
+      '<div class="card-problema">'+l.problema+'</div>'+
+      aliadoInfo+
+      (l.tecnico_asignado?'<div style="font-size:11px;color:var(--azul);margin-bottom:10px">👷 Técnico: '+l.tecnico_asignado+'</div>':'')+
+      '<div class="actions">'+btns+'</div>'+
+    '</div>';
+  }).join('');
+}
+
+function filtrar(f,el){filtroActual=f;document.querySelectorAll('.filtro').forEach(function(x){x.classList.remove('active');});el.classList.add('active');render();}
+
+async function buscarAliado(codigo){
+  var info=document.getElementById('aliado-info');
+  if(!codigo||codigo.length<5){info.style.display='none';return;}
+  var a=aliados.find(function(x){return x.codigo===codigo;});
+  if(a){
+    info.style.display='block';
+    document.getElementById('aliado-nombre-info').textContent=a.nombre;
+  } else {
+    info.style.display='none';
+  }
+}
+
+async function guardar(){
+  var nombre=document.getElementById('m-nombre').value.trim();
+  var tel=document.getElementById('m-tel').value.trim();
+  var problema=document.getElementById('m-problema').value.trim();
+  if(!nombre||!tel||!problema){toast('Completa nombre, teléfono y problema');return;}
+  var codigo=document.getElementById('m-aliado').value.trim();
+  var a=aliados.find(function(x){return x.codigo===codigo;});
+  var r=await getDB().from('leads').insert({
+    cliente:nombre,
+    telefono:tel,
+    problema:problema,
+    aliado_codigo:codigo,
+    aliado_nombre:a?a.nombre:'',
+    comuna:document.getElementById('m-comuna').value.trim(),
+    vehiculo:document.getElementById('m-vehiculo').value.trim(),
+    estado:'nuevo'
+  });
+  if(r.error){toast('Error: '+r.error.message);return;}
+
+  // Notificar al aliado si existe
+  if(a&&a.telefono){
+    var msg='Hola '+a.nombre+' tu referido '+nombre+' ha sido registrado en Serviruta. Te avisaremos cuando el servicio se complete para acreditar tu comision. Serviruta +56 9 8505 8250';
+    window.open('https://wa.me/56'+a.telefono.replace(/\D/g,'')+'?text='+encodeURIComponent(msg),'_blank');
+  }
+
+  toast('Lead registrado','ok');
+  closeModal();
+  load();
+}
+
+function openModal(){
+  ['m-nombre','m-tel','m-problema','m-aliado','m-comuna','m-vehiculo'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('aliado-info').style.display='none';
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal(){document.getElementById('modal').classList.remove('open');}
+
+function abrirAsignar(id){
+  leadAsignarId=id;
+  document.getElementById('modal-asignar').classList.add('open');
+}
+
+async function confirmarAsignacion(){
+  var tecnico=document.getElementById('as-tecnico').value;
+  await getDB().from('leads').update({estado:'asignado',tecnico_asignado:tecnico}).eq('id',leadAsignarId);
+  // WhatsApp al técnico
+  var lead=leads.find(function(l){return l.id===leadAsignarId;});
+  var tel=TELS[tecnico]||'';
+  if(tel&&lead){
+    var msg='Hola '+tecnico.split(' ')[0]+' tienes un nuevo lead asignado:\n\nCliente: '+lead.cliente+'\nTel: '+lead.telefono+'\nProblema: '+lead.problema+(lead.comuna?'\nComuna: '+lead.comuna:'')+(lead.vehiculo?'\nVehiculo: '+lead.vehiculo:'')+'\n\nContactalo a la brevedad. Serviruta +56 9 8505 8250';
+    window.open('https://wa.me/'+tel.replace(/\D/g,'')+'?text='+encodeURIComponent(msg),'_blank');
+  }
+  toast('Técnico asignado','ok');
+  document.getElementById('modal-asignar').classList.remove('open');
+  load();
+}
+
+async function convertir(id){
+  await getDB().from('leads').update({estado:'convertido'}).eq('id',id);
+  toast('Lead convertido a servicio','ok');
+  load();
+}
+
+function contactarCliente(tel,nombre,problema){
+  var msg='Hola '+nombre+' te llamamos de Serviruta mecanica a domicilio. Recibimos tu consulta sobre: '+problema+'. Podemos ayudarte hoy mismo. +56 9 8505 8250';
+  window.open('https://wa.me/56'+tel.replace(/\D/g,'')+'?text='+encodeURIComponent(msg),'_blank');
+  getDB().from('leads').update({estado:'contactado'}).eq('telefono',tel);
+  setTimeout(load,1000);
+}
+
+function toast(msg,type){var t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(type?' '+type:'');t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2500);}
+load();
+</script>
+</body>
+</html>

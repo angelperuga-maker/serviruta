@@ -69,7 +69,8 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
 
 <!-- LISTA -->
 <div id="lista-view" class="body">
-  <div class="filtros">
+  <button onclick="nuevoPpto()" style="width:100%;background:var(--rojo);border:none;border-radius:8px;color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;padding:13px;cursor:pointer;margin-bottom:14px;display:flex;align-items:center;justify-content:center;gap:8px;">＋ Crear presupuesto directo</button>
+<div class="filtros">
     <div class="filtro active" onclick="filtrar('todas',this)">Todas</div>
     <div class="filtro" onclick="filtrar('nueva',this)">🔴 Nuevas</div>
     <div class="filtro" onclick="filtrar('valorizada',this)">🟡 Valorizadas</div>
@@ -107,6 +108,56 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
   <button class="btn btn-sec" onclick="volverLista()">Cancelar</button>
 </div>
 
+
+<!-- MODAL NUEVO PPTO DIRECTO -->
+<div id="modal-nuevo-ppto" style="position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:200;display:none;align-items:flex-end;justify-content:center;" onclick="if(event.target===this)document.getElementById('modal-nuevo-ppto').style.display='none'">
+  <div style="background:var(--c2);border:1px solid var(--borde);border-radius:16px 16px 0 0;width:100%;max-width:600px;padding:20px 20px 36px;max-height:90vh;overflow-y:auto;">
+    <div style="width:36px;height:4px;background:var(--borde);border-radius:2px;margin:0 auto 16px;"></div>
+    <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;margin-bottom:16px;">Nuevo presupuesto directo</div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div>
+        <label style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--txt3);margin-bottom:6px;display:block;">Cliente</label>
+        <input class="inp" id="np-cliente" placeholder="Nombre del cliente">
+      </div>
+      <div>
+        <label style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--txt3);margin-bottom:6px;display:block;">Teléfono</label>
+        <input class="inp" id="np-tel" placeholder="+56 9 XXXX XXXX" type="tel">
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div>
+        <label style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--txt3);margin-bottom:6px;display:block;">Vehículo</label>
+        <input class="inp" id="np-vehiculo" placeholder="Ej: Hyundai Tucson">
+      </div>
+      <div>
+        <label style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--txt3);margin-bottom:6px;display:block;">Patente</label>
+        <input class="inp" id="np-patente" placeholder="Ej: ABCD-12" style="text-transform:uppercase;margin-bottom:10px;" oninput="this.value=this.value.toUpperCase()">
+        <label style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--txt3);margin-bottom:6px;display:block;">Técnico</label>
+        <select class="inp" id="np-tecnico" style="padding:10px 12px;">
+          <option value="Jorge Ramirez">Jorge Ramirez</option>
+          <option value="Felipe Mora">Felipe Mora</option>
+          <option value="Carlos Vega">Carlos Vega</option>
+          <option value="Reynaldo Aguas Bertel">Reynaldo Aguas Bertel</option>
+          <option value="Kiven Henz">Kiven Henz</option>
+          <option value="Humberto Morales">Humberto Morales</option>
+          <option value="Giovanino Perugini">Giovanino Perugini</option>
+          <option value="Reynaldo Aguas">Reynaldo Aguas</option>
+        </select>
+      </div>
+    </div>
+
+    <label style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--txt3);margin-bottom:6px;display:block;margin-top:4px;">Trabajos a realizar</label>
+    <div id="np-items-wrap"></div>
+    <button onclick="npAgregarItem()" style="width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:8px;color:var(--txt2);font-family:'Syne',sans-serif;font-weight:700;font-size:12px;padding:10px;cursor:pointer;margin-bottom:12px;">＋ Agregar trabajo</button>
+
+    <label style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--txt3);margin-bottom:6px;display:block;">Código aliado (opcional)</label>
+    <input class="inp" id="np-aliado" placeholder="Ej: GRU-PEDRO01" style="font-family:monospace;font-size:13px;text-transform:uppercase;" oninput="this.value=this.value.toUpperCase()">
+
+    <button onclick="document.getElementById('modal-nuevo-ppto').style.display='none'" style="width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:8px;color:var(--txt2);font-family:'Syne',sans-serif;font-weight:700;font-size:14px;padding:13px;cursor:pointer;margin-bottom:8px;">Cancelar</button>
+    <button onclick="guardarNuevoPpto()" style="width:100%;background:var(--rojo);border:none;border-radius:8px;color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;padding:13px;cursor:pointer;">Guardar presupuesto</button>
+  </div>
+</div>
 <div id="toast" style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--c3);border:1px solid var(--borde);border-radius:8px;padding:11px 18px;font-size:13px;font-weight:500;z-index:999;opacity:0;transition:all 0.25s;pointer-events:none;white-space:nowrap;"></div>
 
 <script>
@@ -266,6 +317,68 @@ function showToast(msg) {
 }
 
 loadPptos()
+
+var npItems = []
+var npItemId = 0
+
+function nuevoPpto() {
+  npItems = []
+  npItemId = 0
+  document.getElementById('np-cliente').value = ''
+  document.getElementById('np-tel').value = ''
+  document.getElementById('np-vehiculo').value = ''
+  document.getElementById('np-aliado').value = ''
+  document.getElementById('np-items-wrap').innerHTML = ''
+  npAgregarItem()
+  document.getElementById('modal-nuevo-ppto').style.display = 'flex'
+}
+
+function npAgregarItem() {
+  npItemId++
+  var id = npItemId
+  var wrap = document.getElementById('np-items-wrap')
+  var div = document.createElement('div')
+  div.id = 'np-item-' + id
+  div.style.cssText = 'display:flex;gap:8px;margin-bottom:8px;align-items:center;'
+  div.innerHTML = '<input class="inp" placeholder="Descripcion del trabajo..." style="flex:1;margin-bottom:0" id="np-desc-' + id + '"><input class="inp" type="number" placeholder="$Precio" style="width:110px;margin-bottom:0;text-align:right" id="np-precio-' + id + '"><button onclick="document.getElementById('np-item-' + id + '').remove()" style="background:var(--rojo-g);border:1px solid rgba(232,33,10,0.3);color:var(--rojo);border-radius:6px;padding:8px 10px;cursor:pointer;font-size:14px;">🗑</button>'
+  wrap.appendChild(div)
+  npItems.push(id)
+}
+
+async function guardarNuevoPpto() {
+  var cliente = document.getElementById('np-cliente').value.trim()
+  var tel = document.getElementById('np-tel').value.trim()
+  if (!cliente || !tel) { showToast('Completa nombre y teléfono'); return }
+  
+  var items = []
+  document.querySelectorAll('[id^="np-desc-"]').forEach(function(el) {
+    var itemId = el.id.replace('np-desc-', '')
+    var desc = el.value.trim()
+    var precio = parseFloat(document.getElementById('np-precio-' + itemId)?.value) || 0
+    if (desc) items.push({ id: parseInt(itemId), desc: desc, cant: 1, precio_venta: precio })
+  })
+
+  if (!items.length) { showToast('Agrega al menos un trabajo'); return }
+
+  var num = Math.floor(Math.random() * 9000) + 1000
+  var r = await getDB().from('presupuestos').insert({
+    numero: num,
+    tecnico: document.getElementById('np-tecnico').value,
+    cliente: cliente,
+    telefono: tel,
+    vehiculo: document.getElementById('np-vehiculo').value.trim(),
+    auto: document.getElementById('np-patente')?.value.trim() || '',
+    items: items,
+    estado: 'valorizada',
+    aliado_codigo: document.getElementById('np-aliado').value.trim()
+  })
+
+  if (r.error) { showToast('Error: ' + r.error.message); return }
+  showToast('Presupuesto creado')
+  document.getElementById('modal-nuevo-ppto').style.display = 'none'
+  loadPptos()
+}
+
 </script>
 </body>
 </html>

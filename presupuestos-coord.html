@@ -339,10 +339,32 @@ function npAgregarItem() {
   var wrap = document.getElementById('np-items-wrap')
   var div = document.createElement('div')
   div.id = 'np-item-' + id
-  div.style.cssText = 'display:flex;gap:8px;margin-bottom:8px;align-items:center;'
-  div.innerHTML = '<input class="inp" placeholder="Descripcion del trabajo..." style="flex:1;margin-bottom:0" id="np-desc-' + id + '"><input class="inp" type="number" placeholder="$Precio" style="width:110px;margin-bottom:0;text-align:right" id="np-precio-' + id + '"><button onclick="document.getElementById('np-item-' + id + '').remove()" style="background:var(--rojo-g);border:1px solid rgba(232,33,10,0.3);color:var(--rojo);border-radius:6px;padding:8px 10px;cursor:pointer;font-size:14px;">🗑</button>'
+  div.style.display = 'flex'
+  div.style.gap = '8px'
+  div.style.marginBottom = '8px'
+  div.style.alignItems = 'center'
+  var inp1 = document.createElement('input')
+  inp1.className = 'inp'
+  inp1.placeholder = 'Descripcion del trabajo...'
+  inp1.id = 'np-desc-' + id
+  inp1.style.flex = '1'
+  inp1.style.marginBottom = '0'
+  var inp2 = document.createElement('input')
+  inp2.className = 'inp'
+  inp2.type = 'number'
+  inp2.placeholder = '$Precio'
+  inp2.id = 'np-precio-' + id
+  inp2.style.width = '110px'
+  inp2.style.marginBottom = '0'
+  inp2.style.textAlign = 'right'
+  var btn = document.createElement('button')
+  btn.textContent = '🗑'
+  btn.style.cssText = 'background:var(--rojo-g);border:1px solid rgba(232,33,10,0.3);color:var(--rojo);border-radius:6px;padding:8px 10px;cursor:pointer;font-size:14px;'
+  btn.onclick = function() { div.remove() }
+  div.appendChild(inp1)
+  div.appendChild(inp2)
+  div.appendChild(btn)
   wrap.appendChild(div)
-  npItems.push(id)
 }
 
 async function guardarNuevoPpto() {

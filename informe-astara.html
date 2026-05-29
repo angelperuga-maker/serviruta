@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe Inspección - Astara DV-PV-49</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;--naranja:#FB923C;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:600px;margin:0 auto;padding:20px 16px 60px;}
+.logo{display:flex;align-items:center;gap:12px;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid var(--rojo);}
+.mark{width:44px;height:44px;background:var(--rojo);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:"Syne",sans-serif;font-weight:800;font-size:14px;color:#fff;}
+.brand{font-family:"Syne",sans-serif;font-weight:800;font-size:20px;}
+.brand span{color:var(--rojo);}
+.sub{font-size:11px;color:var(--txt3);margin-top:1px;}
+.hero{background:var(--c2);border:1px solid var(--borde);border-radius:12px;padding:16px;margin-bottom:16px;}
+.hero-titulo{font-family:"Syne",sans-serif;font-weight:800;font-size:18px;margin-bottom:4px;}
+.hero-sub{font-size:12px;color:var(--txt3);margin-bottom:12px;}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.hg-item{background:var(--c3);border-radius:8px;padding:10px;}
+.hg-lbl{font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;}
+.hg-val{font-size:13px;font-weight:600;}
+.score-box{background:var(--rojo-g,rgba(232,33,10,0.08));border:1px solid rgba(232,33,10,0.3);border-radius:12px;padding:16px;margin-bottom:16px;text-align:center;}
+.score-num{font-family:"Syne",sans-serif;font-weight:800;font-size:52px;color:var(--rojo);line-height:1;}
+.score-lbl{font-size:13px;color:var(--txt3);margin-top:6px;}
+.score-bar{height:8px;background:var(--c3);border-radius:4px;overflow:hidden;margin:10px 0 6px;}
+.score-fill{height:100%;width:30%;background:var(--rojo);border-radius:4px;}
+.sec{font-family:"Syne",sans-serif;font-weight:700;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);margin:20px 0 10px;display:flex;align-items:center;gap:8px;}
+.sec::after{content:"";flex:1;height:1px;background:var(--borde);}
+.falla{background:var(--c2);border-radius:10px;padding:12px 14px;margin-bottom:8px;display:flex;gap:12px;align-items:flex-start;border-left:3px solid;}
+.falla.critico{border-left-color:var(--rojo);background:rgba(232,33,10,0.05);}
+.falla.alerta{border-left-color:var(--amarillo);background:rgba(245,197,24,0.05);}
+.falla-icon{font-size:18px;flex-shrink:0;margin-top:2px;}
+.falla-nombre{font-weight:600;font-size:13px;margin-bottom:3px;}
+.falla-desc{font-size:12px;color:var(--txt3);line-height:1.5;}
+.falla-codigo{font-size:11px;font-family:monospace;background:var(--c3);border-radius:4px;padding:3px 8px;display:inline-block;margin-top:4px;color:var(--amarillo);}
+.urgente-box{background:rgba(232,33,10,0.1);border:1px solid rgba(232,33,10,0.4);border-radius:12px;padding:16px;margin-bottom:16px;}
+.urgente-title{font-family:"Syne",sans-serif;font-weight:800;font-size:14px;color:var(--rojo);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.urgente-item{font-size:13px;padding:5px 0;border-bottom:1px solid rgba(232,33,10,0.15);display:flex;align-items:center;gap:8px;}
+.urgente-item:last-child{border-bottom:none;}
+.btn{width:100%;padding:14px;border-radius:10px;font-family:"Syne",sans-serif;font-weight:700;font-size:14px;cursor:pointer;border:none;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:8px;}
+.btn-wa{background:#25D366;color:#fff;}
+.btn-rojo{background:var(--rojo);color:#fff;}
+.footer{text-align:center;font-size:11px;color:var(--txt3);margin-top:24px;padding-top:16px;border-top:1px solid var(--borde);}
+</style>
+</head>
+<body>
+
+<div class="logo">
+  <div class="mark">SRV</div>
+  <div>
+    <div class="brand">SERVI<span>RUTA</span></div>
+    <div class="sub">Mecánica a Domicilio · Santiago RM · 24/7</div>
+  </div>
+</div>
+
+<!-- ENCABEZADO VEHÍCULO -->
+<div class="hero">
+  <div class="hero-titulo">🚛 Astara — Blanco</div>
+  <div class="hero-sub">Informe de Inspección · 29 de Mayo 2026</div>
+  <div class="hero-grid">
+    <div class="hg-item"><div class="hg-lbl">Patente</div><div class="hg-val">DV-PV-49</div></div>
+    <div class="hg-item"><div class="hg-lbl">Color</div><div class="hg-val">Blanco</div></div>
+    <div class="hg-item"><div class="hg-lbl">Tipo</div><div class="hg-val">Camión pesado</div></div>
+    <div class="hg-item"><div class="hg-lbl">Empresa</div><div class="hg-val">—</div></div>
+  </div>
+</div>
+
+<!-- SCORE -->
+<div class="score-box">
+  <div style="font-size:12px;color:var(--txt3);margin-bottom:4px">Estado general del vehículo</div>
+  <div class="score-num">30%</div>
+  <div class="score-bar"><div class="score-fill"></div></div>
+  <div class="score-lbl">⚠️ Vehículo con múltiples fallas críticas — requiere intervención antes de operar</div>
+</div>
+
+<!-- URGENTES -->
+<div class="urgente-box">
+  <div class="urgente-title">🚨 Atención inmediata requerida</div>
+  <div class="urgente-item">🔴 Fugas de aire en frenos — RIESGO DE SEGURIDAD</div>
+  <div class="urgente-item">🔴 Fugas de combustible/hidráulico</div>
+  <div class="urgente-item">🔴 Falla en sistema de frenos (luces STOP)</div>
+  <div class="urgente-item">🔴 Cableado suelto cerca del eje cardan — RIESGO</div>
+</div>
+
+<!-- FALLAS SISTEMA ELÉCTRICO -->
+<div class="sec">⚡ Sistema eléctrico y electrónico</div>
+
+<div class="falla critico">
+  <div class="falla-icon">🔴</div>
+  <div>
+    <div class="falla-nombre">Falla sensor de rueda — Sistema ABS</div>
+    <div class="falla-desc">Código de falla activo en el sistema de frenos antibloqueo. Sensor de rueda reportando señal incorrecta o ausente. Puede comprometer la eficiencia de frenado en pavimento mojado.</div>
+    <div class="falla-codigo">SID 19 / FMO 12</div>
+  </div>
+</div>
+
+<div class="falla alerta">
+  <div class="falla-icon">⚠️</div>
+  <div>
+    <div class="falla-nombre">Sensor temperatura ambiente — Aire acondicionado</div>
+    <div class="falla-desc">Sensor defectuoso o desconectado. Afecta el funcionamiento correcto del sistema de climatización y puede generar lecturas erróneas en el tablero.</div>
+    <div class="falla-codigo">Sensor ambiente A/C — reemplazo requerido</div>
+  </div>
+</div>
+
+<div class="falla alerta">
+  <div class="falla-icon">⚠️</div>
+  <div>
+    <div class="falla-nombre">Terminales sueltos o sulfatados — Código activo</div>
+    <div class="falla-desc">Código de falla indica terminales con mala conexión eléctrica o sulfatación. Causa lecturas erráticas en el módulo de control. Requiere limpieza y ajuste de terminales de tierra.</div>
+    <div class="falla-codigo">SPN 131252 — Terminales tierra sulfatados</div>
+  </div>
+</div>
+
+<div class="falla critico">
+  <div class="falla-icon">🔴</div>
+  <div>
+    <div class="falla-nombre">Terminal de batería sulfatado</div>
+    <div class="falla-desc">Sulfatación en bornes de batería genera resistencia eléctrica, dificultad de arranque y puede producir falsos códigos de falla. Requiere limpieza y revisión del nivel de carga.</div>
+  </div>
+</div>
+
+<div class="falla alerta">
+  <div class="falla-icon">⚠️</div>
+  <div>
+    <div class="falla-nombre">Cableado colgando cerca del eje cardan</div>
+    <div class="falla-desc">Riesgo de enredo con partes móviles. Puede producir cortocircuito o ruptura del arnés en movimiento. Requiere revisión y fijación inmediata.</div>
+  </div>
+</div>
+
+<!-- FALLAS DE LUCES -->
+<div class="sec">💡 Sistema de luces</div>
+
+<div class="falla critico">
+  <div class="falla-icon">🔴</div>
+  <div>
+    <div class="falla-nombre">Luz de posición derecha — inoperativa</div>
+    <div class="falla-desc">Luz de posición lateral/delantera derecha no funciona. Infracción a la normativa de tránsito. Puede ser ampolleta, fusible o falla en el circuito.</div>
+  </div>
+</div>
+
+<div class="falla critico">
+  <div class="falla-icon">🔴</div>
+  <div>
+    <div class="falla-nombre">Luz de freno derecha — inoperativa (STOP)</div>
+    <div class="falla-desc">Luz de freno trasera derecha no enciende al presionar el pedal. RIESGO DE SEGURIDAD — vehículos de atrás no detectan frenada. Infracción grave. Requiere reparación inmediata.</div>
+  </div>
+</div>
+
+<!-- FUGAS DE AIRE -->
+<div class="sec">💨 Fugas sistema de aire / frenos</div>
+
+<div class="falla critico">
+  <div class="falla-icon">🔴</div>
+  <div>
+    <div class="falla-nombre">Fuga de aire — freno delantero izquierdo</div>
+    <div class="falla-desc">Escape de aire detectado en el circuito de freno delantero izquierdo. Probable falla en manguera flexible o terminal de conexión. Compromete directamente la efectividad del freno. VEHÍCULO NO APTO para circular.</div>
+  </div>
+</div>
+
+<div class="falla critico">
+  <div class="falla-icon">🔴</div>
+  <div>
+    <div class="falla-nombre">Flexible de freno — 2° rueda de dirección derecha</div>
+    <div class="falla-desc">Manguera flexible del circuito de freno presenta fuga. Pérdida de presión progresiva. Riesgo de falla total del freno en esa rueda. Reemplazo urgente.</div>
+  </div>
+</div>
+
+<div class="falla critico">
+  <div class="falla-icon">🔴</div>
+  <div>
+    <div class="falla-nombre">Fuga flexible de freno — eje trasero derecho</div>
+    <div class="falla-desc">Manguera flexible trasera derecha con escape de aire. Mismo riesgo que anterior. Las 3 fugas de aire juntas reducen significativamente la capacidad de frenado total del vehículo.</div>
+  </div>
+</div>
+
+<!-- FUGAS FLUIDOS -->
+<div class="sec">🛢️ Fugas de fluidos</div>
+
+<div class="falla critico">
+  <div class="falla-icon">🔴</div>
+  <div>
+    <div class="falla-nombre">Fuga hidráulico — repartidor toma fuerza</div>
+    <div class="falla-desc">Pérdida de fluido hidráulico en el repartidor de la toma de fuerza. Puede causar pérdida de funcionalidad del sistema hidráulico y contaminación del suelo. Requiere sellado o reemplazo del componente.</div>
+  </div>
+</div>
+
+<div class="falla critico">
+  <div class="falla-icon">🔴</div>
+  <div>
+    <div class="falla-nombre">Fuga de aceite — tapa de distribución motor</div>
+    <div class="falla-desc">Escape de aceite de motor por el sellado de la tapa de la distribución. Progresivo y puede contaminar correa o cadena de distribución, causando falla catastrófica si no se atiende.</div>
+  </div>
+</div>
+
+<!-- CARROCERÍA -->
+<div class="falla critico">
+  <div class="falla-icon">🔴</div>
+  <div>
+    <div class="falla-nombre">Fuga cilindro de levante de cabina</div>
+    <div class="falla-desc">Cilindro hidráulico de basculamiento de cabina con pérdida de fluido. Puede impedir el correcto levante o descenso de la cabina, o producir caída no controlada. RIESGO DE SEGURIDAD al realizar mantenciones. Requiere revisión del sello y recarga del sistema.</div>
+  </div>
+</div>
+
+<div class="sec">🔩 Carrocería y estructura</div>
+
+<div class="falla alerta">
+  <div class="falla-icon">⚠️</div>
+  <div>
+    <div class="falla-nombre">Tapa caja de herramientas izquierda — lata dañada</div>
+    <div class="falla-desc">Tapa metálica con daño estructural o deformación. No cierra correctamente. Riesgo de pérdida de herramientas en ruta. Requiere reparación o reemplazo.</div>
+  </div>
+</div>
+
+<!-- RESUMEN TRABAJOS -->
+<div class="sec">📋 Resumen de trabajos recomendados</div>
+
+<div style="background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin-bottom:16px;">
+  <div style="font-size:12px;color:var(--rojo);font-weight:700;margin-bottom:8px">URGENTE — antes de circular:</div>
+  <div style="font-size:12px;color:var(--txt2);line-height:2">
+    • Reparar 3 fugas de aire en frenos (mangueras y terminales)<br>
+    • Reparar luz STOP derecha<br>
+    • Fijar cableado suelto cerca del cardan<br>
+    • Revisar cilindro levante cabina — fuga hidráulico<br>
+    • Limpiar terminales de batería y tierra
+  </div>
+  <div style="font-size:12px;color:var(--amarillo);font-weight:700;margin-top:10px;margin-bottom:8px">PRIORIDAD ALTA:</div>
+  <div style="font-size:12px;color:var(--txt2);line-height:2">
+    • Diagnóstico y reemplazo sensor ABS (SID 19/FMO 12)<br>
+    • Reparar fuga aceite tapa distribución<br>
+    • Reparar fuga hidráulico toma fuerza<br>
+    • Reparar luz de posición derecha<br>
+    • Limpiar terminales tierra (SPN 131252)
+  </div>
+  <div style="font-size:12px;color:var(--verde);font-weight:700;margin-top:10px;margin-bottom:8px">MANTENIMIENTO:</div>
+  <div style="font-size:12px;color:var(--txt2);line-height:2">
+    • Reemplazar sensor temperatura A/C<br>
+    • Reparar/reemplazar tapa caja herramientas izquierda
+  </div>
+</div>
+
+<button class="btn btn-wa" onclick="enviarWA()">💬 Enviar informe al cliente por WhatsApp</button>
+<button class="btn btn-rojo" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
+
+<div class="footer">
+  Serviruta · Taller Mecánico a Domicilio · Santiago RM<br>
+  +56 9 8505 8250 · serviruta.cl · 29 de Mayo 2026
+</div>
+
+<script>
+function enviarWA() {
+  var msg = '🚛 *INFORME INSPECCIÓN SERVIRUTA*\n'
+  msg += '_Mecánica a Domicilio · 29 Mayo 2026_\n'
+  msg += '━━━━━━━━━━━━━━━━━━\n\n'
+  msg += '*ASTARA BLANCO · Patente DV-PV-49*\n'
+  msg += '*Estado general: 30% — Múltiples fallas críticas*\n\n'
+  msg += '🚨 *URGENTE — no apto para circular sin reparar:*\n'
+  msg += '• 3 fugas de aire en frenos (del. izq., 2da dir. der., tras. der.)\n'
+  msg += '• Luz STOP derecha inoperativa\n'
+  msg += '• Cableado suelto cerca del cardan\n'
+  msg += '• Bornes batería sulfatados\n\n'
+  msg += '🔴 *Fallas críticas adicionales:*\n'
+  msg += '• ABS — falla sensor rueda (SID 19/FMO 12)\n'
+  msg += '• Fuga aceite motor (tapa distribución)\n'
+  msg += '• Fuga hidráulico repartidor toma fuerza\n'
+  msg += '• Fuga cilindro levante cabina\n'
+  msg += '• Luz posición derecha inoperativa\n'
+  msg += '• Terminales tierra sulfatados (SPN 131252)\n\n'
+  msg += '⚠️ *Alertas:*\n'
+  msg += '• Sensor temperatura A/C defectuoso\n'
+  msg += '• Tapa caja herramientas izquierda dañada\n\n'
+  msg += '━━━━━━━━━━━━━━━━━━\n'
+  msg += '📞 Cotización y reparación: *+56 9 8505 8250*\n'
+  msg += 'Serviruta · 24/7 · serviruta.cl'
+  window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank')
+}
+</script>
+</body>
+</html>

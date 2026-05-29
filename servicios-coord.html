@@ -106,7 +106,8 @@ function renderLista(){
     var btns='';
     if(estado==='enviado')btns+='<button class="btn btn-g" onclick="cambiar(\''+s.id+'\',\'aprobado\',\''+s.tecnico+'\',\''+s.cliente+'\')">Cliente acepto</button>';
     if(estado==='aprobado')btns+='<button class="btn btn-a" onclick="cambiar(\''+s.id+'\',\'ejecucion\',\''+s.tecnico+'\',\''+s.cliente+'\')">Iniciar</button>';
-    if(estado==='ejecucion')btns+='<button class="btn btn-b" onclick="cambiar(\''+s.id+'\',\'completado\',\''+s.tecnico+'\',\''+s.cliente+'\')">Completar</button>';
+    if(estado==='ejecucion')btns+='<button class="btn btn-b" onclick="cambiar(\''+s.id+'\',\'completado\',\''+s.tecnico+'\',\''+s.cliente+'\')">Completar</button><button class="btn" style="background:rgba(167,139,250,0.1);border:1px solid rgba(167,139,250,0.3);color:#A78BFA" onclick="enviarEncuesta(\''+s.telefono+'\',\''+s.cliente+'\',\''+s.tecnico+'\')">⭐ Encuesta</button>';
+if(false)btns+='Completar</button>';
     if(s.telefono)btns+='<button class="btn btn-wa" onclick="waC(\''+s.telefono+'\',\''+s.cliente+'\',\''+estado+'\')">Cliente</button>';
     var tel=TELS[s.tecnico]||'';
     if(tel)btns+='<button class="btn btn-tec" onclick="waT(\''+tel+'\',\''+s.tecnico+'\',\''+s.cliente+'\')">Tecnico</button>';
@@ -129,6 +130,12 @@ function waC(tel,cliente,estado){
 }
 function waT(tel,tec,cliente){
   window.open('https://wa.me/'+tel.replace(/\D/g,'')+('?text='+encodeURIComponent('Hola '+tec.split(' ')[0]+' te escribimos por el servicio de '+cliente+'. Como va todo?')),'_blank');
+}
+function enviarEncuesta(tel,cliente,tecnico){
+  var base='https://angelperuga-maker.github.io/serviruta/encuesta.html';
+  var url=base+'?cliente='+encodeURIComponent(cliente)+'&tecnico='+encodeURIComponent(tecnico)+'&tel='+encodeURIComponent(tel);
+  var msg='Hola '+cliente+' gracias por confiar en Serviruta! Te pedimos 1 minuto para evaluar el servicio de hoy:\n\n'+url+'\n\nTu opinion nos ayuda a mejorar. Serviruta +56 9 8505 8250';
+  window.open('https://wa.me/56'+tel.replace(/\D/g,'')+'?text='+encodeURIComponent(msg),'_blank');
 }
 function filtrar(f,el){filtroActual=f;document.querySelectorAll('.filtro').forEach(function(x){x.classList.remove('active');});el.classList.add('active');renderLista();}
 function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2500);}

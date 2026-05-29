@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta - Desempeño</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--rojo-g:rgba(232,33,10,0.08);--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--verde-g:rgba(34,197,94,0.1);--amarillo:#F5C518;--amarillo-g:rgba(245,197,24,0.08);--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:600px;margin:0 auto;}
+.top{background:var(--c1);border-bottom:1px solid var(--borde);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.top-title{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
+.top-back{background:none;border:1px solid var(--borde);color:var(--txt3);font-size:11px;padding:5px 12px;border-radius:6px;cursor:pointer;}
+.body{padding:14px 16px 80px;}
+.tabs{display:flex;border-bottom:1px solid var(--borde);margin-bottom:16px;}
+.tab{flex:1;padding:10px;text-align:center;font-size:12px;font-weight:600;color:var(--txt3);cursor:pointer;border-bottom:2px solid transparent;}
+.tab.active{color:var(--rojo);border-bottom-color:var(--rojo);}
+.page{display:none;}.page.active{display:block;}
+/* RANKING */
+.ranking-card{background:var(--c2);border:1px solid var(--borde);border-radius:12px;padding:16px;margin-bottom:12px;position:relative;overflow:hidden;}
+.ranking-card.gold{border-color:var(--amarillo);background:var(--amarillo-g);}
+.ranking-card.silver{border-color:#94A3B8;background:rgba(148,163,184,0.05);}
+.ranking-card.bronze{border-color:var(--naranja);background:var(--rojo-g);}
+.rank-top{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.rank-pos{font-family:"Syne",sans-serif;font-weight:800;font-size:24px;min-width:36px;}
+.rank-av{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:"Syne",sans-serif;font-weight:800;font-size:15px;color:#fff;flex-shrink:0;}
+.rank-info{flex:1;}
+.rank-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;}
+.rank-zona{font-size:11px;color:var(--txt3);margin-top:2px;}
+.rank-pts{font-family:"Syne",sans-serif;font-weight:800;font-size:22px;text-align:right;}
+.rank-pts-lbl{font-size:10px;color:var(--txt3);text-align:right;}
+.metricas{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.met{background:var(--c3);border-radius:8px;padding:8px;text-align:center;}
+.met-val{font-family:"Syne",sans-serif;font-weight:800;font-size:16px;}
+.met-lbl{font-size:9px;color:var(--txt3);margin-top:2px;text-transform:uppercase;}
+/* EVALUACIONES */
+.eval-card{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin-bottom:10px;}
+.eval-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;}
+.eval-cliente{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
+.eval-tec{font-size:11px;color:var(--txt3);margin-top:2px;}
+.stars{display:flex;gap:3px;font-size:18px;}
+.eval-comment{font-size:13px;color:var(--txt2);margin-top:8px;padding:8px;background:var(--c3);border-radius:6px;}
+.eval-metricas{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:8px;}
+.em{background:var(--c3);border-radius:6px;padding:6px;text-align:center;}
+.em-val{font-family:"Syne",sans-serif;font-weight:800;font-size:14px;}
+.em-lbl{font-size:9px;color:var(--txt3);text-transform:uppercase;}
+/* ALIADOS */
+.aliado-card{background:var(--c2);border:1px solid var(--borde);border-radius:12px;padding:16px;margin-bottom:10px;}
+.ali-top{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.ali-av{width:44px;height:44px;border-radius:50%;background:var(--verde);display:flex;align-items:center;justify-content:center;font-family:"Syne",sans-serif;font-weight:800;font-size:15px;color:#fff;}
+.ali-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;}
+.ali-tipo{font-size:11px;color:var(--txt3);}
+.ali-nivel{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;margin-left:auto;}
+.nivel-nuevo{background:rgba(96,165,250,0.1);color:var(--azul);border:1px solid rgba(96,165,250,0.3);}
+.nivel-activo{background:var(--verde-g);color:var(--verde);border:1px solid rgba(34,197,94,0.3);}
+.nivel-top{background:rgba(245,197,24,0.1);color:var(--amarillo);border:1px solid rgba(245,197,24,0.3);}
+.nivel-elite{background:rgba(167,139,250,0.1);color:var(--morado);border:1px solid rgba(167,139,250,0.3);}
+.ali-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.as{background:var(--c3);border-radius:8px;padding:8px;text-align:center;}
+.as-val{font-family:"Syne",sans-serif;font-weight:800;font-size:16px;}
+.as-lbl{font-size:9px;color:var(--txt3);text-transform:uppercase;margin-top:2px;}
+.loading{text-align:center;padding:48px;color:var(--txt3);}
+.btn-wa{padding:7px 12px;border-radius:8px;font-family:"Syne",sans-serif;font-weight:700;font-size:11px;cursor:pointer;border:none;background:#25D366;color:#fff;margin-top:8px;}
+</style>
+</head>
+<body>
+<div class="top">
+  <button class="top-back" onclick="location.href='menu-coordinador.html'">← Volver</button>
+  <div class="top-title">📊 Desempeño del equipo</div>
+  <button onclick="load()" style="background:none;border:none;color:var(--txt3);cursor:pointer;font-size:20px;">&#8635;</button>
+</div>
+<div class="body">
+  <div class="tabs">
+    <div class="tab active" onclick="goTab(0,this)">🔧 Técnicos</div>
+    <div class="tab" onclick="goTab(1,this)">⭐ Evaluaciones</div>
+    <div class="tab" onclick="goTab(2,this)">🤝 Aliados</div>
+  </div>
+
+  <!-- TÉCNICOS -->
+  <div class="page active" id="pg-tec">
+    <div id="ranking-tec"><div class="loading">Cargando...</div></div>
+  </div>
+
+  <!-- EVALUACIONES -->
+  <div class="page" id="pg-eval">
+    <div id="lista-eval"><div class="loading">Cargando...</div></div>
+  </div>
+
+  <!-- ALIADOS -->
+  <div class="page" id="pg-ali">
+    <div id="ranking-ali"><div class="loading">Cargando...</div></div>
+  </div>
+</div>
+<script>
+var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co';
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s';
+var db=null;
+var COLORES=['#E8210A','#60A5FA','#22C55E','#F5C518','#FB923C','#A78BFA','#F472B6','#34D399'];
+
+function getDB(){if(!db)db=supabase.createClient(SB_URL,SB_KEY);return db;}
+
+async function load(){
+  var rP=await getDB().from('presupuestos').select('tecnico,estado_servicio,created_at');
+  var rI=await getDB().from('inspecciones').select('tecnico,score,created_at');
+  var rE=await getDB().from('evaluaciones').select('*').order('created_at',{ascending:false});
+  var rA=await getDB().from('aliados').select('*').eq('activo',true);
+  var rL=await getDB().from('leads').select('aliado_codigo,estado');
+
+  renderTecnicos(rP.data||[], rI.data||[], rE.data||[]);
+  renderEvaluaciones(rE.data||[]);
+  renderAliados(rA.data||[], rL.data||[]);
+}
+
+function renderTecnicos(pptos, inspecciones, evals){
+  var tecnicos={};
+
+  pptos.forEach(function(p){
+    if(!p.tecnico)return;
+    if(!tecnicos[p.tecnico])tecnicos[p.tecnico]={nombre:p.tecnico,pptos:0,completados:0,inspecciones:0,notas:[],puntos:0};
+    tecnicos[p.tecnico].pptos++;
+    if(p.estado_servicio==='completado')tecnicos[p.tecnico].completados++;
+  });
+
+  inspecciones.forEach(function(i){
+    if(!i.tecnico)return;
+    if(!tecnicos[i.tecnico])tecnicos[i.tecnico]={nombre:i.tecnico,pptos:0,completados:0,inspecciones:0,notas:[],puntos:0};
+    tecnicos[i.tecnico].inspecciones++;
+  });
+
+  evals.forEach(function(e){
+    if(!e.tecnico)return;
+    if(!tecnicos[e.tecnico])tecnicos[e.tecnico]={nombre:e.tecnico,pptos:0,completados:0,inspecciones:0,notas:[],puntos:0};
+    if(e.nota>0)tecnicos[e.tecnico].notas.push(e.nota);
+  });
+
+  // Calcular puntos
+  Object.values(tecnicos).forEach(function(t){
+    t.puntos = (t.completados*40) + (t.pptos*25) + (t.inspecciones*20);
+    if(t.notas.length) t.puntos += Math.round((t.notas.reduce(function(s,n){return s+n;},0)/t.notas.length)*3);
+    t.nota_prom = t.notas.length ? (t.notas.reduce(function(s,n){return s+n;},0)/t.notas.length).toFixed(1) : '—';
+  });
+
+  var sorted = Object.values(tecnicos).sort(function(a,b){return b.puntos-a.puntos;});
+  var medals=['🥇','🥈','🥉'];
+  var cardClass=['gold','silver','bronze'];
+
+  if(!sorted.length){document.getElementById('ranking-tec').innerHTML='<div class="loading">Sin datos de técnicos aún</div>';return;}
+
+  document.getElementById('ranking-tec').innerHTML = sorted.map(function(t,i){
+    var ini=t.nombre.split(' ').map(function(x){return x[0];}).join('').substring(0,2).toUpperCase();
+    var color=COLORES[i%COLORES.length];
+    var cls=i<3?cardClass[i]:'';
+    var stars=t.nota_prom!=='—'?'★'.repeat(Math.round(parseFloat(t.nota_prom))):'—';
+    return '<div class="ranking-card '+cls+'">'+
+      '<div class="rank-top">'+
+        '<div class="rank-pos">'+(medals[i]||'#'+(i+1))+'</div>'+
+        '<div class="rank-av" style="background:'+color+'">'+ini+'</div>'+
+        '<div class="rank-info">'+
+          '<div class="rank-nombre">'+t.nombre+'</div>'+
+          '<div class="rank-zona">'+stars+(t.nota_prom!=='—'?' ('+t.nota_prom+'/5)':'')+'</div>'+
+        '</div>'+
+        '<div><div class="rank-pts" style="color:'+color+'">'+t.puntos+'</div><div class="rank-pts-lbl">puntos</div></div>'+
+      '</div>'+
+      '<div class="metricas">'+
+        '<div class="met"><div class="met-val" style="color:var(--verde)">'+t.completados+'</div><div class="met-lbl">Completados</div></div>'+
+        '<div class="met"><div class="met-val" style="color:var(--azul)">'+t.pptos+'</div><div class="met-lbl">Presupuestos</div></div>'+
+        '<div class="met"><div class="met-val" style="color:var(--amarillo)">'+t.inspecciones+'</div><div class="met-lbl">Inspecciones</div></div>'+
+        '<div class="met"><div class="met-val" style="color:var(--naranja)">'+t.nota_prom+'</div><div class="met-lbl">Nota prom.</div></div>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+
+function renderEvaluaciones(evals){
+  var el=document.getElementById('lista-eval');
+  if(!evals.length){el.innerHTML='<div class="loading">Sin evaluaciones aún. Se generan al enviar la encuesta al cliente.</div>';return;}
+  el.innerHTML=evals.map(function(e){
+    var stars='★'.repeat(e.nota||0)+'☆'.repeat(5-(e.nota||0));
+    return '<div class="eval-card">'+
+      '<div class="eval-top">'+
+        '<div><div class="eval-cliente">'+(e.cliente||'Cliente')+'</div><div class="eval-tec">👷 '+e.tecnico+' · '+(e.fecha||'')+'</div></div>'+
+        '<div class="stars" style="color:var(--amarillo)">'+stars+'</div>'+
+      '</div>'+
+      (e.comentario?'<div class="eval-comment">'+e.comentario+'</div>':'')+
+      '<div class="eval-metricas">'+
+        '<div class="em"><div class="em-val">'+e.puntualidad+'</div><div class="em-lbl">Puntualidad</div></div>'+
+        '<div class="em"><div class="em-val">'+e.calidad+'</div><div class="em-lbl">Calidad</div></div>'+
+        '<div class="em"><div class="em-val">'+e.comunicacion+'</div><div class="em-lbl">Comunicación</div></div>'+
+        '<div class="em"><div class="em-val">'+e.limpieza+'</div><div class="em-lbl">Limpieza</div></div>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+
+function renderAliados(aliados, leads){
+  if(!aliados.length){document.getElementById('ranking-ali').innerHTML='<div class="loading">Sin aliados</div>';return;}
+
+  var data=aliados.map(function(a){
+    var misLeads=leads.filter(function(l){return l.aliado_codigo===a.codigo;});
+    var convertidos=misLeads.filter(function(l){return l.estado==='convertido';}).length;
+    var tasa=misLeads.length?Math.round(convertidos/misLeads.length*100):0;
+    var nivel='nuevo';
+    if(convertidos>=20)nivel='elite';
+    else if(convertidos>=11)nivel='top';
+    else if(convertidos>=4)nivel='activo';
+    return {aliado:a,leads:misLeads.length,convertidos:convertidos,tasa:tasa,nivel:nivel};
+  }).sort(function(a,b){return b.convertidos-a.convertidos;});
+
+  var nivelLabel={nuevo:'🌱 Nuevo',activo:'⭐ Activo',top:'🔥 Top',elite:'👑 Élite'};
+  var nivelComision={nuevo:'$13.000',activo:'$13.000',top:'$13.000',elite:'$15.000'};
+
+  document.getElementById('ranking-ali').innerHTML=data.map(function(d,i){
+    var ini=d.aliado.nombre.split(' ').map(function(x){return x[0];}).join('').substring(0,2).toUpperCase();
+    return '<div class="aliado-card">'+
+      '<div class="ali-top">'+
+        '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:20px;min-width:28px;color:var(--txt3)">#'+(i+1)+'</div>'+
+        '<div class="ali-av">'+ini+'</div>'+
+        '<div><div class="ali-nombre">'+d.aliado.nombre+'</div><div class="ali-tipo">'+d.aliado.tipo+' · '+nivelComision[d.nivel]+'/servicio</div></div>'+
+        '<span class="ali-nivel nivel-'+d.nivel+'">'+nivelLabel[d.nivel]+'</span>'+
+      '</div>'+
+      '<div class="ali-stats">'+
+        '<div class="as"><div class="as-val" style="color:var(--azul)">'+d.leads+'</div><div class="as-lbl">Leads</div></div>'+
+        '<div class="as"><div class="as-val" style="color:var(--verde)">'+d.convertidos+'</div><div class="as-lbl">Convertidos</div></div>'+
+        '<div class="as"><div class="as-val" style="color:var(--amarillo)">'+d.tasa+'%</div><div class="as-lbl">Conversión</div></div>'+
+        '<div class="as"><div class="as-val" style="color:var(--naranja)">$'+(d.convertidos*13000).toLocaleString('es-CL')+'</div><div class="as-lbl">Comisión</div></div>'+
+      '</div>'+
+      (d.aliado.telefono?'<button class="btn-wa" onclick="window.open(\'https://wa.me/56'+d.aliado.telefono.replace(/\\D/g,'')+'\',\'_blank\')">💬 WhatsApp</button>':'')+
+    '</div>';
+  }).join('');
+}
+
+function goTab(n,el){
+  document.querySelectorAll('.page').forEach(function(p,i){p.classList.toggle('active',i===n);});
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
+  el.classList.add('active');
+}
+
+load();
+</script>
+</body>
+</html>

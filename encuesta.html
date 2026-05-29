@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta - Evaluacion del servicio</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:460px;margin:0 auto;}
+.screen{padding:32px 24px 60px;}
+.logo{display:flex;align-items:center;gap:10px;margin-bottom:32px;}
+.mark{width:38px;height:38px;background:var(--rojo);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:"Syne",sans-serif;font-weight:800;font-size:12px;color:#fff;}
+.brand{font-family:"Syne",sans-serif;font-weight:800;font-size:18px;}
+.brand span{color:var(--rojo);}
+h1{font-family:"Syne",sans-serif;font-weight:800;font-size:26px;letter-spacing:-0.5px;margin-bottom:6px;line-height:1.1;}
+h1 em{color:var(--amarillo);font-style:normal;}
+.sub{font-size:14px;color:var(--txt3);margin-bottom:28px;line-height:1.6;}
+.sec{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);margin:20px 0 10px;display:flex;align-items:center;gap:8px;}
+.sec::after{content:"";flex:1;height:1px;background:var(--borde);}
+.star-group{display:flex;justify-content:center;gap:12px;margin-bottom:20px;}
+.star{font-size:36px;cursor:pointer;opacity:0.3;transition:all 0.15s;}
+.star.on{opacity:1;}
+.criterio{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin-bottom:10px;}
+.crit-label{font-size:13px;font-weight:500;color:var(--txt);margin-bottom:10px;}
+.crit-stars{display:flex;gap:8px;}
+.crit-star{font-size:24px;cursor:pointer;opacity:0.3;transition:all 0.15s;}
+.crit-star.on{opacity:1;}
+.lbl{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--txt3);margin-bottom:6px;display:block;}
+.inp{width:100%;background:var(--c2);border:1px solid var(--borde);border-radius:8px;color:var(--txt);font-family:"DM Sans",sans-serif;font-size:15px;padding:11px 13px;outline:none;margin-bottom:10px;}
+.inp:focus{border-color:var(--rojo);}
+.inp::placeholder{color:var(--txt3);}
+.btn{width:100%;background:var(--rojo);border:none;border-radius:8px;color:#fff;font-family:"Syne",sans-serif;font-weight:700;font-size:16px;padding:15px;cursor:pointer;margin-top:8px;}
+.gracias{display:none;text-align:center;padding:60px 20px;}
+.gracias-icon{font-size:60px;margin-bottom:16px;}
+.gracias h2{font-family:"Syne",sans-serif;font-weight:800;font-size:24px;margin-bottom:8px;}
+.gracias p{font-size:14px;color:var(--txt3);}
+</style>
+</head>
+<body>
+<div class="screen" id="form-screen">
+  <div class="logo">
+    <div class="mark">SRV</div>
+    <div class="brand">SERVI<span>RUTA</span></div>
+  </div>
+  <h1>Tu opinion nos <em>importa</em></h1>
+  <p class="sub">Toma 1 minuto. Tu evaluacion ayuda a mejorar nuestro servicio.</p>
+
+  <div class="sec">Nota general del servicio</div>
+  <div class="star-group" id="stars-general">
+    <span class="star" onclick="setNota(1)">★</span>
+    <span class="star" onclick="setNota(2)">★</span>
+    <span class="star" onclick="setNota(3)">★</span>
+    <span class="star" onclick="setNota(4)">★</span>
+    <span class="star" onclick="setNota(5)">★</span>
+  </div>
+
+  <div class="sec">Detalle del servicio</div>
+  <div class="criterio">
+    <div class="crit-label">⏰ Puntualidad del técnico</div>
+    <div class="crit-stars" id="stars-punt">
+      <span class="crit-star" onclick="setCrit('punt',1)">★</span>
+      <span class="crit-star" onclick="setCrit('punt',2)">★</span>
+      <span class="crit-star" onclick="setCrit('punt',3)">★</span>
+      <span class="crit-star" onclick="setCrit('punt',4)">★</span>
+      <span class="crit-star" onclick="setCrit('punt',5)">★</span>
+    </div>
+  </div>
+  <div class="criterio">
+    <div class="crit-label">🔧 Calidad del trabajo</div>
+    <div class="crit-stars" id="stars-cal">
+      <span class="crit-star" onclick="setCrit('cal',1)">★</span>
+      <span class="crit-star" onclick="setCrit('cal',2)">★</span>
+      <span class="crit-star" onclick="setCrit('cal',3)">★</span>
+      <span class="crit-star" onclick="setCrit('cal',4)">★</span>
+      <span class="crit-star" onclick="setCrit('cal',5)">★</span>
+    </div>
+  </div>
+  <div class="criterio">
+    <div class="crit-label">💬 Comunicacion y trato</div>
+    <div class="crit-stars" id="stars-com">
+      <span class="crit-star" onclick="setCrit('com',1)">★</span>
+      <span class="crit-star" onclick="setCrit('com',2)">★</span>
+      <span class="crit-star" onclick="setCrit('com',3)">★</span>
+      <span class="crit-star" onclick="setCrit('com',4)">★</span>
+      <span class="crit-star" onclick="setCrit('com',5)">★</span>
+    </div>
+  </div>
+  <div class="criterio">
+    <div class="crit-label">✨ Limpieza y orden</div>
+    <div class="crit-stars" id="stars-limp">
+      <span class="crit-star" onclick="setCrit('limp',1)">★</span>
+      <span class="crit-star" onclick="setCrit('limp',2)">★</span>
+      <span class="crit-star" onclick="setCrit('limp',3)">★</span>
+      <span class="crit-star" onclick="setCrit('limp',4)">★</span>
+      <span class="crit-star" onclick="setCrit('limp',5)">★</span>
+    </div>
+  </div>
+
+  <div class="sec">Comentario</div>
+  <textarea class="inp" id="comentario" placeholder="Cuentanos tu experiencia..." rows="3"></textarea>
+
+  <button class="btn" onclick="enviar()">Enviar evaluacion →</button>
+</div>
+
+<div class="gracias" id="gracias-screen">
+  <div class="gracias-icon">🙏</div>
+  <h2>Gracias por tu evaluacion</h2>
+  <p>Tu opinion nos ayuda a seguir mejorando. Serviruta siempre a tu servicio.</p>
+</div>
+
+<script>
+var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co';
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s';
+var db=null;
+var nota=0,punt=0,cal=0,com=0,limp=0;
+
+// Leer params de la URL
+var params=new URLSearchParams(window.location.search);
+var tecnico=params.get('tecnico')||'';
+var cliente=params.get('cliente')||'';
+var tel=params.get('tel')||'';
+var pId=params.get('ppto')||'';
+
+function getDB(){if(!db)db=supabase.createClient(SB_URL,SB_KEY);return db;}
+
+function setNota(n){
+  nota=n;
+  document.querySelectorAll('#stars-general .star').forEach(function(s,i){s.classList.toggle('on',i<n);});
+}
+function setCrit(tipo,n){
+  if(tipo==='punt')punt=n;
+  if(tipo==='cal')cal=n;
+  if(tipo==='com')com=n;
+  if(tipo==='limp')limp=n;
+  document.querySelectorAll('#stars-'+tipo+' .crit-star').forEach(function(s,i){s.classList.toggle('on',i<n);});
+}
+
+async function enviar(){
+  if(!nota){alert('Por favor selecciona una nota general');return;}
+  var db=getDB();
+  await db.from('evaluaciones').insert({
+    tecnico:tecnico,
+    cliente:cliente,
+    telefono:tel,
+    nota:nota,
+    puntualidad:punt,
+    calidad:cal,
+    comunicacion:com,
+    limpieza:limp,
+    comentario:document.getElementById('comentario').value.trim(),
+    presupuesto_id:pId||null,
+    fecha:new Date().toISOString().split('T')[0]
+  });
+  document.getElementById('form-screen').style.display='none';
+  document.getElementById('gracias-screen').style.display='block';
+}
+</script>
+</body>
+</html>

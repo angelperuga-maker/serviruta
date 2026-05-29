@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe Serviruta</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;--naranja:#FB923C;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:500px;margin:0 auto;padding:20px 16px 60px;}
+.logo{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:14px;border-bottom:2px solid var(--rojo);}
+.mark{width:40px;height:40px;background:var(--rojo);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:"Syne",sans-serif;font-weight:800;font-size:13px;color:#fff;}
+.brand{font-family:"Syne",sans-serif;font-weight:800;font-size:18px;}
+.brand span{color:var(--rojo);}
+.sub{font-size:11px;color:var(--txt3);margin-top:1px;}
+.score-box{border-radius:12px;padding:16px;margin-bottom:14px;text-align:center;}
+.score-num{font-family:"Syne",sans-serif;font-weight:800;font-size:52px;line-height:1;}
+.score-bar{height:8px;background:var(--c3);border-radius:4px;overflow:hidden;margin:10px 0 6px;}
+.score-fill{height:100%;border-radius:4px;}
+.veh-card{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin-bottom:14px;}
+.veh-titulo{font-family:"Syne",sans-serif;font-weight:700;font-size:16px;margin-bottom:8px;}
+.veh-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.vg{background:var(--c3);border-radius:6px;padding:8px;}
+.vg-lbl{font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;}
+.vg-val{font-size:13px;font-weight:600;}
+.sec{font-family:"Syne",sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);margin:16px 0 8px;display:flex;align-items:center;gap:8px;}
+.sec::after{content:"";flex:1;height:1px;background:var(--borde);}
+.falla{background:var(--c2);border-radius:10px;padding:12px 14px;margin-bottom:8px;display:flex;gap:10px;align-items:flex-start;}
+.falla.critico{border-left:3px solid var(--rojo);background:rgba(232,33,10,0.05);}
+.falla.alerta{border-left:3px solid var(--amarillo);background:rgba(245,197,24,0.04);}
+.falla.ok{border-left:3px solid var(--verde);background:rgba(34,197,94,0.04);}
+.fi{font-size:16px;flex-shrink:0;margin-top:2px;}
+.fn{font-weight:600;font-size:13px;margin-bottom:2px;}
+.fd{font-size:11px;color:var(--txt3);line-height:1.5;}
+.fn-nota{font-size:11px;color:var(--amarillo);margin-top:3px;font-style:italic;}
+.urgente{background:rgba(232,33,10,0.1);border:1px solid rgba(232,33,10,0.4);border-radius:10px;padding:14px;margin-bottom:14px;}
+.urgente-t{font-family:"Syne",sans-serif;font-weight:800;font-size:13px;color:var(--rojo);margin-bottom:8px;}
+.urgente-item{font-size:12px;padding:4px 0;border-bottom:1px solid rgba(232,33,10,0.15);display:flex;gap:8px;}
+.urgente-item:last-child{border:none;}
+.btn{width:100%;padding:13px;border-radius:10px;font-family:"Syne",sans-serif;font-weight:700;font-size:14px;cursor:pointer;border:none;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:8px;}
+.btn-wa{background:#25D366;color:#fff;}
+.loading{text-align:center;padding:60px;color:var(--txt3);}
+.footer{text-align:center;font-size:11px;color:var(--txt3);margin-top:20px;padding-top:14px;border-top:1px solid var(--borde);}
+</style>
+</head>
+<body>
+
+<div class="logo">
+  <div class="mark">SRV</div>
+  <div>
+    <div class="brand">SERVI<span>RUTA</span></div>
+    <div class="sub">Mecánica a Domicilio · Santiago RM · 24/7</div>
+  </div>
+</div>
+
+<div id="contenido"><div class="loading">⏳ Cargando informe...</div></div>
+
+<div class="footer" id="footer" style="display:none">
+  Serviruta · Taller Mecánico a Domicilio · Santiago RM<br>
+  +56 9 8505 8250 · serviruta.cl
+</div>
+
+<script>
+var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+
+var NOMBRES = {
+  presion_aire:'Presión sistema de aire',compresor:'Compresor de aire',secador_aire:'Secador de aire',
+  freno_servicio:'Freno de servicio',freno_mano:'Freno de parqueo',pastillas_del:'Pastillas delanteras',
+  pastillas_tras:'Pastillas traseras',discos_tambores:'Discos o tambores',flexible_freno:'Mangueras flexibles freno',abs:'Sistema ABS',
+  fuga_carter:'Fuga aceite — cárter',fuga_transmision:'Fuga aceite — transmisión',fuga_diferencial:'Fuga aceite — diferencial',
+  fuga_turbo:'Fuga aceite — turbo',fuga_estanque:'Fuga combustible — estanque',fuga_linea_comb:'Fuga combustible — línea',
+  fuga_inyectores:'Fuga combustible — inyectores',fuga_radiador:'Fuga agua — radiador',fuga_bomba_agua:'Fuga agua — bomba',
+  fuga_aire_deposito:'Fuga aire — depósito',fuga_linea_aire:'Fuga aire — líneas',fuga_camaras:'Fuga aire — cámaras freno',fuga_valvulas:'Fuga aire — válvulas',
+  luz_baja_del:'Luces bajas',luz_alta_del:'Luces altas',luz_posicion_del:'Luces posición delantera',luz_giro_del:'Intermitentes delanteros',
+  luz_stop:'Luces STOP',luz_reversa:'Luz de reversa',luz_posicion_tras:'Luces posición trasera',luz_giro_tras:'Intermitentes traseros',luz_placa:'Luz de patente',
+  luces_posicion_alt:'Luces de contorno/altura',alarma_reversa:'Alarma de reversa',
+  nivel_aceite:'Nivel aceite motor',color_humo:'Humo de escape',ruido_motor:'Ruidos motor',temp_motor:'Temperatura motor',refrigerante:'Refrigerante',
+  revision_tecnica:'Revisión técnica',permiso_circulacion:'Permiso circulación',seguro_obligatorio:'SOAP',extintor:'Extintor',kit_emergencia:'Kit emergencia'
+}
+
+async function cargar() {
+  var params = new URLSearchParams(window.location.search)
+  var id = params.get('id')
+
+  if (!id) { document.getElementById('contenido').innerHTML='<div class="loading">❌ ID de inspección no encontrado</div>'; return }
+
+  var db = supabase.createClient(SB_URL, SB_KEY)
+  var r = await db.from('inspecciones').select('*').eq('id', id).single()
+
+  if (r.error || !r.data) { document.getElementById('contenido').innerHTML='<div class="loading">❌ Inspección no encontrada</div>'; return }
+
+  var d = r.data
+  var estados = d.estados || {}
+  var score = d.score || 0
+
+  var scoreColor = score>=80?'var(--verde)':score>=60?'var(--amarillo)':'var(--rojo)'
+  var scoreTexto = score>=80?'Vehículo en buen estado':score>=60?'Requiere atención':'Vehículo con fallas críticas'
+
+  // Clasificar puntos
+  var criticos = Object.entries(estados).filter(function(e){return e[1]==='critico'})
+  var alertas  = Object.entries(estados).filter(function(e){return e[1]==='alerta'})
+
+  var html = ''
+
+  // Score
+  html += '<div class="score-box" style="background:'+scoreColor.replace(')',',0.1)').replace('var(','rgba(')+'1);border:1px solid '+scoreColor.replace(')',',0.3)').replace('var(','rgba(')+'1)">'
+  html += '<div style="font-size:11px;color:var(--txt3);margin-bottom:4px">Estado general</div>'
+  html += '<div class="score-num" style="color:'+scoreColor+'">'+score+'%</div>'
+  html += '<div class="score-bar"><div class="score-fill" style="width:'+score+'%;background:'+scoreColor+'"></div></div>'
+  html += '<div style="font-size:12px;color:var(--txt3)">'+scoreTexto+'</div></div>'
+
+  // Vehículo
+  html += '<div class="veh-card">'
+  html += '<div class="veh-titulo">🚛 '+d.vehiculo+'</div>'
+  html += '<div class="veh-grid">'
+  html += '<div class="vg"><div class="vg-lbl">Patente</div><div class="vg-val">'+(d.patente||'—')+'</div></div>'
+  html += '<div class="vg"><div class="vg-lbl">Km</div><div class="vg-val">'+(d.kilometraje?d.kilometraje.toLocaleString('es-CL')+' km':'—')+'</div></div>'
+  html += '<div class="vg"><div class="vg-lbl">Cliente</div><div class="vg-val">'+(d.cliente||'—')+'</div></div>'
+  html += '<div class="vg"><div class="vg-lbl">Técnico</div><div class="vg-val">'+d.tecnico+'</div></div>'
+  html += '<div class="vg"><div class="vg-lbl">Fecha</div><div class="vg-val">'+(d.fecha||'—')+'</div></div>'
+  html += '</div></div>'
+
+  // Urgentes
+  if (criticos.length > 0) {
+    html += '<div class="urgente"><div class="urgente-t">🚨 Puntos críticos detectados</div>'
+    criticos.forEach(function(e){ html += '<div class="urgente-item">🔴 '+(NOMBRES[e[0]]||e[0])+'</div>' })
+    html += '</div>'
+  }
+
+  // Detalle criticos
+  if (criticos.length > 0) {
+    html += '<div class="sec">Fallas críticas</div>'
+    criticos.forEach(function(e){
+      html += '<div class="falla critico"><span class="fi">🔴</span><div><div class="fn">'+(NOMBRES[e[0]]||e[0])+'</div></div></div>'
+    })
+  }
+
+  // Alertas
+  if (alertas.length > 0) {
+    html += '<div class="sec">Alertas</div>'
+    alertas.forEach(function(e){
+      html += '<div class="falla alerta"><span class="fi">⚠️</span><div><div class="fn">'+(NOMBRES[e[0]]||e[0])+'</div></div></div>'
+    })
+  }
+
+  // OK
+  var oks = Object.entries(estados).filter(function(e){return e[1]==='ok'})
+  if (oks.length > 0) {
+    html += '<div class="sec">Puntos en buen estado</div>'
+    html += '<div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px">'
+    oks.forEach(function(e){
+      html += '<span style="background:var(--verde-g,rgba(34,197,94,0.1));color:var(--verde);border:1px solid rgba(34,197,94,0.3);border-radius:20px;padding:4px 10px;font-size:11px;font-weight:600">✅ '+(NOMBRES[e[0]]||e[0])+'</span>'
+    })
+    html += '</div>'
+  }
+
+  // Botón WhatsApp
+  html += '<button class="btn btn-wa" onclick="compartir()">💬 Compartir por WhatsApp</button>'
+
+  document.getElementById('contenido').innerHTML = html
+  document.getElementById('footer').style.display = 'block'
+  document.title = 'Informe ' + (d.vehiculo||'') + ' · Serviruta'
+
+  window._inspeccion = d
+}
+
+function compartir() {
+  var d = window._inspeccion
+  if (!d) return
+  var url = window.location.href
+  var msg = '🚛 *INFORME INSPECCIÓN SERVIRUTA*\n\n'
+  msg += '*'+d.vehiculo+(d.patente?' · '+d.patente:'')+'*\n'
+  msg += 'Cliente: '+(d.cliente||'—')+' · Técnico: '+d.tecnico+'\n'
+  msg += 'Estado general: *'+d.score+'%*\n\n'
+  msg += '📋 Ver informe completo:\n' + url + '\n\n'
+  msg += 'Serviruta · +56 9 8505 8250'
+  window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank')
+}
+
+cargar()
+</script>
+</body>
+</html>

@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Serviruta · Inspección Camión</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--rojo-d:#B01A08;--rojo-g:rgba(232,33,10,0.08);--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--c4:#282830;--borde:#2C2C32;--borde2:#3A3A42;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--verde-g:rgba(34,197,94,0.1);--amarillo:#F5C518;--amarillo-g:rgba(245,197,24,0.08);--naranja:#FB923C;--naranja-g:rgba(251,146,60,0.1);--azul:#60A5FA;--azul-g:rgba(96,165,250,0.08);}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:480px;margin:0 auto;}
+.hdr{background:var(--c1);border-bottom:1px solid var(--borde);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.hdr-left{display:flex;align-items:center;gap:9px;}
+.hdr-mark{width:30px;height:30px;background:var(--naranja);border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:"Syne",sans-serif;font-weight:800;font-size:9px;color:#fff;}
+.hdr-title{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;}
+.timer-wrap{display:flex;align-items:center;gap:6px;background:var(--c2);border:1px solid var(--borde);border-radius:20px;padding:5px 12px;}
+.timer-dot{width:7px;height:7px;border-radius:50%;background:var(--verde);animation:pulse 1.2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+.timer-val{font-family:"Syne",sans-serif;font-weight:800;font-size:14px;color:var(--amarillo);}
+.progress-bar{height:3px;background:var(--borde);}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--naranja),var(--amarillo));transition:width 0.4s ease;}
+.steps-nav{display:flex;overflow-x:auto;gap:0;background:var(--c1);border-bottom:1px solid var(--borde);padding:0 6px;}
+.step-tab{flex-shrink:0;padding:10px 12px;cursor:pointer;font-size:11px;font-weight:600;color:var(--txt3);border-bottom:2px solid transparent;transition:all 0.2s;white-space:nowrap;}
+.step-tab.active{color:var(--naranja);border-bottom-color:var(--naranja);}
+.step-tab.done{color:var(--verde);}
+.step-tab.done::before{content:"✓ ";}
+.page{display:none;padding:14px 16px 100px;}.page.active{display:block;animation:fu 0.2s ease;}
+@keyframes fu{from{opacity:0;transform:translateY(5px);}to{opacity:1;transform:translateY(0);}}
+.sec{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);margin:14px 0 10px;display:flex;align-items:center;gap:8px;}
+.sec::after{content:"";flex:1;height:1px;background:var(--borde);}
+.lbl{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--txt3);margin-bottom:5px;display:block;}
+.inp{width:100%;background:var(--c2);border:1px solid var(--borde);border-radius:8px;color:var(--txt);font-family:"DM Sans",sans-serif;font-size:15px;padding:11px 13px;outline:none;transition:border-color 0.2s;-webkit-appearance:none;margin-bottom:10px;}
+.inp:focus{border-color:var(--naranja);}
+.inp::placeholder{color:var(--txt3);}
+.inp-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.inp-sel{width:100%;background:var(--c2);border:1px solid var(--borde);border-radius:8px;color:var(--txt);font-family:"DM Sans",sans-serif;font-size:14px;padding:11px 13px;outline:none;-webkit-appearance:none;margin-bottom:10px;}
+.check-group{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+.check-item{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all 0.15s;}
+.check-item.ok{background:var(--verde-g);border-color:rgba(34,197,94,0.35);}
+.check-item.alerta{background:var(--amarillo-g);border-color:rgba(245,197,24,0.35);}
+.check-item.critico{background:var(--rojo-g);border-color:rgba(232,33,10,0.35);}
+.ci-icon{font-size:20px;flex-shrink:0;width:28px;text-align:center;}
+.ci-info{flex:1;}
+.ci-name{font-size:13px;font-weight:500;color:var(--txt);margin-bottom:2px;}
+.ci-desc{font-size:11px;color:var(--txt3);line-height:1.4;}
+.ci-estado{margin-left:auto;flex-shrink:0;}
+.estado-pills{display:flex;gap:4px;}
+.pill{font-size:10px;font-weight:700;padding:4px 9px;border-radius:20px;cursor:pointer;border:1px solid transparent;transition:all 0.15s;font-family:"Syne",sans-serif;}
+.pill.ok{background:var(--verde-g);color:var(--verde);border-color:rgba(34,197,94,0.3);}
+.pill.alerta{background:var(--amarillo-g);color:var(--amarillo);border-color:rgba(245,197,24,0.3);}
+.pill.critico{background:var(--rojo-g);color:var(--rojo);border-color:rgba(232,33,10,0.3);}
+.pill.selected-ok{background:var(--verde);color:#000;}
+.pill.selected-alerta{background:var(--amarillo);color:#000;}
+.pill.selected-critico{background:var(--rojo);color:#fff;}
+.nota-inp{width:100%;background:var(--c2);border:1px solid var(--borde);border-radius:8px;color:var(--txt);font-family:"DM Sans",sans-serif;font-size:12px;padding:7px 10px;outline:none;resize:none;min-height:40px;margin-top:6px;transition:border-color 0.2s;display:none;}
+.nota-inp:focus{border-color:var(--amarillo);}
+.alerta-box{background:var(--rojo-g);border:1px solid rgba(232,33,10,0.3);border-radius:10px;padding:12px 14px;margin-bottom:12px;display:flex;align-items:flex-start;gap:10px;font-size:12px;color:var(--rojo);}
+.score-wrap{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:16px;margin-bottom:12px;text-align:center;}
+.score-num{font-family:"Syne",sans-serif;font-weight:800;font-size:48px;line-height:1;}
+.score-bar{height:8px;background:var(--c3);border-radius:4px;overflow:hidden;margin:12px 0 8px;}
+.score-fill{height:100%;border-radius:4px;transition:width 0.6s ease;}
+.resumen-card{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin-bottom:12px;}
+.rc-title{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.alerta-item{display:flex;align-items:flex-start;gap:8px;padding:7px 0;border-bottom:1px solid var(--borde);font-size:13px;}
+.alerta-item:last-child{border-bottom:none;}
+.ai-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+.ai-dot.critico{background:var(--rojo);}
+.ai-dot.alerta{background:var(--amarillo);}
+.ai-txt{flex:1;line-height:1.5;}
+.btn{width:100%;padding:13px;border-radius:10px;font-family:"Syne",sans-serif;font-weight:700;font-size:14px;cursor:pointer;border:none;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:8px;transition:all 0.15s;}
+.btn-naranja{background:var(--naranja);color:#fff;}
+.btn-verde{background:var(--verde);color:#000;}
+.btn-wa{background:#25D366;color:#fff;}
+.btn-sec{background:var(--c2);border:1px solid var(--borde);color:var(--txt2);}
+.btn-row{display:flex;gap:8px;}.btn-row .btn{margin-bottom:0;}
+.mp-item{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:12px 14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;}
+.mp-icon{font-size:22px;flex-shrink:0;}
+.mp-info{flex:1;}
+.mp-name{font-size:13px;font-weight:600;}
+.mp-km{font-size:11px;color:var(--txt3);margin-top:2px;}
+.mp-estado-sel{background:var(--c3);border:1px solid var(--borde);border-radius:6px;color:var(--txt);font-size:12px;padding:6px 10px;outline:none;-webkit-appearance:none;}
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--c3);border:1px solid var(--borde);border-radius:8px;padding:11px 18px;font-size:13px;font-weight:500;z-index:999;opacity:0;transition:all 0.25s;pointer-events:none;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.ok{border-color:rgba(34,197,94,0.4);color:var(--verde);}
+.toast.warn{border-color:rgba(245,197,24,0.4);color:var(--amarillo);}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-left">
+    <div class="hdr-mark">🚛</div>
+    <div class="hdr-title">Inspección Camión</div>
+  </div>
+  <div class="timer-wrap">
+    <div class="timer-dot"></div>
+    <div class="timer-val" id="timer-display">00:00</div>
+  </div>
+</div>
+<div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+
+<div class="steps-nav">
+  <div class="step-tab active" id="tab-0" onclick="irPaso(0)">1. Datos</div>
+  <div class="step-tab" id="tab-1" onclick="irPaso(1)">2. Aire/Frenos</div>
+  <div class="step-tab" id="tab-2" onclick="irPaso(2)">3. Fugas</div>
+  <div class="step-tab" id="tab-3" onclick="irPaso(3)">4. Luces</div>
+  <div class="step-tab" id="tab-4" onclick="irPaso(4)">5. MP</div>
+  <div class="step-tab" id="tab-5" onclick="irPaso(5)">6. Resumen</div>
+</div>
+
+<!-- PASO 0: DATOS -->
+<div class="page active" id="pg-0">
+  <div class="sec">Identificación del vehículo</div>
+  <label class="lbl">Empresa / Cliente</label>
+  <input class="inp" id="d-cliente" placeholder="Nombre empresa o conductor">
+  <div class="inp-row">
+    <div><label class="lbl">Teléfono</label><input class="inp" id="d-tel" placeholder="+56 9..." type="tel" style="margin-bottom:0"></div>
+    <div><label class="lbl">Patente</label><input class="inp" id="d-patente" placeholder="XXXX-XX" style="text-transform:uppercase;margin-bottom:0"></div>
+  </div>
+  <div style="height:6px"></div>
+  <div class="inp-row">
+    <div><label class="lbl">Marca</label><input class="inp" id="d-marca" placeholder="Ej: Volvo" style="margin-bottom:0"></div>
+    <div><label class="lbl">Modelo</label><input class="inp" id="d-modelo" placeholder="Ej: FH16" style="margin-bottom:0"></div>
+  </div>
+  <div style="height:6px"></div>
+  <div class="inp-row">
+    <div><label class="lbl">Año</label><input class="inp" id="d-anio" placeholder="2018" type="number" style="margin-bottom:0"></div>
+    <div><label class="lbl">Kilometraje</label><input class="inp" id="d-km" placeholder="350.000" type="number" style="margin-bottom:0"></div>
+  </div>
+  <div style="height:6px"></div>
+  <label class="lbl" style="margin-top:6px">Tipo de camión</label>
+  <select class="inp-sel" id="d-tipo">
+    <option value="Rigido liviano">Rígido liviano (hasta 3.500 kg)</option>
+    <option value="Semipesado">Semipesado (3.500 - 15.000 kg)</option>
+    <option value="Pesado">Pesado (+ 15.000 kg)</option>
+    <option value="Tracto">Tracto camión / Rampla</option>
+    <option value="Bus">Bus / Minibus</option>
+  </select>
+  <label class="lbl">Técnico</label>
+  <select class="inp-sel" id="d-tecnico">
+    <option>Reynaldo Aguas Bertel</option>
+    <option>Reynaldo Aguas</option>
+    <option>Humberto Morales</option>
+    <option>Kiven Henz</option>
+    <option>Giovanino Perugini</option>
+    <option>Jorge Ramirez</option>
+    <option>Felipe Mora</option>
+    <option>Carlos Vega</option>
+  </select>
+  <div style="background:var(--naranja-g);border:1px solid rgba(251,146,60,0.3);border-radius:8px;padding:12px;font-size:12px;color:var(--naranja);margin-bottom:12px;">
+    ⚠️ Esta inspección es para vehículos pesados. Verificar con motor encendido cuando corresponda.
+  </div>
+  <button class="btn btn-naranja" onclick="irPaso(1)">Siguiente — Sistema de aire y frenos →</button>
+</div>
+
+<!-- PASO 1: AIRE Y FRENOS -->
+<div class="page" id="pg-1">
+  <div class="sec">Sistema de aire comprimido</div>
+  <p style="font-size:12px;color:var(--txt3);margin-bottom:10px">Verificar con motor encendido. Presión nominal: 6.5 - 9.0 bar</p>
+  <div class="check-group" id="aire-checks"></div>
+
+  <div class="sec">Sistema de frenos</div>
+  <div class="check-group" id="frenos-checks"></div>
+
+  <div class="btn-row">
+    <button class="btn btn-sec" onclick="irPaso(0)">← Volver</button>
+    <button class="btn btn-naranja" onclick="irPaso(2)">Siguiente →</button>
+  </div>
+</div>
+
+<!-- PASO 2: FUGAS -->
+<div class="page" id="pg-2">
+  <div class="sec">Fugas de aceite</div>
+  <p style="font-size:12px;color:var(--txt3);margin-bottom:10px">Inspección visual con linterna. Clasificar por severidad.</p>
+  <div class="check-group" id="fugas-aceite-checks"></div>
+
+  <div class="sec">Fugas de combustible</div>
+  <div class="check-group" id="fugas-comb-checks"></div>
+
+  <div class="sec">Fugas de agua / refrigerante</div>
+  <div class="check-group" id="fugas-agua-checks"></div>
+
+  <div class="sec">Fugas de aire</div>
+  <p style="font-size:12px;color:var(--txt3);margin-bottom:10px">Escuchar con motor apagado. Ruido silbante = fuga.</p>
+  <div class="check-group" id="fugas-aire-checks"></div>
+
+  <div class="btn-row">
+    <button class="btn btn-sec" onclick="irPaso(1)">← Volver</button>
+    <button class="btn btn-naranja" onclick="irPaso(3)">Siguiente →</button>
+  </div>
+</div>
+
+<!-- PASO 3: LUCES -->
+<div class="page" id="pg-3">
+  <div class="sec">Luces delanteras</div>
+  <div class="check-group" id="luces-del-checks"></div>
+
+  <div class="sec">Luces traseras y laterales</div>
+  <div class="check-group" id="luces-tras-checks"></div>
+
+  <div class="sec">Luces especiales camión</div>
+  <div class="check-group" id="luces-esp-checks"></div>
+
+  <div class="btn-row">
+    <button class="btn btn-sec" onclick="irPaso(2)">← Volver</button>
+    <button class="btn btn-naranja" onclick="irPaso(4)">Siguiente →</button>
+  </div>
+</div>
+
+<!-- PASO 4: MP (MANTENIMIENTO PREVENTIVO) -->
+<div class="page" id="pg-4">
+  <div class="sec">Estado general motor</div>
+  <div class="check-group" id="motor-checks"></div>
+
+  <div class="sec">Mantenimiento preventivo — revisión de plazos</div>
+  <p style="font-size:12px;color:var(--txt3);margin-bottom:10px">Marcar el estado según km actuales y último servicio</p>
+  <div id="mp-items"></div>
+
+  <div class="sec">Documentación (exigencia legal)</div>
+  <div class="check-group" id="doc-checks"></div>
+
+  <div class="btn-row">
+    <button class="btn btn-sec" onclick="irPaso(3)">← Volver</button>
+    <button class="btn btn-verde" onclick="irPaso(5)">Ver resumen →</button>
+  </div>
+</div>
+
+<!-- PASO 5: RESUMEN -->
+<div class="page" id="pg-5">
+  <div class="score-wrap">
+    <div style="font-size:11px;color:var(--txt3);margin-bottom:4px">Estado general del vehículo</div>
+    <div class="score-num" id="score-num">—</div>
+    <div class="score-bar"><div class="score-fill" id="score-fill" style="width:0%"></div></div>
+    <div style="font-size:12px;color:var(--txt3)" id="score-texto">Calculando...</div>
+  </div>
+
+  <div class="resumen-card">
+    <div class="rc-title">🔴 Puntos críticos y alertas</div>
+    <div id="alertas-body"><div style="font-size:13px;color:var(--txt3)">Sin alertas</div></div>
+  </div>
+
+  <div class="resumen-card">
+    <div class="rc-title">🔧 MP — Mantenimiento recomendado</div>
+    <div id="mp-resumen" style="font-size:13px;color:var(--txt2)">—</div>
+  </div>
+
+  <div class="resumen-card">
+    <div class="rc-title">🚛 Vehículo inspeccionado</div>
+    <div id="resumen-vehiculo" style="font-size:13px;color:var(--txt2);line-height:1.8"></div>
+  </div>
+
+  <div id="etiquetas-wrap" style="background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin-bottom:12px;">
+    <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:13px;margin-bottom:10px;">🏷️ Etiquetas de seguimiento</div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;" id="tags-wrap">
+      <div class="etiqueta-pill" data-tag="frenos-urgentes" onclick="toggleTag(this)" style="padding:7px 14px;border-radius:20px;border:1px solid var(--borde);background:var(--c3);cursor:pointer;font-size:12px;font-weight:600;">🔴 Frenos urgentes</div>
+      <div class="etiqueta-pill" data-tag="fuga-aceite" onclick="toggleTag(this)" style="padding:7px 14px;border-radius:20px;border:1px solid var(--borde);background:var(--c3);cursor:pointer;font-size:12px;font-weight:600;">🛢️ Fuga aceite</div>
+      <div class="etiqueta-pill" data-tag="fuga-combustible" onclick="toggleTag(this)" style="padding:7px 14px;border-radius:20px;border:1px solid var(--borde);background:var(--c3);cursor:pointer;font-size:12px;font-weight:600;">⛽ Fuga combustible</div>
+      <div class="etiqueta-pill" data-tag="mp-vencido" onclick="toggleTag(this)" style="padding:7px 14px;border-radius:20px;border:1px solid var(--borde);background:var(--c3);cursor:pointer;font-size:12px;font-weight:600;">🔧 MP vencido</div>
+      <div class="etiqueta-pill" data-tag="luces-fallas" onclick="toggleTag(this)" style="padding:7px 14px;border-radius:20px;border:1px solid var(--borde);background:var(--c3);cursor:pointer;font-size:12px;font-weight:600;">💡 Fallas luces</div>
+      <div class="etiqueta-pill" data-tag="revision-general" onclick="toggleTag(this)" style="padding:7px 14px;border-radius:20px;border:1px solid var(--borde);background:var(--c3);cursor:pointer;font-size:12px;font-weight:600;">🔧 Revisión general</div>
+      <div class="etiqueta-pill" data-tag="cliente-vip" onclick="toggleTag(this)" style="padding:7px 14px;border-radius:20px;border:1px solid var(--borde);background:var(--c3);cursor:pointer;font-size:12px;font-weight:600;">⭐ Cliente VIP</div>
+    </div>
+  </div>
+
+  <button class="btn btn-verde" onclick="guardarInspeccion()">💾 Guardar en sistema</button>
+  <button class="btn btn-wa" onclick="enviarWA()">💬 Enviar informe al cliente</button>
+  <button class="btn btn-sec" onclick="nueva()">＋ Nueva inspección</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SB_URL = 'https://bqlgfmqcefledqyodkii.supabase.co'
+const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+
+// ═══════════════════════════════
+// CHECKS POR SECCIÓN
+// ═══════════════════════════════
+const CHECKS = {
+  aire: [
+    {id:'presion_aire',      nombre:'Presión del sistema de aire',      desc:'Medidor tablero: debe llegar a 6.5-9.0 bar en menos de 3 min',  peso:5},
+    {id:'compresor',         nombre:'Compresor de aire',                desc:'Ruido anormal, tiempo de carga excesivo',                        peso:4},
+    {id:'secador_aire',      nombre:'Secador de aire',                  desc:'Purga automática, acumulación de agua',                          peso:3},
+    {id:'deposito_principal',nombre:'Depósito principal de aire',       desc:'Sin corrosión visible, válvula de seguridad operativa',          peso:3},
+    {id:'valvula_proteccion',nombre:'Válvula de protección de circuito',desc:'Funcionamiento correcto, sin fugas',                             peso:4},
+  ],
+  frenos: [
+    {id:'freno_servicio',    nombre:'Freno de servicio',                desc:'Recorrido pedal, firmeza, tiro uniforme en las 4 ruedas',         peso:5},
+    {id:'freno_mano',        nombre:'Freno de parqueo / emergencia',    desc:'Activa y libera correctamente, fuerza suficiente',                peso:5},
+    {id:'pastillas_del',     nombre:'Pastillas/Zapatas delanteras',     desc:'Espesor mínimo 2 mm, desgaste uniforme',                          peso:4},
+    {id:'pastillas_tras',    nombre:'Pastillas/Zapatas traseras',       desc:'Espesor mínimo 2 mm, desgaste uniforme',                          peso:4},
+    {id:'discos_tambores',   nombre:'Discos o tambores',                desc:'Sin fisuras, ranuras o deformación térmica',                      peso:4},
+    {id:'flexible_freno',    nombre:'Mangueras flexibles de freno',     desc:'Sin grietas, hinchazón ni rozaduras',                             peso:4},
+    {id:'abs',               nombre:'Sistema ABS (si aplica)',          desc:'Testigo ABS en tablero apagado al circular',                      peso:3},
+  ],
+  fugas_aceite: [
+    {id:'fuga_carter',       nombre:'Carter del motor',                 desc:'Goteo o humedad bajo el motor',                                   peso:4},
+    {id:'fuga_transmision',  nombre:'Transmisión / Caja de cambios',   desc:'Mancha o humedad en carcasa',                                     peso:4},
+    {id:'fuga_diferencial',  nombre:'Diferencial(es)',                  desc:'Humedad en tapas laterales y posterior',                          peso:4},
+    {id:'fuga_direccion',    nombre:'Caja de dirección',               desc:'Humedad o goteo en caja hidráulica',                              peso:3},
+    {id:'fuga_turbo',        nombre:'Turbocompresor',                  desc:'Aceite en tubo de admisión, humedad en base',                     peso:3},
+  ],
+  fugas_comb: [
+    {id:'fuga_estanque',     nombre:'Estanque de combustible',          desc:'Sin grietas, corrosión ni goteo en uniones',                      peso:5},
+    {id:'fuga_linea_comb',   nombre:'Línea de combustible',             desc:'Mangueras y conectores sin humedad ni olor a diésel',             peso:5},
+    {id:'fuga_filtro_comb',  nombre:'Filtro de combustible',            desc:'Sin goteo en las uniones roscadas',                               peso:3},
+    {id:'fuga_inyectores',   nombre:'Inyectores / bomba inyección',    desc:'Sin retorno excesivo de combustible',                             peso:4},
+  ],
+  fugas_agua: [
+    {id:'fuga_radiador',     nombre:'Radiador',                         desc:'Sin goteo, nivel correcto de refrigerante',                       peso:4},
+    {id:'fuga_mangueras_rad',nombre:'Mangueras del radiador',           desc:'Sin grietas, uniones firmes',                                     peso:3},
+    {id:'fuga_bomba_agua',   nombre:'Bomba de agua',                    desc:'Sin humedad en carcasa ni sellado',                               peso:4},
+    {id:'fuga_calefaccion',  nombre:'Sistema de calefacción',           desc:'Sin humedad en habitáculo ni mangueras',                          peso:2},
+  ],
+  fugas_aire_sistema: [
+    {id:'fuga_aire_deposito',nombre:'Depósitos de aire (silbido)',      desc:'Escuchar con motor apagado y frenos aplicados',                   peso:4},
+    {id:'fuga_linea_aire',   nombre:'Líneas y mangueras de aire',       desc:'Inspección visual y auditiva de uniones',                         peso:4},
+    {id:'fuga_camaras',      nombre:'Cámaras de freno',                 desc:'Sin fugas en diafragma ni juntas',                                peso:5},
+    {id:'fuga_valvulas',     nombre:'Válvulas de control',              desc:'Sin escape de aire en posición de reposo',                        peso:4},
+  ],
+  luces_del: [
+    {id:'luz_baja_del',      nombre:'Luces bajas (ambas)',              desc:'Potencia y alineación correcta',                                  peso:3},
+    {id:'luz_alta_del',      nombre:'Luces altas',                      desc:'Funcionamiento correcto',                                         peso:2},
+    {id:'luz_posicion_del',  nombre:'Luces de posición delanteras',     desc:'Blancas o amarillas, ambas encendidas',                           peso:2},
+    {id:'luz_giro_del',      nombre:'Intermitentes delanteros',         desc:'Frecuencia y color correcto (naranja)',                           peso:3},
+    {id:'luces_diurnas',     nombre:'Luces diurnas DRL',               desc:'Si aplica, funcionamiento automático',                            peso:1},
+  ],
+  luces_tras: [
+    {id:'luz_stop',          nombre:'Luces de freno (STOP)',            desc:'Ambas encienden al pisar el freno',                               peso:4},
+    {id:'luz_reversa',       nombre:'Luz de reversa',                   desc:'Blanca, enciende al meter marcha atrás',                          peso:3},
+    {id:'luz_posicion_tras', nombre:'Luces de posición traseras',       desc:'Rojas, ambas encendidas con luces encendidas',                    peso:3},
+    {id:'luz_giro_tras',     nombre:'Intermitentes traseros',           desc:'Frecuencia y color correcto (naranja)',                           peso:3},
+    {id:'luz_placa',         nombre:'Luz de patente',                   desc:'Ilumina correctamente la placa trasera',                          peso:2},
+  ],
+  luces_esp: [
+    {id:'luces_posicion_alt',nombre:'Luces de posición altura/contorno',desc:'Balizas naranjas laterales y superiores (exigencia legal)',        peso:4},
+    {id:'luz_trabajo',       nombre:'Luces de trabajo',                 desc:'Si aplica, grúas, plataformas, retroexcavadoras',                 peso:2},
+    {id:'baliza_emergencia', nombre:'Balizas de emergencia',            desc:'Triángulos o luces destellantes disponibles',                     peso:3},
+    {id:'circulina',         nombre:'Circulina / Luz giratoria',        desc:'Si aplica por tipo de vehículo o carga',                          peso:2},
+    {id:'alarma_reversa',    nombre:'Alarma de reversa (sonora)',       desc:'Activa al meter marcha atrás',                                    peso:3},
+  ],
+  motor: [
+    {id:'nivel_aceite',      nombre:'Nivel de aceite motor',            desc:'Entre marcas MIN y MAX, color correcto',                          peso:3},
+    {id:'color_humo',        nombre:'Color del humo de escape',         desc:'Transparente o blanco leve = OK / Negro o azul = problema',       peso:4},
+    {id:'ruido_motor',       nombre:'Ruidos anormales',                 desc:'Golpeteo, silbido o vibración fuera de lo normal',                peso:4},
+    {id:'temp_motor',        nombre:'Temperatura de operación',         desc:'Indicador dentro del rango normal (80-95°C)',                     peso:4},
+    {id:'refrigerante',      nombre:'Nivel de refrigerante',            desc:'Depósito expansión entre MIN y MAX',                              peso:3},
+    {id:'correa_alternador', nombre:'Correa alternador / poly-V',       desc:'Tensión correcta, sin grietas ni desgaste',                       peso:3},
+  ],
+  doc: [
+    {id:'revision_tecnica',  nombre:'Revisión técnica vigente',         desc:'Sticker en parabrisas no vencido',                                peso:5},
+    {id:'permiso_circulacion',nombre:'Permiso de circulación',          desc:'Vigente para el año en curso',                                    peso:5},
+    {id:'seguro_obligatorio',nombre:'SOAP vigente',                     desc:'Sticker en parabrisas',                                           peso:5},
+    {id:'extintor',          nombre:'Extintor operativo',               desc:'Cargado, fecha vigente, en soporte correcto',                     peso:4},
+    {id:'kit_emergencia',    nombre:'Kit de emergencia',                desc:'Triángulos, chaleco reflectante, botiquín',                       peso:3},
+  ]
+}
+
+const MP_ITEMS = [
+  {id:'mp_aceite',     nombre:'Cambio de aceite motor',    desc:'Cada 10.000 km o cada 6 meses',    km:10000},
+  {id:'mp_filtro_ac',  nombre:'Filtro de aceite',          desc:'Con cada cambio de aceite',         km:10000},
+  {id:'mp_filtro_aire',nombre:'Filtro de aire',            desc:'Cada 20.000 km',                    km:20000},
+  {id:'mp_filtro_comb',nombre:'Filtro de combustible',     desc:'Cada 30.000 km',                    km:30000},
+  {id:'mp_filtro_agua',nombre:'Filtro agua/separador',     desc:'Cada 20.000 km en diésel',          km:20000},
+  {id:'mp_liquido_frenos',nombre:'Líquido de frenos',      desc:'Cada 2 años o 40.000 km',           km:40000},
+  {id:'mp_correas',    nombre:'Correa distribución/timing',desc:'Cada 80.000-100.000 km',            km:80000},
+  {id:'mp_bujias',     nombre:'Bujías (si es gasolina)',   desc:'Cada 30.000-60.000 km',             km:60000},
+  {id:'mp_neumaticos', nombre:'Profundidad neumáticos',    desc:'Mínimo legal: 1.6mm — renovar < 3mm',km:0},
+]
+
+let estados = {}
+let mpEstados = {}
+let etiquetasSeleccionadas = []
+let timerInterval = null
+let timerSecs = 0
+let pasoActual = 0
+
+// ═══════════════════════════════
+// RENDER CHECKS
+// ═══════════════════════════════
+function renderCheckGroup(containerId, items) {
+  const el = document.getElementById(containerId)
+  if (!el) return
+  el.innerHTML = items.map(item => `
+    <div class="check-item" id="ci-${item.id}">
+      <div class="ci-icon">${getIcon(estados[item.id])}</div>
+      <div class="ci-info">
+        <div class="ci-name">${item.nombre}</div>
+        <div class="ci-desc">${item.desc}</div>
+      </div>
+      <div class="ci-estado">
+        <div class="estado-pills">
+          <span class="pill ok ${estados[item.id]==='ok'?'selected-ok':''}" onclick="setEstado('${item.id}','ok')">OK</span>
+          <span class="pill alerta ${estados[item.id]==='alerta'?'selected-alerta':''}" onclick="setEstado('${item.id}','alerta')">⚠</span>
+          <span class="pill critico ${estados[item.id]==='critico'?'selected-critico':''}" onclick="setEstado('${item.id}','critico')">✕</span>
+        </div>
+        <textarea class="nota-inp" id="nota-${item.id}" placeholder="Nota..." style="display:${estados[item.id]&&estados[item.id]!=='ok'?'block':'none'}">${document.getElementById('nota-'+item.id)?.value||''}</textarea>
+      </div>
+    </div>`).join('')
+}
+
+function getIcon(e) {
+  if (e==='ok') return '✅'
+  if (e==='alerta') return '⚠️'
+  if (e==='critico') return '🔴'
+  return '○'
+}
+
+function setEstado(id, estado) {
+  estados[id] = estado
+  const ci = document.getElementById('ci-'+id)
+  if (!ci) return
+  ci.className = 'check-item ' + (estado!=='ok'?estado:'')
+  ci.querySelector('.ci-icon').textContent = getIcon(estado)
+  ci.querySelectorAll('.pill').forEach(p => {
+    p.className = p.className.replace(/selected-\w+/g,'').trim()
+    if (p.classList.contains(estado)) p.classList.add('selected-'+estado)
+  })
+  const nota = ci.querySelector('textarea')
+  if (nota) nota.style.display = estado==='ok'?'none':'block'
+  autoEtiquetas()
+}
+
+// ═══════════════════════════════
+// RENDER MP
+// ═══════════════════════════════
+function renderMP() {
+  const el = document.getElementById('mp-items')
+  if (!el) return
+  el.innerHTML = MP_ITEMS.map(item => `
+    <div class="mp-item">
+      <span class="mp-icon">🔧</span>
+      <div class="mp-info">
+        <div class="mp-name">${item.nombre}</div>
+        <div class="mp-km">${item.desc}</div>
+      </div>
+      <select class="mp-estado-sel" id="mp-${item.id}" onchange="mpEstados['${item.id}']=this.value">
+        <option value="">—</option>
+        <option value="ok">✅ Al día</option>
+        <option value="proximo">⚠️ Próximo</option>
+        <option value="vencido">🔴 Vencido</option>
+      </select>
+    </div>`).join('')
+}
+
+// ═══════════════════════════════
+// NAVEGACIÓN
+// ═══════════════════════════════
+function irPaso(n) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'))
+  document.querySelectorAll('.step-tab').forEach((t,i) => {
+    t.classList.remove('active')
+    if (i < n) { t.classList.add('done'); t.classList.remove('active') }
+    if (i === n) { t.classList.add('active'); t.classList.remove('done') }
+  })
+  document.getElementById('pg-'+n).classList.add('active')
+  pasoActual = n
+  const pct = Math.round((n/(6-1))*100)
+  document.getElementById('progress-fill').style.width = pct + '%'
+  window.scrollTo(0,0)
+  if (n===5) generarResumen()
+}
+
+// ═══════════════════════════════
+// RESUMEN Y SCORE
+// ═══════════════════════════════
+function generarResumen() {
+  const allChecks = [
+    ...CHECKS.aire, ...CHECKS.frenos,
+    ...CHECKS.fugas_aceite, ...CHECKS.fugas_comb,
+    ...CHECKS.fugas_agua, ...CHECKS.fugas_aire_sistema,
+    ...CHECKS.luces_del, ...CHECKS.luces_tras, ...CHECKS.luces_esp,
+    ...CHECKS.motor, ...CHECKS.doc
+  ]
+
+  let totalPeso = 0, pesoOk = 0
+  allChecks.forEach(c => {
+    totalPeso += c.peso
+    if (estados[c.id]==='ok') pesoOk += c.peso
+    else if (estados[c.id]==='alerta') pesoOk += c.peso * 0.5
+  })
+  const respondidos = allChecks.filter(c=>estados[c.id]).length
+  const score = respondidos === 0 ? 0 : Math.round((pesoOk/totalPeso)*100)
+
+  document.getElementById('score-num').textContent = score > 0 ? score+'%' : '—'
+  document.getElementById('score-fill').style.width = score + '%'
+  document.getElementById('score-fill').style.background = score>=80?'var(--verde)':score>=60?'var(--amarillo)':'var(--rojo)'
+  document.getElementById('score-texto').textContent =
+    score===0?'Sin completar':score>=80?'Vehículo apto para circular':score>=60?'Requiere atención':'VEHÍCULO CON FALLAS CRÍTICAS'
+
+  // Alertas
+  const criticos = allChecks.filter(c=>estados[c.id]==='critico')
+  const alertas  = allChecks.filter(c=>estados[c.id]==='alerta')
+  const alertasEl = document.getElementById('alertas-body')
+
+  if (!criticos.length && !alertas.length) {
+    alertasEl.innerHTML = '<div style="font-size:13px;color:var(--verde)">✅ Sin puntos críticos detectados</div>'
+  } else {
+    alertasEl.innerHTML = [
+      ...criticos.map(c=>`<div class="alerta-item"><div class="ai-dot critico"></div><div class="ai-txt"><strong>${c.nombre}</strong><br><span>${document.getElementById('nota-'+c.id)?.value||'Requiere atención inmediata'}</span></div></div>`),
+      ...alertas.map(c=>`<div class="alerta-item"><div class="ai-dot alerta"></div><div class="ai-txt"><strong>${c.nombre}</strong><br><span>${document.getElementById('nota-'+c.id)?.value||'Monitorear'}</span></div></div>`)
+    ].join('')
+  }
+
+  // MP Resumen
+  const mpVencidos = MP_ITEMS.filter(m=>mpEstados[m.id]==='vencido')
+  const mpProximos = MP_ITEMS.filter(m=>mpEstados[m.id]==='proximo')
+  let mpHtml = ''
+  if (mpVencidos.length) mpHtml += '<div style="color:var(--rojo);margin-bottom:8px"><strong>🔴 Vencidos:</strong> '+mpVencidos.map(m=>m.nombre).join(', ')+'</div>'
+  if (mpProximos.length) mpHtml += '<div style="color:var(--amarillo)"><strong>⚠️ Próximos:</strong> '+mpProximos.map(m=>m.nombre).join(', ')+'</div>'
+  document.getElementById('mp-resumen').innerHTML = mpHtml || '<div style="color:var(--verde)">✅ Mantenimiento al día</div>'
+
+  // Vehículo
+  const km = parseInt(document.getElementById('d-km')?.value)||0
+  document.getElementById('resumen-vehiculo').innerHTML =
+    `${document.getElementById('d-cliente')?.value||'—'}<br>
+     ${document.getElementById('d-tipo')?.value} ${document.getElementById('d-marca')?.value} ${document.getElementById('d-modelo')?.value} ${document.getElementById('d-anio')?.value}<br>
+     Patente: ${document.getElementById('d-patente')?.value||'—'} · ${km?km.toLocaleString('es-CL')+' km':''}<br>
+     Técnico: ${document.getElementById('d-tecnico')?.value}<br>
+     Tiempo: ${formatTimer()}`
+
+  autoEtiquetas()
+}
+
+// ═══════════════════════════════
+// ETIQUETAS AUTOMÁTICAS
+// ═══════════════════════════════
+function autoEtiquetas() {
+  const auto = []
+  if (estados['freno_servicio']==='critico'||estados['freno_mano']==='critico'||estados['pastillas_del']==='critico') auto.push('frenos-urgentes')
+  if (estados['fuga_carter']==='critico'||estados['fuga_transmision']==='critico') auto.push('fuga-aceite')
+  if (estados['fuga_estanque']==='critico'||estados['fuga_linea_comb']==='critico') auto.push('fuga-combustible')
+  if (Object.values(mpEstados).includes('vencido')) auto.push('mp-vencido')
+  const lucesKeys = Object.keys(estados).filter(k=>k.startsWith('luz_'))
+  if (lucesKeys.some(k=>estados[k]==='critico')) auto.push('luces-fallas')
+
+  auto.forEach(tag => {
+    if (etiquetasSeleccionadas.indexOf(tag) < 0) {
+      etiquetasSeleccionadas.push(tag)
+      const el = document.querySelector('[data-tag="'+tag+'"]')
+      if (el) { el.style.background='rgba(232,33,10,0.15)'; el.style.borderColor='rgba(232,33,10,0.5)'; el.style.color='var(--rojo)' }
+    }
+  })
+}
+
+function toggleTag(el) {
+  const tag = el.getAttribute('data-tag')
+  const idx = etiquetasSeleccionadas.indexOf(tag)
+  if (idx >= 0) {
+    etiquetasSeleccionadas.splice(idx, 1)
+    el.style.background='var(--c3)'; el.style.borderColor='var(--borde)'; el.style.color='var(--txt)'
+  } else {
+    etiquetasSeleccionadas.push(tag)
+    el.style.background='rgba(232,33,10,0.15)'; el.style.borderColor='rgba(232,33,10,0.5)'; el.style.color='var(--rojo)'
+  }
+}
+
+// ═══════════════════════════════
+// GUARDAR EN SUPABASE
+// ═══════════════════════════════
+let _inspId = null
+
+async function guardarInspeccion() {
+  try {
+    const sbI = supabase.createClient(SB_URL, SB_KEY)
+    const data = {
+      tecnico: document.getElementById('d-tecnico')?.value || '',
+      cliente: document.getElementById('d-cliente')?.value || '',
+      telefono: document.getElementById('d-tel')?.value || '',
+      vehiculo: (document.getElementById('d-tipo')?.value||'')+' '+(document.getElementById('d-marca')?.value||'')+' '+(document.getElementById('d-modelo')?.value||''),
+      patente: document.getElementById('d-patente')?.value || '',
+      kilometraje: parseInt(document.getElementById('d-km')?.value)||0,
+      estados: estados,
+      etiquetas: etiquetasSeleccionadas,
+      score: parseInt(document.getElementById('score-num')?.textContent)||0,
+      notas: JSON.stringify(mpEstados),
+      fecha: new Date().toISOString().split('T')[0]
+    }
+    const r = await sbI.from('inspecciones').insert(data).select('id').single()
+    if (r.error) throw r.error
+    _inspId = r.data.id
+    toast('✅ Guardado — ya puedes compartir el link', 'ok')
+  } catch(e) {
+    toast('⚠️ Error: ' + e.message, 'warn')
+  }
+}
+
+// ═══════════════════════════════
+// WHATSAPP INFORME
+// ═══════════════════════════════
+function enviarWA() {
+  const cliente = document.getElementById('d-cliente')?.value || 'Cliente'
+  const tel = (document.getElementById('d-tel')?.value||'').replace(/\D/g,'')
+  const score = document.getElementById('score-num')?.textContent || '—'
+  const vehiculo = (document.getElementById('d-marca')?.value||'') + ' ' + (document.getElementById('d-modelo')?.value||'')
+  const patente = document.getElementById('d-patente')?.value || ''
+
+  if (_inspId) {
+    // Compartir link al informe completo
+    const url = 'https://angelperuga-maker.github.io/serviruta/reporte.html?id=' + _inspId
+    const msg = '🚛 *INFORME INSPECCIÓN SERVIRUTA*\n\n' +
+      '*' + vehiculo + (patente?' · '+patente:'') + '*\n' +
+      'Cliente: ' + cliente + '\n' +
+      'Estado general: *' + score + '*\n\n' +
+      '📋 Ver informe completo aquí:\n' + url + '\n\n' +
+      'Serviruta · +56 9 8505 8250'
+    const destino = tel ? '56' + tel.replace(/^0?56/,'') : ''
+    window.open('https://wa.me/' + (destino||'') + '?text=' + encodeURIComponent(msg), '_blank')
+    return
+  }
+
+  // Si no se guardó aún, mostrar aviso
+  toast('Primero guarda la inspección para generar el link', 'warn')
+  return
+
+  // Código anterior como fallback (no se ejecuta)
+  if (false) {
+  const cliente = document.getElementById('d-cliente')?.value || 'Cliente'
+  const tel = (document.getElementById('d-tel')?.value||'').replace(/\D/g,'')
+  const score = document.getElementById('score-num')?.textContent || '—'
+  const tipo = document.getElementById('d-tipo')?.value || ''
+  const marca = document.getElementById('d-marca')?.value || ''
+  const patente = document.getElementById('d-patente')?.value || ''
+
+  const allChecks = [...CHECKS.aire,...CHECKS.frenos,...CHECKS.fugas_aceite,...CHECKS.fugas_comb,...CHECKS.fugas_agua,...CHECKS.fugas_aire_sistema,...CHECKS.luces_del,...CHECKS.luces_tras,...CHECKS.luces_esp,...CHECKS.motor,...CHECKS.doc]
+  const criticos = allChecks.filter(c=>estados[c.id]==='critico')
+  const alertas  = allChecks.filter(c=>estados[c.id]==='alerta')
+  const mpVencidos = MP_ITEMS.filter(m=>mpEstados[m.id]==='vencido')
+
+  let msg = `🚛 *INFORME INSPECCIÓN SERVIRUTA*\n`
+  msg += `_Mecánica a Domicilio · ${new Date().toLocaleDateString('es-CL')}_\n`
+  msg += `━━━━━━━━━━━━━━━━━━\n\n`
+  msg += `👤 *${cliente}*\n`
+  msg += `🚛 ${tipo} ${marca}${patente?' · Patente: '+patente:''}\n`
+  msg += `👷 Técnico: ${document.getElementById('d-tecnico')?.value}\n\n`
+  msg += `*ESTADO GENERAL: ${score}*\n\n`
+
+  if (criticos.length > 0) {
+    msg += `🔴 *PUNTOS CRÍTICOS:*\n`
+    criticos.forEach(c => { msg += `• ${c.nombre}\n` })
+    msg += `\n`
+  }
+  if (alertas.length > 0) {
+    msg += `⚠️ *ALERTAS:*\n`
+    alertas.forEach(c => { msg += `• ${c.nombre}\n` })
+    msg += `\n`
+  }
+  if (mpVencidos.length > 0) {
+    msg += `🔧 *MANTENIMIENTO VENCIDO:*\n`
+    mpVencidos.forEach(m => { msg += `• ${m.nombre}\n` })
+    msg += `\n`
+  }
+
+  msg += `━━━━━━━━━━━━━━━━━━\n`
+  msg += `📞 +56 9 8505 8250 · serviruta.cl`
+
+  const destino = tel ? `56${tel.replace(/^0?56/,'')}` : ''
+  window.open(`https://wa.me/${destino}?text=${encodeURIComponent(msg)}`, '_blank')
+  } // end if(false)
+}
+
+// ═══════════════════════════════
+// TIMER
+// ═══════════════════════════════
+function iniciarTimer() {
+  if (timerInterval) return
+  const start = Date.now()
+  timerInterval = setInterval(() => {
+    timerSecs = Math.floor((Date.now()-start)/1000)
+    const m = Math.floor(timerSecs/60), s = timerSecs%60
+    const el = document.getElementById('timer-display')
+    if (el) el.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`
+  }, 1000)
+}
+
+function formatTimer() {
+  const m = Math.floor(timerSecs/60), s = timerSecs%60
+  return `${m}m ${s}s`
+}
+
+function nueva() {
+  if (!confirm('¿Nueva inspección? Se perderán los datos actuales.')) return
+  estados = {}; mpEstados = {}; etiquetasSeleccionadas = []
+  timerSecs = 0; clearInterval(timerInterval); timerInterval = null
+  document.getElementById('timer-display').textContent = '00:00'
+  iniciarTimer()
+  irPaso(0)
+  renderAllChecks()
+}
+
+function toast(msg, type='') {
+  const t = document.getElementById('toast')
+  t.textContent=msg; t.className='toast'+(type?' '+type:'')
+  t.classList.add('show')
+  setTimeout(()=>t.classList.remove('show'), 2800)
+}
+
+// ═══════════════════════════════
+// INIT
+// ═══════════════════════════════
+function renderAllChecks() {
+  renderCheckGroup('aire-checks',          CHECKS.aire)
+  renderCheckGroup('frenos-checks',        CHECKS.frenos)
+  renderCheckGroup('fugas-aceite-checks',  CHECKS.fugas_aceite)
+  renderCheckGroup('fugas-comb-checks',    CHECKS.fugas_comb)
+  renderCheckGroup('fugas-agua-checks',    CHECKS.fugas_agua)
+  renderCheckGroup('fugas-aire-checks',    CHECKS.fugas_aire_sistema)
+  renderCheckGroup('luces-del-checks',     CHECKS.luces_del)
+  renderCheckGroup('luces-tras-checks',    CHECKS.luces_tras)
+  renderCheckGroup('luces-esp-checks',     CHECKS.luces_esp)
+  renderCheckGroup('motor-checks',         CHECKS.motor)
+  renderCheckGroup('doc-checks',           CHECKS.doc)
+  renderMP()
+}
+
+renderAllChecks()
+iniciarTimer()
+</script>
+</body>
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe Inspección - DXCP93</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;--naranja:#FB923C;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:600px;margin:0 auto;padding:20px 16px 60px;}
+.logo{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:14px;border-bottom:2px solid var(--rojo);}
+.mark{width:40px;height:40px;background:var(--rojo);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:"Syne",sans-serif;font-weight:800;font-size:13px;color:#fff;}
+.brand{font-family:"Syne",sans-serif;font-weight:800;font-size:18px;}
+.brand span{color:var(--rojo);}
+.sub{font-size:11px;color:var(--txt3);margin-top:1px;}
+.hero{background:var(--c2);border:1px solid var(--borde);border-radius:12px;padding:16px;margin-bottom:14px;}
+.hero-titulo{font-family:"Syne",sans-serif;font-weight:800;font-size:18px;margin-bottom:4px;}
+.hero-sub{font-size:12px;color:var(--txt3);margin-bottom:12px;}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.hg{background:var(--c3);border-radius:6px;padding:8px;}
+.hg-lbl{font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;}
+.hg-val{font-size:13px;font-weight:600;}
+.score-box{background:rgba(232,33,10,0.08);border:1px solid rgba(232,33,10,0.3);border-radius:12px;padding:16px;margin-bottom:14px;text-align:center;}
+.score-num{font-family:"Syne",sans-serif;font-weight:800;font-size:52px;color:var(--rojo);line-height:1;}
+.score-bar{height:8px;background:var(--c3);border-radius:4px;overflow:hidden;margin:10px 0 6px;}
+.score-fill{height:100%;border-radius:4px;}
+.urgente{background:rgba(232,33,10,0.1);border:1px solid rgba(232,33,10,0.4);border-radius:10px;padding:14px;margin-bottom:14px;}
+.urgente-t{font-family:"Syne",sans-serif;font-weight:800;font-size:13px;color:var(--rojo);margin-bottom:8px;}
+.urgente-item{font-size:12px;padding:4px 0;border-bottom:1px solid rgba(232,33,10,0.15);display:flex;gap:8px;}
+.urgente-item:last-child{border:none;}
+.sec{font-family:"Syne",sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);margin:16px 0 8px;display:flex;align-items:center;gap:8px;}
+.sec::after{content:"";flex:1;height:1px;background:var(--borde);}
+.falla{background:var(--c2);border-radius:10px;padding:12px 14px;margin-bottom:8px;display:flex;gap:10px;align-items:flex-start;}
+.falla.critico{border-left:3px solid var(--rojo);background:rgba(232,33,10,0.05);}
+.falla.alerta{border-left:3px solid var(--amarillo);background:rgba(245,197,24,0.04);}
+.falla.mp{border-left:3px solid var(--naranja);background:rgba(251,146,60,0.05);}
+.fi{font-size:16px;flex-shrink:0;margin-top:2px;}
+.fn{font-weight:600;font-size:13px;margin-bottom:2px;}
+.fd{font-size:11px;color:var(--txt3);line-height:1.5;}
+.fc{font-size:11px;font-family:monospace;background:var(--c3);border-radius:4px;padding:3px 8px;display:inline-block;margin-top:4px;color:var(--amarillo);}
+.resumen{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin-bottom:16px;}
+.res-sec{font-size:12px;font-weight:700;margin-bottom:6px;}
+.res-item{font-size:12px;color:var(--txt2);line-height:2.2;}
+.btn{width:100%;padding:13px;border-radius:10px;font-family:"Syne",sans-serif;font-weight:700;font-size:14px;cursor:pointer;border:none;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:8px;}
+.btn-wa{background:#25D366;color:#fff;}
+.btn-print{background:var(--rojo);color:#fff;}
+.footer{text-align:center;font-size:11px;color:var(--txt3);margin-top:20px;padding-top:14px;border-top:1px solid var(--borde);}
+.contador{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+.cnt{background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:10px;text-align:center;}
+.cnt-val{font-family:"Syne",sans-serif;font-weight:800;font-size:22px;}
+.cnt-lbl{font-size:9px;color:var(--txt3);text-transform:uppercase;margin-top:2px;}
+.nota-sin-scanner{background:rgba(245,197,24,0.08);border:1px solid rgba(245,197,24,0.3);border-radius:8px;padding:10px 12px;font-size:11px;color:var(--amarillo);margin-bottom:14px;}
+</style>
+</head>
+<body>
+<div class="logo">
+  <div class="mark">SRV</div>
+  <div><div class="brand">SERVI<span>RUTA</span></div><div class="sub">Mecánica a Domicilio · Santiago RM · 24/7</div></div>
+</div>
+
+<div class="hero">
+  <div class="hero-titulo">🚛 Camión — DXCP93</div>
+  <div class="hero-sub">Informe de Inspección · 29 de Mayo 2026</div>
+  <div class="hero-grid">
+    <div class="hg"><div class="hg-lbl">Patente</div><div class="hg-val">DXCP93</div></div>
+    <div class="hg"><div class="hg-lbl">Tipo</div><div class="hg-val">Camión pesado</div></div>
+    <div class="hg"><div class="hg-lbl">Diagnóstico</div><div class="hg-val">Inspección visual</div></div>
+    <div class="hg"><div class="hg-lbl">Fecha</div><div class="hg-val">29 Mayo 2026</div></div>
+  </div>
+</div>
+
+<div class="nota-sin-scanner">⚠️ Este informe se basa en inspección visual del técnico. Se recomienda complementar con diagnóstico electrónico scanner.</div>
+
+<div class="score-box">
+  <div style="font-size:11px;color:var(--txt3);margin-bottom:4px">Estado general del vehículo</div>
+  <div class="score-num" style="color:var(--rojo)">35%</div>
+  <div class="score-bar"><div class="score-fill" style="width:35%;background:var(--rojo)"></div></div>
+  <div style="font-size:12px;color:var(--rojo);font-weight:600;margin-top:4px">Vehículo con fallas críticas — requiere intervención antes de operar</div>
+</div>
+
+<div class="contador">
+  <div class="cnt"><div class="cnt-val" style="color:var(--rojo)">5</div><div class="cnt-lbl">Críticos</div></div>
+  <div class="cnt"><div class="cnt-val" style="color:var(--amarillo)">1</div><div class="cnt-lbl">Alertas</div></div>
+  <div class="cnt"><div class="cnt-val" style="color:var(--naranja)">5</div><div class="cnt-lbl">MP pendiente</div></div>
+</div>
+
+<div class="urgente">
+  <div class="urgente-t">🚨 Requiere atención inmediata</div>
+  <div class="urgente-item">🔴 Flexible de freno trasero derecho roto — freno comprometido</div>
+  <div class="urgente-item">🔴 Fallas sistema turbo (sensor wastegate + sensor presión riel)</div>
+  <div class="urgente-item">🔴 Luces traseras inoperativas (ambos focos) — infracción legal</div>
+  <div class="urgente-item">🔴 Neumático dañado sin goma — riesgo de reventón</div>
+</div>
+
+<div class="sec">🛑 Sistema de frenos</div>
+<div class="falla critico"><div class="fi">🔴</div><div><div class="fn">Flexible de freno trasero derecho — roto</div><div class="fd">Manguera flexible del circuito de freno trasero derecho con ruptura. Pérdida de presión de freno en esa rueda. VEHÍCULO NO APTO para circular. Reemplazo urgente.</div></div></div>
+
+<div class="sec">⚙️ Sistema turbo y motor</div>
+<div class="falla critico"><div class="fi">🔴</div><div><div class="fn">Falla sensor válvula wastegate</div><div class="fd">Sensor de la válvula wastegate (regulación de sobrealimentación) reportando falla. Puede causar sobreboost o falta de potencia. Requiere diagnóstico y reemplazo.</div></div></div>
+<div class="falla critico"><div class="fi">🔴</div><div><div class="fn">Falla sensor de presión del riel (common rail)</div><div class="fd">Sensor de presión del riel de combustible con falla. Afecta directamente la inyección de combustible y el rendimiento del motor. Puede causar arranque difícil o apagado del motor.</div></div></div>
+
+<div class="sec">💡 Sistema de luces</div>
+<div class="falla critico"><div class="fi">🔴</div><div><div class="fn">Luces traseras — ambos focos inoperativos</div><div class="fd">Ninguna luz trasera funciona. Infracción grave a normativa de tránsito. Posible falla en cableado, fusibles o ambas ampolletas. Requiere revisión del circuito completo.</div></div></div>
+
+<div class="sec">🛞 Neumáticos</div>
+<div class="falla critico"><div class="fi">🔴</div><div><div class="fn">Neumático dañado — sin goma / pedazos faltantes</div><div class="fd">Neumático con daño estructural severo, pérdida de compuesto de goma. Riesgo de reventón en marcha. Reemplazo inmediato obligatorio.</div></div></div>
+
+<div class="sec">🔧 Mantenimiento preventivo pendiente</div>
+<div class="falla mp"><div class="fi">🔧</div><div><div class="fn">Cambio de aceite de motor</div><div class="fd">Aceite de motor requiere cambio.</div></div></div>
+<div class="falla mp"><div class="fi">🔧</div><div><div class="fn">Filtro de aceite</div><div class="fd">Reemplazar junto con el aceite.</div></div></div>
+<div class="falla mp"><div class="fi">🔧</div><div><div class="fn">Filtros de aire — 2 unidades</div><div class="fd">Ambos filtros de aire requieren reemplazo.</div></div></div>
+<div class="falla mp"><div class="fi">🔧</div><div><div class="fn">Filtro de combustible (petróleo)</div><div class="fd">Reemplazo preventivo requerido.</div></div></div>
+<div class="falla mp"><div class="fi">🔧</div><div><div class="fn">Empaque tapa de válvulas</div><div class="fd">Empaque deteriorado. Reemplazo para evitar fuga de aceite.</div></div></div>
+
+<div class="sec">📋 Resumen de trabajos</div>
+<div class="resumen">
+  <div class="res-sec" style="color:var(--rojo)">🔴 URGENTE:</div>
+  <div class="res-item">• Reemplazar flexible freno trasero derecho<br>• Reemplazar neumático dañado<br>• Reparar luces traseras (cableado + focos)<br>• Diagnóstico y reparación sensor wastegate<br>• Diagnóstico y reparación sensor presión riel</div>
+  <div class="res-sec" style="color:var(--naranja);margin-top:12px">🔧 MANTENIMIENTO:</div>
+  <div class="res-item">• Cambio aceite + filtro aceite<br>• Reemplazo 2 filtros de aire<br>• Reemplazo filtro combustible<br>• Reemplazo empaque tapa válvulas</div>
+</div>
+
+<button class="btn btn-wa" onclick="enviarWA()">💬 Enviar informe al cliente</button>
+<button class="btn btn-print" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
+
+<div class="footer">Serviruta · Taller Mecánico a Domicilio · Santiago RM<br>+56 9 8505 8250 · serviruta.cl · 29 de Mayo 2026</div>
+
+<script>
+function enviarWA(){
+  var url='https://angelperuga-maker.github.io/serviruta/informe-dxcp93.html'
+  var msg='🚛 *INFORME INSPECCIÓN SERVIRUTA*\n_29 Mayo 2026_\n━━━━━━━━━━━━━━━━━━\n\n*CAMIÓN DXCP93*\n*Estado: 35% — Fallas críticas*\n\n🚨 *URGENTE:*\n• Flexible freno trasero derecho roto\n• Fallas turbo (wastegate + riel)\n• Luces traseras inoperativas\n• Neumático dañado\n\n🔧 Mantenimiento: Aceite, filtros, empaque válvulas\n\n📋 Informe completo:\n'+url+'\n\n📞 +56 9 8505 8250 · Serviruta'
+  window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank')
+}
+</script>
+</body>
+</html>

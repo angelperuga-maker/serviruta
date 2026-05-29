@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe Inspección - GZKR40</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;--naranja:#FB923C;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:600px;margin:0 auto;padding:20px 16px 60px;}
+.logo{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:14px;border-bottom:2px solid var(--rojo);}
+.mark{width:40px;height:40px;background:var(--rojo);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:"Syne",sans-serif;font-weight:800;font-size:13px;color:#fff;}
+.brand{font-family:"Syne",sans-serif;font-weight:800;font-size:18px;}.brand span{color:var(--rojo);}
+.sub{font-size:11px;color:var(--txt3);margin-top:1px;}
+.hero{background:var(--c2);border:1px solid var(--borde);border-radius:12px;padding:16px;margin-bottom:14px;}
+.hero-titulo{font-family:"Syne",sans-serif;font-weight:800;font-size:18px;margin-bottom:4px;}
+.hero-sub{font-size:12px;color:var(--txt3);margin-bottom:12px;}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.hg{background:var(--c3);border-radius:6px;padding:8px;}
+.hg-lbl{font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:1px;margin-bottom:2px;}
+.hg-val{font-size:13px;font-weight:600;}
+.score-box{background:rgba(232,33,10,0.08);border:1px solid rgba(232,33,10,0.3);border-radius:12px;padding:16px;margin-bottom:14px;text-align:center;}
+.score-num{font-family:"Syne",sans-serif;font-weight:800;font-size:52px;color:var(--rojo);line-height:1;}
+.score-bar{height:8px;background:var(--c3);border-radius:4px;overflow:hidden;margin:10px 0 6px;}
+.score-fill{height:100%;border-radius:4px;}
+.urgente{background:rgba(232,33,10,0.1);border:1px solid rgba(232,33,10,0.4);border-radius:10px;padding:14px;margin-bottom:14px;}
+.urgente-t{font-family:"Syne",sans-serif;font-weight:800;font-size:13px;color:var(--rojo);margin-bottom:8px;}
+.urgente-item{font-size:12px;padding:4px 0;border-bottom:1px solid rgba(232,33,10,0.15);display:flex;gap:8px;}
+.urgente-item:last-child{border:none;}
+.scanner-box{background:rgba(96,165,250,0.06);border:1px solid rgba(96,165,250,0.25);border-radius:10px;padding:14px;margin-bottom:14px;}
+.scanner-t{font-family:"Syne",sans-serif;font-weight:700;font-size:12px;color:#60A5FA;margin-bottom:8px;}
+.scanner-code{font-size:11px;font-family:monospace;background:var(--c3);border-radius:4px;padding:3px 8px;color:var(--amarillo);display:inline-block;margin-right:4px;margin-bottom:4px;}
+.sec{font-family:"Syne",sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);margin:16px 0 8px;display:flex;align-items:center;gap:8px;}
+.sec::after{content:"";flex:1;height:1px;background:var(--borde);}
+.falla{background:var(--c2);border-radius:10px;padding:12px 14px;margin-bottom:8px;display:flex;gap:10px;align-items:flex-start;}
+.falla.critico{border-left:3px solid var(--rojo);background:rgba(232,33,10,0.05);}
+.falla.alerta{border-left:3px solid var(--amarillo);background:rgba(245,197,24,0.04);}
+.falla.mp{border-left:3px solid var(--naranja);background:rgba(251,146,60,0.05);}
+.fi{font-size:16px;flex-shrink:0;margin-top:2px;}
+.fn{font-weight:600;font-size:13px;margin-bottom:2px;}
+.fd{font-size:11px;color:var(--txt3);line-height:1.5;}
+.fc{font-size:11px;font-family:monospace;background:var(--c3);border-radius:4px;padding:3px 8px;display:inline-block;margin-top:4px;color:var(--amarillo);}
+.resumen{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin-bottom:16px;}
+.res-sec{font-size:12px;font-weight:700;margin-bottom:6px;}
+.res-item{font-size:12px;color:var(--txt2);line-height:2.2;}
+.btn{width:100%;padding:13px;border-radius:10px;font-family:"Syne",sans-serif;font-weight:700;font-size:14px;cursor:pointer;border:none;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:8px;}
+.btn-wa{background:#25D366;color:#fff;}.btn-print{background:var(--rojo);color:#fff;}
+.footer{text-align:center;font-size:11px;color:var(--txt3);margin-top:20px;padding-top:14px;border-top:1px solid var(--borde);}
+.contador{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+.cnt{background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:10px;text-align:center;}
+.cnt-val{font-family:"Syne",sans-serif;font-weight:800;font-size:22px;}
+.cnt-lbl{font-size:9px;color:var(--txt3);text-transform:uppercase;margin-top:2px;}
+</style>
+</head>
+<body>
+<div class="logo">
+  <div class="mark">SRV</div>
+  <div><div class="brand">SERVI<span>RUTA</span></div><div class="sub">Mecánica a Domicilio · Santiago RM · 24/7</div></div>
+</div>
+
+<div class="hero">
+  <div class="hero-titulo">🚛 Astara 40 — GZKR40</div>
+  <div class="hero-sub">Informe de Inspección · 29 de Mayo 2026</div>
+  <div class="hero-grid">
+    <div class="hg"><div class="hg-lbl">Patente</div><div class="hg-val">GZKR40</div></div>
+    <div class="hg"><div class="hg-lbl">Marca/Modelo</div><div class="hg-val">Astra 40 2011</div></div>
+    <div class="hg"><div class="hg-lbl">VIN</div><div class="hg-val" style="font-size:11px">ZCNH88648BP516920</div></div>
+    <div class="hg"><div class="hg-lbl">Transmisión</div><div class="hg-val">Allison</div></div>
+  </div>
+</div>
+
+<div class="scanner-box">
+  <div class="scanner-t">📡 Diagnóstico electrónico — 29 Mayo 2026 · 10:05 hrs</div>
+  <div style="font-size:11px;color:var(--txt3);margin-bottom:8px">5 códigos de motor · Kilometraje: 52.716 millas</div>
+  <div>
+    <span class="scanner-code">SID 19 Fmi 12 — Válvula derivación</span>
+    <span class="scanner-code">SPN 131252 Fmi 2 — Terminales</span>
+    <span class="scanner-code">SPN 131225 Fmi 4 — Voltaje bajo</span>
+    <span class="scanner-code">SPN 65716 Fmi 2 — Datos erráticos</span>
+    <span class="scanner-code">SPN 65713 Fmi 3 — Voltaje alto</span>
+  </div>
+  <div style="font-size:11px;color:var(--verde);margin-top:8px">✅ Transmisión OK · ✅ Frenos OK · ✅ Body Controller OK</div>
+</div>
+
+<div class="score-box">
+  <div style="font-size:11px;color:var(--txt3);margin-bottom:4px">Estado general del vehículo</div>
+  <div class="score-num">25%</div>
+  <div class="score-bar"><div class="score-fill" style="width:25%;background:var(--rojo)"></div></div>
+  <div style="font-size:12px;color:var(--rojo);font-weight:600;margin-top:4px">VEHÍCULO NO APTO PARA CIRCULAR — 16 fallas detectadas</div>
+</div>
+
+<div class="contador">
+  <div class="cnt"><div class="cnt-val" style="color:var(--rojo)">11</div><div class="cnt-lbl">Críticos</div></div>
+  <div class="cnt"><div class="cnt-val" style="color:var(--amarillo)">1</div><div class="cnt-lbl">Alertas</div></div>
+  <div class="cnt"><div class="cnt-val" style="color:var(--naranja)">5</div><div class="cnt-lbl">MP pendiente</div></div>
+</div>
+
+<div class="urgente">
+  <div class="urgente-t">🚨 No circular — riesgos inmediatos</div>
+  <div class="urgente-item">🔴 Tuercas faltantes en cardan (3 de 4) — RIESGO MÁXIMO</div>
+  <div class="urgente-item">🔴 Fuga de aire — válvula control de dirección</div>
+  <div class="urgente-item">🔴 Luces STOP izquierda inoperativa</div>
+  <div class="urgente-item">🔴 3 luces bajas inoperativas (2 izq + 1 der)</div>
+  <div class="urgente-item">🔴 Sistema turbo comprometido (SID 19 + inspección visual)</div>
+</div>
+
+<div class="sec">⚡ Diagnóstico electrónico — Motor</div>
+<div class="falla critico"><div class="fi">🔴</div><div>
+  <div class="fn">Válvula de derivación — falla (wastegate)</div>
+  <div class="fd">Código reiterado confirmando falla en la válvula wastegate del turbocompresor. Correlaciona con la inspección visual del técnico. Requiere diagnóstico físico para determinar si es sensor, válvula o turbo.</div>
+  <div class="fc">SID 19, Fmi 12 — Bad Intelligent Device</div>
+</div></div>
+
+<div class="falla critico"><div class="fi">🔴</div><div>
+  <div class="fn">Terminales de tierra — sulfatados / circuito abierto</div>
+  <div class="fd">Terminales con mala conexión eléctrica generando datos erráticos en múltiples sensores.</div>
+  <div class="fc">SPN 131252, Fmi 2</div>
+</div></div>
+
+<div class="falla alerta"><div class="fi">⚠️</div><div>
+  <div class="fn">Voltaje fuera de rango — bajo y alto</div>
+  <div class="fd">Dos códigos de voltaje anormal (uno bajo, uno alto) en el sistema de motor. Probable relación con terminales y estado de la batería.</div>
+  <div class="fc">SPN 131225 Fmi 4 — bajo · SPN 65713 Fmi 3 — alto</div>
+</div></div>
+
+<div class="sec">🔩 Transmisión — CRÍTICO</div>
+<div class="falla critico"><div class="fi">🔴</div><div>
+  <div class="fn">Tuercas faltantes en cardan — 3 de 4</div>
+  <div class="fd">RIESGO MÁXIMO DE SEGURIDAD. El árbol de transmisión puede desprenderse en marcha causando accidente grave. Vehículo NO DEBE CIRCULAR bajo ninguna circunstancia. Instalación inmediata de tuercas con torque correcto.</div>
+</div></div>
+
+<div class="sec">💨 Sistema de aire</div>
+<div class="falla critico"><div class="fi">🔴</div><div>
+  <div class="fn">Válvula de control de dirección — fuga de aire</div>
+  <div class="fd">Escape de aire en válvula de dirección asistida neumática. Puede causar pérdida de asistencia de dirección con riesgo de accidente.</div>
+</div></div>
+
+<div class="sec">💡 Sistema de luces</div>
+<div class="falla critico"><div class="fi">🔴</div><div><div class="fn">3 luces bajas inoperativas (2 izq + 1 der)</div><div class="fd">Tres focos de luz baja fuera de servicio. Vehículo no apto para circular con baja visibilidad. Infracción grave.</div></div></div>
+<div class="falla critico"><div class="fi">🔴</div><div><div class="fn">Luz de freno izquierda — inoperativa (STOP)</div><div class="fd">RIESGO DE SEGURIDAD. Vehículo con registro de choque (código PMETP activo).</div><div class="fc">Cód. PMETP — historial de impacto</div></div></div>
+<div class="falla critico"><div class="fi">🔴</div><div><div class="fn">Intermitente trasero izquierdo — inoperativo</div><div class="fd">Incumplimiento de normativa de tránsito.</div></div></div>
+
+<div class="sec">⚙️ Motor y turbo</div>
+<div class="falla critico"><div class="fi">🔴</div><div>
+  <div class="fn">Falla turbo — sensor o válvula wastegate</div>
+  <div class="fd">Sensor de turbo sin resistencia al medir (técnico) + código SID 19 confirmado en scanner. Diagnóstico físico requerido para determinar: sensor de posición, válvula wastegate o daño interno del turbocompresor.</div>
+</div></div>
+
+<div class="falla critico"><div class="fi">🔴</div><div><div class="fn">Tapa válvulas — fuga aceite (empaque)</div><div class="fd">Empaque deteriorado con fuga severa de aceite. Reemplazo urgente.</div></div></div>
+<div class="falla critico"><div class="fi">🔴</div><div><div class="fn">Fuga aceite hidráulico — nivel bajo</div><div class="fd">Sistema hidráulico con nivel bajo. Verificar origen antes de rellenar.</div></div></div>
+
+<div class="sec">🔧 Mantenimiento preventivo pendiente</div>
+<div class="falla mp"><div class="fi">🔧</div><div><div class="fn">Cambio de aceite de motor + filtro</div></div></div>
+<div class="falla mp"><div class="fi">🔧</div><div><div class="fn">Filtros de aire — 2 unidades</div><div class="fd">Ambos filtros obstruidos afectan el turbo.</div></div></div>
+<div class="falla mp"><div class="fi">🔧</div><div><div class="fn">Filtro de combustible (petróleo)</div></div></div>
+<div class="falla mp"><div class="fi">🔧</div><div><div class="fn">Limpieza terminales de tierra y batería</div><div class="fd">Directamente relacionado con códigos SPN 131252 del scanner.</div></div></div>
+<div class="falla mp"><div class="fi">🔧</div><div><div class="fn">Revisión documentación legal</div><div class="fd">Revisión técnica, SOAP, permiso circulación.</div></div></div>
+
+<div class="sec">📋 Resumen de trabajos</div>
+<div class="resumen">
+  <div class="res-sec" style="color:var(--rojo)">🔴 URGENTE:</div>
+  <div class="res-item">• Instalar 3 tuercas faltantes en cardan (torque correcto)<br>• Reparar fuga válvula control dirección (aire)<br>• Reparar luz STOP izquierda<br>• Reparar 3 luces bajas (2 izq + 1 der)<br>• Reparar intermitente trasero izquierdo</div>
+  <div class="res-sec" style="color:var(--amarillo);margin-top:12px">⚠️ PRIORIDAD ALTA:</div>
+  <div class="res-item">• Diagnóstico turbo (sensor/wastegate/turbo) — confirmado por scanner SID 19<br>• Reemplazar empaque tapa válvulas<br>• Rellenar aceite hidráulico + verificar origen<br>• Limpiar terminales tierra (SPN 131252 scanner)</div>
+  <div class="res-sec" style="color:var(--naranja);margin-top:12px">🔧 MANTENIMIENTO:</div>
+  <div class="res-item">• Cambio aceite + filtro<br>• 2 filtros de aire<br>• Filtro combustible</div>
+</div>
+
+<button class="btn btn-wa" onclick="enviarWA()">💬 Enviar informe al cliente</button>
+<button class="btn btn-print" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
+<div class="footer">Serviruta · Taller Mecánico a Domicilio · Santiago RM<br>+56 9 8505 8250 · serviruta.cl · 29 de Mayo 2026</div>
+
+<script>
+function enviarWA(){
+  var url='https://angelperuga-maker.github.io/serviruta/informe-gzkr40.html'
+  var msg='🚛 *INFORME INSPECCIÓN SERVIRUTA*\n_29 Mayo 2026_\n━━━━━━━━━━━━━━━━━━\n\n*ASTARA 40 · GZKR40*\n*VIN: ZCNH88648BP516920*\n*Estado: 25% — 16 fallas detectadas*\n\n🚨 *URGENTE:*\n• Tuercas faltantes en cardan (3/4) — RIESGO MÁXIMO\n• Fuga aire válvula control dirección\n• Luces STOP e intermitente inoperativas\n• 3 luces bajas fuera de servicio\n• Falla turbo confirmada (SID 19 scanner)\n\n📡 Scanner: 5 códigos detectados\n\n📋 Informe completo:\n'+url+'\n\n📞 +56 9 8505 8250 · Serviruta'
+  window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank')
+}
+</script>
+</body>
+</html>

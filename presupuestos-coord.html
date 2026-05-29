@@ -244,12 +244,27 @@ function abrirDetalle(id) {
 function renderItems() {
   const items = pptoActual.items || []
   document.getElementById('det-items').innerHTML = items.map((item,i) => `
-    <div class="item-row">
+    <div class="item-row" style="flex-wrap:wrap;gap:6px">
       <span class="item-num">${i+1}</span>
-      <div class="item-desc">${item.desc}${item.cant>1?' ×'+item.cant:''}</div>
-      <input class="item-precio" type="number" placeholder="Precio" value="${item.precio_venta||''}"
-        oninput="setItemPrecio(${item.id||i}, this.value)" onchange="calcTotal()">
+      <div class="item-desc" style="flex:1;min-width:100px">${item.desc}</div>
+      <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+        <button onclick="cambiarCant(${item.id||i},-1)" style="width:26px;height:26px;border-radius:6px;border:1px solid var(--borde);background:var(--c3);color:var(--txt);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">−</button>
+        <span id="cant-${item.id||i}" style="font-family:'Syne',sans-serif;font-weight:800;font-size:14px;min-width:20px;text-align:center">${item.cant||1}</span>
+        <button onclick="cambiarCant(${item.id||i},1)" style="width:26px;height:26px;border-radius:6px;border:1px solid var(--borde);background:var(--c3);color:var(--txt);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">+</button>
+      </div>
+      <input class="item-precio" type="number" placeholder="Precio unit." value="${item.precio_venta||''}"
+        oninput="setItemPrecio(${item.id||i}, this.value)" onchange="calcTotal()" style="width:110px">
     </div>`).join('')
+}
+
+function cambiarCant(id, delta) {
+  const items = pptoActual.items || []
+  const item = items.find(x=>(x.id||items.indexOf(x))===id) || items[id] || items.find((_,i)=>i===id)
+  if (!item) return
+  item.cant = Math.max(1, (item.cant||1) + delta)
+  const el = document.getElementById('cant-'+id)
+  if (el) el.textContent = item.cant
+  calcTotal()
 }
 
 function setItemPrecio(id, val) {

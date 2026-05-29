@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta · Agenda</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--rojo-d:#B01A08;--rojo-g:rgba(232,33,10,0.08);--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--verde-g:rgba(34,197,94,0.1);--amarillo:#F5C518;--amarillo-g:rgba(245,197,24,0.08);--azul:#60A5FA;--naranja:#FB923C;}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:600px;margin:0 auto;}
+.top{background:var(--c1);border-bottom:1px solid var(--borde);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.top-title{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
+.top-back{background:none;border:1px solid var(--borde);color:var(--txt3);font-size:11px;padding:5px 12px;border-radius:6px;cursor:pointer;}
+
+/* NAV FECHA */
+.fecha-nav{background:var(--c1);border-bottom:1px solid var(--borde);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;}
+.fecha-btn{background:none;border:1px solid var(--borde);color:var(--txt3);width:36px;height:36px;border-radius:8px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;}
+.fecha-info{text-align:center;}
+.fecha-dia{font-family:"Syne",sans-serif;font-weight:800;font-size:16px;}
+.fecha-mes{font-size:11px;color:var(--txt3);margin-top:1px;}
+.fecha-hoy{background:var(--rojo);border:none;color:#fff;font-size:11px;font-weight:700;padding:6px 14px;border-radius:20px;cursor:pointer;font-family:"Syne",sans-serif;}
+
+/* STATS DÍA */
+.dia-stats{display:flex;gap:8px;padding:10px 16px;background:var(--c1);border-bottom:1px solid var(--borde);overflow-x:auto;}
+.ds{flex-shrink:0;background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:8px 12px;text-align:center;min-width:70px;}
+.ds-val{font-family:"Syne",sans-serif;font-weight:800;font-size:18px;}
+.ds-lbl{font-size:9px;color:var(--txt3);text-transform:uppercase;margin-top:1px;}
+
+/* TIMELINE */
+.body{padding:0 0 100px;}
+.btn-nuevo-wrap{padding:12px 16px;}
+.btn-nuevo{width:100%;background:var(--rojo);border:none;border-radius:8px;color:#fff;font-family:"Syne",sans-serif;font-weight:700;font-size:14px;padding:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;}
+
+.hora-row{display:flex;gap:0;border-bottom:1px solid var(--borde);}
+.hora-lbl{width:56px;flex-shrink:0;padding:0 8px;display:flex;align-items:flex-start;padding-top:10px;font-size:11px;color:var(--txt3);font-family:"Syne",sans-serif;font-weight:700;border-right:1px solid var(--borde);}
+.hora-content{flex:1;padding:4px 8px;min-height:44px;}
+.hora-content.has-events{background:var(--c2);}
+
+.evento{background:var(--c2);border-left:3px solid;border-radius:0 8px 8px 0;padding:8px 10px;margin-bottom:4px;cursor:pointer;transition:all 0.15s;}
+.evento:hover{filter:brightness(1.2);}
+.evento.agendado{border-left-color:var(--azul);background:var(--azul-g,rgba(96,165,250,0.06));}
+.evento.confirmado{border-left-color:var(--verde);background:var(--verde-g);}
+.evento.en-ruta{border-left-color:var(--naranja);background:var(--naranja-g);}
+.evento.completado{border-left-color:var(--txt3);background:var(--c3);opacity:0.7;}
+.evento.cancelado{border-left-color:var(--rojo);background:var(--rojo-g);opacity:0.6;}
+.ev-hora{font-size:10px;color:var(--txt3);margin-bottom:2px;font-weight:700;}
+.ev-cliente{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;}
+.ev-tec{font-size:11px;color:var(--txt3);margin-top:1px;}
+.ev-svc{font-size:11px;color:var(--txt2);margin-top:1px;}
+.ev-badge{font-size:9px;font-weight:700;padding:2px 6px;border-radius:20px;display:inline-block;margin-top:3px;}
+.eb-agendado{background:rgba(96,165,250,0.15);color:var(--azul);}
+.eb-confirmado{background:var(--verde-g);color:var(--verde);}
+.eb-en-ruta{background:var(--naranja-g);color:var(--naranja);}
+.eb-completado{background:var(--c3);color:var(--txt3);}
+.eb-cancelado{background:var(--rojo-g);color:var(--rojo);}
+
+.empty-hora{font-size:11px;color:var(--txt3);padding:10px 0;text-align:center;}
+
+/* MODAL NUEVO */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;display:none;align-items:flex-end;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--c2);border:1px solid var(--borde);border-radius:16px 16px 0 0;width:100%;max-width:600px;padding:20px 20px 36px;max-height:90vh;overflow-y:auto;}
+.modal-handle{width:36px;height:4px;background:var(--borde);border-radius:2px;margin:0 auto 14px;}
+.modal-title{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;margin-bottom:14px;}
+.lbl{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--txt3);margin-bottom:5px;display:block;}
+.inp{width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:8px;color:var(--txt);font-family:"DM Sans",sans-serif;font-size:15px;padding:11px 12px;outline:none;margin-bottom:10px;-webkit-appearance:none;}
+.inp:focus{border-color:var(--rojo);}
+.inp::placeholder{color:var(--txt3);}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.btn-save{width:100%;background:var(--rojo);border:none;border-radius:8px;color:#fff;font-family:"Syne",sans-serif;font-weight:700;font-size:14px;padding:13px;cursor:pointer;margin-top:4px;}
+.btn-cancel{width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:8px;color:var(--txt2);font-family:"Syne",sans-serif;font-weight:700;font-size:14px;padding:13px;cursor:pointer;margin-bottom:8px;}
+
+/* MODAL DETALLE */
+.det-row{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid var(--borde);font-size:13px;}
+.det-row:last-child{border:none;}
+.det-lbl{color:var(--txt3);min-width:80px;font-size:12px;}
+.det-val{flex:1;font-weight:500;}
+.estado-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;}
+.eb-btn{padding:10px;border-radius:8px;font-family:"Syne",sans-serif;font-weight:700;font-size:11px;cursor:pointer;border:none;}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--c3);border:1px solid var(--borde);border-radius:8px;padding:11px 18px;font-size:13px;opacity:0;transition:all 0.25s;pointer-events:none;z-index:999;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.ok{border-color:rgba(34,197,94,0.4);color:var(--verde);}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <button class="top-back" id="top-back" onclick="goBack()">← Volver</button>
+  <div class="top-title">📅 Agenda de servicios</div>
+  <button onclick="load()" style="background:none;border:none;color:var(--txt3);cursor:pointer;font-size:20px;">&#8635;</button>
+</div>
+
+<!-- NAV FECHA -->
+<div class="fecha-nav">
+  <button class="fecha-btn" onclick="cambiarDia(-1)">‹</button>
+  <div class="fecha-info">
+    <div class="fecha-dia" id="fecha-dia">—</div>
+    <div class="fecha-mes" id="fecha-mes">—</div>
+  </div>
+  <button class="fecha-hoy" onclick="irHoy()">Hoy</button>
+  <button class="fecha-btn" onclick="cambiarDia(1)">›</button>
+</div>
+
+<!-- STATS DEL DÍA -->
+<div class="dia-stats">
+  <div class="ds"><div class="ds-val" id="ds-total" style="color:var(--azul)">0</div><div class="ds-lbl">Servicios</div></div>
+  <div class="ds"><div class="ds-val" id="ds-conf" style="color:var(--verde)">0</div><div class="ds-lbl">Confirmados</div></div>
+  <div class="ds"><div class="ds-val" id="ds-ruta" style="color:var(--naranja)">0</div><div class="ds-lbl">En ruta</div></div>
+  <div class="ds"><div class="ds-val" id="ds-comp" style="color:var(--txt3)">0</div><div class="ds-lbl">Completados</div></div>
+</div>
+
+<div class="body">
+  <div class="btn-nuevo-wrap">
+    <button class="btn-nuevo" onclick="openModal()">＋ Agendar servicio</button>
+  </div>
+  <div id="timeline"></div>
+</div>
+
+<!-- MODAL NUEVO SERVICIO -->
+<div class="modal-overlay" id="modal-nuevo" onclick="if(event.target===this)closeModal('modal-nuevo')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Agendar servicio</div>
+    <div class="row">
+      <div><label class="lbl">Fecha</label><input class="inp" type="date" id="m-fecha" style="margin-bottom:0"></div>
+      <div><label class="lbl">Hora</label><input class="inp" type="time" id="m-hora" style="margin-bottom:0"></div>
+    </div>
+    <div style="height:10px"></div>
+    <label class="lbl">Técnico</label>
+    <select class="inp" id="m-tecnico">
+      <option value="Jorge Ramirez">Jorge Ramirez</option>
+      <option value="Felipe Mora">Felipe Mora</option>
+      <option value="Carlos Vega">Carlos Vega</option>
+      <option value="Reynaldo Aguas Bertel">Reynaldo Aguas Bertel</option>
+      <option value="Kiven Henz">Kiven Henz</option>
+      <option value="Humberto Morales">Humberto Morales</option>
+      <option value="Giovanino Perugini">Giovanino Perugini</option>
+      <option value="Reynaldo Aguas">Reynaldo Aguas</option>
+    </select>
+    <div class="row">
+      <div><label class="lbl">Cliente</label><input class="inp" id="m-cliente" placeholder="Nombre" style="margin-bottom:0"></div>
+      <div><label class="lbl">Teléfono</label><input class="inp" id="m-tel" placeholder="+56 9..." type="tel" style="margin-bottom:0"></div>
+    </div>
+    <div style="height:10px"></div>
+    <label class="lbl">Servicio a realizar</label>
+    <input class="inp" id="m-servicio" placeholder="Ej: Cambio aceite, diagnóstico, inspección...">
+    <label class="lbl">Dirección</label>
+    <input class="inp" id="m-direccion" placeholder="Dirección del servicio">
+    <label class="lbl">Vehículo</label>
+    <input class="inp" id="m-vehiculo" placeholder="Marca, modelo, patente">
+    <label class="lbl">Notas</label>
+    <input class="inp" id="m-notas" placeholder="Observaciones opcionales" style="margin-bottom:14px">
+    <button class="btn-cancel" onclick="closeModal('modal-nuevo')">Cancelar</button>
+    <button class="btn-save" onclick="guardarServicio()">Agendar servicio</button>
+  </div>
+</div>
+
+<!-- MODAL DETALLE -->
+<div class="modal-overlay" id="modal-detalle" onclick="if(event.target===this)closeModal('modal-detalle')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="det-titulo">Detalle del servicio</div>
+    <div id="det-body"></div>
+    <div class="estado-btns" id="det-estados"></div>
+    <div style="display:flex;gap:8px;margin-top:10px">
+      <button id="det-wa-tec" style="flex:1;padding:10px;border-radius:8px;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;cursor:pointer;border:none;background:#128C7E;color:#fff;">🔧 WA Técnico</button>
+      <button id="det-wa-cli" style="flex:1;padding:10px;border-radius:8px;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;cursor:pointer;border:none;background:#25D366;color:#fff;">💬 WA Cliente</button>
+      <button id="det-eliminar" style="padding:10px 14px;border-radius:8px;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;cursor:pointer;border:none;background:var(--rojo-g);color:var(--rojo);">🗑</button>
+    </div>
+    <button class="btn-cancel" style="margin-top:8px" onclick="closeModal('modal-detalle')">Cerrar</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+var db=null,eventos=[],fechaActual=new Date(),eventoActual=null
+var TELS={'Jorge Ramirez':'+56912345678','Felipe Mora':'+56923456789','Carlos Vega':'+56934567890','Reynaldo Aguas Bertel':'+56935287199','Kiven Henz':'+56964880196','Humberto Morales':'+56994946414','Giovanino Perugini':'+56933592097','Reynaldo Aguas':'+56935287199'}
+var HORAS=['07:00','08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00','20:00','21:00']
+var ESTADO_COLORS={'agendado':'azul','confirmado':'verde','en-ruta':'naranja','completado':'txt3','cancelado':'rojo'}
+var ESTADO_LABEL={'agendado':'📅 Agendado','confirmado':'✅ Confirmado','en-ruta':'🚗 En ruta','completado':'🏁 Completado','cancelado':'❌ Cancelado'}
+
+// Detectar si es técnico
+var tecnicoNombre=sessionStorage.getItem('tecnico_nombre')||''
+var isCoord=sessionStorage.getItem('coord_auth')||!tecnicoNombre
+
+function goBack(){
+  location.href=isCoord?'menu-coordinador.html':'tecnico-menu.html'
+}
+
+function getDB(){if(!db)db=supabase.createClient(SB_URL,SB_KEY);return db;}
+
+function getFechaStr(d){
+  var y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),dd=String(d.getDate()).padStart(2,'0')
+  return y+'-'+m+'-'+dd
+}
+
+function updateFechaDisplay(){
+  var dias=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado']
+  var meses=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre']
+  var hoy=new Date(); hoy.setHours(0,0,0,0)
+  var fc=new Date(fechaActual); fc.setHours(0,0,0,0)
+  var diff=Math.round((fc-hoy)/(1000*60*60*24))
+  var prefijo=diff===0?'Hoy · ':diff===1?'Mañana · ':diff===-1?'Ayer · ':''
+  document.getElementById('fecha-dia').textContent=prefijo+dias[fechaActual.getDay()]+' '+fechaActual.getDate()
+  document.getElementById('fecha-mes').textContent=meses[fechaActual.getMonth()]+' '+fechaActual.getFullYear()
+}
+
+function cambiarDia(delta){
+  fechaActual.setDate(fechaActual.getDate()+delta)
+  updateFechaDisplay()
+  load()
+}
+
+function irHoy(){
+  fechaActual=new Date()
+  updateFechaDisplay()
+  load()
+}
+
+async function load(){
+  var fecha=getFechaStr(fechaActual)
+  var q=getDB().from('agenda').select('*').eq('fecha',fecha).order('hora')
+  if(!isCoord&&tecnicoNombre) q=q.eq('tecnico',tecnicoNombre)
+  var r=await q
+  eventos=r.data||[]
+  document.getElementById('ds-total').textContent=eventos.length
+  document.getElementById('ds-conf').textContent=eventos.filter(function(e){return e.estado==='confirmado';}).length
+  document.getElementById('ds-ruta').textContent=eventos.filter(function(e){return e.estado==='en-ruta';}).length
+  document.getElementById('ds-comp').textContent=eventos.filter(function(e){return e.estado==='completado';}).length
+  renderTimeline()
+}
+
+function renderTimeline(){
+  var el=document.getElementById('timeline')
+  el.innerHTML=HORAS.map(function(hora){
+    var horaNum=parseInt(hora)
+    var evs=eventos.filter(function(e){
+      var h=parseInt((e.hora||'00:00').split(':')[0])
+      return h===horaNum
+    })
+    var content=evs.length?evs.map(function(ev){
+      var ec=ESTADO_COLORS[ev.estado]||'azul'
+      return '<div class="evento '+ev.estado+'" onclick="abrirDetalle(\''+ev.id+'\')">'+
+        '<div class="ev-hora">'+ev.hora+'</div>'+
+        '<div class="ev-cliente">'+ev.cliente+'</div>'+
+        '<div class="ev-tec">👷 '+ev.tecnico+'</div>'+
+        '<div class="ev-svc">'+ev.servicio+'</div>'+
+        '<span class="ev-badge eb-'+ev.estado+'">'+(ESTADO_LABEL[ev.estado]||ev.estado)+'</span>'+
+      '</div>'
+    }).join(''):'<div class="empty-hora"></div>'
+
+    return '<div class="hora-row">'+
+      '<div class="hora-lbl">'+hora+'</div>'+
+      '<div class="hora-content'+(evs.length?' has-events':'')+'">'+content+'</div>'+
+    '</div>'
+  }).join('')
+}
+
+function openModal(){
+  var f=getFechaStr(fechaActual)
+  document.getElementById('m-fecha').value=f
+  document.getElementById('m-hora').value=''
+  document.getElementById('m-cliente').value=''
+  document.getElementById('m-tel').value=''
+  document.getElementById('m-servicio').value=''
+  document.getElementById('m-direccion').value=''
+  document.getElementById('m-vehiculo').value=''
+  document.getElementById('m-notas').value=''
+  if(!isCoord&&tecnicoNombre){
+    document.getElementById('m-tecnico').value=tecnicoNombre
+  }
+  document.getElementById('modal-nuevo').classList.add('open')
+}
+
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+
+async function guardarServicio(){
+  var cliente=document.getElementById('m-cliente').value.trim()
+  var hora=document.getElementById('m-hora').value
+  if(!cliente||!hora){toast('Ingresa cliente y hora');return;}
+  var r=await getDB().from('agenda').insert({
+    fecha:document.getElementById('m-fecha').value,
+    hora:hora,
+    tecnico:document.getElementById('m-tecnico').value,
+    cliente:cliente,
+    telefono:document.getElementById('m-tel').value.trim(),
+    servicio:document.getElementById('m-servicio').value.trim(),
+    direccion:document.getElementById('m-direccion').value.trim(),
+    vehiculo:document.getElementById('m-vehiculo').value.trim(),
+    notas:document.getElementById('m-notas').value.trim(),
+    estado:'agendado'
+  })
+  if(r.error){toast('Error: '+r.error.message);return;}
+
+  // Notificar técnico por WhatsApp
+  var tec=document.getElementById('m-tecnico').value
+  var telTec=TELS[tec]||''
+  if(telTec&&isCoord){
+    var msg='📅 NUEVO SERVICIO AGENDADO\n\nHola '+tec.split(' ')[0]+' tienes un nuevo servicio:\n\n'+
+      'Cliente: '+cliente+'\nHora: '+hora+' · Fecha: '+document.getElementById('m-fecha').value+
+      (document.getElementById('m-servicio').value?'\nServicio: '+document.getElementById('m-servicio').value:'')+
+      (document.getElementById('m-direccion').value?'\nDirección: '+document.getElementById('m-direccion').value:'')+
+      (document.getElementById('m-vehiculo').value?'\nVehículo: '+document.getElementById('m-vehiculo').value:'')+
+      '\n\nServiruta · +56 9 8505 8250'
+    window.open('https://wa.me/'+telTec.replace(/\D/g,'')+'?text='+encodeURIComponent(msg),'_blank')
+  }
+
+  toast('✅ Servicio agendado','ok')
+  closeModal('modal-nuevo')
+  load()
+}
+
+function abrirDetalle(id){
+  eventoActual=eventos.find(function(e){return e.id===id;})
+  if(!eventoActual)return
+  var ev=eventoActual
+  document.getElementById('det-titulo').textContent=ev.cliente+' · '+ev.hora
+  document.getElementById('det-body').innerHTML=
+    '<div class="det-row"><span class="det-lbl">Técnico</span><span class="det-val">'+ev.tecnico+'</span></div>'+
+    '<div class="det-row"><span class="det-lbl">Servicio</span><span class="det-val">'+(ev.servicio||'—')+'</span></div>'+
+    '<div class="det-row"><span class="det-lbl">Dirección</span><span class="det-val">'+(ev.direccion||'—')+'</span></div>'+
+    '<div class="det-row"><span class="det-lbl">Vehículo</span><span class="det-val">'+(ev.vehiculo||'—')+'</span></div>'+
+    '<div class="det-row"><span class="det-lbl">Teléfono</span><span class="det-val">'+(ev.telefono||'—')+'</span></div>'+
+    (ev.notas?'<div class="det-row"><span class="det-lbl">Notas</span><span class="det-val">'+ev.notas+'</span></div>':'')+
+    '<div class="det-row"><span class="det-lbl">Estado</span><span class="det-val"><strong>'+(ESTADO_LABEL[ev.estado]||ev.estado)+'</strong></span></div>'
+
+  // Botones de estado según estado actual
+  var estados=[['agendado','📅 Agendado','var(--azul)','#000'],['confirmado','✅ Confirmar','var(--verde)','#000'],['en-ruta','🚗 En ruta','var(--naranja)','#fff'],['completado','🏁 Completar','var(--txt2)','#000'],['cancelado','❌ Cancelar','var(--rojo)','#fff']]
+  document.getElementById('det-estados').innerHTML=estados.filter(function(e){return e[0]!==ev.estado;}).slice(0,4).map(function(e){
+    return '<button class="eb-btn" style="background:'+e[2]+';color:'+e[3]+';" onclick="cambiarEstado(\''+ev.id+'\',\''+e[0]+'\')">'+e[1]+'</button>'
+  }).join('')
+
+  // Botones WA
+  var telTec=TELS[ev.tecnico]||''
+  document.getElementById('det-wa-tec').onclick=function(){
+    if(!telTec)return;
+    var msg='Hola '+ev.tecnico.split(' ')[0]+' recordatorio de tu servicio de hoy:\n\n'+ev.hora+' · '+ev.cliente+(ev.direccion?'\n'+ev.direccion:'')+(ev.vehiculo?'\n'+ev.vehiculo:'')+'\n\nServiruta'
+    window.open('https://wa.me/'+telTec.replace(/\D/g,'')+'?text='+encodeURIComponent(msg),'_blank')
+  }
+  document.getElementById('det-wa-cli').onclick=function(){
+    if(!ev.telefono)return;
+    var msg='Hola '+ev.cliente+' te confirmamos tu servicio Serviruta:\n\n📅 '+ev.hora+(ev.direccion?'\n📍 '+ev.direccion:'')+(ev.tecnico?'\n👷 Técnico: '+ev.tecnico:'')+'\n\nCualquier consulta: +56 9 8505 8250'
+    window.open('https://wa.me/56'+ev.telefono.replace(/\D/g,'')+'?text='+encodeURIComponent(msg),'_blank')
+  }
+  document.getElementById('det-eliminar').onclick=function(){
+    if(!confirm('Eliminar este servicio?'))return;
+    getDB().from('agenda').delete().eq('id',ev.id).then(function(){
+      toast('Eliminado');closeModal('modal-detalle');load()
+    })
+  }
+
+  document.getElementById('modal-detalle').classList.add('open')
+}
+
+async function cambiarEstado(id,estado){
+  await getDB().from('agenda').update({estado:estado}).eq('id',id)
+  toast(ESTADO_LABEL[estado]||estado,'ok')
+  closeModal('modal-detalle')
+  load()
+}
+
+function toast(msg,type){var t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(type?' '+type:'');t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2500);}
+
+// Init
+updateFechaDisplay()
+document.getElementById('m-fecha').value=getFechaStr(fechaActual)
+if(!isCoord&&tecnicoNombre){
+  document.getElementById('btn-nuevo-wrap','')
+  document.querySelector('.btn-nuevo').style.display='none'
+}
+load()
+</script>
+</body>
+</html>

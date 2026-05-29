@@ -102,7 +102,7 @@ var COLORES=['#E8210A','#60A5FA','#22C55E','#F5C518','#FB923C','#A78BFA','#F472B
 function getDB(){if(!db)db=supabase.createClient(SB_URL,SB_KEY);return db;}
 
 async function load(){
-  var rP=await getDB().from('presupuestos').select('tecnico,estado_servicio,created_at');
+  var rP=await getDB().from('presupuestos').select('tecnico,estado_servicio,created_at,total,pago_cliente');
   var rI=await getDB().from('inspecciones').select('tecnico,score,created_at');
   var rE=await getDB().from('evaluaciones').select('*').order('created_at',{ascending:false});
   var rA=await getDB().from('aliados').select('*').eq('activo',true);
@@ -118,7 +118,7 @@ function renderTecnicos(pptos, inspecciones, evals){
 
   pptos.forEach(function(p){
     if(!p.tecnico)return;
-    if(!tecnicos[p.tecnico])tecnicos[p.tecnico]={nombre:p.tecnico,pptos:0,completados:0,inspecciones:0,notas:[],puntos:0};
+    if(!tecnicos[p.tecnico])tecnicos[p.tecnico]={nombre:p.tecnico,pptos:0,completados:0,inspecciones:0,notas:[],puntos:0,ventas:0,cobrado:0};
     tecnicos[p.tecnico].pptos++;
     if(p.estado_servicio==='completado')tecnicos[p.tecnico].completados++;
   });
@@ -137,7 +137,8 @@ function renderTecnicos(pptos, inspecciones, evals){
 
   // Calcular puntos
   Object.values(tecnicos).forEach(function(t){
-    t.puntos = (t.completados*40) + (t.pptos*25) + (t.inspecciones*20);
+    t.puntos = (t.completados*40) + (t.pptos*25) + (t.inspecciones*20)
+    t.puntos += Math.round(t.ventas/10000);
     if(t.notas.length) t.puntos += Math.round((t.notas.reduce(function(s,n){return s+n;},0)/t.notas.length)*3);
     t.nota_prom = t.notas.length ? (t.notas.reduce(function(s,n){return s+n;},0)/t.notas.length).toFixed(1) : '—';
   });
@@ -163,11 +164,14 @@ function renderTecnicos(pptos, inspecciones, evals){
         '</div>'+
         '<div><div class="rank-pts" style="color:'+color+'">'+t.puntos+'</div><div class="rank-pts-lbl">puntos</div></div>'+
       '</div>'+
-      '<div class="metricas">'+
+      '<div class="metricas" style="grid-template-columns:repeat(3,1fr)">'+
         '<div class="met"><div class="met-val" style="color:var(--verde)">'+t.completados+'</div><div class="met-lbl">Completados</div></div>'+
         '<div class="met"><div class="met-val" style="color:var(--azul)">'+t.pptos+'</div><div class="met-lbl">Presupuestos</div></div>'+
         '<div class="met"><div class="met-val" style="color:var(--amarillo)">'+t.inspecciones+'</div><div class="met-lbl">Inspecciones</div></div>'+
-        '<div class="met"><div class="met-val" style="color:var(--naranja)">'+t.nota_prom+'</div><div class="met-lbl">Nota prom.</div></div>'+
+      '</div>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">'+
+        '<div class="met" style="background:rgba(34,197,94,0.05);border:1px solid rgba(34,197,94,0.2)"><div class="met-val" style="color:var(--verde);font-size:14px">$'+('+(t.ventas?t.ventas.toLocaleString('es-CL'):'0')+')+'</div><div class="met-lbl">Total vendido</div></div>'+
+        '<div class="met" style="background:rgba(245,197,24,0.05);border:1px solid rgba(245,197,24,0.2)"><div class="met-val" style="color:var(--amarillo);font-size:14px">'+t.nota_prom+'</div><div class="met-lbl">Nota cliente</div></div>'+
       '</div>'+
     '</div>';
   }).join('');

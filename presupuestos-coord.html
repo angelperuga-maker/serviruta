@@ -100,6 +100,10 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
     <div class="total-final"><span class="total-label">Total</span><span class="total-val" id="total-val">$0</span></div>
   </div>
 
+  <div class="sec">Agregar ítems adicionales (coordinador)</div>
+  <div id="coord-items-wrap"></div>
+  <button onclick="coordAgregarItem()" style="width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:8px;color:var(--txt2);font-family:'Syne',sans-serif;font-weight:700;font-size:12px;padding:10px;cursor:pointer;margin-bottom:12px;">＋ Agregar ítem desde coordinador</button>
+
   <div class="sec">Notas al cliente</div>
   <textarea class="inp" id="det-notas" placeholder="Notas opcionales..." rows="2"></textarea>
 
@@ -221,6 +225,18 @@ function abrirDetalle(id) {
   document.getElementById('det-badge').textContent = pptoActual.estado
   document.getElementById('det-badge').className = 'badge ' + pptoActual.estado
   document.getElementById('det-notas').value = pptoActual.notas || ''
+  // Limpiar ítems coordinador previos
+  coordItemId = 0; coordItems = []
+  document.getElementById('coord-items-wrap').innerHTML = ''
+  // Si ya tenía ítems del coordinador, mostrarlos
+  if (pptoActual.items_coord && pptoActual.items_coord.length) {
+    pptoActual.items_coord.forEach(function(item) {
+      coordAgregarItem()
+      var lastId = coordItemId
+      document.getElementById('coord-desc-'+lastId).value = item.desc||''
+      document.getElementById('coord-precio-'+lastId).value = item.precio_venta||''
+    })
+  }
   renderItems()
   calcTotal()
 }
@@ -245,7 +261,8 @@ function setItemPrecio(id, val) {
 
 function calcTotal() {
   const items = pptoActual?.items || []
-  const sub = items.reduce((s,i)=>s+((i.precio_venta||0)*(i.cant||1)),0)
+  const coordExtra = getCoordItems()
+  const sub = [...items, ...coordExtra].reduce((s,i)=>s+((i.precio_venta||0)*(i.cant||1)),0)
   const iva = document.getElementById('aplica-iva')?.checked ? Math.round(sub*0.19) : 0
   const total = sub + iva
   const box = document.getElementById('total-box')
@@ -263,6 +280,7 @@ async function guardarValorizacion() {
   try {
     await getDB().from('presupuestos').update({
       items: pptoActual.items,
+      items_coord: getCoordItems(),
       estado: 'valorizada',
       notas,
       subtotal: sub,
@@ -289,7 +307,7 @@ async function enviarWA() {
   msg += `👤 *${pptoActual.cliente}*\n`
   msg += `🚗 ${pptoActual.vehiculo||''}${pptoActual.auto?' · '+pptoActual.auto:''}\n\n`
   msg += `*SERVICIOS:*\n`
-  ;(pptoActual.items||[]).forEach((item,i)=>{
+  ;[...(pptoActual.items||[]),...getCoordItems()].forEach((item,i)=>{
     const st = (item.precio_venta||0)*(item.cant||1)
     if (st > 0) msg += `${i+1}. ${item.desc}${item.cant>1?' ×'+item.cant:''}: *$${st.toLocaleString('es-CL')}*\n`
   })

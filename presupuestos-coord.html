@@ -434,6 +434,55 @@ async function guardarNuevoPpto() {
   loadPptos()
 }
 
+
+var coordItemId = 0
+
+function getCoordItems() {
+  var items = []
+  document.querySelectorAll('[id^="coord-desc-"]').forEach(function(el) {
+    var id = el.id.replace('coord-desc-', '')
+    var desc = el.value.trim()
+    var precioEl = document.getElementById('coord-precio-' + id)
+    var precio = precioEl ? (parseFloat(precioEl.value) || 0) : 0
+    if (desc) items.push({ id: parseInt(id), desc: desc, cant: 1, precio_venta: precio })
+  })
+  return items
+}
+
+function coordAgregarItem() {
+  coordItemId++
+  var id = coordItemId
+  var wrap = document.getElementById('coord-items-wrap')
+  if (!wrap) return
+  var div = document.createElement('div')
+  div.id = 'coord-item-' + id
+  div.style.cssText = 'display:flex;gap:8px;margin-bottom:8px;align-items:center'
+  var inp1 = document.createElement('input')
+  inp1.className = 'inp'
+  inp1.placeholder = 'Descripcion del item...'
+  inp1.id = 'coord-desc-' + id
+  inp1.style.flex = '1'
+  inp1.style.marginBottom = '0'
+  inp1.addEventListener('input', calcTotal)
+  var inp2 = document.createElement('input')
+  inp2.className = 'inp'
+  inp2.type = 'number'
+  inp2.placeholder = 'Precio unit.'
+  inp2.id = 'coord-precio-' + id
+  inp2.style.width = '110px'
+  inp2.style.marginBottom = '0'
+  inp2.style.textAlign = 'right'
+  inp2.addEventListener('input', calcTotal)
+  var btn = document.createElement('button')
+  btn.textContent = 'X'
+  btn.style.cssText = 'background:rgba(232,33,10,0.1);border:1px solid rgba(232,33,10,0.3);color:#E8210A;border-radius:6px;padding:8px 12px;cursor:pointer;flex-shrink:0'
+  btn.onclick = function() { div.remove(); calcTotal() }
+  div.appendChild(inp1)
+  div.appendChild(inp2)
+  div.appendChild(btn)
+  wrap.appendChild(div)
+}
+
 </script>
 </body>
 </html>

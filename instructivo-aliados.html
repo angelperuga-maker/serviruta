@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta · Guía para Aliados</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:500px;margin:0 auto;padding:24px 18px 60px;}
+
+.logo{display:flex;align-items:center;gap:12px;margin-bottom:28px;}
+.mark{width:44px;height:44px;background:var(--rojo);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:"Syne",sans-serif;font-weight:800;font-size:14px;color:#fff;}
+.brand{font-family:"Syne",sans-serif;font-weight:800;font-size:20px;}
+.brand span{color:var(--rojo);}
+.brand-sub{font-size:11px;color:var(--txt3);margin-top:1px;}
+
+.hero{background:linear-gradient(135deg,var(--rojo),#B01A08);border-radius:14px;padding:24px;margin-bottom:24px;text-align:center;}
+.hero-emoji{font-size:48px;margin-bottom:10px;}
+.hero-title{font-family:"Syne",sans-serif;font-weight:800;font-size:22px;color:#fff;margin-bottom:6px;line-height:1.2;}
+.hero-sub{font-size:13px;color:rgba(255,255,255,0.75);line-height:1.6;}
+
+/* PASOS */
+.paso{display:flex;gap:14px;margin-bottom:20px;align-items:flex-start;}
+.paso-num{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:"Syne",sans-serif;font-weight:800;font-size:16px;color:#fff;flex-shrink:0;margin-top:2px;}
+.paso-body{}
+.paso-titulo{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;margin-bottom:4px;}
+.paso-desc{font-size:13px;color:var(--txt2);line-height:1.6;}
+.paso-tip{background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:10px 12px;margin-top:8px;font-size:12px;color:var(--txt2);line-height:1.6;}
+.paso-tip strong{color:var(--txt);}
+
+.sec{font-family:"Syne",sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);margin:24px 0 14px;display:flex;align-items:center;gap:8px;}
+.sec::after{content:"";flex:1;height:1px;background:var(--borde);}
+
+/* COMISIONES */
+.comision-tabla{background:var(--c2);border:1px solid var(--borde);border-radius:12px;overflow:hidden;margin-bottom:20px;}
+.com-row{display:flex;align-items:center;padding:12px 14px;border-bottom:1px solid var(--borde);}
+.com-row:last-child{border:none;}
+.com-icon{font-size:22px;margin-right:12px;flex-shrink:0;}
+.com-info{flex:1;}
+.com-nivel{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;}
+.com-rango{font-size:11px;color:var(--txt3);margin-top:1px;}
+.com-monto{font-family:"Syne",sans-serif;font-weight:800;font-size:18px;margin-left:auto;}
+
+/* PREMIO */
+.premio{background:rgba(245,197,24,0.08);border:2px solid rgba(245,197,24,0.4);border-radius:14px;padding:18px;margin-bottom:20px;text-align:center;}
+.premio-emoji{font-size:42px;margin-bottom:8px;}
+.premio-titulo{font-family:"Syne",sans-serif;font-weight:800;font-size:18px;color:var(--amarillo);margin-bottom:4px;}
+.premio-monto{font-family:"Syne",sans-serif;font-weight:800;font-size:38px;color:var(--amarillo);line-height:1;margin-bottom:6px;}
+.premio-desc{font-size:12px;color:var(--txt3);}
+
+/* EJEMPLO */
+.ejemplo{background:var(--c2);border:1px solid var(--borde);border-radius:12px;padding:14px;margin-bottom:20px;}
+.ejemplo-titulo{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;margin-bottom:10px;color:var(--verde);}
+.ejemplo-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--borde);font-size:12px;}
+.ejemplo-row:last-child{border:none;padding-top:10px;}
+.ejemplo-total{font-family:"Syne",sans-serif;font-weight:800;font-size:16px;color:var(--verde);}
+
+/* FAQ */
+.faq-item{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin-bottom:8px;}
+.faq-q{font-weight:700;font-size:13px;margin-bottom:6px;color:var(--txt);}
+.faq-a{font-size:12px;color:var(--txt2);line-height:1.6;}
+
+/* CTA */
+.cta{background:var(--rojo);border-radius:14px;padding:20px;text-align:center;margin-bottom:16px;}
+.cta-title{font-family:"Syne",sans-serif;font-weight:800;font-size:18px;color:#fff;margin-bottom:6px;}
+.cta-sub{font-size:13px;color:rgba(255,255,255,0.8);margin-bottom:14px;}
+.cta-btn{display:inline-block;background:#fff;color:var(--rojo);font-family:"Syne",sans-serif;font-weight:800;font-size:14px;padding:12px 24px;border-radius:20px;text-decoration:none;cursor:pointer;border:none;}
+
+.footer{text-align:center;font-size:11px;color:var(--txt3);padding-top:16px;border-top:1px solid var(--borde);}
+</style>
+</head>
+<body>
+
+<div class="logo">
+  <div class="mark">SRV</div>
+  <div>
+    <div class="brand">SERVI<span>RUTA</span></div>
+    <div class="brand-sub">Mecánica a Domicilio · Santiago RM · 24/7</div>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-emoji">🤝</div>
+  <div class="hero-title">Guía para Aliados Serviruta</div>
+  <div class="hero-sub">Todo lo que necesitas saber para ganar comisiones refiriendo clientes a nuestra red de mecánicos.</div>
+</div>
+
+<!-- CÓMO FUNCIONA -->
+<div class="sec">Cómo funciona</div>
+
+<div class="paso">
+  <div class="paso-num" style="background:var(--rojo)">1</div>
+  <div class="paso-body">
+    <div class="paso-titulo">Comparte tu código único</div>
+    <div class="paso-desc">Tienes un código personal (ej: GRU-PEDRO01). Compártelo con personas que necesiten mecánico. Diles que lo mencionen al contratar el servicio.</div>
+    <div class="paso-tip">💡 <strong>Tip:</strong> Comparte tu código en WhatsApp, grupos de vecinos, empresas de transporte, terminales de buses, estacionamientos y condominios.</div>
+  </div>
+</div>
+
+<div class="paso">
+  <div class="paso-num" style="background:var(--naranja)">2</div>
+  <div class="paso-body">
+    <div class="paso-titulo">El cliente contacta a Serviruta</div>
+    <div class="paso-desc">Tu referido llama o escribe a Serviruta mencionando tu código. También puedes registrar el lead directamente desde tu portal.</div>
+    <div class="paso-tip">📞 <strong>Contacto Serviruta:</strong> +56 9 8505 8250 · Disponible 24/7</div>
+  </div>
+</div>
+
+<div class="paso">
+  <div class="paso-num" style="background:var(--amarillo)">3</div>
+  <div class="paso-body">
+    <div class="paso-titulo">El técnico realiza el servicio</div>
+    <div class="paso-desc">Asignamos un técnico certificado que va hasta donde está el vehículo. El cliente no tiene que mover el auto.</div>
+  </div>
+</div>
+
+<div class="paso">
+  <div class="paso-num" style="background:var(--verde)">4</div>
+  <div class="paso-body">
+    <div class="paso-titulo">¡Cobras tu comisión!</div>
+    <div class="paso-desc">Una vez completado y pagado el servicio, tu comisión queda registrada. El pago se procesa cada viernes.</div>
+    <div class="paso-tip">💰 <strong>Pago:</strong> Transferencia bancaria todos los viernes con los servicios completados de la semana.</div>
+  </div>
+</div>
+
+<!-- COMISIONES -->
+<div class="sec">Estructura de comisiones</div>
+
+<div class="comision-tabla">
+  <div class="com-row">
+    <span class="com-icon">🌱</span>
+    <div class="com-info">
+      <div class="com-nivel" style="color:var(--azul)">Nivel Inicio</div>
+      <div class="com-rango">Del referido 1 al 5</div>
+    </div>
+    <div class="com-monto" style="color:var(--azul)">$13.000</div>
+  </div>
+  <div class="com-row">
+    <span class="com-icon">⭐</span>
+    <div class="com-info">
+      <div class="com-nivel" style="color:var(--verde)">Nivel Activo</div>
+      <div class="com-rango">Del referido 6 al 12</div>
+    </div>
+    <div class="com-monto" style="color:var(--verde)">$16.000</div>
+  </div>
+  <div class="com-row">
+    <span class="com-icon">🔥</span>
+    <div class="com-info">
+      <div class="com-nivel" style="color:var(--amarillo)">Nivel Top</div>
+      <div class="com-rango">Desde el referido 13 en adelante</div>
+    </div>
+    <div class="com-monto" style="color:var(--amarillo)">$18.000</div>
+  </div>
+</div>
+
+<!-- PREMIO -->
+<div class="sec">Premio especial</div>
+
+<div class="premio">
+  <div class="premio-emoji">🏆</div>
+  <div class="premio-titulo">Bono por 7 referidos</div>
+  <div class="premio-monto">$100.000</div>
+  <div class="premio-desc">Al completar tu 7° referido convertido en servicio, recibes un bono único de $100.000 además de tu comisión normal.</div>
+</div>
+
+<!-- EJEMPLO -->
+<div class="sec">Ejemplo de ganancias</div>
+
+<div class="ejemplo">
+  <div class="ejemplo-titulo">📊 Si refirieras 10 clientes este mes:</div>
+  <div class="ejemplo-row"><span>5 primeros referidos × $13.000</span><span>$65.000</span></div>
+  <div class="ejemplo-row"><span>5 siguientes referidos × $16.000</span><span>$80.000</span></div>
+  <div class="ejemplo-row"><span>🏆 Bono 7° referido</span><span style="color:var(--amarillo)">$100.000</span></div>
+  <div class="ejemplo-row"><span style="font-weight:700">Total del mes</span><span class="ejemplo-total">$245.000</span></div>
+</div>
+
+<!-- FAQ -->
+<div class="sec">Preguntas frecuentes</div>
+
+<div class="faq-item">
+  <div class="faq-q">¿Cuándo y cómo me pagan?</div>
+  <div class="faq-a">Cada viernes procesamos los pagos por transferencia bancaria. Te avisamos por WhatsApp cuando se acredita.</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q">¿Qué pasa si el cliente no menciona mi código?</div>
+  <div class="faq-a">El cliente debe mencionar tu código al contactar a Serviruta. También puedes registrar el lead tú mismo desde tu portal de aliados antes de que llamen.</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q">¿Hay un límite de referidos?</div>
+  <div class="faq-a">No hay límite. A más referidos, mayor es tu comisión por servicio. Desde el referido 13 ganas $18.000 por cada servicio.</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q">¿Qué servicios son válidos para mi comisión?</div>
+  <div class="faq-a">Todos los servicios completados y pagados: inspecciones, mantenimiento, diagnóstico, reparaciones mecánicas y eléctricas. El servicio debe completarse para que se acredite tu comisión.</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q">¿Dónde puedo ver mis ganancias?</div>
+  <div class="faq-a">En tu portal de aliados puedes ver en tiempo real tus referidos, el estado de cada servicio y tus comisiones acumuladas.</div>
+</div>
+
+<div class="faq-item">
+  <div class="faq-q">¿Cuánto tiempo es válido el bono de $100.000?</div>
+  <div class="faq-a">El bono se paga una sola vez al completar tu 7° referido. No tiene vencimiento — cuando llegues a 7, lo cobras.</div>
+</div>
+
+<!-- CTA -->
+<div class="sec">Accede a tu portal</div>
+
+<div class="cta">
+  <div class="cta-title">¡Empieza a ganar hoy!</div>
+  <div class="cta-sub">Ingresa a tu portal para ver tus comisiones, registrar leads y compartir tu código.</div>
+  <button class="cta-btn" onclick="window.open('https://angelperuga-maker.github.io/serviruta/aliados-v2.html','_blank')">Entrar al portal →</button>
+</div>
+
+<div class="footer">
+  Serviruta · Taller Mecánico a Domicilio · Santiago RM · 24/7<br>
+  +56 9 8505 8250 · serviruta.cl
+</div>
+
+</body>
+</html>

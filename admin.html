@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta · Administración</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--rojo-g:rgba(232,33,10,0.08);--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--verde-g:rgba(34,197,94,0.1);--amarillo:#F5C518;--amarillo-g:rgba(245,197,24,0.08);--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:600px;margin:0 auto;}
+.top{background:var(--c1);border-bottom:1px solid var(--borde);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.top-title{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
+.top-back{background:none;border:1px solid var(--borde);color:var(--txt3);font-size:11px;padding:5px 12px;border-radius:6px;cursor:pointer;}
+.body{padding:14px 16px 80px;}
+.tabs{display:flex;border-bottom:1px solid var(--borde);margin-bottom:16px;}
+.tab{flex:1;padding:10px 6px;text-align:center;font-size:11px;font-weight:600;color:var(--txt3);cursor:pointer;border-bottom:2px solid transparent;}
+.tab.active{color:var(--rojo);border-bottom-color:var(--rojo);}
+.page{display:none;}.page.active{display:block;}
+
+/* PERIODO SELECTOR */
+.periodo{display:flex;gap:6px;margin-bottom:16px;overflow-x:auto;}
+.per-btn{flex-shrink:0;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--borde);background:var(--c2);color:var(--txt3);font-family:"DM Sans",sans-serif;}
+.per-btn.active{background:var(--rojo);border-color:var(--rojo);color:#fff;}
+
+/* KPI CARDS */
+.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.kpi{background:var(--c2);border:1px solid var(--borde);border-radius:12px;padding:14px;}
+.kpi.full{grid-column:1/-1;}
+.kpi-lbl{font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+.kpi-val{font-family:"Syne",sans-serif;font-weight:800;font-size:28px;line-height:1;}
+.kpi-sub{font-size:11px;color:var(--txt3);margin-top:4px;}
+.kpi-trend{font-size:11px;font-weight:700;margin-top:4px;}
+
+/* BARRA TÉCNICO */
+.tec-row{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin-bottom:10px;}
+.tec-top{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.tec-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:"Syne",sans-serif;font-weight:800;font-size:13px;color:#fff;flex-shrink:0;}
+.tec-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
+.tec-zona{font-size:11px;color:var(--txt3);margin-top:1px;}
+.tec-monto{font-family:"Syne",sans-serif;font-weight:800;font-size:18px;margin-left:auto;text-align:right;}
+.tec-monto-lbl{font-size:10px;color:var(--txt3);text-align:right;}
+.bar-wrap{margin-bottom:8px;}
+.bar-label{display:flex;justify-content:space-between;font-size:10px;color:var(--txt3);margin-bottom:3px;}
+.bar{height:6px;background:var(--c3);border-radius:3px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:3px;transition:width 0.6s ease;}
+.tec-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
+.ts{background:var(--c3);border-radius:6px;padding:7px;text-align:center;}
+.ts-val{font-family:"Syne",sans-serif;font-weight:800;font-size:14px;}
+.ts-lbl{font-size:9px;color:var(--txt3);text-transform:uppercase;margin-top:1px;}
+
+/* TABLA SERVICIOS */
+.svc-row{background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:10px;}
+.svc-fecha{font-size:11px;color:var(--txt3);min-width:60px;}
+.svc-info{flex:1;}
+.svc-cliente{font-size:13px;font-weight:600;}
+.svc-tec{font-size:11px;color:var(--txt3);}
+.svc-monto{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;color:var(--verde);}
+.badge-pago{font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;margin-top:3px;display:inline-block;}
+.bp-pagado{background:var(--verde-g);color:var(--verde);border:1px solid rgba(34,197,94,0.3);}
+.bp-pendiente{background:var(--rojo-g);color:var(--rojo);border:1px solid rgba(232,33,10,0.3);}
+
+.sec{font-family:"Syne",sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);margin:16px 0 10px;display:flex;align-items:center;gap:8px;}
+.sec::after{content:"";flex:1;height:1px;background:var(--borde);}
+.loading{text-align:center;padding:40px;color:var(--txt3);}
+</style>
+</head>
+<body>
+<div class="top">
+  <button class="top-back" onclick="location.href='menu-coordinador.html'">← Volver</button>
+  <div class="top-title">📈 Administración</div>
+  <button onclick="load()" style="background:none;border:none;color:var(--txt3);cursor:pointer;font-size:20px;">↻</button>
+</div>
+
+<div class="body">
+  <div class="tabs">
+    <div class="tab active" onclick="goTab(0,this)">📊 Resumen</div>
+    <div class="tab" onclick="goTab(1,this)">👷 Por técnico</div>
+    <div class="tab" onclick="goTab(2,this)">📋 Servicios</div>
+  </div>
+
+  <!-- RESUMEN -->
+  <div class="page active" id="pg-0">
+    <div class="periodo">
+      <button class="per-btn active" onclick="setPeriodo('semana',this)">Esta semana</button>
+      <button class="per-btn" onclick="setPeriodo('mes',this)">Este mes</button>
+      <button class="per-btn" onclick="setPeriodo('todo',this)">Todo</button>
+    </div>
+    <div class="kpi-grid">
+      <div class="kpi full" style="background:linear-gradient(135deg,var(--rojo),#B01A08)">
+        <div class="kpi-lbl" style="color:rgba(255,255,255,0.7)">Ingresos totales</div>
+        <div class="kpi-val" id="kpi-total" style="color:#fff;font-size:36px">$0</div>
+        <div class="kpi-sub" id="kpi-total-sub" style="color:rgba(255,255,255,0.7)">—</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-lbl">Cobrado</div>
+        <div class="kpi-val" id="kpi-cobrado" style="color:var(--verde)">$0</div>
+        <div class="kpi-sub" id="kpi-cobrado-sub">— servicios pagados</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-lbl">Por cobrar</div>
+        <div class="kpi-val" id="kpi-pendiente" style="color:var(--amarillo)">$0</div>
+        <div class="kpi-sub" id="kpi-pendiente-sub">— servicios pendientes</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-lbl">Servicios completados</div>
+        <div class="kpi-val" id="kpi-svc" style="color:var(--azul)">0</div>
+        <div class="kpi-sub" id="kpi-svc-sub">— promedio por servicio</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-lbl">Técnicos activos</div>
+        <div class="kpi-val" id="kpi-tecs" style="color:var(--morado)">0</div>
+        <div class="kpi-sub">con servicios en el período</div>
+      </div>
+    </div>
+    <div class="sec">Distribución por técnico</div>
+    <div id="mini-ranking"><div class="loading">Cargando...</div></div>
+  </div>
+
+  <!-- POR TÉCNICO -->
+  <div class="page" id="pg-1">
+    <div class="periodo">
+      <button class="per-btn active" onclick="setPeriodo2('semana',this)">Esta semana</button>
+      <button class="per-btn" onclick="setPeriodo2('mes',this)">Este mes</button>
+      <button class="per-btn" onclick="setPeriodo2('todo',this)">Todo</button>
+    </div>
+    <div id="tec-ranking"><div class="loading">Cargando...</div></div>
+  </div>
+
+  <!-- SERVICIOS -->
+  <div class="page" id="pg-2">
+    <div class="periodo">
+      <button class="per-btn active" onclick="setPeriodo3('semana',this)">Esta semana</button>
+      <button class="per-btn" onclick="setPeriodo3('mes',this)">Este mes</button>
+      <button class="per-btn" onclick="setPeriodo3('todo',this)">Todo</button>
+    </div>
+    <div id="svc-lista"><div class="loading">Cargando...</div></div>
+  </div>
+</div>
+
+<script>
+var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+var db=null,todos=[],periodo1='semana',periodo2='semana',periodo3='semana'
+
+var COLORES=['#E8210A','#60A5FA','#22C55E','#F5C518','#FB923C','#A78BFA','#F472B6','#34D399']
+
+function getDB(){if(!db)db=supabase.createClient(SB_URL,SB_KEY);return db;}
+
+function getFechaDesde(periodo){
+  var hoy=new Date()
+  if(periodo==='semana'){var d=new Date(hoy);d.setDate(hoy.getDate()-hoy.getDay());return d.toISOString().split('T')[0]}
+  if(periodo==='mes'){return hoy.getFullYear()+'-'+String(hoy.getMonth()+1).padStart(2,'0')+'-01'}
+  return '2020-01-01'
+}
+
+function filtrarPeriodo(data,periodo){
+  var desde=getFechaDesde(periodo)
+  return data.filter(function(s){
+    var fecha=(s.created_at||'').split('T')[0]
+    return fecha>=desde
+  })
+}
+
+async function load(){
+  var r=await getDB().from('presupuestos').select('*').eq('estado_servicio','completado').order('created_at',{ascending:false})
+  todos=r.data||[]
+  renderResumen()
+  renderTecnicos()
+  renderServicios()
+}
+
+function renderResumen(){
+  var data=filtrarPeriodo(todos,periodo1)
+  var total=data.reduce(function(s,x){return s+(x.total||0)},0)
+  var cobrado=data.filter(function(x){return x.pago_cliente==='pagado'}).reduce(function(s,x){return s+(x.total||0)},0)
+  var pendiente=total-cobrado
+  var count=data.length
+  var prom=count?Math.round(total/count):0
+  var tecs=new Set(data.map(function(x){return x.tecnico})).size
+
+  document.getElementById('kpi-total').textContent='$'+total.toLocaleString('es-CL')
+  document.getElementById('kpi-total-sub').textContent=count+' servicio'+(count!==1?'s':'')+' completados'
+  document.getElementById('kpi-cobrado').textContent='$'+cobrado.toLocaleString('es-CL')
+  document.getElementById('kpi-cobrado-sub').textContent=data.filter(function(x){return x.pago_cliente==='pagado'}).length+' servicios pagados'
+  document.getElementById('kpi-pendiente').textContent='$'+pendiente.toLocaleString('es-CL')
+  document.getElementById('kpi-pendiente-sub').textContent=data.filter(function(x){return x.pago_cliente!=='pagado'}).length+' servicios pendientes'
+  document.getElementById('kpi-svc').textContent=count
+  document.getElementById('kpi-svc-sub').textContent=prom?'Prom. $'+prom.toLocaleString('es-CL'):'Sin datos'
+  document.getElementById('kpi-tecs').textContent=tecs
+
+  // Mini ranking
+  var porTec={}
+  data.forEach(function(s){
+    if(!porTec[s.tecnico])porTec[s.tecnico]={nombre:s.tecnico,total:0,count:0}
+    porTec[s.tecnico].total+=(s.total||0)
+    porTec[s.tecnico].count++
+  })
+  var sorted=Object.values(porTec).sort(function(a,b){return b.total-a.total})
+  var maxTotal=sorted.length?sorted[0].total:1
+  var el=document.getElementById('mini-ranking')
+  if(!sorted.length){el.innerHTML='<div class="loading">Sin datos en este período</div>';return}
+  el.innerHTML=sorted.map(function(t,i){
+    var pct=Math.round((t.total/maxTotal)*100)
+    var color=COLORES[i%COLORES.length]
+    return '<div style="margin-bottom:10px">'+
+      '<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">'+
+        '<span style="font-weight:600">'+t.nombre.split(' ').slice(0,2).join(' ')+'</span>'+
+        '<span style="color:'+color+';font-family:Syne,sans-serif;font-weight:800">$'+t.total.toLocaleString('es-CL')+'</span>'+
+      '</div>'+
+      '<div class="bar"><div class="bar-fill" style="width:'+pct+'%;background:'+color+'"></div></div>'+
+      '<div style="font-size:10px;color:var(--txt3);margin-top:2px">'+t.count+' servicio'+(t.count!==1?'s'||'')+'</div>'+
+    '</div>'
+  }).join('')
+}
+
+function renderTecnicos(){
+  var data=filtrarPeriodo(todos,periodo2)
+  var porTec={}
+  data.forEach(function(s){
+    if(!porTec[s.tecnico])porTec[s.tecnico]={nombre:s.tecnico,total:0,cobrado:0,count:0,pend:0}
+    porTec[s.tecnico].total+=(s.total||0)
+    porTec[s.tecnico].count++
+    if(s.pago_cliente==='pagado')porTec[s.tecnico].cobrado+=(s.total||0)
+    else porTec[s.tecnico].pend++
+  })
+  var sorted=Object.values(porTec).sort(function(a,b){return b.total-a.total})
+  var maxTotal=sorted.length?sorted[0].total:1
+  var el=document.getElementById('tec-ranking')
+  if(!sorted.length){el.innerHTML='<div class="loading">Sin datos en este período</div>';return}
+  el.innerHTML=sorted.map(function(t,i){
+    var color=COLORES[i%COLORES.length]
+    var ini=t.nombre.split(' ').map(function(x){return x[0]}).join('').substring(0,2).toUpperCase()
+    var pct=Math.round((t.total/maxTotal)*100)
+    var prom=t.count?Math.round(t.total/t.count):0
+    return '<div class="tec-row">'+
+      '<div class="tec-top">'+
+        '<div class="tec-av" style="background:'+color+'">'+ini+'</div>'+
+        '<div style="flex:1"><div class="tec-nombre">'+t.nombre+'</div><div class="tec-zona">'+t.count+' servicio'+(t.count!==1?'s':'')+'</div></div>'+
+        '<div><div class="tec-monto" style="color:'+color+'">$'+t.total.toLocaleString('es-CL')+'</div><div class="tec-monto-lbl">total vendido</div></div>'+
+      '</div>'+
+      '<div class="bar-wrap">'+
+        '<div class="bar-label"><span>Participación</span><span>'+pct+'%</span></div>'+
+        '<div class="bar"><div class="bar-fill" style="width:'+pct+'%;background:'+color+'"></div></div>'+
+      '</div>'+
+      '<div class="tec-stats">'+
+        '<div class="ts"><div class="ts-val" style="color:var(--verde)">$'+t.cobrado.toLocaleString('es-CL')+'</div><div class="ts-lbl">Cobrado</div></div>'+
+        '<div class="ts"><div class="ts-val" style="color:var(--amarillo)">$'+(t.total-t.cobrado).toLocaleString('es-CL')+'</div><div class="ts-lbl">Por cobrar</div></div>'+
+        '<div class="ts"><div class="ts-val" style="color:var(--azul)">'+t.count+'</div><div class="ts-lbl">Servicios</div></div>'+
+        '<div class="ts"><div class="ts-val" style="color:var(--txt2)">$'+prom.toLocaleString('es-CL')+'</div><div class="ts-lbl">Promedio</div></div>'+
+      '</div>'+
+    '</div>'
+  }).join('')
+}
+
+function renderServicios(){
+  var data=filtrarPeriodo(todos,periodo3)
+  var el=document.getElementById('svc-lista')
+  if(!data.length){el.innerHTML='<div class="loading">Sin servicios en este período</div>';return}
+  var totalPer=data.reduce(function(s,x){return s+(x.total||0)},0)
+  el.innerHTML='<div style="background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:12px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center">'+
+    '<div><div style="font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px">Total período</div>'+
+    '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:24px;color:var(--verde)">$'+totalPer.toLocaleString('es-CL')+'</div></div>'+
+    '<div style="text-align:right"><div style="font-family:Syne,sans-serif;font-weight:800;font-size:20px;color:var(--azul)">'+data.length+'</div>'+
+    '<div style="font-size:10px;color:var(--txt3)">servicios</div></div></div>'+
+  data.map(function(s){
+    var fecha=s.created_at?(new Date(s.created_at)).toLocaleDateString('es-CL',{day:'numeric',month:'short'}):''
+    return '<div class="svc-row">'+
+      '<div class="svc-fecha">'+fecha+'</div>'+
+      '<div class="svc-info">'+
+        '<div class="svc-cliente">'+s.cliente+'</div>'+
+        '<div class="svc-tec">👷 '+s.tecnico+(s.vehiculo?' · '+s.vehiculo:'')+'</div>'+
+      '</div>'+
+      '<div style="text-align:right">'+
+        '<div class="svc-monto">'+(s.total?'$'+s.total.toLocaleString('es-CL'):'—')+'</div>'+
+        '<span class="badge-pago '+(s.pago_cliente==='pagado'?'bp-pagado':'bp-pendiente')+'">'+(s.pago_cliente==='pagado'?'Pagado':'Pendiente')+'</span>'+
+      '</div>'+
+    '</div>'
+  }).join('')
+}
+
+function setPeriodo(p,el){periodo1=p;document.querySelectorAll('#pg-0 .per-btn').forEach(function(x){x.classList.remove('active')});el.classList.add('active');renderResumen()}
+function setPeriodo2(p,el){periodo2=p;document.querySelectorAll('#pg-1 .per-btn').forEach(function(x){x.classList.remove('active')});el.classList.add('active');renderTecnicos()}
+function setPeriodo3(p,el){periodo3=p;document.querySelectorAll('#pg-2 .per-btn').forEach(function(x){x.classList.remove('active')});el.classList.add('active');renderServicios()}
+
+function goTab(n,el){
+  document.querySelectorAll('.page').forEach(function(p,i){p.classList.toggle('active',i===n)})
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')})
+  el.classList.add('active')
+}
+
+load()
+</script>
+</body>
+</html>

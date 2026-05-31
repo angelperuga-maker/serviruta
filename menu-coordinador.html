@@ -48,6 +48,13 @@ if (!sessionStorage.getItem("coord_auth")) { location.href = "login-coordinador.
   <div class="greeting">Panel <em>Coordinador</em></div>
   <div class="sub" id="fecha">—</div>
 
+  <div class="sec">Agenda</div>
+  <a class="card" href="agenda.html">
+    <div class="ci" style="background:rgba(96,165,250,0.1)">📅</div>
+    <div><div class="cn" style="color:var(--azul)">Agenda de servicios</div><div class="cd">Vista diaria con horas por técnico</div></div>
+    <span class="arr">›</span>
+  </a>
+
   <div class="sec">Leads</div>
   <a class="card" href="leads.html">
     <div class="ci" style="background:rgba(251,146,60,0.1)">📥</div>
@@ -75,6 +82,11 @@ if (!sessionStorage.getItem("coord_auth")) { location.href = "login-coordinador.
   </a>
 
   <div class="sec">Aliados</div>
+  <a class="card" href="beneficios-aliados.html">
+    <div class="ci" style="background:rgba(167,139,250,0.1)">🏆</div>
+    <div><div class="cn" style="color:var(--morado,#A78BFA)">Programa de beneficios</div><div class="cd">Niveles, comisiones y premios por referidos</div></div>
+    <span class="arr">›</span>
+  </a>
   <a class="card" href="aliados-admin.html">
     <div class="ci" style="background:rgba(34,197,94,0.1)">➕</div>
     <div><div class="cn" style="color:var(--verde)">Gestionar aliados</div><div class="cd">Crear, editar y enviar credenciales</div></div>

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta · Programa de Beneficios Aliados</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--rojo-g:rgba(232,33,10,0.08);--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--verde-g:rgba(34,197,94,0.1);--amarillo:#F5C518;--amarillo-g:rgba(245,197,24,0.08);--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:600px;margin:0 auto;}
+.top{background:var(--c1);border-bottom:1px solid var(--borde);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.top-title{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
+.top-back{background:none;border:1px solid var(--borde);color:var(--txt3);font-size:11px;padding:5px 12px;border-radius:6px;cursor:pointer;}
+.body{padding:14px 16px 80px;}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,#7C3AED,#A78BFA);border-radius:14px;padding:22px;margin-bottom:16px;position:relative;overflow:hidden;}
+.hero::before{content:"";position:absolute;top:-40px;right:-40px;width:160px;height:160px;background:rgba(255,255,255,0.06);border-radius:50%;}
+.hero-lbl{font-size:11px;color:rgba(255,255,255,0.7);margin-bottom:6px;text-transform:uppercase;letter-spacing:1px;}
+.hero-title{font-family:"Syne",sans-serif;font-weight:800;font-size:24px;color:#fff;margin-bottom:4px;}
+.hero-sub{font-size:13px;color:rgba(255,255,255,0.7);}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px;}
+.stat{background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:10px;text-align:center;}
+.sv{font-family:"Syne",sans-serif;font-weight:800;font-size:20px;}
+.sl{font-size:9px;color:var(--txt3);margin-top:2px;text-transform:uppercase;}
+
+/* NIVELES */
+.sec{font-family:"Syne",sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);margin:16px 0 10px;display:flex;align-items:center;gap:8px;}
+.sec::after{content:"";flex:1;height:1px;background:var(--borde);}
+
+.nivel-card{border-radius:12px;padding:16px;margin-bottom:10px;border:1px solid;}
+.nivel-card.n1{background:rgba(96,165,250,0.05);border-color:rgba(96,165,250,0.2);}
+.nivel-card.n2{background:rgba(34,197,94,0.05);border-color:rgba(34,197,94,0.2);}
+.nivel-card.n3{background:rgba(245,197,24,0.05);border-color:rgba(245,197,24,0.2);}
+.nivel-card.n4{background:rgba(167,139,250,0.05);border-color:rgba(167,139,250,0.3);}
+.nivel-top{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.nivel-icon{font-size:28px;}
+.nivel-nombre{font-family:"Syne",sans-serif;font-weight:800;font-size:16px;}
+.nivel-rango{font-size:11px;color:var(--txt3);margin-top:2px;}
+.nivel-comision{font-family:"Syne",sans-serif;font-weight:800;font-size:20px;margin-left:auto;}
+.nivel-beneficios{display:flex;flex-wrap:wrap;gap:6px;}
+.beneficio-pill{font-size:11px;font-weight:600;padding:4px 10px;border-radius:20px;background:var(--c3);border:1px solid var(--borde);color:var(--txt2);}
+
+/* PREMIO */
+.premio-card{background:linear-gradient(135deg,rgba(245,197,24,0.1),rgba(245,197,24,0.05));border:1px solid rgba(245,197,24,0.4);border-radius:14px;padding:18px;margin-bottom:16px;}
+.premio-top{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.premio-icon{font-size:40px;}
+.premio-titulo{font-family:"Syne",sans-serif;font-weight:800;font-size:16px;color:var(--amarillo);}
+.premio-desc{font-size:12px;color:var(--txt3);margin-top:2px;}
+.premio-monto{font-family:"Syne",sans-serif;font-weight:800;font-size:32px;color:var(--amarillo);}
+.premio-condicion{font-size:12px;color:var(--txt3);margin-top:6px;}
+
+/* RANKING */
+.rank-card{background:var(--c2);border:1px solid var(--borde);border-radius:12px;padding:14px;margin-bottom:10px;}
+.rank-top{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.rank-pos{font-family:"Syne",sans-serif;font-weight:800;font-size:22px;min-width:32px;}
+.rank-av{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:"Syne",sans-serif;font-weight:800;font-size:14px;color:#fff;flex-shrink:0;}
+.rank-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
+.rank-nivel{font-size:11px;color:var(--txt3);margin-top:2px;}
+.rank-refs{font-family:"Syne",sans-serif;font-weight:800;font-size:18px;margin-left:auto;text-align:right;}
+.rank-refs-lbl{font-size:9px;color:var(--txt3);text-align:right;}
+.progress-wrap{margin-top:8px;}
+.progress-label{display:flex;justify-content:space-between;font-size:10px;color:var(--txt3);margin-bottom:4px;}
+.progress-bar{height:6px;background:var(--c3);border-radius:3px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:3px;transition:width 0.6s ease;}
+.rank-comision{font-size:12px;color:var(--verde);margin-top:6px;font-weight:600;}
+.rank-actions{display:flex;gap:8px;margin-top:10px;}
+.btn-sm{padding:7px 12px;border-radius:8px;font-family:"Syne",sans-serif;font-weight:700;font-size:11px;cursor:pointer;border:none;}
+.btn-premio{background:rgba(245,197,24,0.15);border:1px solid rgba(245,197,24,0.4);color:var(--amarillo);}
+.btn-wa{background:#25D366;color:#fff;}
+.btn-notif{background:rgba(167,139,250,0.15);border:1px solid rgba(167,139,250,0.3);color:var(--morado);}
+
+.premio-alcanzado{background:rgba(245,197,24,0.15);border:1px solid rgba(245,197,24,0.4);border-radius:8px;padding:8px 12px;font-size:12px;color:var(--amarillo);font-weight:600;margin-top:6px;display:flex;align-items:center;gap:8px;}
+
+.loading{text-align:center;padding:48px;color:var(--txt3);}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--c3);border:1px solid var(--borde);border-radius:8px;padding:11px 18px;font-size:13px;opacity:0;transition:all 0.25s;pointer-events:none;z-index:999;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.ok{border-color:rgba(34,197,94,0.4);color:var(--verde);}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <button class="top-back" onclick="location.href='menu-coordinador.html'">← Volver</button>
+  <div class="top-title">🏆 Programa de Beneficios</div>
+  <button onclick="load()" style="background:none;border:none;color:var(--txt3);cursor:pointer;font-size:20px;">&#8635;</button>
+</div>
+
+<div class="body">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-lbl">Serviruta Aliados</div>
+    <div class="hero-title">Programa de Beneficios 🏆</div>
+    <div class="hero-sub">Más referidos = más comisión + premios exclusivos</div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat"><div class="sv" id="st-aliados" style="color:var(--morado)">0</div><div class="sl">Aliados activos</div></div>
+    <div class="stat"><div class="sv" id="st-premio" style="color:var(--amarillo)">0</div><div class="sl">Con premio</div></div>
+    <div class="stat"><div class="sv" id="st-total-com" style="color:var(--verde)">$0</div><div class="sl">Total comisiones</div></div>
+  </div>
+
+  <!-- ESTRUCTURA DE NIVELES -->
+  <div class="sec">Estructura de comisiones</div>
+
+  <div class="nivel-card n1">
+    <div class="nivel-top">
+      <span class="nivel-icon">🌱</span>
+      <div><div class="nivel-nombre" style="color:var(--azul)">Nivel Inicio</div><div class="nivel-rango">1 a 5 referidos convertidos</div></div>
+      <div style="text-align:right"><div class="nivel-comision" style="color:var(--azul)">$13.000</div><div style="font-size:10px;color:var(--txt3)">por servicio</div></div>
+    </div>
+    <div class="nivel-beneficios">
+      <span class="beneficio-pill">💬 Código personalizado</span>
+      <span class="beneficio-pill">📊 Portal de comisiones</span>
+    </div>
+  </div>
+
+  <div class="nivel-card n2">
+    <div class="nivel-top">
+      <span class="nivel-icon">⭐</span>
+      <div><div class="nivel-nombre" style="color:var(--verde)">Nivel Activo</div><div class="nivel-rango">6 a 12 referidos convertidos</div></div>
+      <div style="text-align:right"><div class="nivel-comision" style="color:var(--verde)">$16.000</div><div style="font-size:10px;color:var(--txt3)">por servicio</div></div>
+    </div>
+    <div class="nivel-beneficios">
+      <span class="beneficio-pill">💰 +$3.000/servicio extra</span>
+      <span class="beneficio-pill">🎯 Prioridad en asignación</span>
+      <span class="beneficio-pill">📣 Mención en red Serviruta</span>
+    </div>
+  </div>
+
+  <div class="nivel-card n3">
+    <div class="nivel-top">
+      <span class="nivel-icon">🔥</span>
+      <div><div class="nivel-nombre" style="color:var(--amarillo)">Nivel Top</div><div class="nivel-rango">13 referidos convertidos o más</div></div>
+      <div style="text-align:right"><div class="nivel-comision" style="color:var(--amarillo)">$18.000</div><div style="font-size:10px;color:var(--txt3)">por servicio</div></div>
+    </div>
+    <div class="nivel-beneficios">
+      <span class="beneficio-pill">💰 +$5.000/servicio extra</span>
+      <span class="beneficio-pill">🥇 Insignia Top Aliado</span>
+      <span class="beneficio-pill">🎁 Kit Serviruta</span>
+      <span class="beneficio-pill">📢 Difusión en redes sociales</span>
+    </div>
+  </div>
+
+  <!-- PREMIO ESPECIAL -->
+  <div class="sec">Premio especial</div>
+
+  <div class="premio-card">
+    <div class="premio-top">
+      <span class="premio-icon">🏆</span>
+      <div>
+        <div class="premio-titulo">Bono de 7 referidos</div>
+        <div class="premio-desc">Al convertir tu 7° referido en servicio completado</div>
+      </div>
+    </div>
+    <div class="premio-monto">$100.000</div>
+    <div class="premio-condicion">Bono único · Se acredita al completar el 7° servicio · Válido por aliado</div>
+  </div>
+
+  <!-- RANKING ALIADOS -->
+  <div class="sec">Ranking y estado actual</div>
+  <div id="ranking-body"><div class="loading">Cargando...</div></div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var SB_URL = 'https://bqlgfmqcefledqyodkii.supabase.co'
+var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+var db = null
+
+function getDB() { if (!db) db = supabase.createClient(SB_URL, SB_KEY); return db }
+
+function getComision(refs) {
+  if (refs >= 13) return 18000
+  if (refs >= 6)  return 16000
+  return 13000
+}
+
+function getNivel(refs) {
+  if (refs >= 13) return { nombre: '🔥 Top', color: 'var(--amarillo)', clase: 'n3' }
+  if (refs >= 6)  return { nombre: '⭐ Activo', color: 'var(--verde)', clase: 'n2' }
+  return { nombre: '🌱 Inicio', color: 'var(--azul)', clase: 'n1' }
+}
+
+function getSiguienteNivel(refs) {
+  if (refs < 6)  return { meta: 6,  falta: 6 - refs,  label: 'para Nivel Activo ($16.000)', color: 'var(--verde)' }
+  if (refs < 13) return { meta: 13, falta: 13 - refs, label: 'para Nivel Top ($18.000)', color: 'var(--amarillo)' }
+  return null
+}
+
+function tienePremio(refs) { return refs >= 7 }
+
+function calcTotalComision(refs) {
+  var total = 0
+  for (var i = 1; i <= refs; i++) {
+    total += getComision(i)
+  }
+  if (refs >= 7) total += 100000
+  return total
+}
+
+async function load() {
+  var ra = await getDB().from('aliados').select('*').eq('activo', true)
+  var rl = await getDB().from('leads').select('aliado_codigo, estado')
+  var aliados = ra.data || []
+  var leads = rl.data || []
+
+  var data = aliados.map(function(a) {
+    var refs = leads.filter(function(l) { return l.aliado_codigo === a.codigo && l.estado === 'convertido' }).length
+    return { aliado: a, refs: refs }
+  }).sort(function(a, b) { return b.refs - a.refs })
+
+  var conPremio = data.filter(function(d) { return tienePremio(d.refs) }).length
+  var totalCom = data.reduce(function(s, d) { return s + calcTotalComision(d.refs) }, 0)
+
+  document.getElementById('st-aliados').textContent = aliados.length
+  document.getElementById('st-premio').textContent = conPremio
+  document.getElementById('st-total-com').textContent = '$' + (totalCom / 1000).toFixed(0) + 'K'
+
+  var COLORES = ['#A78BFA', '#60A5FA', '#22C55E', '#F5C518', '#FB923C', '#E8210A', '#F472B6']
+  var MEDALS = ['🥇', '🥈', '🥉']
+
+  var el = document.getElementById('ranking-body')
+  if (!data.length) { el.innerHTML = '<div class="loading">Sin aliados registrados</div>'; return }
+
+  el.innerHTML = data.map(function(d, i) {
+    var a = d.aliado
+    var refs = d.refs
+    var nivel = getNivel(refs)
+    var siguiente = getSiguienteNivel(refs)
+    var comision = getComision(refs)
+    var ini = a.nombre.split(' ').map(function(x) { return x[0] }).join('').substring(0, 2).toUpperCase()
+    var color = COLORES[i % COLORES.length]
+    var premio = tienePremio(refs)
+    var totalAcum = refs * comision + (premio ? 100000 : 0)
+
+    var progressPct = siguiente ? Math.round((refs / siguiente.meta) * 100) : 100
+
+    return '<div class="rank-card">' +
+      '<div class="rank-top">' +
+        '<div class="rank-pos">' + (MEDALS[i] || '#' + (i + 1)) + '</div>' +
+        '<div class="rank-av" style="background:' + color + '">' + ini + '</div>' +
+        '<div style="flex:1"><div class="rank-nombre">' + a.nombre + '</div><div class="rank-nivel" style="color:' + nivel.color + '">' + nivel.nombre + ' · ' + a.tipo + '</div></div>' +
+        '<div><div class="rank-refs" style="color:' + color + '">' + refs + '</div><div class="rank-refs-lbl">referidos</div></div>' +
+      '</div>' +
+      (siguiente ?
+        '<div class="progress-wrap">' +
+          '<div class="progress-label"><span style="color:' + nivel.color + '">Nivel actual</span><span>' + d.refs.refs + refs + '/' + siguiente.meta + ' — faltan ' + siguiente.falta + ' ' + siguiente.label + '</span></div>' +
+          '<div class="progress-bar"><div class="progress-fill" style="width:' + progressPct + '%;background:' + siguiente.color + '"></div></div>' +
+        '</div>' : '<div style="font-size:11px;color:var(--amarillo);margin-top:4px">🔥 Nivel máximo alcanzado</div>'
+      ) +
+      '<div class="rank-comision">💰 Comisión actual: $' + comision.toLocaleString('es-CL') + '/servicio · Acumulado: $' + totalAcum.toLocaleString('es-CL') + '</div>' +
+      (premio ? '<div class="premio-alcanzado">🏆 Premio $100.000 desbloqueado — ¡7 referidos completados!</div>' : '') +
+      '<div class="rank-actions">' +
+        (a.telefono ? '<button class="btn-sm btn-wa" onclick="notificarAliado(\'' + a.telefono + '\',\'' + a.nombre + '\',' + refs + ',' + premio + ')">💬 Notificar</button>' : '') +
+        (premio ? '<button class="btn-sm btn-premio" onclick="pagarPremio(\'' + a.nombre + '\',\'' + (a.telefono||'') + '\')">🏆 Pagar premio</button>' : '') +
+        '<button class="btn-sm btn-notif" onclick="verResumen(\'' + a.nombre + '\',' + refs + ',' + comision + ')">📊 Resumen</button>' +
+      '</div>' +
+    '</div>'
+  }).join('')
+}
+
+function notificarAliado(tel, nombre, refs, premio) {
+  var nivel = getNivel(refs)
+  var comision = getComision(refs)
+  var siguiente = getSiguienteNivel(refs)
+  var msg = 'Hola ' + nombre + '! Te escribimos desde Serviruta con tu resumen de aliado:\n\n'
+  msg += '🏆 *PROGRAMA DE BENEFICIOS SERVIRUTA*\n\n'
+  msg += '📊 Tu nivel actual: *' + nivel.nombre + '*\n'
+  msg += '💰 Tu comisión: *$' + comision.toLocaleString('es-CL') + ' por servicio*\n'
+  msg += '✅ Referidos convertidos: *' + refs + '*\n'
+  if (premio) msg += '\n🏆 *¡Felicidades! Has desbloqueado el bono de $100.000 por 7 referidos!*\n'
+  if (siguiente) msg += '\n🎯 Te faltan *' + siguiente.falta + ' referidos* ' + siguiente.label + '\n'
+  msg += '\nGracias por ser parte de la red Serviruta. +56 9 8505 8250'
+  window.open('https://wa.me/56' + tel.replace(/\D/g, '') + '?text=' + encodeURIComponent(msg), '_blank')
+}
+
+function pagarPremio(nombre, tel) {
+  var msg = 'Hola ' + nombre + '! Confirmamos el pago de tu *bono de $100.000* por completar 7 referidos en Serviruta.\n\n¡Felicidades y gracias por tu excelente trabajo en la red! 🎉\n\nServiruta +56 9 8505 8250'
+  if (tel) window.open('https://wa.me/56' + tel.replace(/\D/g, '') + '?text=' + encodeURIComponent(msg), '_blank')
+  toast('🏆 Pago de premio enviado a ' + nombre, 'ok')
+}
+
+function verResumen(nombre, refs, comision) {
+  var nivel = getNivel(refs)
+  var siguiente = getSiguienteNivel(refs)
+  var premio = tienePremio(refs)
+  var total = refs * comision + (premio ? 100000 : 0)
+  var msg = '📊 RESUMEN ' + nombre.toUpperCase() + '\n\n'
+  msg += 'Nivel: ' + nivel.nombre + '\n'
+  msg += 'Referidos: ' + refs + '\n'
+  msg += 'Comisión x servicio: $' + comision.toLocaleString('es-CL') + '\n'
+  msg += 'Total acumulado: $' + total.toLocaleString('es-CL') + '\n'
+  if (premio) msg += 'Premio $100.000: ✅ Desbloqueado\n'
+  if (siguiente) msg += 'Próximo nivel: faltan ' + siguiente.falta + ' referidos'
+  alert(msg)
+}
+
+function toast(msg, type) {
+  var t = document.getElementById('toast')
+  t.textContent = msg; t.className = 'toast' + (type ? ' ' + type : '')
+  t.classList.add('show')
+  setTimeout(function() { t.classList.remove('show') }, 2800)
+}
+
+load()
+</script>
+</body>
+</html>

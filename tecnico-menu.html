@@ -46,7 +46,12 @@ var n = sessionStorage.getItem("tecnico_nombre") || "Técnico";
 <div class="body">
   <div class="greeting">Hola, <em id="tshort">—</em> 👋</div>
   <div class="sub" id="tfecha">—</div>
-  <a class="card" href="ppto-tecnico.html">
+  <a class="card" href="agenda.html">
+    <div class="ci" style="background:rgba(96,165,250,0.1)">📅</div>
+    <div><div class="cn" style="color:var(--azul,#60A5FA)">Mi agenda del día</div><div class="cd">Servicios asignados para hoy</div></div>
+    <span class="arr">›</span>
+  </a>
+    <a class="card" href="ppto-tecnico.html">
     <div class="ci" style="background:rgba(96,165,250,0.1)">📋</div>
     <div><div class="cn" style="color:#60A5FA">Presupuestos</div><div class="cd">Registra trabajos — el coordinador asigna precios</div></div>
     <span class="arr">›</span>

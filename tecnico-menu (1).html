@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta · Técnico</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#080808;color:#F0EDE6;font-family:"DM Sans",sans-serif;min-height:100vh;max-width:460px;margin:0 auto;}
+.top{background:#0F0F12;border-bottom:1px solid #2C2C32;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;}
+.top-left{display:flex;align-items:center;gap:10px;}
+.mark{width:32px;height:32px;background:#60A5FA;border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:"Syne",sans-serif;font-weight:800;font-size:11px;color:#fff;}
+.name{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
+.role{font-size:11px;color:#55525E;margin-top:1px;}
+.logout{background:none;border:none;color:#55525E;font-size:12px;cursor:pointer;font-family:"DM Sans",sans-serif;}
+.body{padding:20px 18px 40px;}
+.greeting{font-family:"Syne",sans-serif;font-weight:800;font-size:26px;letter-spacing:-0.5px;margin-bottom:4px;}
+.greeting em{color:#60A5FA;font-style:normal;}
+.sub{font-size:13px;color:#55525E;margin-bottom:28px;}
+.card{background:#161619;border:1px solid #2C2C32;border-radius:12px;padding:20px 18px;display:flex;align-items:center;gap:16px;margin-bottom:12px;cursor:pointer;transition:all 0.2s;text-decoration:none;color:#F0EDE6;}
+.card:hover{border-color:#3A3A42;transform:translateX(4px);}
+.card:active{transform:scale(0.98);}
+.ci{width:52px;height:52px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;}
+.cn{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;margin-bottom:4px;}
+.cd{font-size:12px;color:#9996A0;line-height:1.4;}
+.arr{font-size:18px;color:#55525E;margin-left:auto;}
+.date{font-size:12px;color:#55525E;text-align:center;margin-top:24px;}
+</style>
+</head>
+<body>
+<script>
+if (!sessionStorage.getItem("tecnico_nombre")) { location.href = "login-tecnico.html"; }
+var n = sessionStorage.getItem("tecnico_nombre") || "Técnico";
+</script>
+<div class="top">
+  <div class="top-left">
+    <div class="mark">🔧</div>
+    <div>
+      <div class="name" id="tname">—</div>
+      <div class="role">Técnico · Serviruta</div>
+    </div>
+  </div>
+  <button class="logout" onclick="sessionStorage.clear();location.href='login-tecnico.html'">Salir</button>
+</div>
+<div class="body">
+  <div class="greeting">Hola, <em id="tshort">—</em> 👋</div>
+  <div class="sub" id="tfecha">—</div>
+  <a class="card" href="ppto-tecnico.html">
+    <div class="ci" style="background:rgba(96,165,250,0.1)">📋</div>
+    <div><div class="cn" style="color:#60A5FA">Presupuestos</div><div class="cd">Registra trabajos — el coordinador asigna precios</div></div>
+    <span class="arr">›</span>
+  </a>
+  <a class="card" href="inspeccion-tecnico.html">
+    <div class="ci" style="background:rgba(34,197,94,0.1)">🔍</div>
+    <div><div class="cn" style="color:#22C55E">Inspección</div><div class="cd">Protocolo de 10 min al llegar al servicio</div></div>
+    <span class="arr">›</span>
+  </a>
+  <a class="card" href="inspeccion-camion.html">
+    <div class="ci" style="background:rgba(251,146,60,0.1)">🚛</div>
+    <div><div class="cn" style="color:var(--naranja)">Inspección Camión</div><div class="cd">Sistema de aire, frenos, fugas, luces y MP</div></div>
+    <span class="arr">›</span>
+  </a>
+  <a class="card" href="stock-tecnico.html">
+    <div class="ci" style="background:rgba(245,197,24,0.1)">📦</div>
+    <div><div class="cn" style="color:#F5C518">Stock</div><div class="cd">Productos disponibles en tu vehículo</div></div>
+    <span class="arr">›</span>
+  </a>
+  <div class="date" id="tdate">—</div>
+</div>
+<script>
+var nombre = sessionStorage.getItem("tecnico_nombre") || "Técnico";
+document.getElementById("tname").textContent = nombre;
+document.getElementById("tshort").textContent = nombre.split(" ")[0];
+var now = new Date();
+document.getElementById("tfecha").textContent = now.toLocaleDateString("es-CL",{weekday:"long",day:"numeric",month:"long"});
+document.getElementById("tdate").textContent = "Serviruta · Santiago RM · 24/7";
+</script>
+</body>
+</html>

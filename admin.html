@@ -78,6 +78,7 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
     <div class="tab active" onclick="goTab(0,this)">📊 Resumen</div>
     <div class="tab" onclick="goTab(1,this)">👷 Por técnico</div>
     <div class="tab" onclick="goTab(2,this)">📋 Servicios</div>
+    <div class="tab" onclick="goTab(3,this)">💰 Pagos diarios</div>
   </div>
 
   <!-- RESUMEN -->
@@ -138,6 +139,11 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
     <div id="svc-lista"><div class="loading">Cargando...</div></div>
   </div>
 </div>
+
+<!-- PAGOS DIARIOS -->
+  <div class="page" id="pg-3">
+    <div id="pagos-diarios-body"><div class="loading">Cargando...</div></div>
+  </div>
 
 <script>
 var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
@@ -288,9 +294,75 @@ function goTab(n,el){
   document.querySelectorAll('.page').forEach(function(p,i){p.classList.toggle('active',i===n)})
   document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')})
   el.classList.add('active')
+  if(n===1)renderTecnicos()
+  if(n===2)renderServicios()
+  if(n===3)renderPagosDiarios()
 }
 
 load()
+
+function renderPagosDiarios(){
+  var el=document.getElementById('pagos-diarios-body')
+  if(!todos.length){el.innerHTML='<div class="loading">Sin servicios completados</div>';return}
+
+  // Agrupar por fecha
+  var porFecha={}
+  todos.forEach(function(s){
+    var fecha=(s.created_at||'').split('T')[0]
+    if(!fecha)return
+    if(!porFecha[fecha])porFecha[fecha]={fecha:fecha,total:0,cobrado:0,count:0,servicios:[]}
+    porFecha[fecha].total+=(s.total||0)
+    if(s.pago_cliente==='pagado')porFecha[fecha].cobrado+=(s.total||0)
+    porFecha[fecha].count++
+    porFecha[fecha].servicios.push(s)
+  })
+
+  var dias=Object.keys(porFecha).sort(function(a,b){return b.localeCompare(a)})
+  var totalGlobal=todos.reduce(function(s,x){return s+(x.total||0)},0)
+  var cobradoGlobal=todos.filter(function(x){return x.pago_cliente==='pagado'}).reduce(function(s,x){return s+(x.total||0)},0)
+
+  var html='<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">'+
+    '<div style="background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:12px">'+
+      '<div style="font-size:10px;color:var(--txt3);text-transform:uppercase;margin-bottom:4px">Total histórico</div>'+
+      '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:22px;color:var(--verde)">$'+totalGlobal.toLocaleString('es-CL')+'</div>'+
+    '</div>'+
+    '<div style="background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:12px">'+
+      '<div style="font-size:10px;color:var(--txt3);text-transform:uppercase;margin-bottom:4px">Por cobrar</div>'+
+      '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:22px;color:var(--amarillo)">$'+(totalGlobal-cobradoGlobal).toLocaleString('es-CL')+'</div>'+
+    '</div>'+
+  '</div>'
+
+  html+=dias.map(function(fecha){
+    var d=porFecha[fecha]
+    var fechaDisplay=new Date(fecha+'T12:00:00').toLocaleDateString('es-CL',{weekday:'short',day:'numeric',month:'short'})
+    return '<div style="background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin-bottom:10px">'+
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">'+
+        '<div>'+
+          '<div style="font-family:Syne,sans-serif;font-weight:700;font-size:14px">'+fechaDisplay+'</div>'+
+          '<div style="font-size:11px;color:var(--txt3)">'+d.count+' servicio'+(d.count!==1?'s':'')+'</div>'+
+        '</div>'+
+        '<div style="text-align:right">'+
+          '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:20px;color:var(--verde)">$'+d.total.toLocaleString('es-CL')+'</div>'+
+          '<div style="font-size:10px;color:var(--txt3)">$'+d.cobrado.toLocaleString('es-CL')+' cobrado</div>'+
+        '</div>'+
+      '</div>'+
+      d.servicios.map(function(s){
+        return '<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-top:1px solid var(--borde)">'+
+          '<div style="flex:1">'+
+            '<div style="font-size:12px;font-weight:600">'+s.cliente+'</div>'+
+            '<div style="font-size:11px;color:var(--txt3)">👷 '+s.tecnico+'</div>'+
+          '</div>'+
+          '<div style="text-align:right">'+
+            '<div style="font-family:Syne,sans-serif;font-weight:700;font-size:14px;color:'+(s.pago_cliente==='pagado'?'var(--verde)':'var(--amarillo)')+'">$'+(s.total||0).toLocaleString('es-CL')+'</div>'+
+            '<div style="font-size:9px;font-weight:700;color:'+(s.pago_cliente==='pagado'?'var(--verde)':'var(--rojo)')+'">'+( s.pago_cliente==='pagado'?'Pagado':'Pendiente')+'</div>'+
+          '</div>'+
+        '</div>'
+      }).join('')+
+    '</div>'
+  }).join('')
+
+  el.innerHTML=html
+}
 </script>
 </body>
 </html>

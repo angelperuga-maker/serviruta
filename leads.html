@@ -143,6 +143,40 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
   </div>
 </div>
 
+<!-- MODAL AGENDA -->
+<div class="modal-overlay" id="modal-agenda" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">📅 Agendar servicio</div>
+    <div class="row">
+      <div><label class="lbl">Fecha</label><input class="inp" type="date" id="ag-fecha" style="margin-bottom:0"></div>
+      <div><label class="lbl">Hora</label><input class="inp" type="time" id="ag-hora" style="margin-bottom:0"></div>
+    </div>
+    <div style="height:10px"></div>
+    <label class="lbl">Técnico asignado</label>
+    <select class="inp" id="ag-tecnico">
+      <option value="Jorge Ramirez">Jorge Ramirez</option>
+      <option value="Felipe Mora">Felipe Mora</option>
+      <option value="Carlos Vega">Carlos Vega</option>
+      <option value="Reynaldo Aguas Bertel">Reynaldo Aguas Bertel</option>
+      <option value="Kiven Henz">Kiven Henz</option>
+      <option value="Humberto Morales">Humberto Morales</option>
+      <option value="Giovanino Perugini">Giovanino Perugini</option>
+      <option value="Reynaldo Aguas">Reynaldo Aguas</option>
+    </select>
+    <label class="lbl">Cliente</label>
+    <input class="inp" id="ag-cliente" placeholder="Nombre">
+    <label class="lbl">Teléfono</label>
+    <input class="inp" id="ag-tel" placeholder="+56 9...">
+    <label class="lbl">Servicio</label>
+    <input class="inp" id="ag-servicio" placeholder="Descripción del servicio">
+    <label class="lbl">Vehículo</label>
+    <input class="inp" id="ag-vehiculo" placeholder="Marca, modelo, patente" style="margin-bottom:14px">
+    <button class="btn-cancel" onclick="document.getElementById('modal-agenda').classList.remove('open')">Cancelar</button>
+    <button class="btn-save" onclick="confirmarAgenda()">✅ Confirmar y agendar</button>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -265,10 +299,61 @@ async function confirmarAsignacion(){
   load();
 }
 
+var leadConvertirId = null
+
+function abrirAgenda(id) {
+  var lead = leads.find(function(l){ return l.id===id })
+  if (!lead) return
+  leadConvertirId = id
+  // Prellenar modal de agenda
+  document.getElementById('ag-cliente').value = lead.cliente||''
+  document.getElementById('ag-tel').value = lead.telefono||''
+  document.getElementById('ag-servicio').value = lead.problema||''
+  document.getElementById('ag-vehiculo').value = lead.vehiculo||''
+  if(lead.tecnico_asignado) document.getElementById('ag-tecnico').value = lead.tecnico_asignado
+  var hoy = new Date()
+  document.getElementById('ag-fecha').value = hoy.getFullYear()+'-'+String(hoy.getMonth()+1).padStart(2,'0')+'-'+String(hoy.getDate()).padStart(2,'0')
+  document.getElementById('ag-hora').value = ''
+  document.getElementById('modal-agenda').classList.add('open')
+}
+
+async function confirmarAgenda() {
+  var fecha = document.getElementById('ag-fecha').value
+  var hora = document.getElementById('ag-hora').value
+  var tec = document.getElementById('ag-tecnico').value
+  if (!hora) { toast('Selecciona una hora'); return }
+
+  // Crear evento en agenda
+  await getDB().from('agenda').insert({
+    fecha: fecha,
+    hora: hora,
+    tecnico: tec,
+    cliente: document.getElementById('ag-cliente').value,
+    telefono: document.getElementById('ag-tel').value,
+    servicio: document.getElementById('ag-servicio').value,
+    vehiculo: document.getElementById('ag-vehiculo').value,
+    estado: 'confirmado'
+  })
+
+  // Marcar lead como convertido
+  if (leadConvertirId) {
+    await getDB().from('leads').update({estado:'convertido', tecnico_asignado:tec}).eq('id', leadConvertirId)
+  }
+
+  // WhatsApp al técnico
+  var tecObj = TELS[tec]
+  if (tecObj) {
+    var msg = '📅 SERVICIO AGENDADO\n\nHola '+tec.split(' ')[0]+'\n\n'+hora+' · '+document.getElementById('ag-fecha').value+'\nCliente: '+document.getElementById('ag-cliente').value+(document.getElementById('ag-servicio').value?'\n'+document.getElementById('ag-servicio').value:'')+'\n\nServiruta +56 9 8505 8250'
+    window.open('https://wa.me/'+tecObj.replace(/\D/g,'')+'?text='+encodeURIComponent(msg),'_blank')
+  }
+
+  toast('✅ Servicio agendado y lead convertido','ok')
+  document.getElementById('modal-agenda').classList.remove('open')
+  load()
+}
+
 async function convertir(id){
-  await getDB().from('leads').update({estado:'convertido'}).eq('id',id);
-  toast('Lead convertido a servicio','ok');
-  load();
+  abrirAgenda(id)
 }
 
 function contactarCliente(tel,nombre,problema){

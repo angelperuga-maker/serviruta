@@ -170,7 +170,7 @@ function renderTecnicos(pptos, inspecciones, evals){
         '<div class="met"><div class="met-val" style="color:var(--amarillo)">'+t.inspecciones+'</div><div class="met-lbl">Inspecciones</div></div>'+
       '</div>'+
       '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px">'+
-        '<div class="met" style="background:rgba(34,197,94,0.05);border:1px solid rgba(34,197,94,0.2)"><div class="met-val" style="color:var(--verde);font-size:14px">$'+('+(t.ventas?t.ventas.toLocaleString('es-CL'):'0')+')+'</div><div class="met-lbl">Total vendido</div></div>'+
+        '<div class="met" style="background:rgba(34,197,94,0.05);border:1px solid rgba(34,197,94,0.2)"><div class="met-val" style="color:var(--verde);font-size:14px">$'+(t.ventas?t.ventas.toLocaleString('es-CL'):'0')+'</div><div class="met-lbl">Total vendido</div></div>'+
         '<div class="met" style="background:rgba(245,197,24,0.05);border:1px solid rgba(245,197,24,0.2)"><div class="met-val" style="color:var(--amarillo);font-size:14px">'+t.nota_prom+'</div><div class="met-lbl">Nota cliente</div></div>'+
       '</div>'+
     '</div>';

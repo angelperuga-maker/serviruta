@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta · Mapa Técnicos</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;height:100vh;display:flex;flex-direction:column;max-width:100vw;}
+.top{background:var(--c1);border-bottom:1px solid var(--borde);padding:10px 14px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.top-title{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;}
+.top-back{background:none;border:1px solid var(--borde);color:var(--txt3);font-size:11px;padding:5px 10px;border-radius:6px;cursor:pointer;}
+.top-right{display:flex;align-items:center;gap:10px;}
+.status-dot{width:8px;height:8px;border-radius:50%;background:var(--verde);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.status-txt{font-size:11px;color:var(--txt3);}
+
+#map{flex:1;width:100%;}
+
+.panel{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:500px;background:var(--c1);border-top:1px solid var(--borde);border-radius:16px 16px 0 0;z-index:100;max-height:50vh;overflow-y:auto;}
+.panel-handle{width:36px;height:4px;background:var(--borde);border-radius:2px;margin:10px auto 8px;}
+.panel-title{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;padding:0 14px 8px;}
+.tec-item{display:flex;align-items:center;gap:10px;padding:10px 14px;border-top:1px solid var(--borde);cursor:pointer;}
+.tec-item:hover{background:var(--c2);}
+.tec-av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:"Syne",sans-serif;font-weight:800;font-size:12px;color:#fff;flex-shrink:0;}
+.tec-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;}
+.tec-estado{font-size:11px;margin-top:1px;}
+.tec-tiempo{font-size:11px;color:var(--txt3);margin-left:auto;text-align:right;}
+.badge-activo{color:var(--verde);}
+.badge-inactivo{color:var(--txt3);}
+.wa-btn{background:#25D366;border:none;color:#fff;font-family:"Syne",sans-serif;font-weight:700;font-size:11px;padding:6px 12px;border-radius:6px;cursor:pointer;flex-shrink:0;}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <button class="top-back" onclick="location.href='menu-coordinador.html'">← Volver</button>
+  <div class="top-title">📍 Técnicos en campo</div>
+  <div class="top-right">
+    <div class="status-dot" id="status-dot"></div>
+    <span class="status-txt" id="status-txt">Actualizando...</span>
+  </div>
+</div>
+
+<div id="map"></div>
+
+<div class="panel">
+  <div class="panel-handle"></div>
+  <div class="panel-title">Técnicos activos</div>
+  <div id="tec-lista"></div>
+</div>
+
+<script>
+var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+var db=null
+var map=null
+var markers={}
+var ubicaciones=[]
+
+var TELS={'Jorge Ramirez':'+56912345678','Felipe Mora':'+56923456789','Carlos Vega':'+56934567890','Reynaldo Aguas Bertel':'+56935287199','Reynaldo Aguas':'+56935287199','Kiven Henz':'+56964880196','Humberto Morales':'+56994946414','Giovanino Perugini':'+56933592097'}
+var COLORES=['#E8210A','#60A5FA','#22C55E','#F5C518','#FB923C','#A78BFA','#F472B6','#34D399']
+
+function getDB(){if(!db)db=supabase.createClient(SB_URL,SB_KEY);return db;}
+
+function initMap(){
+  map=new google.maps.Map(document.getElementById('map'),{
+    center:{lat:-33.4489,lng:-70.6693},
+    zoom:11,
+    mapId:'serviruta_map',
+    disableDefaultUI:false,
+    zoomControl:true,
+    streetViewControl:false,
+    mapTypeControl:false,
+    styles:[
+      {elementType:'geometry',stylers:[{color:'#1d2c4d'}]},
+      {elementType:'labels.text.fill',stylers:[{color:'#8ec3b9'}]},
+      {elementType:'labels.text.stroke',stylers:[{color:'#1a3646'}]},
+      {featureType:'road',elementType:'geometry',stylers:[{color:'#304a7d'}]},
+      {featureType:'road',elementType:'labels.text.fill',stylers:[{color:'#98a5be'}]},
+      {featureType:'water',elementType:'geometry',stylers:[{color:'#0e1626'}]},
+    ]
+  })
+  loadUbicaciones()
+  setInterval(loadUbicaciones,30000)
+}
+
+async function loadUbicaciones(){
+  try{
+    var r=await getDB().from('ubicaciones').select('*').order('updated_at',{ascending:false})
+    ubicaciones=r.data||[]
+    renderMapa()
+    renderLista()
+    document.getElementById('status-dot').style.background='#22C55E'
+    document.getElementById('status-txt').textContent='Actualizado '+new Date().toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'})
+  }catch(e){
+    document.getElementById('status-dot').style.background='#E8210A'
+    document.getElementById('status-txt').textContent='Error de conexion'
+  }
+}
+
+function renderMapa(){
+  // Limpiar marcadores viejos
+  Object.values(markers).forEach(function(m){m.setMap(null)})
+  markers={}
+
+  ubicaciones.forEach(function(u,i){
+    var color=COLORES[i%COLORES.length]
+    var ini=u.tecnico.split(' ').map(function(x){return x[0]}).join('').substring(0,2).toUpperCase()
+    var ahora=new Date()
+    var updated=new Date(u.updated_at)
+    var minutos=Math.round((ahora-updated)/60000)
+    var activo=minutos<10
+
+    // Crear marcador personalizado
+    var marker=new google.maps.Marker({
+      position:{lat:u.lat,lng:u.lng},
+      map:map,
+      title:u.tecnico,
+      icon:{
+        url:'data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(
+          '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="48" viewBox="0 0 40 48">'+
+          '<path d="M20 0C9 0 0 9 0 20c0 15 20 28 20 28S40 35 40 20C40 9 31 0 20 0z" fill="'+(activo?color:'#555')+'"/>'+
+          '<circle cx="20" cy="20" r="12" fill="rgba(0,0,0,0.3)"/>'+
+          '<text x="20" y="25" text-anchor="middle" font-family="Arial" font-weight="bold" font-size="11" fill="white">'+ini+'</text>'+
+          '</svg>'
+        ),
+        scaledSize:new google.maps.Size(36,44),
+        anchor:new google.maps.Point(18,44)
+      }
+    })
+
+    var infoWindow=new google.maps.InfoWindow({
+      content:'<div style="background:#161619;color:#F0EDE6;padding:10px;border-radius:8px;font-family:DM Sans,sans-serif;min-width:160px">'+
+        '<div style="font-family:Syne,sans-serif;font-weight:700;font-size:13px;margin-bottom:4px">'+u.tecnico+'</div>'+
+        '<div style="font-size:11px;color:'+(activo?'#22C55E':'#9996A0')+'">'+( activo?'Activo':'Ultima vez '+minutos+' min atrás')+'</div>'+
+        '</div>'
+    })
+
+    marker.addListener('click',function(){
+      Object.values(markers).forEach(function(m){if(m._iw)m._iw.close()})
+      infoWindow.open(map,marker)
+      marker._iw=infoWindow
+    })
+
+    markers[u.tecnico]=marker
+  })
+}
+
+function renderLista(){
+  var el=document.getElementById('tec-lista')
+  if(!ubicaciones.length){
+    el.innerHTML='<div style="padding:14px;font-size:13px;color:var(--txt3)">Sin técnicos con ubicación activa</div>'
+    return
+  }
+  var ahora=new Date()
+  el.innerHTML=ubicaciones.map(function(u,i){
+    var color=COLORES[i%COLORES.length]
+    var ini=u.tecnico.split(' ').map(function(x){return x[0]}).join('').substring(0,2).toUpperCase()
+    var updated=new Date(u.updated_at)
+    var minutos=Math.round((ahora-updated)/60000)
+    var activo=minutos<10
+    var tel=TELS[u.tecnico]||''
+    return '<div class="tec-item" onclick="centrarEn(\''+u.tecnico+'\')">'+
+      '<div class="tec-av" style="background:'+(activo?color:'#333')+'">'+ini+'</div>'+
+      '<div style="flex:1">'+
+        '<div class="tec-nombre">'+u.tecnico+'</div>'+
+        '<div class="tec-estado '+(activo?'badge-activo':'badge-inactivo')+'">'+( activo?'🟢 En campo':'⚫ Ultima posición')+'</div>'+
+      '</div>'+
+      '<div class="tec-tiempo">'+( activo?'hace '+minutos+'min':'hace '+minutos+' min')+'</div>'+
+      (tel?'<button class="wa-btn" onclick="event.stopPropagation();waChat(\''+tel+'\')" >WA</button>':'')+
+    '</div>'
+  }).join('')
+}
+
+function centrarEn(nombre){
+  var u=ubicaciones.find(function(x){return x.tecnico===nombre})
+  if(!u)return
+  map.setCenter({lat:u.lat,lng:u.lng})
+  map.setZoom(15)
+  if(markers[nombre]){
+    google.maps.event.trigger(markers[nombre],'click')
+  }
+}
+
+function waChat(tel){
+  window.open('https://wa.me/'+tel.replace(/\D/g,''),'_blank')
+}
+
+window.initMap=initMap
+</script>
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD-PLACEHOLDER&callback=initMap&language=es&region=CL"></script>
+
+</body>
+</html>

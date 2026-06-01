@@ -27,6 +27,7 @@ body{background:#080808;color:#F0EDE6;font-family:"DM Sans",sans-serif;min-heigh
 .arr{font-size:18px;color:#55525E;margin-left:auto;}
 .date{font-size:12px;color:#55525E;text-align:center;margin-top:24px;}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
 </head>
 <body>
 <script>
@@ -80,6 +81,18 @@ document.getElementById("tshort").textContent = nombre.split(" ")[0];
 var now = new Date();
 document.getElementById("tfecha").textContent = now.toLocaleDateString("es-CL",{weekday:"long",day:"numeric",month:"long"});
 document.getElementById("tdate").textContent = "Serviruta · Santiago RM · 24/7";
+
+// Al cargar el menú, compartir ubicación automáticamente
+async function compartirUbicacion(){
+  if(!navigator.geolocation)return
+  var nombre=sessionStorage.getItem('tecnico_nombre')
+  if(!nombre)return
+  navigator.geolocation.watchPosition(function(pos){
+    var sbG=supabase.createClient('https://bqlgfmqcefledqyodkii.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s')
+    sbG.from('ubicaciones').upsert({tecnico:nombre,lat:pos.coords.latitude,lng:pos.coords.longitude,estado:'activo',updated_at:new Date().toISOString()},{onConflict:'tecnico'}).then(function(){})
+  },{enableHighAccuracy:true,maximumAge:30000,timeout:10000})
+}
+compartirUbicacion()
 </script>
 </body>
 </html>

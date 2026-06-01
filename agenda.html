@@ -194,9 +194,10 @@ var HORAS=['07','08','09','10','11','12','13','14','15','16','17','18','19','20'
 var ESTADO_LABEL={agendado:'📅 Agendado',confirmado:'✅ Confirmado','en-ruta':'🚗 En ruta',completado:'🏁 Completado',cancelado:'❌ Cancelado'}
 
 var tecActivos=TECNICOS.slice(0,5).map(function(t){return t.nombre})
-var isCoord=!!sessionStorage.getItem('coord_auth')
-if(!isCoord&&!sessionStorage.getItem('tecnico_nombre')){location.href='login-tecnico.html'}
-var tecnicoNombre=sessionStorage.getItem('tecnico_nombre')||''
+var tecNombre=sessionStorage.getItem('tecnico_nombre')||''
+var isCoord=!!sessionStorage.getItem('coord_auth')&&!tecNombre
+if(!isCoord&&!tecNombre){location.href='login-tecnico.html'}
+var tecnicoNombre=tecNombre
 
 function goBack(){location.href=isCoord?'menu-coordinador.html':'tecnico-menu.html'}
 function getDB(){if(!db)db=supabase.createClient(SB_URL,SB_KEY);return db;}

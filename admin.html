@@ -164,7 +164,7 @@ function getFechaDesde(periodo){
 function filtrarPeriodo(data,periodo){
   var desde=getFechaDesde(periodo)
   return data.filter(function(s){
-    var fecha=(s.created_at||'').split('T')[0]
+    var fecha=(s.created_at).split('T')[0]
     return fecha>=desde
   })
 }
@@ -216,7 +216,7 @@ function renderResumen(){
         '<span style="color:'+color+';font-family:Syne,sans-serif;font-weight:800">$'+t.total.toLocaleString('es-CL')+'</span>'+
       '</div>'+
       '<div class="bar"><div class="bar-fill" style="width:'+pct+'%;background:'+color+'"></div></div>'+
-      '<div style="font-size:10px;color:var(--txt3);margin-top:2px">'+t.count+' servicio'+(t.count!==1?'s'||'')+'</div>'+
+      '<div style="font-size:10px;color:var(--txt3);margin-top:2px">'+t.count+' servicio'+(t.count!==1?'s')+'</div>'+
     '</div>'
   }).join('')
 }
@@ -308,7 +308,7 @@ function renderPagosDiarios(){
   // Agrupar por fecha
   var porFecha={}
   todos.forEach(function(s){
-    var fecha=(s.created_at||'').split('T')[0]
+    var fecha=(s.created_at).split('T')[0]
     if(!fecha)return
     if(!porFecha[fecha])porFecha[fecha]={fecha:fecha,total:0,cobrado:0,count:0,servicios:[]}
     porFecha[fecha].total+=(s.total||0)

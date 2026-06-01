@@ -2,360 +2,92 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Serviruta - Administracion</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Serviruta · Técnico</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root{--rojo:#E8210A;--rojo-g:rgba(232,33,10,0.08);--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--verde-g:rgba(34,197,94,0.1);--amarillo:#F5C518;--amarillo-g:rgba(245,197,24,0.08);--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:600px;margin:0 auto;}
-.top{background:var(--c1);border-bottom:1px solid var(--borde);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
-.top-title{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
-.top-back{background:none;border:1px solid var(--borde);color:var(--txt3);font-size:11px;padding:5px 12px;border-radius:6px;cursor:pointer;}
-.body{padding:14px 16px 80px;}
-.tabs{display:flex;border-bottom:1px solid var(--borde);margin-bottom:16px;overflow-x:auto;}
-.tab{flex-shrink:0;padding:10px 12px;text-align:center;font-size:11px;font-weight:600;color:var(--txt3);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;}
-.tab.active{color:var(--rojo);border-bottom-color:var(--rojo);}
-.page{display:none;}.page.active{display:block;}
-.periodo{display:flex;gap:6px;margin-bottom:16px;}
-.per-btn{padding:6px 14px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--borde);background:var(--c2);color:var(--txt3);}
-.per-btn.active{background:var(--rojo);border-color:var(--rojo);color:#fff;}
-.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
-.kpi{background:var(--c2);border:1px solid var(--borde);border-radius:12px;padding:14px;}
-.kpi.full{grid-column:1/-1;}
-.kpi-lbl{font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
-.kpi-val{font-family:"Syne",sans-serif;font-weight:800;font-size:28px;line-height:1;}
-.kpi-sub{font-size:11px;color:var(--txt3);margin-top:4px;}
-.sec{font-family:"Syne",sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);margin:16px 0 10px;display:flex;align-items:center;gap:8px;}
-.sec::after{content:"";flex:1;height:1px;background:var(--borde);}
-.tec-row{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin-bottom:10px;}
-.tec-top{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
-.tec-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:"Syne",sans-serif;font-weight:800;font-size:13px;color:#fff;flex-shrink:0;}
-.tec-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
-.tec-zona{font-size:11px;color:var(--txt3);margin-top:1px;}
-.tec-monto{font-family:"Syne",sans-serif;font-weight:800;font-size:18px;margin-left:auto;text-align:right;}
-.tec-monto-lbl{font-size:10px;color:var(--txt3);}
-.bar-wrap{margin-bottom:8px;}
-.bar-label{display:flex;justify-content:space-between;font-size:10px;color:var(--txt3);margin-bottom:3px;}
-.bar{height:6px;background:var(--c3);border-radius:3px;overflow:hidden;}
-.bar-fill{height:100%;border-radius:3px;transition:width 0.5s;}
-.tec-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
-.ts{background:var(--c3);border-radius:6px;padding:7px;text-align:center;}
-.ts-val{font-family:"Syne",sans-serif;font-weight:800;font-size:13px;}
-.ts-lbl{font-size:9px;color:var(--txt3);text-transform:uppercase;margin-top:1px;}
-.svc-row{background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:11px;margin-bottom:8px;display:flex;align-items:center;gap:10px;}
-.svc-fecha{font-size:11px;color:var(--txt3);min-width:55px;}
-.svc-info{flex:1;}
-.svc-cliente{font-size:13px;font-weight:600;}
-.svc-tec{font-size:11px;color:var(--txt3);}
-.svc-monto{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;}
-.bp{font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;display:inline-block;margin-top:2px;}
-.bp-p{background:var(--verde-g);color:var(--verde);border:1px solid rgba(34,197,94,0.3);}
-.bp-n{background:var(--rojo-g);color:var(--rojo);border:1px solid rgba(232,33,10,0.3);}
-.dia-card{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin-bottom:10px;}
-.dia-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
-.dia-fecha{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
-.dia-count{font-size:11px;color:var(--txt3);}
-.dia-monto{font-family:"Syne",sans-serif;font-weight:800;font-size:20px;color:var(--verde);}
-.dia-cobrado{font-size:10px;color:var(--txt3);}
-.dia-item{display:flex;align-items:center;gap:8px;padding:6px 0;border-top:1px solid var(--borde);}
-.loading{text-align:center;padding:40px;color:var(--txt3);}
+:root{--rojo:#E8210A;--rojo-d:#B01A08;--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--azul:#60A5FA;}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:460px;margin:0 auto;}
+.screen{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:36px 24px;position:relative;overflow:hidden;}
+.screen::before{content:"";position:absolute;top:-80px;right:-80px;width:320px;height:320px;background:radial-gradient(circle,rgba(96,165,250,0.15) 0%,transparent 65%);pointer-events:none;}
+.logo{display:flex;align-items:center;gap:12px;margin-bottom:44px;}
+.logo-mark{width:46px;height:46px;background:var(--azul);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;}
+.logo-brand{font-family:"Syne",sans-serif;font-weight:800;font-size:22px;}
+.logo-brand span{color:var(--azul);}
+.logo-sub{font-size:11px;color:var(--txt3);margin-top:1px;}
+.badge{display:inline-block;background:rgba(96,165,250,0.1);color:var(--azul);border:1px solid rgba(96,165,250,0.3);font-family:"Syne",sans-serif;font-weight:700;font-size:11px;padding:5px 12px;border-radius:20px;margin-bottom:16px;letter-spacing:0.5px;}
+h1{font-family:"Syne",sans-serif;font-weight:800;font-size:28px;line-height:1.1;letter-spacing:-0.8px;margin-bottom:8px;}
+h1 em{color:var(--azul);font-style:normal;}
+.desc{font-size:14px;color:var(--txt3);margin-bottom:32px;line-height:1.6;}
+.lbl{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--txt3);margin-bottom:7px;display:block;}
+.inp{width:100%;background:var(--c2);border:1px solid var(--borde);border-radius:8px;color:var(--txt);font-family:"DM Sans",sans-serif;font-size:16px;padding:14px 16px;outline:none;transition:border-color 0.2s;-webkit-appearance:none;margin-bottom:12px;}
+.inp:focus{border-color:var(--azul);}
+.inp::placeholder{color:var(--txt3);}
+.btn{width:100%;background:var(--azul);border:none;border-radius:8px;color:#000;font-family:"Syne",sans-serif;font-weight:800;font-size:16px;padding:15px;cursor:pointer;transition:background 0.2s;margin-top:4px;}
+.btn:active{transform:scale(0.98);}
+.back{display:block;text-align:center;margin-top:16px;font-size:13px;color:var(--txt3);cursor:pointer;background:none;border:none;font-family:"DM Sans",sans-serif;width:100%;}
+.back:hover{color:var(--txt);}
+.error{background:rgba(232,33,10,0.1);border:1px solid rgba(232,33,10,0.3);color:#f87171;font-size:13px;padding:10px 14px;border-radius:8px;margin-bottom:12px;display:none;}
 </style>
 </head>
 <body>
-<div class="top">
-  <button class="top-back" onclick="location.href='menu-coordinador.html'">← Volver</button>
-  <div class="top-title">📈 Administracion</div>
-  <button onclick="load()" style="background:none;border:none;color:var(--txt3);cursor:pointer;font-size:20px;">↻</button>
+<div class="screen">
+  <div class="logo">
+    <div class="logo-mark">🔧</div>
+    <div>
+      <div class="logo-brand">SERVI<span>RUTA</span></div>
+      <div class="logo-sub">Portal Técnico</div>
+    </div>
+  </div>
+  <div class="badge">🔧 TÉCNICO</div>
+  <h1>Acceso <em>técnico</em></h1>
+  <p class="desc">Ingresa tu nombre y PIN para acceder a tus herramientas.</p>
+
+  <label class="lbl">Tu nombre</label>
+  <select class="inp" id="nombre">
+    <option value="">Selecciona tu nombre...</option>
+    <option value="Jorge Ramirez">Jorge Ramírez</option>
+    <option value="Felipe Mora">Felipe Mora</option>
+    <option value="Carlos Vega">Carlos Vega</option>
+    <option value="Reynaldo Aguas">Reynaldo Aguas</option>
+    <option value="Reynaldo Aguas Bertel">Reynaldo Aguas Bertel</option>
+    <option value="Kiven Henz">Kiven Henz</option>
+    <option value="Humberto Morales">Humberto Morales</option>
+    <option value="Giovanino Perugini">Giovanino Perugini</option>
+  </select>
+
+  <label class="lbl">PIN de acceso</label>
+  <input class="inp" type="password" id="pin" placeholder="••••" maxlength="6" inputmode="numeric">
+
+  <div class="error" id="error">PIN incorrecto. Contacta al coordinador.</div>
+
+  <button class="btn" onclick="entrar()">Entrar →</button>
+  <button class="back" onclick="location.href='index.html'">← Volver al inicio</button>
 </div>
-<div class="body">
-  <div class="tabs">
-    <div class="tab active" id="tab0" onclick="goTab(0)">📊 Resumen</div>
-    <div class="tab" id="tab1" onclick="goTab(1)">👷 Tecnicos</div>
-    <div class="tab" id="tab2" onclick="goTab(2)">📋 Servicios</div>
-    <div class="tab" id="tab3" onclick="goTab(3)">💰 Pagos diarios</div>
-  </div>
-
-  <div class="page active" id="pg0">
-    <div class="periodo" id="per0">
-      <button class="per-btn active" onclick="cambiarPer(0,'semana',this)">Esta semana</button>
-      <button class="per-btn" onclick="cambiarPer(0,'mes',this)">Este mes</button>
-      <button class="per-btn" onclick="cambiarPer(0,'todo',this)">Todo</button>
-    </div>
-    <div class="kpi-grid">
-      <div class="kpi full" style="background:linear-gradient(135deg,var(--rojo),#B01A08)">
-        <div class="kpi-lbl" style="color:rgba(255,255,255,0.7)">Ingresos totales</div>
-        <div class="kpi-val" id="k-total" style="color:#fff;font-size:36px">$0</div>
-        <div class="kpi-sub" id="k-total-sub" style="color:rgba(255,255,255,0.7)">0 servicios</div>
-      </div>
-      <div class="kpi">
-        <div class="kpi-lbl">Cobrado</div>
-        <div class="kpi-val" id="k-cobrado" style="color:var(--verde)">$0</div>
-        <div class="kpi-sub" id="k-cobrado-sub">0 pagados</div>
-      </div>
-      <div class="kpi">
-        <div class="kpi-lbl">Por cobrar</div>
-        <div class="kpi-val" id="k-pendiente" style="color:var(--amarillo)">$0</div>
-        <div class="kpi-sub" id="k-pendiente-sub">0 pendientes</div>
-      </div>
-      <div class="kpi">
-        <div class="kpi-lbl">Promedio servicio</div>
-        <div class="kpi-val" id="k-prom" style="color:var(--azul)">$0</div>
-        <div class="kpi-sub">por servicio completado</div>
-      </div>
-      <div class="kpi">
-        <div class="kpi-lbl">Tecnicos activos</div>
-        <div class="kpi-val" id="k-tecs" style="color:var(--morado)">0</div>
-        <div class="kpi-sub">con servicios en el periodo</div>
-      </div>
-    </div>
-    <div class="sec">Distribucion por tecnico</div>
-    <div id="mini-rank"><div class="loading">Cargando...</div></div>
-  </div>
-
-  <div class="page" id="pg1">
-    <div class="periodo" id="per1">
-      <button class="per-btn active" onclick="cambiarPer(1,'semana',this)">Esta semana</button>
-      <button class="per-btn" onclick="cambiarPer(1,'mes',this)">Este mes</button>
-      <button class="per-btn" onclick="cambiarPer(1,'todo',this)">Todo</button>
-    </div>
-    <div id="tec-list"><div class="loading">Cargando...</div></div>
-  </div>
-
-  <div class="page" id="pg2">
-    <div class="periodo" id="per2">
-      <button class="per-btn active" onclick="cambiarPer(2,'semana',this)">Esta semana</button>
-      <button class="per-btn" onclick="cambiarPer(2,'mes',this)">Este mes</button>
-      <button class="per-btn" onclick="cambiarPer(2,'todo',this)">Todo</button>
-    </div>
-    <div id="svc-list"><div class="loading">Cargando...</div></div>
-  </div>
-
-  <div class="page" id="pg3">
-    <div id="pagos-list"><div class="loading">Cargando...</div></div>
-  </div>
-</div>
-
 <script>
-var SB='https://bqlgfmqcefledqyodkii.supabase.co'
-var SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
-var db=null,todos=[],periodos=[0:'semana',1:'semana',2:'semana']
-
-function getDB(){if(!db)db=supabase.createClient(SB,SK);return db;}
-
-function getFechaDesde(p){
-  var h=new Date()
-  if(p==='semana'){var d=new Date(h);d.setDate(h.getDate()-h.getDay());return d.toISOString().split('T')[0]}
-  if(p==='mes'){return h.getFullYear()+'-'+String(h.getMonth()+1).padStart(2,'0')+'-01'}
-  return '2020-01-01'
+const PINS = {
+  "Jorge Ramirez": "1234",
+  "Felipe Mora": "1234",
+  "Carlos Vega": "1234",
+  "Reynaldo Aguas": "1324",
+  "Reynaldo Aguas Bertel": "1324",
+  "Kiven Henz": "1313",
+  "Humberto Morales": "1456",
+  "Giovanino Perugini": "1515"
 }
-
-function filtrar(p){
-  var desde=getFechaDesde(p)
-  return todos.filter(function(s){return (s.created_at||'').split('T')[0]>=desde})
+function entrar() {
+  const nombre = document.getElementById("nombre").value
+  const pin = document.getElementById("pin").value.trim()
+  const err = document.getElementById("error")
+  if (!nombre) { err.textContent = "Selecciona tu nombre."; err.style.display = "block"; return }
+  if (!pin) { err.textContent = "Ingresa tu PIN."; err.style.display = "block"; return }
+  if (PINS[nombre] !== pin) { err.textContent = "PIN incorrecto."; err.style.display = "block"; return }
+  sessionStorage.removeItem("coord_auth")
+  sessionStorage.setItem("tecnico_nombre", nombre)
+  location.href = "tecnico-menu.html"
 }
-
-async function load(){
-  var r=await getDB().from('presupuestos').select('*').eq('estado_servicio','completado').order('created_at',{ascending:false})
-  todos=r.data||[]
-  renderAll()
-}
-
-function renderAll(){
-  renderResumen()
-  renderTecnicos()
-  renderServicios()
-  renderPagos()
-}
-
-var COLS=['#E8210A','#60A5FA','#22C55E','#F5C518','#FB923C','#A78BFA','#F472B6','#34D399']
-
-function renderResumen(){
-  var data=filtrar(periodos[0])
-  var total=data.reduce(function(s,x){return s+(x.total||0)},0)
-  var cobrado=data.filter(function(x){return x.pago_cliente==='pagado'}).reduce(function(s,x){return s+(x.total||0)},0)
-  var pend=total-cobrado
-  var cnt=data.length
-  var prom=cnt?Math.round(total/cnt):0
-  var tecs={}
-  data.forEach(function(s){tecs[s.tecnico]=1})
-  var ntecs=Object.keys(tecs).length
-
-  document.getElementById('k-total').textContent='$'+total.toLocaleString('es-CL')
-  document.getElementById('k-total-sub').textContent=cnt+' servicios completados'
-  document.getElementById('k-cobrado').textContent='$'+cobrado.toLocaleString('es-CL')
-  document.getElementById('k-cobrado-sub').textContent=data.filter(function(x){return x.pago_cliente==='pagado'}).length+' pagados'
-  document.getElementById('k-pendiente').textContent='$'+pend.toLocaleString('es-CL')
-  document.getElementById('k-pendiente-sub').textContent=data.filter(function(x){return x.pago_cliente!=='pagado'}).length+' pendientes'
-  document.getElementById('k-prom').textContent='$'+prom.toLocaleString('es-CL')
-  document.getElementById('k-tecs').textContent=ntecs
-
-  var porTec={}
-  data.forEach(function(s){
-    if(!porTec[s.tecnico])porTec[s.tecnico]={nombre:s.tecnico,total:0,cnt:0}
-    porTec[s.tecnico].total+=(s.total||0)
-    porTec[s.tecnico].cnt++
-  })
-  var sorted=Object.values(porTec).sort(function(a,b){return b.total-a.total})
-  var maxT=sorted.length?sorted[0].total:1
-  var el=document.getElementById('mini-rank')
-  if(!sorted.length){el.innerHTML='<div class="loading">Sin datos</div>';return}
-  el.innerHTML=sorted.map(function(t,i){
-    var pct=Math.round((t.total/maxT)*100)
-    var col=COLS[i%COLS.length]
-    var nom=t.nombre.split(' ').slice(0,2).join(' ')
-    var s=t.cnt!==1?'s':''
-    return '<div style="margin-bottom:12px">'+
-      '<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">'+
-        '<span style="font-weight:600">'+nom+'</span>'+
-        '<span style="color:'+col+';font-family:Syne,sans-serif;font-weight:800">$'+t.total.toLocaleString('es-CL')+'</span>'+
-      '</div>'+
-      '<div class="bar"><div class="bar-fill" style="width:'+pct+'%;background:'+col+'"></div></div>'+
-      '<div style="font-size:10px;color:var(--txt3);margin-top:2px">'+t.cnt+' servicio'+s+'</div>'+
-    '</div>'
-  }).join('')
-}
-
-function renderTecnicos(){
-  var data=filtrar(periodos[1])
-  var porTec={}
-  data.forEach(function(s){
-    if(!porTec[s.tecnico])porTec[s.tecnico]={nombre:s.tecnico,total:0,cobrado:0,cnt:0}
-    porTec[s.tecnico].total+=(s.total||0)
-    porTec[s.tecnico].cnt++
-    if(s.pago_cliente==='pagado')porTec[s.tecnico].cobrado+=(s.total||0)
-  })
-  var sorted=Object.values(porTec).sort(function(a,b){return b.total-a.total})
-  var maxT=sorted.length?sorted[0].total:1
-  var el=document.getElementById('tec-list')
-  if(!sorted.length){el.innerHTML='<div class="loading">Sin datos</div>';return}
-  el.innerHTML=sorted.map(function(t,i){
-    var col=COLS[i%COLS.length]
-    var ini=t.nombre.split(' ').map(function(x){return x[0]}).join('').substring(0,2).toUpperCase()
-    var pct=Math.round((t.total/maxT)*100)
-    var prom=t.cnt?Math.round(t.total/t.cnt):0
-    var s=t.cnt!==1?'s':''
-    return '<div class="tec-row">'+
-      '<div class="tec-top">'+
-        '<div class="tec-av" style="background:'+col+'">'+ini+'</div>'+
-        '<div style="flex:1"><div class="tec-nombre">'+t.nombre+'</div><div class="tec-zona">'+t.cnt+' servicio'+s+'</div></div>'+
-        '<div><div class="tec-monto" style="color:'+col+'">$'+t.total.toLocaleString('es-CL')+'</div><div class="tec-monto-lbl">total vendido</div></div>'+
-      '</div>'+
-      '<div class="bar-wrap">'+
-        '<div class="bar-label"><span>Participacion '+pct+'%</span></div>'+
-        '<div class="bar"><div class="bar-fill" style="width:'+pct+'%;background:'+col+'"></div></div>'+
-      '</div>'+
-      '<div class="tec-stats">'+
-        '<div class="ts"><div class="ts-val" style="color:var(--verde)">$'+t.cobrado.toLocaleString('es-CL')+'</div><div class="ts-lbl">Cobrado</div></div>'+
-        '<div class="ts"><div class="ts-val" style="color:var(--amarillo)">$'+(t.total-t.cobrado).toLocaleString('es-CL')+'</div><div class="ts-lbl">Por cobrar</div></div>'+
-        '<div class="ts"><div class="ts-val" style="color:var(--azul)">'+t.cnt+'</div><div class="ts-lbl">Servicios</div></div>'+
-        '<div class="ts"><div class="ts-val" style="color:var(--txt2)">$'+prom.toLocaleString('es-CL')+'</div><div class="ts-lbl">Promedio</div></div>'+
-      '</div>'+
-    '</div>'
-  }).join('')
-}
-
-function renderServicios(){
-  var data=filtrar(periodos[2])
-  var el=document.getElementById('svc-list')
-  if(!data.length){el.innerHTML='<div class="loading">Sin servicios</div>';return}
-  var totalP=data.reduce(function(s,x){return s+(x.total||0)},0)
-  el.innerHTML='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">'+
-    '<div style="background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:12px">'+
-      '<div style="font-size:10px;color:var(--txt3);text-transform:uppercase;margin-bottom:3px">Total periodo</div>'+
-      '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:22px;color:var(--verde)">$'+totalP.toLocaleString('es-CL')+'</div>'+
-    '</div>'+
-    '<div style="background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:12px;text-align:right">'+
-      '<div style="font-size:10px;color:var(--txt3);text-transform:uppercase;margin-bottom:3px">Servicios</div>'+
-      '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:22px;color:var(--azul)">'+data.length+'</div>'+
-    '</div>'+
-  '</div>'+
-  data.map(function(s){
-    var fecha=s.created_at?new Date(s.created_at).toLocaleDateString('es-CL',{day:'numeric',month:'short'}):''
-    var pagado=s.pago_cliente==='pagado'
-    return '<div class="svc-row">'+
-      '<div class="svc-fecha">'+fecha+'</div>'+
-      '<div class="svc-info">'+
-        '<div class="svc-cliente">'+s.cliente+'</div>'+
-        '<div class="svc-tec">'+s.tecnico+(s.vehiculo?' · '+s.vehiculo:'')+'</div>'+
-      '</div>'+
-      '<div style="text-align:right">'+
-        '<div class="svc-monto" style="color:'+(pagado?'var(--verde)':'var(--amarillo)')+'">$'+(s.total||0).toLocaleString('es-CL')+'</div>'+
-        '<span class="bp '+(pagado?'bp-p':'bp-n')+'">'+(pagado?'Pagado':'Pendiente')+'</span>'+
-      '</div>'+
-    '</div>'
-  }).join('')
-}
-
-function renderPagos(){
-  var el=document.getElementById('pagos-list')
-  if(!todos.length){el.innerHTML='<div class="loading">Sin datos</div>';return}
-  var porFecha={}
-  todos.forEach(function(s){
-    var f=(s.created_at||'').split('T')[0]
-    if(!f)return
-    if(!porFecha[f])porFecha[f]={fecha:f,total:0,cobrado:0,cnt:0,items:[]}
-    porFecha[f].total+=(s.total||0)
-    if(s.pago_cliente==='pagado')porFecha[f].cobrado+=(s.total||0)
-    porFecha[f].cnt++
-    porFecha[f].items.push(s)
-  })
-  var dias=Object.keys(porFecha).sort(function(a,b){return b.localeCompare(a)})
-  var totalG=todos.reduce(function(s,x){return s+(x.total||0)},0)
-  var cobG=todos.filter(function(x){return x.pago_cliente==='pagado'}).reduce(function(s,x){return s+(x.total||0)},0)
-
-  el.innerHTML='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">'+
-    '<div style="background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:12px">'+
-      '<div style="font-size:10px;color:var(--txt3);text-transform:uppercase;margin-bottom:3px">Total historico</div>'+
-      '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:20px;color:var(--verde)">$'+totalG.toLocaleString('es-CL')+'</div>'+
-    '</div>'+
-    '<div style="background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:12px;text-align:right">'+
-      '<div style="font-size:10px;color:var(--txt3);text-transform:uppercase;margin-bottom:3px">Por cobrar</div>'+
-      '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:20px;color:var(--amarillo)">$'+(totalG-cobG).toLocaleString('es-CL')+'</div>'+
-    '</div>'+
-  '</div>'+
-  dias.map(function(f){
-    var d=porFecha[f]
-    var fd=new Date(f+'T12:00:00').toLocaleDateString('es-CL',{weekday:'short',day:'numeric',month:'short'})
-    return '<div class="dia-card">'+
-      '<div class="dia-top">'+
-        '<div><div class="dia-fecha">'+fd+'</div><div class="dia-count">'+d.cnt+' servicio'+(d.cnt!==1?'s':'')+'</div></div>'+
-        '<div style="text-align:right"><div class="dia-monto">$'+d.total.toLocaleString('es-CL')+'</div><div class="dia-cobrado">$'+d.cobrado.toLocaleString('es-CL')+' cobrado</div></div>'+
-      '</div>'+
-      d.items.map(function(s){
-        var pagado=s.pago_cliente==='pagado'
-        return '<div class="dia-item">'+
-          '<div style="flex:1"><div style="font-size:12px;font-weight:600">'+s.cliente+'</div><div style="font-size:11px;color:var(--txt3)">'+s.tecnico+'</div></div>'+
-          '<div style="text-align:right">'+
-            '<div style="font-family:Syne,sans-serif;font-weight:700;font-size:14px;color:'+(pagado?'var(--verde)':'var(--amarillo)')+'">$'+(s.total||0).toLocaleString('es-CL')+'</div>'+
-            '<div style="font-size:9px;font-weight:700;color:'+(pagado?'var(--verde)':'var(--rojo)')+'">'+( pagado?'Pagado':'Pendiente')+'</div>'+
-          '</div>'+
-        '</div>'
-      }).join('')+
-    '</div>'
-  }).join('')
-}
-
-function goTab(n){
-  for(var i=0;i<4;i++){
-    document.getElementById('pg'+i).classList.toggle('active',i===n)
-    document.getElementById('tab'+i).classList.toggle('active',i===n)
-  }
-}
-
-function cambiarPer(tab,p,el){
-  periodos[tab]=p
-  var container=document.getElementById('per'+tab)
-  container.querySelectorAll('.per-btn').forEach(function(b){b.classList.remove('active')})
-  el.classList.add('active')
-  if(tab===0)renderResumen()
-  if(tab===1)renderTecnicos()
-  if(tab===2)renderServicios()
-}
-
-var periodos={0:'semana',1:'semana',2:'semana'}
-load()
+document.getElementById("pin").addEventListener("keydown", e => { if(e.key==="Enter") entrar() })
 </script>
 </body>
 </html>

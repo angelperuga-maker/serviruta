@@ -90,7 +90,7 @@ async function compartirUbicacion(){
   navigator.geolocation.watchPosition(function(pos){
     var sbG=supabase.createClient('https://bqlgfmqcefledqyodkii.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s')
     sbG.from('ubicaciones').upsert({tecnico:nombre,lat:pos.coords.latitude,lng:pos.coords.longitude,estado:'activo',updated_at:new Date().toISOString()},{onConflict:'tecnico'}).then(function(){})
-  },{enableHighAccuracy:true,maximumAge:30000,timeout:10000})
+  },function(err){console.warn('GPS error:',err.message)},{enableHighAccuracy:true,maximumAge:30000,timeout:10000})
 }
 compartirUbicacion()
 </script>

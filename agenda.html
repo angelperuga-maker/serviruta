@@ -96,7 +96,7 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
   <div class="top-title">📅 Agenda</div>
   <div class="top-right">
     <button onclick="load()" style="background:none;border:none;color:var(--txt3);cursor:pointer;font-size:18px;">&#8635;</button>
-    <button class="btn-nuevo" onclick="openModal()">＋ Agendar</button>
+    <button class="btn-nuevo" onclick="openModal()" id="btn-nuevo">＋ Agendar</button>
   </div>
 </div>
 
@@ -194,7 +194,8 @@ var HORAS=['07','08','09','10','11','12','13','14','15','16','17','18','19','20'
 var ESTADO_LABEL={agendado:'📅 Agendado',confirmado:'✅ Confirmado','en-ruta':'🚗 En ruta',completado:'🏁 Completado',cancelado:'❌ Cancelado'}
 
 var tecActivos=TECNICOS.slice(0,5).map(function(t){return t.nombre})
-var isCoord=sessionStorage.getItem('coord_auth')||!sessionStorage.getItem('tecnico_nombre')
+var isCoord=!!sessionStorage.getItem('coord_auth')
+if(!isCoord&&!sessionStorage.getItem('tecnico_nombre')){location.href='login-tecnico.html'}
 var tecnicoNombre=sessionStorage.getItem('tecnico_nombre')||''
 
 function goBack(){location.href=isCoord?'menu-coordinador.html':'tecnico-menu.html'}
@@ -216,6 +217,10 @@ function cambiarDia(d){fechaActual.setDate(fechaActual.getDate()+d);updateFechaD
 function irHoy(){fechaActual=new Date();updateFechaDisplay();load()}
 
 function renderFiltroTecnicos(){
+  if(!isCoord){
+    document.getElementById('tec-filter').style.display='none'
+    return
+  }
   var el=document.getElementById('tec-filter')
   el.innerHTML=TECNICOS.map(function(t){
     var activo=tecActivos.indexOf(t.nombre)>=0
@@ -255,7 +260,7 @@ async function load(){
 
 function renderTimeline(){
   // Header
-  var tecsVisibles=TECNICOS.filter(function(t){return !isCoord?t.nombre===tecnicoNombre:tecActivos.indexOf(t.nombre)>=0})
+  var tecsVisibles=isCoord?TECNICOS.filter(function(t){return tecActivos.indexOf(t.nombre)>=0}):TECNICOS.filter(function(t){return t.nombre===tecnicoNombre})
   var headerEl=document.getElementById('header-row')
   headerEl.innerHTML='<div class="header-hora" style="width:48px;flex-shrink:0"></div>'+
     tecsVisibles.map(function(t){
@@ -383,6 +388,10 @@ function toast(msg,type){var t=document.getElementById('toast');t.textContent=ms
 updateFechaDisplay()
 document.getElementById('m-fecha').value=getFechaStr(fechaActual)
 renderFiltroTecnicos()
+if(!isCoord){
+  var btnN=document.getElementById('btn-nuevo')
+  if(btnN)btnN.style.display='none'
+}
 load()
 </script>
 </body>

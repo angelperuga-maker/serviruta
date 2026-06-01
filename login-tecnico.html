@@ -51,10 +51,6 @@ h1 em{color:var(--azul);font-style:normal;}
     <option value="Felipe Mora">Felipe Mora</option>
     <option value="Carlos Vega">Carlos Vega</option>
     <option value="Reynaldo Aguas">Reynaldo Aguas</option>
-    <option value="Kiven Henz">Kiven Henz</option>
-<option value="Humberto Morales">Humberto Morales</option>
-<option value="Giovanino Perugini">Giovanino Perugini</option>
-<option value="Reynaldo Aguas">Reynaldo Aguas</option>
   </select>
 
   <label class="lbl">PIN de acceso</label>
@@ -71,10 +67,6 @@ const PINS = {
   "Felipe Mora": "1234",
   "Carlos Vega": "1234",
   "Reynaldo Aguas": "1324"
-  ,"Kiven Henz": "1313"
-,"Humberto Morales": "1456"
-,"Giovanino Perugini": "1515"
-,"Reynaldo Aguas": "1818"
 }
 function entrar() {
   const nombre = document.getElementById("nombre").value
@@ -83,6 +75,7 @@ function entrar() {
   if (!nombre) { err.textContent = "Selecciona tu nombre."; err.style.display = "block"; return }
   if (!pin) { err.textContent = "Ingresa tu PIN."; err.style.display = "block"; return }
   if (PINS[nombre] !== pin) { err.textContent = "PIN incorrecto."; err.style.display = "block"; return }
+  sessionStorage.removeItem("coord_auth")
   sessionStorage.setItem("tecnico_nombre", nombre)
   location.href = "tecnico-menu.html"
 }

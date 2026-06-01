@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Serviruta · Administración</title>
+<title>Serviruta - Administracion</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -14,246 +14,242 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
 .top-title{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
 .top-back{background:none;border:1px solid var(--borde);color:var(--txt3);font-size:11px;padding:5px 12px;border-radius:6px;cursor:pointer;}
 .body{padding:14px 16px 80px;}
-.tabs{display:flex;border-bottom:1px solid var(--borde);margin-bottom:16px;}
-.tab{flex:1;padding:10px 6px;text-align:center;font-size:11px;font-weight:600;color:var(--txt3);cursor:pointer;border-bottom:2px solid transparent;}
+.tabs{display:flex;border-bottom:1px solid var(--borde);margin-bottom:16px;overflow-x:auto;}
+.tab{flex-shrink:0;padding:10px 12px;text-align:center;font-size:11px;font-weight:600;color:var(--txt3);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;}
 .tab.active{color:var(--rojo);border-bottom-color:var(--rojo);}
 .page{display:none;}.page.active{display:block;}
-
-/* PERIODO SELECTOR */
-.periodo{display:flex;gap:6px;margin-bottom:16px;overflow-x:auto;}
-.per-btn{flex-shrink:0;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--borde);background:var(--c2);color:var(--txt3);font-family:"DM Sans",sans-serif;}
+.periodo{display:flex;gap:6px;margin-bottom:16px;}
+.per-btn{padding:6px 14px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--borde);background:var(--c2);color:var(--txt3);}
 .per-btn.active{background:var(--rojo);border-color:var(--rojo);color:#fff;}
-
-/* KPI CARDS */
 .kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
 .kpi{background:var(--c2);border:1px solid var(--borde);border-radius:12px;padding:14px;}
 .kpi.full{grid-column:1/-1;}
 .kpi-lbl{font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
 .kpi-val{font-family:"Syne",sans-serif;font-weight:800;font-size:28px;line-height:1;}
 .kpi-sub{font-size:11px;color:var(--txt3);margin-top:4px;}
-.kpi-trend{font-size:11px;font-weight:700;margin-top:4px;}
-
-/* BARRA TÉCNICO */
+.sec{font-family:"Syne",sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);margin:16px 0 10px;display:flex;align-items:center;gap:8px;}
+.sec::after{content:"";flex:1;height:1px;background:var(--borde);}
 .tec-row{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin-bottom:10px;}
 .tec-top{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
 .tec-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:"Syne",sans-serif;font-weight:800;font-size:13px;color:#fff;flex-shrink:0;}
 .tec-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
 .tec-zona{font-size:11px;color:var(--txt3);margin-top:1px;}
 .tec-monto{font-family:"Syne",sans-serif;font-weight:800;font-size:18px;margin-left:auto;text-align:right;}
-.tec-monto-lbl{font-size:10px;color:var(--txt3);text-align:right;}
+.tec-monto-lbl{font-size:10px;color:var(--txt3);}
 .bar-wrap{margin-bottom:8px;}
 .bar-label{display:flex;justify-content:space-between;font-size:10px;color:var(--txt3);margin-bottom:3px;}
 .bar{height:6px;background:var(--c3);border-radius:3px;overflow:hidden;}
-.bar-fill{height:100%;border-radius:3px;transition:width 0.6s ease;}
+.bar-fill{height:100%;border-radius:3px;transition:width 0.5s;}
 .tec-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
 .ts{background:var(--c3);border-radius:6px;padding:7px;text-align:center;}
-.ts-val{font-family:"Syne",sans-serif;font-weight:800;font-size:14px;}
+.ts-val{font-family:"Syne",sans-serif;font-weight:800;font-size:13px;}
 .ts-lbl{font-size:9px;color:var(--txt3);text-transform:uppercase;margin-top:1px;}
-
-/* TABLA SERVICIOS */
-.svc-row{background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:10px;}
-.svc-fecha{font-size:11px;color:var(--txt3);min-width:60px;}
+.svc-row{background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:11px;margin-bottom:8px;display:flex;align-items:center;gap:10px;}
+.svc-fecha{font-size:11px;color:var(--txt3);min-width:55px;}
 .svc-info{flex:1;}
 .svc-cliente{font-size:13px;font-weight:600;}
 .svc-tec{font-size:11px;color:var(--txt3);}
-.svc-monto{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;color:var(--verde);}
-.badge-pago{font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;margin-top:3px;display:inline-block;}
-.bp-pagado{background:var(--verde-g);color:var(--verde);border:1px solid rgba(34,197,94,0.3);}
-.bp-pendiente{background:var(--rojo-g);color:var(--rojo);border:1px solid rgba(232,33,10,0.3);}
-
-.sec{font-family:"Syne",sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);margin:16px 0 10px;display:flex;align-items:center;gap:8px;}
-.sec::after{content:"";flex:1;height:1px;background:var(--borde);}
+.svc-monto{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;}
+.bp{font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;display:inline-block;margin-top:2px;}
+.bp-p{background:var(--verde-g);color:var(--verde);border:1px solid rgba(34,197,94,0.3);}
+.bp-n{background:var(--rojo-g);color:var(--rojo);border:1px solid rgba(232,33,10,0.3);}
+.dia-card{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin-bottom:10px;}
+.dia-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.dia-fecha{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
+.dia-count{font-size:11px;color:var(--txt3);}
+.dia-monto{font-family:"Syne",sans-serif;font-weight:800;font-size:20px;color:var(--verde);}
+.dia-cobrado{font-size:10px;color:var(--txt3);}
+.dia-item{display:flex;align-items:center;gap:8px;padding:6px 0;border-top:1px solid var(--borde);}
 .loading{text-align:center;padding:40px;color:var(--txt3);}
 </style>
 </head>
 <body>
 <div class="top">
   <button class="top-back" onclick="location.href='menu-coordinador.html'">← Volver</button>
-  <div class="top-title">📈 Administración</div>
+  <div class="top-title">📈 Administracion</div>
   <button onclick="load()" style="background:none;border:none;color:var(--txt3);cursor:pointer;font-size:20px;">↻</button>
 </div>
-
 <div class="body">
   <div class="tabs">
-    <div class="tab active" onclick="goTab(0,this)">📊 Resumen</div>
-    <div class="tab" onclick="goTab(1,this)">👷 Por técnico</div>
-    <div class="tab" onclick="goTab(2,this)">📋 Servicios</div>
-    <div class="tab" onclick="goTab(3,this)">💰 Pagos diarios</div>
+    <div class="tab active" id="tab0" onclick="goTab(0)">📊 Resumen</div>
+    <div class="tab" id="tab1" onclick="goTab(1)">👷 Tecnicos</div>
+    <div class="tab" id="tab2" onclick="goTab(2)">📋 Servicios</div>
+    <div class="tab" id="tab3" onclick="goTab(3)">💰 Pagos diarios</div>
   </div>
 
-  <!-- RESUMEN -->
-  <div class="page active" id="pg-0">
-    <div class="periodo">
-      <button class="per-btn active" onclick="setPeriodo('semana',this)">Esta semana</button>
-      <button class="per-btn" onclick="setPeriodo('mes',this)">Este mes</button>
-      <button class="per-btn" onclick="setPeriodo('todo',this)">Todo</button>
+  <div class="page active" id="pg0">
+    <div class="periodo" id="per0">
+      <button class="per-btn active" onclick="cambiarPer(0,'semana',this)">Esta semana</button>
+      <button class="per-btn" onclick="cambiarPer(0,'mes',this)">Este mes</button>
+      <button class="per-btn" onclick="cambiarPer(0,'todo',this)">Todo</button>
     </div>
     <div class="kpi-grid">
       <div class="kpi full" style="background:linear-gradient(135deg,var(--rojo),#B01A08)">
         <div class="kpi-lbl" style="color:rgba(255,255,255,0.7)">Ingresos totales</div>
-        <div class="kpi-val" id="kpi-total" style="color:#fff;font-size:36px">$0</div>
-        <div class="kpi-sub" id="kpi-total-sub" style="color:rgba(255,255,255,0.7)">—</div>
+        <div class="kpi-val" id="k-total" style="color:#fff;font-size:36px">$0</div>
+        <div class="kpi-sub" id="k-total-sub" style="color:rgba(255,255,255,0.7)">0 servicios</div>
       </div>
       <div class="kpi">
         <div class="kpi-lbl">Cobrado</div>
-        <div class="kpi-val" id="kpi-cobrado" style="color:var(--verde)">$0</div>
-        <div class="kpi-sub" id="kpi-cobrado-sub">— servicios pagados</div>
+        <div class="kpi-val" id="k-cobrado" style="color:var(--verde)">$0</div>
+        <div class="kpi-sub" id="k-cobrado-sub">0 pagados</div>
       </div>
       <div class="kpi">
         <div class="kpi-lbl">Por cobrar</div>
-        <div class="kpi-val" id="kpi-pendiente" style="color:var(--amarillo)">$0</div>
-        <div class="kpi-sub" id="kpi-pendiente-sub">— servicios pendientes</div>
+        <div class="kpi-val" id="k-pendiente" style="color:var(--amarillo)">$0</div>
+        <div class="kpi-sub" id="k-pendiente-sub">0 pendientes</div>
       </div>
       <div class="kpi">
-        <div class="kpi-lbl">Servicios completados</div>
-        <div class="kpi-val" id="kpi-svc" style="color:var(--azul)">0</div>
-        <div class="kpi-sub" id="kpi-svc-sub">— promedio por servicio</div>
+        <div class="kpi-lbl">Promedio servicio</div>
+        <div class="kpi-val" id="k-prom" style="color:var(--azul)">$0</div>
+        <div class="kpi-sub">por servicio completado</div>
       </div>
       <div class="kpi">
-        <div class="kpi-lbl">Técnicos activos</div>
-        <div class="kpi-val" id="kpi-tecs" style="color:var(--morado)">0</div>
-        <div class="kpi-sub">con servicios en el período</div>
+        <div class="kpi-lbl">Tecnicos activos</div>
+        <div class="kpi-val" id="k-tecs" style="color:var(--morado)">0</div>
+        <div class="kpi-sub">con servicios en el periodo</div>
       </div>
     </div>
-    <div class="sec">Distribución por técnico</div>
-    <div id="mini-ranking"><div class="loading">Cargando...</div></div>
+    <div class="sec">Distribucion por tecnico</div>
+    <div id="mini-rank"><div class="loading">Cargando...</div></div>
   </div>
 
-  <!-- POR TÉCNICO -->
-  <div class="page" id="pg-1">
-    <div class="periodo">
-      <button class="per-btn active" onclick="setPeriodo2('semana',this)">Esta semana</button>
-      <button class="per-btn" onclick="setPeriodo2('mes',this)">Este mes</button>
-      <button class="per-btn" onclick="setPeriodo2('todo',this)">Todo</button>
+  <div class="page" id="pg1">
+    <div class="periodo" id="per1">
+      <button class="per-btn active" onclick="cambiarPer(1,'semana',this)">Esta semana</button>
+      <button class="per-btn" onclick="cambiarPer(1,'mes',this)">Este mes</button>
+      <button class="per-btn" onclick="cambiarPer(1,'todo',this)">Todo</button>
     </div>
-    <div id="tec-ranking"><div class="loading">Cargando...</div></div>
+    <div id="tec-list"><div class="loading">Cargando...</div></div>
   </div>
 
-  <!-- SERVICIOS -->
-  <div class="page" id="pg-2">
-    <div class="periodo">
-      <button class="per-btn active" onclick="setPeriodo3('semana',this)">Esta semana</button>
-      <button class="per-btn" onclick="setPeriodo3('mes',this)">Este mes</button>
-      <button class="per-btn" onclick="setPeriodo3('todo',this)">Todo</button>
+  <div class="page" id="pg2">
+    <div class="periodo" id="per2">
+      <button class="per-btn active" onclick="cambiarPer(2,'semana',this)">Esta semana</button>
+      <button class="per-btn" onclick="cambiarPer(2,'mes',this)">Este mes</button>
+      <button class="per-btn" onclick="cambiarPer(2,'todo',this)">Todo</button>
     </div>
-    <div id="svc-lista"><div class="loading">Cargando...</div></div>
+    <div id="svc-list"><div class="loading">Cargando...</div></div>
+  </div>
+
+  <div class="page" id="pg3">
+    <div id="pagos-list"><div class="loading">Cargando...</div></div>
   </div>
 </div>
 
-<!-- PAGOS DIARIOS -->
-  <div class="page" id="pg-3">
-    <div id="pagos-diarios-body"><div class="loading">Cargando...</div></div>
-  </div>
-
 <script>
-var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
-var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
-var db=null,todos=[],periodo1='semana',periodo2='semana',periodo3='semana'
+var SB='https://bqlgfmqcefledqyodkii.supabase.co'
+var SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+var db=null,todos=[],periodos=[0:'semana',1:'semana',2:'semana']
 
-var COLORES=['#E8210A','#60A5FA','#22C55E','#F5C518','#FB923C','#A78BFA','#F472B6','#34D399']
+function getDB(){if(!db)db=supabase.createClient(SB,SK);return db;}
 
-function getDB(){if(!db)db=supabase.createClient(SB_URL,SB_KEY);return db;}
-
-function getFechaDesde(periodo){
-  var hoy=new Date()
-  if(periodo==='semana'){var d=new Date(hoy);d.setDate(hoy.getDate()-hoy.getDay());return d.toISOString().split('T')[0]}
-  if(periodo==='mes'){return hoy.getFullYear()+'-'+String(hoy.getMonth()+1).padStart(2,'0')+'-01'}
+function getFechaDesde(p){
+  var h=new Date()
+  if(p==='semana'){var d=new Date(h);d.setDate(h.getDate()-h.getDay());return d.toISOString().split('T')[0]}
+  if(p==='mes'){return h.getFullYear()+'-'+String(h.getMonth()+1).padStart(2,'0')+'-01'}
   return '2020-01-01'
 }
 
-function filtrarPeriodo(data,periodo){
-  var desde=getFechaDesde(periodo)
-  return data.filter(function(s){
-    var fecha=(s.created_at).split('T')[0]
-    return fecha>=desde
-  })
+function filtrar(p){
+  var desde=getFechaDesde(p)
+  return todos.filter(function(s){return (s.created_at||'').split('T')[0]>=desde})
 }
 
 async function load(){
   var r=await getDB().from('presupuestos').select('*').eq('estado_servicio','completado').order('created_at',{ascending:false})
   todos=r.data||[]
+  renderAll()
+}
+
+function renderAll(){
   renderResumen()
   renderTecnicos()
   renderServicios()
+  renderPagos()
 }
 
+var COLS=['#E8210A','#60A5FA','#22C55E','#F5C518','#FB923C','#A78BFA','#F472B6','#34D399']
+
 function renderResumen(){
-  var data=filtrarPeriodo(todos,periodo1)
+  var data=filtrar(periodos[0])
   var total=data.reduce(function(s,x){return s+(x.total||0)},0)
   var cobrado=data.filter(function(x){return x.pago_cliente==='pagado'}).reduce(function(s,x){return s+(x.total||0)},0)
-  var pendiente=total-cobrado
-  var count=data.length
-  var prom=count?Math.round(total/count):0
-  var tecs=new Set(data.map(function(x){return x.tecnico})).size
+  var pend=total-cobrado
+  var cnt=data.length
+  var prom=cnt?Math.round(total/cnt):0
+  var tecs={}
+  data.forEach(function(s){tecs[s.tecnico]=1})
+  var ntecs=Object.keys(tecs).length
 
-  document.getElementById('kpi-total').textContent='$'+total.toLocaleString('es-CL')
-  document.getElementById('kpi-total-sub').textContent=count+' servicio'+(count!==1?'s':'')+' completados'
-  document.getElementById('kpi-cobrado').textContent='$'+cobrado.toLocaleString('es-CL')
-  document.getElementById('kpi-cobrado-sub').textContent=data.filter(function(x){return x.pago_cliente==='pagado'}).length+' servicios pagados'
-  document.getElementById('kpi-pendiente').textContent='$'+pendiente.toLocaleString('es-CL')
-  document.getElementById('kpi-pendiente-sub').textContent=data.filter(function(x){return x.pago_cliente!=='pagado'}).length+' servicios pendientes'
-  document.getElementById('kpi-svc').textContent=count
-  document.getElementById('kpi-svc-sub').textContent=prom?'Prom. $'+prom.toLocaleString('es-CL'):'Sin datos'
-  document.getElementById('kpi-tecs').textContent=tecs
+  document.getElementById('k-total').textContent='$'+total.toLocaleString('es-CL')
+  document.getElementById('k-total-sub').textContent=cnt+' servicios completados'
+  document.getElementById('k-cobrado').textContent='$'+cobrado.toLocaleString('es-CL')
+  document.getElementById('k-cobrado-sub').textContent=data.filter(function(x){return x.pago_cliente==='pagado'}).length+' pagados'
+  document.getElementById('k-pendiente').textContent='$'+pend.toLocaleString('es-CL')
+  document.getElementById('k-pendiente-sub').textContent=data.filter(function(x){return x.pago_cliente!=='pagado'}).length+' pendientes'
+  document.getElementById('k-prom').textContent='$'+prom.toLocaleString('es-CL')
+  document.getElementById('k-tecs').textContent=ntecs
 
-  // Mini ranking
   var porTec={}
   data.forEach(function(s){
-    if(!porTec[s.tecnico])porTec[s.tecnico]={nombre:s.tecnico,total:0,count:0}
+    if(!porTec[s.tecnico])porTec[s.tecnico]={nombre:s.tecnico,total:0,cnt:0}
     porTec[s.tecnico].total+=(s.total||0)
-    porTec[s.tecnico].count++
+    porTec[s.tecnico].cnt++
   })
   var sorted=Object.values(porTec).sort(function(a,b){return b.total-a.total})
-  var maxTotal=sorted.length?sorted[0].total:1
-  var el=document.getElementById('mini-ranking')
-  if(!sorted.length){el.innerHTML='<div class="loading">Sin datos en este período</div>';return}
+  var maxT=sorted.length?sorted[0].total:1
+  var el=document.getElementById('mini-rank')
+  if(!sorted.length){el.innerHTML='<div class="loading">Sin datos</div>';return}
   el.innerHTML=sorted.map(function(t,i){
-    var pct=Math.round((t.total/maxTotal)*100)
-    var color=COLORES[i%COLORES.length]
-    return '<div style="margin-bottom:10px">'+
+    var pct=Math.round((t.total/maxT)*100)
+    var col=COLS[i%COLS.length]
+    var nom=t.nombre.split(' ').slice(0,2).join(' ')
+    var s=t.cnt!==1?'s':''
+    return '<div style="margin-bottom:12px">'+
       '<div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">'+
-        '<span style="font-weight:600">'+t.nombre.split(' ').slice(0,2).join(' ')+'</span>'+
-        '<span style="color:'+color+';font-family:Syne,sans-serif;font-weight:800">$'+t.total.toLocaleString('es-CL')+'</span>'+
+        '<span style="font-weight:600">'+nom+'</span>'+
+        '<span style="color:'+col+';font-family:Syne,sans-serif;font-weight:800">$'+t.total.toLocaleString('es-CL')+'</span>'+
       '</div>'+
-      '<div class="bar"><div class="bar-fill" style="width:'+pct+'%;background:'+color+'"></div></div>'+
-      '<div style="font-size:10px;color:var(--txt3);margin-top:2px">'+t.count+' servicio'+(t.count!==1?'s':'')+'</div>'+
+      '<div class="bar"><div class="bar-fill" style="width:'+pct+'%;background:'+col+'"></div></div>'+
+      '<div style="font-size:10px;color:var(--txt3);margin-top:2px">'+t.cnt+' servicio'+s+'</div>'+
     '</div>'
   }).join('')
 }
 
 function renderTecnicos(){
-  var data=filtrarPeriodo(todos,periodo2)
+  var data=filtrar(periodos[1])
   var porTec={}
   data.forEach(function(s){
-    if(!porTec[s.tecnico])porTec[s.tecnico]={nombre:s.tecnico,total:0,cobrado:0,count:0,pend:0}
+    if(!porTec[s.tecnico])porTec[s.tecnico]={nombre:s.tecnico,total:0,cobrado:0,cnt:0}
     porTec[s.tecnico].total+=(s.total||0)
-    porTec[s.tecnico].count++
+    porTec[s.tecnico].cnt++
     if(s.pago_cliente==='pagado')porTec[s.tecnico].cobrado+=(s.total||0)
-    else porTec[s.tecnico].pend++
   })
   var sorted=Object.values(porTec).sort(function(a,b){return b.total-a.total})
-  var maxTotal=sorted.length?sorted[0].total:1
-  var el=document.getElementById('tec-ranking')
-  if(!sorted.length){el.innerHTML='<div class="loading">Sin datos en este período</div>';return}
+  var maxT=sorted.length?sorted[0].total:1
+  var el=document.getElementById('tec-list')
+  if(!sorted.length){el.innerHTML='<div class="loading">Sin datos</div>';return}
   el.innerHTML=sorted.map(function(t,i){
-    var color=COLORES[i%COLORES.length]
+    var col=COLS[i%COLS.length]
     var ini=t.nombre.split(' ').map(function(x){return x[0]}).join('').substring(0,2).toUpperCase()
-    var pct=Math.round((t.total/maxTotal)*100)
-    var prom=t.count?Math.round(t.total/t.count):0
+    var pct=Math.round((t.total/maxT)*100)
+    var prom=t.cnt?Math.round(t.total/t.cnt):0
+    var s=t.cnt!==1?'s':''
     return '<div class="tec-row">'+
       '<div class="tec-top">'+
-        '<div class="tec-av" style="background:'+color+'">'+ini+'</div>'+
-        '<div style="flex:1"><div class="tec-nombre">'+t.nombre+'</div><div class="tec-zona">'+t.count+' servicio'+(t.count!==1?'s':'')+'</div></div>'+
-        '<div><div class="tec-monto" style="color:'+color+'">$'+t.total.toLocaleString('es-CL')+'</div><div class="tec-monto-lbl">total vendido</div></div>'+
+        '<div class="tec-av" style="background:'+col+'">'+ini+'</div>'+
+        '<div style="flex:1"><div class="tec-nombre">'+t.nombre+'</div><div class="tec-zona">'+t.cnt+' servicio'+s+'</div></div>'+
+        '<div><div class="tec-monto" style="color:'+col+'">$'+t.total.toLocaleString('es-CL')+'</div><div class="tec-monto-lbl">total vendido</div></div>'+
       '</div>'+
       '<div class="bar-wrap">'+
-        '<div class="bar-label"><span>Participación</span><span>'+pct+'%</span></div>'+
-        '<div class="bar"><div class="bar-fill" style="width:'+pct+'%;background:'+color+'"></div></div>'+
+        '<div class="bar-label"><span>Participacion '+pct+'%</span></div>'+
+        '<div class="bar"><div class="bar-fill" style="width:'+pct+'%;background:'+col+'"></div></div>'+
       '</div>'+
       '<div class="tec-stats">'+
         '<div class="ts"><div class="ts-val" style="color:var(--verde)">$'+t.cobrado.toLocaleString('es-CL')+'</div><div class="ts-lbl">Cobrado</div></div>'+
         '<div class="ts"><div class="ts-val" style="color:var(--amarillo)">$'+(t.total-t.cobrado).toLocaleString('es-CL')+'</div><div class="ts-lbl">Por cobrar</div></div>'+
-        '<div class="ts"><div class="ts-val" style="color:var(--azul)">'+t.count+'</div><div class="ts-lbl">Servicios</div></div>'+
+        '<div class="ts"><div class="ts-val" style="color:var(--azul)">'+t.cnt+'</div><div class="ts-lbl">Servicios</div></div>'+
         '<div class="ts"><div class="ts-val" style="color:var(--txt2)">$'+prom.toLocaleString('es-CL')+'</div><div class="ts-lbl">Promedio</div></div>'+
       '</div>'+
     '</div>'
@@ -261,108 +257,105 @@ function renderTecnicos(){
 }
 
 function renderServicios(){
-  var data=filtrarPeriodo(todos,periodo3)
-  var el=document.getElementById('svc-lista')
-  if(!data.length){el.innerHTML='<div class="loading">Sin servicios en este período</div>';return}
-  var totalPer=data.reduce(function(s,x){return s+(x.total||0)},0)
-  el.innerHTML='<div style="background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:12px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center">'+
-    '<div><div style="font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px">Total período</div>'+
-    '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:24px;color:var(--verde)">$'+totalPer.toLocaleString('es-CL')+'</div></div>'+
-    '<div style="text-align:right"><div style="font-family:Syne,sans-serif;font-weight:800;font-size:20px;color:var(--azul)">'+data.length+'</div>'+
-    '<div style="font-size:10px;color:var(--txt3)">servicios</div></div></div>'+
+  var data=filtrar(periodos[2])
+  var el=document.getElementById('svc-list')
+  if(!data.length){el.innerHTML='<div class="loading">Sin servicios</div>';return}
+  var totalP=data.reduce(function(s,x){return s+(x.total||0)},0)
+  el.innerHTML='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">'+
+    '<div style="background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:12px">'+
+      '<div style="font-size:10px;color:var(--txt3);text-transform:uppercase;margin-bottom:3px">Total periodo</div>'+
+      '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:22px;color:var(--verde)">$'+totalP.toLocaleString('es-CL')+'</div>'+
+    '</div>'+
+    '<div style="background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:12px;text-align:right">'+
+      '<div style="font-size:10px;color:var(--txt3);text-transform:uppercase;margin-bottom:3px">Servicios</div>'+
+      '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:22px;color:var(--azul)">'+data.length+'</div>'+
+    '</div>'+
+  '</div>'+
   data.map(function(s){
-    var fecha=s.created_at?(new Date(s.created_at)).toLocaleDateString('es-CL',{day:'numeric',month:'short'}):''
+    var fecha=s.created_at?new Date(s.created_at).toLocaleDateString('es-CL',{day:'numeric',month:'short'}):''
+    var pagado=s.pago_cliente==='pagado'
     return '<div class="svc-row">'+
       '<div class="svc-fecha">'+fecha+'</div>'+
       '<div class="svc-info">'+
         '<div class="svc-cliente">'+s.cliente+'</div>'+
-        '<div class="svc-tec">👷 '+s.tecnico+(s.vehiculo?' · '+s.vehiculo:'')+'</div>'+
+        '<div class="svc-tec">'+s.tecnico+(s.vehiculo?' · '+s.vehiculo:'')+'</div>'+
       '</div>'+
       '<div style="text-align:right">'+
-        '<div class="svc-monto">'+(s.total?'$'+s.total.toLocaleString('es-CL'):'—')+'</div>'+
-        '<span class="badge-pago '+(s.pago_cliente==='pagado'?'bp-pagado':'bp-pendiente')+'">'+(s.pago_cliente==='pagado'?'Pagado':'Pendiente')+'</span>'+
+        '<div class="svc-monto" style="color:'+(pagado?'var(--verde)':'var(--amarillo)')+'">$'+(s.total||0).toLocaleString('es-CL')+'</div>'+
+        '<span class="bp '+(pagado?'bp-p':'bp-n')+'">'+(pagado?'Pagado':'Pendiente')+'</span>'+
       '</div>'+
     '</div>'
   }).join('')
 }
 
-function setPeriodo(p,el){periodo1=p;document.querySelectorAll('#pg-0 .per-btn').forEach(function(x){x.classList.remove('active')});el.classList.add('active');renderResumen()}
-function setPeriodo2(p,el){periodo2=p;document.querySelectorAll('#pg-1 .per-btn').forEach(function(x){x.classList.remove('active')});el.classList.add('active');renderTecnicos()}
-function setPeriodo3(p,el){periodo3=p;document.querySelectorAll('#pg-2 .per-btn').forEach(function(x){x.classList.remove('active')});el.classList.add('active');renderServicios()}
-
-function goTab(n,el){
-  document.querySelectorAll('.page').forEach(function(p,i){p.classList.toggle('active',i===n)})
-  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')})
-  el.classList.add('active')
-  if(n===1)renderTecnicos()
-  if(n===2)renderServicios()
-  if(n===3)renderPagosDiarios()
-}
-
-load()
-
-function renderPagosDiarios(){
-  var el=document.getElementById('pagos-diarios-body')
-  if(!todos.length){el.innerHTML='<div class="loading">Sin servicios completados</div>';return}
-
-  // Agrupar por fecha
+function renderPagos(){
+  var el=document.getElementById('pagos-list')
+  if(!todos.length){el.innerHTML='<div class="loading">Sin datos</div>';return}
   var porFecha={}
   todos.forEach(function(s){
-    var fecha=(s.created_at).split('T')[0]
-    if(!fecha)return
-    if(!porFecha[fecha])porFecha[fecha]={fecha:fecha,total:0,cobrado:0,count:0,servicios:[]}
-    porFecha[fecha].total+=(s.total||0)
-    if(s.pago_cliente==='pagado')porFecha[fecha].cobrado+=(s.total||0)
-    porFecha[fecha].count++
-    porFecha[fecha].servicios.push(s)
+    var f=(s.created_at||'').split('T')[0]
+    if(!f)return
+    if(!porFecha[f])porFecha[f]={fecha:f,total:0,cobrado:0,cnt:0,items:[]}
+    porFecha[f].total+=(s.total||0)
+    if(s.pago_cliente==='pagado')porFecha[f].cobrado+=(s.total||0)
+    porFecha[f].cnt++
+    porFecha[f].items.push(s)
   })
-
   var dias=Object.keys(porFecha).sort(function(a,b){return b.localeCompare(a)})
-  var totalGlobal=todos.reduce(function(s,x){return s+(x.total||0)},0)
-  var cobradoGlobal=todos.filter(function(x){return x.pago_cliente==='pagado'}).reduce(function(s,x){return s+(x.total||0)},0)
+  var totalG=todos.reduce(function(s,x){return s+(x.total||0)},0)
+  var cobG=todos.filter(function(x){return x.pago_cliente==='pagado'}).reduce(function(s,x){return s+(x.total||0)},0)
 
-  var html='<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">'+
-    '<div style="background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:12px">'+
-      '<div style="font-size:10px;color:var(--txt3);text-transform:uppercase;margin-bottom:4px">Total histórico</div>'+
-      '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:22px;color:var(--verde)">$'+totalGlobal.toLocaleString('es-CL')+'</div>'+
+  el.innerHTML='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">'+
+    '<div style="background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:12px">'+
+      '<div style="font-size:10px;color:var(--txt3);text-transform:uppercase;margin-bottom:3px">Total historico</div>'+
+      '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:20px;color:var(--verde)">$'+totalG.toLocaleString('es-CL')+'</div>'+
     '</div>'+
-    '<div style="background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:12px">'+
-      '<div style="font-size:10px;color:var(--txt3);text-transform:uppercase;margin-bottom:4px">Por cobrar</div>'+
-      '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:22px;color:var(--amarillo)">$'+(totalGlobal-cobradoGlobal).toLocaleString('es-CL')+'</div>'+
+    '<div style="background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:12px;text-align:right">'+
+      '<div style="font-size:10px;color:var(--txt3);text-transform:uppercase;margin-bottom:3px">Por cobrar</div>'+
+      '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:20px;color:var(--amarillo)">$'+(totalG-cobG).toLocaleString('es-CL')+'</div>'+
     '</div>'+
-  '</div>'
-
-  html+=dias.map(function(fecha){
-    var d=porFecha[fecha]
-    var fechaDisplay=new Date(fecha+'T12:00:00').toLocaleDateString('es-CL',{weekday:'short',day:'numeric',month:'short'})
-    return '<div style="background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin-bottom:10px">'+
-      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">'+
-        '<div>'+
-          '<div style="font-family:Syne,sans-serif;font-weight:700;font-size:14px">'+fechaDisplay+'</div>'+
-          '<div style="font-size:11px;color:var(--txt3)">'+d.count+' servicio'+(d.count!==1?'s':'')+'</div>'+
-        '</div>'+
-        '<div style="text-align:right">'+
-          '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:20px;color:var(--verde)">$'+d.total.toLocaleString('es-CL')+'</div>'+
-          '<div style="font-size:10px;color:var(--txt3)">$'+d.cobrado.toLocaleString('es-CL')+' cobrado</div>'+
-        '</div>'+
+  '</div>'+
+  dias.map(function(f){
+    var d=porFecha[f]
+    var fd=new Date(f+'T12:00:00').toLocaleDateString('es-CL',{weekday:'short',day:'numeric',month:'short'})
+    return '<div class="dia-card">'+
+      '<div class="dia-top">'+
+        '<div><div class="dia-fecha">'+fd+'</div><div class="dia-count">'+d.cnt+' servicio'+(d.cnt!==1?'s':'')+'</div></div>'+
+        '<div style="text-align:right"><div class="dia-monto">$'+d.total.toLocaleString('es-CL')+'</div><div class="dia-cobrado">$'+d.cobrado.toLocaleString('es-CL')+' cobrado</div></div>'+
       '</div>'+
-      d.servicios.map(function(s){
-        return '<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-top:1px solid var(--borde)">'+
-          '<div style="flex:1">'+
-            '<div style="font-size:12px;font-weight:600">'+s.cliente+'</div>'+
-            '<div style="font-size:11px;color:var(--txt3)">👷 '+s.tecnico+'</div>'+
-          '</div>'+
+      d.items.map(function(s){
+        var pagado=s.pago_cliente==='pagado'
+        return '<div class="dia-item">'+
+          '<div style="flex:1"><div style="font-size:12px;font-weight:600">'+s.cliente+'</div><div style="font-size:11px;color:var(--txt3)">'+s.tecnico+'</div></div>'+
           '<div style="text-align:right">'+
-            '<div style="font-family:Syne,sans-serif;font-weight:700;font-size:14px;color:'+(s.pago_cliente==='pagado'?'var(--verde)':'var(--amarillo)')+'">$'+(s.total||0).toLocaleString('es-CL')+'</div>'+
-            '<div style="font-size:9px;font-weight:700;color:'+(s.pago_cliente==='pagado'?'var(--verde)':'var(--rojo)')+'">'+( s.pago_cliente==='pagado'?'Pagado':'Pendiente')+'</div>'+
+            '<div style="font-family:Syne,sans-serif;font-weight:700;font-size:14px;color:'+(pagado?'var(--verde)':'var(--amarillo)')+'">$'+(s.total||0).toLocaleString('es-CL')+'</div>'+
+            '<div style="font-size:9px;font-weight:700;color:'+(pagado?'var(--verde)':'var(--rojo)')+'">'+( pagado?'Pagado':'Pendiente')+'</div>'+
           '</div>'+
         '</div>'
       }).join('')+
     '</div>'
   }).join('')
-
-  el.innerHTML=html
 }
+
+function goTab(n){
+  for(var i=0;i<4;i++){
+    document.getElementById('pg'+i).classList.toggle('active',i===n)
+    document.getElementById('tab'+i).classList.toggle('active',i===n)
+  }
+}
+
+function cambiarPer(tab,p,el){
+  periodos[tab]=p
+  var container=document.getElementById('per'+tab)
+  container.querySelectorAll('.per-btn').forEach(function(b){b.classList.remove('active')})
+  el.classList.add('active')
+  if(tab===0)renderResumen()
+  if(tab===1)renderTecnicos()
+  if(tab===2)renderServicios()
+}
+
+var periodos={0:'semana',1:'semana',2:'semana'}
+load()
 </script>
 </body>
 </html>

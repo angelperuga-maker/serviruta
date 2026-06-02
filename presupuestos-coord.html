@@ -434,7 +434,7 @@ function calcTotal(){
   var ivaInfo=document.getElementById('iva-info')
   if(ivaBadge){ivaBadge.textContent=iva?'+$'+iva.toLocaleString('es-CL'):'+$0';ivaBadge.style.color=iva?'var(--amarillo)':'var(--txt3)'}
   if(ivaInfo){ivaInfo.textContent=iva?'Activado — +$'+iva.toLocaleString('es-CL'):'Toca para activar'}
-  return {sub,iva,total}
+  return {sub:sub,iva:iva,total:total}
 }
 
 var coordItemId2=0

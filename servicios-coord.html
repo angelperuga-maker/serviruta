@@ -113,6 +113,7 @@ if(false)btns+='Completar</button>';
 var pagado=(s.pago_cliente==='pagado')
 btns+='<button style="width:100%;background:'+(pagado?'#22C55E':'rgba(34,197,94,0.12)')+';color:'+(pagado?'#000':'#22C55E')+';border:2px solid #22C55E;border-radius:10px;padding:14px;font-family:Syne,sans-serif;font-weight:800;font-size:15px;margin-bottom:8px;cursor:pointer;" onclick="togglePago(\''+s.id+'\',\''+s.pago_cliente+'\')">'+(pagado?'✅ PAGADO — toca para desmarcar':'💰 MARCAR COMO PAGADO')+'</button>'
 if(s.telefono)btns+='<button class="btn btn-wa" onclick="waC(\''+s.telefono+'\',\''+s.cliente+'\',\''+estado+'\')">Cliente</button>';
+    if(estado==='completado'&&s.telefono)btns+='<button class="btn" style="background:rgba(167,139,250,0.15);border:1px solid rgba(167,139,250,0.3);color:#A78BFA;width:100%;" onclick="enviarEncuesta(\\''+s.telefono+'\\',' +'\\'+s.cliente+'\\',' +'\\'+s.tecnico+'\\')">⭐ Enviar encuesta al cliente</button>';
     var tel=TELS[s.tecnico]||'';
     if(tel)btns+='<button class="btn btn-tec" onclick="waT(\''+tel+'\',\''+s.tecnico+'\',\''+s.cliente+'\')">Tecnico</button>';
     return '<div class="card"><div class="card-top"><div><div class="card-cliente">'+s.cliente+'</div><div class="card-sub">N '+s.numero+' - '+s.tecnico+'</div></div><span class="badge b-'+estado+'">'+(labels[estado]||estado)+'</span></div><div class="card-info">'+(s.telefono||'')+'  '+(s.vehiculo||'')+(s.auto?' '+s.auto:'')+'</div>'+(total?'<div class="card-total">$'+total.toLocaleString('es-CL')+'</div>':'')+'<div class="actions">'+btns+'</div></div>';

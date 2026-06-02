@@ -85,9 +85,49 @@ function entrar() {
   if (PINS[nombre] !== pin) { err.textContent = "PIN incorrecto."; err.style.display = "block"; return }
   sessionStorage.removeItem("coord_auth")
   sessionStorage.setItem("tecnico_nombre", nombre)
-  location.href = "tecnico-menu.html"
+  pedirUbicacion(nombre)
 }
 document.getElementById("pin").addEventListener("keydown", e => { if(e.key==="Enter") entrar() })
+
+function pedirUbicacion(nombre) {
+  if (!navigator.geolocation) {
+    location.href = "tecnico-menu.html"
+    return
+  }
+  // Mostrar pantalla de solicitud de ubicación
+  document.body.innerHTML = '<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#080808;color:#F0EDE6;font-family:DM Sans,sans-serif;padding:24px;text-align:center">' +
+    '<div style="width:70px;height:70px;background:#E8210A;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:32px;margin-bottom:20px">📍</div>' +
+    '<h2 style="font-family:Syne,sans-serif;font-weight:800;font-size:22px;margin-bottom:10px">Hola ' + nombre.split(' ')[0] + '!</h2>' +
+    '<p style="font-size:14px;color:#9996A0;line-height:1.6;margin-bottom:24px;max-width:280px">Para que el coordinador pueda verte en el mapa, necesitamos acceder a tu ubicación mientras trabajas.</p>' +
+    '<button onclick="activarGPS('' + nombre + '')" style="background:#E8210A;border:none;color:#fff;font-family:Syne,sans-serif;font-weight:700;font-size:15px;padding:14px 32px;border-radius:10px;cursor:pointer;width:100%;max-width:300px;margin-bottom:10px">📍 Activar ubicación</button>' +
+    '<button onclick="location.href='tecnico-menu.html'" style="background:none;border:1px solid #2C2C32;color:#55525E;font-family:Syne,sans-serif;font-weight:700;font-size:13px;padding:12px 32px;border-radius:10px;cursor:pointer;width:100%;max-width:300px">Omitir por ahora</button>' +
+  '</div>'
+}
+
+function activarGPS(nombre) {
+  navigator.geolocation.getCurrentPosition(
+    function(pos) {
+      // Guardar en Supabase
+      var xhr = new XMLHttpRequest()
+      xhr.open('POST', 'https://bqlgfmqcefledqyodkii.supabase.co/rest/v1/ubicaciones?on_conflict=tecnico')
+      xhr.setRequestHeader('Content-Type', 'application/json')
+      xhr.setRequestHeader('apikey', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s')
+      xhr.setRequestHeader('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s')
+      xhr.setRequestHeader('Prefer', 'resolution=merge-duplicates')
+      xhr.onload = function() { location.href = 'tecnico-menu.html' }
+      xhr.onerror = function() { location.href = 'tecnico-menu.html' }
+      xhr.send(JSON.stringify({
+        tecnico: nombre,
+        lat: pos.coords.latitude,
+        lng: pos.coords.longitude,
+        estado: 'activo',
+        updated_at: new Date().toISOString()
+      }))
+    },
+    function() { location.href = 'tecnico-menu.html' },
+    {enableHighAccuracy: true, timeout: 10000}
+  )
+}
 </script>
 </body>
 </html>

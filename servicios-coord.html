@@ -7,165 +7,175 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root{--rojo:#E8210A;--rojo-g:rgba(232,33,10,0.08);--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--verde-g:rgba(34,197,94,0.1);--amarillo:#F5C518;--amarillo-g:rgba(245,197,24,0.08);--azul:#60A5FA;}
+:root{--rojo:#E8210A;--rojo-g:rgba(232,33,10,0.08);--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--verde-g:rgba(34,197,94,0.1);--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;}
 *{box-sizing:border-box;margin:0;padding:0;}
 body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:600px;margin:0 auto;}
 .top{background:var(--c1);border-bottom:1px solid var(--borde);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
 .top-title{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
 .top-back{background:none;border:1px solid var(--borde);color:var(--txt3);font-size:11px;padding:5px 12px;border-radius:6px;cursor:pointer;}
-.body{padding:14px 16px 80px;}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px;}
-.stat{background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:10px 8px;text-align:center;}
-.sv{font-family:"Syne",sans-serif;font-weight:800;font-size:20px;}
-.sl{font-size:9px;color:var(--txt3);margin-top:2px;text-transform:uppercase;}
-.filtros{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:14px;}
-.filtro{flex-shrink:0;padding:6px 14px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--borde);background:var(--c2);color:var(--txt3);}
-.filtro.active{background:var(--rojo);border-color:var(--rojo);color:#fff;}
-.card{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin-bottom:10px;}
+.body{padding:12px 14px 80px;}
+.filtros{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:12px;}
+.fbtn{flex-shrink:0;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--borde);background:var(--c2);color:var(--txt3);}
+.fbtn.active{background:var(--rojo);border-color:var(--rojo);color:#fff;}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px;}
+.st{background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:8px;text-align:center;}
+.st-val{font-family:"Syne",sans-serif;font-weight:800;font-size:16px;}
+.st-lbl{font-size:9px;color:var(--txt3);text-transform:uppercase;margin-top:1px;}
+.sumatoria{background:linear-gradient(135deg,rgba(34,197,94,0.1),rgba(34,197,94,0.05));border:1px solid rgba(34,197,94,0.3);border-radius:10px;padding:12px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;}
+.sum-val{font-family:"Syne",sans-serif;font-weight:800;font-size:22px;color:var(--verde);}
+.sum-lbl{font-size:11px;color:var(--txt3);}
+.card{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:12px;margin-bottom:10px;}
 .card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;}
-.card-cliente{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;}
+.card-cliente{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
 .card-sub{font-size:11px;color:var(--txt3);margin-top:2px;}
-.badge{font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;font-family:"Syne",sans-serif;white-space:nowrap;}
-.b-nuevo{background:var(--rojo-g);color:var(--rojo);border:1px solid rgba(232,33,10,0.3);}
-.b-enviado{background:rgba(96,165,250,0.1);color:var(--azul);border:1px solid rgba(96,165,250,0.3);}
-.b-aprobado{background:var(--verde-g);color:var(--verde);border:1px solid rgba(34,197,94,0.3);}
-.b-ejecucion{background:var(--amarillo-g);color:var(--amarillo);border:1px solid rgba(245,197,24,0.3);}
-.b-completado{background:rgba(96,165,250,0.1);color:var(--azul);border:1px solid rgba(96,165,250,0.3);}
-.card-info{font-size:12px;color:var(--txt3);margin-bottom:10px;}
-.card-total{font-family:"Syne",sans-serif;font-weight:700;font-size:16px;color:var(--amarillo);margin-bottom:10px;}
-.actions{display:flex;gap:8px;flex-wrap:wrap;}
-.btn{padding:8px 14px;border-radius:8px;font-family:"Syne",sans-serif;font-weight:700;font-size:11px;cursor:pointer;border:none;}
-.btn-g{background:var(--verde);color:#000;}
-.btn-a{background:var(--amarillo);color:#000;}
-.btn-b{background:var(--azul);color:#000;}
+.badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;flex-shrink:0;}
+.b-nuevo{background:rgba(96,165,250,0.15);color:var(--azul);}
+.b-enviado{background:rgba(245,197,24,0.15);color:var(--amarillo);}
+.b-aprobado{background:rgba(34,197,94,0.15);color:var(--verde);}
+.b-ejecucion{background:rgba(251,146,60,0.15);color:var(--naranja);}
+.b-completado{background:rgba(167,139,250,0.15);color:var(--morado);}
+.card-btns{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+.btn{padding:8px 12px;border-radius:8px;font-family:"Syne",sans-serif;font-weight:700;font-size:11px;cursor:pointer;border:none;}
+.btn-g{background:rgba(34,197,94,0.15);color:var(--verde);border:1px solid rgba(34,197,94,0.3);}
+.btn-a{background:rgba(251,146,60,0.15);color:var(--naranja);border:1px solid rgba(251,146,60,0.3);}
+.btn-b{background:rgba(167,139,250,0.15);color:var(--morado);border:1px solid rgba(167,139,250,0.3);}
 .btn-wa{background:#25D366;color:#fff;}
 .btn-tec{background:#128C7E;color:#fff;}
-.empty{text-align:center;padding:48px;color:var(--txt3);}
-.loading{text-align:center;padding:48px;color:var(--txt3);}
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--c3);border:1px solid var(--borde);border-radius:8px;padding:11px 18px;font-size:13px;opacity:0;transition:all 0.25s;pointer-events:none;white-space:nowrap;z-index:999;}
+.btn-pago{width:100%;padding:12px;border-radius:8px;font-family:"Syne",sans-serif;font-weight:800;font-size:14px;cursor:pointer;border:2px solid var(--verde);margin-top:6px;}
+.btn-enc{width:100%;padding:10px;border-radius:8px;font-family:"Syne",sans-serif;font-weight:700;font-size:12px;cursor:pointer;border:1px solid rgba(167,139,250,0.4);background:rgba(167,139,250,0.1);color:var(--morado);margin-top:4px;}
+.loading{text-align:center;padding:40px;color:var(--txt3);}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--c3);border:1px solid var(--borde);border-radius:8px;padding:10px 16px;font-size:12px;opacity:0;transition:all 0.25s;pointer-events:none;z-index:999;white-space:nowrap;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.ok{border-color:rgba(34,197,94,0.4);color:var(--verde);}
 </style>
 </head>
 <body>
 <div class="top">
-  <button class="top-back" onclick="location.href='login-coordinador.html'">← Volver</button>
-  <div class="top-title">Gestion de Servicios</div>
-  <button onclick="loadServicios()" style="background:none;border:none;color:var(--txt3);cursor:pointer;font-size:20px;">&#8635;</button>
+  <button class="top-back" onclick="location.href='menu-coordinador.html'">← Volver</button>
+  <div class="top-title">⚡ Servicios</div>
+  <button onclick="loadServicios()" style="background:none;border:none;color:var(--txt3);cursor:pointer;font-size:20px;">↻</button>
 </div>
 <div class="body">
-  <div class="stats">
-    <div class="stat"><div class="sv" id="stn" style="color:var(--rojo)">0</div><div class="sl">Nuevos</div></div>
-    <div class="stat"><div class="sv" id="sta" style="color:var(--verde)">0</div><div class="sl">Aprobados</div></div>
-    <div class="stat"><div class="sv" id="ste" style="color:var(--amarillo)">0</div><div class="sl">En curso</div></div>
-    <div class="stat"><div class="sv" id="stc" style="color:var(--azul)">0</div><div class="sl">Completos</div></div>
+  <div class="filtros">
+    <div class="fbtn active" id="fb-todos" onclick="filtrar('todos',this)">Todos</div>
+    <div class="fbtn" id="fb-nuevo" onclick="filtrar('nuevo',this)">📋 Nuevos</div>
+    <div class="fbtn" id="fb-enviado" onclick="filtrar('enviado',this)">📤 Enviados</div>
+    <div class="fbtn" id="fb-aprobado" onclick="filtrar('aprobado',this)">✅ Aprobados</div>
+    <div class="fbtn" id="fb-ejecucion" onclick="filtrar('ejecucion',this)">🔧 En ejecución</div>
+    <div class="fbtn" id="fb-completado" onclick="filtrar('completado',this)">🏁 Completados</div>
   </div>
-  <div id="sumatoria"></div>
-<div class="filtros">
-    <div class="filtro active" onclick="filtrar('todos',this)">Todos</div>
-    <div class="filtro" onclick="filtrar('nuevo',this)">Nuevos</div>
-    <div class="filtro" onclick="filtrar('enviado',this)">Enviados</div>
-    <div class="filtro" onclick="filtrar('aprobado',this)">Aprobados</div>
-    <div class="filtro" onclick="filtrar('ejecucion',this)">En curso</div>
-    <div class="filtro" onclick="filtrar('completado',this)">Completos</div>
+  <div class="stats">
+    <div class="st"><div class="st-val" id="stn" style="color:var(--azul)">0</div><div class="st-lbl">Nuevos</div></div>
+    <div class="st"><div class="st-val" id="sta" style="color:var(--amarillo)">0</div><div class="st-lbl">Aprobados</div></div>
+    <div class="st"><div class="st-val" id="ste" style="color:var(--naranja)">0</div><div class="st-lbl">Ejecución</div></div>
+    <div class="st"><div class="st-val" id="stc" style="color:var(--morado)">0</div><div class="st-lbl">Completados</div></div>
+  </div>
+  <div class="sumatoria">
+    <div><div class="sum-lbl">Total ventas filtro actual</div><div class="sum-val" id="sum-total">$0</div></div>
+    <div style="text-align:right"><div class="sum-lbl">Pagado</div><div style="font-family:Syne,sans-serif;font-weight:800;font-size:16px;color:var(--verde)" id="sum-pagado">$0</div></div>
   </div>
   <div id="lista"><div class="loading">Cargando...</div></div>
 </div>
 <div class="toast" id="toast"></div>
+
 <script>
-var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co';
-var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s';
-var db=null,servicios=[],filtroActual='todos';
-var TELS={'Jorge Ramirez':'+56912345678','Felipe Mora':'+56923456789','Carlos Vega':'+56934567890','Reynaldo Aguas Bertel':'+56935287199','Reynaldo Aguas':'+56935287199'};
-function getDB(){if(!db)db=supabase.createClient(SB_URL,SB_KEY);return db;}
+var SB='https://bqlgfmqcefledqyodkii.supabase.co'
+var SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+var db=null,servicios=[],filtroActual='todos'
+
+var TELS={'Jorge Ramirez':'+56912345678','Felipe Mora':'+56923456789','Carlos Vega':'+56934567890','Reynaldo Aguas Bertel':'+56935287199','Reynaldo Aguas':'+56935287199','Kiven Henz':'+56964880196','Humberto Morales':'+56994946414','Giovanino Perugini':'+56933592097'}
+var LABELS={nuevo:'📋 Nuevo',enviado:'📤 Enviado',aprobado:'✅ Aprobado',ejecucion:'🔧 Ejecución',completado:'🏁 Completado'}
+
+function getDB(){if(!db)db=supabase.createClient(SB,SK);return db;}
+
 async function loadServicios(){
-  document.getElementById('lista').innerHTML='<div class="loading">Cargando...</div>';
-  try{
-    var r=await getDB().from('presupuestos').select('*').order('created_at',{ascending:false});
-    if(r.error)throw r.error;
-    servicios=r.data||[];
-    document.getElementById('stn').textContent=servicios.filter(function(s){return !s.estado_servicio||s.estado_servicio==='nuevo';}).length;
-    document.getElementById('sta').textContent=servicios.filter(function(s){return s.estado_servicio==='aprobado';}).length;
-    document.getElementById('ste').textContent=servicios.filter(function(s){return s.estado_servicio==='ejecucion';}).length;
-    document.getElementById('stc').textContent=servicios.filter(function(s){return s.estado_servicio==='completado';}).length;
-    renderLista();
-  }catch(e){document.getElementById('lista').innerHTML='<div class="loading">Error: '+e.message+'</div>';}
+  document.getElementById('lista').innerHTML='<div class="loading">Cargando...</div>'
+  var r=await getDB().from('presupuestos').select('*').order('created_at',{ascending:false})
+  if(r.error){toast('Error: '+r.error.message);return;}
+  servicios=r.data||[]
+  document.getElementById('stn').textContent=servicios.filter(function(s){return !s.estado_servicio||s.estado_servicio==='nuevo'}).length
+  document.getElementById('sta').textContent=servicios.filter(function(s){return s.estado_servicio==='aprobado'}).length
+  document.getElementById('ste').textContent=servicios.filter(function(s){return s.estado_servicio==='ejecucion'}).length
+  document.getElementById('stc').textContent=servicios.filter(function(s){return s.estado_servicio==='completado'}).length
+  renderLista()
 }
-function getEstado(s){
-  if(s.estado_servicio&&s.estado_servicio!=='nuevo')return s.estado_servicio;
-  if(s.estado==='enviada'||s.estado==='enviado')return 'enviado';
-  return 'nuevo';
+
+function filtrar(f,el){
+  filtroActual=f
+  document.querySelectorAll('.fbtn').forEach(function(b){b.classList.remove('active')})
+  el.classList.add('active')
+  renderLista()
 }
+
 function renderLista(){
-  var lista=servicios;
-  if(filtroActual!=='todos')lista=servicios.filter(function(s){return getEstado(s)===filtroActual;});
-  var el=document.getElementById('lista');
-  if(!lista.length){el.innerHTML='<div class="empty">Sin servicios en este estado</div>';return;}
-  var labels={nuevo:'Nuevo',enviado:'Enviado',aprobado:'Aprobado',ejecucion:'En ejecucion',completado:'Completado'};
-  el.innerHTML=lista.map(function(s){
-    var estado=getEstado(s);
-    var total=s.total||0;
-    var btns='';
-    if(estado==='enviado')btns+='<button class="btn btn-g" onclick="cambiar(\''+s.id+'\',\'aprobado\',\''+s.tecnico+'\',\''+s.cliente+'\')">Cliente acepto</button>';
-    if(estado==='aprobado')btns+='<button class="btn btn-a" onclick="cambiar(\''+s.id+'\',\'ejecucion\',\''+s.tecnico+'\',\''+s.cliente+'\')">Iniciar</button>';
-    if(estado==='ejecucion')btns+='<button class="btn btn-b" onclick="cambiar(\''+s.id+'\',\'completado\',\''+s.tecnico+'\',\''+s.cliente+'\')">Completar</button><button class="btn" style="background:rgba(167,139,250,0.1);border:1px solid rgba(167,139,250,0.3);color:#A78BFA" onclick="enviarEncuesta(\''+s.telefono+'\',\''+s.cliente+'\',\''+s.tecnico+'\')">⭐ Encuesta</button>';
-if(false)btns+='Completar</button>';
-    // Botón pago
-var pagado=(s.pago_cliente==='pagado')
-btns+='<button style="width:100%;background:'+(pagado?'#22C55E':'rgba(34,197,94,0.12)')+';color:'+(pagado?'#000':'#22C55E')+';border:2px solid #22C55E;border-radius:10px;padding:14px;font-family:Syne,sans-serif;font-weight:800;font-size:15px;margin-bottom:8px;cursor:pointer;" onclick="togglePago(\''+s.id+'\',\''+s.pago_cliente+'\')">'+(pagado?'✅ PAGADO — toca para desmarcar':'💰 MARCAR COMO PAGADO')+'</button>'
-if(s.telefono)btns+='<button class="btn btn-wa" onclick="waC(\''+s.telefono+'\',\''+s.cliente+'\',\''+estado+'\')">Cliente</button>';
-    if(estado==='completado'&&s.telefono)btns+='<button class="btn" style="background:rgba(167,139,250,0.15);border:1px solid rgba(167,139,250,0.3);color:#A78BFA;width:100%;" onclick="enviarEncuesta(\\''+s.telefono+'\\',' +'\\'+s.cliente+'\\',' +'\\'+s.tecnico+'\\')">⭐ Enviar encuesta al cliente</button>';
-    var tel=TELS[s.tecnico]||'';
-    if(tel)btns+='<button class="btn btn-tec" onclick="waT(\''+tel+'\',\''+s.tecnico+'\',\''+s.cliente+'\')">Tecnico</button>';
-    return '<div class="card"><div class="card-top"><div><div class="card-cliente">'+s.cliente+'</div><div class="card-sub">N '+s.numero+' - '+s.tecnico+'</div></div><span class="badge b-'+estado+'">'+(labels[estado]||estado)+'</span></div><div class="card-info">'+(s.telefono||'')+'  '+(s.vehiculo||'')+(s.auto?' '+s.auto:'')+'</div>'+(total?'<div class="card-total">$'+total.toLocaleString('es-CL')+'</div>':'')+'<div class="actions">'+btns+'</div></div>';
-  }).join('');
+  var data=filtroActual==='todos'?servicios:servicios.filter(function(s){
+    var est=s.estado_servicio||'nuevo'
+    return est===filtroActual
+  })
+  var totalVentas=data.reduce(function(s,x){return s+(x.total||0)},0)
+  var totalPagado=data.filter(function(s){return s.pago_cliente==='pagado'}).reduce(function(s,x){return s+(x.total||0)},0)
+  document.getElementById('sum-total').textContent='$'+totalVentas.toLocaleString('es-CL')
+  document.getElementById('sum-pagado').textContent='$'+totalPagado.toLocaleString('es-CL')
+  if(!data.length){document.getElementById('lista').innerHTML='<div class="loading">Sin servicios</div>';return}
+  document.getElementById('lista').innerHTML=data.map(function(s){return renderCard(s)}).join('')
 }
-async function cambiar(id,estado,tec,cliente){
-  await getDB().from('presupuestos').update({estado_servicio:estado}).eq('id',id);
-  var tel=TELS[tec]||'';
-  if(tel){
-    var msg={aprobado:'SERVICIO APROBADO\n\nHola '+tec.split(' ')[0]+'\n\nEl cliente '+cliente+' acepto el presupuesto.\n\nPuedes proceder.\n\nServiruta',ejecucion:'EN EJECUCION\n\nHola '+tec.split(' ')[0]+'\n\nServicio de '+cliente+' en ejecucion.\n\nServiruta',completado:'COMPLETADO\n\nHola '+tec.split(' ')[0]+'\n\nServicio de '+cliente+' completado. Buen trabajo!\n\nServiruta'}[estado]||'';
-    window.open('https://wa.me/'+tel.replace(/\D/g,'')+('?text='+encodeURIComponent(msg)),'_blank');
-  }
-  toast('Estado actualizado');
-  loadServicios();
+
+function renderCard(s){
+  var estado=s.estado_servicio||'nuevo'
+  var pagado=s.pago_cliente==='pagado'
+  var btns=''
+  if(estado==='nuevo'||estado==='valorizada')btns+='<button class="btn btn-g" onclick="cambiar(\''+s.id+'\',\'enviado\')">📤 Marcar enviado</button>'
+  if(estado==='enviado')btns+='<button class="btn btn-g" onclick="cambiar(\''+s.id+'\',\'aprobado\')">✅ Aprobado por cliente</button>'
+  if(estado==='aprobado')btns+='<button class="btn btn-a" onclick="cambiar(\''+s.id+'\',\'ejecucion\')">🔧 Iniciar ejecución</button>'
+  if(estado==='ejecucion')btns+='<button class="btn btn-b" onclick="cambiar(\''+s.id+'\',\'completado\')">🏁 Completar</button>'
+  if(s.telefono)btns+='<button class="btn btn-wa" onclick="waCliente(\''+s.telefono+'\',\''+s.cliente+'\',\''+estado+'\')">💬 Cliente</button>'
+  var telTec=TELS[s.tecnico]||''
+  if(telTec)btns+='<button class="btn btn-tec" onclick="waTecnico(\''+telTec+'\',\''+s.tecnico+'\',\''+s.cliente+'\')">🔧 Técnico</button>'
+  return '<div class="card">'+
+    '<div class="card-top">'+
+      '<div><div class="card-cliente">'+s.cliente+'</div><div class="card-sub">N° '+(s.numero||'—')+' · '+s.tecnico+(s.vehiculo?' · '+s.vehiculo:'')+'</div></div>'+
+      '<span class="badge b-'+estado+'">'+(LABELS[estado]||estado)+'</span>'+
+    '</div>'+
+    '<div style="font-size:12px;color:var(--txt2);margin-bottom:8px">'+(s.total?'Total: <strong style=\'color:var(--verde)\'>$'+s.total.toLocaleString('es-CL')+'</strong>':'Sin precio')+'</div>'+
+    '<div class="card-btns">'+btns+'</div>'+
+    '<button class="btn-pago" style="background:'+(pagado?'var(--verde)':'rgba(34,197,94,0.12)')+';color:'+(pagado?'#000':'var(--verde)')+'" onclick="togglePago(\''+s.id+'\',\''+( s.pago_cliente||'')+'\')">'+( pagado?'✅ PAGADO — toca para desmarcar':'💰 MARCAR COMO PAGADO')+'</button>'+
+    (estado==='completado'&&s.telefono?'<button class="btn-enc" onclick="enviarEncuesta(\''+s.telefono+'\',\''+s.cliente+'\',\''+s.tecnico+'\')">⭐ Enviar encuesta al cliente</button>':'')+
+  '</div>'
 }
-function waC(tel,cliente,estado){
-  var m={aprobado:'Hola '+cliente+' Confirmamos su aprobacion. El tecnico se coordinara pronto. Serviruta +56 9 8505 8250',ejecucion:'Hola '+cliente+' El tecnico esta en camino. Serviruta +56 9 8505 8250',completado:'Hola '+cliente+' Servicio completado. Gracias por confiar en Serviruta!'}[estado]||'Hola '+cliente+' te escribe Serviruta';
-  window.open('https://wa.me/56'+tel.replace(/\D/g,'')+('?text='+encodeURIComponent(m)),'_blank');
-}
-function waT(tel,tec,cliente){
-  window.open('https://wa.me/'+tel.replace(/\D/g,'')+('?text='+encodeURIComponent('Hola '+tec.split(' ')[0]+' te escribimos por el servicio de '+cliente+'. Como va todo?')),'_blank');
-}
-function enviarEncuesta(tel,cliente,tecnico){
-  var base='https://angelperuga-maker.github.io/serviruta/encuesta.html';
-  var url=base+'?cliente='+encodeURIComponent(cliente)+'&tecnico='+encodeURIComponent(tecnico)+'&tel='+encodeURIComponent(tel);
-  var msg='Hola '+cliente+' gracias por confiar en Serviruta! Te pedimos 1 minuto para evaluar el servicio de hoy:\n\n'+url+'\n\nTu opinion nos ayuda a mejorar. Serviruta +56 9 8505 8250';
-  window.open('https://wa.me/56'+tel.replace(/\D/g,'')+'?text='+encodeURIComponent(msg),'_blank');
-}
-async function togglePago(id,estadoActual){
-  var nuevo=estadoActual==='pagado'?'pendiente':'pagado'
-  await getDB().from('presupuestos').update({pago_cliente:nuevo}).eq('id',id)
-  toast(nuevo==='pagado'?'💰 Marcado como pagado':'⏳ Marcado pendiente')
+
+async function cambiar(id,estado){
+  await getDB().from('presupuestos').update({estado_servicio:estado}).eq('id',id)
+  toast('Estado: '+(estado==='completado'?'🏁 Completado':estado),'ok')
   loadServicios()
 }
 
-function calcularSumatoria(servicios){
-  var totalVentas=servicios.reduce(function(s,x){return s+(x.total||0);},0)
-  var totalPagado=servicios.filter(function(x){return x.pago_cliente==='pagado';}).reduce(function(s,x){return s+(x.total||0);},0)
-  var totalPendiente=totalVentas-totalPagado
-  var el=document.getElementById('sumatoria')
-  if(el){
-    el.innerHTML='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px">'+
-      '<div style="background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:10px;text-align:center"><div style="font-family:Syne,sans-serif;font-weight:800;font-size:14px;color:var(--verde)">$'+totalPagado.toLocaleString('es-CL')+'</div><div style="font-size:9px;color:var(--txt3);text-transform:uppercase;margin-top:2px">Cobrado</div></div>'+
-      '<div style="background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:10px;text-align:center"><div style="font-family:Syne,sans-serif;font-weight:800;font-size:14px;color:var(--rojo)">$'+totalPendiente.toLocaleString('es-CL')+'</div><div style="font-size:9px;color:var(--txt3);text-transform:uppercase;margin-top:2px">Por cobrar</div></div>'+
-      '<div style="background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:10px;text-align:center"><div style="font-family:Syne,sans-serif;font-weight:800;font-size:14px;color:var(--amarillo)">$'+totalVentas.toLocaleString('es-CL')+'</div><div style="font-size:9px;color:var(--txt3);text-transform:uppercase;margin-top:2px">Total ventas</div></div>'+
-    '</div>'
-  }
+async function togglePago(id,estadoActual){
+  var nuevo=estadoActual==='pagado'?'pendiente':'pagado'
+  await getDB().from('presupuestos').update({pago_cliente:nuevo}).eq('id',id)
+  toast(nuevo==='pagado'?'💰 Marcado como pagado':'⏳ Marcado pendiente','ok')
+  loadServicios()
 }
 
-function filtrar(f,el){filtroActual=f;document.querySelectorAll('.filtro').forEach(function(x){x.classList.remove('active');});el.classList.add('active');renderLista();}
-function toast(msg){var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2500);}
-loadServicios();
+function enviarEncuesta(tel,cliente,tecnico){
+  var url='https://angelperuga-maker.github.io/serviruta/encuesta.html?cliente='+encodeURIComponent(cliente)+'&tecnico='+encodeURIComponent(tecnico)+'&tel='+encodeURIComponent(tel)
+  var msg='Hola '+cliente+' gracias por confiar en Serviruta! Te pedimos 1 minuto para evaluar el servicio de hoy:\n\n'+url+'\n\nTu opinion nos ayuda a mejorar. Serviruta +56 9 8505 8250'
+  window.open('https://wa.me/56'+tel.replace(/\D/g,'')+'?text='+encodeURIComponent(msg),'_blank')
+}
+
+function waCliente(tel,cliente,estado){
+  var msgs={enviado:'Hola '+cliente+' te enviamos el presupuesto. Cualquier consulta estamos disponibles. Serviruta +56 9 8505 8250',aprobado:'Hola '+cliente+' confirmamos la aprobacion del servicio. Coordinaremos con el tecnico. Serviruta',ejecucion:'Hola '+cliente+' el tecnico esta en camino a realizar el servicio. Serviruta',completado:'Hola '+cliente+' el servicio ha sido completado. Gracias por confiar en nosotros! Serviruta'}
+  var msg=msgs[estado]||'Hola '+cliente+' Serviruta al habla. Como podemos ayudarte?'
+  window.open('https://wa.me/56'+tel.replace(/\D/g,'')+'?text='+encodeURIComponent(msg),'_blank')
+}
+
+function waTecnico(tel,tecnico,cliente){
+  var msg='Hola '+tecnico.split(' ')[0]+' recordatorio de tu servicio con cliente: '+cliente+'. Serviruta +56 9 8505 8250'
+  window.open('https://wa.me/'+tel.replace(/\D/g,'')+'?text='+encodeURIComponent(msg),'_blank')
+}
+
+function toast(msg,type){var t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(type?' '+type:'');t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2500)}
+
+loadServicios()
 </script>
 </body>
 </html>

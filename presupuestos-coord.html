@@ -227,7 +227,7 @@ function renderGeneral(){
 }
 
 function renderPorTecnico(){
-  var tecs=[...new Set(todos.map(function(s){return s.tecnico}).filter(Boolean))]
+  var tecs=todos.map(function(s){return s.tecnico}).filter(Boolean).filter(function(v,i,a){return a.indexOf(v)===i})
   var filtroEl=document.getElementById('filtro-tec')
   filtroEl.innerHTML='<div class="ftec'+(tecFiltro==='todos'?' active':'')+'" onclick="setTecFiltro(\'todos\',this)">Todos</div>'+
     tecs.map(function(t){
@@ -291,7 +291,7 @@ function renderContabilidad(){
     '</div>'
 
   // Filtro técnicos para contabilidad
-  var tecs=[...new Set(completados.map(function(s){return s.tecnico}).filter(Boolean))]
+  var tecs=completados.map(function(s){return s.tecnico}).filter(Boolean).filter(function(v,i,a){return a.indexOf(v)===i})
   var filtroHtml='<div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:12px">'+
     '<div class="ftec'+(contFiltro==='todos'?' active':'')+'" onclick="setContFiltro('todos',this)">Todos</div>'+
     '<div class="ftec'+(contFiltro==='pendiente'?' active':'')+'" onclick="setContFiltro('pendiente',this)" style="'+(contFiltro==='pendiente'?'background:var(--amarillo);border-color:var(--amarillo);color:#000':'')+'">⏳ Pendientes</div>'+
@@ -423,7 +423,7 @@ function toggleIva(){
 function calcTotal(){
   var items=pptoActual?pptoActual.items||[]:[]
   var coordExtra=getCoordItems()
-  var sub=[...items,...coordExtra].reduce(function(s,i){return s+((i.precio_venta||0)*(i.cant||1))},0)
+  var sub=items.concat(coordExtra).reduce(function(s,i){return s+((i.precio_venta||0)*(i.cant||1))},0)
   var iva=document.getElementById('aplica-iva').checked?Math.round(sub*0.19):0
   var total=sub+iva
   document.getElementById('total-box').innerHTML=
@@ -518,7 +518,7 @@ async function marcarPagado(){
 function enviarWA(){
   if(!pptoActual)return
   var t=calcTotal()
-  var items=[...(pptoActual.items||[]),...getCoordItems()]
+  var items=(pptoActual.items||[]).concat(getCoordItems())
   var lineas=items.map(function(i){return '• '+i.desc+(i.cant>1?' x'+i.cant:'')+(i.precio_venta?' — $'+(i.precio_venta*( i.cant||1)).toLocaleString('es-CL'):'')} ).join('\n')
   var msg='🔧 *PRESUPUESTO SERVIRUTA*\n\nHola '+pptoActual.cliente+'\n\n'+lineas+'\n\n'+(document.getElementById('aplica-iva').checked?'Subtotal: $'+t.sub.toLocaleString('es-CL')+'\nIVA 19%: $'+t.iva.toLocaleString('es-CL')+'\n':'')+'\n*TOTAL: $'+t.total.toLocaleString('es-CL')+'*'+(document.getElementById('det-notas').value?'\n\n'+document.getElementById('det-notas').value:'')+'\n\n📞 Serviruta +56 9 8505 8250'
   var tel=(pptoActual.telefono||'').replace(/\D/g,'')

@@ -172,7 +172,7 @@ function renderAll(){
 var COLS=['#E8210A','#60A5FA','#22C55E','#F5C518','#FB923C','#A78BFA','#F472B6','#34D399']
 
 function renderResumen(){
-  var data=filtrar(periodos[0])
+  var data=filtrar(periodos['0'])
   var total=data.reduce(function(s,x){return s+(x.total||0)},0)
   var cobrado=data.filter(function(x){return x.pago_cliente==='pagado'}).reduce(function(s,x){return s+(x.total||0)},0)
   var pend=total-cobrado
@@ -218,7 +218,7 @@ function renderResumen(){
 }
 
 function renderTecnicos(){
-  var data=filtrar(periodos[1])
+  var data=filtrar(periodos['1'])
   var porTec={}
   data.forEach(function(s){
     if(!porTec[s.tecnico])porTec[s.tecnico]={nombre:s.tecnico,total:0,cobrado:0,cnt:0}
@@ -257,7 +257,7 @@ function renderTecnicos(){
 }
 
 function renderServicios(){
-  var data=filtrar(periodos[2])
+  var data=filtrar(periodos['2'])
   var el=document.getElementById('svc-list')
   if(!data.length){el.innerHTML='<div class="loading">Sin servicios</div>';return}
   var totalP=data.reduce(function(s,x){return s+(x.total||0)},0)
@@ -345,7 +345,7 @@ function goTab(n){
 }
 
 function cambiarPer(tab,p,el){
-  periodos[tab]=p
+  periodos[String(tab)]=p
   var container=document.getElementById('per'+tab)
   container.querySelectorAll('.per-btn').forEach(function(b){b.classList.remove('active')})
   el.classList.add('active')
@@ -354,7 +354,7 @@ function cambiarPer(tab,p,el){
   if(tab===2)renderServicios()
 }
 
-var periodos={0:'semana',1:'semana',2:'semana'}
+var periodos={'0':'semana','1':'semana','2':'semana'}
 load()
 </script>
 </body>

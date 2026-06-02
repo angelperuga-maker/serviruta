@@ -3,509 +3,492 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Serviruta · Coordinador · Presupuestos</title>
+<title>Serviruta · Presupuestos</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root{--rojo:#E8210A;--rojo-d:#B01A08;--rojo-g:rgba(232,33,10,0.08);--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;--naranja:#FB923C;}
+:root{--rojo:#E8210A;--rojo-g:rgba(232,33,10,0.08);--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--verde-g:rgba(34,197,94,0.1);--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:600px;margin:0 auto;}
-.top{background:var(--c1);border-bottom:1px solid var(--borde);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.top{background:var(--c1);border-bottom:1px solid var(--borde);padding:10px 14px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
 .top-title{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
-.top-back{background:none;border:1px solid var(--borde);color:var(--txt3);font-size:11px;padding:5px 12px;border-radius:6px;cursor:pointer;font-family:"DM Sans",sans-serif;}
-.body{padding:16px;}
-.filtros{display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;padding-bottom:4px;}
-.filtro{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--borde);background:var(--c2);color:var(--txt3);white-space:nowrap;font-family:"DM Sans",sans-serif;transition:all 0.15s;}
-.filtro.active{background:var(--rojo);border-color:var(--rojo);color:#fff;}
-.card{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin-bottom:10px;cursor:pointer;transition:all 0.15s;}
-.card:hover{border-color:var(--borde2,#3A3A42);}
-.card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
-.card-cliente{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;}
-.badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;font-family:"Syne",sans-serif;}
-.badge.nueva{background:var(--rojo-g);color:var(--rojo);border:1px solid rgba(232,33,10,0.3);}
-.badge.valorizada{background:rgba(245,197,24,0.1);color:var(--amarillo);border:1px solid rgba(245,197,24,0.3);}
-.badge.enviada{background:rgba(34,197,94,0.1);color:var(--verde);border:1px solid rgba(34,197,94,0.3);}
-.card-info{font-size:12px;color:var(--txt3);}
-.loading{text-align:center;padding:40px;color:var(--txt3);font-size:13px;}
-.empty{text-align:center;padding:40px;color:var(--txt3);}
-.empty-icon{font-size:40px;margin-bottom:12px;}
-
+.top-back{background:none;border:1px solid var(--borde);color:var(--txt3);font-size:11px;padding:5px 10px;border-radius:6px;cursor:pointer;}
+.tabs{display:flex;border-bottom:1px solid var(--borde);background:var(--c1);position:sticky;top:45px;z-index:99;}
+.tab{flex:1;padding:10px 6px;text-align:center;font-size:11px;font-weight:600;color:var(--txt3);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;}
+.tab.active{color:var(--rojo);border-bottom-color:var(--rojo);}
+.page{display:none;padding:12px 14px 80px;}.page.active{display:block;}
+.btn-nuevo{width:100%;background:var(--rojo);border:none;border-radius:8px;color:#fff;font-family:"Syne",sans-serif;font-weight:700;font-size:14px;padding:12px;cursor:pointer;margin-bottom:12px;}
+/* CARDS */
+.ppto-card{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:12px;margin-bottom:10px;cursor:pointer;transition:all 0.15s;}
+.ppto-card:hover{border-color:rgba(232,33,10,0.4);}
+.pc-top{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.pc-num{font-family:"Syne",sans-serif;font-weight:800;font-size:12px;color:var(--txt3);}
+.pc-cliente{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;flex:1;}
+.pc-total{font-family:"Syne",sans-serif;font-weight:800;font-size:16px;color:var(--verde);}
+.pc-info{display:flex;gap:8px;flex-wrap:wrap;}
+.pc-tag{font-size:10px;color:var(--txt3);background:var(--c3);border-radius:4px;padding:2px 7px;}
+.pc-tag.est-nuevo{color:var(--azul);}
+.pc-tag.est-valorizada{color:var(--amarillo);}
+.pc-tag.est-aprobada{color:var(--verde);}
+.pc-tag.est-completado{color:var(--morado);}
+.pc-tag.est-pagado{background:var(--verde-g);color:var(--verde);border:1px solid rgba(34,197,94,0.3);}
 /* DETALLE */
-.detalle{display:none;}
-.detalle.open{display:block;}
-.det-cliente{font-family:"Syne",sans-serif;font-weight:800;font-size:20px;margin-bottom:4px;}
-.det-info{font-size:13px;color:var(--txt3);margin-bottom:16px;}
-.sec{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);margin:14px 0 8px;display:flex;align-items:center;gap:8px;}
+.det-wrap{display:none;}
+.det-wrap.active{display:block;padding:12px 14px 80px;}
+.det-back{background:none;border:1px solid var(--borde);color:var(--txt3);font-size:11px;padding:6px 12px;border-radius:6px;cursor:pointer;margin-bottom:12px;}
+.det-titulo{font-family:"Syne",sans-serif;font-weight:800;font-size:18px;margin-bottom:4px;}
+.det-sub{font-size:12px;color:var(--txt3);margin-bottom:14px;}
+.sec{font-family:"Syne",sans-serif;font-weight:700;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);margin:14px 0 8px;display:flex;align-items:center;gap:8px;}
 .sec::after{content:"";flex:1;height:1px;background:var(--borde);}
-.item-row{display:flex;gap:10px;align-items:center;background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:10px 12px;margin-bottom:8px;}
-.item-num{font-size:12px;color:var(--txt3);min-width:20px;}
-.item-desc{flex:1;font-size:13px;}
-.item-precio{background:var(--c3);border:1px solid var(--borde);border-radius:6px;color:var(--txt);font-family:"DM Sans",sans-serif;font-size:14px;padding:8px 10px;outline:none;width:110px;text-align:right;}
+.item-row{display:flex;align-items:center;gap:6px;background:var(--c2);border-radius:8px;padding:8px 10px;margin-bottom:6px;flex-wrap:wrap;}
+.item-num{width:20px;height:20px;background:var(--c3);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;}
+.item-desc{flex:1;font-size:13px;min-width:100px;}
+.item-precio{width:110px;background:var(--c3);border:1px solid var(--borde);border-radius:6px;color:var(--txt);font-family:"DM Sans",sans-serif;font-size:14px;padding:7px 10px;outline:none;text-align:right;}
 .item-precio:focus{border-color:var(--rojo);}
-.total-box{background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:14px;margin-bottom:14px;}
-.total-row{display:flex;justify-content:space-between;font-size:13px;color:var(--txt2);padding:3px 0;}
-.total-final{display:flex;justify-content:space-between;border-top:1px solid var(--borde);padding-top:10px;margin-top:6px;}
-.total-label{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;}
-.total-val{font-family:"Syne",sans-serif;font-weight:800;font-size:28px;color:var(--verde);}
-.inp{width:100%;background:var(--c2);border:1px solid var(--borde);border-radius:8px;color:var(--txt);font-family:"DM Sans",sans-serif;font-size:14px;padding:10px 12px;outline:none;margin-bottom:10px;}
+.inp{width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:8px;color:var(--txt);font-family:"DM Sans",sans-serif;font-size:15px;padding:10px 12px;outline:none;margin-bottom:10px;-webkit-appearance:none;}
 .inp:focus{border-color:var(--rojo);}
-.btn{width:100%;padding:13px;border-radius:10px;font-family:"Syne",sans-serif;font-weight:700;font-size:14px;cursor:pointer;border:none;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:8px;transition:all 0.15s;}
+.inp::placeholder{color:var(--txt3);}
+.lbl{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--txt3);margin-bottom:5px;display:block;}
+.total-box{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin:12px 0;}
+.total-row{display:flex;justify-content:space-between;font-size:13px;padding:4px 0;}
+.total-final{display:flex;justify-content:space-between;font-family:"Syne",sans-serif;font-weight:800;font-size:20px;padding-top:10px;margin-top:6px;border-top:1px solid var(--borde);}
+.btn{width:100%;padding:13px;border-radius:8px;font-family:"Syne",sans-serif;font-weight:700;font-size:14px;cursor:pointer;border:none;margin-bottom:8px;}
 .btn-rojo{background:var(--rojo);color:#fff;}
 .btn-verde{background:var(--verde);color:#000;}
+.btn-morado{background:rgba(167,139,250,0.15);border:1px solid rgba(167,139,250,0.4);color:var(--morado);}
 .btn-wa{background:#25D366;color:#fff;}
-.btn-sec{background:var(--c2);border:1px solid var(--borde);color:var(--txt2);}
-.iva-row{display:flex;align-items:center;justify-content:space-between;background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:10px 12px;margin-bottom:10px;}
-.iva-lbl{font-size:13px;}
-.iva-sub{font-size:11px;color:var(--txt3);margin-top:1px;}
+.btn-sec{background:var(--c3);border:1px solid var(--borde);color:var(--txt2);}
+.iva-row{display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.iva-row label{font-size:13px;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.cant-ctrl{display:flex;align-items:center;gap:5px;flex-shrink:0;}
+.cant-btn{width:26px;height:26px;border-radius:6px;border:1px solid var(--borde);background:var(--c3);color:var(--txt);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.cant-val{font-family:"Syne",sans-serif;font-weight:800;font-size:14px;min-width:22px;text-align:center;}
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;display:none;align-items:flex-end;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--c2);border:1px solid var(--borde);border-radius:16px 16px 0 0;width:100%;max-width:600px;padding:18px 18px 32px;max-height:90vh;overflow-y:auto;}
+.modal-handle{width:36px;height:4px;background:var(--borde);border-radius:2px;margin:0 auto 14px;}
+.modal-title{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;margin-bottom:14px;}
+.btn-cancel{width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:8px;color:var(--txt2);font-family:"Syne",sans-serif;font-weight:700;font-size:14px;padding:12px;cursor:pointer;margin-bottom:8px;}
+.btn-save{width:100%;background:var(--rojo);border:none;border-radius:8px;color:#fff;font-family:"Syne",sans-serif;font-weight:700;font-size:14px;padding:13px;cursor:pointer;}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--c3);border:1px solid var(--borde);border-radius:8px;padding:10px 16px;font-size:12px;opacity:0;transition:all 0.25s;pointer-events:none;z-index:999;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.ok{border-color:rgba(34,197,94,0.4);color:var(--verde);}
+.loading{text-align:center;padding:40px;color:var(--txt3);}
+.filtro-tec{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:12px;}
+.ftec{flex-shrink:0;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--borde);background:var(--c2);color:var(--txt3);}
+.ftec.active{background:var(--rojo);border-color:var(--rojo);color:#fff;}
 </style>
 </head>
 <body>
 
 <div class="top">
-  <button class="top-back" onclick="location.href='login-coordinador.html'">← Volver</button>
+  <button class="top-back" onclick="location.href='menu-coordinador.html'">← Volver</button>
   <div class="top-title">📋 Presupuestos</div>
-  <button onclick="loadPptos()" style="background:none;border:none;color:var(--txt3);cursor:pointer;font-size:18px;">↻</button>
+  <button onclick="load()" style="background:none;border:none;color:var(--txt3);cursor:pointer;font-size:20px;">↻</button>
 </div>
 
-<!-- LISTA -->
-<div id="lista-view" class="body">
-  <button onclick="nuevoPpto()" style="width:100%;background:var(--rojo);border:none;border-radius:8px;color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;padding:13px;cursor:pointer;margin-bottom:14px;display:flex;align-items:center;justify-content:center;gap:8px;">＋ Crear presupuesto directo</button>
-<div class="filtros">
-    <div class="filtro active" onclick="filtrar('todas',this)">Todas</div>
-    <div class="filtro" onclick="filtrar('nueva',this)">🔴 Nuevas</div>
-    <div class="filtro" onclick="filtrar('valorizada',this)">🟡 Valorizadas</div>
-    <div class="filtro" onclick="filtrar('enviada',this)">🟢 Enviadas</div>
-  </div>
-  <div id="pptos-list"><div class="loading">⏳ Cargando presupuestos...</div></div>
+<div class="tabs" id="main-tabs">
+  <div class="tab active" id="tab0" onclick="goTab(0)">🌐 General</div>
+  <div class="tab" id="tab1" onclick="goTab(1)">👷 Por técnico</div>
+  <div class="tab" id="tab2" onclick="goTab(2)">📊 Contabilidad</div>
 </div>
 
-<!-- DETALLE -->
-<div id="detalle-view" style="display:none;padding:16px 16px 80px;">
-  <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
-    <button onclick="volverLista()" style="background:none;border:1px solid var(--borde);color:var(--txt3);font-size:12px;padding:6px 14px;border-radius:6px;cursor:pointer;font-family:'DM Sans',sans-serif;">← Volver</button>
-    <span id="det-badge" class="badge nueva">Nueva</span>
-  </div>
-  <div id="det-cliente" class="det-cliente">—</div>
-  <div id="det-info" class="det-info">—</div>
-
-  <div class="sec">Trabajos a valorizar</div>
-  <div id="det-items"></div>
-
-  <div class="iva-row">
-    <div><div class="iva-lbl">Incluir IVA (19%)</div><div class="iva-sub">Aplica sobre el valor neto</div></div>
-    <input type="checkbox" id="aplica-iva" checked onchange="calcTotal()" style="width:18px;height:18px;cursor:pointer;accent-color:var(--rojo)">
-  </div>
-
-  <div class="total-box" id="total-box">
-    <div class="total-final"><span class="total-label">Total</span><span class="total-val" id="total-val">$0</span></div>
-  </div>
-
-  <div class="sec">Agregar ítems adicionales (coordinador)</div>
-  <div id="coord-items-wrap"></div>
-  <button onclick="coordAgregarItem()" style="width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:8px;color:var(--txt2);font-family:'Syne',sans-serif;font-weight:700;font-size:12px;padding:10px;cursor:pointer;margin-bottom:12px;">＋ Agregar ítem desde coordinador</button>
-
-  <div class="sec">Notas al cliente</div>
-  <textarea class="inp" id="det-notas" placeholder="Notas opcionales..." rows="2"></textarea>
-
-  <button class="btn btn-rojo" onclick="guardarValorizacion()">💾 Guardar valorización</button>
-  <button class="btn btn-wa" onclick="enviarWA()">💬 Enviar al cliente por WhatsApp</button>
-  <button class="btn" onclick="pasarContabilidad()" style="width:100%;background:rgba(167,139,250,0.15);border:1px solid rgba(167,139,250,0.4);color:#A78BFA;border-radius:8px;padding:13px;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;cursor:pointer;margin-bottom:8px;">📊 Pasar a contabilidad sin enviar al cliente</button>
-  <button class="btn btn-sec" onclick="volverLista()">Cancelar</button>
+<!-- PÁGINA GENERAL -->
+<div class="page active" id="pg0">
+  <button class="btn-nuevo" onclick="openModalNuevo()">＋ Nuevo presupuesto</button>
+  <div id="lista-general"><div class="loading">Cargando...</div></div>
 </div>
 
+<!-- PÁGINA POR TÉCNICO -->
+<div class="page" id="pg1">
+  <div class="filtro-tec" id="filtro-tec"></div>
+  <div id="lista-tec"><div class="loading">Cargando...</div></div>
+</div>
 
-<!-- MODAL NUEVO PPTO DIRECTO -->
-<div id="modal-nuevo-ppto" style="position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:200;display:none;align-items:flex-end;justify-content:center;" onclick="if(event.target===this)document.getElementById('modal-nuevo-ppto').style.display='none'">
-  <div style="background:var(--c2);border:1px solid var(--borde);border-radius:16px 16px 0 0;width:100%;max-width:600px;padding:20px 20px 36px;max-height:90vh;overflow-y:auto;">
-    <div style="width:36px;height:4px;background:var(--borde);border-radius:2px;margin:0 auto 16px;"></div>
-    <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:16px;margin-bottom:16px;">Nuevo presupuesto directo</div>
+<!-- PÁGINA CONTABILIDAD -->
+<div class="page" id="pg2">
+  <div id="resumen-cont" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;"></div>
+  <div id="lista-cont"><div class="loading">Cargando...</div></div>
+</div>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-      <div>
-        <label style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--txt3);margin-bottom:6px;display:block;">Cliente</label>
-        <input class="inp" id="np-cliente" placeholder="Nombre del cliente">
-      </div>
-      <div>
-        <label style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--txt3);margin-bottom:6px;display:block;">Teléfono</label>
-        <input class="inp" id="np-tel" placeholder="+56 9 XXXX XXXX" type="tel">
-      </div>
+<!-- DETALLE PRESUPUESTO -->
+<div class="det-wrap" id="det-wrap">
+  <div style="padding:12px 14px 0">
+    <button class="det-back" onclick="cerrarDetalle()">← Volver a lista</button>
+    <div class="det-titulo" id="det-cliente">—</div>
+    <div class="det-sub" id="det-info">—</div>
+  </div>
+  <div style="padding:0 14px 80px">
+    <div class="sec">Ítems del técnico</div>
+    <div id="det-items"></div>
+    <div class="sec">Ítems adicionales (coordinador)</div>
+    <button onclick="coordAgregarItem()" style="width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:8px;color:var(--txt2);font-family:'Syne',sans-serif;font-weight:700;font-size:12px;padding:10px;cursor:pointer;margin-bottom:10px;">＋ Agregar ítem</button>
+    <div id="coord-items-wrap"></div>
+    <div class="iva-row">
+      <input type="checkbox" id="aplica-iva" onchange="calcTotal()" style="width:18px;height:18px;accent-color:var(--rojo)">
+      <label for="aplica-iva">Aplicar IVA 19%</label>
     </div>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-      <div>
-        <label style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--txt3);margin-bottom:6px;display:block;">Vehículo</label>
-        <input class="inp" id="np-vehiculo" placeholder="Ej: Hyundai Tucson">
-      </div>
-      <div>
-        <label style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--txt3);margin-bottom:6px;display:block;">Patente</label>
-        <input class="inp" id="np-patente" placeholder="Ej: ABCD-12" style="text-transform:uppercase;margin-bottom:10px;" oninput="this.value=this.value.toUpperCase()">
-        <label style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--txt3);margin-bottom:6px;display:block;">Técnico</label>
-        <select class="inp" id="np-tecnico" style="padding:10px 12px;">
-          <option value="Jorge Ramirez">Jorge Ramirez</option>
-          <option value="Felipe Mora">Felipe Mora</option>
-          <option value="Carlos Vega">Carlos Vega</option>
-          <option value="Reynaldo Aguas Bertel">Reynaldo Aguas Bertel</option>
-          <option value="Kiven Henz">Kiven Henz</option>
-          <option value="Humberto Morales">Humberto Morales</option>
-          <option value="Giovanino Perugini">Giovanino Perugini</option>
-          <option value="Reynaldo Aguas">Reynaldo Aguas</option>
+    <div class="total-box" id="total-box"></div>
+    <div class="sec">Notas</div>
+    <textarea class="inp" id="det-notas" placeholder="Notas para el cliente..." rows="2" style="resize:none;margin-bottom:14px"></textarea>
+    <button class="btn btn-rojo" onclick="guardarValorizacion()">💾 Guardar valorización</button>
+    <button class="btn btn-wa" onclick="enviarWA()">💬 Enviar al cliente por WhatsApp</button>
+    <button class="btn btn-morado" onclick="pasarContabilidad()">📊 Pasar a contabilidad sin enviar al cliente</button>
+    <button class="btn btn-verde" onclick="marcarPagado()">💰 Marcar como PAGADO</button>
+    <button class="btn btn-sec" onclick="cerrarDetalle()">Cancelar</button>
+  </div>
+</div>
+
+<!-- MODAL NUEVO -->
+<div class="modal-overlay" id="modal-nuevo" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Nuevo presupuesto</div>
+    <div class="row2">
+      <div><label class="lbl">Técnico</label>
+        <select class="inp" id="n-tecnico" style="margin-bottom:0">
+          <option>Jorge Ramirez</option><option>Felipe Mora</option><option>Carlos Vega</option>
+          <option>Reynaldo Aguas Bertel</option><option>Reynaldo Aguas</option>
+          <option>Kiven Henz</option><option>Humberto Morales</option><option>Giovanino Perugini</option>
         </select>
       </div>
+      <div><label class="lbl">N° Presupuesto</label><input class="inp" id="n-num" placeholder="001" style="margin-bottom:0"></div>
     </div>
-
-    <label style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--txt3);margin-bottom:6px;display:block;margin-top:4px;">Trabajos a realizar</label>
-    <div id="np-items-wrap"></div>
-    <button onclick="npAgregarItem()" style="width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:8px;color:var(--txt2);font-family:'Syne',sans-serif;font-weight:700;font-size:12px;padding:10px;cursor:pointer;margin-bottom:12px;">＋ Agregar trabajo</button>
-
-    <label style="font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--txt3);margin-bottom:6px;display:block;">Código aliado (opcional)</label>
-    <input class="inp" id="np-aliado" placeholder="Ej: GRU-PEDRO01" style="font-family:monospace;font-size:13px;text-transform:uppercase;" oninput="this.value=this.value.toUpperCase()">
-
-    <button onclick="document.getElementById('modal-nuevo-ppto').style.display='none'" style="width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:8px;color:var(--txt2);font-family:'Syne',sans-serif;font-weight:700;font-size:14px;padding:13px;cursor:pointer;margin-bottom:8px;">Cancelar</button>
-    <button onclick="guardarNuevoPpto()" style="width:100%;background:var(--rojo);border:none;border-radius:8px;color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;padding:13px;cursor:pointer;">Guardar presupuesto</button>
+    <div style="height:8px"></div>
+    <label class="lbl">Cliente</label><input class="inp" id="n-cliente" placeholder="Nombre del cliente">
+    <label class="lbl">Teléfono</label><input class="inp" id="n-tel" placeholder="+56 9..." type="tel">
+    <label class="lbl">Vehículo</label><input class="inp" id="n-vehiculo" placeholder="Marca, modelo, patente">
+    <label class="lbl">Código aliado (opcional)</label><input class="inp" id="n-aliado" placeholder="Ej: GRU-PEDRO01" style="margin-bottom:14px">
+    <button class="btn-cancel" onclick="document.getElementById('modal-nuevo').classList.remove('open')">Cancelar</button>
+    <button class="btn-save" onclick="crearPpto()">Crear presupuesto</button>
   </div>
 </div>
-<div id="toast" style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--c3);border:1px solid var(--borde);border-radius:8px;padding:11px 18px;font-size:13px;font-weight:500;z-index:999;opacity:0;transition:all 0.25s;pointer-events:none;white-space:nowrap;"></div>
+
+<div class="toast" id="toast"></div>
 
 <script>
-const SB_URL = 'https://bqlgfmqcefledqyodkii.supabase.co'
-const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
-let db = null
-let pptos = []
-let pptoActual = null
-let filtroActual = 'todas'
+var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+var db=null,todos=[],pptoActual=null,tabActual=0,tecFiltro='todos',coordItemId=0
 
-function getDB() {
-  if (!db) db = supabase.createClient(SB_URL, SB_KEY)
-  return db
+function getDB(){if(!db)db=supabase.createClient(SB_URL,SB_KEY);return db;}
+
+async function load(){
+  var r=await getDB().from('presupuestos').select('*').order('created_at',{ascending:false})
+  todos=r.data||[]
+  renderTab(tabActual)
 }
 
-async function loadPptos() {
-  document.getElementById('pptos-list').innerHTML = '<div class="loading">⏳ Cargando...</div>'
-  try {
-    const { data, error } = await getDB().from('presupuestos').select('*').order('created_at', {ascending: false})
-    if (error) throw error
-    pptos = data || []
-    renderLista()
-  } catch(e) {
-    document.getElementById('pptos-list').innerHTML = '<div class="loading">❌ Error: ' + e.message + '</div>'
+function goTab(n){
+  tabActual=n
+  for(var i=0;i<3;i++){
+    document.getElementById('pg'+i).classList.toggle('active',i===n)
+    document.getElementById('tab'+i).classList.toggle('active',i===n)
+  }
+  renderTab(n)
+}
+
+function renderTab(n){
+  if(n===0)renderGeneral()
+  if(n===1)renderPorTecnico()
+  if(n===2)renderContabilidad()
+}
+
+var ESTADOS={nuevo:'est-nuevo',valorizada:'est-valorizada',aprobada:'est-aprobada',completado:'est-completado',pagado:'est-pagado'}
+var ESTADO_LABEL={nuevo:'📋 Nuevo',valorizada:'💰 Valorizado',aprobada:'✅ Aprobado',completado:'🏁 Completado',pagado:'💚 Pagado'}
+
+function cardHTML(s){
+  var est=s.pago_cliente==='pagado'?'pagado':(s.estado_servicio||s.estado||'nuevo')
+  return '<div class="ppto-card" onclick="abrirDetalle(\''+s.id+'\')">'+
+    '<div class="pc-top">'+
+      '<span class="pc-num">#'+(s.numero||'—')+'</span>'+
+      '<span class="pc-cliente">'+s.cliente+'</span>'+
+      '<span class="pc-total">'+(s.total?'$'+s.total.toLocaleString('es-CL'):'Sin precio')+'</span>'+
+    '</div>'+
+    '<div class="pc-info">'+
+      '<span class="pc-tag">👷 '+s.tecnico+'</span>'+
+      '<span class="pc-tag">🚗 '+(s.vehiculo||'Sin vehículo')+'</span>'+
+      '<span class="pc-tag '+(ESTADOS[est]||'')+'">'+( ESTADO_LABEL[est]||est)+'</span>'+
+      (s.pago_cliente==='pagado'?'<span class="pc-tag est-pagado">💚 Pagado</span>':'')+
+    '</div>'+
+  '</div>'
+}
+
+function renderGeneral(){
+  var el=document.getElementById('lista-general')
+  if(!todos.length){el.innerHTML='<div class="loading">Sin presupuestos</div>';return}
+  el.innerHTML=todos.map(cardHTML).join('')
+}
+
+function renderPorTecnico(){
+  var tecs=[...new Set(todos.map(function(s){return s.tecnico}).filter(Boolean))]
+  var filtroEl=document.getElementById('filtro-tec')
+  filtroEl.innerHTML='<div class="ftec'+(tecFiltro==='todos'?' active':'')+'" onclick="setTecFiltro(\'todos\',this)">Todos</div>'+
+    tecs.map(function(t){
+      var nom=t.split(' ').slice(0,2).join(' ')
+      return '<div class="ftec'+(tecFiltro===t?' active':'')+'" onclick="setTecFiltro(\''+t+'\',this)">'+nom+'</div>'
+    }).join('')
+
+  var data=tecFiltro==='todos'?todos:todos.filter(function(s){return s.tecnico===tecFiltro})
+  var el=document.getElementById('lista-tec')
+  if(!data.length){el.innerHTML='<div class="loading">Sin presupuestos para este técnico</div>';return}
+
+  // Agrupar por técnico si es "todos"
+  if(tecFiltro==='todos'){
+    var porTec={}
+    data.forEach(function(s){
+      if(!porTec[s.tecnico])porTec[s.tecnico]=[]
+      porTec[s.tecnico].push(s)
+    })
+    el.innerHTML=Object.keys(porTec).map(function(tec){
+      var total=porTec[tec].reduce(function(s,x){return s+(x.total||0)},0)
+      return '<div style="margin-bottom:16px">'+
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">'+
+          '<div style="font-family:Syne,sans-serif;font-weight:700;font-size:13px;color:var(--azul)">👷 '+tec+'</div>'+
+          '<div style="font-size:12px;color:var(--verde)">$'+total.toLocaleString('es-CL')+' · '+porTec[tec].length+' ppto'+(porTec[tec].length!==1?'s':'')+'</div>'+
+        '</div>'+
+        porTec[tec].map(cardHTML).join('')+
+      '</div>'
+    }).join('')
+  } else {
+    el.innerHTML=data.map(cardHTML).join('')
   }
 }
 
-function renderLista() {
-  const lista = filtroActual === 'todas' ? pptos : pptos.filter(p => p.estado === filtroActual)
-  const el = document.getElementById('pptos-list')
-  if (lista.length === 0) {
-    el.innerHTML = '<div class="empty"><div class="empty-icon">📋</div><p>Sin presupuestos ' + (filtroActual === 'todas' ? 'aún' : 'en este estado') + '</p></div>'
-    return
-  }
-  const badges = {nueva:'🔴 Nueva', valorizada:'🟡 Valorizada', enviada:'🟢 Enviada', aceptada:'✅ Aceptada'}
-  el.innerHTML = lista.map(p => `
-    <div class="card" onclick="abrirDetalle('${p.id}')">
-      <div class="card-top">
-        <div class="card-cliente">${p.cliente}</div>
-        <span class="badge ${p.estado}">${badges[p.estado]||p.estado}</span>
-      </div>
-      <div class="card-info">🚗 ${p.vehiculo||''}${p.auto?' · '+p.auto:''} · 👷 ${p.tecnico} · N° ${p.numero}</div>
-      <div class="card-info" style="margin-top:4px">${(p.items||[]).slice(0,3).map(i=>'• '+i.desc).join(' · ')}${(p.items||[]).length>3?' +más':''}</div>
-    </div>`).join('')
-}
-
-function filtrar(f, el) {
-  filtroActual = f
-  document.querySelectorAll('.filtro').forEach(x=>x.classList.remove('active'))
+function setTecFiltro(tec,el){
+  tecFiltro=tec
+  document.querySelectorAll('.ftec').forEach(function(x){x.classList.remove('active')})
   el.classList.add('active')
-  renderLista()
+  renderPorTecnico()
 }
 
-function abrirDetalle(id) {
-  pptoActual = pptos.find(p=>p.id===id)
-  if (!pptoActual) return
-  document.getElementById('lista-view').style.display = 'none'
-  document.getElementById('detalle-view').style.display = 'block'
-  document.getElementById('det-cliente').textContent = pptoActual.cliente
-  document.getElementById('det-info').textContent = '📞 ' + (pptoActual.telefono||'Sin tel') + ' · 🚗 ' + (pptoActual.vehiculo||'') + (pptoActual.auto?' · '+pptoActual.auto:'') + ' · 👷 ' + pptoActual.tecnico
-  document.getElementById('det-badge').textContent = pptoActual.estado
-  document.getElementById('det-badge').className = 'badge ' + pptoActual.estado
-  document.getElementById('det-notas').value = pptoActual.notas || ''
-  // Limpiar ítems coordinador previos
-  coordItemId = 0; coordItems = []
-  document.getElementById('coord-items-wrap').innerHTML = ''
-  // Si ya tenía ítems del coordinador, mostrarlos
-  if (pptoActual.items_coord && pptoActual.items_coord.length) {
-    pptoActual.items_coord.forEach(function(item) {
-      coordAgregarItem()
-      var lastId = coordItemId
-      document.getElementById('coord-desc-'+lastId).value = item.desc||''
-      document.getElementById('coord-precio-'+lastId).value = item.precio_venta||''
+function renderContabilidad(){
+  var completados=todos.filter(function(s){return s.estado_servicio==='completado'||s.pago_cliente==='pagado'})
+  var totalComp=completados.reduce(function(s,x){return s+(x.total||0)},0)
+  var pagados=completados.filter(function(s){return s.pago_cliente==='pagado'})
+  var totalPag=pagados.reduce(function(s,x){return s+(x.total||0)},0)
+
+  document.getElementById('resumen-cont').innerHTML=
+    '<div style="background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:12px">'+
+      '<div style="font-size:10px;color:var(--txt3);text-transform:uppercase;margin-bottom:4px">Total en contabilidad</div>'+
+      '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:22px;color:var(--verde)">$'+totalComp.toLocaleString('es-CL')+'</div>'+
+      '<div style="font-size:11px;color:var(--txt3)">'+completados.length+' servicios</div>'+
+    '</div>'+
+    '<div style="background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:12px;text-align:right">'+
+      '<div style="font-size:10px;color:var(--txt3);text-transform:uppercase;margin-bottom:4px">Pagado</div>'+
+      '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:22px;color:var(--amarillo)">$'+totalPag.toLocaleString('es-CL')+'</div>'+
+      '<div style="font-size:11px;color:var(--txt3)">'+pagados.length+' pagados</div>'+
+    '</div>'
+
+  var el=document.getElementById('lista-cont')
+  if(!completados.length){el.innerHTML='<div class="loading">Sin servicios en contabilidad</div>';return}
+  el.innerHTML=completados.map(cardHTML).join('')
+}
+
+function abrirDetalle(id){
+  pptoActual=todos.find(function(s){return s.id===id})
+  if(!pptoActual)return
+  document.getElementById('main-tabs').style.display='none'
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')})
+  document.getElementById('det-wrap').classList.add('active')
+  document.getElementById('det-cliente').textContent=pptoActual.cliente
+  document.getElementById('det-info').textContent='#'+(pptoActual.numero||'—')+' · '+pptoActual.tecnico+(pptoActual.vehiculo?' · '+pptoActual.vehiculo:'')
+  document.getElementById('det-notas').value=pptoActual.notas||''
+  document.getElementById('aplica-iva').checked=!!(pptoActual.iva&&pptoActual.iva>0)
+  document.getElementById('coord-items-wrap').innerHTML=''
+  coordItemId=0
+  if(pptoActual.items_coord&&pptoActual.items_coord.length){
+    pptoActual.items_coord.forEach(function(item){
+      coordAgregarItemPrellenado(item.desc,item.precio_venta||0)
     })
   }
   renderItems()
   calcTotal()
 }
 
-function renderItems() {
-  const items = pptoActual.items || []
-  document.getElementById('det-items').innerHTML = items.map((item,i) => `
-    <div class="item-row" style="flex-wrap:wrap;gap:6px">
-      <span class="item-num">${i+1}</span>
-      <div class="item-desc" style="flex:1;min-width:100px">${item.desc}</div>
-      <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
-        <button onclick="cambiarCant(${item.id||i},-1)" style="width:26px;height:26px;border-radius:6px;border:1px solid var(--borde);background:var(--c3);color:var(--txt);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">−</button>
-        <span id="cant-${item.id||i}" style="font-family:'Syne',sans-serif;font-weight:800;font-size:14px;min-width:20px;text-align:center">${item.cant||1}</span>
-        <button onclick="cambiarCant(${item.id||i},1)" style="width:26px;height:26px;border-radius:6px;border:1px solid var(--borde);background:var(--c3);color:var(--txt);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0">+</button>
-      </div>
-      <input class="item-precio" type="number" placeholder="Precio unit." value="${item.precio_venta||''}"
-        oninput="setItemPrecio(${item.id||i}, this.value)" onchange="calcTotal()" style="width:110px">
-    </div>`).join('')
+function cerrarDetalle(){
+  document.getElementById('det-wrap').classList.remove('active')
+  document.getElementById('main-tabs').style.display='flex'
+  document.getElementById('pg'+tabActual).classList.add('active')
+  pptoActual=null
+  load()
 }
 
-function cambiarCant(id, delta) {
-  const items = pptoActual.items || []
-  const item = items.find(x=>(x.id||items.indexOf(x))===id) || items[id] || items.find((_,i)=>i===id)
-  if (!item) return
-  item.cant = Math.max(1, (item.cant||1) + delta)
-  const el = document.getElementById('cant-'+id)
-  if (el) el.textContent = item.cant
+function renderItems(){
+  var items=pptoActual.items||[]
+  document.getElementById('det-items').innerHTML=items.map(function(item,i){
+    return '<div class="item-row">'+
+      '<span class="item-num">'+(i+1)+'</span>'+
+      '<div class="item-desc">'+item.desc+(item.cant>1?' ×'+item.cant:'')+'</div>'+
+      '<div class="cant-ctrl">'+
+        '<button class="cant-btn" onclick="cambiarCant('+(item.id||i)+',-1)">−</button>'+
+        '<span class="cant-val" id="cant-'+(item.id||i)+'">'+(item.cant||1)+'</span>'+
+        '<button class="cant-btn" onclick="cambiarCant('+(item.id||i)+',1)">+</button>'+
+      '</div>'+
+      '<input class="item-precio" type="number" placeholder="$Precio" value="'+(item.precio_venta||'')+'" oninput="setItemPrecio('+(item.id||i)+',this.value)" onchange="calcTotal()">'+
+    '</div>'
+  }).join('')
+}
+
+function cambiarCant(id,delta){
+  var items=pptoActual.items||[]
+  var item=items.find(function(x){return (x.id||items.indexOf(x))===id})||items[id]
+  if(!item)return
+  item.cant=Math.max(1,(item.cant||1)+delta)
+  var el=document.getElementById('cant-'+id)
+  if(el)el.textContent=item.cant
   calcTotal()
 }
 
-function setItemPrecio(id, val) {
-  const items = pptoActual.items || []
-  const item = items.find(x=>(x.id||items.indexOf(x))===id) || items[id]
-  if (item) item.precio_venta = parseFloat(val)||0
+function setItemPrecio(id,val){
+  var items=pptoActual.items||[]
+  var item=items.find(function(x){return (x.id||items.indexOf(x))===id})||items[id]
+  if(item)item.precio_venta=parseFloat(val)||0
   calcTotal()
 }
 
-function calcTotal() {
-  const items = pptoActual?.items || []
-  const coordExtra = getCoordItems()
-  const sub = [...items, ...coordExtra].reduce((s,i)=>s+((i.precio_venta||0)*(i.cant||1)),0)
-  const iva = document.getElementById('aplica-iva')?.checked ? Math.round(sub*0.19) : 0
-  const total = sub + iva
-  const box = document.getElementById('total-box')
-  box.innerHTML = `
-    <div class="total-row"><span>Subtotal</span><span>$${sub.toLocaleString('es-CL')}</span></div>
-    ${iva>0?'<div class="total-row"><span>IVA (19%)</span><span>+$'+iva.toLocaleString('es-CL')+'</span></div>':''}
-    <div class="total-final"><span class="total-label">TOTAL</span><span class="total-val">$${total.toLocaleString('es-CL')}</span></div>`
-  return {sub, iva, total}
-}
-
-async function pasarContabilidad() {
-  if (!pptoActual) return
-  const {sub, iva, total} = calcTotal()
-  const notas = document.getElementById('det-notas')?.value?.trim() || ''
-  try {
-    await getDB().from('presupuestos').update({
-      items: pptoActual.items,
-      items_coord: getCoordItems(),
-      estado: 'valorizada',
-      estado_servicio: 'completado',
-      notas,
-      subtotal: sub,
-      iva,
-      total
-    }).eq('id', pptoActual.id)
-    showToast('✅ Pasado a contabilidad correctamente')
-    setTimeout(function(){ volverLista() }, 1500)
-  } catch(e) {
-    showToast('Error: ' + e.message)
-  }
-}
-
-async function guardarValorizacion() {
-  if (!pptoActual) return
-  const {sub, iva, total} = calcTotal()
-  const notas = document.getElementById('det-notas').value.trim()
-  try {
-    await getDB().from('presupuestos').update({
-      items: pptoActual.items,
-      items_coord: getCoordItems(),
-      estado: 'valorizada',
-      notas,
-      subtotal: sub,
-      iva,
-      total
-    }).eq('id', pptoActual.id)
-    pptoActual.estado = 'valorizada'
-    showToast('✅ Valorización guardada')
-    await loadPptos()
-    volverLista()
-  } catch(e) {
-    showToast('❌ Error: ' + e.message)
-  }
-}
-
-async function enviarWA() {
-  if (!pptoActual) return
-  const {sub, iva, total} = calcTotal()
-  const notas = document.getElementById('det-notas').value.trim()
-  const tel = (pptoActual.telefono||'').replace(/\D/g,'')
-  let msg = `*PRESUPUESTO SERVIRUTA N° ${pptoActual.numero}*\n`
-  msg += `_Taller Mecánico a Domicilio · Santiago RM_\n`
-  msg += `━━━━━━━━━━━━━━━━━━\n\n`
-  msg += `👤 *${pptoActual.cliente}*\n`
-  msg += `🚗 ${pptoActual.vehiculo||''}${pptoActual.auto?' · '+pptoActual.auto:''}\n\n`
-  msg += `*SERVICIOS:*\n`
-  ;[...(pptoActual.items||[]),...getCoordItems()].forEach((item,i)=>{
-    const st = (item.precio_venta||0)*(item.cant||1)
-    if (st > 0) msg += `${i+1}. ${item.desc}${item.cant>1?' ×'+item.cant:''}: *$${st.toLocaleString('es-CL')}*\n`
-  })
-  msg += `\n━━━━━━━━━━━━━━━━━━\n`
-  if (iva > 0) msg += `Subtotal: $${sub.toLocaleString('es-CL')}\nIVA (19%): +$${iva.toLocaleString('es-CL')}\n`
-  msg += `💰 *TOTAL: $${total.toLocaleString('es-CL')}*\n━━━━━━━━━━━━━━━━━━\n`
-  if (notas) msg += `\n📋 ${notas}\n`
-  msg += `\n⏰ Válido 48 hrs · +56 9 8505 8250`
-  window.open(`https://wa.me/56${tel}?text=${encodeURIComponent(msg)}`, '_blank')
-  await getDB().from('presupuestos').update({estado:'enviada'}).eq('id', pptoActual.id)
-  pptoActual.estado = 'enviada'
-  showToast('✅ WhatsApp abierto')
-}
-
-function volverLista() {
-  document.getElementById('lista-view').style.display = 'block'
-  document.getElementById('detalle-view').style.display = 'none'
-  pptoActual = null
-}
-
-function showToast(msg) {
-  const t = document.getElementById('toast')
-  t.textContent = msg; t.style.opacity = '1'; t.style.transform = 'translateX(-50%) translateY(0)'
-  setTimeout(()=>{ t.style.opacity='0'; t.style.transform='translateX(-50%) translateY(10px)' }, 2500)
-}
-
-loadPptos()
-
-var npItems = []
-var npItemId = 0
-
-function nuevoPpto() {
-  npItems = []
-  npItemId = 0
-  document.getElementById('np-cliente').value = ''
-  document.getElementById('np-tel').value = ''
-  document.getElementById('np-vehiculo').value = ''
-  document.getElementById('np-aliado').value = ''
-  document.getElementById('np-items-wrap').innerHTML = ''
-  npAgregarItem()
-  document.getElementById('modal-nuevo-ppto').style.display = 'flex'
-}
-
-function npAgregarItem() {
-  npItemId++
-  var id = npItemId
-  var wrap = document.getElementById('np-items-wrap')
-  var div = document.createElement('div')
-  div.id = 'np-item-' + id
-  div.style.display = 'flex'
-  div.style.gap = '8px'
-  div.style.marginBottom = '8px'
-  div.style.alignItems = 'center'
-  var inp1 = document.createElement('input')
-  inp1.className = 'inp'
-  inp1.placeholder = 'Descripcion del trabajo...'
-  inp1.id = 'np-desc-' + id
-  inp1.style.flex = '1'
-  inp1.style.marginBottom = '0'
-  var inp2 = document.createElement('input')
-  inp2.className = 'inp'
-  inp2.type = 'number'
-  inp2.placeholder = '$Precio'
-  inp2.id = 'np-precio-' + id
-  inp2.style.width = '110px'
-  inp2.style.marginBottom = '0'
-  inp2.style.textAlign = 'right'
-  var btn = document.createElement('button')
-  btn.textContent = '🗑'
-  btn.style.cssText = 'background:var(--rojo-g);border:1px solid rgba(232,33,10,0.3);color:var(--rojo);border-radius:6px;padding:8px 10px;cursor:pointer;font-size:14px;'
-  btn.onclick = function() { div.remove() }
-  div.appendChild(inp1)
-  div.appendChild(inp2)
-  div.appendChild(btn)
-  wrap.appendChild(div)
-}
-
-async function guardarNuevoPpto() {
-  var cliente = document.getElementById('np-cliente').value.trim()
-  var tel = document.getElementById('np-tel').value.trim()
-  if (!cliente || !tel) { showToast('Completa nombre y teléfono'); return }
-  
-  var items = []
-  document.querySelectorAll('[id^="np-desc-"]').forEach(function(el) {
-    var itemId = el.id.replace('np-desc-', '')
-    var desc = el.value.trim()
-    var precio = parseFloat(document.getElementById('np-precio-' + itemId)?.value) || 0
-    if (desc) items.push({ id: parseInt(itemId), desc: desc, cant: 1, precio_venta: precio })
-  })
-
-  if (!items.length) { showToast('Agrega al menos un trabajo'); return }
-
-  var num = Math.floor(Math.random() * 9000) + 1000
-  var r = await getDB().from('presupuestos').insert({
-    numero: num,
-    tecnico: document.getElementById('np-tecnico').value,
-    cliente: cliente,
-    telefono: tel,
-    vehiculo: document.getElementById('np-vehiculo').value.trim(),
-    auto: document.getElementById('np-patente')?.value.trim() || '',
-    items: items,
-    estado: 'valorizada',
-    aliado_codigo: document.getElementById('np-aliado').value.trim()
-  })
-
-  if (r.error) { showToast('Error: ' + r.error.message); return }
-  showToast('Presupuesto creado')
-  document.getElementById('modal-nuevo-ppto').style.display = 'none'
-  loadPptos()
-}
-
-
-var coordItemId = 0
-
-function getCoordItems() {
-  var items = []
-  document.querySelectorAll('[id^="coord-desc-"]').forEach(function(el) {
-    var id = el.id.replace('coord-desc-', '')
-    var desc = el.value.trim()
-    var precioEl = document.getElementById('coord-precio-' + id)
-    var precio = precioEl ? (parseFloat(precioEl.value) || 0) : 0
-    if (desc) items.push({ id: parseInt(id), desc: desc, cant: 1, precio_venta: precio })
+function getCoordItems(){
+  var items=[]
+  document.querySelectorAll('[id^="coord-desc-"]').forEach(function(el){
+    var cid=el.id.replace('coord-desc-','')
+    var desc=el.value.trim()
+    var precioEl=document.getElementById('coord-precio-'+cid)
+    var precio=precioEl?(parseFloat(precioEl.value)||0):0
+    var cantEl=document.getElementById('coord-cant-'+cid)
+    var cant=cantEl?(parseInt(cantEl.textContent)||1):1
+    if(desc)items.push({id:parseInt(cid),desc:desc,cant:cant,precio_venta:precio})
   })
   return items
 }
 
-function coordAgregarItem() {
-  coordItemId++
-  var id = coordItemId
-  var wrap = document.getElementById('coord-items-wrap')
-  if (!wrap) return
-  var div = document.createElement('div')
-  div.id = 'coord-item-' + id
-  div.style.cssText = 'display:flex;gap:8px;margin-bottom:8px;align-items:center'
-  var inp1 = document.createElement('input')
-  inp1.className = 'inp'
-  inp1.placeholder = 'Descripcion del item...'
-  inp1.id = 'coord-desc-' + id
-  inp1.style.flex = '1'
-  inp1.style.marginBottom = '0'
-  inp1.addEventListener('input', calcTotal)
-  var inp2 = document.createElement('input')
-  inp2.className = 'inp'
-  inp2.type = 'number'
-  inp2.placeholder = 'Precio unit.'
-  inp2.id = 'coord-precio-' + id
-  inp2.style.width = '110px'
-  inp2.style.marginBottom = '0'
-  inp2.style.textAlign = 'right'
-  inp2.addEventListener('input', calcTotal)
-  var btn = document.createElement('button')
-  btn.textContent = 'X'
-  btn.style.cssText = 'background:rgba(232,33,10,0.1);border:1px solid rgba(232,33,10,0.3);color:#E8210A;border-radius:6px;padding:8px 12px;cursor:pointer;flex-shrink:0'
-  btn.onclick = function() { div.remove(); calcTotal() }
-  div.appendChild(inp1)
-  div.appendChild(inp2)
-  div.appendChild(btn)
-  wrap.appendChild(div)
+function calcTotal(){
+  var items=pptoActual?pptoActual.items||[]:[]
+  var coordExtra=getCoordItems()
+  var sub=[...items,...coordExtra].reduce(function(s,i){return s+((i.precio_venta||0)*(i.cant||1))},0)
+  var iva=document.getElementById('aplica-iva').checked?Math.round(sub*0.19):0
+  var total=sub+iva
+  document.getElementById('total-box').innerHTML=
+    '<div class="total-row"><span>Subtotal</span><span>$'+sub.toLocaleString('es-CL')+'</span></div>'+
+    (iva?'<div class="total-row"><span>IVA 19%</span><span>+$'+iva.toLocaleString('es-CL')+'</span></div>':'')+
+    '<div class="total-final"><span>TOTAL</span><span style="color:var(--verde)">$'+total.toLocaleString('es-CL')+'</span></div>'
+  return {sub,iva,total}
 }
 
+var coordItemId2=0
+function coordAgregarItem(){
+  coordItemId2++
+  var id=coordItemId2
+  crearCoordItem(id,'',0,1)
+}
+
+function coordAgregarItemPrellenado(desc,precio){
+  coordItemId2++
+  var id=coordItemId2
+  crearCoordItem(id,desc,precio,1)
+}
+
+function crearCoordItem(id,desc,precio,cant){
+  var wrap=document.getElementById('coord-items-wrap')
+  var div=document.createElement('div')
+  div.id='coord-item-'+id
+  div.style.cssText='background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:8px 10px;margin-bottom:8px;'
+  div.innerHTML=
+    '<div style="display:flex;gap:6px;margin-bottom:6px;align-items:center">'+
+      '<input id="coord-desc-'+id+'" class="inp" placeholder="Descripción del ítem..." value="'+desc+'" style="flex:1;margin-bottom:0">'+
+      '<button onclick="document.getElementById(\'coord-item-'+id+'\').remove();calcTotal()" style="background:var(--rojo-g);border:1px solid rgba(232,33,10,0.3);color:var(--rojo);border-radius:6px;padding:6px 10px;cursor:pointer;flex-shrink:0">🗑</button>'+
+    '</div>'+
+    '<div style="display:flex;gap:6px;align-items:center">'+
+      '<div style="display:flex;align-items:center;gap:5px">'+
+        '<button onclick="var el=document.getElementById(\'coord-cant-'+id+'\');el.textContent=Math.max(1,parseInt(el.textContent)-1);calcTotal()" style="width:26px;height:26px;border-radius:6px;border:1px solid var(--borde);background:var(--c3);color:var(--txt);font-size:15px;cursor:pointer">−</button>'+
+        '<span id="coord-cant-'+id+'" style="font-family:Syne,sans-serif;font-weight:800;font-size:14px;min-width:22px;text-align:center">'+cant+'</span>'+
+        '<button onclick="var el=document.getElementById(\'coord-cant-'+id+'\');el.textContent=parseInt(el.textContent)+1;calcTotal()" style="width:26px;height:26px;border-radius:6px;border:1px solid var(--borde);background:var(--c3);color:var(--txt);font-size:15px;cursor:pointer">+</button>'+
+      '</div>'+
+      '<input id="coord-precio-'+id+'" class="inp" type="number" placeholder="$Precio unit." value="'+precio+'" style="flex:1;margin-bottom:0;text-align:right" oninput="calcTotal()">'+
+    '</div>'
+  wrap.appendChild(div)
+  document.getElementById('coord-desc-'+id).addEventListener('input',calcTotal)
+}
+
+async function guardarValorizacion(){
+  if(!pptoActual)return
+  var t=calcTotal()
+  try{
+    await getDB().from('presupuestos').update({
+      items:pptoActual.items,items_coord:getCoordItems(),
+      estado:'valorizada',notas:document.getElementById('det-notas').value.trim(),
+      subtotal:t.sub,iva:t.iva,total:t.total
+    }).eq('id',pptoActual.id)
+    toast('✅ Valorización guardada','ok')
+    load()
+  }catch(e){toast('Error: '+e.message)}
+}
+
+async function pasarContabilidad(){
+  if(!pptoActual)return
+  var t=calcTotal()
+  try{
+    await getDB().from('presupuestos').update({
+      items:pptoActual.items,items_coord:getCoordItems(),
+      estado:'aprobada',estado_servicio:'completado',
+      notas:document.getElementById('det-notas').value.trim(),
+      subtotal:t.sub,iva:t.iva,total:t.total
+    }).eq('id',pptoActual.id)
+    toast('📊 Pasado a contabilidad','ok')
+    setTimeout(function(){cerrarDetalle()},1200)
+  }catch(e){toast('Error: '+e.message)}
+}
+
+async function marcarPagado(){
+  if(!pptoActual)return
+  var t=calcTotal()
+  try{
+    await getDB().from('presupuestos').update({
+      items:pptoActual.items,items_coord:getCoordItems(),
+      estado:'aprobada',estado_servicio:'completado',pago_cliente:'pagado',
+      subtotal:t.sub,iva:t.iva,total:t.total
+    }).eq('id',pptoActual.id)
+    toast('💚 Marcado como PAGADO','ok')
+    setTimeout(function(){cerrarDetalle()},1200)
+  }catch(e){toast('Error: '+e.message)}
+}
+
+function enviarWA(){
+  if(!pptoActual)return
+  var t=calcTotal()
+  var items=[...(pptoActual.items||[]),...getCoordItems()]
+  var lineas=items.map(function(i){return '• '+i.desc+(i.cant>1?' x'+i.cant:'')+(i.precio_venta?' — $'+(i.precio_venta*( i.cant||1)).toLocaleString('es-CL'):'')} ).join('\n')
+  var msg='🔧 *PRESUPUESTO SERVIRUTA*\n\nHola '+pptoActual.cliente+'\n\n'+lineas+'\n\n'+(document.getElementById('aplica-iva').checked?'Subtotal: $'+t.sub.toLocaleString('es-CL')+'\nIVA 19%: $'+t.iva.toLocaleString('es-CL')+'\n':'')+'\n*TOTAL: $'+t.total.toLocaleString('es-CL')+'*'+(document.getElementById('det-notas').value?'\n\n'+document.getElementById('det-notas').value:'')+'\n\n📞 Serviruta +56 9 8505 8250'
+  var tel=(pptoActual.telefono||'').replace(/\D/g,'')
+  if(tel)window.open('https://wa.me/56'+tel+'?text='+encodeURIComponent(msg),'_blank')
+  else{navigator.clipboard.writeText(msg).then(function(){toast('Texto copiado','ok')})}
+}
+
+function openModalNuevo(){document.getElementById('modal-nuevo').classList.add('open')}
+
+async function crearPpto(){
+  var cliente=document.getElementById('n-cliente').value.trim()
+  var tec=document.getElementById('n-tecnico').value
+  if(!cliente){toast('Ingresa el nombre del cliente');return}
+  var r=await getDB().from('presupuestos').insert({
+    numero:document.getElementById('n-num').value.trim()||String(Date.now()).slice(-4),
+    tecnico:tec,cliente:cliente,
+    telefono:document.getElementById('n-tel').value.trim(),
+    vehiculo:document.getElementById('n-vehiculo').value.trim(),
+    aliado_codigo:document.getElementById('n-aliado').value.trim(),
+    estado:'nuevo',items:[]
+  }).select()
+  if(r.error){toast('Error: '+r.error.message);return}
+  toast('✅ Presupuesto creado','ok')
+  document.getElementById('modal-nuevo').classList.remove('open')
+  await load()
+  if(r.data&&r.data[0])abrirDetalle(r.data[0].id)
+}
+
+function toast(msg,type){var t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(type?' '+type:'');t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2500)}
+
+load()
 </script>
 </body>
 </html>

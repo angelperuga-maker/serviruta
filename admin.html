@@ -140,7 +140,7 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
 <script>
 var SB='https://bqlgfmqcefledqyodkii.supabase.co'
 var SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
-var db=null,todos=[],periodos=[0:'semana',1:'semana',2:'semana']
+var db=null,todos=[],periodos={'0':'semana','1':'semana','2':'semana'}
 
 function getDB(){if(!db)db=supabase.createClient(SB,SK);return db;}
 

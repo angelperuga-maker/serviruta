@@ -275,8 +275,6 @@ function renderContabilidad(){
   var totalComp=completados.reduce(function(s,x){return s+(x.total||0)},0)
   var pagados=completados.filter(function(s){return s.pago_cliente==='pagado'})
   var totalPag=pagados.reduce(function(s,x){return s+(x.total||0)},0)
-  var pendPago=completados.filter(function(s){return s.pago_cliente!=='pagado'})
-  var totalPend=totalComp-totalPag
 
   document.getElementById('resumen-cont').innerHTML=
     '<div style="background:linear-gradient(135deg,rgba(34,197,94,0.1),rgba(34,197,94,0.05));border:1px solid rgba(34,197,94,0.3);border-radius:10px;padding:12px">'+
@@ -285,23 +283,12 @@ function renderContabilidad(){
       '<div style="font-size:11px;color:var(--txt3)">'+completados.length+' servicio'+(completados.length!==1?'s':'')+'</div>'+
     '</div>'+
     '<div style="background:linear-gradient(135deg,rgba(167,139,250,0.1),rgba(167,139,250,0.05));border:1px solid rgba(167,139,250,0.3);border-radius:10px;padding:12px;text-align:right">'+
-      '<div style="font-size:10px;color:var(--txt3);text-transform:uppercase;margin-bottom:4px">💚 Pagado</div>'+
+      '<div style="font-size:10px;color:var(--txt3);text-transform:uppercase;margin-bottom:4px">Pagado</div>'+
       '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:22px;color:var(--morado)">$'+totalPag.toLocaleString('es-CL')+'</div>'+
-      '<div style="font-size:11px;color:var(--txt3)">$'+totalPend.toLocaleString('es-CL')+' pendiente</div>'+
+      '<div style="font-size:11px;color:var(--txt3)">$'+(totalComp-totalPag).toLocaleString('es-CL')+' pendiente</div>'+
     '</div>'
 
-  // Filtro técnicos para contabilidad
   var tecs=completados.map(function(s){return s.tecnico}).filter(Boolean).filter(function(v,i,a){return a.indexOf(v)===i})
-  var filtroHtml='<div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:12px">'+
-    '<div class="ftec'+(contFiltro==='todos'?' active':'')+'" onclick="setContFiltro('todos',this)">Todos</div>'+
-    '<div class="ftec'+(contFiltro==='pendiente'?' active':'')+'" onclick="setContFiltro('pendiente',this)" style="'+(contFiltro==='pendiente'?'background:var(--amarillo);border-color:var(--amarillo);color:#000':'')+'">⏳ Pendientes</div>'+
-    '<div class="ftec'+(contFiltro==='pagado'?' active':'')+'" onclick="setContFiltro('pagado',this)" style="'+(contFiltro==='pagado'?'background:var(--verde);border-color:var(--verde);color:#000':'')+'">💚 Pagados</div>'+
-    tecs.map(function(t){
-      var nom=t.split(' ').slice(0,2).join(' ')
-      return '<div class="ftec'+(contFiltro===t?' active':'')+'" onclick="setContFiltro(''+t+'',this)">'+nom+'</div>'
-    }).join('')+
-  '</div>'
-
   var el=document.getElementById('lista-cont')
   if(!completados.length){el.innerHTML='<div class="loading">Sin servicios en contabilidad</div>';return}
 
@@ -310,12 +297,32 @@ function renderContabilidad(){
   else if(contFiltro==='pagado')data=completados.filter(function(s){return s.pago_cliente==='pagado'})
   else if(contFiltro!=='todos')data=completados.filter(function(s){return s.tecnico===contFiltro})
 
-  // Agrupar por técnico si es "todos"
-  var html=filtroHtml
+  // Construir filtro como DOM
+  var filtroWrap=document.createElement('div')
+  filtroWrap.style.cssText='display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:12px'
+  var filtros=[['todos','Todos',''],['pendiente','⏳ Pendientes','var(--amarillo)'],['pagado','💚 Pagados','var(--verde)']]
+  filtros.forEach(function(f){
+    var btn=document.createElement('div')
+    btn.className='ftec'+(contFiltro===f[0]?' active':'')
+    btn.textContent=f[1]
+    if(contFiltro===f[0]&&f[2])btn.style.cssText='background:'+f[2]+';border-color:'+f[2]+';color:#000'
+    btn.onclick=(function(val){return function(){setContFiltro(val)}})(f[0])
+    filtroWrap.appendChild(btn)
+  })
+  tecs.forEach(function(t){
+    var nom=t.split(' ').slice(0,2).join(' ')
+    var btn=document.createElement('div')
+    btn.className='ftec'+(contFiltro===t?' active':'')
+    btn.textContent=nom
+    btn.onclick=(function(val){return function(){setContFiltro(val)}})(t)
+    filtroWrap.appendChild(btn)
+  })
+
+  var html=''
   if(contFiltro==='todos'){
     var porTec={}
     data.forEach(function(s){if(!porTec[s.tecnico])porTec[s.tecnico]=[];porTec[s.tecnico].push(s)})
-    html+=Object.keys(porTec).map(function(tec){
+    html=Object.keys(porTec).map(function(tec){
       var tot=porTec[tec].reduce(function(s,x){return s+(x.total||0)},0)
       var pag=porTec[tec].filter(function(x){return x.pago_cliente==='pagado'}).reduce(function(s,x){return s+(x.total||0)},0)
       return '<div style="margin-bottom:16px">'+
@@ -327,12 +334,13 @@ function renderContabilidad(){
         porTec[tec].map(cardHTML).join('')+
       '</div>'
     }).join('')
-  } else {
-    html+=data.map(cardHTML).join('')
+  }else{
+    html=data.map(cardHTML).join('')
   }
-  el.innerHTML=html
+  el.innerHTML=''
+  el.appendChild(filtroWrap)
+  el.insertAdjacentHTML('beforeend',html)
 }
-
 function setContFiltro(f,el){
   contFiltro=f
   renderContabilidad()
@@ -550,6 +558,7 @@ async function crearPpto(){
 function toast(msg,type){var t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(type?' '+type:'');t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2500)}
 
 load()
+
 </script>
 </body>
 </html>

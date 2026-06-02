@@ -109,6 +109,7 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
 
   <button class="btn btn-rojo" onclick="guardarValorizacion()">💾 Guardar valorización</button>
   <button class="btn btn-wa" onclick="enviarWA()">💬 Enviar al cliente por WhatsApp</button>
+  <button class="btn" onclick="pasarContabilidad()" style="width:100%;background:rgba(167,139,250,0.15);border:1px solid rgba(167,139,250,0.4);color:#A78BFA;border-radius:8px;padding:13px;font-family:'Syne',sans-serif;font-weight:700;font-size:14px;cursor:pointer;margin-bottom:8px;">📊 Pasar a contabilidad sin enviar al cliente</button>
   <button class="btn btn-sec" onclick="volverLista()">Cancelar</button>
 </div>
 
@@ -286,6 +287,28 @@ function calcTotal() {
     ${iva>0?'<div class="total-row"><span>IVA (19%)</span><span>+$'+iva.toLocaleString('es-CL')+'</span></div>':''}
     <div class="total-final"><span class="total-label">TOTAL</span><span class="total-val">$${total.toLocaleString('es-CL')}</span></div>`
   return {sub, iva, total}
+}
+
+async function pasarContabilidad() {
+  if (!pptoActual) return
+  const {sub, iva, total} = calcTotal()
+  const notas = document.getElementById('det-notas')?.value?.trim() || ''
+  try {
+    await getDB().from('presupuestos').update({
+      items: pptoActual.items,
+      items_coord: getCoordItems(),
+      estado: 'valorizada',
+      estado_servicio: 'completado',
+      notas,
+      subtotal: sub,
+      iva,
+      total
+    }).eq('id', pptoActual.id)
+    showToast('✅ Pasado a contabilidad correctamente')
+    setTimeout(function(){ volverLista() }, 1500)
+  } catch(e) {
+    showToast('Error: ' + e.message)
+  }
 }
 
 async function guardarValorizacion() {

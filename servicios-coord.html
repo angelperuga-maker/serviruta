@@ -111,7 +111,7 @@ function renderLista(){
 if(false)btns+='Completar</button>';
     // Botón pago
 var pagado=(s.pago_cliente==='pagado')
-btns+='<button class="btn" style="background:'+(pagado?'var(--verde)':'var(--rojo-g)')+';color:'+(pagado?'#000':'var(--rojo)')+';border:1px solid '+(pagado?'transparent':'rgba(232,33,10,0.3)')+';" onclick="togglePago(\''+s.id+'\',\''+s.pago_cliente+'\')"> '+(pagado?'💰 Pagado':'⏳ Pendiente pago')+'</button>'
+btns+='<button style="width:100%;background:'+(pagado?'#22C55E':'rgba(34,197,94,0.12)')+';color:'+(pagado?'#000':'#22C55E')+';border:2px solid #22C55E;border-radius:10px;padding:14px;font-family:Syne,sans-serif;font-weight:800;font-size:15px;margin-bottom:8px;cursor:pointer;" onclick="togglePago(\''+s.id+'\',\''+s.pago_cliente+'\')">'+(pagado?'✅ PAGADO — toca para desmarcar':'💰 MARCAR COMO PAGADO')+'</button>'
 if(s.telefono)btns+='<button class="btn btn-wa" onclick="waC(\''+s.telefono+'\',\''+s.cliente+'\',\''+estado+'\')">Cliente</button>';
     var tel=TELS[s.tecnico]||'';
     if(tel)btns+='<button class="btn btn-tec" onclick="waT(\''+tel+'\',\''+s.tecnico+'\',\''+s.cliente+'\')">Tecnico</button>';

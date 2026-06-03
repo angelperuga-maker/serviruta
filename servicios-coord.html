@@ -83,7 +83,7 @@ var SB='https://bqlgfmqcefledqyodkii.supabase.co'
 var SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
 var db=null,servicios=[],filtroActual='todos'
 
-var TELS={'Jorge Ramirez':'+56912345678','Felipe Mora':'+56923456789','Carlos Vega':'+56934567890','Reynaldo Aguas Bertel':'+56935287199','Reynaldo Aguas':'+56935287199','Kiven Henz':'+56964880196','Humberto Morales':'+56994946414','Giovanino Perugini':'+56933592097'}
+var TELS={'Reynaldo Aguas Bertel':'+56935287199','Reynaldo Aguas':'+56935287199','Kiven Henz':'+56964880196','Humberto Morales':'+56994946414','Giovanino Perugini':'+56933592097'}
 var LABELS={nuevo:'📋 Nuevo',enviado:'📤 Enviado',aprobado:'✅ Aprobado',ejecucion:'🔧 Ejecución',completado:'🏁 Completado'}
 
 function getDB(){if(!db)db=supabase.createClient(SB,SK);return db;}

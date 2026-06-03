@@ -142,6 +142,7 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
     <button class="btn btn-morado" onclick="pasarContabilidad()">📊 Pasar a contabilidad sin enviar al cliente</button>
     <button class="btn btn-verde" onclick="marcarPagado()">💰 Marcar como PAGADO</button>
     <button class="btn btn-sec" onclick="cerrarDetalle()">Cancelar</button>
+    <button class="btn" onclick="eliminarPptoDetalle()" style="width:100%;padding:13px;border-radius:8px;font-family:Syne,sans-serif;font-weight:700;font-size:13px;cursor:pointer;border:1px solid rgba(232,33,10,0.3);background:rgba(232,33,10,0.08);color:#E8210A;">🗑 Eliminar presupuesto</button>
   </div>
 </div>
 
@@ -478,6 +479,14 @@ function crearCoordItem(id,desc,precio,cant){
     '</div>'
   wrap.appendChild(div)
   document.getElementById('coord-desc-'+id).addEventListener('input',calcTotal)
+}
+
+async function eliminarPptoDetalle(){
+  if(!pptoActual)return
+  if(!confirm('Eliminar presupuesto de '+pptoActual.cliente+'?'))return
+  await getDB().from('presupuestos').delete().eq('id',pptoActual.id)
+  toast('Eliminado','ok')
+  setTimeout(function(){cerrarDetalle()},800)
 }
 
 async function guardarValorizacion(){

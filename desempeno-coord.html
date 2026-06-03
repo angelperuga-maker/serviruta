@@ -120,7 +120,7 @@ function renderTecnicos(pptos, inspecciones, evals){
     if(!p.tecnico)return;
     if(!tecnicos[p.tecnico])tecnicos[p.tecnico]={nombre:p.tecnico,pptos:0,completados:0,inspecciones:0,notas:[],puntos:0,ventas:0,cobrado:0};
     tecnicos[p.tecnico].pptos++;
-    if(p.estado_servicio==='completado')tecnicos[p.tecnico].completados++;
+    if(p.estado_servicio==='completado'){tecnicos[p.tecnico].completados++;tecnicos[p.tecnico].ventas+=(p.total||0);if(p.pago_cliente==='pagado')tecnicos[p.tecnico].cobrado+=(p.total||0);}
   });
 
   inspecciones.forEach(function(i){

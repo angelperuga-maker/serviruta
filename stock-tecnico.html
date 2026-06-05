@@ -560,7 +560,12 @@ function renderUso() {
                   <span class="qc-num">${enCarrito.qty}</span>
                   <button class="qc-btn plus" onclick="cambiarQtyCarrito(${p.id},1,event)">+</button>
                 </div>`
-              : `<div style="font-size:11px;color:var(--txt3);margin-top:4px">Toca para agregar</div>`
+              : `<div class="qty-controls" style="margin-top:6px">
+                  <button class="qc-btn minus" onclick="event.stopPropagation()" disabled style="opacity:0.3">−</button>
+                  <span class="qc-num">1</span>
+                  <button class="qc-btn plus" onclick="event.stopPropagation();toggleCarrito(${p.id});cambiarQtyCarrito(${p.id},0,event)" style="background:var(--verde);color:#000">+</button>
+                </div>
+                <div style="font-size:10px;color:var(--txt3);margin-top:3px;text-align:center">Toca + para agregar</div>`
             }
           </div>
         </div>`}).join('')

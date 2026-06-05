@@ -595,9 +595,8 @@ function cambiarCantVenta(id, delta) {
 function toggleVenta(id, el) {
   if (!ventasOn[id]) cantVenta[id] = 1
   ventasOn[id] = !ventasOn[id]
-  el.className = 'vi-check' + (ventasOn[id]?' on':'')
-  el.textContent = ventasOn[id]?'✓':''
-  toast(ventasOn[id]?'✅ Agregado a oportunidades':'Removido','ok')
+  toast(ventasOn[id]?'Agregado':'Removido','ok')
+  renderVentas()
 }
 
 // ════════════════════════════════

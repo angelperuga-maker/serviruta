@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta · Perfil de Cargo</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;0,900;1,400&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --negro:#0A0A0A;--blanco:#F5F2EC;--rojo:#E8210A;--rojo-d:#B01A08;
+  --gris1:#1A1A1A;--gris2:#2A2A2A;--gris3:#3D3D3D;--gris4:#6B6B6B;
+  --txt:#F5F2EC;--txt2:#A8A49E;--txt3:#6B6866;
+  --verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:640px;margin:0 auto;}
+
+/* HERO */
+.hero{padding:48px 28px 0;position:relative;overflow:hidden;}
+.hero-eyebrow{font-family:"DM Mono",monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--rojo);margin-bottom:12px;}
+.hero-title{font-family:"Fraunces",serif;font-weight:900;font-size:clamp(36px,8vw,52px);line-height:1.05;margin-bottom:6px;letter-spacing:-1px;}
+.hero-title span{font-style:italic;color:var(--rojo);}
+.hero-sub{font-size:14px;color:var(--txt2);line-height:1.7;margin-top:12px;max-width:420px;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--gris2);border:1px solid var(--gris3);border-radius:20px;padding:6px 14px;font-size:12px;color:var(--txt2);margin-top:16px;}
+.hero-badge span{width:8px;height:8px;border-radius:50%;background:var(--verde);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.6;transform:scale(1.2)}}
+
+/* DIVIDER */
+.divider{height:1px;background:linear-gradient(90deg,var(--rojo),transparent);margin:32px 28px;}
+
+/* SECTION */
+.sec{padding:0 28px;margin-bottom:32px;}
+.sec-label{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--rojo);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+.sec-label::after{content:"";flex:1;height:1px;background:var(--gris2);}
+
+/* MISION */
+.mision{background:var(--gris1);border-left:3px solid var(--rojo);border-radius:0 10px 10px 0;padding:18px 20px;font-family:"Fraunces",serif;font-size:18px;line-height:1.6;color:var(--txt);font-style:italic;}
+
+/* CARDS RESPONSABILIDADES */
+.resp-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.resp-card{background:var(--gris1);border:1px solid var(--gris2);border-radius:12px;padding:16px;}
+.resp-card:hover{border-color:var(--gris3);}
+.resp-icon{font-size:22px;margin-bottom:10px;}
+.resp-titulo{font-family:"Fraunces",serif;font-weight:700;font-size:15px;margin-bottom:6px;line-height:1.2;}
+.resp-items{list-style:none;padding:0;}
+.resp-items li{font-size:12px;color:var(--txt2);padding:4px 0;border-bottom:1px solid var(--gris2);line-height:1.5;}
+.resp-items li:last-child{border:none;}
+.resp-items li::before{content:"→ ";color:var(--rojo);}
+
+/* PERFIL */
+.perfil-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.perfil-item{background:var(--gris1);border:1px solid var(--gris2);border-radius:10px;padding:14px;}
+.perfil-cat{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);margin-bottom:8px;}
+.perfil-tag{display:inline-block;background:var(--gris2);border-radius:4px;padding:3px 8px;font-size:11px;color:var(--txt2);margin:2px;}
+
+/* KPIs */
+.kpi-list{display:flex;flex-direction:column;gap:8px;}
+.kpi-item{background:var(--gris1);border:1px solid var(--gris2);border-radius:10px;padding:14px;display:flex;align-items:center;gap:14px;}
+.kpi-num{font-family:"Fraunces",serif;font-weight:900;font-size:28px;color:var(--rojo);min-width:60px;line-height:1;}
+.kpi-desc{font-size:13px;color:var(--txt2);line-height:1.5;}
+.kpi-desc strong{color:var(--txt);display:block;font-size:14px;margin-bottom:2px;}
+
+/* COMPENSACION */
+.comp-card{background:var(--gris1);border:1px solid var(--gris2);border-radius:12px;overflow:hidden;margin-bottom:10px;}
+.comp-row{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:1px solid var(--gris2);}
+.comp-row:last-child{border:none;}
+.comp-concepto{font-size:13px;color:var(--txt2);}
+.comp-valor{font-family:"DM Mono",monospace;font-size:13px;font-weight:500;}
+
+/* BONO */
+.bono-banner{background:linear-gradient(135deg,var(--gris1),var(--gris2));border:1px solid var(--amarillo);border-radius:12px;padding:18px 20px;display:flex;align-items:center;gap:16px;}
+.bono-icon{font-size:36px;}
+.bono-txt{flex:1;}
+.bono-titulo{font-family:"Fraunces",serif;font-weight:700;font-size:16px;color:var(--amarillo);margin-bottom:4px;}
+.bono-desc{font-size:12px;color:var(--txt2);line-height:1.6;}
+
+/* CRECIMIENTO */
+.crec-steps{display:flex;flex-direction:column;gap:0;}
+.crec-step{display:flex;gap:16px;padding:14px 0;}
+.crec-step:not(:last-child){border-bottom:1px solid var(--gris2);}
+.crec-tiempo{font-family:"DM Mono",monospace;font-size:11px;color:var(--rojo);min-width:70px;padding-top:2px;}
+.crec-cargo{font-family:"Fraunces",serif;font-weight:700;font-size:15px;margin-bottom:4px;}
+.crec-desc{font-size:12px;color:var(--txt2);line-height:1.5;}
+
+/* FOOTER */
+.footer{padding:28px;border-top:1px solid var(--gris2);display:flex;align-items:center;justify-content:space-between;}
+.footer-brand{font-family:"Fraunces",serif;font-weight:900;font-size:20px;}
+.footer-brand span{color:var(--rojo);}
+.footer-fecha{font-family:"DM Mono",monospace;font-size:10px;color:var(--txt3);}
+
+.full{grid-column:1/-1;}
+.tag-verde{background:rgba(34,197,94,0.1);color:var(--verde);border:1px solid rgba(34,197,94,0.2);}
+.tag-rojo{background:rgba(232,33,10,0.1);color:#FF6B5B;border:1px solid rgba(232,33,10,0.2);}
+.tag-azul{background:rgba(96,165,250,0.1);color:var(--azul);border:1px solid rgba(96,165,250,0.2);}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Serviruta · Perfil de cargo</div>
+  <h1 class="hero-title">Jefe de Red<br><span>Aliados & Técnicos</span></h1>
+  <p class="hero-sub">El puente entre Serviruta y las personas que hacen posible el servicio. Responsable de que la red crezca, funcione y quiera quedarse.</p>
+  <div class="hero-badge"><span></span> Posición clave para la expansión regional</div>
+</div>
+
+<div class="divider"></div>
+
+<!-- MISIÓN -->
+<div class="sec">
+  <div class="sec-label">Misión del cargo</div>
+  <div class="mision">"Construir y mantener una red de aliados y técnicos comprometidos, asegurando que cada persona que trabaja con Serviruta tenga las herramientas, el soporte y los incentivos para crecer junto a la empresa."</div>
+</div>
+
+<!-- RESPONSABILIDADES -->
+<div class="sec">
+  <div class="sec-label">Responsabilidades principales</div>
+  <div class="resp-grid">
+
+    <div class="resp-card">
+      <div class="resp-icon">🤝</div>
+      <div class="resp-titulo">Incorporar aliados</div>
+      <ul class="resp-items">
+        <li>Prospectar grueros, talleres y conductores</li>
+        <li>Onboarding y activación del código aliado</li>
+        <li>Seguimiento del primer referido</li>
+        <li>Gestionar aliados en el hub digital</li>
+      </ul>
+    </div>
+
+    <div class="resp-card">
+      <div class="resp-icon">👷</div>
+      <div class="resp-titulo">Incorporar técnicos</div>
+      <ul class="resp-items">
+        <li>Publicar y gestionar avisos de reclutamiento</li>
+        <li>Entrevistar y evaluar candidatos</li>
+        <li>Inducción al hub y procesos Serviruta</li>
+        <li>Acompañar primeras semanas en campo</li>
+      </ul>
+    </div>
+
+    <div class="resp-card">
+      <div class="resp-icon">📈</div>
+      <div class="resp-titulo">Escalar la red</div>
+      <ul class="resp-items">
+        <li>Definir metas mensuales de aliados activos</li>
+        <li>Identificar zonas con baja cobertura</li>
+        <li>Activar aliados inactivos con incentivos</li>
+        <li>Liderar expansión a nuevas ciudades</li>
+      </ul>
+    </div>
+
+    <div class="resp-card">
+      <div class="resp-icon">💛</div>
+      <div class="resp-titulo">Fidelizar</div>
+      <ul class="resp-items">
+        <li>Seguimiento semanal a aliados y técnicos</li>
+        <li>Gestionar pagos de comisiones a tiempo</li>
+        <li>Resolver problemas y conflictos</li>
+        <li>Reconocer logros y destacar top performers</li>
+      </ul>
+    </div>
+
+    <div class="resp-card full">
+      <div class="resp-icon">📊</div>
+      <div class="resp-titulo">Reportar y mejorar</div>
+      <ul class="resp-items">
+        <li>Reporte semanal al coordinador: aliados activos, técnicos operativos, servicios generados por aliados</li>
+        <li>Analizar el módulo de desempeño del hub para identificar tendencias</li>
+        <li>Proponer mejoras al programa de beneficios según feedback de la red</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<!-- PERFIL -->
+<div class="sec">
+  <div class="sec-label">Perfil ideal</div>
+  <div class="perfil-grid">
+    <div class="perfil-item">
+      <div class="perfil-cat">Experiencia</div>
+      <span class="perfil-tag tag-azul">Ventas o captacion</span>
+      <span class="perfil-tag tag-azul">Gestion de personas</span>
+      <span class="perfil-tag tag-azul">Rubro automotriz o servicios</span>
+      <span class="perfil-tag tag-azul">Reclutamiento campo</span>
+    </div>
+    <div class="perfil-item">
+      <div class="perfil-cat">Habilidades blandas</div>
+      <span class="perfil-tag tag-verde">Comunicacion directa</span>
+      <span class="perfil-tag tag-verde">Empuje comercial</span>
+      <span class="perfil-tag tag-verde">Empatia con el tecnico</span>
+      <span class="perfil-tag tag-verde">Tolerancia a la frustracion</span>
+    </div>
+    <div class="perfil-item">
+      <div class="perfil-cat">Herramientas</div>
+      <span class="perfil-tag">WhatsApp Business</span>
+      <span class="perfil-tag">Google Sheets basico</span>
+      <span class="perfil-tag">Hub Serviruta (se capacita)</span>
+    </div>
+    <div class="perfil-item">
+      <div class="perfil-cat">No indispensable pero suma</div>
+      <span class="perfil-tag tag-rojo">Red en el rubro automotriz</span>
+      <span class="perfil-tag tag-rojo">Conocimiento mecanica basica</span>
+      <span class="perfil-tag tag-rojo">Experiencia en startups</span>
+    </div>
+  </div>
+</div>
+
+<!-- KPIs -->
+<div class="sec">
+  <div class="sec-label">Objetivos medibles</div>
+  <div class="kpi-list">
+    <div class="kpi-item">
+      <div class="kpi-num">20</div>
+      <div class="kpi-desc"><strong>Aliados activos al mes 2</strong>Con al menos 1 referido convertido por aliado en los ultimos 30 dias</div>
+    </div>
+    <div class="kpi-item">
+      <div class="kpi-num">5</div>
+      <div class="kpi-desc"><strong>Nuevos aliados por semana</strong>Incorporacion constante para compensar la rotacion natural</div>
+    </div>
+    <div class="kpi-item">
+      <div class="kpi-num">90%</div>
+      <div class="kpi-desc"><strong>Retencion de tecnicos a 90 dias</strong>Medido como porcentaje de tecnicos contratados que siguen activos a los 3 meses</div>
+    </div>
+    <div class="kpi-item">
+      <div class="kpi-num">4.5★</div>
+      <div class="kpi-desc"><strong>Satisfaccion promedio de tecnicos</strong>Encuesta mensual interna: 5 preguntas sobre soporte, herramientas y claridad de procesos</div>
+    </div>
+    <div class="kpi-item">
+      <div class="kpi-num">3</div>
+      <div class="kpi-desc"><strong>Ciudades nuevas incorporadas a 6 meses</strong>Vina, Valparaiso y Rancagua con red operativa de aliados y tecnicos</div>
+    </div>
+  </div>
+</div>
+
+<!-- COMPENSACION -->
+<div class="sec">
+  <div class="sec-label">Compensacion propuesta</div>
+  <div class="comp-card">
+    <div class="comp-row">
+      <span class="comp-concepto">Sueldo base</span>
+      <span class="comp-valor" style="color:var(--verde)">$800.000 — $1.100.000 CLP</span>
+    </div>
+    <div class="comp-row">
+      <span class="comp-concepto">Variable por aliado activo nuevo</span>
+      <span class="comp-valor" style="color:var(--azul)">$5.000 CLP c/u</span>
+    </div>
+    <div class="comp-row">
+      <span class="comp-concepto">Variable por tecnico contratado</span>
+      <span class="comp-valor" style="color:var(--azul)">$15.000 CLP c/u</span>
+    </div>
+    <div class="comp-row">
+      <span class="comp-concepto">Comision sobre servicios de aliados</span>
+      <span class="comp-valor" style="color:var(--azul)">1% sobre total generado</span>
+    </div>
+    <div class="comp-row">
+      <span class="comp-concepto">Modalidad</span>
+      <span class="comp-valor" style="color:var(--txt2)">Hibrido — terreno + remoto</span>
+    </div>
+  </div>
+
+  <div class="bono-banner">
+    <div class="bono-icon">🏆</div>
+    <div class="bono-txt">
+      <div class="bono-titulo">Bono trimestral de desempeno</div>
+      <div class="bono-desc">Si se cumplen los 3 KPIs principales del trimestre (aliados, retencion tecnicos y expansion), el cargo recibe un bono de $150.000 — $300.000 CLP segun nivel de cumplimiento.</div>
+    </div>
+  </div>
+</div>
+
+<!-- CRECIMIENTO -->
+<div class="sec">
+  <div class="sec-label">Plan de carrera dentro de Serviruta</div>
+  <div class="crec-steps">
+    <div class="crec-step">
+      <div class="crec-tiempo">Hoy</div>
+      <div>
+        <div class="crec-cargo">Jefe de Red · Aliados & Tecnicos</div>
+        <div class="crec-desc">Base en Santiago. Gestiona la red de la RM.</div>
+      </div>
+    </div>
+    <div class="crec-step">
+      <div class="crec-tiempo">Mes 6</div>
+      <div>
+        <div class="crec-cargo">Jefe de Red Regional</div>
+        <div class="crec-desc">Lidera la red de Santiago + ciudades expandidas. Puede incorporar un asistente.</div>
+      </div>
+    </div>
+    <div class="crec-step">
+      <div class="crec-tiempo">Ano 2</div>
+      <div>
+        <div class="crec-cargo">Gerente de Operaciones de Red</div>
+        <div class="crec-desc">Supervisa equipos en multiples ciudades o paises. Participa en decisiones de expansion.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-brand">SERVI<span>RUTA</span></div>
+  <div class="footer-fecha">Perfil elaborado · Junio 2025</div>
+</div>
+
+</body>
+</html>

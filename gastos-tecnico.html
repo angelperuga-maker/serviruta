@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta - Mis Gastos</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--rojo-g:rgba(232,33,10,0.08);--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:600px;margin:0 auto;}
+.top{background:var(--c1);border-bottom:1px solid var(--borde);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.top-title{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
+.top-back{background:none;border:1px solid var(--borde);color:var(--txt3);font-size:11px;padding:5px 12px;border-radius:6px;cursor:pointer;}
+.body{padding:12px 14px 80px;}
+.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+.kpi{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:12px;}
+.kpi-val{font-family:"Syne",sans-serif;font-weight:800;font-size:22px;}
+.kpi-lbl{font-size:10px;color:var(--txt3);text-transform:uppercase;margin-top:3px;}
+.btn-nuevo{width:100%;background:var(--rojo);border:none;border-radius:8px;color:#fff;font-family:"Syne",sans-serif;font-weight:700;font-size:14px;padding:13px;cursor:pointer;margin-bottom:12px;}
+.gasto-card{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:12px;margin-bottom:8px;}
+.gc-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:6px;}
+.gc-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.gc-desc{font-weight:600;font-size:13px;}
+.gc-meta{font-size:11px;color:var(--txt3);margin-top:2px;}
+.gc-monto{font-family:"Syne",sans-serif;font-weight:800;font-size:16px;text-align:right;}
+.gc-fecha{font-size:10px;color:var(--txt3);text-align:right;}
+.gc-foto{width:100%;border-radius:8px;margin-top:8px;max-height:180px;object-fit:cover;}
+.loading{text-align:center;padding:40px;color:var(--txt3);}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;display:none;align-items:flex-end;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--c2);border:1px solid var(--borde);border-radius:16px 16px 0 0;width:100%;max-width:600px;padding:18px 18px 36px;max-height:92vh;overflow-y:auto;}
+.modal-handle{width:36px;height:4px;background:var(--borde);border-radius:2px;margin:0 auto 14px;}
+.modal-title{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;margin-bottom:14px;}
+.lbl{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--txt3);margin-bottom:5px;display:block;}
+.inp{width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:8px;color:var(--txt);font-family:"DM Sans",sans-serif;font-size:15px;padding:10px 12px;outline:none;margin-bottom:10px;-webkit-appearance:none;}
+.inp:focus{border-color:var(--rojo);}
+.inp::placeholder{color:var(--txt3);}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.foto-upload{width:100%;background:var(--c3);border:2px dashed var(--borde);border-radius:8px;padding:20px;text-align:center;cursor:pointer;margin-bottom:10px;}
+.foto-preview{width:100%;border-radius:8px;margin-bottom:10px;max-height:200px;object-fit:cover;}
+.btn-save{width:100%;background:var(--rojo);border:none;border-radius:8px;color:#fff;font-family:"Syne",sans-serif;font-weight:700;font-size:14px;padding:13px;cursor:pointer;}
+.btn-cancel{width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:8px;color:var(--txt2);font-family:"Syne",sans-serif;font-weight:700;font-size:14px;padding:12px;cursor:pointer;margin-bottom:8px;}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--c3);border:1px solid var(--borde);border-radius:8px;padding:10px 16px;font-size:12px;opacity:0;transition:all 0.25s;pointer-events:none;z-index:999;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.ok{border-color:rgba(34,197,94,0.4);color:var(--verde);}
+</style>
+</head>
+<body>
+<div class="top">
+  <button class="top-back" onclick="location.href='tecnico-menu.html'">← Volver</button>
+  <div class="top-title">Mis gastos</div>
+  <button onclick="load()" style="background:none;border:none;color:var(--txt3);cursor:pointer;font-size:20px;">&#8635;</button>
+</div>
+<div class="body">
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-val" id="k-mes" style="color:var(--rojo)">$0</div><div class="kpi-lbl">Este mes</div></div>
+    <div class="kpi"><div class="kpi-val" id="k-total" style="color:var(--azul)">$0</div><div class="kpi-lbl">Total historico</div></div>
+  </div>
+  <button class="btn-nuevo" onclick="openModal()">+ Registrar gasto</button>
+  <div id="lista"><div class="loading">Cargando...</div></div>
+</div>
+
+<div class="modal-overlay" id="modal-gasto" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Registrar gasto</div>
+    <div class="row2">
+      <div><label class="lbl">Fecha</label><input class="inp" type="date" id="g-fecha" style="margin-bottom:0"></div>
+      <div><label class="lbl">Monto ($)</label><input class="inp" type="number" id="g-monto" placeholder="0" style="margin-bottom:0"></div>
+    </div>
+    <div style="height:10px"></div>
+    <label class="lbl">Tipo</label>
+    <select class="inp" id="g-tipo">
+      <option value="Materiales">Materiales y repuestos</option>
+      <option value="Combustible">Combustible y traslado</option>
+      <option value="Herramientas">Herramientas y equipos</option>
+      <option value="Otros">Otros</option>
+    </select>
+    <label class="lbl">Descripcion</label>
+    <input class="inp" id="g-desc" placeholder="Ej: Aceite, filtro, combustible...">
+    <label class="lbl">N documento (opcional)</label>
+    <input class="inp" id="g-doc" placeholder="N boleta o factura">
+    <label class="lbl">Foto boleta / factura</label>
+    <div class="foto-upload" onclick="document.getElementById('g-foto-input').click()">
+      <img id="g-foto-preview" class="foto-preview" style="display:none">
+      <div id="g-foto-placeholder">
+        <div style="font-size:28px;margin-bottom:6px">📷</div>
+        <div style="font-size:13px;color:var(--txt3)">Toca para fotografiar</div>
+      </div>
+    </div>
+    <input type="file" id="g-foto-input" accept="image/*" capture="environment" style="display:none" onchange="previewFoto(this)">
+    <button class="btn-cancel" onclick="this.closest('.modal-overlay').classList.remove('open')">Cancelar</button>
+    <button class="btn-save" onclick="guardarGasto()">Guardar</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var SB='https://bqlgfmqcefledqyodkii.supabase.co'
+var SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+var db=null,gastos=[],fotoBase64=''
+var nombre=sessionStorage.getItem('tecnico_nombre')||''
+var TIPO_ICONS={'Materiales':'🔩','Combustible':'⛽','Herramientas':'🔧','Otros':'📦'}
+var TIPO_COLORS={'Materiales':'#60A5FA','Combustible':'#FB923C','Herramientas':'#F5C518','Otros':'#9996A0'}
+
+function getDB(){if(!db)db=supabase.createClient(SB,SK);return db;}
+
+async function load(){
+  var q=getDB().from('gastos').select('*').order('fecha',{ascending:false})
+  if(nombre)q=q.eq('tecnico',nombre)
+  var r=await q
+  gastos=r.data||[]
+  var mes=new Date().getFullYear()+'-'+String(new Date().getMonth()+1).padStart(2,'0')
+  var totalMes=gastos.filter(function(g){return (g.fecha||'').startsWith(mes)}).reduce(function(s,g){return s+(g.monto||0)},0)
+  var total=gastos.reduce(function(s,g){return s+(g.monto||0)},0)
+  document.getElementById('k-mes').textContent='$'+totalMes.toLocaleString('es-CL')
+  document.getElementById('k-total').textContent='$'+total.toLocaleString('es-CL')
+  var el=document.getElementById('lista')
+  if(!gastos.length){el.innerHTML='<div class="loading">Sin gastos registrados</div>';return}
+  el.innerHTML=gastos.map(function(g){
+    var col=TIPO_COLORS[g.tipo]||'#9996A0'
+    var icon=TIPO_ICONS[g.tipo]||'📦'
+    return '<div class="gasto-card">'+
+      '<div class="gc-top">'+
+        '<div class="gc-icon" style="background:'+col+'22">'+icon+'</div>'+
+        '<div style="flex:1"><div class="gc-desc">'+g.descripcion+'</div><div class="gc-meta">'+g.tipo+(g.documento?' · '+g.documento:'')+'</div></div>'+
+        '<div><div class="gc-monto" style="color:'+col+'">$'+(g.monto||0).toLocaleString('es-CL')+'</div><div class="gc-fecha">'+(g.fecha||'')+'</div></div>'+
+      '</div>'+
+      (g.foto_url?'<img src="'+g.foto_url+'" class="gc-foto" loading="lazy">':'')+
+    '</div>'
+  }).join('')
+}
+
+function openModal(){
+  var hoy=new Date()
+  document.getElementById('g-fecha').value=hoy.getFullYear()+'-'+String(hoy.getMonth()+1).padStart(2,'0')+'-'+String(hoy.getDate()).padStart(2,'0')
+  document.getElementById('g-monto').value=''
+  document.getElementById('g-desc').value=''
+  document.getElementById('g-doc').value=''
+  document.getElementById('g-foto-preview').style.display='none'
+  document.getElementById('g-foto-placeholder').style.display='block'
+  fotoBase64=''
+  document.getElementById('modal-gasto').classList.add('open')
+}
+
+function previewFoto(input){
+  var file=input.files[0]
+  if(!file)return
+  var reader=new FileReader()
+  reader.onload=function(e){
+    fotoBase64=e.target.result
+    document.getElementById('g-foto-preview').src=fotoBase64
+    document.getElementById('g-foto-preview').style.display='block'
+    document.getElementById('g-foto-placeholder').style.display='none'
+  }
+  reader.readAsDataURL(file)
+}
+
+async function guardarGasto(){
+  var monto=parseInt(document.getElementById('g-monto').value)||0
+  var desc=document.getElementById('g-desc').value.trim()
+  if(!desc||!monto){toast('Ingresa descripcion y monto');return}
+  var r=await getDB().from('gastos').insert({
+    fecha:document.getElementById('g-fecha').value,
+    tipo:document.getElementById('g-tipo').value,
+    descripcion:desc,
+    monto:monto,
+    tecnico:nombre||null,
+    documento:document.getElementById('g-doc').value.trim()||null,
+    foto_url:fotoBase64||null
+  })
+  if(r.error){toast('Error: '+r.error.message);return}
+  toast('Gasto registrado','ok')
+  document.getElementById('modal-gasto').classList.remove('open')
+  load()
+}
+
+function toast(msg,type){var t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(type?' '+type:'');t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2500)}
+
+load()
+</script>
+</body>
+</html>

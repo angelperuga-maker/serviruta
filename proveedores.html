@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta - Proveedores</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--rojo-g:rgba(232,33,10,0.08);--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:600px;margin:0 auto;}
+.top{background:var(--c1);border-bottom:1px solid var(--borde);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.top-title{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
+.top-back{background:none;border:1px solid var(--borde);color:var(--txt3);font-size:11px;padding:5px 12px;border-radius:6px;cursor:pointer;}
+.body{padding:12px 14px 80px;}
+.search-wrap{position:relative;margin-bottom:10px;}
+.search-inp{width:100%;background:var(--c2);border:1px solid var(--borde);border-radius:8px;color:var(--txt);font-family:"DM Sans",sans-serif;font-size:14px;padding:10px 12px 10px 36px;outline:none;}
+.search-inp:focus{border-color:var(--rojo);}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);font-size:14px;}
+.filtros{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:12px;}
+.fbtn{flex-shrink:0;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--borde);background:var(--c2);color:var(--txt3);}
+.fbtn.active{background:var(--rojo);border-color:var(--rojo);color:#fff;}
+.btn-nuevo{width:100%;background:var(--rojo);border:none;border-radius:8px;color:#fff;font-family:"Syne",sans-serif;font-weight:700;font-size:14px;padding:12px;cursor:pointer;margin-bottom:12px;}
+.prov-card{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin-bottom:10px;cursor:pointer;transition:all 0.15s;}
+.prov-card:hover{border-color:rgba(232,33,10,0.3);}
+.pc-top{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.pc-av{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.pc-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;}
+.pc-rut{font-size:11px;color:var(--txt3);margin-top:1px;}
+.pc-cat{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;margin-left:auto;flex-shrink:0;}
+.pc-info{display:flex;gap:8px;flex-wrap:wrap;}
+.pc-tag{font-size:11px;color:var(--txt2);background:var(--c3);border-radius:4px;padding:2px 8px;}
+.pc-productos{font-size:12px;color:var(--txt3);margin-top:6px;line-height:1.5;}
+.loading{text-align:center;padding:40px;color:var(--txt3);}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;display:none;align-items:flex-end;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--c2);border:1px solid var(--borde);border-radius:16px 16px 0 0;width:100%;max-width:600px;padding:18px 18px 36px;max-height:92vh;overflow-y:auto;}
+.modal-handle{width:36px;height:4px;background:var(--borde);border-radius:2px;margin:0 auto 14px;}
+.modal-title{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;margin-bottom:14px;}
+.lbl{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--txt3);margin-bottom:5px;display:block;}
+.inp{width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:8px;color:var(--txt);font-family:"DM Sans",sans-serif;font-size:15px;padding:10px 12px;outline:none;margin-bottom:10px;-webkit-appearance:none;}
+.inp:focus{border-color:var(--rojo);}
+.inp::placeholder{color:var(--txt3);}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.btn-save{width:100%;background:var(--rojo);border:none;border-radius:8px;color:#fff;font-family:"Syne",sans-serif;font-weight:700;font-size:14px;padding:13px;cursor:pointer;}
+.btn-cancel{width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:8px;color:var(--txt2);font-family:"Syne",sans-serif;font-weight:700;font-size:14px;padding:12px;cursor:pointer;margin-bottom:8px;}
+.btn-del{width:100%;padding:10px;border-radius:8px;font-family:"Syne",sans-serif;font-weight:700;font-size:12px;cursor:pointer;border:1px solid rgba(232,33,10,0.3);background:var(--rojo-g);color:var(--rojo);margin-bottom:8px;}
+.det-row{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid var(--borde);font-size:13px;}
+.det-row:last-child{border:none;}
+.det-lbl{color:var(--txt3);min-width:80px;font-size:12px;}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--c3);border:1px solid var(--borde);border-radius:8px;padding:10px 16px;font-size:12px;opacity:0;transition:all 0.25s;pointer-events:none;z-index:999;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.ok{border-color:rgba(34,197,94,0.4);color:var(--verde);}
+</style>
+</head>
+<body>
+<div class="top">
+  <button class="top-back" onclick="location.href='menu-coordinador.html'">← Volver</button>
+  <div class="top-title">Proveedores</div>
+  <button onclick="load()" style="background:none;border:none;color:var(--txt3);cursor:pointer;font-size:20px;">&#8635;</button>
+</div>
+<div class="body">
+  <button class="btn-nuevo" onclick="openModal()">+ Agregar proveedor</button>
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input class="search-inp" id="search" placeholder="Buscar proveedor..." oninput="renderLista()">
+  </div>
+  <div class="filtros" id="filtros"></div>
+  <div id="lista"><div class="loading">Cargando...</div></div>
+</div>
+
+<!-- MODAL NUEVO/EDITAR -->
+<div class="modal-overlay" id="modal-form" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="form-titulo">Nuevo proveedor</div>
+    <label class="lbl">Nombre</label>
+    <input class="inp" id="p-nombre" placeholder="Nombre del proveedor">
+    <div class="row2">
+      <div><label class="lbl">RUT</label><input class="inp" id="p-rut" placeholder="12.345.678-9" style="margin-bottom:0"></div>
+      <div><label class="lbl">Categoria</label>
+        <select class="inp" id="p-cat" style="margin-bottom:0">
+          <option value="repuestos">Repuestos</option>
+          <option value="lubricantes">Lubricantes</option>
+          <option value="herramientas">Herramientas</option>
+          <option value="baterias">Baterias</option>
+          <option value="electrico">Electrico</option>
+          <option value="general">General</option>
+        </select>
+      </div>
+    </div>
+    <div style="height:10px"></div>
+    <label class="lbl">Contacto</label>
+    <input class="inp" id="p-contacto" placeholder="Nombre del contacto">
+    <div class="row2">
+      <div><label class="lbl">Telefono</label><input class="inp" id="p-tel" placeholder="+56 9..." type="tel" style="margin-bottom:0"></div>
+      <div><label class="lbl">Email</label><input class="inp" id="p-email" placeholder="email@..." type="email" style="margin-bottom:0"></div>
+    </div>
+    <div style="height:10px"></div>
+    <label class="lbl">Productos que provee</label>
+    <textarea class="inp" id="p-productos" placeholder="Ej: Aceites sintéticos, filtros de aire, bujías..." rows="2" style="resize:none"></textarea>
+    <label class="lbl">Notas</label>
+    <input class="inp" id="p-notas" placeholder="Condiciones de pago, plazos, observaciones..." style="margin-bottom:14px">
+    <button class="btn-cancel" onclick="document.getElementById('modal-form').classList.remove('open')">Cancelar</button>
+    <button class="btn-save" onclick="guardar()">Guardar proveedor</button>
+  </div>
+</div>
+
+<!-- MODAL DETALLE -->
+<div class="modal-overlay" id="modal-det" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="det-nombre">Proveedor</div>
+    <div id="det-body"></div>
+    <div style="display:flex;gap:8px;margin-top:12px">
+      <button id="det-wa" style="flex:1;padding:10px;border-radius:8px;font-family:Syne,sans-serif;font-weight:700;font-size:12px;cursor:pointer;border:none;background:#25D366;color:#fff">WA Contacto</button>
+      <button id="det-edit" style="flex:1;padding:10px;border-radius:8px;font-family:Syne,sans-serif;font-weight:700;font-size:12px;cursor:pointer;border:1px solid var(--borde);background:var(--c3);color:var(--txt2)">Editar</button>
+    </div>
+    <button id="det-del" class="btn-del" style="margin-top:8px">Eliminar proveedor</button>
+    <button class="btn-cancel" onclick="document.getElementById('modal-det').classList.remove('open')">Cerrar</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var SB='https://bqlgfmqcefledqyodkii.supabase.co'
+var SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+var db=null,proveedores=[],editId=null,catFiltro='todos'
+
+var CAT_ICONS={repuestos:'🔩',lubricantes:'🛢️',herramientas:'🔧',baterias:'🔋',electrico:'⚡',general:'📦'}
+var CAT_COLORS={repuestos:'#60A5FA',lubricantes:'#F5C518',herramientas:'#FB923C',baterias:'#22C55E',electrico:'#A78BFA',general:'#9996A0'}
+
+function getDB(){if(!db)db=supabase.createClient(SB,SK);return db;}
+
+async function load(){
+  var r=await getDB().from('proveedores').select('*').order('nombre')
+  proveedores=r.data||[]
+  renderFiltros()
+  renderLista()
+}
+
+function renderFiltros(){
+  var cats=['todos'].concat([...new Set(proveedores.map(function(p){return p.categoria}).filter(Boolean))])
+  document.getElementById('filtros').innerHTML=cats.map(function(c){
+    return '<div class="fbtn'+(catFiltro===c?' active':'')+'" onclick="setCat(\''+c+'\',this)">'+(c==='todos'?'Todos':CAT_ICONS[c]||'📦')+' '+c.charAt(0).toUpperCase()+c.slice(1)+'</div>'
+  }).join('')
+}
+
+function setCat(c,el){
+  catFiltro=c
+  document.querySelectorAll('.fbtn').forEach(function(b){b.classList.remove('active')})
+  el.classList.add('active')
+  renderLista()
+}
+
+function renderLista(){
+  var query=document.getElementById('search').value.toLowerCase()
+  var data=proveedores.filter(function(p){
+    var matchCat=catFiltro==='todos'||p.categoria===catFiltro
+    var matchQ=!query||p.nombre.toLowerCase().includes(query)||(p.productos||'').toLowerCase().includes(query)||(p.contacto||'').toLowerCase().includes(query)
+    return matchCat&&matchQ
+  })
+  var el=document.getElementById('lista')
+  if(!data.length){el.innerHTML='<div class="loading">Sin proveedores</div>';return}
+  el.innerHTML=data.map(function(p){
+    var col=CAT_COLORS[p.categoria]||'#9996A0'
+    var icon=CAT_ICONS[p.categoria]||'📦'
+    return '<div class="prov-card" onclick="verDetalle(\''+p.id+'\')">'+
+      '<div class="pc-top">'+
+        '<div class="pc-av" style="background:'+col+'22">'+icon+'</div>'+
+        '<div style="flex:1"><div class="pc-nombre">'+p.nombre+'</div><div class="pc-rut">'+(p.rut||'Sin RUT')+'</div></div>'+
+        '<span class="pc-cat" style="background:'+col+'22;color:'+col+'">'+( p.categoria||'general')+'</span>'+
+      '</div>'+
+      '<div class="pc-info">'+
+        (p.contacto?'<span class="pc-tag">👤 '+p.contacto+'</span>':'')+
+        (p.telefono?'<span class="pc-tag">📞 '+p.telefono+'</span>':'')+
+      '</div>'+
+      (p.productos?'<div class="pc-productos">'+p.productos+'</div>':'')+
+    '</div>'
+  }).join('')
+}
+
+function openModal(prov){
+  editId=prov?prov.id:null
+  document.getElementById('form-titulo').textContent=prov?'Editar proveedor':'Nuevo proveedor'
+  document.getElementById('p-nombre').value=prov?prov.nombre:''
+  document.getElementById('p-rut').value=prov?prov.rut||'':''
+  document.getElementById('p-cat').value=prov?prov.categoria||'general':'general'
+  document.getElementById('p-contacto').value=prov?prov.contacto||'':''
+  document.getElementById('p-tel').value=prov?prov.telefono||'':''
+  document.getElementById('p-email').value=prov?prov.email||'':''
+  document.getElementById('p-productos').value=prov?prov.productos||'':''
+  document.getElementById('p-notas').value=prov?prov.notas||'':''
+  document.getElementById('modal-det').classList.remove('open')
+  document.getElementById('modal-form').classList.add('open')
+}
+
+async function guardar(){
+  var nombre=document.getElementById('p-nombre').value.trim()
+  if(!nombre){toast('Ingresa el nombre');return}
+  var data={
+    nombre:nombre,rut:document.getElementById('p-rut').value.trim(),
+    categoria:document.getElementById('p-cat').value,
+    contacto:document.getElementById('p-contacto').value.trim(),
+    telefono:document.getElementById('p-tel').value.trim(),
+    email:document.getElementById('p-email').value.trim(),
+    productos:document.getElementById('p-productos').value.trim(),
+    notas:document.getElementById('p-notas').value.trim()
+  }
+  if(editId){
+    await getDB().from('proveedores').update(data).eq('id',editId)
+    toast('Proveedor actualizado','ok')
+  } else {
+    await getDB().from('proveedores').insert(data)
+    toast('Proveedor agregado','ok')
+  }
+  document.getElementById('modal-form').classList.remove('open')
+  load()
+}
+
+function verDetalle(id){
+  var p=proveedores.find(function(x){return x.id===id})
+  if(!p)return
+  var col=CAT_COLORS[p.categoria]||'#9996A0'
+  document.getElementById('det-nombre').textContent=p.nombre
+  document.getElementById('det-body').innerHTML=
+    '<div class="det-row"><span class="det-lbl">Categoria</span><span style="color:'+col+'">'+( p.categoria||'—')+'</span></div>'+
+    '<div class="det-row"><span class="det-lbl">RUT</span><span>'+(p.rut||'—')+'</span></div>'+
+    '<div class="det-row"><span class="det-lbl">Contacto</span><span>'+(p.contacto||'—')+'</span></div>'+
+    '<div class="det-row"><span class="det-lbl">Telefono</span><span>'+(p.telefono||'—')+'</span></div>'+
+    '<div class="det-row"><span class="det-lbl">Email</span><span>'+(p.email||'—')+'</span></div>'+
+    '<div class="det-row"><span class="det-lbl">Productos</span><span>'+(p.productos||'—')+'</span></div>'+
+    (p.notas?'<div class="det-row"><span class="det-lbl">Notas</span><span>'+p.notas+'</span></div>':'')
+  document.getElementById('det-wa').onclick=function(){
+    if(!p.telefono)return
+    window.open('https://wa.me/56'+p.telefono.replace(/\D/g,''),'_blank')
+  }
+  document.getElementById('det-edit').onclick=function(){openModal(p)}
+  document.getElementById('det-del').onclick=function(){
+    if(!confirm('Eliminar a '+p.nombre+'?'))return
+    getDB().from('proveedores').delete().eq('id',p.id).then(function(){
+      toast('Eliminado','ok')
+      document.getElementById('modal-det').classList.remove('open')
+      load()
+    })
+  }
+  document.getElementById('modal-det').classList.add('open')
+}
+
+function toast(msg,type){var t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(type?' '+type:'');t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2500)}
+
+load()
+</script>
+</body>
+</html>

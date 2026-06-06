@@ -311,7 +311,7 @@ function openModal(){
 
 function openModalConTec(tec,hora){
   openModal()
-  document.getElementById('m-tecnico').value=tec
+  document.querySelectorAll('.tec-chk').forEach(function(c){c.checked=c.value===tec})
   document.getElementById('m-hora').value=hora
 }
 
@@ -320,8 +320,11 @@ function closeModal(id){document.getElementById(id).classList.remove('open')}
 async function guardar(){
   var cliente=document.getElementById('m-cliente').value.trim()
   var hora=document.getElementById('m-hora').value
-  var tec=document.getElementById('m-tecnico').value
+  var tecChecks=Array.from(document.querySelectorAll('.tec-chk:checked')).map(function(c){return c.value})
+  var tec=tecChecks.join(', ')
+  if(!tec){toast('Selecciona al menos un técnico');return}
   if(!cliente||!hora){toast('Ingresa cliente y hora');return}
+  if(!tec){toast('Selecciona al menos un técnico');return}
   var r=await getDB().from('agenda').insert({
     fecha:document.getElementById('m-fecha').value,hora:hora,tecnico:tec,
     cliente:cliente,telefono:document.getElementById('m-tel').value.trim(),
@@ -330,10 +333,14 @@ async function guardar(){
     vehiculo:document.getElementById('m-vehiculo').value.trim(),estado:'agendado'
   })
   if(r.error){toast('Error: '+r.error.message);return}
-  var tecObj=TECNICOS.find(function(t){return t.nombre===tec})
-  if(tecObj&&tecObj.tel&&isCoord){
-    var msg='📅 NUEVO SERVICIO AGENDADO\n\nHola '+tec.split(' ')[0]+'\n\n'+hora+' · '+cliente+(document.getElementById('m-servicio').value?'\n'+document.getElementById('m-servicio').value:'')+(document.getElementById('m-direccion').value?'\n'+document.getElementById('m-direccion').value:'')+'\n\nServiruta +56 9 8505 8250'
-    window.open('https://wa.me/'+tecObj.tel.replace(/\D/g,'')+'?text='+encodeURIComponent(msg),'_blank')
+  if(isCoord&&tecChecks.length){
+    tecChecks.forEach(function(nombre){
+      var tecObj=TECNICOS.find(function(t){return t.nombre===nombre})
+      if(tecObj&&tecObj.tel){
+        var msg='NUEVO SERVICIO\n\nHola '+nombre.split(' ')[0]+'\n\n'+hora+' · '+cliente+(document.getElementById('m-servicio').value?'\n'+document.getElementById('m-servicio').value:'')+(document.getElementById('m-direccion').value?'\n'+document.getElementById('m-direccion').value:'')+' \n\nServiruta +56 9 8505 8250'
+        window.open('https://wa.me/'+tecObj.tel.replace(/\D/g,'')+'?text='+encodeURIComponent(msg),'_blank')
+      }
+    })
   }
   toast('✅ Agendado','ok')
   closeModal('modal-nuevo')

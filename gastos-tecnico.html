@@ -82,6 +82,17 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
     <input class="inp" id="g-desc" placeholder="Ej: Aceite, filtro, combustible...">
     <label class="lbl">N documento (opcional)</label>
     <input class="inp" id="g-doc" placeholder="N boleta o factura">
+    <label class="lbl">Origen del dinero</label>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
+      <label id="origen-propio-lbl" style="display:flex;align-items:center;gap:8px;background:var(--c3);border:2px solid var(--borde);border-radius:8px;padding:12px;cursor:pointer;transition:all 0.15s;" onclick="setOrigen('propio',this)">
+        <input type="radio" name="origen" id="origen-propio" value="propio" style="accent-color:var(--rojo);width:16px;height:16px">
+        <div><div style="font-size:13px;font-weight:600">Plata propia</div><div style="font-size:10px;color:var(--txt3)">El tecnico puso de su bolsillo</div></div>
+      </label>
+      <label id="origen-empresa-lbl" style="display:flex;align-items:center;gap:8px;background:var(--c3);border:2px solid var(--borde);border-radius:8px;padding:12px;cursor:pointer;transition:all 0.15s;" onclick="setOrigen('empresa',this)">
+        <input type="radio" name="origen" id="origen-empresa" value="empresa" style="accent-color:var(--verde);width:16px;height:16px">
+        <div><div style="font-size:13px;font-weight:600">Transferencia empresa</div><div style="font-size:10px;color:var(--txt3)">Serviruta transfirió los fondos</div></div>
+      </label>
+    </div>
     <label class="lbl">Foto boleta / factura</label>
     <div class="foto-upload" onclick="document.getElementById('g-foto-input').click()">
       <img id="g-foto-preview" class="foto-preview" style="display:none">
@@ -130,6 +141,7 @@ async function load(){
         '<div><div class="gc-monto" style="color:'+col+'">$'+(g.monto||0).toLocaleString('es-CL')+'</div><div class="gc-fecha">'+(g.fecha||'')+'</div></div>'+
       '</div>'+
       (g.foto_url?'<img src="'+g.foto_url+'" class="gc-foto" loading="lazy">':'')+
+      (g.notas?'<div style="font-size:11px;font-weight:700;margin-top:6px;padding:4px 8px;border-radius:4px;display:inline-block;background:'+(g.notas.includes('[Transferencia empresa]')?'rgba(34,197,94,0.1)':'rgba(232,33,10,0.08)')+';">'+( g.notas.includes('[Transferencia empresa]')?'💳 Transferencia empresa':'💵 Plata propia')+'</div>':'')+
     '</div>'
   }).join('')
 }
@@ -146,15 +158,36 @@ function openModal(){
   document.getElementById('modal-gasto').classList.add('open')
 }
 
+function setOrigen(val, lbl) {
+  document.getElementById('origen-propio-lbl').style.borderColor = 'var(--borde)'
+  document.getElementById('origen-empresa-lbl').style.borderColor = 'var(--borde)'
+  if(val==='propio') document.getElementById('origen-propio-lbl').style.borderColor = 'var(--rojo)'
+  else document.getElementById('origen-empresa-lbl').style.borderColor = 'var(--verde)'
+  document.getElementById('origen-'+val).checked = true
+}
+
 function previewFoto(input){
   var file=input.files[0]
   if(!file)return
   var reader=new FileReader()
   reader.onload=function(e){
-    fotoBase64=e.target.result
-    document.getElementById('g-foto-preview').src=fotoBase64
-    document.getElementById('g-foto-preview').style.display='block'
-    document.getElementById('g-foto-placeholder').style.display='none'
+    // Comprimir imagen antes de guardar
+    var img=new Image()
+    img.onload=function(){
+      var canvas=document.createElement('canvas')
+      var MAX=800
+      var w=img.width,h=img.height
+      if(w>h){if(w>MAX){h=Math.round(h*MAX/w);w=MAX}}
+      else{if(h>MAX){w=Math.round(w*MAX/h);h=MAX}}
+      canvas.width=w;canvas.height=h
+      var ctx=canvas.getContext('2d')
+      ctx.drawImage(img,0,0,w,h)
+      fotoBase64=canvas.toDataURL('image/jpeg',0.7)
+      document.getElementById('g-foto-preview').src=fotoBase64
+      document.getElementById('g-foto-preview').style.display='block'
+      document.getElementById('g-foto-placeholder').style.display='none'
+    }
+    img.src=e.target.result
   }
   reader.readAsDataURL(file)
 }
@@ -163,6 +196,8 @@ async function guardarGasto(){
   var monto=parseInt(document.getElementById('g-monto').value)||0
   var desc=document.getElementById('g-desc').value.trim()
   if(!desc||!monto){toast('Ingresa descripcion y monto');return}
+  var origenEl=document.querySelector('input[name="origen"]:checked')
+  var origen=origenEl?origenEl.value:'propio'
   var r=await getDB().from('gastos').insert({
     fecha:document.getElementById('g-fecha').value,
     tipo:document.getElementById('g-tipo').value,
@@ -170,6 +205,7 @@ async function guardarGasto(){
     monto:monto,
     tecnico:nombre||null,
     documento:document.getElementById('g-doc').value.trim()||null,
+    notas:(origen==='empresa'?'[Transferencia empresa] ':'[Plata propia] ')+(document.getElementById('g-notas')?document.getElementById('g-notas').value.trim():''),
     foto_url:fotoBase64||null
   })
   if(r.error){toast('Error: '+r.error.message);return}

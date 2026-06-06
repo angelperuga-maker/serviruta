@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta · QR Aliados</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#111;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:100vh;padding:24px 16px 48px;font-family:"DM Sans",sans-serif;}
+.card{background:#0F0F0F;border:1px solid #222;border-radius:16px;padding:28px 24px;width:min(380px,96vw);text-align:center;margin-bottom:14px;}
+.marca{font-family:"Syne",sans-serif;font-weight:900;font-size:22px;color:#fff;margin-bottom:4px;}
+.marca span{color:#E8210A;}
+.sub{font-size:12px;color:#666;letter-spacing:2px;text-transform:uppercase;margin-bottom:24px;}
+.qr-wrap{background:#fff;border-radius:12px;padding:16px;display:inline-block;margin-bottom:20px;}
+.qr-url{font-size:11px;color:#555;margin-bottom:20px;word-break:break-all;}
+.divider{height:1px;background:#1a1a1a;margin:16px 0;}
+.beneficios{text-align:left;margin-bottom:20px;}
+.b-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #1a1a1a;font-size:13px;color:#ccc;}
+.b-row:last-child{border:none;}
+.b-ico{font-size:16px;flex-shrink:0;}
+.wa-btn{display:flex;align-items:center;justify-content:center;gap:8px;background:#25D366;border:none;border-radius:10px;padding:13px;width:100%;cursor:pointer;text-decoration:none;margin-bottom:8px;}
+.wa-txt{font-family:"Syne",sans-serif;font-weight:800;font-size:14px;color:#000;}
+.inst-btn{display:flex;align-items:center;justify-content:center;gap:8px;background:rgba(232,33,10,0.12);border:1px solid rgba(232,33,10,0.3);border-radius:10px;padding:12px;width:100%;cursor:pointer;text-decoration:none;}
+.inst-txt{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;color:#FF6B5B;}
+.print-btn{background:#1a1a1a;border:1px solid #333;border-radius:8px;color:#999;font-family:"Syne",sans-serif;font-weight:700;font-size:12px;padding:10px 20px;cursor:pointer;margin-top:12px;width:100%;}
+</style>
+</head>
+<body>
+
+<div class="card" id="qr-card">
+  <div class="marca">SERVI<span>RUTA</span></div>
+  <div class="sub">Programa de Aliados</div>
+  <div class="qr-wrap">
+    <canvas id="qr-canvas"></canvas>
+  </div>
+  <div class="qr-url">angelperuga-maker.github.io/serviruta/instructivo-aliados.html</div>
+  <div class="divider"></div>
+  <div class="beneficios">
+    <div class="b-row"><span class="b-ico">💰</span><span>$13.000 a $18.000 por cada servicio</span></div>
+    <div class="b-row"><span class="b-ico">🏆</span><span>Bono de $100.000 al 7° referido</span></div>
+    <div class="b-row"><span class="b-ico">✅</span><span>Sin inversion · Sin horarios fijos</span></div>
+    <div class="b-row"><span class="b-ico">📱</span><span>Todo se maneja por WhatsApp</span></div>
+  </div>
+  <a href="https://wa.me/56985058250?text=Hola%2C+quiero+ser+aliado+de+Serviruta.+%C2%BFC%C3%B3mo+funciona%3F" class="wa-btn" target="_blank">
+    <span style="font-size:18px">💬</span>
+    <span class="wa-txt">Escribir por WhatsApp</span>
+  </a>
+  <a href="https://angelperuga-maker.github.io/serviruta/instructivo-aliados.html" class="inst-btn" target="_blank">
+    <span style="font-size:16px">📋</span>
+    <span class="inst-txt">Ver instructivo completo</span>
+  </a>
+</div>
+
+<button class="print-btn" onclick="window.print()">🖨️ Imprimir este QR</button>
+
+<script>
+QRCode.toCanvas(document.getElementById('qr-canvas'),
+  'https://angelperuga-maker.github.io/serviruta/instructivo-aliados.html',
+  {width:220,margin:1,color:{dark:'#000000',light:'#ffffff'}},
+  function(err){if(err)console.error(err)}
+)
+</script>
+
+<style media="print">
+body{background:#fff;padding:0;}
+.print-btn{display:none;}
+.card{border:none;background:#fff;color:#000;}
+.marca{color:#000!important;}
+.sub,.qr-url,.b-row{color:#333!important;}
+.wa-btn,.inst-btn{display:none;}
+</style>
+
+</body>
+</html>

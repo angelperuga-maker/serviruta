@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta · Flyer Aliados</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#111;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height:100vh;padding:20px 16px 40px;font-family:"DM Sans",sans-serif;}
+
+/* SELECTOR DE FORMATO */
+.format-selector{display:flex;gap:8px;margin-bottom:16px;}
+.fs-btn{background:#1a1a1a;border:1px solid #333;color:#999;font-family:"Syne",sans-serif;font-weight:700;font-size:12px;padding:8px 16px;border-radius:20px;cursor:pointer;}
+.fs-btn.active{background:#E8210A;border-color:#E8210A;color:#fff;}
+.dl-btn{background:#22C55E;border:none;color:#000;font-family:"Syne",sans-serif;font-weight:800;font-size:13px;padding:10px 24px;border-radius:8px;cursor:pointer;margin-bottom:16px;}
+
+/* FLYER FEED 1:1 */
+.flyer-feed{width:min(500px,92vw);aspect-ratio:1/1;background:#0A0A0A;position:relative;overflow:hidden;border-radius:4px;}
+
+/* FLYER STORY 9:16 */
+.flyer-story{width:min(360px,92vw);aspect-ratio:9/16;background:#0A0A0A;position:relative;overflow:hidden;border-radius:4px;}
+
+.hidden{display:none;}
+
+/* ELEMENTOS COMUNES */
+.bg-glow{position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(232,33,10,0.2) 0%,transparent 70%);top:-200px;right:-200px;pointer-events:none;}
+.bg-glow2{position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(232,33,10,0.08) 0%,transparent 70%);bottom:-100px;left:-100px;pointer-events:none;}
+.grid-lines{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none;}
+.srv-label{position:absolute;top:20px;left:20px;font-family:"Syne",sans-serif;font-weight:800;font-size:13px;letter-spacing:3px;text-transform:uppercase;color:#E8210A;}
+.marca{position:absolute;top:16px;right:20px;font-family:"Syne",sans-serif;font-weight:900;font-size:15px;color:#fff;}
+.marca span{color:#E8210A;}
+.linea-roja{position:absolute;left:0;right:0;height:3px;background:linear-gradient(90deg,#E8210A,transparent);}
+
+/* FEED */
+.feed-linea{top:50px;}
+.feed-main{position:absolute;bottom:140px;left:0;right:0;padding:0 32px;}
+.feed-monto{font-family:"Syne",sans-serif;font-weight:900;font-size:clamp(72px,15vw,96px);color:#E8210A;line-height:0.9;letter-spacing:-4px;}
+.feed-monto-lbl{font-family:"DM Sans",sans-serif;font-size:13px;color:rgba(255,255,255,0.5);letter-spacing:2px;text-transform:uppercase;margin-top:4px;}
+.feed-titulo{font-family:"Syne",sans-serif;font-weight:900;font-size:clamp(22px,5vw,32px);color:#fff;line-height:1.1;margin-top:12px;}
+.feed-titulo em{color:#E8210A;font-style:normal;}
+.feed-bottom{position:absolute;bottom:0;left:0;right:0;padding:16px 24px;background:linear-gradient(transparent,rgba(0,0,0,0.9));}
+.feed-chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
+.chip{font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;}
+.chip-r{background:rgba(232,33,10,0.15);border:1px solid rgba(232,33,10,0.3);color:#FF6B5B;}
+.chip-g{background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.25);color:#22C55E;}
+.chip-w{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:#ccc;}
+.feed-cta{display:flex;align-items:center;justify-content:space-between;}
+.feed-cta-txt{font-family:"Syne",sans-serif;font-weight:700;font-size:12px;color:rgba(255,255,255,0.6);}
+.qr-mini{width:56px;height:56px;background:#fff;border-radius:6px;padding:4px;display:flex;align-items:center;justify-content:center;}
+.qr-mini canvas{width:48px!important;height:48px!important;}
+
+/* STORY */
+.story-linea{top:64px;}
+.story-monto{font-family:"Syne",sans-serif;font-weight:900;color:#E8210A;line-height:0.85;letter-spacing:-3px;margin-bottom:6px;}
+.story-monto-lbl{font-family:"DM Sans",sans-serif;font-size:12px;color:rgba(255,255,255,0.5);letter-spacing:2px;text-transform:uppercase;}
+.story-content{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:90%;text-align:center;}
+.story-titulo{font-family:"Syne",sans-serif;font-weight:900;color:#fff;line-height:1.1;margin-top:12px;}
+.story-titulo em{color:#E8210A;font-style:normal;}
+.story-pasos{display:flex;flex-direction:column;gap:8px;margin-top:16px;text-align:left;}
+.paso{display:flex;align-items:flex-start;gap:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:10px 12px;}
+.paso-num{font-family:"Syne",sans-serif;font-weight:900;font-size:16px;color:#E8210A;flex-shrink:0;line-height:1;}
+.paso-txt{font-size:11px;color:rgba(255,255,255,0.75);line-height:1.4;}
+.paso-txt strong{color:#fff;display:block;font-size:12px;margin-bottom:1px;}
+.story-bottom{position:absolute;bottom:0;left:0;right:0;padding:16px 20px 20px;background:linear-gradient(transparent,rgba(0,0,0,0.95));}
+.story-qr-row{display:flex;align-items:center;gap:12px;}
+.story-qr-box{width:70px;height:70px;background:#fff;border-radius:8px;padding:5px;flex-shrink:0;}
+.story-qr-box canvas{width:60px!important;height:60px!important;}
+.story-qr-info{flex:1;}
+.story-qr-titulo{font-family:"Syne",sans-serif;font-weight:700;font-size:12px;color:#fff;margin-bottom:3px;}
+.story-qr-sub{font-size:10px;color:rgba(255,255,255,0.5);line-height:1.4;}
+.story-wa{display:flex;align-items:center;gap:6px;background:#25D366;border-radius:6px;padding:8px 12px;margin-top:8px;justify-content:center;cursor:pointer;text-decoration:none;}
+.story-wa-txt{font-family:"Syne",sans-serif;font-weight:700;font-size:12px;color:#000;}
+</style>
+</head>
+<body>
+
+<div class="format-selector">
+  <button class="fs-btn active" onclick="mostrar('feed',this)">Instagram Feed 1:1</button>
+  <button class="fs-btn" onclick="mostrar('story',this)">Instagram Story 9:16</button>
+</div>
+<button class="dl-btn" onclick="descargar()">Guardar imagen</button>
+
+<!-- FLYER FEED -->
+<div class="flyer-feed" id="flyer-feed">
+  <div class="bg-glow"></div>
+  <div class="bg-glow2"></div>
+  <div class="grid-lines"></div>
+  <div class="srv-label">Aliados</div>
+  <div class="marca">SERVI<span>RUTA</span></div>
+  <div class="linea-roja feed-linea"></div>
+  <div class="feed-main">
+    <div class="feed-monto">$18K</div>
+    <div class="feed-monto-lbl">por cada servicio referido</div>
+    <div class="feed-titulo">Convierte tus<br>contactos en<br><em>dinero real</em></div>
+  </div>
+  <div class="feed-bottom">
+    <div class="feed-chips">
+      <span class="chip chip-g">Sin inversion</span>
+      <span class="chip chip-g">Sin horarios</span>
+      <span class="chip chip-r">Bono $100.000 al 7 referido</span>
+    </div>
+    <div class="feed-cta">
+      <div>
+        <div class="feed-cta-txt">Escanea y empieza hoy</div>
+        <div style="font-size:10px;color:rgba(255,255,255,0.35);margin-top:2px">+56 9 8505 8250</div>
+      </div>
+      <div class="qr-mini"><canvas id="qr-feed"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<!-- FLYER STORY -->
+<div class="flyer-story hidden" id="flyer-story">
+  <div class="bg-glow"></div>
+  <div class="bg-glow2"></div>
+  <div class="grid-lines"></div>
+  <div class="srv-label">Serviruta · Aliados</div>
+  <div class="linea-roja story-linea"></div>
+  <div class="story-content">
+    <div class="story-monto" style="font-size:clamp(56px,16vw,80px)">$100K</div>
+    <div class="story-monto-lbl">bono al llegar a 7 referidos</div>
+    <div class="story-titulo" style="font-size:clamp(20px,5vw,26px)">Gana dinero<br>recomendando<br><em>mecanico a domicilio</em></div>
+    <div class="story-pasos">
+      <div class="paso">
+        <div class="paso-num">1</div>
+        <div class="paso-txt"><strong>Recibes tu codigo</strong>Codigo personal de aliado Serviruta</div>
+      </div>
+      <div class="paso">
+        <div class="paso-num">2</div>
+        <div class="paso-txt"><strong>Lo compartes</strong>Con quien necesite mecanico a domicilio</div>
+      </div>
+      <div class="paso">
+        <div class="paso-num">3</div>
+        <div class="paso-txt"><strong>Cobras tu comision</strong>$13.000 a $18.000 por cada servicio completado</div>
+      </div>
+    </div>
+  </div>
+  <div class="story-bottom">
+    <div class="story-qr-row">
+      <div class="story-qr-box"><canvas id="qr-story"></canvas></div>
+      <div class="story-qr-info">
+        <div class="story-qr-titulo">Escanea para unirte</div>
+        <div class="story-qr-sub">Instructivo completo del programa<br>+56 9 8505 8250</div>
+      </div>
+    </div>
+    <a href="https://wa.me/56985058250?text=Hola%2C+quiero+ser+aliado+de+Serviruta" class="story-wa" target="_blank">
+      <span style="font-size:16px">💬</span>
+      <span class="story-wa-txt">Escribir ahora por WhatsApp</span>
+    </a>
+  </div>
+</div>
+
+<script>
+var formato='feed'
+var URL_INSTRUCTIVO='https://angelperuga-maker.github.io/serviruta/instructivo-aliados.html'
+
+function generarQR(){
+  QRCode.toCanvas(document.getElementById('qr-feed'),URL_INSTRUCTIVO,{width:48,margin:0,color:{dark:'#000000',light:'#ffffff'}},function(){})
+  QRCode.toCanvas(document.getElementById('qr-story'),URL_INSTRUCTIVO,{width:60,margin:0,color:{dark:'#000000',light:'#ffffff'}},function(){})
+}
+
+function mostrar(f,btn){
+  formato=f
+  document.getElementById('flyer-feed').classList.toggle('hidden',f!=='feed')
+  document.getElementById('flyer-story').classList.toggle('hidden',f!=='story')
+  document.querySelectorAll('.fs-btn').forEach(function(b){b.classList.remove('active')})
+  btn.classList.add('active')
+}
+
+function descargar(){
+  var el=document.getElementById('flyer-'+formato)
+  // Usar html2canvas si está disponible, sino abrir instrucciones
+  var msg='Para guardar el flyer:\n\n1. Clic derecho sobre la imagen\n2. "Guardar imagen como"\n\nO en móvil: mantén presionado y elige guardar.'
+  alert(msg)
+}
+
+window.onload=function(){
+  setTimeout(generarQR,300)
+}
+</script>
+</body>
+</html>

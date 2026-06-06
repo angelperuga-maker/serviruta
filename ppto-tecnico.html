@@ -80,7 +80,7 @@ body{background:var(--negro);color:var(--txt);font-family:'DM Sans',sans-serif;m
 .item-t-inp{flex:1;background:var(--c3);border:1px solid var(--borde);border-radius:6px;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:14px;padding:10px 12px;outline:none;transition:border-color 0.2s;}
 .item-t-inp:focus{border-color:var(--azul);}
 .item-t-inp::placeholder{color:var(--txt3);}
-.item-t-cant{width:50px;background:var(--c3);border:1px solid var(--borde);border-radius:6px;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:14px;padding:10px 8px;outline:none;text-align:center;}
+.item-t-cant{width:0;display:none;background:var(--c3);border:1px solid var(--borde);border-radius:6px;color:var(--txt);font-family:'DM Sans',sans-serif;font-size:14px;padding:10px 8px;outline:none;text-align:center;}
 .item-del{background:none;border:none;color:var(--txt3);font-size:17px;cursor:pointer;padding:4px;}
 .item-del:hover{color:var(--rojo);}
 
@@ -249,9 +249,11 @@ body{background:var(--negro);color:var(--txt);font-family:'DM Sans',sans-serif;m
     <div style="height:4px"></div>
     <label class="lbl" style="margin-top:10px">Tu nombre</label>
     <select class="inp" id="t-tecnico">
-      <option>Jorge Ramírez</option>
-      <option>Felipe Mora</option>
-      <option>Carlos Vega</option>
+      <option>Reynaldo Aguas Bertel</option>
+      <option>Reynaldo Aguas</option>
+      <option>Kiven Henz</option>
+      <option>Humberto Morales</option>
+      <option>Giovanino Perugini</option>
     </select>
 
     <div class="sec">Trabajos realizados</div>
@@ -259,6 +261,9 @@ body{background:var(--negro);color:var(--txt);font-family:'DM Sans',sans-serif;m
 
     <div class="items-wrap" id="t-items"></div>
     <button class="btn-add" onclick="tAddItem()">＋ Agregar trabajo o repuesto</button>
+
+    <label class="lbl">Código de aliado (si viene referido)</label>
+    <input class="inp" id="t-aliado" placeholder="Ej: GRU-PEDRO01 — dejar vacío si no hay aliado" style="font-family:monospace;font-size:13px;text-transform:uppercase;margin-bottom:12px" oninput="this.value=this.value.toUpperCase()">
 
     <label class="lbl">Observaciones adicionales</label>
     <textarea class="notas" id="t-obs" placeholder="Ej: Se recomienda revisar amortiguadores en próxima visita..."></textarea>
@@ -342,10 +347,21 @@ function tRenderItems() {
       <span class="item-t-num">${i+1}</span>
       <input class="item-t-inp" placeholder="Ej: Cambio correa accesorios"
         value="${item.desc}" oninput="tUpdateItem(${item.id},'desc',this.value)">
-      <input class="item-t-cant" type="number" min="1" value="${item.cant}" title="Cantidad"
-        oninput="tUpdateItem(${item.id},'cant',this.value)">
+      <div style="display:flex;align-items:center;gap:5px;flex-shrink:0">
+        <button onclick="tCambiarCant(${item.id},-1)" style="width:26px;height:26px;border-radius:6px;border:1px solid var(--borde);background:var(--c3);color:var(--txt);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center">−</button>
+        <span id="tcant-${item.id}" style="font-family:'Syne',sans-serif;font-weight:800;font-size:14px;min-width:20px;text-align:center">${item.cant||1}</span>
+        <button onclick="tCambiarCant(${item.id},1)" style="width:26px;height:26px;border-radius:6px;border:1px solid var(--borde);background:var(--c3);color:var(--txt);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center">+</button>
+      </div>
       <button class="item-del" onclick="tDelItem(${item.id})">🗑</button>
     </div>`).join('')
+}
+
+function tCambiarCant(id, delta) {
+  const item = tItems.find(x=>x.id===id)
+  if (!item) return
+  item.cant = Math.max(1, (item.cant||1) + delta)
+  const el = document.getElementById('tcant-'+id)
+  if (el) el.textContent = item.cant
 }
 
 function tUpdateItem(id, campo, val) {
@@ -384,6 +400,7 @@ async function tEnviar() {
   // Guardar en Supabase
   try {
     if (!sbClient) sbClient = supabase.createClient('https://bqlgfmqcefledqyodkii.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s')
+    var aliadoCodigo = document.getElementById('t-aliado')?.value?.trim() || ''
     await sbClient.from('presupuestos').insert({
       numero: sol.pptoNum,
       tecnico: sol.tecnico,
@@ -393,7 +410,8 @@ async function tEnviar() {
       auto: sol.auto,
       items: sol.items,
       obs: sol.obs,
-      estado: 'nueva'
+      estado: 'nueva',
+      aliado_codigo: aliadoCodigo
     })
   } catch(e) { console.warn('Supabase error:', e.message) }
   solicitudes.unshift(sol)
@@ -406,6 +424,7 @@ async function tEnviar() {
     </div>`).join('') +
     (sol.obs ? `<div style="font-size:12px;color:var(--txt3);margin-top:8px">📋 ${sol.obs}</div>` : '')
 
+  document.getElementById('t-aliado').value = ''
   tPg('tec-estado')
   document.getElementById('tec-hdr-title').textContent = 'Estado del trabajo'
   toast('✅ Enviado al coordinador','ok')

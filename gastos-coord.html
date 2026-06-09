@@ -171,6 +171,17 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
     <select class="inp" id="g-ppto" style="margin-bottom:10px">
       <option value="">-- Gasto general --</option>
     </select>
+    <label class="lbl">Origen del dinero</label>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+      <label id="org-propio-lbl" style="display:flex;align-items:center;gap:8px;background:var(--c3);border:2px solid var(--borde);border-radius:8px;padding:10px;cursor:pointer" onclick="setOrigenC('propio')">
+        <input type="radio" name="origenC" id="org-propio" value="propio" style="accent-color:var(--rojo);width:15px;height:15px">
+        <div><div style="font-size:12px;font-weight:600">💵 Plata propia</div><div style="font-size:10px;color:var(--txt3)">Tecnico puso de su bolsillo</div></div>
+      </label>
+      <label id="org-empresa-lbl" style="display:flex;align-items:center;gap:8px;background:var(--c3);border:2px solid rgba(34,197,94,0.4);border-radius:8px;padding:10px;cursor:pointer" onclick="setOrigenC('empresa')">
+        <input type="radio" name="origenC" id="org-empresa" value="empresa" checked style="accent-color:var(--verde);width:15px;height:15px">
+        <div><div style="font-size:12px;font-weight:600">💳 Empresa</div><div style="font-size:10px;color:var(--txt3)">Fondos de Serviruta</div></div>
+      </label>
+    </div>
     <label class="lbl">N documento</label>
     <input class="inp" id="g-doc" placeholder="N de boleta o factura">
     <label class="lbl">Notas</label>
@@ -266,7 +277,7 @@ function gastoCardHTML(g){
       '</div>'+
       '<div><div class="gc-monto" style="color:'+col+'">$'+(g.monto||0).toLocaleString('es-CL')+'</div><div class="gc-fecha">'+(g.fecha||'')+'</div></div>'+
     '</div>'+
-    (g.notas?'<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px"><span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;background:'+origenCol+';color:'+origenTxtCol+'">'+origen+'</span>'+(g.presupuesto_id?'<span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;background:rgba(96,165,250,0.1);color:var(--azul)">📋 Asignado a ppto</span>':'')+'</div>':'')+
+    '<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px">'+(g.notas?'<span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;background:'+origenCol+';color:'+origenTxtCol+'">'+origen+'</span>':'')+(g.presupuesto_id?'<span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;background:rgba(96,165,250,0.1);color:var(--azul)">📋 Asignado a ppto</span>':'')+'</div>'+
     (g.foto_url?'<img src="'+g.foto_url+'" class="gc-foto" onclick="verFoto(\''+g.foto_url+'\')" loading="lazy">':'')+
     '<div class="gc-actions"><button class="gc-btn" style="background:var(--rojo-g);color:var(--rojo);border:1px solid rgba(232,33,10,0.3)" onclick="eliminarGasto(\''+g.id+'\')">Eliminar</button></div>'+
   '</div>'
@@ -388,6 +399,12 @@ async function openModal(tipo){
   document.getElementById('modal-gasto').classList.add('open')
 }
 
+function setOrigenC(val){
+  document.getElementById('org-propio-lbl').style.borderColor=val==='propio'?'var(--rojo)':'var(--borde)'
+  document.getElementById('org-empresa-lbl').style.borderColor=val==='empresa'?'rgba(34,197,94,0.4)':'var(--borde)'
+  document.getElementById('org-'+val).checked=true
+}
+
 function previewFoto(input){
   var file=input.files[0]
   if(!file)return
@@ -421,7 +438,7 @@ async function guardarGasto(){
     tecnico:document.getElementById('g-tecnico').value||null,
     presupuesto_id:document.getElementById('g-ppto').value||null,
     documento:document.getElementById('g-doc').value.trim()||null,
-    notas:document.getElementById('g-notas').value.trim()||null,
+    notas:(document.getElementById('org-empresa').checked?'[Transferencia empresa] ':'[Plata propia] ')+(document.getElementById('g-notas').value.trim()||''),
     foto_url:fotoBase64||null
   }
   var r=await getDB().from('gastos').insert(data)

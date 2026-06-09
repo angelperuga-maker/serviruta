@@ -387,6 +387,8 @@ async function tEnviar() {
     id: Date.now(),
     cliente: nombre,
     tel: tel,
+    email: document.getElementById('t-email')?.value?.trim()||'',
+    patente: document.getElementById('t-patente')?.value?.trim().toUpperCase()||'',
     veh: document.getElementById('t-veh').value,
     auto: document.getElementById('t-auto').value.trim(),
     tecnico: document.getElementById('t-tecnico').value,
@@ -406,6 +408,8 @@ async function tEnviar() {
       tecnico: sol.tecnico,
       cliente: sol.cliente,
       telefono: sol.tel,
+      email: sol.email||null,
+      patente: sol.patente||null,
       vehiculo: sol.veh,
       auto: sol.auto,
       items: sol.items,
@@ -413,6 +417,22 @@ async function tEnviar() {
       estado: 'nueva',
       aliado_codigo: aliadoCodigo
     })
+    // Guardar cliente automáticamente en tabla clientes
+    if(sol.tel){
+      await sbClient.from('clientes').upsert({
+        nombre: sol.cliente,
+        telefono: sol.tel,
+        email: sol.email||null
+      },{onConflict:'telefono',ignoreDuplicates:false})
+    }
+    // Guardar vehículo automáticamente si tiene patente
+    if(sol.patente){
+      await sbClient.from('vehiculos').upsert({
+        patente: sol.patente,
+        marca: sol.auto||null,
+        cliente_nombre: sol.cliente
+      },{onConflict:'patente',ignoreDuplicates:false})
+    }
   } catch(e) { console.warn('Supabase error:', e.message) }
   solicitudes.unshift(sol)
 

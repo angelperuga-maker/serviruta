@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta - Diagnosticos</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--rojo-g:rgba(232,33,10,0.08);--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:600px;margin:0 auto;}
+.top{background:var(--c1);border-bottom:1px solid var(--borde);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.top-title{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
+.top-back{background:none;border:1px solid var(--borde);color:var(--txt3);font-size:11px;padding:5px 12px;border-radius:6px;cursor:pointer;}
+.body{padding:12px 14px 80px;}
+.filtros{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:12px;}
+.fbtn{flex-shrink:0;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--borde);background:var(--c2);color:var(--txt3);}
+.fbtn.active{background:var(--rojo);border-color:var(--rojo);color:#fff;}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;}
+.st{background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:10px;text-align:center;}
+.st-val{font-family:"Syne",sans-serif;font-weight:800;font-size:22px;}
+.st-lbl{font-size:10px;color:var(--txt3);text-transform:uppercase;margin-top:2px;}
+.diag-card{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin-bottom:10px;cursor:pointer;transition:border-color 0.15s;}
+.diag-card:hover{border-color:var(--rojo);}
+.dc-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;}
+.dc-sev{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.dc-cliente{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
+.dc-meta{font-size:11px;color:var(--txt3);margin-top:2px;line-height:1.5;}
+.dc-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;margin-left:auto;flex-shrink:0;}
+.dc-problema{font-size:13px;color:var(--txt2);line-height:1.5;margin-bottom:8px;}
+.dc-fotos{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px;}
+.dc-fotos img{width:100%;border-radius:6px;aspect-ratio:1;object-fit:cover;cursor:pointer;}
+.dc-tec{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--txt3);}
+.loading{text-align:center;padding:40px;color:var(--txt3);}
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;display:none;align-items:flex-end;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--c2);border:1px solid var(--borde);border-radius:16px 16px 0 0;width:100%;max-width:600px;padding:18px 18px 36px;max-height:92vh;overflow-y:auto;}
+.modal-handle{width:36px;height:4px;background:var(--borde);border-radius:2px;margin:0 auto 14px;}
+.modal-title{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;margin-bottom:4px;}
+.lbl{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--txt3);margin-bottom:5px;display:block;}
+.inp{width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:8px;color:var(--txt);font-family:"DM Sans",sans-serif;font-size:15px;padding:10px 12px;outline:none;margin-bottom:10px;-webkit-appearance:none;}
+.inp:focus{border-color:var(--rojo);}
+.det-row{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid var(--borde);font-size:13px;}
+.det-row:last-child{border:none;}
+.det-lbl{color:var(--txt3);min-width:80px;font-size:12px;flex-shrink:0;}
+.btn-save{width:100%;background:var(--rojo);border:none;border-radius:8px;color:#fff;font-family:"Syne",sans-serif;font-weight:700;font-size:14px;padding:12px;cursor:pointer;}
+.btn-est{flex:1;padding:10px;border-radius:8px;font-family:"Syne",sans-serif;font-weight:700;font-size:12px;cursor:pointer;border:1px solid var(--borde);background:var(--c3);color:var(--txt2);}
+.btn-cancel{width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:8px;color:var(--txt2);font-family:"Syne",sans-serif;font-weight:700;font-size:14px;padding:12px;cursor:pointer;margin-bottom:8px;}
+.foto-grande{position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:300;display:none;align-items:center;justify-content:center;cursor:pointer;}
+.foto-grande.open{display:flex;}
+.foto-grande img{max-width:95vw;max-height:95vh;border-radius:8px;object-fit:contain;}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--c3);border:1px solid var(--borde);border-radius:8px;padding:10px 16px;font-size:12px;opacity:0;transition:all 0.25s;pointer-events:none;z-index:999;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.ok{border-color:rgba(34,197,94,0.4);color:var(--verde);}
+</style>
+</head>
+<body>
+<div class="top">
+  <button class="top-back" onclick="location.href='menu-coordinador.html'">← Volver</button>
+  <div class="top-title">🔍 Diagnosticos</div>
+  <button onclick="load()" style="background:none;border:none;color:var(--txt3);cursor:pointer;font-size:20px;">&#8635;</button>
+</div>
+<div class="body">
+  <div class="stats">
+    <div class="st"><div class="st-val" id="st-pend" style="color:var(--amarillo)">0</div><div class="st-lbl">Pendientes</div></div>
+    <div class="st"><div class="st-val" id="st-crit" style="color:var(--rojo)">0</div><div class="st-lbl">Criticos</div></div>
+    <div class="st"><div class="st-val" id="st-total" style="color:var(--azul)">0</div><div class="st-lbl">Total</div></div>
+  </div>
+  <div class="filtros">
+    <div class="fbtn active" onclick="setFiltro('todos',this)">Todos</div>
+    <div class="fbtn" onclick="setFiltro('pendiente',this)">⏳ Pendientes</div>
+    <div class="fbtn" onclick="setFiltro('revisado',this)">👁 Revisados</div>
+    <div class="fbtn" onclick="setFiltro('resuelto',this)">✅ Resueltos</div>
+    <div class="fbtn" onclick="setFiltro('alta',this)">🔴 Criticos</div>
+  </div>
+  <div id="lista"><div class="loading">Cargando...</div></div>
+</div>
+
+<!-- MODAL DETALLE -->
+<div class="modal-overlay" id="modal-det" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="det-titulo">Diagnostico</div>
+    <div id="det-meta" style="font-size:11px;color:var(--txt3);margin-bottom:12px"></div>
+    <div id="det-body"></div>
+    <div id="det-fotos" style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0"></div>
+    <div style="font-family:Syne,sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);margin:12px 0 6px">Notas coordinador</div>
+    <textarea class="inp" id="coord-notas" placeholder="Escribe tus observaciones, indicaciones o seguimiento..." rows="3" style="resize:none"></textarea>
+    <div style="font-family:Syne,sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);margin:8px 0 8px">Cambiar estado</div>
+    <div style="display:flex;gap:8px;margin-bottom:12px">
+      <button class="btn-est" onclick="cambiarEstado('pendiente')">⏳ Pendiente</button>
+      <button class="btn-est" onclick="cambiarEstado('revisado')">👁 Revisado</button>
+      <button class="btn-est" onclick="cambiarEstado('resuelto')">✅ Resuelto</button>
+    </div>
+    <div id="wa-tecnico-btn"></div>
+    <button class="btn-save" onclick="guardarNotas()">Guardar notas</button>
+    <button class="btn-cancel" style="margin-top:8px" onclick="document.getElementById('modal-det').classList.remove('open')">Cerrar</button>
+  </div>
+</div>
+
+<!-- FOTO GRANDE -->
+<div class="foto-grande" id="foto-grande" onclick="this.classList.remove('open')">
+  <img id="foto-grande-img" src="">
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var SB='https://bqlgfmqcefledqyodkii.supabase.co'
+var SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+var db=null,diagnosticos=[],filtro='todos',diagActual=null
+
+var SEV_ICONS={baja:'🟢',media:'🟡',alta:'🔴'}
+var SEV_BG={baja:'rgba(34,197,94,0.08)',media:'rgba(245,197,24,0.08)',alta:'rgba(232,33,10,0.08)'}
+var SEV_COL={baja:'var(--verde)',media:'var(--amarillo)',alta:'var(--rojo)'}
+var EST_COL={pendiente:'var(--amarillo)',revisado:'var(--azul)',resuelto:'var(--verde)'}
+var TELS={'Reynaldo Aguas Bertel':'+56935287199','Reynaldo Aguas':'+56935287199','Kiven Henz':'+56964880196','Humberto Morales':'+56994946414','Giovanino Perugini':'+56933592097'}
+
+function getDB(){if(!db)db=supabase.createClient(SB,SK);return db;}
+
+async function load(){
+  var r=await getDB().from('diagnosticos').select('*').order('created_at',{ascending:false})
+  diagnosticos=r.data||[]
+  document.getElementById('st-pend').textContent=diagnosticos.filter(function(d){return d.estado==='pendiente'}).length
+  document.getElementById('st-crit').textContent=diagnosticos.filter(function(d){return d.severidad==='alta'}).length
+  document.getElementById('st-total').textContent=diagnosticos.length
+  renderLista()
+}
+
+function setFiltro(f,el){
+  filtro=f
+  document.querySelectorAll('.fbtn').forEach(function(b){b.classList.remove('active')})
+  el.classList.add('active')
+  renderLista()
+}
+
+function renderLista(){
+  var data=diagnosticos.filter(function(d){
+    if(filtro==='todos')return true
+    if(filtro==='alta')return d.severidad==='alta'
+    return d.estado===filtro
+  })
+  var el=document.getElementById('lista')
+  if(!data.length){el.innerHTML='<div class="loading">Sin diagnosticos</div>';return}
+  el.innerHTML=data.map(function(d){
+    var fecha=d.created_at?new Date(d.created_at).toLocaleDateString('es-CL',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):''
+    return '<div class="diag-card" onclick="verDetalle(\''+d.id+'\')">'+
+      '<div class="dc-top">'+
+        '<div class="dc-sev" style="background:'+SEV_BG[d.severidad||'media']+'">'+SEV_ICONS[d.severidad||'media']+'</div>'+
+        '<div style="flex:1">'+
+          '<div class="dc-cliente">'+d.cliente+(d.patente?' · '+d.patente:'')+'</div>'+
+          '<div class="dc-meta">'+(d.vehiculo||'')+(d.sistema?' · '+d.sistema:'')+'</div>'+
+          '<div class="dc-meta">'+d.tecnico+' · '+fecha+'</div>'+
+        '</div>'+
+        '<span class="dc-badge" style="background:'+SEV_BG[d.severidad||'media']+';color:'+EST_COL[d.estado||'pendiente']+'">'+( d.estado||'pendiente')+'</span>'+
+      '</div>'+
+      '<div class="dc-problema">'+d.problema+'</div>'+
+      (d.foto1||d.foto2||d.foto3?'<div class="dc-fotos">'+
+        (d.foto1?'<img src="'+d.foto1+'" onclick="event.stopPropagation();verFoto(\''+d.id+'\',\'foto1\')">':'')+
+        (d.foto2?'<img src="'+d.foto2+'" onclick="event.stopPropagation();verFoto(\''+d.id+'\',\'foto2\')">':'')+
+        (d.foto3?'<img src="'+d.foto3+'" onclick="event.stopPropagation();verFoto(\''+d.id+'\',\'foto3\')">':'')+
+      '</div>':'')+
+      '<div class="dc-tec">🔧 '+d.tecnico+(d.notas_coord?'&nbsp;·&nbsp;💬 Con notas':'')+'</div>'+
+    '</div>'
+  }).join('')
+}
+
+function verDetalle(id){
+  var d=diagnosticos.find(function(x){return x.id===id})
+  if(!d)return
+  diagActual=d
+  document.getElementById('det-titulo').textContent=d.cliente+(d.patente?' · '+d.patente:'')
+  document.getElementById('det-meta').textContent=d.tecnico+' · '+(d.vehiculo||'')+(d.sistema?' · '+d.sistema:'')
+  document.getElementById('det-body').innerHTML=
+    '<div class="det-row"><span class="det-lbl">Severidad</span><span style="color:'+SEV_COL[d.severidad||'media']+'">'+SEV_ICONS[d.severidad||'media']+' '+(d.severidad||'media')+'</span></div>'+
+    '<div class="det-row"><span class="det-lbl">Problema</span><span>'+d.problema+'</span></div>'+
+    (d.descripcion?'<div class="det-row"><span class="det-lbl">Detalle</span><span>'+d.descripcion+'</span></div>':'')+
+    (d.telefono?'<div class="det-row"><span class="det-lbl">Tel cliente</span><span>'+d.telefono+'</span></div>':'')+
+    '<div class="det-row"><span class="det-lbl">Estado</span><span style="color:'+EST_COL[d.estado||'pendiente']+'">'+( d.estado||'pendiente')+'</span></div>'
+  var fotosEl=document.getElementById('det-fotos')
+  var fotosHTML=''
+  if(d.foto1)fotosHTML+='<img src="'+d.foto1+'" style="width:100%;border-radius:8px;aspect-ratio:1;object-fit:cover;cursor:pointer" onclick="verFoto(\''+d.id+'\',\'foto1\')">'
+  if(d.foto2)fotosHTML+='<img src="'+d.foto2+'" style="width:100%;border-radius:8px;aspect-ratio:1;object-fit:cover;cursor:pointer" onclick="verFoto(\''+d.id+'\',\'foto2\')">'
+  if(d.foto3)fotosHTML+='<img src="'+d.foto3+'" style="width:100%;border-radius:8px;aspect-ratio:1;object-fit:cover;cursor:pointer" onclick="verFoto(\''+d.id+'\',\'foto3\')">'
+  fotosEl.innerHTML=fotosHTML
+  fotosEl.style.display=fotosHTML?'grid':'none'
+  document.getElementById('coord-notas').value=d.notas_coord||''
+  // WA al técnico
+  var tel=TELS[d.tecnico]||''
+  var waEl=document.getElementById('wa-tecnico-btn')
+  if(tel){
+    var msg='Hola '+d.tecnico.split(' ')[0]+' revise el diagnostico de '+d.cliente+(d.patente?' ('+d.patente+')':'')+'. Coordinaremos el servicio. Serviruta'
+    waEl.innerHTML='<a href="https://wa.me/56'+tel.replace(/\\D/g,'')+\'?text=\'+encodeURIComponent(msg) style="display:flex;align-items:center;justify-content:center;gap:8px;background:#25D366;border:none;border-radius:8px;padding:10px;margin-bottom:10px;cursor:pointer;text-decoration:none;font-family:Syne,sans-serif;font-weight:700;font-size:13px;color:#000" target="_blank"><span style="font-size:16px">💬</span> WA al tecnico</a>'
+  } else { waEl.innerHTML='' }
+  document.getElementById('modal-det').classList.add('open')
+}
+
+async function cambiarEstado(estado){
+  if(!diagActual)return
+  await getDB().from('diagnosticos').update({estado:estado}).eq('id',diagActual.id)
+  toast('Estado: '+estado,'ok')
+  document.getElementById('modal-det').classList.remove('open')
+  load()
+}
+
+async function guardarNotas(){
+  if(!diagActual)return
+  var notas=document.getElementById('coord-notas').value.trim()
+  await getDB().from('diagnosticos').update({notas_coord:notas,estado:'revisado'}).eq('id',diagActual.id)
+  toast('Notas guardadas','ok')
+  document.getElementById('modal-det').classList.remove('open')
+  load()
+}
+
+function verFoto(id,campo){
+  var d=diagnosticos.find(function(x){return x.id===id})
+  if(!d)return
+  document.getElementById('foto-grande-img').src=d[campo]||''
+  document.getElementById('foto-grande').classList.add('open')
+}
+
+function toast(msg,type){var t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(type?' '+type:'');t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2500)}
+
+load()
+</script>
+</body>
+</html>

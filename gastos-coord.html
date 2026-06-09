@@ -45,6 +45,24 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
 .fbtn{flex-shrink:0;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--borde);background:var(--c2);color:var(--txt3);}
 .fbtn.active{background:var(--rojo);border-color:var(--rojo);color:#fff;}
 .loading{text-align:center;padding:40px;color:var(--txt3);}
+/* TECNICO ACORDEON */
+.tec-acc{background:var(--c2);border:1px solid var(--borde);border-radius:10px;margin-bottom:10px;overflow:hidden;}
+.tec-acc-header{display:flex;align-items:center;gap:10px;padding:14px;cursor:pointer;}
+.tec-acc-header:hover{background:var(--c3);}
+.tec-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:"Syne",sans-serif;font-weight:800;font-size:13px;color:#fff;flex-shrink:0;}
+.tec-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
+.tec-cnt{font-size:11px;color:var(--txt3);}
+.tec-monto{font-family:"Syne",sans-serif;font-weight:800;font-size:16px;margin-left:auto;text-align:right;}
+.tec-body{display:none;border-top:1px solid var(--borde);padding:12px;}
+.tec-body.open{display:block;}
+.g-row{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--borde);}
+.g-row:last-child{border:none;}
+.g-row-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.g-row-desc{flex:1;}
+.g-row-titulo{font-size:12px;font-weight:600;}
+.g-row-meta{font-size:10px;color:var(--txt3);}
+.g-row-monto{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;text-align:right;}
+/* MODAL */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;display:none;align-items:flex-end;justify-content:center;}
 .modal-overlay.open{display:flex;}
 .modal{background:var(--c2);border:1px solid var(--borde);border-radius:16px 16px 0 0;width:100%;max-width:600px;padding:18px 18px 36px;max-height:92vh;overflow-y:auto;}
@@ -56,19 +74,13 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
 .inp::placeholder{color:var(--txt3);}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .foto-upload{width:100%;background:var(--c3);border:2px dashed var(--borde);border-radius:8px;padding:20px;text-align:center;cursor:pointer;margin-bottom:10px;}
-.foto-upload:hover{border-color:var(--rojo);}
 .foto-preview{width:100%;border-radius:8px;margin-bottom:10px;max-height:200px;object-fit:cover;}
 .btn-save{width:100%;background:var(--rojo);border:none;border-radius:8px;color:#fff;font-family:"Syne",sans-serif;font-weight:700;font-size:14px;padding:13px;cursor:pointer;}
 .btn-cancel{width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:8px;color:var(--txt2);font-family:"Syne",sans-serif;font-weight:700;font-size:14px;padding:12px;cursor:pointer;margin-bottom:8px;}
+.btn-del{width:100%;padding:10px;border-radius:8px;font-family:"Syne",sans-serif;font-weight:700;font-size:12px;cursor:pointer;border:1px solid rgba(232,33,10,0.3);background:var(--rojo-g);color:var(--rojo);margin-bottom:8px;}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--c3);border:1px solid var(--borde);border-radius:8px;padding:10px 16px;font-size:12px;opacity:0;transition:all 0.25s;pointer-events:none;z-index:999;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 .toast.ok{border-color:rgba(34,197,94,0.4);color:var(--verde);}
-.tec-row-g{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:12px;margin-bottom:8px;}
-.trg-top{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
-.trg-av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:"Syne",sans-serif;font-weight:800;font-size:13px;color:#fff;flex-shrink:0;}
-.trg-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
-.trg-cnt{font-size:11px;color:var(--txt3);}
-.trg-monto{font-family:"Syne",sans-serif;font-weight:800;font-size:18px;margin-left:auto;color:var(--rojo);}
 </style>
 </head>
 <body>
@@ -84,8 +96,6 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
     <div class="tab" id="tab2" onclick="goTab(2)">Por tecnico</div>
     <div class="tab" id="tab3" onclick="goTab(3)">Fijos</div>
   </div>
-
-  <!-- RESUMEN -->
   <div class="page active" id="pg0">
     <button class="btn-nuevo" onclick="openModal()">+ Registrar gasto</button>
     <div class="kpi-grid">
@@ -93,8 +103,8 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
         <div class="kpi-lbl" style="color:var(--txt3)">Total gastos este mes</div>
         <div class="kpi-val" id="k-mes" style="color:var(--rojo)">$0</div>
       </div>
-      <div class="kpi"><div class="kpi-val" id="k-variables" style="color:var(--naranja)">$0</div><div class="kpi-lbl">Gastos variables</div></div>
-      <div class="kpi"><div class="kpi-val" id="k-fijos" style="color:var(--amarillo)">$0</div><div class="kpi-lbl">Gastos fijos</div></div>
+      <div class="kpi"><div class="kpi-val" id="k-variables" style="color:var(--naranja)">$0</div><div class="kpi-lbl">Variables</div></div>
+      <div class="kpi"><div class="kpi-val" id="k-fijos" style="color:var(--amarillo)">$0</div><div class="kpi-lbl">Fijos</div></div>
       <div class="kpi"><div class="kpi-val" id="k-cnt" style="color:var(--azul)">0</div><div class="kpi-lbl">Registros</div></div>
       <div class="kpi"><div class="kpi-val" id="k-margen" style="color:var(--verde)">$0</div><div class="kpi-lbl">Margen (ingresos - gastos)</div></div>
     </div>
@@ -103,8 +113,6 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
     <div class="sec">Ultimos gastos</div>
     <div id="ultimos-gastos"></div>
   </div>
-
-  <!-- TODOS -->
   <div class="page" id="pg1">
     <button class="btn-nuevo" onclick="openModal()">+ Registrar gasto</button>
     <div class="filtros" id="filtros-tipo">
@@ -118,14 +126,10 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
     </div>
     <div id="lista-todos"></div>
   </div>
-
-  <!-- POR TECNICO -->
   <div class="page" id="pg2">
     <button class="btn-nuevo" onclick="openModal()">+ Registrar gasto</button>
     <div id="lista-tec"></div>
   </div>
-
-  <!-- FIJOS -->
   <div class="page" id="pg3">
     <button class="btn-nuevo" onclick="openModal('fijo')">+ Agregar gasto fijo</button>
     <div id="lista-fijos"></div>
@@ -138,14 +142,8 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
     <div class="modal-handle"></div>
     <div class="modal-title" id="modal-titulo">Registrar gasto</div>
     <div class="row2">
-      <div>
-        <label class="lbl">Fecha</label>
-        <input class="inp" type="date" id="g-fecha" style="margin-bottom:0">
-      </div>
-      <div>
-        <label class="lbl">Monto ($)</label>
-        <input class="inp" type="number" id="g-monto" placeholder="0" style="margin-bottom:0">
-      </div>
+      <div><label class="lbl">Fecha</label><input class="inp" type="date" id="g-fecha" style="margin-bottom:0"></div>
+      <div><label class="lbl">Monto ($)</label><input class="inp" type="number" id="g-monto" placeholder="0" style="margin-bottom:0"></div>
     </div>
     <div style="height:10px"></div>
     <label class="lbl">Tipo de gasto</label>
@@ -155,26 +153,26 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
       <option value="Herramientas">Herramientas y equipos</option>
       <option value="Sueldos">Sueldos</option>
       <option value="Impuestos">Impuestos y legal</option>
-      <option value="Costos fijos">Costos fijos (arriendo, servicios)</option>
+      <option value="Costos fijos">Costos fijos</option>
       <option value="Otros">Otros</option>
     </select>
     <label class="lbl">Descripcion</label>
-    <input class="inp" id="g-desc" placeholder="Ej: Aceite motor 5W30, 4 litros...">
-    <label class="lbl">Tecnico responsable (opcional)</label>
+    <input class="inp" id="g-desc" placeholder="Ej: Aceite motor 5W30...">
+    <label class="lbl">Tecnico responsable</label>
     <select class="inp" id="g-tecnico">
-      <option value="">-- General / No asignado --</option>
+      <option value="">-- General --</option>
       <option value="Reynaldo Aguas Bertel">Reynaldo Aguas Bertel</option>
       <option value="Reynaldo Aguas">Reynaldo Aguas</option>
       <option value="Kiven Henz">Kiven Henz</option>
       <option value="Humberto Morales">Humberto Morales</option>
       <option value="Giovanino Perugini">Giovanino Perugini</option>
     </select>
-    <label class="lbl">Numero documento (boleta/factura)</label>
-    <input class="inp" id="g-doc" placeholder="N de boleta o factura">
-    <label class="lbl">Asignar a presupuesto (opcional)</label>
+    <label class="lbl">Asignar a presupuesto</label>
     <select class="inp" id="g-ppto" style="margin-bottom:10px">
-      <option value="">-- Gasto general (sin ppto) --</option>
+      <option value="">-- Gasto general --</option>
     </select>
+    <label class="lbl">N documento</label>
+    <input class="inp" id="g-doc" placeholder="N de boleta o factura">
     <label class="lbl">Notas</label>
     <input class="inp" id="g-notas" placeholder="Notas adicionales" style="margin-bottom:10px">
     <label class="lbl">Foto boleta / factura</label>
@@ -183,7 +181,6 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
       <div id="g-foto-placeholder">
         <div style="font-size:28px;margin-bottom:6px">📷</div>
         <div style="font-size:13px;color:var(--txt3)">Toca para subir foto</div>
-        <div style="font-size:11px;color:var(--txt3);margin-top:2px">JPG, PNG hasta 5MB</div>
       </div>
     </div>
     <input type="file" id="g-foto-input" accept="image/*" capture="environment" style="display:none" onchange="previewFoto(this)">
@@ -192,18 +189,8 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
   </div>
 </div>
 
-<!-- MODAL VER FOTO -->
 <div class="modal-overlay" id="modal-foto" onclick="this.classList.remove('open')" style="align-items:center">
   <img id="foto-grande" style="max-width:90vw;max-height:90vh;border-radius:12px;object-fit:contain">
-</div>
-
-<div class="modal-overlay" id="modal-det-tec" onclick="if(event.target===this)this.classList.remove('open')">
-  <div class="modal">
-    <div class="modal-handle"></div>
-    <div class="modal-title" id="det-tec-nombre">Gastos del tecnico</div>
-    <div id="det-tec-body"></div>
-    <button class="btn-cancel" onclick="document.getElementById('modal-det-tec').classList.remove('open')" style="margin-top:12px">Cerrar</button>
-  </div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -212,7 +199,6 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
 var SB='https://bqlgfmqcefledqyodkii.supabase.co'
 var SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
 var db=null,gastos=[],tipoFiltro='todos',fotoBase64=''
-
 var TIPO_ICONS={'Materiales':'🔩','Combustible':'⛽','Herramientas':'🔧','Sueldos':'👷','Impuestos':'📋','Costos fijos':'🏠','Otros':'📦'}
 var TIPO_COLORS={'Materiales':'#60A5FA','Combustible':'#FB923C','Herramientas':'#F5C518','Sueldos':'#A78BFA','Impuestos':'#F472B6','Costos fijos':'#34D399','Otros':'#9996A0'}
 var COLS=['#60A5FA','#22C55E','#F5C518','#FB923C','#A78BFA','#34D399']
@@ -240,28 +226,17 @@ function renderResumen(){
   var totalMes=delMes.reduce(function(s,g){return s+(g.monto||0)},0)
   var totalFijos=fijos.reduce(function(s,g){return s+(g.monto||0)},0)
   var totalVar=variables.reduce(function(s,g){return s+(g.monto||0)},0)
-
   document.getElementById('k-mes').textContent='$'+totalMes.toLocaleString('es-CL')
   document.getElementById('k-variables').textContent='$'+totalVar.toLocaleString('es-CL')
   document.getElementById('k-fijos').textContent='$'+totalFijos.toLocaleString('es-CL')
   document.getElementById('k-cnt').textContent=gastos.length
-
-  // Margen (obtener ingresos del mes)
-  getDB().from('presupuestos').select('total').eq('estado_servicio','completado').then(function(r){
+  getDB().from('presupuestos').select('total,created_at').eq('estado_servicio','completado').then(function(r){
     var ingresos=(r.data||[]).filter(function(p){return (p.created_at||'').startsWith(mes)}).reduce(function(s,p){return s+(p.total||0)},0)
     var margen=ingresos-totalMes
-    document.getElementById('k-margen').textContent='$'+margen.toLocaleString('es-CL')
-    // Calcular plata propia pendiente de reembolso
-    var propios=gastos.filter(function(g){return g.notas&&g.notas.includes('[Plata propia]')})
-    var totalPropio=propios.reduce(function(s,g){return s+(g.monto||0)},0)
-    var kMargen=document.getElementById('k-margen')
-    if(totalPropio>0){
-      kMargen.insertAdjacentHTML('afterend','<div style="margin-top:8px;background:rgba(232,33,10,0.08);border:1px solid rgba(232,33,10,0.2);border-radius:8px;padding:10px"><div style="font-size:10px;color:var(--txt3);text-transform:uppercase;margin-bottom:3px">Plata propia por reembolsar</div><div style="font-family:Syne,sans-serif;font-weight:800;font-size:18px;color:#FF6B5B">$'+totalPropio.toLocaleString('es-CL')+'</div><div style="font-size:11px;color:var(--txt3)">'+propios.length+' gastos de tecnicos pendientes</div></div>')
-    }
-    document.getElementById('k-margen').style.color=margen>=0?'var(--verde)':'var(--rojo)'
+    var el=document.getElementById('k-margen')
+    el.textContent='$'+margen.toLocaleString('es-CL')
+    el.style.color=margen>=0?'var(--verde)':'var(--rojo)'
   })
-
-  // Por categoria
   var porTipo={}
   gastos.forEach(function(g){
     if(!porTipo[g.tipo])porTipo[g.tipo]={total:0,cnt:0}
@@ -273,46 +248,36 @@ function renderResumen(){
     var icon=TIPO_ICONS[tipo]||'📦'
     return '<div class="tipo-card"><div style="font-size:20px;margin-bottom:4px">'+icon+'</div><div class="tipo-nombre">'+tipo+'</div><div class="tipo-monto" style="color:'+col+'">$'+porTipo[tipo].total.toLocaleString('es-CL')+'</div><div style="font-size:10px;color:var(--txt3)">'+porTipo[tipo].cnt+' registros</div></div>'
   }).join('')
-
-  // Ultimos 5
   document.getElementById('ultimos-gastos').innerHTML=gastos.slice(0,5).map(gastoCardHTML).join('')
 }
 
 function gastoCardHTML(g){
   var col=TIPO_COLORS[g.tipo]||'#9996A0'
   var icon=TIPO_ICONS[g.tipo]||'📦'
+  var origen=g.notas&&g.notas.includes('[Transferencia empresa]')?'💳 Empresa':'💵 Propia'
+  var origenCol=g.notas&&g.notas.includes('[Transferencia empresa]')?'rgba(34,197,94,0.1)':'rgba(232,33,10,0.08)'
+  var origenTxtCol=g.notas&&g.notas.includes('[Transferencia empresa]')?'var(--verde)':'#FF6B5B'
   return '<div class="gasto-card">'+
     '<div class="gc-top">'+
       '<div class="gc-icon" style="background:'+col+'22">'+icon+'</div>'+
       '<div class="gc-info">'+
         '<div class="gc-desc">'+g.descripcion+'</div>'+
-        '<div class="gc-meta">'+g.tipo+(g.tecnico?' · '+g.tecnico.split(' ')[0]:'')+(g.documento?' · Doc: '+g.documento:'')+'</div>'+
+        '<div class="gc-meta">'+g.tipo+(g.tecnico?' · '+g.tecnico.split(' ')[0]:'')+(g.documento?' · '+g.documento:'')+'</div>'+
       '</div>'+
       '<div><div class="gc-monto" style="color:'+col+'">$'+(g.monto||0).toLocaleString('es-CL')+'</div><div class="gc-fecha">'+(g.fecha||'')+'</div></div>'+
     '</div>'+
+    (g.notas?'<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px"><span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;background:'+origenCol+';color:'+origenTxtCol+'">'+origen+'</span>'+(g.presupuesto_id?'<span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;background:rgba(96,165,250,0.1);color:var(--azul)">📋 Asignado a ppto</span>':'')+'</div>':'')+
     (g.foto_url?'<img src="'+g.foto_url+'" class="gc-foto" onclick="verFoto(\''+g.foto_url+'\')" loading="lazy">':'')+
-    (g.notas?'<div style="font-size:11px;margin-top:6px;display:flex;align-items:center;gap:8px">'+
-      (g.notas.includes('[Transferencia empresa]')?
-        '<span style="background:rgba(34,197,94,0.1);color:var(--verde);border:1px solid rgba(34,197,94,0.2);border-radius:4px;padding:2px 8px;font-size:11px;font-weight:700">💳 Transferencia empresa</span>':
-        g.notas.includes('[Plata propia]')?
-        '<span style="background:rgba(232,33,10,0.08);color:#FF6B5B;border:1px solid rgba(232,33,10,0.2);border-radius:4px;padding:2px 8px;font-size:11px;font-weight:700">💵 Plata propia — pendiente reembolso</span>':
-        '<span style="color:var(--txt3);font-size:11px">'+g.notas+'</span>')+
-      '</div>':'')+
-    '<div class="gc-actions">'+
-      '<button class="gc-btn" style="background:var(--rojo-g);color:var(--rojo);border:1px solid rgba(232,33,10,0.3)" onclick="eliminarGasto(\''+g.id+'\')">Eliminar</button>'+
-    '</div>'+
+    '<div class="gc-actions"><button class="gc-btn" style="background:var(--rojo-g);color:var(--rojo);border:1px solid rgba(232,33,10,0.3)" onclick="eliminarGasto(\''+g.id+'\')">Eliminar</button></div>'+
   '</div>'
 }
 
 function renderTodos(){
   var data=tipoFiltro==='todos'?gastos:gastos.filter(function(g){return g.tipo===tipoFiltro})
   var el=document.getElementById('lista-todos')
-  if(!data.length){el.innerHTML='<div class="loading">Sin gastos registrados</div>';return}
+  if(!data.length){el.innerHTML='<div class="loading">Sin gastos</div>';return}
   var total=data.reduce(function(s,g){return s+(g.monto||0)},0)
-  el.innerHTML='<div style="background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:12px;margin-bottom:10px;display:flex;justify-content:space-between">'+
-    '<div style="font-size:11px;color:var(--txt3)">Total filtro</div>'+
-    '<div style="font-family:Syne,sans-serif;font-weight:800;color:var(--rojo)">$'+total.toLocaleString('es-CL')+'</div>'+
-  '</div>'+
+  el.innerHTML='<div style="background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:12px;margin-bottom:10px;display:flex;justify-content:space-between"><div style="font-size:11px;color:var(--txt3)">Total</div><div style="font-family:Syne,sans-serif;font-weight:800;color:var(--rojo)">$'+total.toLocaleString('es-CL')+'</div></div>'+
   data.map(gastoCardHTML).join('')
 }
 
@@ -326,9 +291,10 @@ function setTipoFiltro(tipo,el){
 function renderTecnicos(){
   var porTec={}
   gastos.filter(function(g){return g.tecnico}).forEach(function(g){
-    if(!porTec[g.tecnico])porTec[g.tecnico]={nombre:g.tecnico,total:0,cnt:0,items:[]}
+    if(!porTec[g.tecnico])porTec[g.tecnico]={nombre:g.tecnico,total:0,cnt:0,propio:0,items:[]}
     porTec[g.tecnico].total+=(g.monto||0)
     porTec[g.tecnico].cnt++
+    if(g.notas&&g.notas.includes('[Plata propia]'))porTec[g.tecnico].propio+=(g.monto||0)
     porTec[g.tecnico].items.push(g)
   })
   var sorted=Object.values(porTec).sort(function(a,b){return b.total-a.total})
@@ -337,88 +303,55 @@ function renderTecnicos(){
   el.innerHTML=sorted.map(function(t,i){
     var col=COLS[i%COLS.length]
     var ini=t.nombre.split(' ').map(function(x){return x[0]}).join('').substring(0,2).toUpperCase()
-    var propio=t.items.filter(function(g){return g.notas&&g.notas.includes('[Plata propia]')}).reduce(function(s,g){return s+(g.monto||0)},0)
-    return '<div class="tec-row-g" onclick="verDetallesTecnico(''+t.nombre+'')" style="cursor:pointer;transition:border-color 0.15s;" onmouseover="this.style.borderColor=''+col+''" onmouseout="this.style.borderColor=''">'+
-      '<div class="trg-top">'+
-        '<div class="trg-av" style="background:'+col+'">'+ini+'</div>'+
-        '<div style="flex:1"><div class="trg-nombre">'+t.nombre+'</div><div class="trg-cnt">'+t.cnt+' gasto'+(t.cnt!==1?'s:':':')+' — toca para ver detalle</div></div>'+
-        '<div style="text-align:right"><div class="trg-monto">$'+t.total.toLocaleString('es-CL')+'</div>'+(propio>0?'<div style="font-size:10px;color:#FF6B5B;margin-top:2px">$'+propio.toLocaleString('es-CL')+' x reembolsar</div>':'')+' </div>'+
+    var filas=t.items.map(function(g){
+      var gc=TIPO_COLORS[g.tipo]||'#9996A0'
+      var gi=TIPO_ICONS[g.tipo]||'📦'
+      var org=g.notas&&g.notas.includes('[Transferencia empresa]')?'💳':'💵'
+      return '<div class="g-row">'+
+        '<div class="g-row-icon" style="background:'+gc+'22">'+gi+'</div>'+
+        '<div class="g-row-desc">'+
+          '<div class="g-row-titulo">'+g.descripcion+'</div>'+
+          '<div class="g-row-meta">'+g.tipo+(g.fecha?' · '+g.fecha:'')+(g.presupuesto_id?' · 📋 Ppto ':' ')+org+'</div>'+
+        '</div>'+
+        '<div class="g-row-monto" style="color:'+gc+'">$'+(g.monto||0).toLocaleString('es-CL')+'</div>'+
+      '</div>'
+    }).join('')
+    var fotosHTML=t.items.filter(function(g){return g.foto_url}).map(function(g){
+      return '<img src="'+g.foto_url+'" style="width:100%;border-radius:6px;aspect-ratio:1;object-fit:cover" loading="lazy" onclick="verFoto(\''+g.foto_url+'\')">'
+    }).join('')
+    return '<div class="tec-acc">'+
+      '<div class="tec-acc-header" onclick="toggleTec('+i+')">'+
+        '<div class="tec-av" style="background:'+col+'">'+ini+'</div>'+
+        '<div style="flex:1"><div class="tec-nombre">'+t.nombre+'</div><div class="tec-cnt">'+t.cnt+' gasto'+(t.cnt!==1?'s':'')+(t.propio>0?' · $'+t.propio.toLocaleString('es-CL')+' x reembolsar':'')+'</div></div>'+
+        '<div style="text-align:right"><div class="tec-monto" style="color:'+col+'">$'+t.total.toLocaleString('es-CL')+'</div><div id="tec-arr-'+i+'" style="font-size:12px;color:var(--txt3);margin-top:2px">▼</div></div>'+
       '</div>'+
-      '<div id="tec-det-'+i+'" style="display:none;margin-top:10px;border-top:1px solid var(--borde);padding-top:10px">'+
-        t.items.map(function(g){
-          var gc=TIPO_COLORS[g.tipo]||'#9996A0'
-          var gi=TIPO_ICONS[g.tipo]||'📦'
-          var org=g.notas&&g.notas.includes('[Transferencia empresa]')?'💳':'💵'
-          return '<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--borde)">'+
-            '<div style="width:28px;height:28px;border-radius:6px;background:'+gc+'22;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">'+gi+'</div>'+
-            '<div style="flex:1"><div style="font-size:12px;font-weight:600">'+g.descripcion+'</div><div style="font-size:10px;color:var(--txt3)">'+g.tipo+(g.fecha?' · '+g.fecha:'')+(g.presupuesto_id?' · 📋 Ppto':'')+' '+org+'</div></div>'+
-            '<div style="font-family:Syne,sans-serif;font-weight:700;font-size:13px;color:'+gc+'">$'+(g.monto||0).toLocaleString('es-CL')+'</div>'+
-          '</div>'
-        }).join('')+
-        (t.items.filter(function(g){return g.foto_url}).length?'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px">'+t.items.filter(function(g){return g.foto_url}).map(function(g){return '<img src="'+g.foto_url+'" style="width:100%;border-radius:6px;aspect-ratio:1;object-fit:cover" loading="lazy">'}).join('')+'</div>':'')+
+      '<div class="tec-body" id="tec-body-'+i+'">'+
+        '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:10px">'+
+          '<div style="background:var(--c3);border-radius:6px;padding:8px;text-align:center"><div style="font-family:Syne,sans-serif;font-weight:800;font-size:14px;color:var(--rojo)">$'+t.total.toLocaleString('es-CL')+'</div><div style="font-size:9px;color:var(--txt3)">TOTAL</div></div>'+
+          '<div style="background:var(--c3);border-radius:6px;padding:8px;text-align:center"><div style="font-family:Syne,sans-serif;font-weight:800;font-size:14px;color:#FF6B5B">$'+t.propio.toLocaleString('es-CL')+'</div><div style="font-size:9px;color:var(--txt3)">X REEMBOLSAR</div></div>'+
+          '<div style="background:var(--c3);border-radius:6px;padding:8px;text-align:center"><div style="font-family:Syne,sans-serif;font-weight:800;font-size:14px;color:var(--verde)">$'+(t.total-t.propio).toLocaleString('es-CL')+'</div><div style="font-size:9px;color:var(--txt3)">DE EMPRESA</div></div>'+
+        '</div>'+
+        filas+
+        (fotosHTML?'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px">'+fotosHTML+'</div>':'')+
       '</div>'+
-      '<button onclick="toggleTec('+i+',event)" style="width:100%;background:none;border:none;color:var(--txt3);font-family:Syne,sans-serif;font-weight:700;font-size:11px;padding:8px 0 0;cursor:pointer;text-align:center" id="tec-btn-'+i+'">▼ Ver '+t.cnt+' gasto'+(t.cnt!==1?'s':'')+'</button>'+
     '</div>'
   }).join('')
 }
 
-function toggleTec(i, e){
-  if(e)e.stopPropagation()
-  var det=document.getElementById('tec-det-'+i)
-  var btn=document.getElementById('tec-btn-'+i)
-  var abierto=det.style.display!=='none'
-  det.style.display=abierto?'none':'block'
-  btn.textContent=abierto?btn.textContent.replace('▲','▼'):btn.textContent.replace('▼','▲')
+function toggleTec(i){
+  var body=document.getElementById('tec-body-'+i)
+  var arr=document.getElementById('tec-arr-'+i)
+  var open=body.classList.contains('open')
+  body.classList.toggle('open',!open)
+  if(arr)arr.textContent=open?'▼':'▲'
 }
-
-function verDetallesTecnico(nombre){
-  var items=gastos.filter(function(g){return g.tecnico===nombre}).sort(function(a,b){return (b.fecha||'').localeCompare(a.fecha||'')})
-  var total=items.reduce(function(s,g){return s+(g.monto||0)},0)
-  var propio=items.filter(function(g){return g.notas&&g.notas.includes('[Plata propia]')}).reduce(function(s,g){return s+(g.monto||0)},0)
-  var empresa=items.filter(function(g){return g.notas&&g.notas.includes('[Transferencia empresa]')}).reduce(function(s,g){return s+(g.monto||0)},0)
-
-  var html='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px">'+
-    '<div style="background:var(--c3);border-radius:8px;padding:10px;text-align:center"><div style="font-family:Syne,sans-serif;font-weight:800;font-size:18px;color:var(--rojo)">$'+total.toLocaleString('es-CL')+'</div><div style="font-size:10px;color:var(--txt3)">Total gastos</div></div>'+
-    '<div style="background:var(--c3);border-radius:8px;padding:10px;text-align:center"><div style="font-family:Syne,sans-serif;font-weight:800;font-size:18px;color:#FF6B5B">$'+propio.toLocaleString('es-CL')+'</div><div style="font-size:10px;color:var(--txt3)">Plata propia</div></div>'+
-    '<div style="background:var(--c3);border-radius:8px;padding:10px;text-align:center"><div style="font-family:Syne,sans-serif;font-weight:800;font-size:18px;color:var(--verde)">$'+empresa.toLocaleString('es-CL')+'</div><div style="font-size:10px;color:var(--txt3)">De empresa</div></div>'+
-  '</div>'+
-  items.map(function(g){
-    var col=TIPO_COLORS[g.tipo]||'#9996A0'
-    var icon=TIPO_ICONS[g.tipo]||'📦'
-    var origen=g.notas&&g.notas.includes('[Transferencia empresa]')?'💳 Empresa':'💵 Propia'
-    var origenCol=g.notas&&g.notas.includes('[Transferencia empresa]')?'var(--verde)':'#FF6B5B'
-    return '<div style="background:var(--c3);border-radius:10px;padding:12px;margin-bottom:8px">'+
-      '<div style="display:flex;align-items:flex-start;gap:10px">'+
-        '<div style="width:34px;height:34px;border-radius:8px;background:'+col+'22;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">'+icon+'</div>'+
-        '<div style="flex:1">'+
-          '<div style="font-weight:600;font-size:13px">'+g.descripcion+'</div>'+
-          '<div style="font-size:11px;color:var(--txt3);margin-top:2px">'+g.tipo+(g.documento?' · '+g.documento:'')+(g.fecha?' · '+g.fecha:'')+'</div>'+
-          (g.presupuesto_id?'<div style="font-size:10px;color:var(--azul);margin-top:3px">📋 Asignado a presupuesto</div>':'')+
-        '</div>'+
-        '<div style="text-align:right">'+
-          '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:15px;color:'+col+'">$'+(g.monto||0).toLocaleString('es-CL')+'</div>'+
-          '<div style="font-size:10px;font-weight:700;color:'+origenCol+'">'+origen+'</div>'+
-        '</div>'+
-      '</div>'+
-      (g.foto_url?'<img src="'+g.foto_url+'" style="width:100%;border-radius:8px;margin-top:8px;max-height:160px;object-fit:cover" loading="lazy">':'')+
-    '</div>'
-  }).join('')
-
-  document.getElementById('det-tec-nombre').textContent=nombre
-  document.getElementById('det-tec-body').innerHTML=html
-  document.getElementById('modal-det-tec').classList.add('open')
-}
-
 
 function renderFijos(){
   var fijos=gastos.filter(function(g){return g.tipo==='Costos fijos'||g.tipo==='Sueldos'||g.tipo==='Impuestos'})
   var el=document.getElementById('lista-fijos')
-  if(!fijos.length){el.innerHTML='<div class="loading">Sin gastos fijos registrados</div>';return}
+  if(!fijos.length){el.innerHTML='<div class="loading">Sin gastos fijos</div>';return}
   var total=fijos.reduce(function(s,g){return s+(g.monto||0)},0)
-  el.innerHTML='<div style="background:linear-gradient(135deg,rgba(245,197,24,0.1),rgba(245,197,24,0.05));border:1px solid rgba(245,197,24,0.3);border-radius:8px;padding:12px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center">'+
-    '<div><div style="font-size:10px;color:var(--txt3);text-transform:uppercase">Total gastos fijos</div><div style="font-family:Syne,sans-serif;font-weight:800;font-size:22px;color:var(--amarillo)">$'+total.toLocaleString('es-CL')+'</div></div>'+
-    '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:20px;color:var(--azul)">'+fijos.length+'</div>'+
-  '</div>'+
+  el.innerHTML='<div style="background:linear-gradient(135deg,rgba(245,197,24,0.1),rgba(245,197,24,0.05));border:1px solid rgba(245,197,24,0.3);border-radius:8px;padding:12px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:10px;color:var(--txt3);text-transform:uppercase">Total fijos</div><div style="font-family:Syne,sans-serif;font-weight:800;font-size:22px;color:var(--amarillo)">$'+total.toLocaleString('es-CL')+'</div></div><div style="font-family:Syne,sans-serif;font-weight:800;font-size:20px;color:var(--azul)">'+fijos.length+'</div></div>'+
   fijos.map(gastoCardHTML).join('')
 }
 
@@ -429,20 +362,7 @@ function goTab(n){
   }
 }
 
-async function cargarPptos(){
-  var sel=document.getElementById('g-ppto')
-  if(!sel)return
-  sel.innerHTML='<option value="">-- Gasto general (sin ppto) --</option>'
-  var r=await getDB().from('presupuestos').select('id,numero,cliente,vehiculo,tecnico').order('created_at',{ascending:false}).limit(50)
-  if(r.data){r.data.forEach(function(p){
-    var opt=document.createElement('option')
-    opt.value=p.id
-    opt.textContent='#'+(p.numero||'—')+' · '+p.cliente+(p.vehiculo?' · '+p.vehiculo:'')+(p.tecnico?' ('+p.tecnico.split(' ')[0]+')':'')
-    sel.appendChild(opt)
-  })}
-}
-
-function openModal(tipo){
+async function openModal(tipo){
   var hoy=new Date()
   document.getElementById('g-fecha').value=hoy.getFullYear()+'-'+String(hoy.getMonth()+1).padStart(2,'0')+'-'+String(hoy.getDate()).padStart(2,'0')
   document.getElementById('g-monto').value=''
@@ -454,8 +374,18 @@ function openModal(tipo){
   document.getElementById('g-foto-placeholder').style.display='block'
   fotoBase64=''
   if(tipo==='fijo')document.getElementById('g-tipo').value='Costos fijos'
+  // Cargar presupuestos
+  var sel=document.getElementById('g-ppto')
+  sel.innerHTML='<option value="">-- Gasto general --</option>'
+  var r=await getDB().from('presupuestos').select('id,numero,cliente,vehiculo,tecnico,estado_servicio').order('created_at',{ascending:false}).limit(50)
+  if(r.data){r.data.forEach(function(p){
+    var opt=document.createElement('option')
+    opt.value=p.id
+    var icono=p.estado_servicio==='ejecucion'?'🔧 ':p.estado_servicio==='aprobado'?'✅ ':''
+    opt.textContent=icono+'#'+(p.numero||'—')+' · '+p.cliente+(p.vehiculo?' · '+p.vehiculo:'')+(p.tecnico?' ('+p.tecnico.split(' ')[0]+')':'')
+    sel.appendChild(opt)
+  })}
   document.getElementById('modal-gasto').classList.add('open')
-  cargarPptos()
 }
 
 function previewFoto(input){
@@ -466,13 +396,10 @@ function previewFoto(input){
     var img=new Image()
     img.onload=function(){
       var canvas=document.createElement('canvas')
-      var MAX=800
-      var w=img.width,h=img.height
-      if(w>h){if(w>MAX){h=Math.round(h*MAX/w);w=MAX}}
-      else{if(h>MAX){w=Math.round(w*MAX/h);h=MAX}}
+      var MAX=800,w=img.width,h=img.height
+      if(w>h){if(w>MAX){h=Math.round(h*MAX/w);w=MAX}}else{if(h>MAX){w=Math.round(w*MAX/h);h=MAX}}
       canvas.width=w;canvas.height=h
-      var ctx=canvas.getContext('2d')
-      ctx.drawImage(img,0,0,w,h)
+      canvas.getContext('2d').drawImage(img,0,0,w,h)
       fotoBase64=canvas.toDataURL('image/jpeg',0.7)
       document.getElementById('g-foto-preview').src=fotoBase64
       document.getElementById('g-foto-preview').style.display='block'
@@ -487,19 +414,16 @@ async function guardarGasto(){
   var monto=parseInt(document.getElementById('g-monto').value)||0
   var desc=document.getElementById('g-desc').value.trim()
   if(!desc||!monto){toast('Ingresa descripcion y monto');return}
-
   var data={
     fecha:document.getElementById('g-fecha').value,
     tipo:document.getElementById('g-tipo').value,
-    descripcion:desc,
-    monto:monto,
+    descripcion:desc,monto:monto,
     tecnico:document.getElementById('g-tecnico').value||null,
     presupuesto_id:document.getElementById('g-ppto').value||null,
     documento:document.getElementById('g-doc').value.trim()||null,
     notas:document.getElementById('g-notas').value.trim()||null,
     foto_url:fotoBase64||null
   }
-
   var r=await getDB().from('gastos').insert(data)
   if(r.error){toast('Error: '+r.error.message);return}
   toast('Gasto registrado','ok')

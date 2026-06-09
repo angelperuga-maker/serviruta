@@ -163,8 +163,14 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
     </div>
     <div style="height:8px"></div>
     <label class="lbl">Cliente</label><input class="inp" id="n-cliente" placeholder="Nombre del cliente">
-    <label class="lbl">Teléfono</label><input class="inp" id="n-tel" placeholder="+56 9..." type="tel">
-    <label class="lbl">Vehículo</label><input class="inp" id="n-vehiculo" placeholder="Marca, modelo, patente">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+      <div><label class="lbl">Teléfono</label><input class="inp" id="n-tel" placeholder="+56 9..." type="tel" style="margin-bottom:0"></div>
+      <div><label class="lbl">Correo (opcional)</label><input class="inp" id="n-email" placeholder="email@..." type="email" style="margin-bottom:0"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+      <div><label class="lbl">Patente</label><input class="inp" id="n-patente" placeholder="Ej: ABCD12" style="margin-bottom:0;text-transform:uppercase"></div>
+      <div><label class="lbl">Vehículo</label><input class="inp" id="n-vehiculo" placeholder="Marca y modelo" style="margin-bottom:0"></div>
+    </div>
     <label class="lbl">Código aliado (opcional)</label><input class="inp" id="n-aliado" placeholder="Ej: GRU-PEDRO01" style="margin-bottom:14px">
     <button class="btn-cancel" onclick="document.getElementById('modal-nuevo').classList.remove('open')">Cancelar</button>
     <button class="btn-save" onclick="crearPpto()">Crear presupuesto</button>
@@ -558,6 +564,14 @@ async function crearPpto(){
     estado:'nuevo',items:[]
   }).select()
   if(r.error){toast('Error: '+r.error.message);return}
+  // Guardar cliente automáticamente
+  var nTel=document.getElementById('n-tel').value.trim()
+  var nEmail=document.getElementById('n-email')?.value?.trim()||null
+  var nPatente=document.getElementById('n-patente')?.value?.trim().toUpperCase()||null
+  var nNombre=document.getElementById('n-cliente').value.trim()
+  var nVeh=document.getElementById('n-vehiculo').value.trim()
+  if(nTel)getDB().from('clientes').upsert({nombre:nNombre,telefono:nTel,email:nEmail},{onConflict:'telefono',ignoreDuplicates:false})
+  if(nPatente)getDB().from('vehiculos').upsert({patente:nPatente,marca:nVeh||null,cliente_nombre:nNombre},{onConflict:'patente',ignoreDuplicates:false})
   toast('✅ Presupuesto creado','ok')
   document.getElementById('modal-nuevo').classList.remove('open')
   await load()

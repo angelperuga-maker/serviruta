@@ -231,9 +231,22 @@ body{background:var(--negro);color:var(--txt);font-family:'DM Sans',sans-serif;m
     <div class="sec">Cliente y vehículo</div>
     <label class="lbl">Nombre del cliente</label>
     <input class="inp" id="t-nombre" placeholder="Ej: Carlos Medina" autocomplete="off">
-    <label class="lbl">Teléfono</label>
-    <input class="inp" id="t-tel" placeholder="+56 9 XXXX XXXX" type="tel">
     <div class="inp-row">
+      <div>
+        <label class="lbl">Teléfono</label>
+        <input class="inp" id="t-tel" placeholder="+56 9 XXXX XXXX" type="tel" style="margin-bottom:0">
+      </div>
+      <div>
+        <label class="lbl">Correo (opcional)</label>
+        <input class="inp" id="t-email" placeholder="email@..." type="email" style="margin-bottom:0">
+      </div>
+    </div>
+    <div style="height:6px"></div>
+    <div class="inp-row">
+      <div>
+        <label class="lbl">Patente</label>
+        <input class="inp" id="t-patente" placeholder="Ej: ABCD12" style="margin-bottom:0;text-transform:uppercase">
+      </div>
       <div>
         <label class="lbl">Vehículo</label>
         <select class="inp" id="t-veh" style="margin-bottom:0">
@@ -241,11 +254,10 @@ body{background:var(--negro);color:var(--txt);font-family:'DM Sans',sans-serif;m
           <option>Moto</option><option>Bus</option><option>Maquinaria</option>
         </select>
       </div>
-      <div>
-        <label class="lbl">Marca y modelo</label>
-        <input class="inp" id="t-auto" placeholder="Ej: Hyundai Tucson" style="margin-bottom:0">
-      </div>
     </div>
+    <div style="height:6px"></div>
+    <label class="lbl">Marca y modelo</label>
+    <input class="inp" id="t-auto" placeholder="Ej: Hyundai Tucson">
     <div style="height:4px"></div>
     <label class="lbl" style="margin-top:10px">Tu nombre</label>
     <select class="inp" id="t-tecnico">

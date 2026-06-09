@@ -171,6 +171,10 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
     </select>
     <label class="lbl">Numero documento (boleta/factura)</label>
     <input class="inp" id="g-doc" placeholder="N de boleta o factura">
+    <label class="lbl">Asignar a presupuesto (opcional)</label>
+    <select class="inp" id="g-ppto" style="margin-bottom:10px">
+      <option value="">-- Gasto general (sin ppto) --</option>
+    </select>
     <label class="lbl">Notas</label>
     <input class="inp" id="g-notas" placeholder="Notas adicionales" style="margin-bottom:10px">
     <label class="lbl">Foto boleta / factura</label>
@@ -191,6 +195,15 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
 <!-- MODAL VER FOTO -->
 <div class="modal-overlay" id="modal-foto" onclick="this.classList.remove('open')" style="align-items:center">
   <img id="foto-grande" style="max-width:90vw;max-height:90vh;border-radius:12px;object-fit:contain">
+</div>
+
+<div class="modal-overlay" id="modal-det-tec" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="det-tec-nombre">Gastos del tecnico</div>
+    <div id="det-tec-body"></div>
+    <button class="btn-cancel" onclick="document.getElementById('modal-det-tec').classList.remove('open')" style="margin-top:12px">Cerrar</button>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -324,22 +337,55 @@ function renderTecnicos(){
   el.innerHTML=sorted.map(function(t,i){
     var col=COLS[i%COLS.length]
     var ini=t.nombre.split(' ').map(function(x){return x[0]}).join('').substring(0,2).toUpperCase()
-    return '<div class="tec-row-g">'+
+    var propio=t.items.filter(function(g){return g.notas&&g.notas.includes('[Plata propia]')}).reduce(function(s,g){return s+(g.monto||0)},0)
+    return '<div class="tec-row-g" onclick="verDetallesTecnico(''+t.nombre+'')" style="cursor:pointer;transition:border-color 0.15s;" onmouseover="this.style.borderColor=''+col+''" onmouseout="this.style.borderColor=''">'+
       '<div class="trg-top">'+
         '<div class="trg-av" style="background:'+col+'">'+ini+'</div>'+
-        '<div style="flex:1"><div class="trg-nombre">'+t.nombre+'</div><div class="trg-cnt">'+t.cnt+' gasto'+(t.cnt!==1?'s':'')+'</div></div>'+
-        '<div class="trg-monto">$'+t.total.toLocaleString('es-CL')+'</div>'+
+        '<div style="flex:1"><div class="trg-nombre">'+t.nombre+'</div><div class="trg-cnt">'+t.cnt+' gasto'+(t.cnt!==1?'s:':':')+' — toca para ver detalle</div></div>'+
+        '<div style="text-align:right"><div class="trg-monto">$'+t.total.toLocaleString('es-CL')+'</div>'+(propio>0?'<div style="font-size:10px;color:#FF6B5B;margin-top:2px">$'+propio.toLocaleString('es-CL')+' x reembolsar</div>':'')+' </div>'+
       '</div>'+
-      t.items.slice(0,3).map(function(g){
-        return '<div style="display:flex;justify-content:space-between;padding:5px 0;border-top:1px solid var(--borde);font-size:12px">'+
-          '<span style="color:var(--txt2)">'+g.descripcion+'</span>'+
-          '<span style="font-weight:700;color:var(--rojo)">$'+(g.monto||0).toLocaleString('es-CL')+'</span>'+
-        '</div>'
-      }).join('')+
-      (t.items.length>3?'<div style="font-size:11px;color:var(--txt3);margin-top:4px">+' +(t.items.length-3)+' mas...</div>':'')+
     '</div>'
   }).join('')
 }
+
+function verDetallesTecnico(nombre){
+  var items=gastos.filter(function(g){return g.tecnico===nombre}).sort(function(a,b){return (b.fecha||'').localeCompare(a.fecha||'')})
+  var total=items.reduce(function(s,g){return s+(g.monto||0)},0)
+  var propio=items.filter(function(g){return g.notas&&g.notas.includes('[Plata propia]')}).reduce(function(s,g){return s+(g.monto||0)},0)
+  var empresa=items.filter(function(g){return g.notas&&g.notas.includes('[Transferencia empresa]')}).reduce(function(s,g){return s+(g.monto||0)},0)
+
+  var html='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px">'+
+    '<div style="background:var(--c3);border-radius:8px;padding:10px;text-align:center"><div style="font-family:Syne,sans-serif;font-weight:800;font-size:18px;color:var(--rojo)">$'+total.toLocaleString('es-CL')+'</div><div style="font-size:10px;color:var(--txt3)">Total gastos</div></div>'+
+    '<div style="background:var(--c3);border-radius:8px;padding:10px;text-align:center"><div style="font-family:Syne,sans-serif;font-weight:800;font-size:18px;color:#FF6B5B">$'+propio.toLocaleString('es-CL')+'</div><div style="font-size:10px;color:var(--txt3)">Plata propia</div></div>'+
+    '<div style="background:var(--c3);border-radius:8px;padding:10px;text-align:center"><div style="font-family:Syne,sans-serif;font-weight:800;font-size:18px;color:var(--verde)">$'+empresa.toLocaleString('es-CL')+'</div><div style="font-size:10px;color:var(--txt3)">De empresa</div></div>'+
+  '</div>'+
+  items.map(function(g){
+    var col=TIPO_COLORS[g.tipo]||'#9996A0'
+    var icon=TIPO_ICONS[g.tipo]||'📦'
+    var origen=g.notas&&g.notas.includes('[Transferencia empresa]')?'💳 Empresa':'💵 Propia'
+    var origenCol=g.notas&&g.notas.includes('[Transferencia empresa]')?'var(--verde)':'#FF6B5B'
+    return '<div style="background:var(--c3);border-radius:10px;padding:12px;margin-bottom:8px">'+
+      '<div style="display:flex;align-items:flex-start;gap:10px">'+
+        '<div style="width:34px;height:34px;border-radius:8px;background:'+col+'22;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0">'+icon+'</div>'+
+        '<div style="flex:1">'+
+          '<div style="font-weight:600;font-size:13px">'+g.descripcion+'</div>'+
+          '<div style="font-size:11px;color:var(--txt3);margin-top:2px">'+g.tipo+(g.documento?' · '+g.documento:'')+(g.fecha?' · '+g.fecha:'')+'</div>'+
+          (g.presupuesto_id?'<div style="font-size:10px;color:var(--azul);margin-top:3px">📋 Asignado a presupuesto</div>':'')+
+        '</div>'+
+        '<div style="text-align:right">'+
+          '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:15px;color:'+col+'">$'+(g.monto||0).toLocaleString('es-CL')+'</div>'+
+          '<div style="font-size:10px;font-weight:700;color:'+origenCol+'">'+origen+'</div>'+
+        '</div>'+
+      '</div>'+
+      (g.foto_url?'<img src="'+g.foto_url+'" style="width:100%;border-radius:8px;margin-top:8px;max-height:160px;object-fit:cover" loading="lazy">':'')+
+    '</div>'
+  }).join('')
+
+  document.getElementById('det-tec-nombre').textContent=nombre
+  document.getElementById('det-tec-body').innerHTML=html
+  document.getElementById('modal-det-tec').classList.add('open')
+}
+
 
 function renderFijos(){
   var fijos=gastos.filter(function(g){return g.tipo==='Costos fijos'||g.tipo==='Sueldos'||g.tipo==='Impuestos'})
@@ -360,6 +406,19 @@ function goTab(n){
   }
 }
 
+async function cargarPptos(){
+  var sel=document.getElementById('g-ppto')
+  if(!sel)return
+  sel.innerHTML='<option value="">-- Gasto general (sin ppto) --</option>'
+  var r=await getDB().from('presupuestos').select('id,numero,cliente,vehiculo,tecnico').order('created_at',{ascending:false}).limit(50)
+  if(r.data){r.data.forEach(function(p){
+    var opt=document.createElement('option')
+    opt.value=p.id
+    opt.textContent='#'+(p.numero||'—')+' · '+p.cliente+(p.vehiculo?' · '+p.vehiculo:'')+(p.tecnico?' ('+p.tecnico.split(' ')[0]+')':'')
+    sel.appendChild(opt)
+  })}
+}
+
 function openModal(tipo){
   var hoy=new Date()
   document.getElementById('g-fecha').value=hoy.getFullYear()+'-'+String(hoy.getMonth()+1).padStart(2,'0')+'-'+String(hoy.getDate()).padStart(2,'0')
@@ -373,6 +432,7 @@ function openModal(tipo){
   fotoBase64=''
   if(tipo==='fijo')document.getElementById('g-tipo').value='Costos fijos'
   document.getElementById('modal-gasto').classList.add('open')
+  cargarPptos()
 }
 
 function previewFoto(input){
@@ -411,6 +471,7 @@ async function guardarGasto(){
     descripcion:desc,
     monto:monto,
     tecnico:document.getElementById('g-tecnico').value||null,
+    presupuesto_id:document.getElementById('g-ppto').value||null,
     documento:document.getElementById('g-doc').value.trim()||null,
     notas:document.getElementById('g-notas').value.trim()||null,
     foto_url:fotoBase64||null

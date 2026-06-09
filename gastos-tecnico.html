@@ -82,10 +82,31 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
     <input class="inp" id="g-desc" placeholder="Ej: Aceite, filtro, combustible...">
     <label class="lbl">N documento (opcional)</label>
     <input class="inp" id="g-doc" placeholder="N boleta o factura">
-    <label class="lbl">Asignar a presupuesto (opcional)</label>
-    <select class="inp" id="g-ppto" style="margin-bottom:10px">
-      <option value="">-- Gasto general (sin ppto) --</option>
-    </select>
+    <label class="lbl">¿A qué servicio corresponde este gasto?</label>
+
+    <!-- Sugerencia automática -->
+    <div id="ppto-sugerido" style="display:none;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.3);border-radius:10px;padding:12px;margin-bottom:10px;">
+      <div style="font-size:11px;color:var(--verde);font-weight:700;margin-bottom:6px">⚡ Servicio activo detectado</div>
+      <div id="sug-texto" style="font-size:13px;font-weight:600;margin-bottom:10px"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <button id="btn-sug-si" style="background:var(--verde);border:none;border-radius:8px;color:#000;font-family:Syne,sans-serif;font-weight:800;font-size:13px;padding:10px;cursor:pointer">✓ Sí, asignar aquí</button>
+        <button id="btn-sug-no" style="background:var(--c3);border:1px solid var(--borde);border-radius:8px;color:var(--txt2);font-family:Syne,sans-serif;font-weight:700;font-size:13px;padding:10px;cursor:pointer">No es este</button>
+      </div>
+    </div>
+
+    <!-- Asignación confirmada -->
+    <div id="ppto-asignado" style="display:none;background:rgba(96,165,250,0.08);border:1px solid rgba(96,165,250,0.3);border-radius:8px;padding:10px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between">
+      <span id="ppto-asignado-txt" style="font-size:12px;color:var(--azul);font-weight:600"></span>
+      <button onclick="document.getElementById('ppto-asignado').style.display='none';document.getElementById('ppto-manual').style.display='block';document.getElementById('g-ppto').value=''" style="background:none;border:none;color:var(--txt3);cursor:pointer;font-size:11px">Cambiar</button>
+    </div>
+
+    <!-- Selector manual -->
+    <div id="ppto-manual" style="display:none;margin-bottom:10px">
+      <select class="inp" id="g-ppto" style="margin-bottom:0">
+        <option value="">-- Sin asignar (gasto general) --</option>
+      </select>
+    </div>
+
     <label class="lbl">Origen del dinero</label>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
       <label id="origen-propio-lbl" style="display:flex;align-items:center;gap:8px;background:var(--c3);border:2px solid var(--borde);border-radius:8px;padding:12px;cursor:pointer;transition:all 0.15s;" onclick="setOrigen('propio',this)">
@@ -160,16 +181,50 @@ async function openModal(){
   document.getElementById('g-foto-preview').style.display='none'
   document.getElementById('g-foto-placeholder').style.display='block'
   fotoBase64=''
-  // Cargar presupuestos del técnico
+
+  // Cargar todos los presupuestos del técnico
   var sel=document.getElementById('g-ppto')
   sel.innerHTML='<option value="">-- Gasto general (sin ppto) --</option>'
-  var r=await getDB().from('presupuestos').select('id,numero,cliente,vehiculo').order('created_at',{ascending:false}).limit(30)
-  if(r.data){r.data.forEach(function(p){
+  var query=getDB().from('presupuestos').select('id,numero,cliente,vehiculo,estado_servicio').order('created_at',{ascending:false}).limit(50)
+  if(nombre) query=query.eq('tecnico',nombre)
+  var r=await query
+  var pptos=r.data||[]
+
+  // Detectar servicio activo hoy
+  var activos=pptos.filter(function(p){return p.estado_servicio==='ejecucion'||p.estado_servicio==='aprobado'})
+  var sugerido=activos.length?activos[0]:null
+
+  // Mostrar sugerencia si hay servicio activo
+  var sugEl=document.getElementById('ppto-sugerido')
+  if(sugerido){
+    sugEl.style.display='block'
+    document.getElementById('sug-texto').textContent='#'+(sugerido.numero||'—')+' · '+sugerido.cliente+(sugerido.vehiculo?' · '+sugerido.vehiculo:'')
+    document.getElementById('btn-sug-si').onclick=function(){
+      sel.value=sugerido.id
+      sugEl.style.display='none'
+      document.getElementById('ppto-manual').style.display='none'
+      document.getElementById('ppto-asignado').style.display='block'
+      document.getElementById('ppto-asignado-txt').textContent='📋 Asignado: #'+(sugerido.numero||'—')+' · '+sugerido.cliente
+    }
+    document.getElementById('btn-sug-no').onclick=function(){
+      sugEl.style.display='none'
+      document.getElementById('ppto-manual').style.display='block'
+    }
+  } else {
+    sugEl.style.display='none'
+    document.getElementById('ppto-manual').style.display='block'
+  }
+
+  // Llenar selector manual
+  pptos.forEach(function(p){
     var opt=document.createElement('option')
     opt.value=p.id
-    opt.textContent='#'+(p.numero||'—')+' · '+p.cliente+(p.vehiculo?' · '+p.vehiculo:'')
+    var estado=p.estado_servicio==='ejecucion'?'🔧 ':p.estado_servicio==='aprobado'?'✅ ':''
+    opt.textContent=estado+'#'+(p.numero||'—')+' · '+p.cliente+(p.vehiculo?' · '+p.vehiculo:'')
     sel.appendChild(opt)
-  })}
+  })
+
+  document.getElementById('ppto-asignado').style.display='none'
   document.getElementById('modal-gasto').classList.add('open')
 }
 

@@ -344,8 +344,31 @@ function renderTecnicos(){
         '<div style="flex:1"><div class="trg-nombre">'+t.nombre+'</div><div class="trg-cnt">'+t.cnt+' gasto'+(t.cnt!==1?'s:':':')+' — toca para ver detalle</div></div>'+
         '<div style="text-align:right"><div class="trg-monto">$'+t.total.toLocaleString('es-CL')+'</div>'+(propio>0?'<div style="font-size:10px;color:#FF6B5B;margin-top:2px">$'+propio.toLocaleString('es-CL')+' x reembolsar</div>':'')+' </div>'+
       '</div>'+
+      '<div id="tec-det-'+i+'" style="display:none;margin-top:10px;border-top:1px solid var(--borde);padding-top:10px">'+
+        t.items.map(function(g){
+          var gc=TIPO_COLORS[g.tipo]||'#9996A0'
+          var gi=TIPO_ICONS[g.tipo]||'📦'
+          var org=g.notas&&g.notas.includes('[Transferencia empresa]')?'💳':'💵'
+          return '<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--borde)">'+
+            '<div style="width:28px;height:28px;border-radius:6px;background:'+gc+'22;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0">'+gi+'</div>'+
+            '<div style="flex:1"><div style="font-size:12px;font-weight:600">'+g.descripcion+'</div><div style="font-size:10px;color:var(--txt3)">'+g.tipo+(g.fecha?' · '+g.fecha:'')+(g.presupuesto_id?' · 📋 Ppto':'')+' '+org+'</div></div>'+
+            '<div style="font-family:Syne,sans-serif;font-weight:700;font-size:13px;color:'+gc+'">$'+(g.monto||0).toLocaleString('es-CL')+'</div>'+
+          '</div>'
+        }).join('')+
+        (t.items.filter(function(g){return g.foto_url}).length?'<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px">'+t.items.filter(function(g){return g.foto_url}).map(function(g){return '<img src="'+g.foto_url+'" style="width:100%;border-radius:6px;aspect-ratio:1;object-fit:cover" loading="lazy">'}).join('')+'</div>':'')+
+      '</div>'+
+      '<button onclick="toggleTec('+i+',event)" style="width:100%;background:none;border:none;color:var(--txt3);font-family:Syne,sans-serif;font-weight:700;font-size:11px;padding:8px 0 0;cursor:pointer;text-align:center" id="tec-btn-'+i+'">▼ Ver '+t.cnt+' gasto'+(t.cnt!==1?'s':'')+'</button>'+
     '</div>'
   }).join('')
+}
+
+function toggleTec(i, e){
+  if(e)e.stopPropagation()
+  var det=document.getElementById('tec-det-'+i)
+  var btn=document.getElementById('tec-btn-'+i)
+  var abierto=det.style.display!=='none'
+  det.style.display=abierto?'none':'block'
+  btn.textContent=abierto?btn.textContent.replace('▲','▼'):btn.textContent.replace('▼','▲')
 }
 
 function verDetallesTecnico(nombre){

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta · Ficha Tecnico</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--rojo-g:rgba(232,33,10,0.08);--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:600px;margin:0 auto;padding:24px 16px 60px;}
+.logo{display:flex;align-items:center;gap:12px;margin-bottom:24px;}
+.mark{width:42px;height:42px;background:var(--rojo);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:"Syne",sans-serif;font-weight:800;font-size:14px;color:#fff;}
+.brand{font-family:"Syne",sans-serif;font-weight:800;font-size:20px;}
+.brand span{color:var(--rojo);}
+.brand-sub{font-size:12px;color:var(--txt3);}
+.hero{background:linear-gradient(135deg,rgba(232,33,10,0.12),rgba(232,33,10,0.04));border:1px solid rgba(232,33,10,0.2);border-radius:12px;padding:16px;margin-bottom:24px;}
+.hero-titulo{font-family:"Syne",sans-serif;font-weight:800;font-size:18px;margin-bottom:4px;}
+.hero-sub{font-size:13px;color:var(--txt2);line-height:1.6;}
+.sec{font-family:"Syne",sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);margin:20px 0 10px;display:flex;align-items:center;gap:8px;}
+.sec::after{content:"";flex:1;height:1px;background:var(--borde);}
+.lbl{font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:var(--txt3);margin-bottom:5px;display:block;}
+.inp{width:100%;background:var(--c2);border:1px solid var(--borde);border-radius:8px;color:var(--txt);font-family:"DM Sans",sans-serif;font-size:15px;padding:11px 12px;outline:none;margin-bottom:12px;-webkit-appearance:none;}
+.inp:focus{border-color:var(--rojo);}
+.inp::placeholder{color:var(--txt3);}
+textarea.inp{resize:none;line-height:1.6;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+.chip{padding:8px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--borde);background:var(--c2);color:var(--txt3);transition:all 0.15s;}
+.chip.active{background:var(--rojo);border-color:var(--rojo);color:#fff;}
+.radio-group{display:flex;flex-direction:column;gap:8px;margin-bottom:12px;}
+.radio-opt{display:flex;align-items:center;gap:10px;background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:11px 14px;cursor:pointer;}
+.radio-opt.active{border-color:var(--rojo);background:var(--rojo-g);}
+.radio-dot{width:18px;height:18px;border-radius:50%;border:2px solid var(--borde);flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.radio-opt.active .radio-dot{border-color:var(--rojo);background:var(--rojo);}
+.radio-opt.active .radio-dot::after{content:"";width:6px;height:6px;border-radius:50%;background:#fff;}
+.radio-lbl{font-size:13px;font-weight:500;}
+.radio-sub{font-size:11px;color:var(--txt3);margin-top:1px;}
+.foto-slot{width:100%;aspect-ratio:16/9;background:var(--c2);border:2px dashed var(--borde);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;margin-bottom:12px;overflow:hidden;position:relative;}
+.foto-slot img{width:100%;height:100%;object-fit:cover;}
+.foto-placeholder{text-align:center;}
+.btn-submit{width:100%;background:var(--rojo);border:none;border-radius:10px;color:#fff;font-family:"Syne",sans-serif;font-weight:800;font-size:15px;padding:15px;cursor:pointer;margin-top:8px;}
+.btn-submit:disabled{opacity:0.5;cursor:not-allowed;}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:12px 18px;font-size:13px;opacity:0;transition:all 0.25s;pointer-events:none;z-index:999;text-align:center;max-width:90vw;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.ok{border-color:rgba(34,197,94,0.4);color:var(--verde);}
+.exito{display:none;text-align:center;padding:40px 20px;}
+.exito-icon{font-size:60px;margin-bottom:16px;}
+.exito-titulo{font-family:"Syne",sans-serif;font-weight:800;font-size:24px;margin-bottom:8px;}
+.exito-sub{font-size:14px;color:var(--txt2);line-height:1.7;}
+</style>
+</head>
+<body>
+
+<div class="logo">
+  <div class="mark">SRV</div>
+  <div><div class="brand">SERVI<span>RUTA</span></div><div class="brand-sub">Incorporacion de tecnicos</div></div>
+</div>
+
+<!-- FORMULARIO -->
+<div id="formulario">
+  <div class="hero">
+    <div class="hero-titulo">Ficha de incorporacion</div>
+    <div class="hero-sub">Completa este formulario para unirte al equipo de Serviruta. El coordinador revisara tu ficha y te contactara.</div>
+  </div>
+
+  <!-- DATOS PERSONALES -->
+  <div class="sec">Datos personales</div>
+  <label class="lbl">Nombre completo</label>
+  <input class="inp" id="f-nombre" placeholder="Nombre y apellidos">
+  <div class="row2">
+    <div><label class="lbl">RUT</label><input class="inp" id="f-rut" placeholder="12.345.678-9"></div>
+    <div><label class="lbl">Fecha de nacimiento</label><input class="inp" id="f-nacimiento" type="date"></div>
+  </div>
+  <div class="row2">
+    <div><label class="lbl">Telefono</label><input class="inp" id="f-tel" placeholder="+56 9..." type="tel"></div>
+    <div><label class="lbl">Email</label><input class="inp" id="f-email" placeholder="correo@..." type="email"></div>
+  </div>
+  <label class="lbl">Direccion y comuna</label>
+  <input class="inp" id="f-direccion" placeholder="Calle, numero, comuna">
+
+  <!-- EXPERIENCIA -->
+  <div class="sec">Experiencia y especialidades</div>
+  <label class="lbl">Anos de experiencia en mecanica</label>
+  <div class="radio-group">
+    <div class="radio-opt" onclick="setRadio('experiencia','menos1',this)"><div class="radio-dot"></div><div><div class="radio-lbl">Menos de 1 ano</div></div></div>
+    <div class="radio-opt" onclick="setRadio('experiencia','1a3',this)"><div class="radio-dot"></div><div><div class="radio-lbl">1 a 3 anos</div></div></div>
+    <div class="radio-opt" onclick="setRadio('experiencia','3a7',this)"><div class="radio-dot"></div><div><div class="radio-lbl">3 a 7 anos</div></div></div>
+    <div class="radio-opt" onclick="setRadio('experiencia','mas7',this)"><div class="radio-dot"></div><div><div class="radio-lbl">Mas de 7 anos</div></div></div>
+  </div>
+
+  <label class="lbl">Especialidades (selecciona todas las que aplican)</label>
+  <div class="chips" id="especialidades">
+    <div class="chip" onclick="toggleChip(this)">Motor</div>
+    <div class="chip" onclick="toggleChip(this)">Frenos</div>
+    <div class="chip" onclick="toggleChip(this)">Suspension</div>
+    <div class="chip" onclick="toggleChip(this)">Electrico</div>
+    <div class="chip" onclick="toggleChip(this)">Transmision</div>
+    <div class="chip" onclick="toggleChip(this)">Refrigeracion</div>
+    <div class="chip" onclick="toggleChip(this)">Diagnostico scanner</div>
+    <div class="chip" onclick="toggleChip(this)">Aire acondicionado</div>
+    <div class="chip" onclick="toggleChip(this)">Escape</div>
+    <div class="chip" onclick="toggleChip(this)">Carroceria</div>
+    <div class="chip" onclick="toggleChip(this)">Mecanica general</div>
+    <div class="chip" onclick="toggleChip(this)">Camiones</div>
+  </div>
+
+  <label class="lbl">Donde has trabajado antes</label>
+  <textarea class="inp" id="f-experiencia" placeholder="Talleres, empresas o tipo de trabajo que has realizado..." rows="3"></textarea>
+
+  <!-- VEHICULO Y HERRAMIENTAS -->
+  <div class="sec">Vehiculo y herramientas</div>
+  <label class="lbl">Tienes vehiculo propio para trasladarte?</label>
+  <div class="radio-group">
+    <div class="radio-opt" onclick="setRadio('vehiculo','si',this)"><div class="radio-dot"></div><div><div class="radio-lbl">Si tengo vehiculo propio</div></div></div>
+    <div class="radio-opt" onclick="setRadio('vehiculo','no',this)"><div class="radio-dot"></div><div><div class="radio-lbl">No, pero tengo acceso a transporte</div></div></div>
+  </div>
+
+  <div id="vehiculo-detalle" style="display:none">
+    <div class="row2">
+      <div><label class="lbl">Tipo</label>
+        <select class="inp" id="f-tipo-veh">
+          <option value="">Seleccionar</option>
+          <option>Auto</option><option>Camioneta</option><option>Moto</option><option>Furgon</option>
+        </select>
+      </div>
+      <div><label class="lbl">Marca y modelo</label><input class="inp" id="f-veh-marca" placeholder="Ej: Toyota Yaris"></div>
+    </div>
+  </div>
+
+  <label class="lbl">Tienes herramientas propias?</label>
+  <div class="radio-group">
+    <div class="radio-opt" onclick="setRadio('herramientas','completas',this)"><div class="radio-dot"></div><div><div class="radio-lbl">Si, herramientas completas</div><div class="radio-sub">Incluye scanner y equipos</div></div></div>
+    <div class="radio-opt" onclick="setRadio('herramientas','basicas',this)"><div class="radio-dot"></div><div><div class="radio-lbl">Herramientas basicas</div></div></div>
+    <div class="radio-opt" onclick="setRadio('herramientas','no',this)"><div class="radio-dot"></div><div><div class="radio-lbl">No tengo herramientas</div></div></div>
+  </div>
+
+  <!-- DISPONIBILIDAD -->
+  <div class="sec">Disponibilidad</div>
+  <label class="lbl">Dias disponibles</label>
+  <div class="chips" id="dias">
+    <div class="chip" onclick="toggleChip(this)">Lunes</div>
+    <div class="chip" onclick="toggleChip(this)">Martes</div>
+    <div class="chip" onclick="toggleChip(this)">Miercoles</div>
+    <div class="chip" onclick="toggleChip(this)">Jueves</div>
+    <div class="chip" onclick="toggleChip(this)">Viernes</div>
+    <div class="chip" onclick="toggleChip(this)">Sabado</div>
+    <div class="chip" onclick="toggleChip(this)">Domingo</div>
+  </div>
+
+  <label class="lbl">Horario disponible</label>
+  <div class="radio-group">
+    <div class="radio-opt" onclick="setRadio('horario','manana',this)"><div class="radio-dot"></div><div><div class="radio-lbl">Manana (8am - 1pm)</div></div></div>
+    <div class="radio-opt" onclick="setRadio('horario','tarde',this)"><div class="radio-dot"></div><div><div class="radio-lbl">Tarde (1pm - 7pm)</div></div></div>
+    <div class="radio-opt" onclick="setRadio('horario','completo',this)"><div class="radio-dot"></div><div><div class="radio-lbl">Dia completo</div></div></div>
+    <div class="radio-opt" onclick="setRadio('horario','flexible',this)"><div class="radio-dot"></div><div><div class="radio-lbl">Flexible segun servicio</div></div></div>
+  </div>
+
+  <label class="lbl">Zona de cobertura (comunas donde puedes trabajar)</label>
+  <input class="inp" id="f-zona" placeholder="Ej: Santiago Centro, Providencia, Nunoa...">
+
+  <!-- FOTO -->
+  <div class="sec">Foto de perfil</div>
+  <p style="font-size:12px;color:var(--txt3);margin-bottom:10px">Sube una foto tuya de frente, con buena iluminacion.</p>
+  <div class="foto-slot" id="foto-slot" onclick="document.getElementById('foto-inp').click()">
+    <div class="foto-placeholder">
+      <div style="font-size:36px;margin-bottom:8px">📷</div>
+      <div style="font-size:13px;color:var(--txt3)">Toca para subir foto</div>
+    </div>
+  </div>
+  <input type="file" id="foto-inp" accept="image/*" capture="user" style="display:none" onchange="loadFoto(this)">
+
+  <!-- REFERENCIAS -->
+  <div class="sec">Referencias y comentarios</div>
+  <label class="lbl">Como supiste de Serviruta?</label>
+  <div class="radio-group">
+    <div class="radio-opt" onclick="setRadio('origen','aliado',this)"><div class="radio-dot"></div><div><div class="radio-lbl">Un aliado o conocido me recomendo</div></div></div>
+    <div class="radio-opt" onclick="setRadio('origen','redes',this)"><div class="radio-dot"></div><div><div class="radio-lbl">Redes sociales</div></div></div>
+    <div class="radio-opt" onclick="setRadio('origen','aviso',this)"><div class="radio-dot"></div><div><div class="radio-lbl">Vi un aviso de trabajo</div></div></div>
+    <div class="radio-opt" onclick="setRadio('origen','otro',this)"><div class="radio-dot"></div><div><div class="radio-lbl">Otro</div></div></div>
+  </div>
+
+  <label class="lbl">Algo mas que quieras contarnos?</label>
+  <textarea class="inp" id="f-comentarios" placeholder="Cuéntanos sobre ti, tus motivaciones o cualquier informacion relevante..." rows="3"></textarea>
+
+  <button class="btn-submit" id="btn-submit" onclick="enviarFicha()">Enviar ficha de postulacion →</button>
+</div>
+
+<!-- EXITO -->
+<div class="exito" id="exito">
+  <div class="exito-icon">✅</div>
+  <div class="exito-titulo">Ficha enviada</div>
+  <div class="exito-sub">Tu informacion fue enviada correctamente al equipo de Serviruta.<br><br>Te contactaremos al <strong id="tel-confirmacion"></strong> en los proximos 1-2 dias habiles.<br><br>Gracias por tu interes en formar parte del equipo.</div>
+  <div style="margin-top:24px">
+    <a href="https://wa.me/56985058250?text=Hola%2C+acabo+de+enviar+mi+ficha+de+postulacion+a+Serviruta" style="display:inline-block;background:#25D366;color:#000;font-family:Syne,sans-serif;font-weight:800;font-size:14px;padding:13px 24px;border-radius:10px;text-decoration:none" target="_blank">💬 Escribir por WhatsApp</a>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var SB='https://bqlgfmqcefledqyodkii.supabase.co'
+var SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+var db=null,fotoBase64='',radios={}
+
+function getDB(){if(!db)db=supabase.createClient(SB,SK);return db;}
+
+function setRadio(grupo,valor,el){
+  radios[grupo]=valor
+  document.querySelectorAll('[onclick*="setRadio(\''+grupo+'\'"]').forEach(function(b){b.classList.remove('active')})
+  el.classList.add('active')
+  if(grupo==='vehiculo'){
+    document.getElementById('vehiculo-detalle').style.display=valor==='si'?'block':'none'
+  }
+}
+
+function toggleChip(el){el.classList.toggle('active')}
+
+function getChips(containerId){
+  return Array.from(document.querySelectorAll('#'+containerId+' .chip.active')).map(function(c){return c.textContent}).join(', ')
+}
+
+function loadFoto(input){
+  var file=input.files[0]
+  if(!file)return
+  var reader=new FileReader()
+  reader.onload=function(e){
+    var img=new Image()
+    img.onload=function(){
+      var canvas=document.createElement('canvas')
+      var MAX=600,w=img.width,h=img.height
+      if(w>h){if(w>MAX){h=Math.round(h*MAX/w);w=MAX}}else{if(h>MAX){w=Math.round(w*MAX/h);h=MAX}}
+      canvas.width=w;canvas.height=h
+      canvas.getContext('2d').drawImage(img,0,0,w,h)
+      fotoBase64=canvas.toDataURL('image/jpeg',0.7)
+      var slot=document.getElementById('foto-slot')
+      slot.innerHTML='<img src="'+fotoBase64+'">'
+    }
+    img.src=e.target.result
+  }
+  reader.readAsDataURL(file)
+}
+
+async function enviarFicha(){
+  var nombre=document.getElementById('f-nombre').value.trim()
+  var tel=document.getElementById('f-tel').value.trim()
+  var rut=document.getElementById('f-rut').value.trim()
+  if(!nombre||!tel||!rut){toast('Ingresa nombre, RUT y telefono');return}
+  var btn=document.getElementById('btn-submit')
+  btn.disabled=true
+  btn.textContent='Enviando...'
+
+  var data={
+    nombre:nombre,
+    rut:rut,
+    telefono:tel,
+    email:document.getElementById('f-email').value.trim()||null,
+    fecha_nacimiento:document.getElementById('f-nacimiento').value||null,
+    direccion:document.getElementById('f-direccion').value.trim()||null,
+    experiencia_anos:radios['experiencia']||null,
+    especialidades:getChips('especialidades')||null,
+    experiencia_laboral:document.getElementById('f-experiencia').value.trim()||null,
+    tiene_vehiculo:radios['vehiculo']||null,
+    tipo_vehiculo:document.getElementById('f-tipo-veh')?.value||null,
+    vehiculo_marca:document.getElementById('f-veh-marca')?.value.trim()||null,
+    herramientas:radios['herramientas']||null,
+    dias_disponibles:getChips('dias')||null,
+    horario:radios['horario']||null,
+    zona_cobertura:document.getElementById('f-zona').value.trim()||null,
+    origen:radios['origen']||null,
+    comentarios:document.getElementById('f-comentarios').value.trim()||null,
+    foto:fotoBase64||null,
+    estado:'postulacion'
+  }
+
+  var r=await getDB().from('tecnicos_postulaciones').insert(data)
+  if(r.error){
+    toast('Error: '+r.error.message)
+    btn.disabled=false
+    btn.textContent='Enviar ficha de postulacion →'
+    return
+  }
+  document.getElementById('formulario').style.display='none'
+  document.getElementById('exito').style.display='block'
+  document.getElementById('tel-confirmacion').textContent=tel
+  window.scrollTo(0,0)
+}
+
+function toast(msg,type){var t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(type?' '+type:'');t.classList.add('show');setTimeout(function(){t.classList.remove('show')},3000)}
+</script>
+</body>
+</html>

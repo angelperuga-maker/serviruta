@@ -215,52 +215,20 @@ async function guardarNotas(){
 async function agregarComoTecnico(){
   if(!actual)return
   if(!confirm('Agregar a '+actual.nombre+' como tecnico activo en el hub?'))return
-
-  // Generar PIN: últimos 4 dígitos del teléfono
   var pin=actual.telefono?actual.telefono.replace(/[^0-9]/g,'').slice(-4):'0000'
   var nombre=actual.nombre
   var tel=actual.telefono?actual.telefono.replace(/[^0-9]/g,''):''
   var link='https://angelperuga-maker.github.io/serviruta/login-tecnico.html'
-
-  // Guardar como incorporado con PIN
   await getDB().from('tecnicos_postulaciones').update({estado:'incorporado',notas_coord:(document.getElementById('notas-coord').value||'')+'[PIN: '+pin+']'}).eq('id',actual.id)
-
-  // Enviar WA con credenciales
-  var msg='Hola '+nombre.split(' ')[0]+'! Bienvenido al equipo Serviruta 🎉
-
-'+
-    'Ya puedes acceder al hub de tecnicos:
-
-'+
-    '🔗 '+link+'
-
-'+
-    '👤 Tu nombre: '+nombre+'
-'+
-    '🔑 Tu PIN: '+pin+'
-
-'+
-    'Guarda este mensaje. Cualquier consulta escríbenos. Serviruta +56 9 8505 8250'
-
-  // Mostrar modal con PIN e instrucciones
+  var lineas=['Hola '+nombre.split(' ')[0]+'! Bienvenido al equipo Serviruta!','','Accede al hub de tecnicos:','Link: '+link,'','Tu nombre: '+nombre,'Tu PIN: '+pin,'','Guarda este mensaje. Serviruta +56 9 8505 8250']
+  var msg=lineas.join('\n')
   document.getElementById('modal-det').classList.remove('open')
   load()
-
   setTimeout(function(){
-    if(tel){
-      window.open('https://wa.me/56'+tel+'?text='+encodeURIComponent(msg),'_blank')
-    }
-    alert('Tecnico incorporado!
-
-Nombre: '+nombre+'
-PIN: '+pin+'
-
-IMPORTANTE: Agrega el nombre "'+nombre+'" al archivo login-tecnico.html en GitHub para que pueda iniciar sesion.
-
-El WA con las credenciales ya fue enviado.')
+    if(tel){window.open('https://wa.me/56'+tel+'?text='+encodeURIComponent(msg),'_blank')}
+    alert('Tecnico incorporado!\n\nNombre: '+nombre+'\nPIN: '+pin+'\n\nIMPORTANTE: Agrega el nombre en login-tecnico.html en GitHub.\n\nEl WA fue enviado.')
   },300)
 }
-
 async function eliminarPostulacion(){
   if(!actual)return
   if(!confirm('Eliminar postulacion de '+actual.nombre+'?'))return

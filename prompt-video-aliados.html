@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta · Prompt Video Aliados</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;max-width:640px;margin:0 auto;padding:20px 16px 60px;}
+.eyebrow{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--rojo);margin-bottom:12px;}
+h1{font-family:"Syne",sans-serif;font-weight:900;font-size:28px;line-height:1.1;margin-bottom:8px;}
+h1 em{font-style:italic;color:var(--naranja);}
+.sub{font-size:13px;color:var(--txt2);line-height:1.7;margin-bottom:24px;}
+.sec{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--txt3);margin:22px 0 10px;display:flex;align-items:center;gap:10px;}
+.sec::after{content:"";flex:1;height:1px;background:var(--c2);}
+/* PROMPT BOX */
+.prompt-box{background:var(--c1);border:1px solid var(--borde);border-radius:12px;padding:16px;margin-bottom:12px;position:relative;}
+.prompt-tag{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:3px 10px;border-radius:20px;display:inline-block;margin-bottom:10px;}
+.prompt-titulo{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;margin-bottom:8px;}
+.prompt-texto{font-family:"DM Mono",monospace;font-size:12px;color:var(--txt2);line-height:1.8;background:var(--c2);border-radius:8px;padding:14px;white-space:pre-wrap;}
+.copy-btn{position:absolute;top:14px;right:14px;background:var(--c3);border:1px solid var(--borde);border-radius:6px;color:var(--txt3);font-family:"Syne",sans-serif;font-weight:700;font-size:10px;padding:5px 10px;cursor:pointer;}
+.copy-btn:hover{background:var(--borde);}
+/* TIPS */
+.tip{background:var(--c2);border-left:3px solid var(--naranja);border-radius:0 8px 8px 0;padding:12px 14px;margin-bottom:8px;font-size:13px;color:var(--txt2);line-height:1.6;}
+.tip strong{color:var(--txt);}
+/* HERRAMIENTAS */
+.tool-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+.tool{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:12px;}
+.tool-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;margin-bottom:4px;}
+.tool-desc{font-size:11px;color:var(--txt3);line-height:1.5;}
+.tool-tag{font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;display:inline-block;margin-top:6px;}
+</style>
+</head>
+<body>
+
+<div class="eyebrow">Serviruta · Material publicitario</div>
+<h1>Prompt para video <em>anuncio</em><br>Programa de Aliados</h1>
+<p class="sub">Prompts listos para usar en Sora, Runway, Kling u otras herramientas de generacion de video con IA. Incluye versiones para Story, Reels y Feed.</p>
+
+<div class="sec">Prompt principal — Story 9:16 (15 seg)</div>
+
+<div class="prompt-box">
+  <span class="prompt-tag" style="background:rgba(232,33,10,0.12);color:#FF6B5B;">Sora / Kling / Runway</span>
+  <button class="copy-btn" onclick="copiar('p1')">Copiar</button>
+  <div class="prompt-titulo">Escena de impacto — el gruero que cobra</div>
+  <div class="prompt-texto" id="p1">Cinematic vertical video 9:16, 15 seconds. Dark urban aesthetic, night scene in Santiago Chile. A tow truck driver in work clothes checks his phone under a streetlight. His screen shows a payment notification: "$18.000 received". He smiles confidently. Cut to: his hand handing a business card to a stranded driver next to a broken-down car on a highway. Text overlay appears: "Tu contacto = Tu comision". Final shot: the number $100.000 appears in bold red on black screen. Moody color grade, cinematic grain, fast cuts, urban hip hop beat underneath. Style: documentary meets commercial, real people not models.</div>
+</div>
+
+<div class="prompt-box">
+  <span class="prompt-tag" style="background:rgba(251,146,60,0.12);color:var(--naranja);">Texto en pantalla</span>
+  <button class="copy-btn" onclick="copiar('p1b')">Copiar</button>
+  <div class="prompt-titulo">Subtitulos y texto del anuncio</div>
+  <div class="prompt-texto" id="p1b">Segundo 0-3:
+"¿Conoces gente con auto?"
+[fondo negro, texto blanco grande, fuente bold]
+
+Segundo 3-8:
+[escena gruero con telefono]
+"Cada cliente que refieras te paga"
+
+Segundo 8-12:
+[numero grande en pantalla]
+"$13.000 → $18.000 por servicio"
+
+Segundo 12-15:
+[logo Serviruta]
+"7 referidos = Bono $100.000"
+"Escribe ahora → wa.me/56985058250"</div>
+</div>
+
+<div class="sec">Prompt versión Reels — Feed 1:1 (30 seg)</div>
+
+<div class="prompt-box">
+  <span class="prompt-tag" style="background:rgba(34,197,94,0.1);color:var(--verde);">Sora / Runway</span>
+  <button class="copy-btn" onclick="copiar('p2')">Copiar</button>
+  <div class="prompt-titulo">Historia de 3 actos — referido en accion</div>
+  <div class="prompt-texto" id="p2">Cinematic vertical video 9:16, 30 seconds. Three-act structure, urban Chile setting, real documentary feel.
+
+ACT 1 (0-8s): A mechanic in blue overalls arrives at a broken-down car on a residential street in Santiago. He greets a woman with her two kids. He opens the hood. Confident, professional. Text: "Mecanico a tu puerta en 30 minutos."
+
+ACT 2 (8-20s): Split screen. Left side: the mechanic fixing the car. Right side: a tow truck driver on his phone, smiling, watching a payment arrive. Text: "El los refirio. El cobra la comision."
+
+ACT 3 (20-30s): The car starts. The woman smiles. The tow truck driver pumps his fist. Bold text on black: "$100.000 al llegar a 7 referidos." Serviruta logo appears. Red and white color palette. CTA: "Se aliado hoy."
+
+Music: confident latin trap beat, building energy. Handheld camera style, golden hour lighting.</div>
+</div>
+
+<div class="sec">Prompt para imagen estática — Feed 1:1</div>
+
+<div class="prompt-box">
+  <span class="prompt-tag" style="background:rgba(96,165,250,0.1);color:var(--azul);">Midjourney / DALL-E / Ideogram</span>
+  <button class="copy-btn" onclick="copiar('p3')">Copiar</button>
+  <div class="prompt-titulo">Imagen principal para Feed</div>
+  <div class="prompt-texto" id="p3">Dark background, deep black #080808. Center: large bold number "$100.000" in bright red (#E8210A), massive typography, takes up 60% of the frame. Below: small white text "por 7 referidos". Bottom: "SERVIRUTA" logo in white, sans-serif bold. Top left corner: small red accent line. Minimalist, high contrast, professional. No people, no illustrations. Pure typographic impact. Square 1:1 format. Style: fintech app meets street poster. Grain texture overlay.</div>
+</div>
+
+<div class="sec">Prompt para testimonial — video corto</div>
+
+<div class="prompt-box">
+  <span class="prompt-tag" style="background:rgba(167,139,250,0.12);color:#A78BFA;">Guion para filmar con celular</span>
+  <button class="copy-btn" onclick="copiar('p4')">Copiar</button>
+  <div class="prompt-titulo">Video testimonio aliado real (filmar tu mismo)</div>
+  <div class="prompt-texto" id="p4">INSTRUCCIONES PARA GRABAR EL TESTIMONIAL:
+
+Formato: Vertical 9:16, camara delantera o trasera
+Duracion: 20-25 segundos
+Lugar: En tu grua o taller, con el vehiculo de fondo
+
+GUION SUGERIDO (el aliado habla directo a camara):
+
+"Mira, yo soy gruero hace 8 anos.
+Desde que soy aliado de Serviruta,
+cada vez que llevo un auto averiado
+le paso el contacto al dueno...
+y Serviruta me paga comision.
+
+El mes pasado gane mas de $200.000
+sin cambiar nada de lo que hago."
+
+[pausa, mira a camara]
+
+"Si tienes grua o taller,
+anota este numero."
+
+[muestra el telefono con el WA de Serviruta]
+
+EDICION: Subtitulos grandes, musica baja de fondo, logo Serviruta al final. Usar CapCut o app similar.</div>
+</div>
+
+<div class="sec">Herramientas recomendadas</div>
+
+<div class="tool-grid">
+  <div class="tool">
+    <div class="tool-nombre">Sora (OpenAI)</div>
+    <div class="tool-desc">Mejor calidad de video IA. Acepta los prompts largos directamente.</div>
+    <span class="tool-tag" style="background:rgba(34,197,94,0.1);color:var(--verde)">Mejor calidad</span>
+  </div>
+  <div class="tool">
+    <div class="tool-nombre">Kling AI</div>
+    <div class="tool-desc">Muy bueno para video realista de personas. Gratis con limite.</div>
+    <span class="tool-tag" style="background:rgba(245,197,24,0.1);color:var(--amarillo)">Gratis</span>
+  </div>
+  <div class="tool">
+    <div class="tool-nombre">Runway Gen-3</div>
+    <div class="tool-desc">Ideal para efectos cinematicos y transiciones rapidas.</div>
+    <span class="tool-tag" style="background:rgba(96,165,250,0.1);color:var(--azul)">Cinematico</span>
+  </div>
+  <div class="tool">
+    <div class="tool-nombre">CapCut</div>
+    <div class="tool-desc">Para editar el testimonial real. Subtitulos automaticos en espanol.</div>
+    <span class="tool-tag" style="background:rgba(167,139,250,0.1);color:#A78BFA">Edicion</span>
+  </div>
+</div>
+
+<div class="sec">Tips de produccion</div>
+
+<div class="tip"><strong>Musica:</strong> Busca en Epidemic Sound o Artlist tracks de "latin trap", "urban motivational" o "confidence beat". Evita musica con copyright en Meta.</div>
+<div class="tip"><strong>Subtitulos:</strong> En Meta Ads los videos se ven sin sonido el 85% del tiempo. Subtitulos grandes y legibles son obligatorios.</div>
+<div class="tip"><strong>Primer frame:</strong> El primer segundo decide si el usuario para o sigue scrolleando. Empieza siempre con el numero ($18.000 o $100.000) o con la pregunta directa.</div>
+<div class="tip"><strong>CTA:</strong> El llamado a la accion siempre debe ser "Escribe por WhatsApp" — no "visita nuestra web". En Chile la conversion por WA es 3x mayor que por formulario.</div>
+
+<script>
+function copiar(id){
+  var txt=document.getElementById(id).textContent
+  navigator.clipboard.writeText(txt).then(function(){
+    var btns=document.querySelectorAll('.copy-btn')
+    btns.forEach(function(b){
+      if(b.closest('.prompt-box').querySelector('#'+id)){
+        b.textContent='✅ Copiado'
+        setTimeout(function(){b.textContent='Copiar'},2000)
+      }
+    })
+  }).catch(function(){
+    var ta=document.createElement('textarea')
+    ta.value=txt;ta.style.cssText='position:fixed;opacity:0'
+    document.body.appendChild(ta);ta.select()
+    document.execCommand('copy');document.body.removeChild(ta)
+  })
+}
+</script>
+
+</body>
+</html>

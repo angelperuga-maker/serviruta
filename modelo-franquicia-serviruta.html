@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta · Modelo de Franquicia</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;0,900;1,400&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;max-width:640px;margin:0 auto;padding:20px 16px 60px;}
+.eyebrow{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--rojo);margin-bottom:14px;}
+h1{font-family:"Fraunces",serif;font-weight:900;font-size:clamp(30px,6vw,42px);line-height:1.05;letter-spacing:-1px;margin-bottom:8px;}
+h1 em{font-style:italic;color:var(--naranja);}
+.hero-sub{font-size:14px;color:var(--txt2);line-height:1.7;margin-bottom:24px;}
+.sec{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--txt3);margin:24px 0 12px;display:flex;align-items:center;gap:10px;}
+.sec::after{content:"";flex:1;height:1px;background:var(--c2);}
+
+/* MODELO CARDS */
+.modelo{border-radius:14px;padding:20px;margin-bottom:14px;border:1px solid;}
+.mod-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:16px;}
+.mod-icon{font-size:32px;flex-shrink:0;}
+.mod-titulo{font-family:"Fraunces",serif;font-weight:800;font-size:20px;line-height:1.1;margin-bottom:4px;}
+.mod-sub{font-size:12px;line-height:1.5;}
+.mod-tag{font-family:"DM Mono",monospace;font-size:10px;font-weight:500;padding:3px 10px;border-radius:20px;display:inline-block;margin-bottom:8px;letter-spacing:1px;}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.box{border-radius:10px;padding:12px;}
+.box-titulo{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
+.box-item{display:flex;gap:6px;font-size:12px;line-height:1.6;margin-bottom:4px;}
+.numeros{border-radius:10px;padding:14px;margin-bottom:12px;}
+.num-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid;font-size:13px;}
+.num-row:last-child{border:none;}
+.num-lbl{color:var(--txt2);}
+.num-val{font-family:"Fraunces",serif;font-weight:700;font-size:15px;}
+.ideal{border-radius:8px;padding:10px 12px;font-size:12px;line-height:1.6;margin-top:4px;}
+
+/* COMPARATIVA */
+.tabla-comp{background:var(--c2);border:1px solid var(--borde);border-radius:12px;overflow:hidden;margin-bottom:14px;}
+.tc-header{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;background:var(--c3);border-bottom:1px solid var(--borde);}
+.tc-cel{padding:10px 10px;font-size:11px;font-weight:700;color:var(--txt3);text-align:center;}
+.tc-cel:first-child{text-align:left;}
+.tc-row{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;border-bottom:0.5px solid var(--borde);}
+.tc-row:last-child{border:none;}
+.tc-item{padding:10px;font-size:12px;color:var(--txt2);text-align:center;display:flex;align-items:center;justify-content:center;}
+.tc-item:first-child{text-align:left;justify-content:flex-start;color:var(--txt);font-weight:500;}
+
+/* ZONAS */
+.zona-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
+.zona{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;}
+.zona-ciudad{font-family:"Fraunces",serif;font-weight:800;font-size:16px;margin-bottom:4px;}
+.zona-region{font-size:11px;color:var(--txt3);margin-bottom:8px;}
+.zona-stat{display:flex;justify-content:space-between;font-size:11px;padding:4px 0;border-bottom:1px solid var(--borde);}
+.zona-stat:last-child{border:none;}
+.zona-val{font-weight:700;}
+
+/* RECOMENDACION */
+.rec{background:linear-gradient(135deg,rgba(232,33,10,0.1),rgba(232,33,10,0.04));border:1px solid rgba(232,33,10,0.3);border-radius:14px;padding:20px;margin-bottom:14px;}
+.rec-titulo{font-family:"Fraunces",serif;font-weight:800;font-size:20px;margin-bottom:8px;color:var(--rojo);}
+.rec-body{font-size:13px;color:var(--txt2);line-height:1.8;}
+.rec-body strong{color:var(--txt);}
+</style>
+</head>
+<body>
+
+<div class="eyebrow">Serviruta · Expansion · Modelos de negocio</div>
+<h1>Tres modelos para <em>escalar</em><br>Serviruta por ciudades</h1>
+<p class="hero-sub">Comparativa de franquicia, licencia de marca y socio operativo. Con numeros reales, lo que Serviruta aporta y lo que el operador local necesita en cada ciudad.</p>
+
+<!-- MODELO 1 -->
+<div class="sec">Modelo 1 — Franquicia por ciudad</div>
+
+<div class="modelo" style="background:rgba(232,33,10,0.04);border-color:rgba(232,33,10,0.25)">
+  <div class="mod-header">
+    <div class="mod-icon">🏢</div>
+    <div>
+      <span class="mod-tag" style="background:rgba(232,33,10,0.12);color:#FF6B5B">Mayor control · Mayor compromiso</span>
+      <div class="mod-titulo" style="color:var(--rojo)">Franquicia por ciudad</div>
+      <div class="mod-sub" style="color:var(--txt2)">El franquiciado compra el derecho exclusivo de operar Serviruta en una ciudad. Sigue el manual de operaciones, usa la marca y el hub, paga royalty mensual.</div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="box" style="background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.2)">
+      <div class="box-titulo" style="color:var(--verde)">Serviruta pone</div>
+      <div class="box-item"><span>✅</span><span>Marca, logo y reputacion</span></div>
+      <div class="box-item"><span>✅</span><span>Hub digital completo</span></div>
+      <div class="box-item"><span>✅</span><span>Manual de operaciones</span></div>
+      <div class="box-item"><span>✅</span><span>Capacitacion inicial</span></div>
+      <div class="box-item"><span>✅</span><span>Soporte tecnico del hub</span></div>
+      <div class="box-item"><span>✅</span><span>Material de marketing</span></div>
+    </div>
+    <div class="box" style="background:rgba(96,165,250,0.06);border:1px solid rgba(96,165,250,0.2)">
+      <div class="box-titulo" style="color:var(--azul)">Franquiciado pone</div>
+      <div class="box-item"><span>💰</span><span>Inversion inicial</span></div>
+      <div class="box-item"><span>👷</span><span>Tecnicos locales</span></div>
+      <div class="box-item"><span>🤝</span><span>Red de aliados local</span></div>
+      <div class="box-item"><span>📞</span><span>Coordinacion local</span></div>
+      <div class="box-item"><span>📣</span><span>Publicidad local</span></div>
+      <div class="box-item"><span>💳</span><span>Capital operativo</span></div>
+    </div>
+  </div>
+
+  <div class="numeros" style="background:var(--c3);border:1px solid var(--borde)">
+    <div class="num-row" style="border-color:var(--borde)"><span class="num-lbl">Inversion inicial franquiciado</span><span class="num-val" style="color:var(--rojo)">$3M - $5M CLP</span></div>
+    <div class="num-row" style="border-color:var(--borde)"><span class="num-lbl">Royalty mensual a Serviruta</span><span class="num-val" style="color:var(--naranja)">8-12% de ingresos</span></div>
+    <div class="num-row" style="border-color:var(--borde)"><span class="num-lbl">Canon de entrada (fee inicial)</span><span class="num-val" style="color:var(--amarillo)">$1.5M - $2M CLP</span></div>
+    <div class="num-row" style="border-color:var(--borde)"><span class="num-lbl">Exclusividad territorial</span><span class="num-val" style="color:var(--verde)">Si — ciudad completa</span></div>
+    <div class="num-row" style="border-color:var(--borde)"><span class="num-lbl">Duracion contrato</span><span class="num-val">3-5 anos renovable</span></div>
+    <div class="num-row" style="border-color:var(--borde)"><span class="num-lbl">Ingresos estimados mes 6</span><span class="num-val" style="color:var(--verde)">$4M - $8M CLP/mes</span></div>
+    <div class="num-row" style="border-color:var(--borde)"><span class="num-lbl">ROI estimado franquiciado</span><span class="num-val" style="color:var(--azul)">12-18 meses</span></div>
+  </div>
+
+  <div class="ideal" style="background:rgba(232,33,10,0.06);border:1px solid rgba(232,33,10,0.2);color:var(--txt2)">
+    <strong style="color:var(--txt)">Perfil ideal del franquiciado:</strong> Persona con experiencia en negocios, capital inicial disponible, red local en el rubro automotriz o de servicios. Puede ser un ex mecanico, dueno de taller o empresario local que quiere un negocio probado.
+  </div>
+</div>
+
+<!-- MODELO 2 -->
+<div class="sec">Modelo 2 — Licencia de marca</div>
+
+<div class="modelo" style="background:rgba(245,197,24,0.03);border-color:rgba(245,197,24,0.25)">
+  <div class="mod-header">
+    <div class="mod-icon">📄</div>
+    <div>
+      <span class="mod-tag" style="background:rgba(245,197,24,0.12);color:var(--amarillo)">Mas flexible · Menos control</span>
+      <div class="mod-titulo" style="color:var(--amarillo)">Licencia de marca por ciudad</div>
+      <div class="mod-sub" style="color:var(--txt2)">El licenciatario paga un fee mensual fijo por usar la marca Serviruta y el hub digital. Opera con mas autonomia, sin royalty variable. Ideal para alguien que ya tiene operacion de mecanica.</div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="box" style="background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.2)">
+      <div class="box-titulo" style="color:var(--verde)">Serviruta pone</div>
+      <div class="box-item"><span>✅</span><span>Marca y reputacion</span></div>
+      <div class="box-item"><span>✅</span><span>Hub digital y acceso</span></div>
+      <div class="box-item"><span>✅</span><span>Capacitacion basica</span></div>
+      <div class="box-item"><span>✅</span><span>Material de marketing</span></div>
+    </div>
+    <div class="box" style="background:rgba(245,197,24,0.06);border:1px solid rgba(245,197,24,0.2)">
+      <div class="box-titulo" style="color:var(--amarillo)">Licenciatario pone</div>
+      <div class="box-item"><span>💰</span><span>Fee mensual fijo</span></div>
+      <div class="box-item"><span>👷</span><span>Tecnicos y operacion</span></div>
+      <div class="box-item"><span>🤝</span><span>Aliados locales</span></div>
+      <div class="box-item"><span>📣</span><span>Toda la publicidad</span></div>
+    </div>
+  </div>
+
+  <div class="numeros" style="background:var(--c3);border:1px solid var(--borde)">
+    <div class="num-row" style="border-color:var(--borde)"><span class="num-lbl">Inversion inicial</span><span class="num-val" style="color:var(--amarillo)">$500K - $1M CLP</span></div>
+    <div class="num-row" style="border-color:var(--borde)"><span class="num-lbl">Fee mensual fijo a Serviruta</span><span class="num-val" style="color:var(--naranja)">$150K - $300K CLP/mes</span></div>
+    <div class="num-row" style="border-color:var(--borde)"><span class="num-lbl">Royalty sobre ingresos</span><span class="num-val" style="color:var(--verde)">No aplica</span></div>
+    <div class="num-row" style="border-color:var(--borde)"><span class="num-lbl">Exclusividad territorial</span><span class="num-val">Opcional — con sobrecargo</span></div>
+    <div class="num-row" style="border-color:var(--borde)"><span class="num-lbl">Duracion contrato</span><span class="num-val">1 ano renovable</span></div>
+    <div class="num-row" style="border-color:var(--borde)"><span class="num-lbl">Control de operacion</span><span class="num-val" style="color:var(--azul)">Autonomia total</span></div>
+    <div class="num-row" style="border-color:var(--borde)"><span class="num-lbl">Ingresos estimados mes 6</span><span class="num-val" style="color:var(--verde)">Segun su operacion</span></div>
+  </div>
+
+  <div class="ideal" style="background:rgba(245,197,24,0.05);border:1px solid rgba(245,197,24,0.2);color:var(--txt2)">
+    <strong style="color:var(--txt)">Perfil ideal:</strong> Dueno de taller mecanico o empresa de gruas que ya tiene tecnicos y clientes. Quiere sumar la marca Serviruta para crecer sin cambiar su operacion actual.
+  </div>
+</div>
+
+<!-- MODELO 3 -->
+<div class="sec">Modelo 3 — Socio operativo</div>
+
+<div class="modelo" style="background:rgba(34,197,94,0.03);border-color:rgba(34,197,94,0.25)">
+  <div class="mod-header">
+    <div class="mod-icon">🤝</div>
+    <div>
+      <span class="mod-tag" style="background:rgba(34,197,94,0.12);color:var(--verde)">Modelo preferido para expansion rapida</span>
+      <div class="mod-titulo" style="color:var(--verde)">Socio operativo por ciudad</div>
+      <div class="mod-sub" style="color:var(--txt2)">Serviruta y el socio son socios reales. Serviruta pone la marca, el hub y el modelo. El socio pone los tecnicos, la operacion y el conocimiento local. Utilidades se dividen por acuerdo.</div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="box" style="background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.2)">
+      <div class="box-titulo" style="color:var(--verde)">Serviruta pone</div>
+      <div class="box-item"><span>✅</span><span>Marca y posicionamiento</span></div>
+      <div class="box-item"><span>✅</span><span>Hub digital completo</span></div>
+      <div class="box-item"><span>✅</span><span>Modelo operativo probado</span></div>
+      <div class="box-item"><span>✅</span><span>Publicidad digital nacional</span></div>
+      <div class="box-item"><span>✅</span><span>Programa de aliados activo</span></div>
+      <div class="box-item"><span>✅</span><span>Capacitacion y soporte</span></div>
+    </div>
+    <div class="box" style="background:rgba(96,165,250,0.06);border:1px solid rgba(96,165,250,0.2)">
+      <div class="box-titulo" style="color:var(--azul)">Socio pone</div>
+      <div class="box-item"><span>👷</span><span>Tecnicos certificados</span></div>
+      <div class="box-item"><span>🗺️</span><span>Conocimiento local</span></div>
+      <div class="box-item"><span>🤝</span><span>Red de aliados local</span></div>
+      <div class="box-item"><span>📞</span><span>Coordinacion en terreno</span></div>
+      <div class="box-item"><span>🚗</span><span>Movilizacion local</span></div>
+    </div>
+  </div>
+
+  <div class="numeros" style="background:var(--c3);border:1px solid var(--borde)">
+    <div class="num-row" style="border-color:var(--borde)"><span class="num-lbl">Inversion inicial socio</span><span class="num-val" style="color:var(--verde)">$0 - $500K CLP</span></div>
+    <div class="num-row" style="border-color:var(--borde)"><span class="num-lbl">Division de utilidades</span><span class="num-val" style="color:var(--naranja)">60/40 o 70/30 segun acuerdo</span></div>
+    <div class="num-row" style="border-color:var(--borde)"><span class="num-lbl">Royalty mensual</span><span class="num-val" style="color:var(--verde)">No aplica — es socio</span></div>
+    <div class="num-row" style="border-color:var(--borde)"><span class="num-lbl">Exclusividad territorial</span><span class="num-val" style="color:var(--verde)">Si — ciudad asignada</span></div>
+    <div class="num-row" style="border-color:var(--borde)"><span class="num-lbl">Duracion acuerdo</span><span class="num-val">Sin plazo fijo — basado en resultados</span></div>
+    <div class="num-row" style="border-color:var(--borde)"><span class="num-lbl">Ingresos estimados socio mes 6</span><span class="num-val" style="color:var(--verde)">$1.5M - $3M CLP/mes</span></div>
+    <div class="num-row" style="border-color:var(--borde)"><span class="num-lbl">Riesgo del socio</span><span class="num-val" style="color:var(--azul)">Bajo — sin gran inversion</span></div>
+  </div>
+
+  <div class="ideal" style="background:rgba(34,197,94,0.05);border:1px solid rgba(34,197,94,0.2);color:var(--txt2)">
+    <strong style="color:var(--txt)">Perfil ideal:</strong> Persona de confianza con red local, conocimiento del rubro y ganas de construir. Puede ser el Jefe de Red que se gradua a socio, o alguien referido con experiencia en mecanica o transporte.
+  </div>
+</div>
+
+<!-- COMPARATIVA -->
+<div class="sec">Comparativa rapida</div>
+
+<div class="tabla-comp">
+  <div class="tc-header">
+    <div class="tc-cel">Criterio</div>
+    <div class="tc-cel">Franquicia</div>
+    <div class="tc-cel">Licencia</div>
+    <div class="tc-cel">Socio</div>
+  </div>
+  <div class="tc-row">
+    <div class="tc-item">Inversion inicial</div>
+    <div class="tc-item" style="color:var(--rojo)">Alta</div>
+    <div class="tc-item" style="color:var(--amarillo)">Media</div>
+    <div class="tc-item" style="color:var(--verde)">Baja</div>
+  </div>
+  <div class="tc-row">
+    <div class="tc-item">Control de Serviruta</div>
+    <div class="tc-item" style="color:var(--verde)">Alto</div>
+    <div class="tc-item" style="color:var(--amarillo)">Medio</div>
+    <div class="tc-item" style="color:var(--azul)">Compartido</div>
+  </div>
+  <div class="tc-row">
+    <div class="tc-item">Velocidad de expansion</div>
+    <div class="tc-item" style="color:var(--amarillo)">Lenta</div>
+    <div class="tc-item" style="color:var(--verde)">Rapida</div>
+    <div class="tc-item" style="color:var(--verde)">Muy rapida</div>
+  </div>
+  <div class="tc-row">
+    <div class="tc-item">Ingresos para Serviruta</div>
+    <div class="tc-item" style="color:var(--verde)">Canon + royalty</div>
+    <div class="tc-item" style="color:var(--amarillo)">Fee fijo</div>
+    <div class="tc-item" style="color:var(--azul)">% utilidades</div>
+  </div>
+  <div class="tc-row">
+    <div class="tc-item">Riesgo para Serviruta</div>
+    <div class="tc-item" style="color:var(--verde)">Bajo</div>
+    <div class="tc-item" style="color:var(--verde)">Bajo</div>
+    <div class="tc-item" style="color:var(--amarillo)">Medio</div>
+  </div>
+  <div class="tc-row">
+    <div class="tc-item">Ideal para mercados</div>
+    <div class="tc-item">Maduros</div>
+    <div class="tc-item">Con talleres ya establecidos</div>
+    <div class="tc-item" style="color:var(--verde)">Nuevos · LATAM</div>
+  </div>
+</div>
+
+<!-- ZONAS -->
+<div class="sec">Mapa de expansion por ciudades</div>
+
+<div class="zona-grid">
+  <div class="zona" style="border-color:rgba(96,165,250,0.3)">
+    <div class="zona-ciudad" style="color:var(--azul)">🌊 Viña del Mar</div>
+    <div class="zona-region">Valparaiso · Region V</div>
+    <div class="zona-stat"><span>Poblacion</span><span class="zona-val">350.000</span></div>
+    <div class="zona-stat"><span>Modelo recomendado</span><span class="zona-val" style="color:var(--verde)">Socio operativo</span></div>
+    <div class="zona-stat"><span>Canon sugerido</span><span class="zona-val">$1.5M CLP</span></div>
+    <div class="zona-stat"><span>Potencial mes 6</span><span class="zona-val" style="color:var(--verde)">$3M+ CLP</span></div>
+  </div>
+  <div class="zona" style="border-color:rgba(245,197,24,0.3)">
+    <div class="zona-ciudad" style="color:var(--amarillo)">🍇 Rancagua</div>
+    <div class="zona-region">OHiggins · Region VI</div>
+    <div class="zona-stat"><span>Poblacion</span><span class="zona-val">250.000</span></div>
+    <div class="zona-stat"><span>Modelo recomendado</span><span class="zona-val" style="color:var(--amarillo)">Licencia de marca</span></div>
+    <div class="zona-stat"><span>Fee mensual</span><span class="zona-val">$200K CLP</span></div>
+    <div class="zona-stat"><span>Potencial mes 6</span><span class="zona-val" style="color:var(--verde)">$2M+ CLP</span></div>
+  </div>
+  <div class="zona" style="border-color:rgba(34,197,94,0.3)">
+    <div class="zona-ciudad" style="color:var(--verde)">🌲 Concepcion</div>
+    <div class="zona-region">Biobio · Region VIII</div>
+    <div class="zona-stat"><span>Poblacion</span><span class="zona-val">230.000</span></div>
+    <div class="zona-stat"><span>Modelo recomendado</span><span class="zona-val" style="color:var(--verde)">Socio operativo</span></div>
+    <div class="zona-stat"><span>Canon sugerido</span><span class="zona-val">$1M CLP</span></div>
+    <div class="zona-stat"><span>Potencial mes 6</span><span class="zona-val" style="color:var(--verde)">$2.5M+ CLP</span></div>
+  </div>
+  <div class="zona" style="border-color:rgba(167,139,250,0.3)">
+    <div class="zona-ciudad" style="color:var(--morado)">🏔️ Antofagasta</div>
+    <div class="zona-region">Antofagasta · Region II</div>
+    <div class="zona-stat"><span>Poblacion</span><span class="zona-val">400.000</span></div>
+    <div class="zona-stat"><span>Modelo recomendado</span><span class="zona-val" style="color:var(--rojo)">Franquicia</span></div>
+    <div class="zona-stat"><span>Canon entrada</span><span class="zona-val">$2M CLP</span></div>
+    <div class="zona-stat"><span>Potencial mes 6</span><span class="zona-val" style="color:var(--verde)">$5M+ CLP</span></div>
+  </div>
+</div>
+
+<!-- RECOMENDACION -->
+<div class="sec">Recomendacion para Serviruta hoy</div>
+
+<div class="rec">
+  <div class="rec-titulo">Empieza con el modelo de Socio Operativo</div>
+  <div class="rec-body">
+    En esta etapa, Serviruta tiene el sistema pero aun no tiene la reputacion establecida para vender una franquicia cara.<br><br>
+    <strong>La estrategia correcta es:</strong> buscar 1 persona de confianza en Vina y 1 en Concepcion, ofrecerles ser socios con 30-40% de las utilidades locales a cambio de poner los tecnicos y la operacion. Serviruta pone la marca, el hub y la publicidad digital.<br><br>
+    <strong>Una vez que tengas 2-3 ciudades operando con socio, en 12 meses puedes vender franquicias reales</strong> con casos de exito reales que demuestren el modelo — eso vale millones en una negociacion de franquicia.<br><br>
+    <strong>Para Buenos Aires y Lima:</strong> el modelo de socio operativo es el unico que funciona en mercados extranjeros donde no tienes presencia ni reputacion todavia.
+  </div>
+</div>
+
+</body>
+</html>

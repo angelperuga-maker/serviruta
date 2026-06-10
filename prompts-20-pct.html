@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta · Prompts 20% Texto</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;max-width:640px;margin:0 auto;padding:20px 16px 60px;}
+.eyebrow{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--rojo);margin-bottom:12px;}
+h1{font-family:"Syne",sans-serif;font-weight:900;font-size:26px;line-height:1.1;margin-bottom:8px;}
+h1 em{font-style:italic;color:var(--naranja);}
+.hero-sub{font-size:13px;color:var(--txt2);line-height:1.7;margin-bottom:16px;}
+.regla{background:linear-gradient(135deg,rgba(245,197,24,0.08),rgba(245,197,24,0.03));border:1px solid rgba(245,197,24,0.3);border-radius:10px;padding:14px;margin-bottom:20px;}
+.regla-titulo{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;color:var(--amarillo);margin-bottom:8px;}
+.regla-desc{font-size:12px;color:var(--txt2);line-height:1.7;}
+.regla-desc strong{color:var(--txt);}
+.sec{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--txt3);margin:22px 0 10px;display:flex;align-items:center;gap:10px;}
+.sec::after{content:"";flex:1;height:1px;background:var(--c2);}
+.prompt-card{background:var(--c2);border:1px solid var(--borde);border-radius:12px;margin-bottom:12px;overflow:hidden;}
+.prompt-header{padding:12px 14px;border-bottom:1px solid var(--borde);display:flex;align-items:center;justify-content:space-between;}
+.prompt-tag{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:3px 10px;border-radius:20px;font-weight:500;}
+.prompt-titulo{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;margin:10px 14px 4px;}
+.prompt-desc{font-size:12px;color:var(--txt3);margin:0 14px 10px;line-height:1.5;}
+.prompt-body{padding:0 14px 14px;}
+.prompt-txt{background:var(--c3);border-radius:8px;padding:12px;font-family:"DM Mono",monospace;font-size:11px;color:var(--txt2);line-height:1.8;white-space:pre-wrap;position:relative;}
+.copy-btn{position:absolute;top:8px;right:8px;background:var(--c2);border:1px solid var(--borde);border-radius:5px;color:var(--txt3);font-size:10px;padding:3px 8px;cursor:pointer;font-family:"Syne",sans-serif;font-weight:700;}
+.texto-permitido{background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.2);border-radius:6px;padding:8px 10px;margin-top:8px;font-size:11px;color:var(--verde);}
+.texto-permitido-titulo{font-weight:700;margin-bottom:4px;}
+.no-hacer{background:rgba(232,33,10,0.06);border:1px solid rgba(232,33,10,0.2);border-radius:6px;padding:8px 10px;margin-top:6px;font-size:11px;color:#FF6B5B;}
+.formato-chips{display:flex;gap:6px;flex-wrap:wrap;margin:8px 14px 0;}
+.chip{font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:var(--c3);color:var(--txt3);}
+</style>
+</head>
+<body>
+
+<div class="eyebrow">Serviruta · Meta Ads · Regla 20%</div>
+<h1>Prompts que respetan<br>la <em>regla del 20%</em></h1>
+<p class="hero-sub">Meta penaliza imagenes con mucho texto reduciendo el alcance o rechazando el anuncio. Estos prompts generan creatividades donde el texto ocupa menos del 20% del area visual.</p>
+
+<div class="regla">
+  <div class="regla-titulo">⚡ La regla del 20% en la practica</div>
+  <div class="regla-desc">
+    <strong>Que permite Meta:</strong> Maximo 20% del area de la imagen cubierta por texto.<br>
+    <strong>Lo que esto significa:</strong> En una imagen 1080x1080px, solo ~216px de alto pueden tener texto.<br>
+    <strong>La solucion:</strong> Poner el texto IMPACTANTE en el copy del anuncio (no en la imagen). La imagen solo lleva 2-4 palabras maximo o ningun texto.<br>
+    <strong>Truco:</strong> El texto mas importante va en el caption del anuncio — ese si puede ser tan largo como quieras.
+  </div>
+</div>
+
+<!-- IMAGENES FEED -->
+<div class="sec">Imagenes Feed 1:1 — sin texto o texto minimo</div>
+
+<div class="prompt-card">
+  <div class="prompt-header">
+    <span class="prompt-tag" style="background:rgba(251,146,60,0.12);color:var(--naranja)">Feed 1:1 · Midjourney / DALL-E</span>
+    <span style="font-size:11px;color:var(--txt3)">Anuncio 1</span>
+  </div>
+  <div class="formato-chips">
+    <span class="chip">1080x1080px</span><span class="chip">Sin texto en imagen</span><span class="chip">Emocional</span>
+  </div>
+  <div class="prompt-titulo">Gruero — el momento del cobro</div>
+  <div class="prompt-desc">La historia visual: gruero feliz mirando su telefono. Sin texto en la imagen. El texto va en el caption.</div>
+  <div class="prompt-body">
+    <div class="prompt-txt" id="img1">Square 1:1 photo. A confident Latin American man in his 40s, wearing work clothes, stands next to his tow truck at night in a city street. He looks at his phone screen with a wide smile. Screen glow illuminates his face. Background: blurred city lights, warm bokeh. NO text, NO logos, NO overlays in the image. Cinematic color grade, shallow depth of field, street photography style. Real person, not a model. Dark moody atmosphere with warm accent light.<button class="copy-btn" onclick="copiar('img1',this)">Copiar</button></div>
+    <div class="texto-permitido">
+      <div class="texto-permitido-titulo">✅ Texto permitido en la imagen (opcional, maximo 4 palabras):</div>
+      Solo el logo de Serviruta en una esquina pequena. Nada mas.
+    </div>
+    <div class="no-hacer">❌ NO poner: "$18.000", "Gana dinero", "Unete ahora" — eso va en el caption del anuncio.</div>
+  </div>
+</div>
+
+<div class="prompt-card">
+  <div class="prompt-header">
+    <span class="prompt-tag" style="background:rgba(96,165,250,0.12);color:var(--azul)">Feed 1:1 · Midjourney / DALL-E</span>
+    <span style="font-size:11px;color:var(--txt3)">Anuncio 2</span>
+  </div>
+  <div class="formato-chips">
+    <span class="chip">1080x1080px</span><span class="chip">Texto minimo</span><span class="chip">Impacto</span>
+  </div>
+  <div class="prompt-titulo">Mecanico en accion — confianza</div>
+  <div class="prompt-desc">Imagen aspiracional: mecanico profesional. Transmite confianza y servicio de calidad.</div>
+  <div class="prompt-body">
+    <div class="prompt-txt" id="img2">Square 1:1 professional photo. A skilled mechanic in clean blue work uniform leans over an open car hood on a residential street in Santiago Chile. Golden hour lighting. He looks focused and confident. The car owner stands nearby looking relieved. NO text overlays, NO watermarks, NO banners in the image. Cinematic composition, warm tones, photojournalism style. Real neighborhood background, apartment buildings visible. Shot with 85mm lens, shallow focus on the mechanic.<button class="copy-btn" onclick="copiar('img2',this)">Copiar</button></div>
+    <div class="texto-permitido">
+      <div class="texto-permitido-titulo">✅ Texto permitido (si lo agregas en Canva despues):</div>
+      "Serviruta" logo solo. O nada. La imagen habla sola.
+    </div>
+  </div>
+</div>
+
+<div class="prompt-card">
+  <div class="prompt-header">
+    <span class="prompt-tag" style="background:rgba(34,197,94,0.12);color:var(--verde)">Feed 1:1 · Midjourney / Ideogram</span>
+    <span style="font-size:11px;color:var(--txt3)">Anuncio 3 — Dinero</span>
+  </div>
+  <div class="formato-chips">
+    <span class="chip">1080x1080px</span><span class="chip">Solo 2 palabras</span><span class="chip">Alto impacto</span>
+  </div>
+  <div class="prompt-titulo">Solo el numero — impacto tipografico</div>
+  <div class="prompt-desc">La excepcion: cuando el texto ES la imagen. Solo 2 palabras en el centro, el resto es fondo. Cumple el 20%.</div>
+  <div class="prompt-body">
+    <div class="prompt-txt" id="img3">Square 1:1 minimalist design. Pure black background #080808. Center of frame: only the text "$18K" in massive bold white typography, takes up 40% of height, centered. Below it, very small text "por referido" in gray, 3% of total image height. No other elements. No decorations. No people. No gradients. Extreme minimalism. High contrast. The negative black space is intentional and powerful. Similar to a luxury brand poster.<button class="copy-btn" onclick="copiar('img3',this)">Copiar</button></div>
+    <div class="texto-permitido">
+      <div class="texto-permitido-titulo">✅ Por que este cumple el 20%:</div>
+      "18K" + "por referido" = solo 2 lineas de texto en mucho espacio negro. El texto ocupa menos del 15% del area total.
+    </div>
+  </div>
+</div>
+
+<!-- STORIES -->
+<div class="sec">Stories 9:16 — sin texto o texto al pie</div>
+
+<div class="prompt-card">
+  <div class="prompt-header">
+    <span class="prompt-tag" style="background:rgba(232,33,10,0.12);color:#FF6B5B">Story 9:16 · Midjourney / DALL-E</span>
+    <span style="font-size:11px;color:var(--txt3)">Story 1</span>
+  </div>
+  <div class="formato-chips">
+    <span class="chip">1080x1920px</span><span class="chip">Texto solo abajo</span><span class="chip">Narrativa</span>
+  </div>
+  <div class="prompt-titulo">Tow truck — escena nocturna urbana</div>
+  <div class="prompt-desc">Imagen cinematica vertical. Todo el espacio superior libre. Texto solo en franja inferior.</div>
+  <div class="prompt-body">
+    <div class="prompt-txt" id="st1">Vertical 9:16 cinematic photograph. Night scene in Santiago Chile urban highway. A tow truck with flashing orange lights is loading a broken-down car. The truck driver stands confidently, arms crossed, looking at camera. City lights in background, light rain on asphalt, reflections on wet ground. NO text in the upper 80% of the image — the top area must be completely clean for text overlay later. Dark dramatic atmosphere, blue and orange color contrast. Real documentary style, not illustration. Shot from low angle looking up.<button class="copy-btn" onclick="copiar('st1',this)">Copiar</button></div>
+    <div class="texto-permitido">
+      <div class="texto-permitido-titulo">✅ Donde agregar texto (en Canva):</div>
+      Solo en el 20% inferior: "Serviruta" + numero de WA. El 80% superior queda limpio.
+    </div>
+  </div>
+</div>
+
+<div class="prompt-card">
+  <div class="prompt-header">
+    <span class="prompt-tag" style="background:rgba(167,139,250,0.12);color:var(--morado)">Story 9:16 · Midjourney / Runway</span>
+    <span style="font-size:11px;color:var(--txt3)">Story 2</span>
+  </div>
+  <div class="formato-chips">
+    <span class="chip">1080x1920px</span><span class="chip">Sin texto</span><span class="chip">Lifestyle</span>
+  </div>
+  <div class="prompt-titulo">El pago — mano con celular</div>
+  <div class="prompt-desc">Close up emocional. La notification de pago como protagonista. Sin texto en la imagen.</div>
+  <div class="prompt-body">
+    <div class="prompt-txt" id="st2">Vertical 9:16 close-up photo. A Latin American man's hands holding a smartphone. The phone screen shows a bank transfer notification with a green checkmark and money amount. Background completely blurred — tow truck or workshop tools barely visible. Warm golden light from the side. NO text overlays anywhere in the image. The hands look like working hands, not a model's hands. Raw, authentic, documentary style. Top 70% of frame: blurred warm background. Bottom 30%: hands with phone. Shot on 50mm equivalent.<button class="copy-btn" onclick="copiar('st2',this)">Copiar</button></div>
+    <div class="texto-permitido">
+      <div class="texto-permitido-titulo">✅ Texto en Canva sobre esta imagen:</div>
+      Parte superior: "Tu codigo. Tu comision." (solo 4 palabras, fuente grande blanca).
+      Parte inferior: Logo + WA. Total texto: menos del 20%.
+    </div>
+  </div>
+</div>
+
+<!-- VIDEOS -->
+<div class="sec">Videos — texto como overlay breve</div>
+
+<div class="prompt-card">
+  <div class="prompt-header">
+    <span class="prompt-tag" style="background:rgba(245,197,24,0.12);color:var(--amarillo)">Video 9:16 · Sora / Kling / Runway</span>
+    <span style="font-size:11px;color:var(--txt3)">Video 1 — 15 seg</span>
+  </div>
+  <div class="formato-chips">
+    <span class="chip">1080x1920px</span><span class="chip">Texto solo en frames finales</span><span class="chip">15 seg</span>
+  </div>
+  <div class="prompt-titulo">Video historia sin texto — el texto va como caption</div>
+  <div class="prompt-desc">El video NO tiene texto superpuesto en los primeros 12 segundos. Solo al final aparece una pantalla simple.</div>
+  <div class="prompt-body">
+    <div class="prompt-txt" id="vid1">Vertical 9:16 cinematic video, 15 seconds. NO text overlays during the entire video except the final 3 seconds.
+
+SCENE 1 (0-5s): Tow truck arrives at a broken-down car on a Santiago street. Driver steps out confidently. No dialogue, no text.
+
+SCENE 2 (5-10s): Driver hands a business card to the stressed car owner. Car owner looks relieved and nods. No text.
+
+SCENE 3 (10-12s): Driver back in his truck, checks phone, smiles seeing a notification. No text.
+
+FINAL FRAME (12-15s): Pure black screen. Only text allowed here: white "Serviruta" logo centered + small "wa.me/56985058250" below. This final card has text but it's 100% of a separate frame — not overlaid on the action.
+
+Music: confident urban beat. Color grade: moody, cinematic. Handheld camera movement throughout.<button class="copy-btn" onclick="copiar('vid1',this)">Copiar</button></div>
+    <div class="texto-permitido">
+      <div class="texto-permitido-titulo">✅ Por que cumple el 20%:</div>
+      Durante 12 segundos no hay texto. Los ultimos 3 segundos son una pantalla separada de solo texto — no cuenta como "texto sobre imagen".
+    </div>
+  </div>
+</div>
+
+<div class="prompt-card">
+  <div class="prompt-header">
+    <span class="prompt-tag" style="background:rgba(34,197,94,0.12);color:var(--verde)">Video 9:16 · Kling / Runway</span>
+    <span style="font-size:11px;color:var(--txt3)">Video 2 — 30 seg</span>
+  </div>
+  <div class="formato-chips">
+    <span class="chip">1080x1920px</span><span class="chip">Subtitulos permitidos</span><span class="chip">30 seg</span>
+  </div>
+  <div class="prompt-titulo">Testimonial animado — subtitulos pequenos</div>
+  <div class="prompt-desc">Los subtitulos SI se permiten si son pequenos y en la parte inferior. Son considerados accesibilidad, no texto de anuncio.</div>
+  <div class="prompt-body">
+    <div class="prompt-txt" id="vid2">Vertical 9:16 documentary style video, 30 seconds. A real-looking Latin American tow truck driver speaks directly to camera in his workshop or next to his truck.
+
+IMPORTANT: Subtitles/captions appear ONLY at the bottom 15% of the frame in small white text with black shadow. Maximum 2 lines at a time. Font size: small, readable but not dominant. This follows Meta's accessibility guidelines.
+
+The speaker talks naturally about his income from referrals. B-roll cuts show his truck, phone notifications, city streets.
+
+NO large text banners. NO ticker text. NO full-screen text cards (except final 3 seconds). The subtitles are small and unobtrusive — well under the 20% text rule.
+
+Final 3 seconds: black card with logo and contact only.<button class="copy-btn" onclick="copiar('vid2',this)">Copiar</button></div>
+    <div class="texto-permitido">
+      <div class="texto-permitido-titulo">✅ Subtitulos si se pueden:</div>
+      Meta permite subtitulos en la franja inferior. Usa CapCut con fuente "Classic" o "Typewriter", tamano 60-70pt, color blanco con sombra negra.
+    </div>
+  </div>
+</div>
+
+<!-- RESUMEN RAPIDO -->
+<div class="sec">Resumen rapido — reglas de oro</div>
+
+<div style="background:var(--c2);border:1px solid var(--borde);border-radius:12px;padding:16px;">
+  <div style="display:flex;flex-direction:column;gap:10px;font-size:13px;line-height:1.6;">
+    <div style="display:flex;gap:10px"><span style="color:var(--verde);font-size:16px;flex-shrink:0">✅</span><span>El texto impactante (<strong style="color:var(--txt)">"Gana $18.000 por referido"</strong>) va en el CAPTION del anuncio, no en la imagen</span></div>
+    <div style="display:flex;gap:10px"><span style="color:var(--verde);font-size:16px;flex-shrink:0">✅</span><span>En la imagen: solo el logo de Serviruta o maximo 4 palabras</span></div>
+    <div style="display:flex;gap:10px"><span style="color:var(--verde);font-size:16px;flex-shrink:0">✅</span><span>En videos: subtitulos pequenos en franja inferior estan permitidos</span></div>
+    <div style="display:flex;gap:10px"><span style="color:var(--verde);font-size:16px;flex-shrink:0">✅</span><span>Los ultimos 3 segundos del video pueden ser pantalla negra con texto — no cuenta como imagen con texto</span></div>
+    <div style="display:flex;gap:10px"><span style="color:var(--rojo);font-size:16px;flex-shrink:0">❌</span><span>NO pongas precios, numeros, listas de beneficios ni frases largas sobre la imagen o el video</span></div>
+    <div style="display:flex;gap:10px"><span style="color:var(--amarillo);font-size:16px;flex-shrink:0">💡</span><span>Antes de publicar, usa la herramienta gratuita de Meta: <strong style="color:var(--txt)">facebook.com/ads/tools/text_overlay</strong> para verificar el porcentaje de texto</span></div>
+  </div>
+</div>
+
+<script>
+function copiar(id, btn) {
+  var txt = document.getElementById(id).childNodes[0].textContent.trim()
+  navigator.clipboard.writeText(txt).then(function() {
+    btn.textContent = '✅ Copiado'
+    setTimeout(function() { btn.textContent = 'Copiar' }, 2000)
+  }).catch(function() {
+    var ta = document.createElement('textarea')
+    ta.value = txt; ta.style.cssText = 'position:fixed;opacity:0'
+    document.body.appendChild(ta); ta.select()
+    document.execCommand('copy'); document.body.removeChild(ta)
+    btn.textContent = '✅ Copiado'
+    setTimeout(function() { btn.textContent = 'Copiar' }, 2000)
+  })
+}
+</script>
+</body>
+</html>

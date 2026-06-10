@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta · Guía Meta Ads</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;--fb:#1877F2;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;max-width:640px;margin:0 auto;padding:20px 16px 60px;}
+.eyebrow{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--fb);margin-bottom:12px;}
+h1{font-family:"Syne",sans-serif;font-weight:900;font-size:28px;line-height:1.1;margin-bottom:8px;}
+h1 em{font-style:italic;color:var(--rojo);}
+.hero-sub{font-size:13px;color:var(--txt2);line-height:1.7;margin-bottom:20px;}
+.prereq{background:var(--c2);border:1px solid rgba(245,197,24,0.3);border-radius:10px;padding:14px;margin-bottom:20px;}
+.prereq-titulo{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;color:var(--amarillo);margin-bottom:8px;}
+.prereq-item{display:flex;gap:8px;font-size:12px;color:var(--txt2);padding:3px 0;}
+.sec{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--txt3);margin:22px 0 10px;display:flex;align-items:center;gap:10px;}
+.sec::after{content:"";flex:1;height:1px;background:var(--c2);}
+.paso{background:var(--c2);border:1px solid var(--borde);border-radius:12px;padding:16px;margin-bottom:12px;}
+.paso-header{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.paso-num{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:"Syne",sans-serif;font-weight:900;font-size:15px;color:#fff;flex-shrink:0;}
+.paso-titulo{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;}
+.paso-tiempo{font-size:11px;color:var(--txt3);margin-top:2px;}
+.sub-paso{display:flex;gap:10px;margin-bottom:8px;}
+.sp-num{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;margin-top:2px;}
+.sp-txt{flex:1;font-size:13px;color:var(--txt2);line-height:1.6;}
+.sp-txt strong{color:var(--txt);}
+.config-box{background:var(--c3);border-radius:8px;padding:12px;margin-top:8px;}
+.config-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--borde);font-size:12px;}
+.config-row:last-child{border:none;}
+.config-lbl{color:var(--txt3);}
+.config-val{color:var(--txt);font-weight:600;text-align:right;max-width:60%;}
+.alerta{border-radius:8px;padding:12px;margin-top:8px;font-size:12px;line-height:1.6;}
+.a-tip{background:rgba(96,165,250,0.08);border:1px solid rgba(96,165,250,0.2);color:var(--azul);}
+.a-warn{background:rgba(245,197,24,0.08);border:1px solid rgba(245,197,24,0.3);color:var(--amarillo);}
+.a-ok{background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);color:var(--verde);}
+.copy-box{background:var(--c3);border-radius:8px;padding:12px;margin-top:8px;font-family:"DM Mono",monospace;font-size:11px;color:var(--naranja);line-height:1.8;position:relative;}
+.copy-btn{position:absolute;top:8px;right:8px;background:var(--c2);border:1px solid var(--borde);border-radius:5px;color:var(--txt3);font-size:10px;padding:3px 8px;cursor:pointer;font-family:"Syne",sans-serif;font-weight:700;}
+</style>
+</head>
+<body>
+
+<div class="eyebrow">Serviruta · Meta Ads · Paso a paso</div>
+<h1>Publicar tu primer <em>anuncio</em><br>en Meta Ads</h1>
+<p class="hero-sub">Guia completa para crear y publicar el anuncio de aliados Serviruta en Facebook e Instagram. Desde cero hasta el anuncio activo.</p>
+
+<div class="prereq">
+  <div class="prereq-titulo">⚠️ Antes de empezar necesitas:</div>
+  <div class="prereq-item"><span>✅</span><span>Cuenta de Facebook personal activa</span></div>
+  <div class="prereq-item"><span>✅</span><span>Pagina de Facebook de Serviruta (o crearla)</span></div>
+  <div class="prereq-item"><span>✅</span><span>Tarjeta de credito/debito o cuenta de banco para pagar los anuncios</span></div>
+  <div class="prereq-item"><span>✅</span><span>La imagen o video del anuncio listo (del modulo de flyer o prompts)</span></div>
+  <div class="prereq-item"><span>✅</span><span>El texto del anuncio listo (del modulo de copys)</span></div>
+</div>
+
+<div class="sec">Paso 1 — Crear la pagina de Facebook</div>
+
+<div class="paso">
+  <div class="paso-header">
+    <div class="paso-num" style="background:var(--fb)">1</div>
+    <div><div class="paso-titulo">Crear Pagina de Serviruta</div><div class="paso-tiempo">10 min · Solo si no tienes pagina</div></div>
+  </div>
+  <div class="sub-paso"><div class="sp-num" style="background:rgba(24,119,242,0.2);color:var(--fb)">1</div><div class="sp-txt">Ve a <strong>facebook.com</strong> → menu izquierdo → <strong>"Paginas"</strong> → <strong>"Crear nueva pagina"</strong></div></div>
+  <div class="sub-paso"><div class="sp-num" style="background:rgba(24,119,242,0.2);color:var(--fb)">2</div><div class="sp-txt">Nombre: <strong>Serviruta</strong> · Categoria: <strong>Empresa de servicios para automoviles</strong></div></div>
+  <div class="sub-paso"><div class="sp-num" style="background:rgba(24,119,242,0.2);color:var(--fb)">3</div><div class="sp-txt">Agrega foto de perfil (logo Serviruta) y foto de portada</div></div>
+  <div class="sub-paso"><div class="sp-num" style="background:rgba(24,119,242,0.2);color:var(--fb)">4</div><div class="sp-txt">Agrega el numero de WhatsApp <strong>+56 9 8505 8250</strong> como boton de contacto</div></div>
+</div>
+
+<div class="sec">Paso 2 — Acceder al Ads Manager</div>
+
+<div class="paso">
+  <div class="paso-header">
+    <div class="paso-num" style="background:#E1306C">2</div>
+    <div><div class="paso-titulo">Abrir Meta Ads Manager</div><div class="paso-tiempo">2 min</div></div>
+  </div>
+  <div class="sub-paso"><div class="sp-num" style="background:rgba(225,48,108,0.2);color:#E1306C">1</div><div class="sp-txt">Ve a <strong>adsmanager.facebook.com</strong> en tu computador (funciona mejor que en celular)</div></div>
+  <div class="sub-paso"><div class="sp-num" style="background:rgba(225,48,108,0.2);color:#E1306C">2</div><div class="sp-txt">Inicia sesion con tu cuenta de Facebook personal</div></div>
+  <div class="sub-paso"><div class="sp-num" style="background:rgba(225,48,108,0.2);color:#E1306C">3</div><div class="sp-txt">Si es la primera vez: Meta te pedira crear una <strong>cuenta publicitaria</strong>. Pon: Pais Chile, Moneda CLP, Huso horario Santiago</div></div>
+  <div class="sub-paso"><div class="sp-num" style="background:rgba(225,48,108,0.2);color:#E1306C">4</div><div class="sp-txt">Agrega un metodo de pago: tarjeta de credito/debito o cuenta PayPal</div></div>
+</div>
+
+<div class="sec">Paso 3 — Crear la campaña</div>
+
+<div class="paso">
+  <div class="paso-header">
+    <div class="paso-num" style="background:var(--rojo)">3</div>
+    <div><div class="paso-titulo">Nueva campana</div><div class="paso-tiempo">5 min</div></div>
+  </div>
+  <div class="sub-paso"><div class="sp-num" style="background:var(--rojo-g);color:var(--rojo)">1</div><div class="sp-txt">Clic en el boton verde <strong>"+ Crear"</strong></div></div>
+  <div class="sub-paso"><div class="sp-num" style="background:var(--rojo-g);color:var(--rojo)">2</div><div class="sp-txt">Objetivo: selecciona <strong>"Clientes potenciales"</strong> o <strong>"Mensajes"</strong> (para WhatsApp directo)</div></div>
+  <div class="sub-paso"><div class="sp-num" style="background:var(--rojo-g);color:var(--rojo)">3</div><div class="sp-txt">Nombre de la campana: <strong>"Serviruta Aliados Mayo 2025"</strong></div></div>
+  <div class="sub-paso"><div class="sp-num" style="background:var(--rojo-g);color:var(--rojo)">4</div><div class="sp-txt">Presupuesto de la campana: <strong>OFF</strong> (lo defines en el conjunto de anuncios)</div></div>
+  <div class="sub-paso"><div class="sp-num" style="background:var(--rojo-g);color:var(--rojo)">5</div><div class="sp-txt">Clic en <strong>"Siguiente"</strong></div></div>
+  <div class="alerta a-tip">💡 Si quieres que lleguen mensajes directo a WhatsApp, elige objetivo <strong>"Mensajes"</strong> y selecciona WhatsApp como destino. Es la opcion que mejor convierte para Serviruta.</div>
+</div>
+
+<div class="sec">Paso 4 — Configurar el conjunto de anuncios</div>
+
+<div class="paso">
+  <div class="paso-header">
+    <div class="paso-num" style="background:var(--naranja)">4</div>
+    <div><div class="paso-titulo">Segmentacion y presupuesto</div><div class="paso-tiempo">10 min · La parte mas importante</div></div>
+  </div>
+  <div class="config-box">
+    <div class="config-row"><div class="config-lbl">Nombre del conjunto</div><div class="config-val">Grueros y talleres RM</div></div>
+    <div class="config-row"><div class="config-lbl">Presupuesto diario</div><div class="config-val">$14.000 CLP (~$14 USD/dia)</div></div>
+    <div class="config-row"><div class="config-lbl">Inicio</div><div class="config-val">Hoy · Sin fecha de fin</div></div>
+    <div class="config-row"><div class="config-lbl">Ubicaciones</div><div class="config-val">Solo Chile</div></div>
+    <div class="config-row"><div class="config-lbl">Region especifica</div><div class="config-val">Region Metropolitana de Santiago</div></div>
+    <div class="config-row"><div class="config-lbl">Edad</div><div class="config-val">25 - 55 anos</div></div>
+    <div class="config-row"><div class="config-lbl">Sexo</div><div class="config-val">Todos</div></div>
+    <div class="config-row"><div class="config-lbl">Idioma</div><div class="config-val">Espanol (todos)</div></div>
+    <div class="config-row"><div class="config-lbl">Plataformas</div><div class="config-val">Facebook + Instagram + Messenger</div></div>
+  </div>
+  <div class="sub-paso" style="margin-top:12px"><div class="sp-num" style="background:rgba(251,146,60,0.2);color:var(--naranja)">★</div><div class="sp-txt"><strong>Segmentacion detallada — lo mas importante:</strong> En el campo "Intereses" agrega: <strong>Grua de remolque, Taller mecanico, Conductor profesional, Servicio de automoviles, Negocio propio</strong></div></div>
+  <div class="alerta a-warn" style="margin-top:8px">⚠️ NO uses "Advantage+ audience" si es tu primer anuncio. Selecciona <strong>"Segmentacion original"</strong> para tener control total.</div>
+</div>
+
+<div class="sec">Paso 5 — Crear el anuncio</div>
+
+<div class="paso">
+  <div class="paso-header">
+    <div class="paso-num" style="background:var(--verde);color:#000">5</div>
+    <div><div class="paso-titulo">Subir la creatividad</div><div class="paso-tiempo">10 min</div></div>
+  </div>
+  <div class="sub-paso"><div class="sp-num" style="background:rgba(34,197,94,0.2);color:var(--verde)">1</div><div class="sp-txt">Nombre del anuncio: <strong>"Aliados - Imagen dinero - V1"</strong></div></div>
+  <div class="sub-paso"><div class="sp-num" style="background:rgba(34,197,94,0.2);color:var(--verde)">2</div><div class="sp-txt">Identidad: selecciona la <strong>Pagina de Serviruta</strong> en Facebook</div></div>
+  <div class="sub-paso"><div class="sp-num" style="background:rgba(34,197,94,0.2);color:var(--verde)">3</div><div class="sp-txt">Formato: <strong>Imagen unica</strong> (para empezar) o <strong>Video</strong> si ya tienes el creativo listo</div></div>
+  <div class="sub-paso"><div class="sp-num" style="background:rgba(34,197,94,0.2);color:var(--verde)">4</div><div class="sp-txt">Sube tu imagen o video. Medidas recomendadas: <strong>1080x1080px</strong> para Feed, <strong>1080x1920px</strong> para Stories</div></div>
+  <div class="sub-paso"><div class="sp-num" style="background:rgba(34,197,94,0.2);color:var(--verde)">5</div><div class="sp-txt">Pega el texto del anuncio en <strong>"Texto principal"</strong></div></div>
+  <div class="config-box" style="margin-top:8px">
+    <div class="config-row"><div class="config-lbl">Texto principal</div><div class="config-val">Pegar copy del modulo copys</div></div>
+    <div class="config-row"><div class="config-lbl">Titular</div><div class="config-val">Gana hasta $100.000 recomendando mecanicos</div></div>
+    <div class="config-row"><div class="config-lbl">Descripcion</div><div class="config-val">Serviruta · Sin inversion · Comision por referido</div></div>
+    <div class="config-row"><div class="config-lbl">Boton CTA</div><div class="config-val">Enviar mensaje</div></div>
+    <div class="config-row"><div class="config-lbl">Destino del CTA</div><div class="config-val">WhatsApp +56 9 8505 8250</div></div>
+    <div class="config-row"><div class="config-lbl">Mensaje prellenado WA</div><div class="config-val">Hola, quiero ser aliado de Serviruta</div></div>
+  </div>
+</div>
+
+<div class="sec">Paso 6 — Revisar y publicar</div>
+
+<div class="paso">
+  <div class="paso-header">
+    <div class="paso-num" style="background:var(--morado)">6</div>
+    <div><div class="paso-titulo">Publicar el anuncio</div><div class="paso-tiempo">2 min</div></div>
+  </div>
+  <div class="sub-paso"><div class="sp-num" style="background:rgba(167,139,250,0.2);color:var(--morado)">1</div><div class="sp-txt">Clic en <strong>"Revisar"</strong> — Meta muestra un resumen de la campana</div></div>
+  <div class="sub-paso"><div class="sp-num" style="background:rgba(167,139,250,0.2);color:var(--morado)">2</div><div class="sp-txt">Verifica que el presupuesto, segmentacion y anuncio son correctos</div></div>
+  <div class="sub-paso"><div class="sp-num" style="background:rgba(167,139,250,0.2);color:var(--morado)">3</div><div class="sp-txt">Clic en <strong>"Publicar"</strong> — Meta lo revisa en 24-48 horas antes de activarlo</div></div>
+  <div class="sub-paso"><div class="sp-num" style="background:rgba(167,139,250,0.2);color:var(--morado)">4</div><div class="sp-txt">Recibes un email cuando el anuncio este <strong>"Activo"</strong></div></div>
+  <div class="alerta a-ok" style="margin-top:8px">✅ Una vez activo, dale al menos <strong>7 dias y $50 USD de gasto</strong> antes de tocar algo. El algoritmo de Meta necesita ese tiempo para aprender a quien mostrarle el anuncio.</div>
+</div>
+
+<div class="sec">Paso 7 — Leer las metricas</div>
+
+<div class="paso">
+  <div class="paso-header">
+    <div class="paso-num" style="background:var(--azul)">7</div>
+    <div><div class="paso-titulo">Como leer los resultados</div><div class="paso-tiempo">Revision semanal</div></div>
+  </div>
+  <div class="config-box">
+    <div class="config-row"><div class="config-lbl">CTR (Click Through Rate)</div><div class="config-val">Bueno si supera 1.5%</div></div>
+    <div class="config-row"><div class="config-lbl">CPM (Costo por 1000 impresiones)</div><div class="config-val">Normal en Chile: $3.000-8.000 CLP</div></div>
+    <div class="config-row"><div class="config-lbl">Costo por mensaje</div><div class="config-val">Bueno si es menor a $5.000 CLP</div></div>
+    <div class="config-row"><div class="config-lbl">Frecuencia</div><div class="config-val">Si supera 3: cambiar el creativo</div></div>
+    <div class="config-row"><div class="config-lbl">Alcance vs Impresiones</div><div class="config-val">Alcance = personas unicas</div></div>
+  </div>
+  <div class="alerta a-tip" style="margin-top:8px">💡 Si a los 7 dias el costo por mensaje supera $8.000 CLP, pausa el anuncio y cambia la imagen. Si esta bajo $5.000, duplica el presupuesto.</div>
+</div>
+
+<div class="sec">Errores comunes a evitar</div>
+
+<div class="paso" style="background:rgba(232,33,10,0.04);border-color:rgba(232,33,10,0.2)">
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <div class="sub-paso"><div style="font-size:16px;flex-shrink:0">❌</div><div class="sp-txt"><strong>Cambiar el anuncio antes de los 7 dias.</strong> El algoritmo necesita tiempo para aprender. Cambiarlo reinicia el aprendizaje y gasta mas dinero.</div></div>
+    <div class="sub-paso"><div style="font-size:16px;flex-shrink:0">❌</div><div class="sp-txt"><strong>Poner mucho texto en la imagen.</strong> Meta penaliza imagenes con mas del 20% de texto. Usa texto minimo en la imagen.</div></div>
+    <div class="sub-paso"><div style="font-size:16px;flex-shrink:0">❌</div><div class="sp-txt"><strong>Segmentar demasiado.</strong> Audiencias menores a 100.000 personas son demasiado pequenas. La RM tiene millones de personas, no filtres de mas.</div></div>
+    <div class="sub-paso"><div style="font-size:16px;flex-shrink:0">❌</div><div class="sp-txt"><strong>No responder los mensajes de WhatsApp.</strong> Si el anuncio funciona y no respondes rapido, pierdes los leads. Responde en menos de 1 hora.</div></div>
+    <div class="sub-paso"><div style="font-size:16px;flex-shrink:0">❌</div><div class="sp-txt"><strong>Publicar solo en Instagram o solo en Facebook.</strong> Deja que Meta decida donde mostrar el anuncio — el algoritmo lo optimiza solo.</div></div>
+  </div>
+</div>
+
+</body>
+</html>

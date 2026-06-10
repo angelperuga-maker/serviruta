@@ -75,6 +75,7 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
     <div class="tab" id="tab1" onclick="goTab(1)">Tecnicos</div>
     <div class="tab" id="tab2" onclick="goTab(2)">Servicios</div>
     <div class="tab" id="tab3" onclick="goTab(3)">Pagos diarios</div>
+    <div class="tab" id="tab4" onclick="goTab(4)">Gastos</div>
   </div>
   <div class="page active" id="pg0">
     <div class="periodo" id="per0">
@@ -116,6 +117,16 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
     <div id="pagos-list"><div class="loading">Cargando...</div></div>
   </div>
 </div>
+  <div class="page" id="pg4">
+    <div class="kpi-grid" id="g-kpi-grid" style="margin-bottom:14px"></div>
+    <div class="sec">Por tipo</div>
+    <div id="g-por-tipo" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px"></div>
+    <div class="sec">Por tecnico</div>
+    <div id="g-por-tec"></div>
+    <div class="sec">Ultimos registros</div>
+    <div id="g-lista"></div>
+  </div>
+</div>
 <script>
 var SB='https://bqlgfmqcefledqyodkii.supabase.co'
 var SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
@@ -135,6 +146,71 @@ function getFechaDesde(p){
 function filtrar(p){
   var desde=getFechaDesde(p)
   return todos.filter(function(s){return (s.created_at||'').split('T')[0]>=desde})
+}
+
+async function loadGastos(){
+  var r=await getDB().from('gastos').select('*').order('fecha',{ascending:false})
+  var gastos=r.data||[]
+  var mes=new Date().getFullYear()+'-'+String(new Date().getMonth()+1).padStart(2,'0')
+  var delMes=gastos.filter(function(g){return (g.fecha||'').startsWith(mes)})
+  var totalMes=delMes.reduce(function(s,g){return s+(g.monto||0)},0)
+  var totalHist=gastos.reduce(function(s,g){return s+(g.monto||0)},0)
+  var propio=gastos.filter(function(g){return g.notas&&g.notas.includes('[Plata propia]')}).reduce(function(s,g){return s+(g.monto||0)},0)
+  var TIPO_ICONS={'Materiales':'🔩','Combustible':'⛽','Herramientas':'🔧','Sueldos':'👷','Impuestos':'📋','Costos fijos':'🏠','Otros':'📦'}
+  var TIPO_COLORS={'Materiales':'#60A5FA','Combustible':'#FB923C','Herramientas':'#F5C518','Sueldos':'#A78BFA','Impuestos':'#F472B6','Costos fijos':'#34D399','Otros':'#9996A0'}
+  var COLS=['#60A5FA','#22C55E','#F5C518','#FB923C','#A78BFA','#34D399']
+
+  // KPIs
+  document.getElementById('g-kpi-grid').innerHTML=
+    '<div class="kpi full" style="background:linear-gradient(135deg,rgba(232,33,10,0.12),rgba(232,33,10,0.04));border-color:rgba(232,33,10,0.3)"><div class="kpi-lbl" style="color:var(--txt3)">Total gastos este mes</div><div class="kpi-val" id="gk-mes" style="color:var(--rojo)">$'+totalMes.toLocaleString('es-CL')+'</div></div>'+
+    '<div class="kpi"><div class="kpi-val" style="color:var(--amarillo)">$'+totalHist.toLocaleString('es-CL')+'</div><div class="kpi-lbl">Total historico</div></div>'+
+    '<div class="kpi"><div class="kpi-val" style="color:#FF6B5B">$'+propio.toLocaleString('es-CL')+'</div><div class="kpi-lbl">Plata propia x reembolsar</div></div>'+
+    '<div class="kpi"><div class="kpi-val" style="color:var(--azul)">'+gastos.length+'</div><div class="kpi-lbl">Total registros</div></div>'
+
+  // Por tipo
+  var porTipo={}
+  gastos.forEach(function(g){
+    if(!porTipo[g.tipo])porTipo[g.tipo]={total:0,cnt:0}
+    porTipo[g.tipo].total+=(g.monto||0)
+    porTipo[g.tipo].cnt++
+  })
+  document.getElementById('g-por-tipo').innerHTML=Object.keys(porTipo).map(function(t){
+    var col=TIPO_COLORS[t]||'#9996A0'
+    var icon=TIPO_ICONS[t]||'📦'
+    return '<div style="background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:10px"><div style="font-size:18px;margin-bottom:4px">'+icon+'</div><div style="font-size:12px;font-weight:600">'+t+'</div><div style="font-family:Syne,sans-serif;font-weight:800;font-size:15px;color:'+col+'">$'+porTipo[t].total.toLocaleString('es-CL')+'</div><div style="font-size:10px;color:var(--txt3)">'+porTipo[t].cnt+' registros</div></div>'
+  }).join('')
+
+  // Por tecnico
+  var porTec={}
+  gastos.filter(function(g){return g.tecnico}).forEach(function(g){
+    if(!porTec[g.tecnico])porTec[g.tecnico]={total:0,cnt:0,propio:0}
+    porTec[g.tecnico].total+=(g.monto||0)
+    porTec[g.tecnico].cnt++
+    if(g.notas&&g.notas.includes('[Plata propia]'))porTec[g.tecnico].propio+=(g.monto||0)
+  })
+  var sortedTec=Object.entries(porTec).sort(function(a,b){return b[1].total-a[1].total})
+  document.getElementById('g-por-tec').innerHTML=sortedTec.map(function(e,i){
+    var t=e[0],d=e[1]
+    var col=COLS[i%COLS.length]
+    var ini=t.split(' ').map(function(x){return x[0]}).join('').substring(0,2).toUpperCase()
+    return '<div style="background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:10px">'+
+      '<div style="width:36px;height:36px;border-radius:50%;background:'+col+';display:flex;align-items:center;justify-content:center;font-family:Syne,sans-serif;font-weight:800;font-size:13px;color:#fff;flex-shrink:0">'+ini+'</div>'+
+      '<div style="flex:1"><div style="font-family:Syne,sans-serif;font-weight:700;font-size:13px">'+t+'</div><div style="font-size:11px;color:var(--txt3)">'+d.cnt+' gastos'+(d.propio>0?' · $'+d.propio.toLocaleString('es-CL')+' x reembolsar':'')+'</div></div>'+
+      '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:15px;color:'+col+'">$'+d.total.toLocaleString('es-CL')+'</div>'+
+    '</div>'
+  }).join('')
+
+  // Lista ultimos 10
+  document.getElementById('g-lista').innerHTML=gastos.slice(0,10).map(function(g){
+    var col=TIPO_COLORS[g.tipo]||'#9996A0'
+    var icon=TIPO_ICONS[g.tipo]||'📦'
+    var pagado=g.notas&&g.notas.includes('[Transferencia empresa]')
+    return '<div style="background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:10px;margin-bottom:6px;display:flex;align-items:center;gap:10px">'+
+      '<div style="width:32px;height:32px;border-radius:6px;background:'+col+'22;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">'+icon+'</div>'+
+      '<div style="flex:1"><div style="font-size:12px;font-weight:600">'+g.descripcion+'</div><div style="font-size:10px;color:var(--txt3)">'+g.tipo+(g.tecnico?' · '+g.tecnico.split(' ')[0]:'')+(g.fecha?' · '+g.fecha:'')+'</div></div>'+
+      '<div style="text-align:right"><div style="font-family:Syne,sans-serif;font-weight:700;font-size:13px;color:'+col+'">$'+(g.monto||0).toLocaleString('es-CL')+'</div><div style="font-size:10px;color:'+(pagado?'var(--verde)':'#FF6B5B')+'">'+(pagado?'Empresa':'Propia')+'</div></div>'+
+    '</div>'
+  }).join('')
 }
 
 async function load(){
@@ -295,10 +371,11 @@ async function eliminarAdmin(e,id,cliente){
 }
 
 function goTab(n){
-  for(var i=0;i<4;i++){
+  for(var i=0;i<5;i++){
     document.getElementById('pg'+i).classList.toggle('active',i===n)
     document.getElementById('tab'+i).classList.toggle('active',i===n)
   }
+  if(n===4)loadGastos()
 }
 
 function cambiarPer(tab,p,el){

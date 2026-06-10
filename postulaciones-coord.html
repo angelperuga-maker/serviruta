@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta - Postulaciones</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--rojo-g:rgba(232,33,10,0.08);--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:600px;margin:0 auto;}
+.top{background:var(--c1);border-bottom:1px solid var(--borde);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.top-title{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
+.top-back{background:none;border:1px solid var(--borde);color:var(--txt3);font-size:11px;padding:5px 12px;border-radius:6px;cursor:pointer;}
+.body{padding:12px 14px 80px;}
+.filtros{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:12px;}
+.fbtn{flex-shrink:0;padding:5px 12px;border-radius:20px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--borde);background:var(--c2);color:var(--txt3);}
+.fbtn.active{background:var(--rojo);border-color:var(--rojo);color:#fff;}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;}
+.st{background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:10px;text-align:center;}
+.st-val{font-family:"Syne",sans-serif;font-weight:800;font-size:22px;}
+.st-lbl{font-size:10px;color:var(--txt3);text-transform:uppercase;margin-top:2px;}
+.card{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin-bottom:10px;cursor:pointer;transition:border-color 0.15s;}
+.card:hover{border-color:rgba(232,33,10,0.3);}
+.card-top{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.card-foto{width:46px;height:46px;border-radius:50%;object-fit:cover;flex-shrink:0;background:var(--c3);display:flex;align-items:center;justify-content:center;font-family:"Syne",sans-serif;font-weight:800;font-size:16px;color:var(--txt3);}
+.card-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;}
+.card-meta{font-size:11px;color:var(--txt3);margin-top:2px;}
+.card-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;margin-left:auto;flex-shrink:0;}
+.chips-row{display:flex;gap:6px;flex-wrap:wrap;}
+.chip-small{font-size:10px;font-weight:600;padding:2px 8px;border-radius:20px;background:var(--c3);color:var(--txt3);}
+.loading{text-align:center;padding:40px;color:var(--txt3);}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:200;display:none;align-items:flex-end;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--c2);border:1px solid var(--borde);border-radius:16px 16px 0 0;width:100%;max-width:600px;padding:18px 18px 36px;max-height:94vh;overflow-y:auto;}
+.modal-handle{width:36px;height:4px;background:var(--borde);border-radius:2px;margin:0 auto 14px;}
+.modal-titulo{font-family:"Syne",sans-serif;font-weight:800;font-size:18px;margin-bottom:4px;}
+.modal-sub{font-size:12px;color:var(--txt3);margin-bottom:14px;}
+.det-row{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid var(--borde);font-size:13px;}
+.det-row:last-child{border:none;}
+.det-lbl{color:var(--txt3);min-width:110px;font-size:12px;flex-shrink:0;}
+.sec-modal{font-family:"Syne",sans-serif;font-weight:700;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);margin:14px 0 8px;}
+.foto-perfil{width:100%;max-height:220px;object-fit:cover;border-radius:10px;margin-bottom:12px;}
+.est-btns{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0;}
+.est-btn{padding:10px;border-radius:8px;font-family:"Syne",sans-serif;font-weight:700;font-size:11px;cursor:pointer;border:1px solid var(--borde);background:var(--c3);color:var(--txt2);text-align:center;}
+.btn-wa{width:100%;background:#25D366;border:none;border-radius:8px;color:#000;font-family:"Syne",sans-serif;font-weight:800;font-size:14px;padding:12px;cursor:pointer;margin-bottom:8px;}
+.btn-agregar{width:100%;background:var(--verde);border:none;border-radius:8px;color:#000;font-family:"Syne",sans-serif;font-weight:800;font-size:14px;padding:13px;cursor:pointer;margin-bottom:8px;}
+.btn-cancel{width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:8px;color:var(--txt2);font-family:"Syne",sans-serif;font-weight:700;font-size:14px;padding:12px;cursor:pointer;}
+.btn-del{width:100%;padding:10px;border-radius:8px;font-family:"Syne",sans-serif;font-weight:700;font-size:12px;cursor:pointer;border:1px solid rgba(232,33,10,0.3);background:var(--rojo-g);color:var(--rojo);margin-bottom:8px;}
+.notas-inp{width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:8px;color:var(--txt);font-family:"DM Sans",sans-serif;font-size:14px;padding:10px 12px;outline:none;resize:none;margin-bottom:8px;}
+.notas-inp:focus{border-color:var(--rojo);}
+.btn-notas{width:100%;background:var(--rojo);border:none;border-radius:8px;color:#fff;font-family:"Syne",sans-serif;font-weight:700;font-size:13px;padding:10px;cursor:pointer;}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--c3);border:1px solid var(--borde);border-radius:8px;padding:10px 16px;font-size:12px;opacity:0;transition:all 0.25s;pointer-events:none;z-index:999;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.ok{border-color:rgba(34,197,94,0.4);color:var(--verde);}
+</style>
+</head>
+<body>
+<div class="top">
+  <button class="top-back" onclick="location.href='menu-coordinador.html'">← Volver</button>
+  <div class="top-title">Postulaciones tecnicos</div>
+  <button onclick="load()" style="background:none;border:none;color:var(--txt3);cursor:pointer;font-size:20px;">&#8635;</button>
+</div>
+<div class="body">
+  <div class="stats">
+    <div class="st"><div class="st-val" id="st-nuevas" style="color:var(--azul)">0</div><div class="st-lbl">Nuevas</div></div>
+    <div class="st"><div class="st-val" id="st-revision" style="color:var(--amarillo)">0</div><div class="st-lbl">En revision</div></div>
+    <div class="st"><div class="st-val" id="st-aprobadas" style="color:var(--verde)">0</div><div class="st-lbl">Aprobadas</div></div>
+  </div>
+  <div class="filtros">
+    <div class="fbtn active" onclick="setFiltro('todos',this)">Todos</div>
+    <div class="fbtn" onclick="setFiltro('postulacion',this)">Nuevas</div>
+    <div class="fbtn" onclick="setFiltro('revision',this)">En revision</div>
+    <div class="fbtn" onclick="setFiltro('aprobado',this)">Aprobados</div>
+    <div class="fbtn" onclick="setFiltro('rechazado',this)">Rechazados</div>
+  </div>
+  <div id="lista"><div class="loading">Cargando...</div></div>
+</div>
+
+<!-- MODAL DETALLE -->
+<div class="modal-overlay" id="modal-det" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <img id="det-foto" class="foto-perfil" style="display:none">
+    <div class="modal-titulo" id="det-nombre">Postulante</div>
+    <div class="modal-sub" id="det-fecha"></div>
+    <div id="det-body"></div>
+    <div class="sec-modal">Cambiar estado</div>
+    <div class="est-btns">
+      <div class="est-btn" onclick="cambiarEstado('revision')" style="color:var(--amarillo);border-color:rgba(245,197,24,0.3)">En revision</div>
+      <div class="est-btn" onclick="cambiarEstado('aprobado')" style="color:var(--verde);border-color:rgba(34,197,94,0.3)">Aprobado</div>
+      <div class="est-btn" onclick="cambiarEstado('rechazado')" style="color:#FF6B5B;border-color:rgba(232,33,10,0.3)">Rechazado</div>
+    </div>
+    <div class="sec-modal">Notas del coordinador</div>
+    <textarea class="notas-inp" id="notas-coord" placeholder="Observaciones, resultado de entrevista, puntos a revisar..." rows="3"></textarea>
+    <button class="btn-notas" onclick="guardarNotas()">Guardar notas</button>
+    <div style="height:10px"></div>
+    <button class="btn-agregar" id="btn-agregar-tec" onclick="agregarComoTecnico()">Agregar como tecnico al sistema</button>
+    <button class="btn-wa" id="btn-wa-det">Contactar por WhatsApp</button>
+    <button class="btn-del" onclick="eliminarPostulacion()">Eliminar postulacion</button>
+    <button class="btn-cancel" onclick="document.getElementById('modal-det').classList.remove('open')">Cerrar</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var SB='https://bqlgfmqcefledqyodkii.supabase.co'
+var SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+var db=null,postulaciones=[],filtro='todos',actual=null
+
+var EST_COLORS={postulacion:'var(--azul)',revision:'var(--amarillo)',aprobado:'var(--verde)',rechazado:'#FF6B5B'}
+var EST_BG={postulacion:'rgba(96,165,250,0.1)',revision:'rgba(245,197,24,0.1)',aprobado:'rgba(34,197,94,0.1)',rechazado:'rgba(232,33,10,0.08)'}
+var COLS=['#E8210A','#60A5FA','#22C55E','#F5C518','#FB923C','#A78BFA']
+
+function getDB(){if(!db)db=supabase.createClient(SB,SK);return db;}
+
+async function load(){
+  var r=await getDB().from('tecnicos_postulaciones').select('*').order('created_at',{ascending:false})
+  postulaciones=r.data||[]
+  document.getElementById('st-nuevas').textContent=postulaciones.filter(function(p){return p.estado==='postulacion'}).length
+  document.getElementById('st-revision').textContent=postulaciones.filter(function(p){return p.estado==='revision'}).length
+  document.getElementById('st-aprobadas').textContent=postulaciones.filter(function(p){return p.estado==='aprobado'}).length
+  renderLista()
+}
+
+function setFiltro(f,el){
+  filtro=f
+  document.querySelectorAll('.fbtn').forEach(function(b){b.classList.remove('active')})
+  el.classList.add('active')
+  renderLista()
+}
+
+function renderLista(){
+  var data=filtro==='todos'?postulaciones:postulaciones.filter(function(p){return p.estado===filtro})
+  var el=document.getElementById('lista')
+  if(!data.length){el.innerHTML='<div class="loading">Sin postulaciones</div>';return}
+  el.innerHTML=data.map(function(p,i){
+    var fecha=p.created_at?new Date(p.created_at).toLocaleDateString('es-CL',{day:'numeric',month:'short',year:'numeric'}):''
+    var col=COLS[i%COLS.length]
+    var ini=(p.nombre||'?').split(' ').map(function(x){return x[0]}).join('').substring(0,2).toUpperCase()
+    var espec=p.especialidades?p.especialidades.split(',').slice(0,3):[]
+    return '<div class="card" onclick="verDetalle(\''+p.id+'\')">'+
+      '<div class="card-top">'+
+        (p.foto?'<img src="'+p.foto+'" class="card-foto">':'<div class="card-foto" style="background:'+col+'">'+ini+'</div>')+
+        '<div style="flex:1">'+
+          '<div class="card-nombre">'+p.nombre+'</div>'+
+          '<div class="card-meta">'+( p.zona_cobertura||p.direccion||'')+(p.experiencia_anos?' · '+p.experiencia_anos:'')+'</div>'+
+          '<div class="card-meta">'+fecha+'</div>'+
+        '</div>'+
+        '<span class="card-badge" style="background:'+EST_BG[p.estado||'postulacion']+';color:'+EST_COLORS[p.estado||'postulacion']+'">'+( p.estado||'nueva')+'</span>'+
+      '</div>'+
+      (espec.length?'<div class="chips-row">'+espec.map(function(e){return '<span class="chip-small">'+e.trim()+'</span>'}).join('')+'</div>':'')+
+    '</div>'
+  }).join('')
+}
+
+function verDetalle(id){
+  var p=postulaciones.find(function(x){return x.id===id})
+  if(!p)return
+  actual=p
+  var fecha=p.created_at?new Date(p.created_at).toLocaleDateString('es-CL',{day:'numeric',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'}):''
+  if(p.foto){document.getElementById('det-foto').src=p.foto;document.getElementById('det-foto').style.display='block'}
+  else{document.getElementById('det-foto').style.display='none'}
+  document.getElementById('det-nombre').textContent=p.nombre
+  document.getElementById('det-fecha').textContent='Postulo el '+fecha
+  document.getElementById('det-body').innerHTML=
+    '<div class="sec-modal">Datos personales</div>'+
+    '<div class="det-row"><span class="det-lbl">RUT</span><span>'+(p.rut||'—')+'</span></div>'+
+    '<div class="det-row"><span class="det-lbl">Telefono</span><span>'+(p.telefono||'—')+'</span></div>'+
+    '<div class="det-row"><span class="det-lbl">Email</span><span>'+(p.email||'—')+'</span></div>'+
+    '<div class="det-row"><span class="det-lbl">Direccion</span><span>'+(p.direccion||'—')+'</span></div>'+
+    '<div class="sec-modal">Experiencia</div>'+
+    '<div class="det-row"><span class="det-lbl">Experiencia</span><span>'+(p.experiencia_anos||'—')+'</span></div>'+
+    '<div class="det-row"><span class="det-lbl">Especialidades</span><span>'+(p.especialidades||'—')+'</span></div>'+
+    '<div class="det-row"><span class="det-lbl">Trabajos previos</span><span>'+(p.experiencia_laboral||'—')+'</span></div>'+
+    '<div class="sec-modal">Disponibilidad y equipos</div>'+
+    '<div class="det-row"><span class="det-lbl">Vehiculo</span><span>'+(p.tiene_vehiculo==='si'?'Si - '+(p.tipo_vehiculo||'')+(p.vehiculo_marca?' '+p.vehiculo_marca:''):'No')+'</span></div>'+
+    '<div class="det-row"><span class="det-lbl">Herramientas</span><span>'+(p.herramientas||'—')+'</span></div>'+
+    '<div class="det-row"><span class="det-lbl">Dias disponibles</span><span>'+(p.dias_disponibles||'—')+'</span></div>'+
+    '<div class="det-row"><span class="det-lbl">Horario</span><span>'+(p.horario||'—')+'</span></div>'+
+    '<div class="det-row"><span class="det-lbl">Zona cobertura</span><span>'+(p.zona_cobertura||'—')+'</span></div>'+
+    (p.comentarios?'<div class="sec-modal">Comentarios</div><div style="font-size:13px;color:var(--txt2);line-height:1.6;background:var(--c3);border-radius:8px;padding:10px">'+p.comentarios+'</div>':'')+
+    (p.notas_coord?'<div class="sec-modal">Notas coordinador</div><div style="font-size:13px;color:var(--azul);line-height:1.6;background:rgba(96,165,250,0.06);border:1px solid rgba(96,165,250,0.2);border-radius:8px;padding:10px">'+p.notas_coord+'</div>':'')
+  document.getElementById('notas-coord').value=p.notas_coord||''
+  document.getElementById('btn-agregar-tec').style.display=p.estado==='aprobado'?'block':'none'
+  if(p.telefono){
+    var msg='Hola '+p.nombre.split(' ')[0]+' gracias por postular a Serviruta. Queremos coordinar una conversacion contigo. Cuando tienes disponibilidad?'
+    document.getElementById('btn-wa-det').onclick=function(){window.open('https://wa.me/56'+p.telefono.replace(/[^0-9]/g,'')+'?text='+encodeURIComponent(msg),'_blank')}
+    document.getElementById('btn-wa-det').style.display='block'
+  } else {
+    document.getElementById('btn-wa-det').style.display='none'
+  }
+  document.getElementById('modal-det').classList.add('open')
+}
+
+async function cambiarEstado(estado){
+  if(!actual)return
+  await getDB().from('tecnicos_postulaciones').update({estado:estado}).eq('id',actual.id)
+  toast('Estado actualizado','ok')
+  document.getElementById('modal-det').classList.remove('open')
+  load()
+}
+
+async function guardarNotas(){
+  if(!actual)return
+  var notas=document.getElementById('notas-coord').value.trim()
+  await getDB().from('tecnicos_postulaciones').update({notas_coord:notas}).eq('id',actual.id)
+  toast('Notas guardadas','ok')
+}
+
+async function agregarComoTecnico(){
+  if(!actual)return
+  if(!confirm('Agregar a '+actual.nombre+' como tecnico activo en el hub?'))return
+  // El PIN se genera automáticamente como los últimos 4 dígitos del teléfono
+  var pin=actual.telefono?actual.telefono.replace(/[^0-9]/g,'').slice(-4):'0000'
+  toast('Tecnico listo. PIN: '+pin+' · Agrega su nombre al login-tecnico.html','ok')
+  await getDB().from('tecnicos_postulaciones').update({estado:'incorporado'}).eq('id',actual.id)
+  document.getElementById('modal-det').classList.remove('open')
+  load()
+}
+
+async function eliminarPostulacion(){
+  if(!actual)return
+  if(!confirm('Eliminar postulacion de '+actual.nombre+'?'))return
+  await getDB().from('tecnicos_postulaciones').delete().eq('id',actual.id)
+  toast('Eliminado','ok')
+  document.getElementById('modal-det').classList.remove('open')
+  load()
+}
+
+function toast(msg,type){var t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(type?' '+type:'');t.classList.add('show');setTimeout(function(){t.classList.remove('show')},3000)}
+
+load()
+</script>
+</body>
+</html>

@@ -181,6 +181,8 @@ function verDetalle(id){
     '<div class="det-row"><span class="det-lbl">Dias disponibles</span><span>'+(p.dias_disponibles||'—')+'</span></div>'+
     '<div class="det-row"><span class="det-lbl">Horario</span><span>'+(p.horario||'—')+'</span></div>'+
     '<div class="det-row"><span class="det-lbl">Zona cobertura</span><span>'+(p.zona_cobertura||'—')+'</span></div>'+
+    (p.foto_licencia?'<div class="sec-modal">Licencia de conducir</div><img src="'+p.foto_licencia+'" style="width:100%;border-radius:8px;margin-bottom:8px">':'')+
+    (p.foto_herramientas?'<div class="sec-modal">Herramientas</div><img src="'+p.foto_herramientas+'" style="width:100%;border-radius:8px;margin-bottom:8px">':'')+
     (p.comentarios?'<div class="sec-modal">Comentarios</div><div style="font-size:13px;color:var(--txt2);line-height:1.6;background:var(--c3);border-radius:8px;padding:10px">'+p.comentarios+'</div>':'')+
     (p.notas_coord?'<div class="sec-modal">Notas coordinador</div><div style="font-size:13px;color:var(--azul);line-height:1.6;background:rgba(96,165,250,0.06);border:1px solid rgba(96,165,250,0.2);border-radius:8px;padding:10px">'+p.notas_coord+'</div>':'')
   document.getElementById('notas-coord').value=p.notas_coord||''
@@ -213,12 +215,50 @@ async function guardarNotas(){
 async function agregarComoTecnico(){
   if(!actual)return
   if(!confirm('Agregar a '+actual.nombre+' como tecnico activo en el hub?'))return
-  // El PIN se genera automáticamente como los últimos 4 dígitos del teléfono
+
+  // Generar PIN: últimos 4 dígitos del teléfono
   var pin=actual.telefono?actual.telefono.replace(/[^0-9]/g,'').slice(-4):'0000'
-  toast('Tecnico listo. PIN: '+pin+' · Agrega su nombre al login-tecnico.html','ok')
-  await getDB().from('tecnicos_postulaciones').update({estado:'incorporado'}).eq('id',actual.id)
+  var nombre=actual.nombre
+  var tel=actual.telefono?actual.telefono.replace(/[^0-9]/g,''):''
+  var link='https://angelperuga-maker.github.io/serviruta/login-tecnico.html'
+
+  // Guardar como incorporado con PIN
+  await getDB().from('tecnicos_postulaciones').update({estado:'incorporado',notas_coord:(document.getElementById('notas-coord').value||'')+'[PIN: '+pin+']'}).eq('id',actual.id)
+
+  // Enviar WA con credenciales
+  var msg='Hola '+nombre.split(' ')[0]+'! Bienvenido al equipo Serviruta 🎉
+
+'+
+    'Ya puedes acceder al hub de tecnicos:
+
+'+
+    '🔗 '+link+'
+
+'+
+    '👤 Tu nombre: '+nombre+'
+'+
+    '🔑 Tu PIN: '+pin+'
+
+'+
+    'Guarda este mensaje. Cualquier consulta escríbenos. Serviruta +56 9 8505 8250'
+
+  // Mostrar modal con PIN e instrucciones
   document.getElementById('modal-det').classList.remove('open')
   load()
+
+  setTimeout(function(){
+    if(tel){
+      window.open('https://wa.me/56'+tel+'?text='+encodeURIComponent(msg),'_blank')
+    }
+    alert('Tecnico incorporado!
+
+Nombre: '+nombre+'
+PIN: '+pin+'
+
+IMPORTANTE: Agrega el nombre "'+nombre+'" al archivo login-tecnico.html en GitHub para que pueda iniciar sesion.
+
+El WA con las credenciales ya fue enviado.')
+  },300)
 }
 
 async function eliminarPostulacion(){

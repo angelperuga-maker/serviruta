@@ -301,6 +301,10 @@ function renderTecnicos(){
         '<div class="ts"><div class="ts-val" style="color:var(--azul)">'+t.cnt+'</div><div class="ts-lbl">Servicios</div></div>'+
         '<div class="ts"><div class="ts-val" style="color:var(--txt2)">$'+prom.toLocaleString('es-CL')+'</div><div class="ts-lbl">Promedio</div></div>'+
       '</div>'+
+      '<button onclick="toggleAdmin('+i+',event)" id="adm-btn-'+i+'" style="width:100%;background:none;border:none;border-top:1px solid var(--borde);color:var(--txt3);font-family:Syne,sans-serif;font-weight:700;font-size:11px;padding:10px 0 0;cursor:pointer;margin-top:8px">▼ Ver '+t.cnt+' servicio'+s+'</button>'+
+      '<div id="adm-body-'+i+'" style="display:none;margin-top:8px">'+
+        data.filter(function(s){return s.tecnico===t.nombre}).map(function(sv){var pagado=sv.pago_cliente==='pagado';var fecha=sv.created_at?new Date(sv.created_at).toLocaleDateString('es-CL',{day:'numeric',month:'short'}):'' ;return '<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--borde)"><div style="flex:1"><div style="font-size:12px;font-weight:600">'+sv.cliente+'</div><div style="font-size:10px;color:var(--txt3)">'+fecha+(sv.vehiculo?' · '+sv.vehiculo:'')+'</div></div><div style="text-align:right"><div style="font-family:Syne,sans-serif;font-weight:700;font-size:13px;color:'+(pagado?'var(--verde)':'var(--amarillo)')+';">$'+(sv.total||0).toLocaleString('es-CL')+'</div><div style="font-size:10px;color:'+(pagado?'var(--verde)':'var(--rojo)')+'">'+(pagado?'Pagado':'Pendiente')+'</div></div></div>'}).join('')+
+      '</div>'+
     '</div>'
   }).join('')
 }
@@ -376,6 +380,16 @@ function goTab(n){
     document.getElementById('tab'+i).classList.toggle('active',i===n)
   }
   if(n===4)loadGastos()
+}
+
+function toggleAdmin(i, e){
+  if(e)e.stopPropagation()
+  var body=document.getElementById('adm-body-'+i)
+  var btn=document.getElementById('adm-btn-'+i)
+  if(!body)return
+  var open=body.style.display!=='none'
+  body.style.display=open?'none':'block'
+  btn.textContent=btn.textContent.replace(open?'▲':'▼',open?'▼':'▲')
 }
 
 function cambiarPer(tab,p,el){

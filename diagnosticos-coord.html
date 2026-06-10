@@ -189,12 +189,15 @@ function verDetalle(id){
   document.getElementById('coord-notas').value=d.notas_coord||''
   // WA al técnico
   var tel=TELS[d.tecnico]||''
-  var waEl=document.getElementById('wa-tecnico-btn')
+    var waEl=document.getElementById('wa-tecnico-btn')
   if(tel){
-    var msg='Hola '+d.tecnico.split(' ')[0]+' revise el diagnostico de '+d.cliente+(d.patente?' ('+d.patente+')':'')+'. Coordinaremos el servicio. Serviruta'
-    waEl.innerHTML='<a href="https://wa.me/56'+tel.replace(/\\D/g,'')+\'?text=\'+encodeURIComponent(msg) style="display:flex;align-items:center;justify-content:center;gap:8px;background:#25D366;border:none;border-radius:8px;padding:10px;margin-bottom:10px;cursor:pointer;text-decoration:none;font-family:Syne,sans-serif;font-weight:700;font-size:13px;color:#000" target="_blank"><span style="font-size:16px">💬</span> WA al tecnico</a>'
-  } else { waEl.innerHTML='' }
-  document.getElementById('modal-det').classList.add('open')
+    var waMsg='Hola '+d.tecnico.split(' ')[0]+' revise el diagnostico de '+d.cliente+'. Coordinaremos el servicio. Serviruta'
+    var waHref='https://wa.me/56'+tel.replace(/[^0-9]/g,'')+'?text='+encodeURIComponent(waMsg)
+    waEl.innerHTML='<a href="'+waHref+'" target="_blank" style="display:flex;align-items:center;justify-content:center;gap:8px;background:#25D366;border-radius:8px;padding:10px;margin-bottom:10px;text-decoration:none;font-family:Syne,sans-serif;font-weight:700;font-size:13px;color:#000">WA al tecnico</a>'
+  } else {
+    waEl.innerHTML=''
+  }
+    document.getElementById('modal-det').classList.add('open')
 }
 
 async function cambiarEstado(estado){

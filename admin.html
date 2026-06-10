@@ -182,7 +182,7 @@ function renderAll(){renderResumen();renderTecnicos();renderServicios();renderPa
 function renderResumen(){
   var data=filtrar(periodos['0'])
   var total=data.reduce(function(acc,x){return acc+(x.total||0)},0)
-  var cobrado=data.filter(function(x){return x.pago_cliente==='pagado'}).reduce(function(s,x){return s+(x.total||0)},0)
+  var cobrado=data.filter(function(x){return x.pago_cliente==='pagado'}).reduce(function(acc,x){return acc+(x.total||0)},0)
   var cnt=data.length
   var prom=cnt?Math.round(total/cnt):0
   var tecs={}
@@ -314,7 +314,7 @@ function renderPagos(){
   })
   var dias=Object.keys(porFecha).sort(function(a,b){return b.localeCompare(a)})
   var totalG=todos.reduce(function(acc,x){return acc+(x.total||0)},0)
-  var cobG=todos.filter(function(x){return x.pago_cliente==='pagado'}).reduce(function(s,x){return s+(x.total||0)},0)
+  var cobG=todos.filter(function(x){return x.pago_cliente==='pagado'}).reduce(function(acc,x){return acc+(x.total||0)},0)
   el.innerHTML='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px">'+
     '<div style="background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:12px"><div style="font-size:10px;color:var(--txt3);text-transform:uppercase;margin-bottom:3px">Total historico</div><div style="font-family:Syne,sans-serif;font-weight:800;font-size:20px;color:var(--verde)">$'+totalG.toLocaleString('es-CL')+'</div></div>'+
     '<div style="background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:12px;text-align:right"><div style="font-size:10px;color:var(--txt3);text-transform:uppercase;margin-bottom:3px">Por cobrar</div><div style="font-family:Syne,sans-serif;font-weight:800;font-size:20px;color:var(--amarillo)">$'+(totalG-cobG).toLocaleString('es-CL')+'</div></div>'+
@@ -335,7 +335,7 @@ function renderPagos(){
 function renderGastos(){
   var mes=new Date().getFullYear()+'-'+String(new Date().getMonth()+1).padStart(2,'0')
   var delMes=gastos.filter(function(g){return (g.fecha||'').startsWith(mes)})
-  var totalMes=delMes.reduce(function(s,g){return s+(g.monto||0)},0)
+  var totalMes=delMes.reduce(function(acc,g){return acc+(g.monto||0)},0)
   var totalHist=gastos.reduce(function(acc,g){return acc+(g.monto||0)},0)
   var propio=gastos.filter(function(g){return g.notas&&g.notas.includes('[Plata propia]')}).reduce(function(acc,g){return acc+(g.monto||0)},0)
   document.getElementById('g-kpis').innerHTML=

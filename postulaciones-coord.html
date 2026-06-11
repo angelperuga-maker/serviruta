@@ -234,9 +234,12 @@ async function guardarNotas(){
 async function agregarComoTecnico(){
   if(!actual)return
   if(!confirm('Agregar a '+actual.nombre+' como tecnico activo en el hub?'))return
-  var pin=actual.telefono?actual.telefono.replace(/[^0-9]/g,'').slice(-4):'0000'
+  var telLimpio=(actual.telefono||'').replace(/[^0-9]/g,'')
+  // Agregar 56 si no empieza con 56
+  var tel56=telLimpio.startsWith('56')?telLimpio:'56'+telLimpio
+  var pin=telLimpio.slice(-4)||'0000'
   var nombre=actual.nombre
-  var tel=actual.telefono?actual.telefono.replace(/[^0-9]/g,''):''
+  var tel=tel56
   var link='https://angelperuga-maker.github.io/serviruta/login-tecnico.html'
   await getDB().from('tecnicos_postulaciones').update({estado:'incorporado',notas_coord:(document.getElementById('notas-coord').value||'')+'[PIN: '+pin+']'}).eq('id',actual.id)
   var lineas=['Hola '+nombre.split(' ')[0]+'! Bienvenido al equipo Serviruta!','','Accede al hub de tecnicos:','Link: '+link,'','Tu nombre: '+nombre,'Tu PIN: '+pin,'','Guarda este mensaje. Serviruta +56 9 8505 8250']

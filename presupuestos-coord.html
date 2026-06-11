@@ -500,13 +500,20 @@ async function eliminarPptoDetalle(){
 async function guardarValorizacion(){
   if(!pptoActual)return
   var t=calcTotal()
+  // Guardar precios en items del tecnico tambien
+  var itemsConPrecio=(pptoActual.items||[]).map(function(item){
+    var precioEl=document.getElementById('precio-'+(item.id||pptoActual.items.indexOf(item)))
+    if(precioEl)item.precio_venta=parseFloat(precioEl.value)||item.precio_venta||0
+    return item
+  })
   try{
     await getDB().from('presupuestos').update({
-      items:pptoActual.items,items_coord:getCoordItems(),
+      items:itemsConPrecio,items_coord:getCoordItems(),
       estado:'valorizada',notas:document.getElementById('det-notas').value.trim(),
       subtotal:t.sub,iva:t.iva,total:t.total
     }).eq('id',pptoActual.id)
-    toast('✅ Valorización guardada','ok')
+    pptoActual.items=itemsConPrecio
+    toast('Valorizacion guardada','ok')
     load()
   }catch(e){toast('Error: '+e.message)}
 }
@@ -516,7 +523,7 @@ async function pasarContabilidad(){
   var t=calcTotal()
   try{
     await getDB().from('presupuestos').update({
-      items:pptoActual.items,items_coord:getCoordItems(),
+      items:(pptoActual.items||[]).map(function(item){var p=document.getElementById('precio-'+(item.id||(pptoActual.items||[]).indexOf(item)));if(p)item.precio_venta=parseFloat(p.value)||item.precio_venta||0;return item}),items_coord:getCoordItems(),
       estado:'aprobada',estado_servicio:'completado',
       notas:document.getElementById('det-notas').value.trim(),
       subtotal:t.sub,iva:t.iva,total:t.total

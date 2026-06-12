@@ -407,7 +407,7 @@ async function tEnviar() {
     tecnico: document.getElementById('t-tecnico').value,
     obs: document.getElementById('t-obs').value.trim(),
     items: tItems.filter(i=>i.desc.trim()).map(i=>({...i})),
-    estado: 'nueva',
+    estado: 'en_espera',
     ppto: null,
     pptoNum: pptoNum++,
     fecha: new Date().toLocaleDateString('es-CL')
@@ -427,7 +427,7 @@ async function tEnviar() {
       auto: sol.auto,
       items: sol.items,
       obs: sol.obs,
-      estado: 'nueva',
+      estado: 'en_espera',
       aliado_codigo: aliadoCodigo
     })
     // Guardar cliente automáticamente en tabla clientes

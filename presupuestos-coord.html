@@ -194,6 +194,58 @@ async function load(){
   renderTab(tabActual)
 }
 
+function goTabEsp(){
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')})
+  document.getElementById('tab-esp').classList.add('active')
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')})
+  var espera=todos.filter(function(s){return s.estado==='en_espera'})
+  var el=document.getElementById('pg-espera')
+  if(!el){
+    var pg=document.createElement('div')
+    pg.className='page active'
+    pg.id='pg-espera'
+    document.querySelector('.body').appendChild(pg)
+    el=pg
+  } else {el.classList.add('active')}
+
+  if(!espera.length){el.innerHTML='<div style="text-align:center;padding:40px;color:var(--txt3)">Sin presupuestos en espera</div>';return}
+
+  el.innerHTML='<div style="background:rgba(245,197,24,0.08);border:1px solid rgba(245,197,24,0.3);border-radius:10px;padding:12px;margin-bottom:12px;font-size:13px;color:var(--amarillo)">Estos presupuestos <strong>no se suman</strong> a contabilidad ni a totales de tecnicos hasta que sean aprobados.</div>'+
+  espera.map(function(s){
+    var fecha=s.created_at?new Date(s.created_at).toLocaleDateString('es-CL',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):''
+    return '<div style="background:var(--c2);border:1px solid rgba(245,197,24,0.3);border-radius:10px;padding:14px;margin-bottom:10px">'+
+      '<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">'+
+        '<div><div style="font-family:Syne,sans-serif;font-weight:700;font-size:15px">'+s.cliente+'</div>'+
+        '<div style="font-size:11px;color:var(--txt3)">'+s.tecnico+(s.vehiculo?' · '+s.vehiculo:'')+(fecha?' · '+fecha:'')+'</div></div>'+
+        '<span style="font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;background:rgba(245,197,24,0.1);color:var(--amarillo)">⏳ En espera</span>'+
+      '</div>'+
+      '<div style="font-size:13px;color:var(--txt2);margin-bottom:10px">'+
+        (s.items&&s.items.length?s.items.map(function(i){return i.desc}).join(', '):'Sin detalle')+
+      '</div>'+
+      '<div style="display:flex;gap:8px">'+
+        '<button onclick="aprobarPpto(&quot;'+s.id+'&quot;)" style="flex:1;background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);color:var(--verde);font-family:Syne,sans-serif;font-weight:700;font-size:12px;padding:10px;border-radius:8px;cursor:pointer">Aprobar</button>'+
+        '<button onclick="abrirDetalle(&quot;'+s.id+'&quot;)" style="flex:1;background:var(--c3);border:1px solid var(--borde);color:var(--txt2);font-family:Syne,sans-serif;font-weight:700;font-size:12px;padding:10px;border-radius:8px;cursor:pointer">Valorizar</button>'+
+        '<button onclick="rechazarPpto(&quot;'+s.id+'&quot;,&quot;'+s.cliente+'&quot;)" style="background:var(--rojo-g);border:1px solid rgba(232,33,10,0.3);color:#FF6B5B;font-family:Syne,sans-serif;font-weight:700;font-size:12px;padding:10px;border-radius:8px;cursor:pointer">X</button>'+
+      '</div>'+
+    '</div>'
+  }).join('')
+}
+
+async function aprobarPpto(id){
+  await getDB().from('presupuestos').update({estado:'nueva',estado_servicio:'nuevo'}).eq('id',id)
+  toast('Presupuesto aprobado y movido al flujo principal','ok')
+  load()
+  goTabEsp()
+}
+
+async function rechazarPpto(id,cliente){
+  if(!confirm('Rechazar presupuesto de '+cliente+'?'))return
+  await getDB().from('presupuestos').delete().eq('id',id)
+  toast('Presupuesto eliminado','ok')
+  load()
+  goTabEsp()
+}
+
 function goTab(n){
   tabActual=n
   for(var i=0;i<3;i++){

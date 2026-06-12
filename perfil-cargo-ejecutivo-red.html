@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta · Jefe de Proyecto Aliados</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;0,900;1,400&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--negro:#0A0A0A;--rojo:#E8210A;--gris1:#161616;--gris2:#222;--gris3:#333;--txt:#F0EDE6;--txt2:#9A978F;--txt3:#5A5755;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;max-width:640px;margin:0 auto;padding:24px 20px 60px;}
+.eyebrow{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--rojo);margin-bottom:14px;}
+h1{font-family:"Fraunces",serif;font-weight:900;font-size:clamp(34px,7vw,48px);line-height:1.05;letter-spacing:-1px;margin-bottom:12px;}
+h1 em{font-style:italic;color:var(--naranja);}
+.hero-sub{font-size:14px;color:var(--txt2);line-height:1.75;margin-bottom:24px;max-width:500px;}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px;}
+.chip{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:5px 12px;border-radius:20px;border:1px solid;}
+.div{height:1px;margin:28px 0;}
+.sec{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--txt3);margin:24px 0 12px;display:flex;align-items:center;gap:10px;}
+.sec::after{content:"";flex:1;height:1px;background:var(--gris2);}
+.mision{border-left:3px solid var(--naranja);background:var(--gris1);padding:18px 20px;border-radius:0 10px 10px 0;font-family:"Fraunces",serif;font-size:17px;line-height:1.65;font-style:italic;margin-bottom:20px;}
+/* RESPONSABILIDADES */
+.resp-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+.resp{background:var(--gris1);border:1px solid var(--gris2);border-radius:12px;padding:16px;}
+.resp-icon{font-size:24px;margin-bottom:10px;}
+.resp-titulo{font-family:"Fraunces",serif;font-weight:700;font-size:15px;margin-bottom:8px;}
+.resp-items{list-style:none;}
+.resp-items li{font-size:12px;color:var(--txt2);padding:4px 0;border-bottom:1px solid var(--gris2);line-height:1.5;}
+.resp-items li:last-child{border:none;}
+.resp-items li::before{content:"→ ";color:var(--naranja);}
+.full{grid-column:1/-1;}
+/* KPIs */
+.kpi-list{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;}
+.kpi-item{background:var(--gris1);border:1px solid var(--gris2);border-radius:10px;padding:14px;display:flex;align-items:center;gap:14px;}
+.kpi-num{font-family:"Fraunces",serif;font-weight:900;font-size:30px;color:var(--naranja);min-width:64px;line-height:1;}
+.kpi-desc{font-size:13px;color:var(--txt2);line-height:1.5;}
+.kpi-desc strong{color:var(--txt);display:block;font-size:14px;margin-bottom:2px;}
+/* PERFIL */
+.perfil-cols{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+.pc{background:var(--gris1);border:1px solid var(--gris2);border-radius:10px;padding:14px;}
+.pc-lbl{font-family:"DM Mono",monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);margin-bottom:8px;}
+.tag{display:inline-block;padding:3px 9px;border-radius:4px;font-size:11px;margin:2px;}
+.t-n{background:var(--gris2);color:var(--txt2);}
+.t-o{background:rgba(251,146,60,0.1);color:var(--naranja);border:1px solid rgba(251,146,60,0.2);}
+.t-v{background:rgba(34,197,94,0.1);color:var(--verde);border:1px solid rgba(34,197,94,0.2);}
+/* COMP */
+.comp-box{background:var(--gris1);border:1px solid var(--gris2);border-radius:12px;overflow:hidden;margin-bottom:14px;}
+.comp-row{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;border-bottom:1px solid var(--gris2);}
+.comp-row:last-child{border:none;}
+.comp-l{font-size:13px;color:var(--txt2);}
+.comp-v{font-family:"DM Mono",monospace;font-size:13px;font-weight:500;color:var(--naranja);}
+/* CREC */
+.crec-step{display:flex;gap:16px;padding:14px 0;border-bottom:1px solid var(--gris2);}
+.crec-step:last-child{border:none;}
+.crec-tiempo{font-family:"DM Mono",monospace;font-size:11px;color:var(--naranja);min-width:70px;padding-top:2px;}
+.crec-cargo{font-family:"Fraunces",serif;font-weight:700;font-size:15px;margin-bottom:4px;}
+.crec-desc{font-size:12px;color:var(--txt2);line-height:1.5;}
+.footer{margin-top:32px;padding-top:16px;border-top:1px solid var(--gris2);display:flex;justify-content:space-between;align-items:center;}
+.footer-brand{font-family:"Fraunces",serif;font-weight:900;font-size:18px;}
+.footer-brand span{color:var(--rojo);}
+.footer-fecha{font-family:"DM Mono",monospace;font-size:10px;color:var(--txt3);}
+</style>
+</head>
+<body>
+
+<div class="eyebrow">Serviruta · Perfil de cargo</div>
+<h1>Jefe de <em>Proyecto</em><br>Aliados</h1>
+<p class="hero-sub">Responsable de disenar, ejecutar y escalar el programa de aliados de Serviruta. Construye la red de grueros, plantas de revision tecnica y tecnicos que hace posible la expansion del negocio.</p>
+
+<div class="chips">
+  <span class="chip" style="border-color:rgba(232,33,10,0.4);color:#FF6B5B">Liderazgo</span>
+  <span class="chip" style="border-color:rgba(251,146,60,0.4);color:var(--naranja)">Expansion</span>
+  <span class="chip" style="border-color:rgba(34,197,94,0.4);color:var(--verde)">Aliados y Tecnicos</span>
+  <span class="chip" style="border-color:rgba(96,165,250,0.4);color:var(--azul)">Estrategia</span>
+</div>
+
+<div class="sec">Mision del cargo</div>
+<div class="mision">"Disenar y ejecutar la estrategia de aliados de Serviruta, asegurando que la red crezca de forma sostenida, que los aliados y tecnicos esten comprometidos, y que cada ciudad nueva se active con el modelo correcto."</div>
+
+<div class="sec">Responsabilidades principales</div>
+<div class="resp-grid">
+
+  <div class="resp">
+    <div class="resp-icon">🗺️</div>
+    <div class="resp-titulo">Estrategia y planificacion</div>
+    <ul class="resp-items">
+      <li>Disenar el plan de expansion por ciudades</li>
+      <li>Definir metas mensuales de aliados activos</li>
+      <li>Identificar nuevos segmentos de aliados</li>
+      <li>Proponer mejoras al programa de beneficios</li>
+    </ul>
+  </div>
+
+  <div class="resp">
+    <div class="resp-icon">🤝</div>
+    <div class="resp-titulo">Incorporacion de aliados</div>
+    <ul class="resp-items">
+      <li>Prospectar grueros, talleres y plantas RT</li>
+      <li>Presentar el programa en terreno</li>
+      <li>Onboarding y activacion de cada aliado</li>
+      <li>Seguimiento hasta el primer referido</li>
+    </ul>
+  </div>
+
+  <div class="resp">
+    <div class="resp-icon">👷</div>
+    <div class="resp-titulo">Incorporacion de tecnicos</div>
+    <ul class="resp-items">
+      <li>Publicar y gestionar avisos de reclutamiento</li>
+      <li>Entrevistar y evaluar candidatos</li>
+      <li>Induccion al hub y procesos Serviruta</li>
+      <li>Acompañar primeros servicios en campo</li>
+    </ul>
+  </div>
+
+  <div class="resp">
+    <div class="resp-icon">💛</div>
+    <div class="resp-titulo">Fidelizacion y retencion</div>
+    <ul class="resp-items">
+      <li>Seguimiento semanal a aliados activos</li>
+      <li>Gestionar pagos de comisiones a tiempo</li>
+      <li>Reconocer y premiar top performers</li>
+      <li>Resolver conflictos y bloqueos</li>
+    </ul>
+  </div>
+
+  <div class="resp">
+    <div class="resp-icon">📱</div>
+    <div class="resp-titulo">Marketing y captacion digital</div>
+    <ul class="resp-items">
+      <li>Ejecutar campanas de Meta Ads para aliados</li>
+      <li>Gestionar contenido del programa de aliados</li>
+      <li>Coordinar material grafico y flyers</li>
+      <li>Analizar metricas de campanas semanalmente</li>
+    </ul>
+  </div>
+
+  <div class="resp">
+    <div class="resp-icon">📊</div>
+    <div class="resp-titulo">Reportes y mejora continua</div>
+    <ul class="resp-items">
+      <li>Reporte semanal al coordinador general</li>
+      <li>Analizar hub digital — desempeno y gastos</li>
+      <li>Proponer ajustes al modelo operativo</li>
+      <li>Documentar procesos para escalar</li>
+    </ul>
+  </div>
+
+  <div class="resp full">
+    <div class="resp-icon">🚀</div>
+    <div class="resp-titulo">Expansion a nuevas ciudades</div>
+    <ul class="resp-items">
+      <li>Liderar la activacion de Vina del Mar, Rancagua y Concepcion en los primeros 6 meses</li>
+      <li>Reclutar socios operativos o franquiciados locales segun el modelo definido</li>
+      <li>Asegurar que cada ciudad nueva tenga minimo 10 aliados activos antes de operar</li>
+    </ul>
+  </div>
+
+</div>
+
+<div class="sec">Objetivos medibles — KPIs</div>
+<div class="kpi-list">
+  <div class="kpi-item">
+    <div class="kpi-num">40+</div>
+    <div class="kpi-desc"><strong>Aliados activos al mes 2</strong>Con al menos 1 referido convertido en los ultimos 30 dias</div>
+  </div>
+  <div class="kpi-item">
+    <div class="kpi-num">10</div>
+    <div class="kpi-desc"><strong>Aliados nuevos por semana</strong>Grueros, plantas RT y talleres incorporados y activados</div>
+  </div>
+  <div class="kpi-item">
+    <div class="kpi-num">2</div>
+    <div class="kpi-desc"><strong>Tecnicos nuevos por mes</strong>Incorporados, capacitados y con primeros servicios completados</div>
+  </div>
+  <div class="kpi-item">
+    <div class="kpi-num">3</div>
+    <div class="kpi-desc"><strong>Ciudades operativas al mes 6</strong>Vina del Mar, Rancagua y Concepcion con red activa de aliados y tecnicos</div>
+  </div>
+  <div class="kpi-item">
+    <div class="kpi-num">80%</div>
+    <div class="kpi-desc"><strong>Tasa de activacion de aliados</strong>Porcentaje de aliados incorporados que generan al menos 1 referido en su primer mes</div>
+  </div>
+</div>
+
+<div class="sec">Perfil ideal</div>
+<div class="perfil-cols">
+  <div class="pc">
+    <div class="pc-lbl">Experiencia</div>
+    <span class="tag t-o">Ventas o desarrollo comercial</span>
+    <span class="tag t-o">Gestion de equipos</span>
+    <span class="tag t-o">Rubro automotriz o servicios</span>
+    <span class="tag t-n">No necesita ser mecanico</span>
+  </div>
+  <div class="pc">
+    <div class="pc-lbl">Caracter</div>
+    <span class="tag t-v">Liderazgo natural</span>
+    <span class="tag t-v">Orientado a resultados</span>
+    <span class="tag t-v">Autonomo y proactivo</span>
+    <span class="tag t-v">Capacidad de negociacion</span>
+  </div>
+  <div class="pc">
+    <div class="pc-lbl">Herramientas</div>
+    <span class="tag t-n">WhatsApp Business</span>
+    <span class="tag t-n">Meta Ads (o dispuesto a aprender)</span>
+    <span class="tag t-n">Hub Serviruta (se capacita)</span>
+  </div>
+  <div class="pc">
+    <div class="pc-lbl">Suma pero no es req.</div>
+    <span class="tag t-o">Red en el mundo del transporte</span>
+    <span class="tag t-o">Experiencia en startups</span>
+    <span class="tag t-o">Conocidos en el rubro automotriz</span>
+  </div>
+</div>
+
+<div class="sec">Compensacion</div>
+<div class="comp-box">
+  <div class="comp-row"><span class="comp-l">Sueldo base</span><span class="comp-v">A convenir segun experiencia</span></div>
+  <div class="comp-row"><span class="comp-l">Bono por aliado activo nuevo</span><span class="comp-v">Variable por desempeno</span></div>
+  <div class="comp-row"><span class="comp-l">Bono por tecnico incorporado</span><span class="comp-v">Variable por desempeno</span></div>
+  <div class="comp-row"><span class="comp-l">Comision sobre red de aliados</span><span class="comp-v">% sobre servicios generados</span></div>
+  <div class="comp-row"><span class="comp-l">Bono trimestral de desempeno</span><span class="comp-v">Segun cumplimiento de KPIs</span></div>
+  <div class="comp-row"><span class="comp-l">Modalidad</span><span class="comp-v">Hibrido — terreno y remoto</span></div>
+</div>
+
+<div class="sec">Plan de carrera</div>
+<div style="background:var(--gris1);border:1px solid var(--gris2);border-radius:12px;padding:16px;margin-bottom:20px;">
+  <div class="crec-step">
+    <div class="crec-tiempo">Hoy</div>
+    <div><div class="crec-cargo">Jefe de Proyecto Aliados</div><div class="crec-desc">Liderando la red de Santiago y primeras ciudades de expansion.</div></div>
+  </div>
+  <div class="crec-step">
+    <div class="crec-tiempo">Mes 6</div>
+    <div><div class="crec-cargo">Gerente de Red Nacional</div><div class="crec-desc">Supervisando aliados y tecnicos en multiples ciudades de Chile.</div></div>
+  </div>
+  <div class="crec-step">
+    <div class="crec-tiempo">Ano 2</div>
+    <div><div class="crec-cargo">Director de Expansion LATAM</div><div class="crec-desc">Liderando la entrada a Buenos Aires y Lima con modelo de socios operativos.</div></div>
+  </div>
+</div>
+
+<div class="footer">
+  <div class="footer-brand">SERVI<span>RUTA</span></div>
+  <div class="footer-fecha">Perfil elaborado · 2025</div>
+</div>
+
+</body>
+</html>

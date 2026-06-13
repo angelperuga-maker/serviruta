@@ -124,7 +124,8 @@ async function enviar(){
       body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:400,system:SYSTEM_PROMPT,messages:historial})
     })
     var data=await r.json()
-    var respuesta=data.content&&data.content[0]?data.content[0].text:'Sin respuesta. Intenta de nuevo.'
+    console.log('API response:', JSON.stringify(data))
+    var respuesta=data.content&&data.content[0]?data.content[0].text:(data.error?'Error: '+data.error.message:'Sin respuesta.')
     ocultarTyping()
     agregarMensaje('agent',respuesta)
     historial.push({role:'assistant',content:respuesta})

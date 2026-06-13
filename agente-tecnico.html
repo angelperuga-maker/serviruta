@@ -113,19 +113,13 @@ async function enviar(){
   historial.push({role:'user',content:txt})
   mostrarTyping()
   try{
-    var r=await fetch('https://api.anthropic.com/v1/messages',{
+    var r=await fetch('https://hook.us2.make.com/hail5qzypi39pmsixxi167lviw8wahbq',{
       method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'x-api-key':'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',
-        'anthropic-version':'2023-06-01',
-        'anthropic-dangerous-direct-browser-access':'true'
-      },
-      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:400,system:SYSTEM_PROMPT,messages:historial})
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({system:SYSTEM_PROMPT,messages:historial})
     })
-    var data=await r.json()
-    console.log('API response:', JSON.stringify(data))
-    var respuesta=data.content&&data.content[0]?data.content[0].text:(data.error?'Error: '+data.error.message:'Sin respuesta.')
+    var respuesta=await r.text()
+    if(!respuesta||respuesta.trim()==='')respuesta='Sin respuesta. Intenta de nuevo.'
     ocultarTyping()
     agregarMensaje('agent',respuesta)
     historial.push({role:'assistant',content:respuesta})

@@ -49,9 +49,9 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
 </div>
 <div class="body">
   <div class="kpi-row">
-    <div class="kpi"><div class="kpi-val" id="k-activos" style="color:var(--naranja)">0</div><div class="kpi-lbl">Activos</div></div>
-    <div class="kpi"><div class="kpi-val" id="k-completados" style="color:var(--morado)">0</div><div class="kpi-lbl">Completados</div></div>
-    <div class="kpi"><div class="kpi-val" id="k-total" style="color:var(--verde)">$0</div><div class="kpi-lbl">Vendido</div></div>
+    <div class="kpi"><div class="kpi-val" id="k-activos" style="color:var(--naranja)">0</div><div class="kpi-lbl">En ejecucion</div></div>
+    <div class="kpi"><div class="kpi-val" id="k-completados" style="color:var(--verde)">0</div><div class="kpi-lbl">Finalizados</div></div>
+    <div class="kpi"><div class="kpi-val" id="k-total" style="color:var(--azul)">0</div><div class="kpi-lbl">Total</div></div>
   </div>
   <div class="tabs">
     <div class="tab active" id="tab0" onclick="goTab(0)">En ejecucion</div>
@@ -79,11 +79,9 @@ async function load(){
   var todos=r.data||[]
   var activos=todos.filter(function(s){return s.estado_servicio==='ejecucion'||s.estado_servicio==='aprobado'})
   var completados=todos.filter(function(s){return s.estado_servicio==='completado'})
-  var totalVendido=completados.reduce(function(s,x){return s+(x.total||0)},0)
-
   document.getElementById('k-activos').textContent=activos.length
   document.getElementById('k-completados').textContent=completados.length
-  document.getElementById('k-total').textContent='$'+(totalVendido/1000).toFixed(0)+'K'
+  document.getElementById('k-total').textContent=todos.length
 
   renderActivos(activos)
   renderCompletados(completados)
@@ -117,7 +115,7 @@ function renderCompletados(data){
         '<div><div class="card-cliente">'+s.cliente+'</div><div class="card-sub">'+fecha+(s.vehiculo?' · '+s.vehiculo:'')+'</div></div>'+
         '<span class="badge b-completado">'+( s.pago_cliente==='pagado'?'Pagado':'Por cobrar')+'</span>'+
       '</div>'+
-      '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:18px;color:var(--verde);margin-top:6px">$'+(s.total||0).toLocaleString('es-CL')+'</div>'+
+      '<div style="font-size:12px;color:var(--txt3);margin-top:6px">'+(s.pago_cliente==='pagado'?'✅ Cobrado por coordinador':'⏳ Pendiente de cobro')+'</div>'+
     '</div>'
   }).join('')
 }

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Serviruta - Clientes y Vehiculos</title>
+<title>Serviruta - Clientes</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -13,51 +13,52 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
 .top{background:var(--c1);border-bottom:1px solid var(--borde);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
 .top-title{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
 .top-back{background:none;border:1px solid var(--borde);color:var(--txt3);font-size:11px;padding:5px 12px;border-radius:6px;cursor:pointer;}
-.tabs{display:flex;border-bottom:1px solid var(--borde);background:var(--c1);position:sticky;top:45px;z-index:99;}
-.tab{flex:1;padding:10px;text-align:center;font-size:11px;font-weight:600;color:var(--txt3);cursor:pointer;border-bottom:2px solid transparent;}
-.tab.active{color:var(--rojo);border-bottom-color:var(--rojo);}
-.page{display:none;padding:12px 14px 80px;}.page.active{display:block;}
-.search-wrap{position:relative;margin-bottom:10px;}
-.search-inp{width:100%;background:var(--c2);border:1px solid var(--borde);border-radius:8px;color:var(--txt);font-family:"DM Sans",sans-serif;font-size:14px;padding:10px 12px 10px 36px;outline:none;}
+.body{padding:12px 14px 80px;}
+.search-bar{display:flex;gap:8px;margin-bottom:12px;}
+.search-inp{flex:1;background:var(--c2);border:1px solid var(--borde);border-radius:8px;color:var(--txt);font-family:"DM Sans",sans-serif;font-size:14px;padding:10px 12px;outline:none;}
 .search-inp:focus{border-color:var(--rojo);}
-.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--txt3);}
-.btn-nuevo{width:100%;background:var(--rojo);border:none;border-radius:8px;color:#fff;font-family:"Syne",sans-serif;font-weight:700;font-size:14px;padding:12px;cursor:pointer;margin-bottom:12px;}
-.cli-card{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:13px;margin-bottom:8px;cursor:pointer;transition:border-color 0.15s;}
+.search-inp::placeholder{color:var(--txt3);}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+.st{background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:10px;text-align:center;}
+.st-val{font-family:"Syne",sans-serif;font-weight:800;font-size:20px;}
+.st-lbl{font-size:10px;color:var(--txt3);text-transform:uppercase;margin-top:2px;}
+.cli-card{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin-bottom:10px;cursor:pointer;transition:border-color 0.15s;}
 .cli-card:hover{border-color:rgba(232,33,10,0.3);}
-.cc-top{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
-.cc-av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:"Syne",sans-serif;font-weight:800;font-size:15px;color:#fff;flex-shrink:0;}
-.cc-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
-.cc-tel{font-size:11px;color:var(--txt3);margin-top:1px;}
-.cc-stats{font-size:11px;margin-left:auto;text-align:right;color:var(--txt3);}
-.cc-veh{display:flex;gap:6px;flex-wrap:wrap;}
-.veh-tag{font-size:10px;font-weight:700;background:var(--c3);border-radius:4px;padding:2px 8px;color:var(--azul);}
-.veh-card{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:13px;margin-bottom:8px;cursor:pointer;transition:border-color 0.15s;}
-.veh-card:hover{border-color:rgba(96,165,250,0.3);}
-.vc-top{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
-.vc-icon{width:40px;height:40px;border-radius:8px;background:rgba(96,165,250,0.1);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
-.vc-patente{font-family:"Syne",sans-serif;font-weight:800;font-size:16px;color:var(--azul);}
-.vc-modelo{font-size:12px;color:var(--txt2);}
-.vc-cliente{font-size:11px;color:var(--txt3);margin-top:2px;}
-.vc-stats{font-size:11px;margin-left:auto;text-align:right;color:var(--txt3);}
-.loading{text-align:center;padding:40px;color:var(--txt3);}
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;display:none;align-items:flex-end;justify-content:center;}
+.cli-top{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+.cli-av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:"Syne",sans-serif;font-weight:800;font-size:15px;color:#fff;flex-shrink:0;}
+.cli-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
+.cli-tel{font-size:11px;color:var(--txt3);margin-top:2px;}
+.cli-veh{font-size:12px;color:var(--txt2);margin-bottom:8px;}
+.cli-stats{display:flex;gap:8px;}
+.cs{background:var(--c3);border-radius:6px;padding:5px 10px;font-size:11px;font-weight:600;}
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:200;display:none;align-items:flex-end;justify-content:center;}
 .modal-overlay.open{display:flex;}
-.modal{background:var(--c2);border:1px solid var(--borde);border-radius:16px 16px 0 0;width:100%;max-width:600px;padding:18px 18px 36px;max-height:92vh;overflow-y:auto;}
-.modal-handle{width:36px;height:4px;background:var(--borde);border-radius:2px;margin:0 auto 14px;}
-.modal-title{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;margin-bottom:14px;}
-.lbl{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--txt3);margin-bottom:5px;display:block;}
-.inp{width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:8px;color:var(--txt);font-family:"DM Sans",sans-serif;font-size:15px;padding:10px 12px;outline:none;margin-bottom:10px;-webkit-appearance:none;}
+.modal{background:var(--c2);border:1px solid var(--borde);border-radius:16px 16px 0 0;width:100%;max-width:600px;padding:18px 18px 36px;max-height:94vh;overflow-y:auto;}
+.modal-handle{width:36px;height:4px;background:var(--borde);border-radius:2px;margin:0 auto 16px;}
+.modal-nombre{font-family:"Syne",sans-serif;font-weight:800;font-size:20px;margin-bottom:2px;}
+.modal-tel{font-size:13px;color:var(--txt3);margin-bottom:14px;}
+.sec{font-family:"Syne",sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);margin:14px 0 8px;display:flex;align-items:center;gap:8px;}
+.sec::after{content:"";flex:1;height:1px;background:var(--borde);}
+.lbl{font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:var(--txt3);margin-bottom:5px;display:block;}
+.inp{width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:8px;color:var(--txt);font-family:"DM Sans",sans-serif;font-size:14px;padding:10px 12px;outline:none;margin-bottom:10px;-webkit-appearance:none;}
 .inp:focus{border-color:var(--rojo);}
 .inp::placeholder{color:var(--txt3);}
+.acciones{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.acc-btn{padding:11px;border-radius:8px;font-family:"Syne",sans-serif;font-weight:700;font-size:12px;cursor:pointer;border:none;text-align:center;text-decoration:none;display:block;}
+.btn-wa{background:#25D366;color:#000;}
+.btn-hub{background:rgba(96,165,250,0.15);color:var(--azul);border:1px solid rgba(96,165,250,0.3)!important;}
+.btn-agenda{background:rgba(34,197,94,0.15);color:var(--verde);border:1px solid rgba(34,197,94,0.3)!important;}
+.btn-notas{background:var(--rojo);color:#fff;}
+.svc-mini{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--borde);}
+.svc-mini:last-child{border:none;}
+.btn-save{width:100%;background:var(--rojo);border:none;border-radius:8px;color:#fff;font-family:"Syne",sans-serif;font-weight:700;font-size:14px;padding:12px;cursor:pointer;margin-bottom:8px;}
+.btn-cancel{width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:8px;color:var(--txt2);font-family:"Syne",sans-serif;font-weight:700;font-size:14px;padding:12px;cursor:pointer;}
+/* MODAL AGENDA */
+.modal-agenda{display:none;}
+.modal-agenda.open{display:block;}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.btn-save{width:100%;background:var(--rojo);border:none;border-radius:8px;color:#fff;font-family:"Syne",sans-serif;font-weight:700;font-size:14px;padding:13px;cursor:pointer;}
-.btn-cancel{width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:8px;color:var(--txt2);font-family:"Syne",sans-serif;font-weight:700;font-size:14px;padding:12px;cursor:pointer;margin-bottom:8px;}
-.btn-del{width:100%;padding:10px;border-radius:8px;font-family:"Syne",sans-serif;font-weight:700;font-size:12px;cursor:pointer;border:1px solid rgba(232,33,10,0.3);background:var(--rojo-g);color:var(--rojo);margin-bottom:8px;}
-.det-row{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid var(--borde);font-size:13px;}
-.det-row:last-child{border:none;}
-.det-lbl{color:var(--txt3);min-width:80px;font-size:12px;}
-.hist-item{background:var(--c3);border-radius:6px;padding:8px 10px;margin-bottom:4px;font-size:12px;color:var(--txt2);}
-.hist-fecha{font-size:10px;color:var(--txt3);}
+.loading{text-align:center;padding:30px;color:var(--txt3);}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--c3);border:1px solid var(--borde);border-radius:8px;padding:10px 16px;font-size:12px;opacity:0;transition:all 0.25s;pointer-events:none;z-index:999;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 .toast.ok{border-color:rgba(34,197,94,0.4);color:var(--verde);}
@@ -66,95 +67,77 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
 <body>
 <div class="top">
   <button class="top-back" onclick="location.href='menu-coordinador.html'">← Volver</button>
-  <div class="top-title">Clientes y Vehiculos</div>
+  <div class="top-title">Gestión de Clientes</div>
   <button onclick="load()" style="background:none;border:none;color:var(--txt3);cursor:pointer;font-size:20px;">&#8635;</button>
 </div>
-<div class="tabs">
-  <div class="tab active" id="tab0" onclick="goTab(0)">Clientes</div>
-  <div class="tab" id="tab1" onclick="goTab(1)">Vehiculos</div>
-</div>
-
-<!-- CLIENTES -->
-<div class="page active" id="pg0">
-  <button class="btn-nuevo" onclick="openModalCliente()">+ Agregar cliente</button>
-  <div class="search-wrap">
-    <span class="search-icon">🔍</span>
-    <input class="search-inp" id="search-cli" placeholder="Buscar cliente..." oninput="renderClientes()">
+<div class="body">
+  <div class="search-bar">
+    <input class="search-inp" id="buscar" placeholder="Buscar por nombre, teléfono o patente..." oninput="filtrar()">
   </div>
-  <div id="lista-clientes"><div class="loading">Cargando...</div></div>
-</div>
-
-<!-- VEHICULOS -->
-<div class="page" id="pg1">
-  <button class="btn-nuevo" onclick="openModalVehiculo()">+ Agregar vehiculo</button>
-  <div class="search-wrap">
-    <span class="search-icon">🔍</span>
-    <input class="search-inp" id="search-veh" placeholder="Buscar patente, marca..." oninput="renderVehiculos()">
+  <div class="stats">
+    <div class="st"><div class="st-val" id="st-total" style="color:var(--azul)">0</div><div class="st-lbl">Clientes</div></div>
+    <div class="st"><div class="st-val" id="st-activos" style="color:var(--verde)">0</div><div class="st-lbl">Activos</div></div>
+    <div class="st"><div class="st-val" id="st-svcs" style="color:var(--naranja)">0</div><div class="st-lbl">Servicios</div></div>
   </div>
-  <div id="lista-vehiculos"><div class="loading">Cargando...</div></div>
+  <div id="lista"><div class="loading">Cargando...</div></div>
 </div>
 
 <!-- MODAL CLIENTE -->
 <div class="modal-overlay" id="modal-cli" onclick="if(event.target===this)this.classList.remove('open')">
   <div class="modal">
     <div class="modal-handle"></div>
-    <div class="modal-title" id="cli-titulo">Nuevo cliente</div>
-    <label class="lbl">Nombre</label>
-    <input class="inp" id="c-nombre" placeholder="Nombre completo">
-    <div class="row2">
-      <div><label class="lbl">Telefono</label><input class="inp" id="c-tel" placeholder="+56 9..." type="tel" style="margin-bottom:0"></div>
-      <div><label class="lbl">Email</label><input class="inp" id="c-email" placeholder="email@..." style="margin-bottom:0"></div>
+    <div id="modal-main">
+      <div class="modal-nombre" id="m-nombre"></div>
+      <div class="modal-tel" id="m-tel"></div>
+      <div class="acciones">
+        <a id="m-wa" href="#" target="_blank" class="acc-btn btn-wa">💬 WhatsApp</a>
+        <button class="acc-btn btn-hub" onclick="enviarHub()">🔗 Enviar Hub</button>
+        <button class="acc-btn btn-agenda" onclick="mostrarAgenda()">📅 Agendar</button>
+        <button class="acc-btn btn-notas" onclick="mostrarNotas()">📝 Notas</button>
+      </div>
+      <div class="sec">Vehículos</div>
+      <div id="m-vehiculos"></div>
+      <div class="sec">Historial de servicios</div>
+      <div id="m-historial"></div>
+      <button class="btn-cancel" onclick="document.getElementById('modal-cli').classList.remove('open')">Cerrar</button>
     </div>
-    <div style="height:10px"></div>
-    <label class="lbl">Comuna</label>
-    <input class="inp" id="c-comuna" placeholder="Ej: Las Condes, Maipu...">
-    <label class="lbl">Notas</label>
-    <input class="inp" id="c-notas" placeholder="Observaciones del cliente" style="margin-bottom:14px">
-    <button class="btn-cancel" onclick="document.getElementById('modal-cli').classList.remove('open')">Cancelar</button>
-    <button class="btn-save" onclick="guardarCliente()">Guardar cliente</button>
-  </div>
-</div>
 
-<!-- MODAL VEHICULO -->
-<div class="modal-overlay" id="modal-veh" onclick="if(event.target===this)this.classList.remove('open')">
-  <div class="modal">
-    <div class="modal-handle"></div>
-    <div class="modal-title" id="veh-titulo">Nuevo vehiculo</div>
-    <label class="lbl">Patente</label>
-    <input class="inp" id="v-patente" placeholder="Ej: ABCD12" style="text-transform:uppercase">
-    <div class="row2">
-      <div><label class="lbl">Marca</label><input class="inp" id="v-marca" placeholder="Toyota" style="margin-bottom:0"></div>
-      <div><label class="lbl">Modelo</label><input class="inp" id="v-modelo" placeholder="Corolla" style="margin-bottom:0"></div>
+    <!-- AGENDAR -->
+    <div class="modal-agenda" id="modal-agenda">
+      <div class="sec">Agendar servicio</div>
+      <label class="lbl">Servicio</label>
+      <select class="inp" id="ag-servicio">
+        <option value="">Seleccionar...</option>
+        <option>Diagnóstico con scanner</option>
+        <option>Kit de embrague</option>
+        <option>Servicio DPF</option>
+        <option>Reparación alternador</option>
+        <option>Pre-Revisión Técnica</option>
+        <option>Mantención general</option>
+        <option>Otro</option>
+      </select>
+      <label class="lbl">Técnico</label>
+      <select class="inp" id="ag-tecnico">
+        <option value="">Sin asignar</option>
+        <option>Reynaldo Aguas Bertel</option>
+        <option>Reynaldo Aguas</option>
+        <option>Kiven Henz</option>
+        <option>Humberto Morales</option>
+        <option>Giovanino Perugini</option>
+        <option>Javier Honores</option>
+      </select>
+      <div class="row2">
+        <div><label class="lbl">Fecha</label><input class="inp" type="date" id="ag-fecha" style="margin-bottom:0"></div>
+        <div><label class="lbl">Hora</label><input class="inp" type="time" id="ag-hora" style="margin-bottom:0"></div>
+      </div>
+      <div style="height:10px"></div>
+      <label class="lbl">Dirección</label>
+      <input class="inp" id="ag-dir" placeholder="Dirección del servicio">
+      <label class="lbl">Notas</label>
+      <input class="inp" id="ag-notas-ag" placeholder="Observaciones del agendamiento">
+      <button class="btn-save" onclick="guardarAgenda()">Confirmar agendamiento</button>
+      <button class="btn-cancel" onclick="ocultarAgenda()">← Volver</button>
     </div>
-    <div style="height:10px"></div>
-    <div class="row2">
-      <div><label class="lbl">Ano</label><input class="inp" id="v-anio" placeholder="2018" type="number" style="margin-bottom:0"></div>
-      <div><label class="lbl">Color</label><input class="inp" id="v-color" placeholder="Blanco" style="margin-bottom:0"></div>
-    </div>
-    <div style="height:10px"></div>
-    <label class="lbl">Cliente propietario</label>
-    <input class="inp" id="v-cliente" placeholder="Nombre del cliente">
-    <label class="lbl">Notas</label>
-    <input class="inp" id="v-notas" placeholder="Observaciones del vehiculo" style="margin-bottom:14px">
-    <button class="btn-cancel" onclick="document.getElementById('modal-veh').classList.remove('open')">Cancelar</button>
-    <button class="btn-save" onclick="guardarVehiculo()">Guardar vehiculo</button>
-  </div>
-</div>
-
-<!-- MODAL DETALLE CLIENTE -->
-<div class="modal-overlay" id="modal-det-cli" onclick="if(event.target===this)this.classList.remove('open')">
-  <div class="modal">
-    <div class="modal-handle"></div>
-    <div class="modal-title" id="det-cli-nombre">Cliente</div>
-    <div id="det-cli-body"></div>
-    <div class="sec" style="font-family:Syne,sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);margin:14px 0 8px">Historial de servicios</div>
-    <div id="det-cli-hist"></div>
-    <div style="display:flex;gap:8px;margin-top:12px">
-      <button id="cli-wa" style="flex:1;padding:10px;border-radius:8px;font-family:Syne,sans-serif;font-weight:700;font-size:12px;cursor:pointer;border:none;background:#25D366;color:#fff">WA Cliente</button>
-      <button id="cli-edit" style="flex:1;padding:10px;border-radius:8px;font-family:Syne,sans-serif;font-weight:700;font-size:12px;cursor:pointer;border:1px solid var(--borde);background:var(--c3);color:var(--txt2)">Editar</button>
-    </div>
-    <button id="cli-del" class="btn-del" style="margin-top:8px">Eliminar cliente</button>
-    <button class="btn-cancel" onclick="document.getElementById('modal-det-cli').classList.remove('open')">Cerrar</button>
   </div>
 </div>
 
@@ -163,200 +146,161 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
 <script>
 var SB='https://bqlgfmqcefledqyodkii.supabase.co'
 var SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
-var db=null,clientes=[],vehiculos=[],presupuestos=[],editCliId=null,editVehId=null
-
+var db=null,todos=[],filtrados=[],clienteActual=null
 var COLS=['#E8210A','#60A5FA','#22C55E','#F5C518','#FB923C','#A78BFA','#F472B6','#34D399']
 
 function getDB(){if(!db)db=supabase.createClient(SB,SK);return db;}
 
 async function load(){
-  var rc=await getDB().from('clientes').select('*').order('nombre')
-  var rv=await getDB().from('vehiculos').select('*').order('patente')
-  var rp=await getDB().from('presupuestos').select('cliente,telefono,vehiculo,total,estado_servicio,created_at').order('created_at',{ascending:false})
-  clientes=rc.data||[]
-  vehiculos=rv.data||[]
-  presupuestos=rp.data||[]
-
-  // Poblar clientes desde presupuestos si no existen
-  renderClientes()
-  renderVehiculos()
+  var r=await getDB().from('presupuestos').select('*').order('created_at',{ascending:false})
+  var data=r.data||[]
+  // Agrupar por cliente único
+  var mapa={}
+  data.forEach(function(s){
+    var key=s.cliente+'|'+s.telefono
+    if(!mapa[key]){
+      mapa[key]={
+        nombre:s.cliente,telefono:s.telefono,
+        vehiculos:{},servicios:[],
+        ultimoServicio:s.created_at,activo:false
+      }
+    }
+    if(s.vehiculo||s.auto||s.patente){
+      var vk=(s.patente||s.vehiculo||s.auto)
+      mapa[key].vehiculos[vk]={vehiculo:s.auto||s.vehiculo,patente:s.patente}
+    }
+    mapa[key].servicios.push(s)
+    if(s.estado_servicio==='ejecucion'||s.estado_servicio==='aprobado')mapa[key].activo=true
+  })
+  todos=Object.values(mapa).sort(function(a,b){return (b.ultimoServicio||'').localeCompare(a.ultimoServicio||'')})
+  filtrados=todos
+  document.getElementById('st-total').textContent=todos.length
+  document.getElementById('st-activos').textContent=todos.filter(function(c){return c.activo}).length
+  document.getElementById('st-svcs').textContent=data.length
+  renderLista()
 }
 
-function goTab(n){
-  for(var i=0;i<2;i++){
-    document.getElementById('pg'+i).classList.toggle('active',i===n)
-    document.getElementById('tab'+i).classList.toggle('active',i===n)
-  }
+function filtrar(){
+  var q=document.getElementById('buscar').value.toLowerCase()
+  filtrados=q?todos.filter(function(c){
+    return c.nombre.toLowerCase().includes(q)||(c.telefono||'').includes(q)||
+      Object.values(c.vehiculos).some(function(v){return (v.patente||'').toLowerCase().includes(q)||(v.vehiculo||'').toLowerCase().includes(q)})
+  }):todos
+  renderLista()
 }
 
-function renderClientes(){
-  var q=(document.getElementById('search-cli').value||'').toLowerCase()
-
-  // Combinar clientes manuales + clientes de presupuestos
-  var cliPptos={}
-  presupuestos.forEach(function(p){
-    var key=(p.telefono||p.cliente||'').trim()
-    if(!key)return
-    if(!cliPptos[key])cliPptos[key]={nombre:p.cliente,telefono:p.telefono,vehiculos:[],servicios:0,totalGastado:0}
-    cliPptos[key].servicios++
-    cliPptos[key].totalGastado+=(p.total||0)
-    if(p.vehiculo&&cliPptos[key].vehiculos.indexOf(p.vehiculo)<0)cliPptos[key].vehiculos.push(p.vehiculo)
-  })
-
-  var data=Object.values(cliPptos).filter(function(c){
-    return !q||c.nombre.toLowerCase().includes(q)||(c.telefono||'').includes(q)
-  }).sort(function(a,b){return b.servicios-a.servicios})
-
-  // Agregar clientes manuales
-  var manuales=clientes.filter(function(c){
-    return (!q||c.nombre.toLowerCase().includes(q)||(c.telefono||'').includes(q))&&
-           !Object.values(cliPptos).find(function(x){return x.telefono===c.telefono})
-  })
-
-  var el=document.getElementById('lista-clientes')
-  if(!data.length&&!manuales.length){el.innerHTML='<div class="loading">Sin clientes registrados</div>';return}
-
-  el.innerHTML=data.map(function(c,i){
+function renderLista(){
+  var el=document.getElementById('lista')
+  if(!filtrados.length){el.innerHTML='<div class="loading">Sin clientes</div>';return}
+  el.innerHTML=filtrados.map(function(c,i){
     var col=COLS[i%COLS.length]
-    var ini=(c.nombre||'?').split(' ').map(function(x){return x[0]}).join('').substring(0,2).toUpperCase()
-    return '<div class="cli-card" onclick="verDetalleCliente(\''+encodeURIComponent(c.telefono||c.nombre)+'\')">'+
-      '<div class="cc-top">'+
-        '<div class="cc-av" style="background:'+col+'">'+ini+'</div>'+
-        '<div style="flex:1"><div class="cc-nombre">'+c.nombre+'</div><div class="cc-tel">'+(c.telefono||'Sin telefono')+'</div></div>'+
-        '<div class="cc-stats"><div style="font-family:Syne,sans-serif;font-weight:800;font-size:14px;color:var(--verde)">'+c.servicios+'</div><div>servicios</div></div>'+
+    var ini=c.nombre.split(' ').map(function(x){return x[0]}).join('').substring(0,2).toUpperCase()
+    var vehs=Object.values(c.vehiculos).map(function(v){return (v.vehiculo||'')+(v.patente?' ('+v.patente+')':'')}).filter(Boolean).join(', ')
+    var completados=c.servicios.filter(function(s){return s.estado_servicio==='completado'}).length
+    var fecha=c.ultimoServicio?new Date(c.ultimoServicio).toLocaleDateString('es-CL',{day:'numeric',month:'short'}):''
+    return '<div class="cli-card" onclick="verCliente(\''+i+'\')">'+
+      '<div class="cli-top">'+
+        '<div class="cli-av" style="background:'+col+'">'+ini+'</div>'+
+        '<div style="flex:1"><div class="cli-nombre">'+c.nombre+'</div><div class="cli-tel">'+(c.telefono||'Sin teléfono')+(c.activo?' · <span style="color:var(--verde)">Activo</span>':'')+'</div></div>'+
+        '<div style="font-size:11px;color:var(--txt3);text-align:right">'+fecha+'</div>'+
       '</div>'+
-      (c.vehiculos.length?'<div class="cc-veh">'+c.vehiculos.map(function(v){return '<span class="veh-tag">'+v+'</span>'}).join('')+'</div>':'')+
-    '</div>'
-  }).join('')+
-  manuales.map(function(c,i){
-    var col=COLS[(data.length+i)%COLS.length]
-    var ini=(c.nombre||'?').split(' ').map(function(x){return x[0]}).join('').substring(0,2).toUpperCase()
-    return '<div class="cli-card" onclick="">'+
-      '<div class="cc-top">'+
-        '<div class="cc-av" style="background:'+col+'">'+ini+'</div>'+
-        '<div style="flex:1"><div class="cc-nombre">'+c.nombre+'</div><div class="cc-tel">'+(c.telefono||'Sin telefono')+(c.comuna?' · '+c.comuna:'')+'</div></div>'+
-        '<div class="cc-stats"><div style="font-size:10px;color:var(--txt3)">manual</div></div>'+
+      (vehs?'<div class="cli-veh">🚗 '+vehs+'</div>':'')+
+      '<div class="cli-stats">'+
+        '<span class="cs" style="color:var(--azul)">'+c.servicios.length+' servicios</span>'+
+        (completados?'<span class="cs" style="color:var(--verde)">'+completados+' completados</span>':'')+
+        (c.activo?'<span class="cs" style="color:var(--naranja)">En servicio</span>':'')+
       '</div>'+
     '</div>'
   }).join('')
 }
 
-function verDetalleCliente(key){
-  var keyDec=decodeURIComponent(key)
-  var historial=presupuestos.filter(function(p){return p.telefono===keyDec||p.cliente===keyDec})
-  if(!historial.length)return
-  var c=historial[0]
-  var totalGastado=historial.reduce(function(s,p){return s+(p.total||0)},0)
-  document.getElementById('det-cli-nombre').textContent=c.cliente
-  document.getElementById('det-cli-body').innerHTML=
-    '<div class="det-row"><span class="det-lbl">Telefono</span><span>'+(c.telefono||'—')+'</span></div>'+
-    '<div class="det-row"><span class="det-lbl">Servicios</span><span><strong>'+historial.length+'</strong></span></div>'+
-    '<div class="det-row"><span class="det-lbl">Total gastado</span><span style="color:var(--verde);font-family:Syne,sans-serif;font-weight:700">$'+totalGastado.toLocaleString('es-CL')+'</span></div>'
-  document.getElementById('det-cli-hist').innerHTML=historial.slice(0,8).map(function(p){
-    var fecha=p.created_at?new Date(p.created_at).toLocaleDateString('es-CL',{day:'numeric',month:'short',year:'numeric'}):''
-    return '<div class="hist-item"><div style="display:flex;justify-content:space-between"><span>'+(p.vehiculo||'—')+'</span><span style="color:var(--verde);font-weight:700">$'+(p.total||0).toLocaleString('es-CL')+'</span></div><div class="hist-fecha">'+fecha+'</div></div>'
-  }).join('')
-  document.getElementById('cli-wa').onclick=function(){
-    if(!c.telefono)return
-    var msg='Hola '+c.cliente+' te contactamos desde Serviruta. Como podemos ayudarte?'
-    window.open('https://wa.me/56'+c.telefono.replace(/\D/g,'')+'?text='+encodeURIComponent(msg),'_blank')
+function verCliente(idx){
+  var c=filtrados[idx]
+  if(!c)return
+  clienteActual=c
+  document.getElementById('m-nombre').textContent=c.nombre
+  document.getElementById('m-tel').textContent=(c.telefono||'Sin teléfono')+' · '+c.servicios.length+' servicios'
+  if(c.telefono){
+    var msg='Hola '+c.nombre.split(' ')[0]+', le escribe Serviruta. ¿Cómo podemos ayudarle?'
+    document.getElementById('m-wa').href='https://wa.me/56'+c.telefono.replace(/[^0-9]/g,'')+'?text='+encodeURIComponent(msg)
+  } else {
+    document.getElementById('m-wa').style.opacity='0.4'
+    document.getElementById('m-wa').removeAttribute('href')
   }
-  document.getElementById('modal-det-cli').classList.add('open')
-}
-
-function renderVehiculos(){
-  var q=(document.getElementById('search-veh').value||'').toLowerCase()
-
-  // Vehículos de presupuestos
-  var vehPptos={}
-  presupuestos.forEach(function(p){
-    if(!p.vehiculo)return
-    var key=p.vehiculo.trim()
-    if(!vehPptos[key])vehPptos[key]={patente:key,cliente:p.cliente,telefono:p.telefono,servicios:0}
-    vehPptos[key].servicios++
-  })
-
-  var data=Object.values(vehPptos).filter(function(v){
-    return !q||v.patente.toLowerCase().includes(q)||(v.cliente||'').toLowerCase().includes(q)
-  }).sort(function(a,b){return b.servicios-a.servicios})
-
-  var manuales=vehiculos.filter(function(v){
-    return (!q||v.patente.toLowerCase().includes(q)||(v.marca||'').toLowerCase().includes(q)||(v.modelo||'').toLowerCase().includes(q))&&
-           !vehPptos[v.patente]
-  })
-
-  var el=document.getElementById('lista-vehiculos')
-  if(!data.length&&!manuales.length){el.innerHTML='<div class="loading">Sin vehiculos registrados</div>';return}
-
-  el.innerHTML=data.map(function(v){
-    return '<div class="veh-card">'+
-      '<div class="vc-top">'+
-        '<div class="vc-icon">🚗</div>'+
-        '<div style="flex:1">'+
-          '<div class="vc-patente">'+v.patente+'</div>'+
-          '<div class="vc-cliente">Propietario: '+( v.cliente||'—')+'</div>'+
-        '</div>'+
-        '<div class="vc-stats"><div style="font-family:Syne,sans-serif;font-weight:800;font-size:16px;color:var(--azul)">'+v.servicios+'</div><div>servicios</div></div>'+
-      '</div>'+
-    '</div>'
-  }).join('')+
-  manuales.map(function(v){
-    return '<div class="veh-card">'+
-      '<div class="vc-top">'+
-        '<div class="vc-icon">🚗</div>'+
-        '<div style="flex:1">'+
-          '<div class="vc-patente">'+v.patente+'</div>'+
-          '<div class="vc-modelo">'+(v.marca||'')+(v.modelo?' '+v.modelo:'')+(v.anio?' '+v.anio:'')+'</div>'+
-          '<div class="vc-cliente">'+(v.cliente_nombre||'Sin cliente')+'</div>'+
-        '</div>'+
-        '<div style="font-size:10px;color:var(--txt3)">manual</div>'+
-      '</div>'+
+  var vehs=Object.values(c.vehiculos)
+  document.getElementById('m-vehiculos').innerHTML=vehs.length?vehs.map(function(v){
+    return '<div style="background:var(--c3);border-radius:8px;padding:10px;margin-bottom:6px;display:flex;align-items:center;gap:8px"><span style="font-size:18px">🚗</span><div><div style="font-size:13px;font-weight:600">'+(v.vehiculo||'Vehículo')+'</div><div style="font-size:11px;color:var(--txt3)">'+(v.patente||'Sin patente')+'</div></div></div>'
+  }).join(''):'<div style="font-size:12px;color:var(--txt3)">Sin vehículos registrados</div>'
+  var svcs=c.servicios.slice(0,5)
+  document.getElementById('m-historial').innerHTML=svcs.map(function(s){
+    var fecha=s.created_at?new Date(s.created_at).toLocaleDateString('es-CL',{day:'numeric',month:'short',year:'numeric'}):''
+    var completado=s.estado_servicio==='completado'
+    return '<div class="svc-mini">'+
+      '<div style="flex:1"><div style="font-size:12px;font-weight:600">'+(s.auto||s.vehiculo||'Servicio')+'</div><div style="font-size:10px;color:var(--txt3)">'+fecha+(s.tecnico?' · '+s.tecnico.split(' ')[0]:'')+'</div></div>'+
+      '<div style="text-align:right"><div style="font-family:Syne,sans-serif;font-weight:700;font-size:13px;color:'+(completado?'var(--verde)':'var(--amarillo)')+'">$'+(s.total||0).toLocaleString('es-CL')+'</div><div style="font-size:9px;color:var(--txt3)">'+(completado?'Completado':'En proceso')+'</div></div>'+
     '</div>'
   }).join('')
-}
-
-function openModalCliente(){
-  editCliId=null
-  document.getElementById('cli-titulo').textContent='Nuevo cliente'
-  document.getElementById('c-nombre').value=''
-  document.getElementById('c-tel').value=''
-  document.getElementById('c-email').value=''
-  document.getElementById('c-comuna').value=''
-  document.getElementById('c-notas').value=''
+  document.getElementById('modal-main').style.display='block'
+  document.getElementById('modal-agenda').classList.remove('open')
   document.getElementById('modal-cli').classList.add('open')
 }
 
-async function guardarCliente(){
-  var nombre=document.getElementById('c-nombre').value.trim()
-  if(!nombre){toast('Ingresa el nombre');return}
-  var data={nombre:nombre,telefono:document.getElementById('c-tel').value.trim(),email:document.getElementById('c-email').value.trim(),comuna:document.getElementById('c-comuna').value.trim(),notas:document.getElementById('c-notas').value.trim()}
-  await getDB().from('clientes').insert(data)
-  toast('Cliente guardado','ok')
+function enviarHub(){
+  if(!clienteActual||!clienteActual.telefono)return
+  var tel=clienteActual.telefono.replace(/[^0-9]/g,'')
+  var link='https://angelperuga-maker.github.io/serviruta/hub-cliente.html'
+  var msg='Hola '+clienteActual.nombre.split(' ')[0]+'! Le enviamos su acceso al Hub de cliente Serviruta donde puede ver el historial completo de su vehículo:\n\n'+link+'\n\nIngresa con tu número: '+clienteActual.telefono
+  window.open('https://wa.me/56'+tel+'?text='+encodeURIComponent(msg),'_blank')
+  toast('Link del hub enviado por WA','ok')
+}
+
+function mostrarAgenda(){
+  var hoy=new Date()
+  document.getElementById('ag-fecha').value=hoy.toISOString().split('T')[0]
+  document.getElementById('ag-hora').value='09:00'
+  document.getElementById('ag-dir').value=''
+  document.getElementById('ag-notas-ag').value=''
+  document.getElementById('modal-main').style.display='none'
+  document.getElementById('modal-agenda').classList.add('open')
+}
+
+function ocultarAgenda(){
+  document.getElementById('modal-agenda').classList.remove('open')
+  document.getElementById('modal-main').style.display='block'
+}
+
+async function guardarAgenda(){
+  if(!clienteActual)return
+  var servicio=document.getElementById('ag-servicio').value
+  var fecha=document.getElementById('ag-fecha').value
+  var hora=document.getElementById('ag-hora').value
+  if(!servicio||!fecha){toast('Completa servicio y fecha');return}
+  var data={
+    cliente:clienteActual.nombre,
+    telefono:clienteActual.telefono||null,
+    servicio:servicio,
+    tecnico:document.getElementById('ag-tecnico').value||null,
+    fecha:fecha,hora:hora,
+    direccion:document.getElementById('ag-dir').value.trim()||null,
+    estado:'agendado',
+    notas:document.getElementById('ag-notas-ag').value.trim()||null
+  }
+  var r=await getDB().from('agenda').insert(data)
+  if(r.error){toast('Error: '+r.error.message);return}
+  toast('Agendado correctamente','ok')
+  // Enviar confirmación por WA si tiene teléfono
+  if(clienteActual.telefono){
+    var tel=clienteActual.telefono.replace(/[^0-9]/g,'')
+    var msg='Hola '+clienteActual.nombre.split(' ')[0]+'! Su servicio de '+servicio+' está confirmado para el '+fecha+' a las '+hora+'. Un técnico de Serviruta llegará a su domicilio. ¿Tiene alguna consulta?'
+    setTimeout(function(){window.open('https://wa.me/56'+tel+'?text='+encodeURIComponent(msg),'_blank')},500)
+  }
+  ocultarAgenda()
   document.getElementById('modal-cli').classList.remove('open')
-  load()
 }
 
-function openModalVehiculo(){
-  editVehId=null
-  document.getElementById('veh-titulo').textContent='Nuevo vehiculo'
-  document.getElementById('v-patente').value=''
-  document.getElementById('v-marca').value=''
-  document.getElementById('v-modelo').value=''
-  document.getElementById('v-anio').value=''
-  document.getElementById('v-color').value=''
-  document.getElementById('v-cliente').value=''
-  document.getElementById('v-notas').value=''
-  document.getElementById('modal-veh').classList.add('open')
-}
-
-async function guardarVehiculo(){
-  var patente=document.getElementById('v-patente').value.trim().toUpperCase()
-  if(!patente){toast('Ingresa la patente');return}
-  var data={patente:patente,marca:document.getElementById('v-marca').value.trim(),modelo:document.getElementById('v-modelo').value.trim(),anio:document.getElementById('v-anio').value,color:document.getElementById('v-color').value.trim(),cliente_nombre:document.getElementById('v-cliente').value.trim(),notas:document.getElementById('v-notas').value.trim()}
-  await getDB().from('vehiculos').insert(data)
-  toast('Vehiculo guardado','ok')
-  document.getElementById('modal-veh').classList.remove('open')
-  load()
+function mostrarNotas(){
+  var notas=prompt('Notas para '+clienteActual.nombre+':')
+  if(notas)toast('Nota guardada (módulo en desarrollo)','ok')
 }
 
 function toast(msg,type){var t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(type?' '+type:'');t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2500)}

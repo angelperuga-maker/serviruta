@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta · Mi Vehículo</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--rojo-g:rgba(232,33,10,0.08);--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:600px;margin:0 auto;}
+
+/* LOGIN */
+.login-wrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;}
+.login-logo{font-family:"Syne",sans-serif;font-weight:900;font-size:28px;margin-bottom:6px;}
+.login-logo span{color:var(--rojo);}
+.login-sub{font-size:13px;color:var(--txt3);margin-bottom:36px;text-align:center;}
+.login-card{width:100%;background:var(--c2);border:1px solid var(--borde);border-radius:16px;padding:24px;}
+.login-titulo{font-family:"Syne",sans-serif;font-weight:700;font-size:18px;margin-bottom:6px;}
+.login-desc{font-size:13px;color:var(--txt2);margin-bottom:20px;line-height:1.6;}
+.lbl{font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;color:var(--txt3);margin-bottom:6px;display:block;}
+.inp{width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:10px;color:var(--txt);font-family:"DM Sans",sans-serif;font-size:16px;padding:13px 14px;outline:none;margin-bottom:14px;-webkit-appearance:none;letter-spacing:1px;}
+.inp:focus{border-color:var(--rojo);}
+.inp::placeholder{color:var(--txt3);letter-spacing:0;}
+.btn-login{width:100%;background:var(--rojo);border:none;border-radius:10px;color:#fff;font-family:"Syne",sans-serif;font-weight:800;font-size:15px;padding:14px;cursor:pointer;}
+.login-err{font-size:12px;color:var(--rojo);text-align:center;margin-top:8px;display:none;}
+
+/* HUB */
+.hub{display:none;}
+.top{background:var(--c1);border-bottom:1px solid var(--borde);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.top-marca{font-family:"Syne",sans-serif;font-weight:800;font-size:14px;}
+.top-logout{background:none;border:1px solid var(--borde);color:var(--txt3);font-size:11px;padding:5px 12px;border-radius:6px;cursor:pointer;}
+.body{padding:0 0 80px;}
+
+/* HERO VEHICULO */
+.veh-hero{background:linear-gradient(135deg,var(--c2),var(--c1));border-bottom:1px solid var(--borde);padding:20px 16px;}
+.veh-patente{font-family:"Syne",sans-serif;font-weight:900;font-size:28px;letter-spacing:3px;color:var(--rojo);margin-bottom:4px;}
+.veh-nombre{font-size:16px;font-weight:600;margin-bottom:2px;}
+.veh-meta{font-size:12px;color:var(--txt3);}
+.veh-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px;}
+.vst{background:var(--c3);border-radius:8px;padding:10px;text-align:center;}
+.vst-val{font-family:"Syne",sans-serif;font-weight:800;font-size:18px;}
+.vst-lbl{font-size:9px;color:var(--txt3);text-transform:uppercase;margin-top:2px;}
+
+/* TABS */
+.tabs{display:flex;overflow-x:auto;border-bottom:1px solid var(--borde);background:var(--c1);position:sticky;top:49px;z-index:99;}
+.tab{flex-shrink:0;padding:12px 14px;font-size:11px;font-weight:600;color:var(--txt3);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;}
+.tab.active{color:var(--rojo);border-bottom-color:var(--rojo);}
+.page{display:none;padding:14px 14px 0;}.page.active{display:block;}
+.sec{font-family:"Syne",sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);margin:16px 0 10px;display:flex;align-items:center;gap:8px;}
+.sec::after{content:"";flex:1;height:1px;background:var(--borde);}
+
+/* SERVICIO CARD */
+.svc-card{background:var(--c2);border:1px solid var(--borde);border-radius:12px;padding:14px;margin-bottom:10px;}
+.svc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;}
+.svc-fecha{font-size:12px;color:var(--txt3);}
+.svc-titulo{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;margin-bottom:2px;}
+.svc-tec{font-size:11px;color:var(--txt3);}
+.svc-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;}
+.bp{background:var(--verde-g, rgba(34,197,94,0.1));color:var(--verde);}
+.svc-items{font-size:12px;color:var(--txt2);line-height:1.7;margin:8px 0;background:var(--c3);border-radius:6px;padding:8px;}
+.svc-total{font-family:"Syne",sans-serif;font-weight:800;font-size:18px;color:var(--verde);text-align:right;margin-top:6px;}
+.svc-garantia{font-size:10px;color:var(--txt3);text-align:right;}
+.fotos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:8px;}
+.fotos-grid img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:6px;cursor:pointer;}
+
+/* MANTENIMIENTO */
+.mant-card{background:var(--c2);border-radius:12px;padding:14px;margin-bottom:10px;border-left:3px solid;}
+.mant-top{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+.mant-icon{font-size:22px;}
+.mant-titulo{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
+.mant-estado{font-size:11px;margin-top:1px;}
+.mant-barra{height:6px;background:var(--c3);border-radius:3px;overflow:hidden;margin-top:8px;}
+.mant-fill{height:100%;border-radius:3px;transition:width 0.5s;}
+.mant-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--txt3);margin-top:4px;}
+
+/* DOC CARD */
+.doc-card{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:12px;}
+.doc-icon{width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.doc-nombre{font-size:13px;font-weight:600;margin-bottom:2px;}
+.doc-meta{font-size:11px;color:var(--txt3);}
+.doc-btn{margin-left:auto;background:var(--c3);border:1px solid var(--borde);border-radius:6px;color:var(--txt2);font-size:11px;font-weight:600;padding:6px 12px;cursor:pointer;flex-shrink:0;}
+
+/* SOLICITAR */
+.solic-card{background:linear-gradient(135deg,var(--rojo),#B01A08);border-radius:14px;padding:20px;margin-bottom:12px;text-align:center;}
+.solic-titulo{font-family:"Syne",sans-serif;font-weight:800;font-size:18px;margin-bottom:6px;}
+.solic-sub{font-size:13px;color:rgba(255,255,255,0.8);margin-bottom:16px;line-height:1.6;}
+.btn-wa-grande{display:block;background:#fff;border:none;border-radius:10px;color:#000;font-family:"Syne",sans-serif;font-weight:800;font-size:14px;padding:13px;cursor:pointer;text-decoration:none;margin-bottom:8px;}
+.btn-llamar{display:block;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:10px;color:#fff;font-family:"Syne",sans-serif;font-weight:700;font-size:13px;padding:11px;cursor:pointer;text-decoration:none;}
+.serv-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+.serv-btn{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;text-align:center;cursor:pointer;transition:all 0.15s;}
+.serv-btn:hover{border-color:var(--rojo);}
+.serv-icon{font-size:24px;margin-bottom:6px;}
+.serv-nombre{font-size:12px;font-weight:600;}
+.serv-precio{font-size:11px;color:var(--txt3);margin-top:2px;}
+
+/* EVALUACION */
+.eval-card{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin-bottom:10px;}
+.estrellas-show{font-size:20px;letter-spacing:2px;margin-bottom:6px;}
+.eval-coment{font-size:13px;color:var(--txt2);font-style:italic;line-height:1.6;}
+.eval-tec{font-size:11px;color:var(--txt3);margin-top:6px;}
+.tags-row{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0;}
+.etag{font-size:10px;padding:2px 8px;border-radius:4px;background:var(--c3);color:var(--txt3);}
+
+/* FOTO GRANDE */
+.foto-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.95);z-index:300;display:none;align-items:center;justify-content:center;cursor:pointer;}
+.foto-overlay.open{display:flex;}
+.foto-overlay img{max-width:95vw;max-height:95vh;border-radius:8px;object-fit:contain;}
+
+.loading{text-align:center;padding:40px;color:var(--txt3);}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="login-wrap" id="login-wrap">
+  <div class="login-logo">SERVI<span>RUTA</span></div>
+  <div class="login-sub">Mecánica premium a domicilio</div>
+  <div class="login-card">
+    <div class="login-titulo">Tu historial de servicio</div>
+    <div class="login-desc">Ingresa tu número de celular para ver el historial completo de tu vehículo, próximos mantenimientos y documentos.</div>
+    <label class="lbl">Número de celular</label>
+    <input class="inp" id="tel-inp" type="tel" placeholder="9 XXXX XXXX" maxlength="9" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+    <button class="btn-login" onclick="ingresar()">Ver mi historial →</button>
+    <div class="login-err" id="login-err">No encontramos servicios con ese número. Verifica e intenta de nuevo.</div>
+  </div>
+</div>
+
+<!-- HUB -->
+<div class="hub" id="hub">
+  <div class="top">
+    <div class="top-marca">SERVI<span style="color:var(--rojo)">RUTA</span></div>
+    <button class="top-logout" onclick="cerrarSesion()">Salir</button>
+  </div>
+
+  <!-- HERO VEHICULO -->
+  <div class="veh-hero">
+    <div class="veh-patente" id="veh-patente">—</div>
+    <div class="veh-nombre" id="veh-nombre">—</div>
+    <div class="veh-meta" id="veh-meta">—</div>
+    <div class="veh-stats">
+      <div class="vst"><div class="vst-val" id="vs-servicios" style="color:var(--azul)">0</div><div class="vst-lbl">Servicios</div></div>
+      <div class="vst"><div class="vst-val" id="vs-ultimo" style="color:var(--amarillo)">—</div><div class="vst-lbl">Ultimo</div></div>
+      <div class="vst"><div class="vst-val" id="vs-garantia" style="color:var(--verde)">—</div><div class="vst-lbl">Garantia</div></div>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <div class="tab active" id="tab0" onclick="goTab(0)">Historial</div>
+    <div class="tab" id="tab1" onclick="goTab(1)">Mantenimiento</div>
+    <div class="tab" id="tab2" onclick="goTab(2)">Documentos</div>
+    <div class="tab" id="tab3" onclick="goTab(3)">Evaluaciones</div>
+    <div class="tab" id="tab4" onclick="goTab(4)">Solicitar</div>
+  </div>
+
+  <div class="body">
+
+    <!-- HISTORIAL -->
+    <div class="page active" id="pg0">
+      <div id="historial-lista"><div class="loading">Cargando...</div></div>
+    </div>
+
+    <!-- MANTENIMIENTO -->
+    <div class="page" id="pg1">
+      <div class="sec">Estado del vehículo</div>
+      <div id="mant-lista"></div>
+      <div class="sec">Próximos servicios sugeridos</div>
+      <div id="prox-lista"></div>
+    </div>
+
+    <!-- DOCUMENTOS -->
+    <div class="page" id="pg2">
+      <div class="sec">Documentos del servicio</div>
+      <div id="docs-lista"></div>
+    </div>
+
+    <!-- EVALUACIONES -->
+    <div class="page" id="pg3">
+      <div class="sec">Mis evaluaciones</div>
+      <div id="eval-lista"></div>
+    </div>
+
+    <!-- SOLICITAR -->
+    <div class="page" id="pg4">
+      <div style="padding-top:4px">
+        <div class="solic-card">
+          <div class="solic-titulo">¿Necesitas un servicio?</div>
+          <div class="solic-sub">Nuestro equipo va donde estás. Sin filas, sin grúas.</div>
+          <a id="btn-wa-solicitar" href="#" target="_blank" class="btn-wa-grande">💬 Solicitar por WhatsApp</a>
+          <a href="tel:+56985058250" class="btn-llamar">📞 Llamar al coordinador</a>
+        </div>
+        <div class="sec">Servicios disponibles</div>
+        <div class="serv-grid">
+          <div class="serv-btn" onclick="solicitarServicio('Diagnostico con scanner')"><div class="serv-icon">🔍</div><div class="serv-nombre">Diagnóstico</div><div class="serv-precio">Desde $35.000</div></div>
+          <div class="serv-btn" onclick="solicitarServicio('Kit de embrague')"><div class="serv-icon">⚙️</div><div class="serv-nombre">Kit Embrague</div><div class="serv-precio">Desde $249.000</div></div>
+          <div class="serv-btn" onclick="solicitarServicio('Servicio DPF')"><div class="serv-icon">💨</div><div class="serv-nombre">Servicio DPF</div><div class="serv-precio">Desde $149.000</div></div>
+          <div class="serv-btn" onclick="solicitarServicio('Reparacion alternador')"><div class="serv-icon">⚡</div><div class="serv-nombre">Alternador</div><div class="serv-precio">Consultar</div></div>
+          <div class="serv-btn" onclick="solicitarServicio('Pre-revision tecnica')"><div class="serv-icon">📋</div><div class="serv-nombre">Pre-Rev. Técnica</div><div class="serv-precio">$55.000</div></div>
+          <div class="serv-btn" onclick="solicitarServicio('Mantención general')"><div class="serv-icon">🔧</div><div class="serv-nombre">Mantención</div><div class="serv-precio">Consultar</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOTO OVERLAY -->
+<div class="foto-overlay" id="foto-overlay" onclick="this.classList.remove('open')">
+  <img id="foto-grande" src="">
+</div>
+
+<script>
+var SB='https://bqlgfmqcefledqyodkii.supabase.co'
+var SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+var db=null,clienteTel='',clienteNombre='',servicios=[],diagnosticos=[],evaluaciones=[]
+
+function getDB(){if(!db)db=supabase.createClient(SB,SK);return db;}
+
+async function ingresar(){
+  var tel=document.getElementById('tel-inp').value.trim()
+  if(tel.length<8){document.getElementById('login-err').style.display='block';return}
+  // Buscar por teléfono en presupuestos
+  var telVariants=[tel,'56'+tel,'+56'+tel,'+569'+tel.slice(1)]
+  var r=await getDB().from('presupuestos').select('*').or(telVariants.map(function(t){return 'telefono.eq.'+t}).join(',')).order('created_at',{ascending:false})
+  var data=r.data||[]
+  if(!data.length){document.getElementById('login-err').style.display='block';return}
+  document.getElementById('login-err').style.display='none'
+  clienteTel=tel
+  clienteNombre=data[0].cliente||''
+  servicios=data
+  cargarTodo()
+}
+
+async function cargarTodo(){
+  // Cargar diagnosticos
+  var rd=await getDB().from('diagnosticos').select('*').ilike('telefono','%'+clienteTel+'%').order('created_at',{ascending:false})
+  diagnosticos=rd.data||[]
+  // Cargar evaluaciones
+  var re=await getDB().from('evaluaciones').select('*').eq('cliente',clienteNombre).order('created_at',{ascending:false})
+  evaluaciones=re.data||[]
+  mostrarHub()
+}
+
+function mostrarHub(){
+  document.getElementById('login-wrap').style.display='none'
+  document.getElementById('hub').style.display='block'
+  renderHero()
+  renderHistorial()
+  renderMantenimiento()
+  renderDocumentos()
+  renderEvaluaciones()
+  // Configurar WA
+  var msg='Hola Serviruta, soy '+clienteNombre+'. Quiero solicitar un servicio para mi vehículo.'
+  document.getElementById('btn-wa-solicitar').href='https://wa.me/56985058250?text='+encodeURIComponent(msg)
+}
+
+function renderHero(){
+  var ultimo=servicios[0]||{}
+  var patente=ultimo.patente||'—'
+  var vehiculo=(ultimo.auto||ultimo.vehiculo)||'—'
+  var totalSvcs=servicios.filter(function(s){return s.estado_servicio==='completado'}).length
+  var ultFecha=ultimo.created_at?new Date(ultimo.created_at).toLocaleDateString('es-CL',{day:'numeric',month:'short',year:'numeric'}):''
+  document.getElementById('veh-patente').textContent=patente
+  document.getElementById('veh-nombre').textContent=vehiculo
+  document.getElementById('veh-meta').textContent='Cliente: '+clienteNombre
+  document.getElementById('vs-servicios').textContent=totalSvcs
+  document.getElementById('vs-ultimo').textContent=ultFecha||'—'
+  document.getElementById('vs-garantia').textContent=totalSvcs>0?'1 año':'—'
+}
+
+function renderHistorial(){
+  var el=document.getElementById('historial-lista')
+  if(!servicios.length){el.innerHTML='<div class="loading">Sin servicios registrados</div>';return}
+  var html=''
+  if(diagnosticos.length){
+    html+='<div class="sec">Diagnósticos</div>'
+    html+=diagnosticos.map(function(d){
+      var fecha=d.created_at?new Date(d.created_at).toLocaleDateString('es-CL',{day:'numeric',month:'short',year:'numeric'}):''
+      var sevCol={baja:'var(--verde)',media:'var(--amarillo)',alta:'var(--rojo)'}[d.severidad||'media']
+      return '<div class="svc-card" style="border-left:3px solid '+sevCol+'">'+
+        '<div class="svc-top"><div><div class="svc-titulo">🔍 '+d.problema+'</div><div class="svc-tec">'+fecha+(d.sistema?' · '+d.sistema:'')+'</div></div><span class="svc-badge" style="background:rgba(34,197,94,0.1);color:var(--verde)">Diagnóstico</span></div>'+
+        (d.descripcion?'<div class="svc-items">'+d.descripcion+'</div>':'')+
+        ((d.foto1||d.foto2||d.foto3)?'<div class="fotos-grid">'+
+          (d.foto1?'<img src="'+d.foto1+'" onclick="verFoto(\''+d.foto1+'\')">':'')+
+          (d.foto2?'<img src="'+d.foto2+'" onclick="verFoto(\''+d.foto2+'\')">':'')+
+          (d.foto3?'<img src="'+d.foto3+'" onclick="verFoto(\''+d.foto3+'\')">':'')+
+        '</div>':'')+
+      '</div>'
+    }).join('')
+  }
+  html+='<div class="sec">Servicios realizados</div>'
+  html+=servicios.map(function(s){
+    var fecha=s.created_at?new Date(s.created_at).toLocaleDateString('es-CL',{day:'numeric',month:'short',year:'numeric'}):''
+    var items=(s.items||[]).map(function(i){return '• '+i.desc}).join('\n')
+    var coordItems=(s.items_coord||[]).map(function(i){return '• '+i.desc}).join('\n')
+    var pagado=s.pago_cliente==='pagado'
+    var completado=s.estado_servicio==='completado'
+    return '<div class="svc-card">'+
+      '<div class="svc-top">'+
+        '<div><div class="svc-titulo">'+( s.auto||s.vehiculo||'Servicio')+'</div><div class="svc-tec">'+fecha+(s.tecnico?' · Tec. '+s.tecnico.split(' ')[0]:'')+'</div></div>'+
+        '<span class="svc-badge" style="background:'+(completado?'rgba(34,197,94,0.1)':'rgba(251,146,60,0.1)')+';color:'+(completado?'var(--verde)':'var(--naranja)'+'">'+(completado?'Completado':'En proceso'))+'</span>'+
+      '</div>'+
+      ((items||coordItems)?'<div class="svc-items">'+(items||coordItems)+'</div>':'')+
+      (s.obs?'<div style="font-size:12px;color:var(--txt3);margin:6px 0">Obs: '+s.obs+'</div>':'')+
+      (completado&&s.total?'<div class="svc-total">$'+s.total.toLocaleString('es-CL')+' <span style="font-size:11px;color:var(--txt3);font-weight:400">'+(pagado?'Pagado':'Pendiente')+'</span></div>':'')+
+      (completado?'<div class="svc-garantia">✅ Garantía 1 año desde la fecha del servicio</div>':'')+
+    '</div>'
+  }).join('')
+  el.innerHTML=html
+}
+
+function renderMantenimiento(){
+  var ultimo=servicios.find(function(s){return s.estado_servicio==='completado'})
+  var fechaUlt=ultimo?new Date(ultimo.created_at):null
+  var hoy=new Date()
+  var mesesDesde=fechaUlt?Math.floor((hoy-fechaUlt)/(1000*60*60*24*30)):null
+
+  var items=[
+    {icon:'🛢️',nombre:'Cambio de aceite',ciclo:6,alerta:'Cada 6 meses o 10.000 km',color:'var(--amarillo)'},
+    {icon:'🔴',nombre:'Frenos',ciclo:12,alerta:'Revisión anual recomendada',color:'var(--rojo)'},
+    {icon:'🔋',nombre:'Batería',ciclo:24,alerta:'Revisión cada 2 años',color:'var(--azul)'},
+    {icon:'💧',nombre:'Refrigerante',ciclo:18,alerta:'Cada 18 meses',color:'var(--verde)'},
+    {icon:'🔩',nombre:'Correa de distribución',ciclo:36,alerta:'Cada 3 años o 60.000 km',color:'var(--morado)'},
+    {icon:'💨',nombre:'Filtro de aire',ciclo:12,alerta:'Revisión anual',color:'var(--naranja)'},
+  ]
+
+  document.getElementById('mant-lista').innerHTML=items.map(function(item){
+    var pct=mesesDesde?Math.min(Math.round((mesesDesde/item.ciclo)*100),100):0
+    var estado=pct>=100?'Vencido':pct>=75?'Por vencer':'Al dia'
+    var estCol=pct>=100?'var(--rojo)':pct>=75?'var(--amarillo)':'var(--verde)'
+    return '<div class="mant-card" style="border-left-color:'+item.color+'">'+
+      '<div class="mant-top"><div class="mant-icon">'+item.icon+'</div><div><div class="mant-titulo">'+item.nombre+'</div><div class="mant-estado" style="color:'+estCol+'">'+estado+(mesesDesde?' · hace '+mesesDesde+' meses':'')+'</div></div></div>'+
+      '<div class="mant-barra"><div class="mant-fill" style="width:'+pct+'%;background:'+estCol+'"></div></div>'+
+      '<div class="mant-labels"><span>0</span><span>'+item.alerta+'</span></div>'+
+    '</div>'
+  }).join('')
+
+  var prox=[
+    {icon:'🔍',nombre:'Diagnóstico preventivo',desc:'Detecta fallas antes de que se agraven'},
+    {icon:'📋',nombre:'Pre-Revisión Técnica',desc:'Evita rechazos y filas en la planta'},
+    {icon:'🔧',nombre:'Mantención general',desc:'Revisión completa del estado del vehículo'},
+  ]
+  document.getElementById('prox-lista').innerHTML=prox.map(function(p){
+    return '<div class="doc-card"><div class="doc-icon" style="background:var(--c3)">'+p.icon+'</div><div><div class="doc-nombre">'+p.nombre+'</div><div class="doc-meta">'+p.desc+'</div></div><button class="doc-btn" onclick="solicitarServicio(\''+p.nombre+'\')">Solicitar</button></div>'
+  }).join('')
+}
+
+function renderDocumentos(){
+  var el=document.getElementById('docs-lista')
+  var docs=[]
+  servicios.forEach(function(s){
+    if(s.estado_servicio==='completado'){
+      var fecha=s.created_at?new Date(s.created_at).toLocaleDateString('es-CL',{day:'numeric',month:'short',year:'numeric'}):''
+      docs.push({icon:'📄',nombre:'Orden de servicio — '+(s.auto||s.vehiculo||'Vehículo'),meta:fecha+(s.tecnico?' · '+s.tecnico.split(' ')[0]:''),tipo:'orden',data:s})
+    }
+  })
+  diagnosticos.forEach(function(d){
+    var fecha=d.created_at?new Date(d.created_at).toLocaleDateString('es-CL',{day:'numeric',month:'short',year:'numeric'}):''
+    if(d.foto1||d.foto2||d.foto3){
+      docs.push({icon:'🔍',nombre:'Reporte diagnóstico — '+d.problema,meta:fecha+(d.sistema?' · '+d.sistema:''),tipo:'diag',data:d})
+    }
+  })
+  if(!docs.length){el.innerHTML='<div class="loading">Sin documentos disponibles</div>';return}
+  el.innerHTML=docs.map(function(doc){
+    return '<div class="doc-card">'+
+      '<div class="doc-icon" style="background:var(--c3)">'+doc.icon+'</div>'+
+      '<div><div class="doc-nombre">'+doc.nombre+'</div><div class="doc-meta">'+doc.meta+'</div></div>'+
+      '<button class="doc-btn" onclick="verDocumento(this)" data-tipo="'+doc.tipo+'">Ver</button>'+
+    '</div>'
+  }).join('')
+}
+
+function renderEvaluaciones(){
+  var el=document.getElementById('eval-lista')
+  if(!evaluaciones.length){
+    el.innerHTML='<div class="loading">Sin evaluaciones aún</div><div style="text-align:center;margin-top:12px"><a href="encuesta.html?cliente='+encodeURIComponent(clienteNombre)+'" style="background:var(--rojo);border:none;border-radius:8px;color:#fff;font-family:Syne,sans-serif;font-weight:700;font-size:13px;padding:10px 20px;text-decoration:none;display:inline-block">Evaluar último servicio</a></div>'
+    return
+  }
+  var STARS=['','⭐','⭐⭐','⭐⭐⭐','⭐⭐⭐⭐','⭐⭐⭐⭐⭐']
+  el.innerHTML=evaluaciones.map(function(e){
+    var tags=[]
+    if(e.puntualidad>=4)tags.push('Puntual')
+    if(e.calidad>=4)tags.push('Buen trabajo')
+    if(e.comunicacion>=4)tags.push('Comunicacion')
+    if(e.limpieza>=4)tags.push('Limpio y ordenado')
+    return '<div class="eval-card">'+
+      '<div class="estrellas-show">'+STARS[e.nota||0]+'</div>'+
+      (tags.length?'<div class="tags-row">'+tags.map(function(t){return '<span class="etag">'+t+'</span>'}).join('')+'</div>':'')+
+      (e.comentarios?'<div class="eval-coment">"'+e.comentarios+'"</div>':'')+
+      '<div class="eval-tec">Técnico: '+e.tecnico+(e.volveria?(' · ¿Volvería? '+e.volveria):'')+'</div>'+
+    '</div>'
+  }).join('')
+}
+
+function solicitarServicio(servicio){
+  var msg='Hola Serviruta, soy '+clienteNombre+'. Quiero solicitar: '+servicio+'.\n\nMi vehículo: '+(servicios[0]?(servicios[0].auto||servicios[0].vehiculo||''):'')
+  window.open('https://wa.me/56985058250?text='+encodeURIComponent(msg),'_blank')
+}
+
+function verFoto(url){
+  document.getElementById('foto-grande').src=url
+  document.getElementById('foto-overlay').classList.add('open')
+}
+
+function goTab(n){
+  for(var i=0;i<5;i++){
+    document.getElementById('pg'+i).classList.toggle('active',i===n)
+    document.getElementById('tab'+i).classList.toggle('active',i===n)
+  }
+}
+
+function cerrarSesion(){
+  clienteTel='';clienteNombre='';servicios=[];diagnosticos=[];evaluaciones=[]
+  document.getElementById('hub').style.display='none'
+  document.getElementById('login-wrap').style.display='flex'
+  document.getElementById('tel-inp').value=''
+}
+</script>
+</body>
+</html>

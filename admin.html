@@ -81,6 +81,7 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
     <div class="tab" id="tab2" onclick="goTab(2)">Servicios</div>
     <div class="tab" id="tab3" onclick="goTab(3)">Pagos diarios</div>
     <div class="tab" id="tab4" onclick="goTab(4)">Gastos</div>
+    <div class="tab" id="tab5" onclick="goTab(5)" style="color:var(--verde)">Por cobrar</div>
   </div>
 
   <!-- RESUMEN -->
@@ -131,6 +132,10 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
   </div>
 
   <!-- GASTOS -->
+  <div class="page" id="pg5">
+    <div id="cobrar-kpis" style="margin-bottom:14px"></div>
+    <div id="cobrar-lista"></div>
+  </div>
   <div class="page" id="pg4">
     <div class="kpi-grid" id="g-kpis" style="margin-bottom:14px"></div>
     <div class="sec">Por categoria</div>
@@ -166,7 +171,7 @@ function filtrar(p){
 }
 
 async function load(){
-  var r=await getDB().from('presupuestos').select('*').eq('estado_servicio','completado').order('created_at',{ascending:false})
+  var r=await getDB().from('presupuestos').select('*').in('estado_servicio',['completado']).order('created_at',{ascending:false})
   todos=r.data||[]
   renderAll()
 }
@@ -390,12 +395,49 @@ async function eliminarAdmin(e,id,cliente){
   load()
 }
 
+function renderPorCobrar(){
+  var porCobrar=todos.filter(function(s){return s.pago_cliente!=='pagado'})
+  var totalPC=porCobrar.reduce(function(acc,x){return acc+(x.total||0)},0)
+  document.getElementById('cobrar-kpis').innerHTML=
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'+
+    '<div style="background:linear-gradient(135deg,rgba(34,197,94,0.12),rgba(34,197,94,0.04));border:1px solid rgba(34,197,94,0.3);border-radius:10px;padding:14px"><div style="font-size:10px;color:var(--txt3);text-transform:uppercase;margin-bottom:4px">Total por cobrar</div><div style="font-family:Syne,sans-serif;font-weight:800;font-size:26px;color:var(--verde)">$'+totalPC.toLocaleString('es-CL')+'</div></div>'+
+    '<div style="background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;text-align:right"><div style="font-size:10px;color:var(--txt3);text-transform:uppercase;margin-bottom:4px">Servicios</div><div style="font-family:Syne,sans-serif;font-weight:800;font-size:26px;color:var(--azul)">'+porCobrar.length+'</div></div>'+
+    '</div>'
+  document.getElementById('cobrar-lista').innerHTML=porCobrar.map(function(s){
+    var fecha=s.created_at?new Date(s.created_at).toLocaleDateString('es-CL',{day:'numeric',month:'short'}):''
+    return '<div style="background:var(--c2);border:1px solid rgba(34,197,94,0.2);border-radius:10px;padding:14px;margin-bottom:10px">'+
+      '<div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px">'+
+        '<div><div style="font-family:Syne,sans-serif;font-weight:700;font-size:15px">'+s.cliente+'</div><div style="font-size:11px;color:var(--txt3)">'+s.tecnico+' · '+fecha+(s.vehiculo?' · '+s.vehiculo:'')+'</div></div>'+
+        '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:18px;color:var(--verde)">$'+(s.total||0).toLocaleString('es-CL')+'</div>'+
+      '</div>'+
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'+
+        '<button onclick="marcarPagadoAdmin(&quot;'+s.id+'&quot;)" style="background:var(--verde);border:none;border-radius:8px;color:#000;font-family:Syne,sans-serif;font-weight:800;font-size:13px;padding:11px;cursor:pointer">Marcar pagado</button>'+
+        (s.telefono?'<button onclick="enviarEncuestaAdmin(&quot;'+s.telefono+'&quot;,&quot;'+s.cliente+'&quot;,&quot;'+s.tecnico+'&quot;)" style="background:#25D366;border:none;border-radius:8px;color:#000;font-family:Syne,sans-serif;font-weight:700;font-size:12px;padding:11px;cursor:pointer">Encuesta WA</button>':'<div></div>')+
+      '</div>'+
+    '</div>'
+  }).join('')
+}
+
+async function marcarPagadoAdmin(id){
+  await getDB().from('presupuestos').update({pago_cliente:'pagado'}).eq('id',id)
+  toast('Marcado como pagado','ok')
+  load()
+  setTimeout(function(){renderPorCobrar()},400)
+}
+
+function enviarEncuestaAdmin(tel,cliente,tecnico){
+  var url='https://angelperuga-maker.github.io/serviruta/encuesta.html?cliente='+encodeURIComponent(cliente)+'&tecnico='+encodeURIComponent(tecnico)
+  var msg='Hola '+cliente+' gracias por elegir Serviruta. Evaluanos con 1 clic:\n\n'+url+'\n\nTu opinion nos ayuda a mejorar. Serviruta +56 9 8505 8250'
+  window.open('https://wa.me/56'+tel.replace(/[^0-9]/g,'')+'?text='+encodeURIComponent(msg),'_blank')
+}
+
 function goTab(n){
-  for(var i=0;i<5;i++){
+  for(var i=0;i<6;i++){
     document.getElementById('pg'+i).classList.toggle('active',i===n)
     document.getElementById('tab'+i).classList.toggle('active',i===n)
   }
   if(n===4)loadGastos()
+  if(n===5)renderPorCobrar()
 }
 
 function cambiarPer(tab,p,el){

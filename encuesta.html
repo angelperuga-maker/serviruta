@@ -3,159 +3,146 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Serviruta - Evaluacion del servicio</title>
+<title>Serviruta - Evaluanos</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root{--rojo:#E8210A;--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;}
+:root{--rojo:#E8210A;--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;}
 *{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:460px;margin:0 auto;}
-.screen{padding:32px 24px 60px;}
-.logo{display:flex;align-items:center;gap:10px;margin-bottom:32px;}
-.mark{width:38px;height:38px;background:var(--rojo);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:"Syne",sans-serif;font-weight:800;font-size:12px;color:#fff;}
-.brand{font-family:"Syne",sans-serif;font-weight:800;font-size:18px;}
-.brand span{color:var(--rojo);}
-h1{font-family:"Syne",sans-serif;font-weight:800;font-size:26px;letter-spacing:-0.5px;margin-bottom:6px;line-height:1.1;}
-h1 em{color:var(--amarillo);font-style:normal;}
-.sub{font-size:14px;color:var(--txt3);margin-bottom:28px;line-height:1.6;}
-.sec{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);margin:20px 0 10px;display:flex;align-items:center;gap:8px;}
-.sec::after{content:"";flex:1;height:1px;background:var(--borde);}
-.star-group{display:flex;justify-content:center;gap:12px;margin-bottom:20px;}
-.star{font-size:36px;cursor:pointer;opacity:0.3;transition:all 0.15s;}
-.star.on{opacity:1;}
-.criterio{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin-bottom:10px;}
-.crit-label{font-size:13px;font-weight:500;color:var(--txt);margin-bottom:10px;}
-.crit-stars{display:flex;gap:8px;}
-.crit-star{font-size:24px;cursor:pointer;opacity:0.3;transition:all 0.15s;}
-.crit-star.on{opacity:1;}
-.lbl{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--txt3);margin-bottom:6px;display:block;}
-.inp{width:100%;background:var(--c2);border:1px solid var(--borde);border-radius:8px;color:var(--txt);font-family:"DM Sans",sans-serif;font-size:15px;padding:11px 13px;outline:none;margin-bottom:10px;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:480px;margin:0 auto;padding:32px 20px 60px;display:flex;flex-direction:column;align-items:center;}
+.logo{font-family:"Syne",sans-serif;font-weight:900;font-size:22px;margin-bottom:8px;text-align:center;}
+.logo span{color:var(--rojo);}
+.hero{text-align:center;margin-bottom:28px;}
+.hero-icon{font-size:52px;margin-bottom:12px;}
+.hero-titulo{font-family:"Syne",sans-serif;font-weight:800;font-size:22px;margin-bottom:6px;}
+.hero-sub{font-size:13px;color:var(--txt2);line-height:1.7;}
+.bloque{width:100%;background:var(--c2);border:1px solid var(--borde);border-radius:14px;padding:18px;margin-bottom:14px;}
+.bloque-titulo{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;margin-bottom:12px;color:var(--txt2);}
+.estrellas{display:flex;justify-content:center;gap:10px;margin-bottom:4px;}
+.estrella{font-size:36px;cursor:pointer;opacity:0.35;transition:all 0.15s;user-select:none;}
+.estrella.active{opacity:1;}
+.estrella:hover{transform:scale(1.15);}
+.star-lbl{text-align:center;font-size:11px;color:var(--txt3);margin-top:4px;}
+.opciones{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.opcion{background:var(--c3);border:1px solid var(--borde);border-radius:8px;padding:10px;text-align:center;font-size:12px;cursor:pointer;transition:all 0.15s;}
+.opcion.active{border-color:var(--verde);background:rgba(34,197,94,0.1);color:var(--verde);}
+.inp{width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:8px;color:var(--txt);font-family:"DM Sans",sans-serif;font-size:14px;padding:11px 12px;outline:none;resize:none;}
 .inp:focus{border-color:var(--rojo);}
 .inp::placeholder{color:var(--txt3);}
-.btn{width:100%;background:var(--rojo);border:none;border-radius:8px;color:#fff;font-family:"Syne",sans-serif;font-weight:700;font-size:16px;padding:15px;cursor:pointer;margin-top:8px;}
-.gracias{display:none;text-align:center;padding:60px 20px;}
-.gracias-icon{font-size:60px;margin-bottom:16px;}
-.gracias h2{font-family:"Syne",sans-serif;font-weight:800;font-size:24px;margin-bottom:8px;}
-.gracias p{font-size:14px;color:var(--txt3);}
+.btn-enviar{width:100%;background:var(--rojo);border:none;border-radius:10px;color:#fff;font-family:"Syne",sans-serif;font-weight:800;font-size:15px;padding:15px;cursor:pointer;margin-top:4px;}
+.exito{display:none;text-align:center;padding:40px 20px;width:100%;}
+.exito-icon{font-size:64px;margin-bottom:16px;}
+.exito-titulo{font-family:"Syne",sans-serif;font-weight:800;font-size:22px;margin-bottom:8px;}
+.exito-sub{font-size:13px;color:var(--txt2);line-height:1.7;}
 </style>
 </head>
 <body>
-<div class="screen" id="form-screen">
-  <div class="logo">
-    <div class="mark">SRV</div>
-    <div class="brand">SERVI<span>RUTA</span></div>
-  </div>
-  <h1>Tu opinion nos <em>importa</em></h1>
-  <p class="sub">Toma 1 minuto. Tu evaluacion ayuda a mejorar nuestro servicio.</p>
+<div class="logo">SERVI<span>RUTA</span></div>
 
-  <div class="sec">Nota general del servicio</div>
-  <div class="star-group" id="stars-general">
-    <span class="star" onclick="setNota(1)">★</span>
-    <span class="star" onclick="setNota(2)">★</span>
-    <span class="star" onclick="setNota(3)">★</span>
-    <span class="star" onclick="setNota(4)">★</span>
-    <span class="star" onclick="setNota(5)">★</span>
+<div id="form-wrap" style="width:100%">
+  <div class="hero">
+    <div class="hero-icon">⭐</div>
+    <div class="hero-titulo" id="titulo-bienvenida">¿Cómo fue tu experiencia?</div>
+    <div class="hero-sub">Tu opinion nos ayuda a mejorar. Solo toma 1 minuto.</div>
   </div>
 
-  <div class="sec">Detalle del servicio</div>
-  <div class="criterio">
-    <div class="crit-label">⏰ Puntualidad del técnico</div>
-    <div class="crit-stars" id="stars-punt">
-      <span class="crit-star" onclick="setCrit('punt',1)">★</span>
-      <span class="crit-star" onclick="setCrit('punt',2)">★</span>
-      <span class="crit-star" onclick="setCrit('punt',3)">★</span>
-      <span class="crit-star" onclick="setCrit('punt',4)">★</span>
-      <span class="crit-star" onclick="setCrit('punt',5)">★</span>
+  <div class="bloque">
+    <div class="bloque-titulo">Califica el servicio recibido</div>
+    <div class="estrellas" id="estrellas">
+      <span class="estrella" onclick="setEstrella(1)">⭐</span>
+      <span class="estrella" onclick="setEstrella(2)">⭐</span>
+      <span class="estrella" onclick="setEstrella(3)">⭐</span>
+      <span class="estrella" onclick="setEstrella(4)">⭐</span>
+      <span class="estrella" onclick="setEstrella(5)">⭐</span>
     </div>
+    <div class="star-lbl" id="star-lbl">Toca una estrella</div>
   </div>
-  <div class="criterio">
-    <div class="crit-label">🔧 Calidad del trabajo</div>
-    <div class="crit-stars" id="stars-cal">
-      <span class="crit-star" onclick="setCrit('cal',1)">★</span>
-      <span class="crit-star" onclick="setCrit('cal',2)">★</span>
-      <span class="crit-star" onclick="setCrit('cal',3)">★</span>
-      <span class="crit-star" onclick="setCrit('cal',4)">★</span>
-      <span class="crit-star" onclick="setCrit('cal',5)">★</span>
-    </div>
-  </div>
-  <div class="criterio">
-    <div class="crit-label">💬 Comunicacion y trato</div>
-    <div class="crit-stars" id="stars-com">
-      <span class="crit-star" onclick="setCrit('com',1)">★</span>
-      <span class="crit-star" onclick="setCrit('com',2)">★</span>
-      <span class="crit-star" onclick="setCrit('com',3)">★</span>
-      <span class="crit-star" onclick="setCrit('com',4)">★</span>
-      <span class="crit-star" onclick="setCrit('com',5)">★</span>
-    </div>
-  </div>
-  <div class="criterio">
-    <div class="crit-label">✨ Limpieza y orden</div>
-    <div class="crit-stars" id="stars-limp">
-      <span class="crit-star" onclick="setCrit('limp',1)">★</span>
-      <span class="crit-star" onclick="setCrit('limp',2)">★</span>
-      <span class="crit-star" onclick="setCrit('limp',3)">★</span>
-      <span class="crit-star" onclick="setCrit('limp',4)">★</span>
-      <span class="crit-star" onclick="setCrit('limp',5)">★</span>
+
+  <div class="bloque">
+    <div class="bloque-titulo">¿Cómo evaluarías al técnico?</div>
+    <div class="opciones">
+      <div class="opcion" onclick="toggle(this,'puntualidad')">⏰ Puntual</div>
+      <div class="opcion" onclick="toggle(this,'limpieza')">🧹 Ordenado y limpio</div>
+      <div class="opcion" onclick="toggle(this,'comunicacion')">💬 Buena comunicacion</div>
+      <div class="opcion" onclick="toggle(this,'calidad')">🔧 Trabajo de calidad</div>
     </div>
   </div>
 
-  <div class="sec">Comentario</div>
-  <textarea class="inp" id="comentario" placeholder="Cuentanos tu experiencia..." rows="3"></textarea>
+  <div class="bloque">
+    <div class="bloque-titulo">¿Volvería a llamarnos?</div>
+    <div class="opciones" id="volveria">
+      <div class="opcion" onclick="setVolveria('si',this)">Si, definitivamente</div>
+      <div class="opcion" onclick="setVolveria('tal_vez',this)">Tal vez</div>
+      <div class="opcion" onclick="setVolveria('no',this)">No por ahora</div>
+      <div class="opcion" onclick="setVolveria('ya_recomende',this)">Ya los recomendé</div>
+    </div>
+  </div>
 
-  <button class="btn" onclick="enviar()">Enviar evaluacion →</button>
+  <div class="bloque">
+    <div class="bloque-titulo">Comentario adicional (opcional)</div>
+    <textarea class="inp" id="comentario" placeholder="Cuéntanos tu experiencia..." rows="3"></textarea>
+  </div>
+
+  <button class="btn-enviar" onclick="enviarEncuesta()">Enviar evaluacion →</button>
 </div>
 
-<div class="gracias" id="gracias-screen">
-  <div class="gracias-icon">🙏</div>
-  <h2>Gracias por tu evaluacion</h2>
-  <p>Tu opinion nos ayuda a seguir mejorando. Serviruta siempre a tu servicio.</p>
+<div class="exito" id="exito">
+  <div class="exito-icon">🙌</div>
+  <div class="exito-titulo">Gracias por tu evaluacion</div>
+  <div class="exito-sub">Tu opinion es muy valiosa para nosotros.<br>Nos ayuda a seguir mejorando el servicio.<br><br>Hasta la proxima. Serviruta.</div>
 </div>
 
 <script>
-var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co';
-var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s';
-var db=null;
-var nota=0,punt=0,cal=0,com=0,limp=0;
+var SB='https://bqlgfmqcefledqyodkii.supabase.co'
+var SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+var db=null,nota=0,atributos=[],volveria='',cliente='',tecnico=''
 
-// Leer params de la URL
-var params=new URLSearchParams(window.location.search);
-var tecnico=params.get('tecnico')||'';
-var cliente=params.get('cliente')||'';
-var tel=params.get('tel')||'';
-var pId=params.get('ppto')||'';
+function getDB(){if(!db)db=supabase.createClient(SB,SK);return db;}
 
-function getDB(){if(!db)db=supabase.createClient(SB_URL,SB_KEY);return db;}
+// Leer params URL
+var params=new URLSearchParams(window.location.search)
+cliente=params.get('cliente')||''
+tecnico=params.get('tecnico')||''
+if(cliente)document.getElementById('titulo-bienvenida').textContent='Hola '+cliente.split(' ')[0]+', ¿cómo fue tu experiencia?'
 
-function setNota(n){
-  nota=n;
-  document.querySelectorAll('#stars-general .star').forEach(function(s,i){s.classList.toggle('on',i<n);});
-}
-function setCrit(tipo,n){
-  if(tipo==='punt')punt=n;
-  if(tipo==='cal')cal=n;
-  if(tipo==='com')com=n;
-  if(tipo==='limp')limp=n;
-  document.querySelectorAll('#stars-'+tipo+' .crit-star').forEach(function(s,i){s.classList.toggle('on',i<n);});
+var STAR_LBLS=['','Muy malo','Regular','Bueno','Muy bueno','Excelente']
+function setEstrella(n){
+  nota=n
+  document.querySelectorAll('.estrella').forEach(function(el,i){el.classList.toggle('active',i<n)})
+  document.getElementById('star-lbl').textContent=STAR_LBLS[n]
+  document.getElementById('star-lbl').style.color=n>=4?'var(--verde)':n>=3?'var(--amarillo)':'var(--rojo)'
 }
 
-async function enviar(){
-  if(!nota){alert('Por favor selecciona una nota general');return;}
-  var db=getDB();
-  await db.from('evaluaciones').insert({
-    tecnico:tecnico,
-    cliente:cliente,
-    telefono:tel,
+function toggle(el,attr){
+  el.classList.toggle('active')
+  if(el.classList.contains('active')){if(!atributos.includes(attr))atributos.push(attr)}
+  else{atributos=atributos.filter(function(a){return a!==attr})}
+}
+
+function setVolveria(val,el){
+  volveria=val
+  document.querySelectorAll('#volveria .opcion').forEach(function(b){b.classList.remove('active')})
+  el.classList.add('active')
+}
+
+async function enviarEncuesta(){
+  if(!nota){alert('Por favor califica el servicio con estrellas');return}
+  var data={
+    tecnico:tecnico||'Sin asignar',
+    cliente:cliente||'Anonimo',
     nota:nota,
-    puntualidad:punt,
-    calidad:cal,
-    comunicacion:com,
-    limpieza:limp,
-    comentario:document.getElementById('comentario').value.trim(),
-    presupuesto_id:pId||null,
-    fecha:new Date().toISOString().split('T')[0]
-  });
-  document.getElementById('form-screen').style.display='none';
-  document.getElementById('gracias-screen').style.display='block';
+    puntualidad:atributos.includes('puntualidad')?5:null,
+    calidad:atributos.includes('calidad')?5:null,
+    comunicacion:atributos.includes('comunicacion')?5:null,
+    limpieza:atributos.includes('limpieza')?5:null,
+    comentarios:document.getElementById('comentario').value.trim()||null,
+    volveria:volveria||null
+  }
+  var r=await getDB().from('evaluaciones').insert(data)
+  if(r.error){alert('Error al enviar. Intenta de nuevo.');return}
+  document.getElementById('form-wrap').style.display='none'
+  document.getElementById('exito').style.display='block'
+  window.scrollTo(0,0)
 }
 </script>
 </body>

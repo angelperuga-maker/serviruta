@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta - Mis Servicios</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--rojo-g:rgba(232,33,10,0.08);--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--verde-g:rgba(34,197,94,0.1);--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:600px;margin:0 auto;}
+.top{background:var(--c1);border-bottom:1px solid var(--borde);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.top-title{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
+.top-back{background:none;border:1px solid var(--borde);color:var(--txt3);font-size:11px;padding:5px 12px;border-radius:6px;cursor:pointer;}
+.body{padding:12px 14px 80px;}
+.tabs{display:flex;border-bottom:1px solid var(--borde);margin-bottom:14px;}
+.tab{flex:1;padding:10px;text-align:center;font-size:11px;font-weight:600;color:var(--txt3);cursor:pointer;border-bottom:2px solid transparent;}
+.tab.active{color:var(--rojo);border-bottom-color:var(--rojo);}
+.page{display:none;}.page.active{display:block;}
+.card{background:var(--c2);border:1px solid var(--borde);border-radius:12px;padding:14px;margin-bottom:12px;}
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:8px;}
+.card-cliente{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;}
+.card-sub{font-size:11px;color:var(--txt3);margin-top:2px;}
+.badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;}
+.b-ejecucion{background:rgba(251,146,60,0.15);color:var(--naranja);}
+.b-completado{background:rgba(167,139,250,0.15);color:var(--morado);}
+.card-items{font-size:12px;color:var(--txt2);margin:8px 0;line-height:1.6;background:var(--c3);border-radius:6px;padding:8px;}
+.card-dir{font-size:11px;color:var(--txt3);margin-bottom:10px;display:flex;align-items:center;gap:4px;}
+.btn-fin{width:100%;background:var(--verde);border:none;border-radius:8px;color:#000;font-family:"Syne",sans-serif;font-weight:800;font-size:14px;padding:13px;cursor:pointer;margin-bottom:6px;}
+.btn-fin:hover{background:#1aad52;}
+.btn-wa{width:100%;background:#25D366;border:none;border-radius:8px;color:#000;font-family:"Syne",sans-serif;font-weight:700;font-size:13px;padding:10px;cursor:pointer;}
+.btn-coord{width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:8px;color:var(--txt2);font-family:"Syne",sans-serif;font-weight:700;font-size:12px;padding:10px;cursor:pointer;margin-bottom:6px;}
+.loading{text-align:center;padding:40px;color:var(--txt3);}
+.kpi-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;}
+.kpi{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:12px;text-align:center;}
+.kpi-val{font-family:"Syne",sans-serif;font-weight:800;font-size:22px;}
+.kpi-lbl{font-size:10px;color:var(--txt3);text-transform:uppercase;margin-top:2px;}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--c3);border:1px solid var(--borde);border-radius:8px;padding:10px 16px;font-size:12px;opacity:0;transition:all 0.25s;pointer-events:none;z-index:999;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.ok{border-color:rgba(34,197,94,0.4);color:var(--verde);}
+</style>
+</head>
+<body>
+<div class="top">
+  <button class="top-back" onclick="location.href='tecnico-menu.html'">← Volver</button>
+  <div class="top-title">Mis Servicios</div>
+  <button onclick="load()" style="background:none;border:none;color:var(--txt3);cursor:pointer;font-size:20px;">&#8635;</button>
+</div>
+<div class="body">
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-val" id="k-activos" style="color:var(--naranja)">0</div><div class="kpi-lbl">Activos</div></div>
+    <div class="kpi"><div class="kpi-val" id="k-completados" style="color:var(--morado)">0</div><div class="kpi-lbl">Completados</div></div>
+    <div class="kpi"><div class="kpi-val" id="k-total" style="color:var(--verde)">$0</div><div class="kpi-lbl">Vendido</div></div>
+  </div>
+  <div class="tabs">
+    <div class="tab active" id="tab0" onclick="goTab(0)">En ejecucion</div>
+    <div class="tab" id="tab1" onclick="goTab(1)">Completados</div>
+  </div>
+  <div class="page active" id="pg0">
+    <div id="lista-activos"><div class="loading">Cargando...</div></div>
+  </div>
+  <div class="page" id="pg1">
+    <div id="lista-completados"><div class="loading">Cargando...</div></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+var SB='https://bqlgfmqcefledqyodkii.supabase.co'
+var SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+var db=null,nombre=sessionStorage.getItem('tecnico_nombre')||''
+
+function getDB(){if(!db)db=supabase.createClient(SB,SK);return db;}
+
+async function load(){
+  var q=getDB().from('presupuestos').select('*').order('created_at',{ascending:false})
+  if(nombre)q=q.eq('tecnico',nombre)
+  var r=await q
+  var todos=r.data||[]
+  var activos=todos.filter(function(s){return s.estado_servicio==='ejecucion'||s.estado_servicio==='aprobado'})
+  var completados=todos.filter(function(s){return s.estado_servicio==='completado'})
+  var totalVendido=completados.reduce(function(s,x){return s+(x.total||0)},0)
+
+  document.getElementById('k-activos').textContent=activos.length
+  document.getElementById('k-completados').textContent=completados.length
+  document.getElementById('k-total').textContent='$'+(totalVendido/1000).toFixed(0)+'K'
+
+  renderActivos(activos)
+  renderCompletados(completados)
+}
+
+function renderActivos(data){
+  var el=document.getElementById('lista-activos')
+  if(!data.length){el.innerHTML='<div class="loading">Sin servicios activos</div>';return}
+  el.innerHTML=data.map(function(s){
+    var items=s.items?s.items.map(function(i){return i.desc}).join(', '):''
+    return '<div class="card">'+
+      '<div class="card-top">'+
+        '<div><div class="card-cliente">'+s.cliente+'</div><div class="card-sub">'+s.tecnico+(s.vehiculo?' · '+s.vehiculo:'')+'</div></div>'+
+        '<span class="badge b-ejecucion">En ejecucion</span>'+
+      '</div>'+
+      (items?'<div class="card-items">'+items+'</div>':'')+
+      (s.direccion?'<div class="card-dir">📍 '+s.direccion+'</div>':'')+
+      '<button class="btn-fin" onclick="finalizar(\''+s.id+'\',\''+s.cliente+'\',\''+( s.telefono||'')+'\',\''+( s.tecnico||nombre)+'\')">Marcar como Finalizado</button>'+
+      (s.telefono?'<button class="btn-coord" onclick="waCoord(\''+s.cliente+'\')">Avisar al coordinador</button>':'')+
+    '</div>'
+  }).join('')
+}
+
+function renderCompletados(data){
+  var el=document.getElementById('lista-completados')
+  if(!data.length){el.innerHTML='<div class="loading">Sin servicios completados</div>';return}
+  el.innerHTML=data.map(function(s){
+    var fecha=s.created_at?new Date(s.created_at).toLocaleDateString('es-CL',{day:'numeric',month:'short'}):''
+    return '<div class="card">'+
+      '<div class="card-top">'+
+        '<div><div class="card-cliente">'+s.cliente+'</div><div class="card-sub">'+fecha+(s.vehiculo?' · '+s.vehiculo:'')+'</div></div>'+
+        '<span class="badge b-completado">'+( s.pago_cliente==='pagado'?'Pagado':'Por cobrar')+'</span>'+
+      '</div>'+
+      '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:18px;color:var(--verde);margin-top:6px">$'+(s.total||0).toLocaleString('es-CL')+'</div>'+
+    '</div>'
+  }).join('')
+}
+
+async function finalizar(id,cliente,tel,tecnico){
+  if(!confirm('Marcar servicio de '+cliente+' como FINALIZADO?'))return
+  await getDB().from('presupuestos').update({estado_servicio:'completado'}).eq('id',id)
+  toast('Servicio finalizado','ok')
+  // Abrir WA al coordinador para avisar
+  var msgCoord='Hola, acabo de finalizar el servicio con '+cliente+'. Queda pendiente el cobro y envio de encuesta. Serviruta'
+  window.open('https://wa.me/56985058250?text='+encodeURIComponent(msgCoord),'_blank')
+  load()
+}
+
+function waCoord(cliente){
+  var msg='Hola coordinador, el servicio con '+cliente+' está en progreso. Confirmo cuando termine. '+nombre
+  window.open('https://wa.me/56985058250?text='+encodeURIComponent(msg),'_blank')
+}
+
+function goTab(n){
+  for(var i=0;i<2;i++){
+    document.getElementById('pg'+i).classList.toggle('active',i===n)
+    document.getElementById('tab'+i).classList.toggle('active',i===n)
+  }
+}
+
+function toast(msg,type){var t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(type?' '+type:'');t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2500)}
+
+load()
+</script>
+</body>
+</html>

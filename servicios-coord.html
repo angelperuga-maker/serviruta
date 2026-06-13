@@ -64,6 +64,7 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
     <div class="fbtn" id="fb-aprobado" onclick="setFiltro('aprobado',this)">Aprobados</div>
     <div class="fbtn" id="fb-ejecucion" onclick="setFiltro('ejecucion',this)">Ejecucion</div>
     <div class="fbtn" id="fb-completado" onclick="setFiltro('completado',this)">Completados</div>
+    <div class="fbtn" id="fb-cobrar" onclick="setFiltro('cobrar',this)" style="color:var(--verde);border-color:rgba(34,197,94,0.3)">Por cobrar</div>
   </div>
   <div class="stats">
     <div class="st"><div class="st-val" id="stn" style="color:var(--azul)">0</div><div class="st-lbl">Nuevos</div></div>
@@ -107,7 +108,10 @@ function setFiltro(f,el){
 }
 
 function renderLista(){
-  var data=filtroActual==='todos'?servicios:servicios.filter(function(s){return (s.estado_servicio||'nuevo')===filtroActual})
+  var data
+  if(filtroActual==='todos'){data=servicios}
+  else if(filtroActual==='cobrar'){data=servicios.filter(function(s){return s.estado_servicio==='completado'&&s.pago_cliente!=='pagado'})}
+  else{data=servicios.filter(function(s){return (s.estado_servicio||'nuevo')===filtroActual})}
   var totalV=data.reduce(function(s,x){return s+(x.total||0)},0)
   var totalP=data.filter(function(s){return s.pago_cliente==='pagado'}).reduce(function(s,x){return s+(x.total||0)},0)
   document.getElementById('sum-total').textContent='$'+totalV.toLocaleString('es-CL')

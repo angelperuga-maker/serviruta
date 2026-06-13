@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta · Resumen del Día</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:600px;margin:0 auto;}
+.top{background:var(--c1);border-bottom:1px solid var(--borde);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.top-title{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
+.top-back{background:none;border:1px solid var(--borde);color:var(--txt3);font-size:11px;padding:5px 12px;border-radius:6px;cursor:pointer;}
+.body{padding:12px 14px 80px;}
+.fecha-nav{display:flex;align-items:center;justify-content:space-between;background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:10px 14px;margin-bottom:14px;}
+.fecha-btn{background:none;border:1px solid var(--borde);border-radius:6px;color:var(--txt3);padding:5px 12px;cursor:pointer;font-size:13px;}
+.fecha-txt{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;}
+.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+.kpi{background:var(--c2);border:1px solid var(--borde);border-radius:12px;padding:14px;}
+.kpi.full{grid-column:1/-1;}
+.kpi-lbl{font-size:10px;color:var(--txt3);text-transform:uppercase;margin-bottom:6px;}
+.kpi-val{font-family:"Syne",sans-serif;font-weight:800;font-size:26px;}
+.sec{font-family:"Syne",sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);margin:14px 0 8px;display:flex;align-items:center;gap:8px;}
+.sec::after{content:"";flex:1;height:1px;background:var(--borde);}
+.svc-row{background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:10px;}
+.svc-info{flex:1;}
+.svc-cliente{font-size:13px;font-weight:600;}
+.svc-meta{font-size:11px;color:var(--txt3);}
+.svc-monto{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;text-align:right;}
+.tec-fila{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--borde);}
+.tec-fila:last-child{border:none;}
+.tec-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:"Syne",sans-serif;font-weight:800;font-size:11px;color:#fff;flex-shrink:0;}
+.tec-nombre{font-size:13px;font-weight:600;flex:1;}
+.gasto-fila{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--borde);font-size:12px;}
+.gasto-fila:last-child{border:none;}
+.btn-compartir{width:100%;background:var(--rojo);border:none;border-radius:10px;color:#fff;font-family:"Syne",sans-serif;font-weight:800;font-size:14px;padding:13px;cursor:pointer;margin-top:14px;}
+.btn-wa{width:100%;background:#25D366;border:none;border-radius:10px;color:#000;font-family:"Syne",sans-serif;font-weight:800;font-size:14px;padding:13px;cursor:pointer;margin-top:8px;}
+.loading{text-align:center;padding:30px;color:var(--txt3);}
+</style>
+</head>
+<body>
+<div class="top">
+  <button class="top-back" onclick="location.href='menu-coordinador.html'">← Volver</button>
+  <div class="top-title">Resumen del Día</div>
+  <button onclick="load()" style="background:none;border:none;color:var(--txt3);cursor:pointer;font-size:20px;">&#8635;</button>
+</div>
+<div class="body">
+  <div class="fecha-nav">
+    <button class="fecha-btn" onclick="cambiarDia(-1)">←</button>
+    <div class="fecha-txt" id="fecha-txt"></div>
+    <button class="fecha-btn" onclick="cambiarDia(1)">→</button>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi full" style="background:linear-gradient(135deg,var(--c2),var(--c1));border-color:rgba(232,33,10,0.3)">
+      <div class="kpi-lbl">Ingresos del día</div>
+      <div class="kpi-val" id="k-ingresos" style="color:var(--verde);font-size:34px">$0</div>
+    </div>
+    <div class="kpi"><div class="kpi-lbl">Cobrado</div><div class="kpi-val" id="k-cobrado" style="color:var(--verde)">$0</div></div>
+    <div class="kpi"><div class="kpi-lbl">Por cobrar</div><div class="kpi-val" id="k-pcobrar" style="color:var(--amarillo)">$0</div></div>
+    <div class="kpi"><div class="kpi-lbl">Servicios</div><div class="kpi-val" id="k-svcs" style="color:var(--azul)">0</div></div>
+    <div class="kpi"><div class="kpi-lbl">Gastos</div><div class="kpi-val" id="k-gastos" style="color:var(--rojo)">$0</div></div>
+    <div class="kpi full"><div class="kpi-lbl">Margen neto del día</div><div class="kpi-val" id="k-margen" style="font-size:22px">$0</div></div>
+  </div>
+
+  <div class="sec">Servicios completados</div>
+  <div id="svcs-lista"><div class="loading">Sin servicios</div></div>
+
+  <div class="sec">Por técnico</div>
+  <div id="tec-resumen" style="background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin-bottom:14px"></div>
+
+  <div class="sec">Gastos del día</div>
+  <div id="gastos-lista" style="background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin-bottom:14px"></div>
+
+  <div class="sec">Diagnósticos y alertas</div>
+  <div id="diag-lista"></div>
+
+  <button class="btn-compartir" onclick="generarResumenIA()">Generar resumen con IA</button>
+  <button class="btn-wa" id="btn-wa-resumen">Compartir por WhatsApp</button>
+</div>
+
+<script>
+var SB='https://bqlgfmqcefledqyodkii.supabase.co'
+var SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+var db=null,fechaActual=new Date()
+var COLS=['#E8210A','#60A5FA','#22C55E','#F5C518','#FB923C','#A78BFA']
+
+function getDB(){if(!db)db=supabase.createClient(SB,SK);return db;}
+
+function getFechaStr(d){return d.toISOString().split('T')[0]}
+function getFechaLegible(d){return d.toLocaleDateString('es-CL',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}
+
+function cambiarDia(n){
+  fechaActual=new Date(fechaActual)
+  fechaActual.setDate(fechaActual.getDate()+n)
+  load()
+}
+
+async function load(){
+  var fecha=getFechaStr(fechaActual)
+  document.getElementById('fecha-txt').textContent=getFechaLegible(fechaActual)
+
+  var rs=await getDB().from('presupuestos').select('*').eq('estado_servicio','completado').like('created_at',fecha+'%')
+  var svcs=rs.data||[]
+  var rg=await getDB().from('gastos').select('*').like('fecha',fecha+'%')
+  var gastos=rg.data||[]
+  var rd=await getDB().from('diagnosticos').select('*').like('created_at',fecha+'%')
+  var diags=rd.data||[]
+
+  var ingresos=svcs.reduce(function(s,x){return s+(x.total||0)},0)
+  var cobrado=svcs.filter(function(s){return s.pago_cliente==='pagado'}).reduce(function(s,x){return s+(x.total||0)},0)
+  var gastosTot=gastos.reduce(function(s,g){return s+(g.monto||0)},0)
+  var margen=cobrado-gastosTot
+
+  document.getElementById('k-ingresos').textContent='$'+ingresos.toLocaleString('es-CL')
+  document.getElementById('k-cobrado').textContent='$'+cobrado.toLocaleString('es-CL')
+  document.getElementById('k-pcobrar').textContent='$'+(ingresos-cobrado).toLocaleString('es-CL')
+  document.getElementById('k-svcs').textContent=svcs.length
+  document.getElementById('k-gastos').textContent='$'+gastosTot.toLocaleString('es-CL')
+  var margenEl=document.getElementById('k-margen')
+  margenEl.textContent='$'+margen.toLocaleString('es-CL')
+  margenEl.style.color=margen>=0?'var(--verde)':'var(--rojo)'
+
+  // Servicios
+  var svcEl=document.getElementById('svcs-lista')
+  svcEl.innerHTML=svcs.length?svcs.map(function(s){
+    var pagado=s.pago_cliente==='pagado'
+    return '<div class="svc-row">'+
+      '<div class="svc-info"><div class="svc-cliente">'+s.cliente+'</div><div class="svc-meta">'+s.tecnico+(s.vehiculo?' · '+s.vehiculo:'')+'</div></div>'+
+      '<div><div class="svc-monto" style="color:'+(pagado?'var(--verde)':'var(--amarillo)')+'">$'+(s.total||0).toLocaleString('es-CL')+'</div><div style="font-size:10px;color:var(--txt3);text-align:right">'+(pagado?'Cobrado':'Pendiente')+'</div></div>'+
+    '</div>'
+  }).join(''):'<div class="loading">Sin servicios este día</div>'
+
+  // Por técnico
+  var porTec={}
+  svcs.forEach(function(s){
+    if(!porTec[s.tecnico])porTec[s.tecnico]={total:0,cnt:0}
+    porTec[s.tecnico].total+=(s.total||0)
+    porTec[s.tecnico].cnt++
+  })
+  var tecEl=document.getElementById('tec-resumen')
+  tecEl.innerHTML=Object.keys(porTec).length?Object.keys(porTec).map(function(t,i){
+    var col=COLS[i%COLS.length]
+    var ini=t.split(' ').map(function(x){return x[0]}).join('').substring(0,2).toUpperCase()
+    return '<div class="tec-fila">'+
+      '<div class="tec-av" style="background:'+col+'">'+ini+'</div>'+
+      '<div class="tec-nombre">'+t+'</div>'+
+      '<div style="text-align:right"><div style="font-family:Syne,sans-serif;font-weight:700;font-size:14px;color:'+col+'">$'+porTec[t].total.toLocaleString('es-CL')+'</div><div style="font-size:10px;color:var(--txt3)">'+porTec[t].cnt+' servicio'+(porTec[t].cnt!==1?'s':'')+'</div></div>'+
+    '</div>'
+  }).join(''):'<div style="font-size:12px;color:var(--txt3)">Sin datos</div>'
+
+  // Gastos
+  var gastosEl=document.getElementById('gastos-lista')
+  gastosEl.innerHTML=gastos.length?gastos.map(function(g){
+    return '<div class="gasto-fila"><div><div>'+g.descripcion+'</div><div style="color:var(--txt3)">'+g.tipo+(g.tecnico?' · '+g.tecnico.split(' ')[0]:'')+'</div></div><div style="font-family:Syne,sans-serif;font-weight:700;color:var(--rojo)">$'+(g.monto||0).toLocaleString('es-CL')+'</div></div>'
+  }).join(''):'<div style="font-size:12px;color:var(--txt3)">Sin gastos registrados</div>'
+
+  // Diagnósticos
+  var diagEl=document.getElementById('diag-lista')
+  diagEl.innerHTML=diags.length?diags.map(function(d){
+    var sevCol={baja:'var(--verde)',media:'var(--amarillo)',alta:'var(--rojo)'}[d.severidad||'media']
+    return '<div style="background:var(--c2);border:1px solid var(--borde);border-left:3px solid '+sevCol+';border-radius:8px;padding:10px;margin-bottom:6px"><div style="font-size:12px;font-weight:600">'+d.cliente+(d.vehiculo?' · '+d.vehiculo:'')+'</div><div style="font-size:11px;color:var(--txt3)">'+d.problema+' · '+d.tecnico.split(' ')[0]+'</div></div>'
+  }).join(''):'<div style="font-size:12px;color:var(--txt3);padding:10px 0">Sin diagnósticos</div>'
+
+  // WA compartir
+  var resumenTxt='*Serviruta — Resumen '+getFechaLegible(fechaActual)+'*\n\n'+
+    'Servicios: '+svcs.length+'\nIngresos: $'+ingresos.toLocaleString('es-CL')+'\nCobrado: $'+cobrado.toLocaleString('es-CL')+'\nGastos: $'+gastosTot.toLocaleString('es-CL')+'\nMargen: $'+margen.toLocaleString('es-CL')
+  document.getElementById('btn-wa-resumen').onclick=function(){
+    window.open('https://wa.me/56985058250?text='+encodeURIComponent(resumenTxt),'_blank')
+  }
+}
+
+async function generarResumenIA(){
+  var btn=document.querySelector('.btn-compartir')
+  btn.textContent='Generando...'
+  btn.disabled=true
+  try{
+    var fecha=getFechaStr(fechaActual)
+    var rs=await getDB().from('presupuestos').select('*').eq('estado_servicio','completado').like('created_at',fecha+'%')
+    var svcs=rs.data||[]
+    var rg=await getDB().from('gastos').select('*').like('fecha',fecha+'%')
+    var gastos=rg.data||[]
+    var ingresos=svcs.reduce(function(s,x){return s+(x.total||0)},0)
+    var gastosTot=gastos.reduce(function(s,g){return s+(g.monto||0)},0)
+
+    var r=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-6',
+        max_tokens:300,
+        messages:[{role:'user',content:'Genera un resumen ejecutivo diario para Serviruta (mecánica a domicilio Santiago Chile) con estos datos del '+fecha+': Servicios completados: '+svcs.length+'. Ingresos: $'+ingresos+' CLP. Gastos: $'+gastosTot+' CLP. Margen: $'+(ingresos-gastosTot)+' CLP. Técnicos activos: '+[...new Set(svcs.map(function(s){return s.tecnico}))].join(', ')+'. Escribe 3-4 líneas concisas con los puntos clave del día y una recomendación. En español, tono profesional.'}]
+      })
+    })
+    var data=await r.json()
+    var texto=data.content&&data.content[0]?data.content[0].text:'Error al generar resumen.'
+    alert(texto)
+  }catch(e){
+    alert('Error al conectar con la IA.')
+  }
+  btn.textContent='Generar resumen con IA'
+  btn.disabled=false
+}
+
+load()
+</script>
+</body>
+</html>

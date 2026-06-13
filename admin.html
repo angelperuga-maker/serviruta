@@ -418,11 +418,27 @@ function renderPorCobrar(){
   }).join('')
 }
 
-async function marcarPagadoAdmin(id){
-  await getDB().from('presupuestos').update({pago_cliente:'pagado'}).eq('id',id)
-  toast('Marcado como pagado','ok')
-  load()
-  setTimeout(function(){renderPorCobrar()},400)
+var pagoIdActual=null
+function marcarPagadoAdmin(id){
+  pagoIdActual=id
+  var s=todos.find(function(x){return x.id===id})
+  document.getElementById('tr-cliente-lbl').textContent=(s?s.cliente:'')+(s&&s.total?' · $'+s.total.toLocaleString('es-CL'):'')
+  document.getElementById('tr-monto').value=s?s.total:''
+  document.getElementById('tr-numero').value=''
+  document.getElementById('tr-banco').value=''
+  document.getElementById('modal-transfer').style.display='flex'
+  document.getElementById('tr-confirmar-btn').onclick=async function(){
+    var medio=document.getElementById('tr-medio').value
+    var banco=document.getElementById('tr-banco').value
+    var numero=document.getElementById('tr-numero').value.trim()
+    var monto=document.getElementById('tr-monto').value
+    var notas='[Pago: '+medio+(banco?' · '+banco:'')+(numero?' · Ref: '+numero:'')+' · $'+monto+']'
+    await getDB().from('presupuestos').update({pago_cliente:'pagado',obs:(s&&s.obs?s.obs+' ':'')+notas}).eq('id',pagoIdActual)
+    document.getElementById('modal-transfer').style.display='none'
+    toast('Pago registrado','ok')
+    load()
+    setTimeout(function(){renderPorCobrar()},400)
+  }
 }
 
 function enviarEncuestaAdmin(tel,cliente,tecnico){

@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta · Monitor de Operaciones</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--rojo-g:rgba(232,33,10,0.08);--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:600px;margin:0 auto;}
+.top{background:var(--c1);border-bottom:1px solid var(--borde);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.top-title{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
+.top-back{background:none;border:1px solid var(--borde);color:var(--txt3);font-size:11px;padding:5px 12px;border-radius:6px;cursor:pointer;}
+.live-badge{background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.3);color:var(--verde);font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;display:flex;align-items:center;gap:4px;}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--verde);animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.body{padding:12px 14px 80px;}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px;}
+.kpi{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:10px;text-align:center;}
+.kpi-val{font-family:"Syne",sans-serif;font-weight:800;font-size:20px;}
+.kpi-lbl{font-size:9px;color:var(--txt3);text-transform:uppercase;margin-top:2px;}
+.sec{font-family:"Syne",sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);margin:14px 0 8px;display:flex;align-items:center;gap:8px;}
+.sec::after{content:"";flex:1;height:1px;background:var(--borde);}
+.tec-monitor{background:var(--c2);border:1px solid var(--borde);border-radius:12px;padding:14px;margin-bottom:10px;}
+.tm-top{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.tm-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:"Syne",sans-serif;font-weight:800;font-size:13px;color:#fff;flex-shrink:0;}
+.tm-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
+.tm-estado{font-size:11px;margin-top:1px;}
+.tm-badge{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;margin-left:auto;flex-shrink:0;}
+.tm-servicio{background:var(--c3);border-radius:8px;padding:10px;margin-bottom:8px;font-size:12px;}
+.tm-cliente{font-weight:600;margin-bottom:2px;}
+.tm-dir{font-size:11px;color:var(--txt3);margin-bottom:6px;}
+.tm-timer{font-family:"Syne",sans-serif;font-weight:800;font-size:16px;}
+.tm-actions{display:flex;gap:6px;}
+.tm-btn{flex:1;padding:8px;border-radius:6px;font-family:"Syne",sans-serif;font-weight:700;font-size:11px;cursor:pointer;border:none;text-align:center;}
+.alerta-card{background:rgba(232,33,10,0.06);border:1px solid rgba(232,33,10,0.25);border-radius:10px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:10px;}
+.alerta-icon{font-size:20px;flex-shrink:0;}
+.alerta-txt{flex:1;font-size:12px;line-height:1.5;}
+.alerta-txt strong{color:var(--txt);display:block;font-size:13px;margin-bottom:2px;}
+.alerta-btn{background:var(--rojo);border:none;border-radius:6px;color:#fff;font-family:"Syne",sans-serif;font-weight:700;font-size:11px;padding:6px 12px;cursor:pointer;flex-shrink:0;}
+.loading{text-align:center;padding:30px;color:var(--txt3);}
+.update-time{text-align:center;font-size:10px;color:var(--txt3);margin-bottom:10px;}
+</style>
+</head>
+<body>
+<div class="top">
+  <button class="top-back" onclick="location.href='menu-coordinador.html'">← Volver</button>
+  <div class="top-title">Monitor de Operaciones</div>
+  <div class="live-badge"><div class="live-dot"></div>En vivo</div>
+</div>
+<div class="body">
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-val" id="k-activos" style="color:var(--verde)">0</div><div class="kpi-lbl">Activos</div></div>
+    <div class="kpi"><div class="kpi-val" id="k-alertas" style="color:var(--rojo)">0</div><div class="kpi-lbl">Alertas</div></div>
+    <div class="kpi"><div class="kpi-val" id="k-hoy" style="color:var(--azul)">0</div><div class="kpi-lbl">Hoy</div></div>
+    <div class="kpi"><div class="kpi-val" id="k-cobrar" style="color:var(--amarillo)">0</div><div class="kpi-lbl">Por cobrar</div></div>
+  </div>
+
+  <div id="update-time" class="update-time">Actualizando...</div>
+
+  <div id="alertas-section" style="display:none">
+    <div class="sec" style="color:var(--rojo)">⚠️ Alertas activas</div>
+    <div id="alertas-lista"></div>
+  </div>
+
+  <div class="sec">Técnicos en servicio</div>
+  <div id="tec-lista"><div class="loading">Cargando...</div></div>
+
+  <div class="sec">Sin actividad hoy</div>
+  <div id="sin-actividad"></div>
+</div>
+
+<script>
+var SB='https://bqlgfmqcefledqyodkii.supabase.co'
+var SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+var db=null
+var TECNICOS=['Reynaldo Aguas Bertel','Reynaldo Aguas','Kiven Henz','Humberto Morales','Giovanino Perugini','Javier Honores']
+var TELS={'Reynaldo Aguas Bertel':'+56935287199','Kiven Henz':'+56964880196','Humberto Morales':'+56994946414','Giovanino Perugini':'+56933592097','Javier Honores':'+56929161693'}
+var COLS=['#E8210A','#60A5FA','#22C55E','#F5C518','#FB923C','#A78BFA']
+
+function getDB(){if(!db)db=supabase.createClient(SB,SK);return db;}
+
+async function load(){
+  var hoy=new Date().toISOString().split('T')[0]
+  var r=await getDB().from('presupuestos').select('*').in('estado_servicio',['ejecucion','aprobado','completado']).order('created_at',{ascending:false})
+  var todos=r.data||[]
+  var activos=todos.filter(function(s){return s.estado_servicio==='ejecucion'||s.estado_servicio==='aprobado'})
+  var completadosHoy=todos.filter(function(s){return s.estado_servicio==='completado'&&(s.created_at||'').startsWith(hoy)})
+  var porCobrar=todos.filter(function(s){return s.estado_servicio==='completado'&&s.pago_cliente!=='pagado'})
+
+  document.getElementById('k-activos').textContent=activos.length
+  document.getElementById('k-hoy').textContent=completadosHoy.length
+  document.getElementById('k-cobrar').textContent=porCobrar.length
+
+  // Detectar alertas: servicio activo sin actualización > 3h
+  var ahora=new Date()
+  var alertas=[]
+  activos.forEach(function(s){
+    var inicio=new Date(s.created_at)
+    var horas=Math.floor((ahora-inicio)/(1000*60*60))
+    if(horas>=3)alertas.push({...s,horasActivo:horas})
+  })
+  document.getElementById('k-alertas').textContent=alertas.length
+
+  renderAlertas(alertas)
+  renderTecnicos(activos,todos,ahora)
+  renderSinActividad(activos)
+
+  var now=new Date()
+  document.getElementById('update-time').textContent='Última actualización: '+now.toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit',second:'2-digit'})
+}
+
+function renderAlertas(alertas){
+  var sec=document.getElementById('alertas-section')
+  var lista=document.getElementById('alertas-lista')
+  if(!alertas.length){sec.style.display='none';return}
+  sec.style.display='block'
+  lista.innerHTML=alertas.map(function(s){
+    var tel=TELS[s.tecnico]||''
+    var msg='Hola '+s.tecnico.split(' ')[0]+', llevas '+s.horasActivo+' horas en el servicio con '+s.cliente+'. ¿Cómo va todo? ¿Necesitas asistencia?'
+    return '<div class="alerta-card">'+
+      '<div class="alerta-icon">⏱️</div>'+
+      '<div class="alerta-txt"><strong>'+s.tecnico.split(' ')[0]+' — '+s.horasActivo+'h en servicio</strong>'+s.cliente+(s.vehiculo?' · '+s.vehiculo:'')+'</div>'+
+      (tel?'<button class="alerta-btn" onclick="window.open(\'https://wa.me/56'+tel.replace(/[^0-9]/g,'')+'?text='+encodeURIComponent(msg)+'\',\'_blank\')">WA</button>':'')+
+    '</div>'
+  }).join('')
+}
+
+function renderTecnicos(activos,todos,ahora){
+  var el=document.getElementById('tec-lista')
+  if(!activos.length){el.innerHTML='<div class="loading">Ningún técnico activo en este momento</div>';return}
+  var porTec={}
+  activos.forEach(function(s){
+    if(!porTec[s.tecnico])porTec[s.tecnico]=[]
+    porTec[s.tecnico].push(s)
+  })
+  el.innerHTML=Object.keys(porTec).map(function(nombre,i){
+    var svcs=porTec[nombre]
+    var col=COLS[TECNICOS.indexOf(nombre)%COLS.length]||COLS[0]
+    var ini=nombre.split(' ').map(function(x){return x[0]}).join('').substring(0,2).toUpperCase()
+    var tel=TELS[nombre]||''
+    return svcs.map(function(s){
+      var inicio=new Date(s.created_at)
+      var mins=Math.floor((ahora-inicio)/(1000*60))
+      var horas=Math.floor(mins/60)
+      var minResto=mins%60
+      var timerStr=(horas>0?horas+'h ':'')+minResto+'min'
+      var timerCol=horas>=3?'var(--rojo)':horas>=2?'var(--amarillo)':'var(--verde)'
+      var msg='Hola '+nombre.split(' ')[0]+', ¿cómo va el servicio con '+s.cliente+'? ¿Necesitas algo?'
+      return '<div class="tec-monitor">'+
+        '<div class="tm-top">'+
+          '<div class="tm-av" style="background:'+col+'">'+ini+'</div>'+
+          '<div style="flex:1"><div class="tm-nombre">'+nombre+'</div><div class="tm-estado" style="color:var(--verde)">● En servicio</div></div>'+
+          '<span class="tm-badge" style="background:rgba(34,197,94,0.1);color:var(--verde)">Activo</span>'+
+        '</div>'+
+        '<div class="tm-servicio">'+
+          '<div class="tm-cliente">👤 '+s.cliente+(s.vehiculo?' · '+s.vehiculo:'')+'</div>'+
+          (s.direccion?'<div class="tm-dir">📍 '+s.direccion+'</div>':'')+
+          '<div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px">'+
+            '<div style="font-size:11px;color:var(--txt3)">Tiempo en servicio</div>'+
+            '<div class="tm-timer" style="color:'+timerCol+'">⏱ '+timerStr+'</div>'+
+          '</div>'+
+        '</div>'+
+        '<div class="tm-actions">'+
+          (tel?'<button class="tm-btn" style="background:#25D366;color:#000" onclick="window.open(\'https://wa.me/56'+tel.replace(/[^0-9]/g,'')+'?text='+encodeURIComponent(msg)+'\',\'_blank\')">💬 WA</button>':'')+
+          '<button class="tm-btn" style="background:var(--c3);border:1px solid var(--borde);color:var(--txt2)" onclick="verHistorial(\''+nombre+'\')">Ver historial</button>'+
+          '<button class="tm-btn" style="background:var(--rojo-g);border:1px solid rgba(232,33,10,0.3);color:var(--rojo)" onclick="alertarCoord(\''+nombre+'\',\''+s.cliente+'\')">Alertar</button>'+
+        '</div>'+
+      '</div>'
+    }).join('')
+  }).join('')
+}
+
+function renderSinActividad(activos){
+  var activosNombres=activos.map(function(s){return s.tecnico})
+  var sin=TECNICOS.filter(function(t){return !activosNombres.includes(t)})
+  var el=document.getElementById('sin-actividad')
+  el.innerHTML=sin.map(function(nombre,i){
+    var col=COLS[TECNICOS.indexOf(nombre)%COLS.length]||COLS[0]
+    var ini=nombre.split(' ').map(function(x){return x[0]}).join('').substring(0,2).toUpperCase()
+    var tel=TELS[nombre]||''
+    return '<div style="background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:10px">'+
+      '<div style="width:36px;height:36px;border-radius:50%;background:'+col+';opacity:0.5;display:flex;align-items:center;justify-content:center;font-family:Syne,sans-serif;font-weight:800;font-size:12px;color:#fff">'+ini+'</div>'+
+      '<div style="flex:1"><div style="font-size:13px;font-weight:600;color:var(--txt2)">'+nombre+'</div><div style="font-size:11px;color:var(--txt3)">Sin servicio activo hoy</div></div>'+
+      (tel?'<a href="https://wa.me/56'+tel.replace(/[^0-9]/g,'')+'" target="_blank" style="background:var(--c3);border:1px solid var(--borde);border-radius:6px;color:var(--txt3);font-size:11px;padding:5px 10px;text-decoration:none">WA</a>':'')+
+    '</div>'
+  }).join('')
+}
+
+function alertarCoord(tec,cliente){
+  var msg='⚠️ ALERTA COORDINADOR: '+tec+' podría necesitar asistencia en el servicio con '+cliente+'. Por favor verificar.'
+  window.open('https://wa.me/56985058250?text='+encodeURIComponent(msg),'_blank')
+}
+
+function verHistorial(tec){
+  location.href='presupuestos-coord.html'
+}
+
+load()
+setInterval(load,60000)
+</script>
+</body>
+</html>

@@ -118,8 +118,15 @@ async function enviar(){
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({system:SYSTEM_PROMPT,messages:historial})
     })
-    var respuesta=await r.text()
-    if(!respuesta||respuesta.trim()==='')respuesta='Sin respuesta. Intenta de nuevo.'
+    var raw=await r.text()
+    var respuesta=raw
+    try{
+      var parsed=JSON.parse(raw)
+      if(parsed.content&&parsed.content[0])respuesta=parsed.content[0].text
+      else if(parsed.text)respuesta=parsed.text
+      else if(typeof parsed==='string')respuesta=parsed
+    }catch(e){respuesta=raw}
+    if(!respuesta||respuesta.trim()===''||respuesta==='Accepted')respuesta='Procesando... intenta de nuevo en un momento.'
     ocultarTyping()
     agregarMensaje('agent',respuesta)
     historial.push({role:'assistant',content:respuesta})

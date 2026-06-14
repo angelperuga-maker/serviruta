@@ -119,14 +119,18 @@ async function enviar(){
       body:JSON.stringify({body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:400,system:SYSTEM_PROMPT,messages:historial})})
     })
     var raw=await r.text()
+    console.log('RAW RESPONSE:',raw)
     var respuesta=raw
     try{
       var parsed=JSON.parse(raw)
-      if(parsed.content&&parsed.content[0])respuesta=parsed.content[0].text
+      console.log('PARSED:',JSON.stringify(parsed))
+      if(parsed.content&&parsed.content[0]&&parsed.content[0].text)respuesta=parsed.content[0].text
       else if(parsed.text)respuesta=parsed.text
-      else if(typeof parsed==='string')respuesta=parsed
+      else if(parsed.data&&parsed.data.content&&parsed.data.content[0])respuesta=parsed.data.content[0].text
+      else if(typeof parsed==='string'&&parsed.length>10)respuesta=parsed
+      else respuesta=JSON.stringify(parsed)
     }catch(e){respuesta=raw}
-    if(!respuesta||respuesta.trim()===''||respuesta==='Accepted')respuesta='Procesando... intenta de nuevo en un momento.'
+    if(!respuesta||respuesta.trim()===''||respuesta.trim()==='Accepted'||respuesta.trim()==='null')respuesta='Sin respuesta del servidor.'
     ocultarTyping()
     agregarMensaje('agent',respuesta)
     historial.push({role:'assistant',content:respuesta})

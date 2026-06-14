@@ -116,7 +116,7 @@ async function enviar(){
     var r=await fetch('https://hook.us2.make.com/hail5qzypi39pmsixxi167lviw8wahbq',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({system:SYSTEM_PROMPT,messages:historial})
+      body:JSON.stringify({body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:400,system:SYSTEM_PROMPT,messages:historial})})
     })
     var raw=await r.text()
     var respuesta=raw

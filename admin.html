@@ -411,11 +411,13 @@ function renderPorCobrar(){
         '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:18px;color:var(--verde)">$'+(s.total||0).toLocaleString('es-CL')+'</div>'+
       '</div>'+
       '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'+
-        '<button onclick="marcarPagadoAdmin(&quot;'+s.id+'&quot;)" style="background:var(--verde);border:none;border-radius:8px;color:#000;font-family:Syne,sans-serif;font-weight:800;font-size:13px;padding:11px;cursor:pointer">Marcar pagado</button>'+
-        (s.telefono?'<button onclick="enviarEncuestaAdmin(&quot;'+s.telefono+'&quot;,&quot;'+s.cliente+'&quot;,&quot;'+s.tecnico+'&quot;)" style="background:#25D366;border:none;border-radius:8px;color:#000;font-family:Syne,sans-serif;font-weight:700;font-size:12px;padding:11px;cursor:pointer">Encuesta WA</button>':'<div></div>')+
+        '<button data-action="pagar" data-id="'+s.id+'" style="background:var(--verde);border:none;border-radius:8px;color:#000;font-family:Syne,sans-serif;font-weight:800;font-size:13px;padding:11px;cursor:pointer">Marcar pagado</button>'+
+        (s.telefono?'<button data-action="encuesta" data-tel="'+s.telefono+'" data-cli="'+(s.cliente||'').replace(/"/g,'')+'" data-tec="'+(s.tecnico||'').replace(/"/g,'')+'" style="background:#25D366;border:none;border-radius:8px;color:#000;font-family:Syne,sans-serif;font-weight:700;font-size:12px;padding:11px;cursor:pointer">Encuesta WA</button>':'<div></div>')+
       '</div>'+
     '</div>'
   }).join('')
+  document.querySelectorAll('#cobrar-lista [data-action="pagar"]').forEach(function(btn){btn.onclick=function(){marcarPagadoAdmin(btn.getAttribute('data-id'))}})
+  document.querySelectorAll('#cobrar-lista [data-action="encuesta"]').forEach(function(btn){btn.onclick=function(){enviarEncuestaAdmin(btn.getAttribute('data-tel'),btn.getAttribute('data-cli'),btn.getAttribute('data-tec'))}})
 }
 
 var pagoIdActual=null

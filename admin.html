@@ -171,7 +171,7 @@ function filtrar(p){
 }
 
 async function load(){
-  var r=await getDB().from('presupuestos').select('*').in('estado_servicio',['completado']).order('created_at',{ascending:false})
+  var r=await getDB().from('presupuestos').select('*').order('created_at',{ascending:false})
   todos=r.data||[]
   renderAll()
 }

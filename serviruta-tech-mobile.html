@@ -1100,13 +1100,45 @@ body {
     </div>
   </div>
 
+  <!-- ══ CENTRAL (pantalla de navegación completa) ══ -->
+  <div class="screen" id="s-central">
+    <div class="sec-title">🗂️ Central de diagnóstico</div>
+    <div class="sec-desc">Todas las categorías — toca para abrir.</div>
+    <div class="section-divider">⚡ Sistema eléctrico</div>
+    <div class="central-cats">
+      <div class="cat-row" onclick="nav('s-cat-noarranca','No arranca')"><div class="cat-row-icon">🚫</div><div class="cat-row-body"><div class="cat-row-title">No arranca</div><div class="cat-row-sub">Sin respuesta, cranea sin encender</div></div><span class="cat-row-count">8 fallas</span><div class="cat-row-chevron">›</div></div>
+      <div class="cat-row" onclick="nav('s-cat-alternador','Alternador')"><div class="cat-row-icon">⚡</div><div class="cat-row-body"><div class="cat-row-title">Alternador</div><div class="cat-row-sub">Luz batería, no carga, voltaje bajo</div></div><span class="cat-row-count">6 fallas</span><div class="cat-row-chevron">›</div></div>
+      <div class="cat-row" onclick="nav('s-cat-partida','Motor de partida')"><div class="cat-row-icon">🔁</div><div class="cat-row-body"><div class="cat-row-title">Motor de partida</div><div class="cat-row-sub">Ruido clic, no gira, piñón</div></div><span class="cat-row-count">5 fallas</span><div class="cat-row-chevron">›</div></div>
+      <div class="cat-row" onclick="nav('s-bateria','Batería')"><div class="cat-row-icon">🔋</div><div class="cat-row-body"><div class="cat-row-title">Batería</div><div class="cat-row-sub">Voltajes, carga, reemplazo</div></div><span class="cat-row-count">6 protocolos</span><div class="cat-row-chevron">›</div></div>
+      <div class="cat-row" onclick="nav('s-immo','Inmovilizador')"><div class="cat-row-icon">🔒</div><div class="cat-row-body"><div class="cat-row-title">Inmovilizador</div><div class="cat-row-sub">Llave, ECU, alarma aftermarket</div></div><span class="cat-row-count">6 protocolos</span><div class="cat-row-chevron">›</div></div>
+    </div>
+    <div class="section-divider" style="margin-top:14px;">🔩 Motor y emisiones</div>
+    <div class="central-cats">
+      <div class="cat-row" onclick="nav('s-dpf-menu','DPF / FAP')"><div class="cat-row-icon">🔴</div><div class="cat-row-body"><div class="cat-row-title">DPF / FAP</div><div class="cat-row-sub">Saturación, regeneración, códigos</div></div><span class="cat-row-count">5 síntomas</span><div class="cat-row-chevron">›</div></div>
+      <div class="cat-row" onclick="nav('s-cat-motor','Motor general')"><div class="cat-row-icon">🔩</div><div class="cat-row-body"><div class="cat-row-title">Motor general</div><div class="cat-row-sub">Golpeteo, aceite, humo, misfire</div></div><span class="cat-row-count">8 fallas</span><div class="cat-row-chevron">›</div></div>
+      <div class="cat-row" onclick="nav('s-cat-refrigeracion','Refrigeración')"><div class="cat-row-icon">🌡️</div><div class="cat-row-body"><div class="cat-row-title">Refrigeración</div><div class="cat-row-sub">Sobrecalentamiento, pérdida, ventilador</div></div><span class="cat-row-count">7 fallas</span><div class="cat-row-chevron">›</div></div>
+    </div>
+    <div class="section-divider" style="margin-top:14px;">🚗 Chasis y seguridad</div>
+    <div class="central-cats">
+      <div class="cat-row" onclick="nav('s-cat-frenos','Frenos')"><div class="cat-row-icon">🛑</div><div class="cat-row-body"><div class="cat-row-title">Frenos</div><div class="cat-row-sub">Ruido, vibración, pedal, ABS</div></div><span class="cat-row-count">7 fallas</span><div class="cat-row-chevron">›</div></div>
+      <div class="cat-row" onclick="nav('s-cat-suspension','Suspensión')"><div class="cat-row-icon">🚗</div><div class="cat-row-body"><div class="cat-row-title">Suspensión</div><div class="cat-row-sub">Ruidos, vibración, geometría</div></div><span class="cat-row-count">6 fallas</span><div class="cat-row-chevron">›</div></div>
+    </div>
+    <div class="section-divider" style="margin-top:14px;">🛠️ Herramientas</div>
+    <div class="central-cats">
+      <div class="cat-row" onclick="nav('s-regen','Regeneración forzada')"><div class="cat-row-icon">🔄</div><div class="cat-row-body"><div class="cat-row-title">Regeneración forzada DPF</div><div class="cat-row-sub">Protocolo paso a paso</div></div><div class="cat-row-chevron">›</div></div>
+      <div class="cat-row" onclick="nav('s-dtc','Códigos DTC')"><div class="cat-row-icon">📋</div><div class="cat-row-body"><div class="cat-row-title">Códigos DTC</div><div class="cat-row-sub">P2002 · P244B · B1600 y más</div></div><div class="cat-row-chevron">›</div></div>
+      <div class="cat-row" onclick="nav('s-mant','Mantenimiento')"><div class="cat-row-icon">🔧</div><div class="cat-row-body"><div class="cat-row-title">Plan de mantenimiento</div><div class="cat-row-sub">Por vehículo y kilometraje</div></div><div class="cat-row-chevron">›</div></div>
+      <div class="cat-row" onclick="nav('s-checklist','Checklist DPF')"><div class="cat-row-icon">✅</div><div class="cat-row-body"><div class="cat-row-title">Checklist DPF</div><div class="cat-row-sub">14 ítems de verificación</div></div><div class="cat-row-chevron">›</div></div>
+    </div>
+  </div>
+
 </div>
 
 <!-- ── BOTTOM NAV ── -->
 <nav class="bottom-nav">
-  <button class="bn-item active" id="bn-home" onclick="goBN('s-home','Técnico','bn-home')">
+  <button class="bn-item active" id="bn-home" onclick="goBN('s-home','Central de diagnóstico','bn-home')">
     <div class="bn-icon">🏠</div>
-    <div class="bn-label">Inicio</div>
+    <div class="bn-label">Central</div>
   </button>
   <button class="bn-item" id="bn-scan" onclick="goBN('s-quickscan','Diagnóstico rápido','bn-scan')">
     <div class="bn-icon">⚡</div>
@@ -1230,60 +1262,6 @@ body {
   </div>
 
 <!-- ══ CENTRAL DE FALLAS ══ -->
-  <div class="screen" id="s-central">
-    <div class="sec-title">🗂️ Central de diagnóstico</div>
-    <div class="sec-desc">Protocolos por sistema. Toca una categoría para ver las fallas y soluciones.</div>
-    <div class="central-cats">
-      <div class="cat-row" onclick="nav('s-cat-noarranca','No arranca')">
-        <div class="cat-row-icon">🚫</div>
-        <div class="cat-row-body"><div class="cat-row-title">No arranca</div><div class="cat-row-sub">Sin respuesta, cranea sin encender, arranque lento</div></div>
-        <span class="cat-row-count">8 fallas</span>
-        <div class="cat-row-chevron">›</div>
-      </div>
-      <div class="cat-row" onclick="nav('s-cat-alternador','Alternador')">
-        <div class="cat-row-icon">⚡</div>
-        <div class="cat-row-body"><div class="cat-row-title">Alternador</div><div class="cat-row-sub">Luz batería, no carga, voltaje bajo o excesivo</div></div>
-        <span class="cat-row-count">6 fallas</span>
-        <div class="cat-row-chevron">›</div>
-      </div>
-      <div class="cat-row" onclick="nav('s-cat-partida','Motor de partida')">
-        <div class="cat-row-icon">🔁</div>
-        <div class="cat-row-body"><div class="cat-row-title">Motor de partida</div><div class="cat-row-sub">Ruido clic, no gira, gira sin encender motor</div></div>
-        <span class="cat-row-count">5 fallas</span>
-        <div class="cat-row-chevron">›</div>
-      </div>
-      <div class="cat-row" onclick="nav('s-cat-refrigeracion','Refrigeración')">
-        <div class="cat-row-icon">🌡️</div>
-        <div class="cat-row-body"><div class="cat-row-title">Refrigeración</div><div class="cat-row-sub">Sobrecalentamiento, pérdida refrigerante, ventilador</div></div>
-        <span class="cat-row-count">7 fallas</span>
-        <div class="cat-row-chevron">›</div>
-      </div>
-      <div class="cat-row" onclick="nav('s-cat-suspension','Suspensión')">
-        <div class="cat-row-icon">🚗</div>
-        <div class="cat-row-body"><div class="cat-row-title">Suspensión</div><div class="cat-row-sub">Ruidos, vibraciones, desgaste irregular de neumáticos</div></div>
-        <span class="cat-row-count">6 fallas</span>
-        <div class="cat-row-chevron">›</div>
-      </div>
-      <div class="cat-row" onclick="nav('s-cat-frenos','Frenos')">
-        <div class="cat-row-icon">🛑</div>
-        <div class="cat-row-body"><div class="cat-row-title">Frenos</div><div class="cat-row-sub">Ruido, vibración al frenar, pedal esponjoso, ABS</div></div>
-        <span class="cat-row-count">7 fallas</span>
-        <div class="cat-row-chevron">›</div>
-      </div>
-      <div class="cat-row" onclick="nav('s-cat-motor','Motor general')">
-        <div class="cat-row-icon">🔩</div>
-        <div class="cat-row-body"><div class="cat-row-title">Motor general</div><div class="cat-row-sub">Ruidos, pérdida de aceite, humos, consumo</div></div>
-        <span class="cat-row-count">8 fallas</span>
-        <div class="cat-row-chevron">›</div>
-      </div>
-    </div>
-    <div class="section-divider" style="margin-top:16px;">Base de conocimiento técnicos</div>
-    <div class="row" onclick="goBN('s-feedback','Feedback técnico','bn-fb')">
-      <div class="row-icon">💬</div>
-      <div class="row-body"><div class="row-title">Ver soluciones reportadas</div><div class="row-sub">Casos resueltos por técnicos Serviruta</div></div>
-      <div class="row-chevron">›</div>
-    </div>
-  </div>
 
   <!-- ══ NO ARRANCA ══ -->
   <div class="screen" id="s-cat-noarranca">

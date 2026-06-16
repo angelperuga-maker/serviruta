@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta · Agente Captador de Leads</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:600px;margin:0 auto;}
+.top{background:var(--c1);border-bottom:1px solid var(--borde);padding:12px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;}
+.top-back{background:none;border:1px solid var(--borde);color:var(--txt3);font-size:11px;padding:5px 12px;border-radius:6px;cursor:pointer;}
+.top-av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--azul),var(--verde));display:flex;align-items:center;justify-content:center;font-size:16px;}
+.top-info{flex:1;}
+.top-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;}
+.top-estado{font-size:10px;color:var(--verde);}
+.body{padding:14px 14px 80px;}
+.tabs{display:flex;background:var(--c1);border-radius:10px;padding:4px;margin-bottom:14px;}
+.tab{flex:1;padding:8px;text-align:center;font-size:11px;font-weight:700;color:var(--txt3);cursor:pointer;border-radius:8px;}
+.tab.active{background:var(--c3);color:var(--txt);}
+.page{display:none;}.page.active{display:block;}
+
+/* KPIs */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:14px;}
+.kpi{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:10px;text-align:center;}
+.kpi-val{font-family:"Syne",sans-serif;font-weight:800;font-size:18px;}
+.kpi-lbl{font-size:9px;color:var(--txt3);text-transform:uppercase;margin-top:2px;}
+
+.sec{font-family:"Syne",sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);margin:14px 0 8px;display:flex;align-items:center;gap:8px;}
+.sec::after{content:"";flex:1;height:1px;background:var(--borde);}
+
+/* LEAD CARD */
+.lead-card{background:var(--c2);border:1px solid var(--borde);border-radius:12px;padding:14px;margin-bottom:10px;}
+.lead-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;}
+.lead-fuente{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.f-meta{background:rgba(96,165,250,0.15);color:var(--azul);}
+.f-google{background:rgba(245,197,24,0.15);color:var(--amarillo);}
+.f-wa{background:rgba(34,197,94,0.15);color:var(--verde);}
+.f-web{background:rgba(167,139,250,0.15);color:var(--morado);}
+.lead-info{flex:1;}
+.lead-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
+.lead-meta{font-size:11px;color:var(--txt3);margin-top:2px;}
+.lead-badge{font-size:9px;font-weight:700;padding:3px 8px;border-radius:20px;}
+.b-nuevo{background:rgba(34,197,94,0.15);color:var(--verde);}
+.b-contactado{background:rgba(96,165,250,0.15);color:var(--azul);}
+.b-calificado{background:rgba(245,197,24,0.15);color:var(--amarillo);}
+.b-agendado{background:rgba(167,139,250,0.15);color:var(--morado);}
+.b-perdido{background:rgba(232,33,10,0.15);color:var(--rojo);}
+
+.lead-detalle{background:var(--c3);border-radius:8px;padding:10px;margin:8px 0;font-size:12px;color:var(--txt2);line-height:1.5;}
+.lead-actions{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.lact{padding:8px;border-radius:6px;font-family:"Syne",sans-serif;font-weight:700;font-size:11px;cursor:pointer;border:none;}
+.lact-wa{background:#25D366;color:#000;}
+.lact-agendar{background:var(--verde);color:#000;}
+.lact-cal{background:var(--azul);color:#000;}
+.lact-perder{background:var(--c3);border:1px solid var(--borde)!important;color:var(--txt3);}
+
+/* WEBHOOK INFO */
+.webhook-box{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin-bottom:10px;}
+.webhook-url{background:var(--c3);border-radius:6px;padding:10px;font-family:DM Mono,monospace;font-size:11px;color:var(--verde);word-break:break-all;margin:8px 0;border:1px dashed var(--borde);}
+.copy-btn{background:var(--azul);border:none;border-radius:6px;color:#000;font-family:Syne,sans-serif;font-weight:700;font-size:11px;padding:6px 12px;cursor:pointer;}
+
+/* MODAL AGENDAR */
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:300;align-items:flex-end;justify-content:center;}
+.modal.open{display:flex;}
+.modal-inner{background:var(--c2);border:1px solid var(--borde);border-radius:16px 16px 0 0;width:100%;max-width:600px;padding:20px 18px 36px;max-height:94vh;overflow-y:auto;}
+.lbl{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--txt3);margin-bottom:5px;display:block;margin-top:10px;}
+.inp{width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:8px;color:var(--txt);font-family:DM Sans,sans-serif;font-size:14px;padding:10px 12px;outline:none;-webkit-appearance:none;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.btn-save{width:100%;background:var(--verde);border:none;border-radius:8px;color:#000;font-family:Syne,sans-serif;font-weight:800;font-size:14px;padding:13px;cursor:pointer;margin-top:14px;}
+.btn-cancel{width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:8px;color:var(--txt2);font-family:Syne,sans-serif;font-weight:700;font-size:14px;padding:12px;cursor:pointer;margin-top:6px;}
+
+.empty{text-align:center;padding:30px;color:var(--txt3);font-size:12px;}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--c3);border:1px solid var(--borde);border-radius:8px;padding:10px 16px;font-size:12px;opacity:0;transition:all 0.25s;pointer-events:none;z-index:999;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.ok{border-color:rgba(34,197,94,0.4);color:var(--verde);}
+.form-test{background:var(--c2);border:1px dashed var(--borde);border-radius:10px;padding:14px;}
+</style>
+</head>
+<body>
+<div class="top">
+  <button class="top-back" onclick="location.href='menu-coordinador.html'">←</button>
+  <div class="top-av">🎯</div>
+  <div class="top-info">
+    <div class="top-nombre">Agente Captador IA</div>
+    <div class="top-estado">● Captación de leads Meta · Google · WA</div>
+  </div>
+  <button onclick="load()" style="background:none;border:none;color:var(--txt3);cursor:pointer;font-size:20px">&#8635;</button>
+</div>
+
+<div class="body">
+  <div class="tabs">
+    <div class="tab active" id="tab0" onclick="goTab(0)">📥 Leads</div>
+    <div class="tab" id="tab1" onclick="goTab(1)">🔗 Webhooks</div>
+    <div class="tab" id="tab2" onclick="goTab(2)">📝 Test</div>
+  </div>
+
+  <!-- LEADS -->
+  <div class="page active" id="pg0">
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-val" id="k-nuevos" style="color:var(--verde)">0</div><div class="kpi-lbl">Nuevos</div></div>
+      <div class="kpi"><div class="kpi-val" id="k-contactados" style="color:var(--azul)">0</div><div class="kpi-lbl">Contactados</div></div>
+      <div class="kpi"><div class="kpi-val" id="k-agendados" style="color:var(--morado)">0</div><div class="kpi-lbl">Agendados</div></div>
+      <div class="kpi"><div class="kpi-val" id="k-total" style="color:var(--naranja)">0</div><div class="kpi-lbl">Total</div></div>
+    </div>
+
+    <div class="sec" style="color:var(--verde)">🟢 Nuevos sin contactar</div>
+    <div id="nuevos-lista"></div>
+
+    <div class="sec">En proceso</div>
+    <div id="proceso-lista"></div>
+
+    <div class="sec">Agendados</div>
+    <div id="agendados-lista"></div>
+  </div>
+
+  <!-- WEBHOOKS -->
+  <div class="page" id="pg1">
+    <div class="webhook-box">
+      <div style="font-family:Syne,sans-serif;font-weight:700;font-size:14px;margin-bottom:4px;color:var(--azul)">📘 Meta Lead Ads</div>
+      <div style="font-size:11px;color:var(--txt3);margin-bottom:8px">Conecta tu Lead Ads de Facebook/Instagram a este endpoint:</div>
+      <div class="webhook-url" id="webhook-meta">https://hook.us2.make.com/[tu-id]?source=meta</div>
+      <button class="copy-btn" onclick="copyText('webhook-meta')">Copiar URL</button>
+      <div style="font-size:10px;color:var(--txt3);margin-top:8px">Setup en Make.com → Webhook → Meta Lead Ads. El webhook captura nombre, telefono, email del lead.</div>
+    </div>
+
+    <div class="webhook-box">
+      <div style="font-family:Syne,sans-serif;font-weight:700;font-size:14px;margin-bottom:4px;color:var(--amarillo)">📒 Google Ads / Lead Form</div>
+      <div style="font-size:11px;color:var(--txt3);margin-bottom:8px">Conecta tu Google Lead Form a este endpoint:</div>
+      <div class="webhook-url" id="webhook-google">https://hook.us2.make.com/[tu-id]?source=google</div>
+      <button class="copy-btn" onclick="copyText('webhook-google')">Copiar URL</button>
+      <div style="font-size:10px;color:var(--txt3);margin-top:8px">En Google Ads → Lead Form Extension → Webhook URL. Captura datos del formulario directo.</div>
+    </div>
+
+    <div class="webhook-box">
+      <div style="font-family:Syne,sans-serif;font-weight:700;font-size:14px;margin-bottom:4px;color:var(--verde)">💬 WhatsApp Business</div>
+      <div style="font-size:11px;color:var(--txt3);margin-bottom:8px">Para WA Business API o Twilio:</div>
+      <div class="webhook-url" id="webhook-wa">https://hook.us2.make.com/[tu-id]?source=wa</div>
+      <button class="copy-btn" onclick="copyText('webhook-wa')">Copiar URL</button>
+    </div>
+
+    <div class="webhook-box">
+      <div style="font-family:Syne,sans-serif;font-weight:700;font-size:14px;margin-bottom:4px;color:var(--morado)">🌐 Formulario Web</div>
+      <div style="font-size:11px;color:var(--txt3);margin-bottom:8px">Para tu sitio serviruta.cl:</div>
+      <div class="webhook-url" id="webhook-web">https://hook.us2.make.com/[tu-id]?source=web</div>
+      <button class="copy-btn" onclick="copyText('webhook-web')">Copiar URL</button>
+    </div>
+
+    <div class="sec">Flujo automático</div>
+    <div style="background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;">
+      <div style="font-size:12px;line-height:1.8;color:var(--txt2)">
+        <div><span style="color:var(--verde);font-weight:700">1.</span> Lead llega del webhook → se guarda en Supabase</div>
+        <div><span style="color:var(--verde);font-weight:700">2.</span> Agente IA saluda automáticamente por WhatsApp</div>
+        <div><span style="color:var(--verde);font-weight:700">3.</span> Califica: servicio, vehículo, comuna, urgencia</div>
+        <div><span style="color:var(--verde);font-weight:700">4.</span> Agenda en sistema y crea presupuesto</div>
+        <div><span style="color:var(--verde);font-weight:700">5.</span> Pasa al Agente Coordinador IA para asignar técnico</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TEST -->
+  <div class="page" id="pg2">
+    <div style="font-size:11px;color:var(--txt3);margin-bottom:10px">Simula un lead entrante para probar el sistema sin esperar uno real:</div>
+    <div class="form-test">
+      <label class="lbl">Nombre del cliente</label>
+      <input class="inp" id="t-nombre" placeholder="Juan Perez">
+      <label class="lbl">Teléfono</label>
+      <input class="inp" id="t-tel" placeholder="+56 9 XXXX XXXX">
+      <label class="lbl">Email (opcional)</label>
+      <input class="inp" id="t-email" placeholder="cliente@email.cl">
+      <label class="lbl">Origen</label>
+      <select class="inp" id="t-origen">
+        <option value="meta">Meta Lead Ads (Facebook/Instagram)</option>
+        <option value="google">Google Ads</option>
+        <option value="wa">WhatsApp Business</option>
+        <option value="web">Formulario Web</option>
+      </select>
+      <label class="lbl">Servicio de interés</label>
+      <select class="inp" id="t-servicio">
+        <option value="">No especifica</option>
+        <option>Cambio kit embrague</option>
+        <option>Reparacion alternador</option>
+        <option>Diagnostico computarizado</option>
+        <option>Servicio DPF</option>
+        <option>Pre-revision tecnica</option>
+        <option>Mantencion general</option>
+        <option>Otro</option>
+      </select>
+      <label class="lbl">Comentario del lead</label>
+      <textarea class="inp" id="t-comentario" rows="2" placeholder="No me parte el auto..."></textarea>
+      <button class="btn-save" onclick="simularLead()">Simular lead entrante</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL AGENDAR -->
+<div class="modal" id="modal-agendar">
+  <div class="modal-inner">
+    <div style="width:36px;height:4px;background:var(--borde);border-radius:2px;margin:0 auto 16px"></div>
+    <div style="font-family:Syne,sans-serif;font-weight:800;font-size:18px;margin-bottom:4px">Agendar servicio</div>
+    <div style="font-size:12px;color:var(--txt3);margin-bottom:14px" id="ag-cliente-lbl"></div>
+
+    <div class="row2">
+      <div>
+        <label class="lbl">Fecha</label>
+        <input class="inp" type="date" id="ag-fecha">
+      </div>
+      <div>
+        <label class="lbl">Hora</label>
+        <input class="inp" type="time" id="ag-hora" value="09:00">
+      </div>
+    </div>
+    <label class="lbl">Servicio</label>
+    <select class="inp" id="ag-servicio">
+      <option>Cambio kit embrague</option>
+      <option>Reparacion alternador</option>
+      <option>Diagnostico computarizado</option>
+      <option>Servicio DPF</option>
+      <option>Pre-revision tecnica</option>
+      <option>Mantencion general</option>
+      <option>Otro</option>
+    </select>
+    <label class="lbl">Vehículo (marca, modelo, año)</label>
+    <input class="inp" id="ag-vehiculo" placeholder="Toyota Corolla 2018">
+    <label class="lbl">Patente</label>
+    <input class="inp" id="ag-patente" placeholder="ABCD12">
+    <label class="lbl">Dirección y comuna</label>
+    <input class="inp" id="ag-direccion" placeholder="Av. Providencia 1234, Providencia">
+    <label class="lbl">Notas</label>
+    <textarea class="inp" id="ag-notas" rows="2" placeholder="Descripcion del problema, urgencia, etc."></textarea>
+
+    <button class="btn-save" onclick="confirmarAgendar()">Confirmar agendamiento</button>
+    <button class="btn-cancel" onclick="document.getElementById('modal-agendar').classList.remove('open')">Cancelar</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var SB='https://bqlgfmqcefledqyodkii.supabase.co'
+var SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+var db=null,leads=[],leadActual=null
+
+function getDB(){if(!db)db=supabase.createClient(SB,SK);return db;}
+
+var FUENTES={
+  meta:{icon:'📘',cls:'f-meta',nombre:'Meta Lead Ads'},
+  google:{icon:'📒',cls:'f-google',nombre:'Google Ads'},
+  wa:{icon:'💬',cls:'f-wa',nombre:'WhatsApp'},
+  web:{icon:'🌐',cls:'f-web',nombre:'Web'}
+}
+
+var ESTADOS={
+  nuevo:{label:'Nuevo',cls:'b-nuevo'},
+  contactado:{label:'Contactado',cls:'b-contactado'},
+  calificado:{label:'Calificado',cls:'b-calificado'},
+  agendado:{label:'Agendado',cls:'b-agendado'},
+  perdido:{label:'Perdido',cls:'b-perdido'}
+}
+
+async function load(){
+  var r=await getDB().from('leads').select('*').order('created_at',{ascending:false}).limit(50)
+  leads=r.data||[]
+
+  var nuevos=leads.filter(function(l){return l.estado==='nuevo'||!l.estado})
+  var enProceso=leads.filter(function(l){return l.estado==='contactado'||l.estado==='calificado'})
+  var agendados=leads.filter(function(l){return l.estado==='agendado'})
+
+  document.getElementById('k-nuevos').textContent=nuevos.length
+  document.getElementById('k-contactados').textContent=enProceso.length
+  document.getElementById('k-agendados').textContent=agendados.length
+  document.getElementById('k-total').textContent=leads.length
+
+  renderLista('nuevos-lista',nuevos)
+  renderLista('proceso-lista',enProceso)
+  renderLista('agendados-lista',agendados)
+}
+
+function renderLista(id,data){
+  var el=document.getElementById(id)
+  if(!data.length){el.innerHTML='<div class="empty">Sin leads en esta categoría</div>';return}
+  el.innerHTML=data.map(function(l,i){
+    var f=FUENTES[l.origen]||FUENTES.web
+    var est=ESTADOS[l.estado||'nuevo']
+    var fecha=l.created_at?new Date(l.created_at).toLocaleDateString('es-CL',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):''
+    return '<div class="lead-card" data-lead-id="'+l.id+'">'+
+      '<div class="lead-top">'+
+        '<div class="lead-fuente '+f.cls+'">'+f.icon+'</div>'+
+        '<div class="lead-info">'+
+          '<div class="lead-nombre">'+(l.nombre||'Sin nombre')+'</div>'+
+          '<div class="lead-meta">'+f.nombre+' · '+fecha+'</div>'+
+        '</div>'+
+        '<span class="lead-badge '+est.cls+'">'+est.label+'</span>'+
+      '</div>'+
+      (l.telefono?'<div style="font-size:12px;color:var(--azul);margin:4px 0">📞 '+l.telefono+'</div>':'')+
+      (l.email?'<div style="font-size:11px;color:var(--txt3);margin:2px 0">'+l.email+'</div>':'')+
+      ((l.servicio||l.detalle)?'<div class="lead-detalle">'+(l.servicio?'<b>Servicio:</b> '+l.servicio+'<br>':'')+(l.detalle?l.detalle:'')+'</div>':'')+
+      '<div class="lead-actions">'+
+        (l.telefono?'<button class="lact lact-wa" data-action="wa" data-id="'+l.id+'">💬 WhatsApp</button>':'')+
+        (l.estado!=='agendado'?'<button class="lact lact-agendar" data-action="agendar" data-id="'+l.id+'">📅 Agendar</button>':'<button class="lact lact-cal" data-action="vercontrol" data-id="'+l.id+'">Ver control</button>')+
+      '</div>'+
+    '</div>'
+  }).join('')
+  // Attach listeners
+  document.querySelectorAll('#'+id+' [data-action]').forEach(function(btn){
+    btn.onclick=function(){
+      var id=btn.getAttribute('data-id')
+      var lead=leads.find(function(x){return x.id===id})
+      if(!lead)return
+      var action=btn.getAttribute('data-action')
+      if(action==='wa')contactarWA(lead)
+      else if(action==='agendar')abrirAgendar(lead)
+      else if(action==='vercontrol')location.href='agente-coordinador.html'
+    }
+  })
+}
+
+function contactarWA(lead){
+  if(!lead.telefono)return
+  var nombre=lead.nombre?lead.nombre.split(' ')[0]:'cliente'
+  var msg='Hola '+nombre+'! Soy de Serviruta, mecánica móvil profesional. Recibimos tu solicitud y queremos ayudarte. '+
+    '¿Podrías contarme:\n\n'+
+    '1. ¿Qué problema tiene tu vehículo?\n'+
+    '2. ¿Marca, modelo y año?\n'+
+    '3. ¿En qué comuna estás?\n'+
+    '4. ¿Es urgente o lo agendamos para esta semana?\n\n'+
+    'Nuestro técnico va donde estés. Garantía 1 año.'
+  window.open('https://wa.me/56'+lead.telefono.replace(/[^0-9]/g,'')+'?text='+encodeURIComponent(msg),'_blank')
+  // Marcar como contactado
+  getDB().from('leads').update({estado:'contactado'}).eq('id',lead.id).then(function(){load()})
+}
+
+function abrirAgendar(lead){
+  leadActual=lead
+  document.getElementById('ag-cliente-lbl').textContent=(lead.nombre||'')+(lead.telefono?' · '+lead.telefono:'')
+  var hoy=new Date()
+  hoy.setDate(hoy.getDate()+1)
+  document.getElementById('ag-fecha').value=hoy.toISOString().split('T')[0]
+  document.getElementById('ag-hora').value='09:00'
+  document.getElementById('ag-servicio').value=lead.servicio||'Diagnostico computarizado'
+  document.getElementById('ag-vehiculo').value=''
+  document.getElementById('ag-patente').value=''
+  document.getElementById('ag-direccion').value=''
+  document.getElementById('ag-notas').value=lead.detalle||''
+  document.getElementById('modal-agendar').classList.add('open')
+}
+
+async function confirmarAgendar(){
+  if(!leadActual)return
+  var fecha=document.getElementById('ag-fecha').value
+  var hora=document.getElementById('ag-hora').value
+  var servicio=document.getElementById('ag-servicio').value
+  var vehiculo=document.getElementById('ag-vehiculo').value.trim()
+  var patente=document.getElementById('ag-patente').value.trim().toUpperCase()
+  var direccion=document.getElementById('ag-direccion').value.trim()
+  var notas=document.getElementById('ag-notas').value.trim()
+
+  if(!fecha||!direccion){toast('Completa fecha y direccion');return}
+
+  // 1. Crear entrada en agenda
+  var ag={
+    cliente:leadActual.nombre,
+    telefono:leadActual.telefono,
+    servicio:servicio,
+    fecha:fecha,hora:hora,
+    direccion:direccion,
+    estado:'agendado',
+    notas:notas+(vehiculo?' · Vehiculo: '+vehiculo:'')+(patente?' · '+patente:'')
+  }
+  await getDB().from('agenda').insert(ag)
+
+  // 2. Crear presupuesto en estado en_espera
+  var presupuesto={
+    numero:'L'+Date.now().toString().slice(-6),
+    cliente:leadActual.nombre,
+    telefono:leadActual.telefono,
+    email:leadActual.email,
+    patente:patente,
+    vehiculo:vehiculo,
+    auto:vehiculo,
+    estado:'borrador',
+    estado_servicio:'nuevo',
+    pago_cliente:'pendiente',
+    obs:'Lead '+leadActual.origen+' · '+servicio+(notas?' · '+notas:''),
+    items:[]
+  }
+  await getDB().from('presupuestos').insert(presupuesto)
+
+  // 3. Marcar lead como agendado
+  await getDB().from('leads').update({estado:'agendado'}).eq('id',leadActual.id)
+
+  // 4. Enviar WA confirmacion
+  if(leadActual.telefono){
+    var nombre=leadActual.nombre?leadActual.nombre.split(' ')[0]:'cliente'
+    var msg='Hola '+nombre+'! Tu servicio quedó agendado:\n\n'+
+      '📅 '+fecha+' a las '+hora+'\n'+
+      '🔧 '+servicio+'\n'+
+      '📍 '+direccion+'\n\n'+
+      'El técnico llegará a la hora coordinada con todas las herramientas. ¿Alguna duda? Estamos aqui.'
+    window.open('https://wa.me/56'+leadActual.telefono.replace(/[^0-9]/g,'')+'?text='+encodeURIComponent(msg),'_blank')
+  }
+
+  document.getElementById('modal-agendar').classList.remove('open')
+  toast('Lead agendado · pasado a Coordinador','ok')
+  load()
+}
+
+async function simularLead(){
+  var nombre=document.getElementById('t-nombre').value.trim()
+  var tel=document.getElementById('t-tel').value.trim()
+  if(!nombre||!tel){toast('Completa nombre y telefono');return}
+
+  var lead={
+    nombre:nombre,
+    telefono:tel,
+    email:document.getElementById('t-email').value.trim()||null,
+    origen:document.getElementById('t-origen').value,
+    servicio:document.getElementById('t-servicio').value||null,
+    detalle:document.getElementById('t-comentario').value.trim()||null,
+    estado:'nuevo'
+  }
+
+  var r=await getDB().from('leads').insert(lead)
+  if(r.error){toast('Error: '+r.error.message);return}
+
+  toast('Lead simulado correctamente','ok')
+  // Limpiar form
+  document.getElementById('t-nombre').value=''
+  document.getElementById('t-tel').value=''
+  document.getElementById('t-email').value=''
+  document.getElementById('t-comentario').value=''
+  goTab(0)
+  load()
+}
+
+function copyText(id){
+  var t=document.getElementById(id).textContent
+  navigator.clipboard.writeText(t).then(function(){toast('URL copiada','ok')})
+}
+
+function goTab(n){
+  for(var i=0;i<3;i++){
+    document.getElementById('pg'+i).classList.toggle('active',i===n)
+    document.getElementById('tab'+i).classList.toggle('active',i===n)
+  }
+}
+
+function toast(msg,type){
+  var t=document.getElementById('toast');t.textContent=msg
+  t.className='toast'+(type?' '+type:'')
+  t.classList.add('show')
+  setTimeout(function(){t.classList.remove('show')},2500)
+}
+
+load()
+setInterval(load,30*1000)
+</script>
+</body>
+</html>

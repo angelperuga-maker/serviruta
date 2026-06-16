@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta · Agente Coordinador IA</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:600px;margin:0 auto;}
+.top{background:var(--c1);border-bottom:1px solid var(--borde);padding:12px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;}
+.top-back{background:none;border:1px solid var(--borde);color:var(--txt3);font-size:11px;padding:5px 12px;border-radius:6px;cursor:pointer;flex-shrink:0;}
+.top-av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--morado),var(--azul));display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.top-info{flex:1;}
+.top-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;}
+.top-estado{font-size:10px;color:var(--verde);}
+.body{padding:14px 14px 80px;}
+.tabs{display:flex;background:var(--c1);border-radius:10px;padding:4px;margin-bottom:14px;}
+.tab{flex:1;padding:8px;text-align:center;font-size:11px;font-weight:700;color:var(--txt3);cursor:pointer;border-radius:8px;}
+.tab.active{background:var(--c3);color:var(--txt);}
+.page{display:none;}.page.active{display:block;}
+.sec{font-family:"Syne",sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);margin:14px 0 8px;display:flex;align-items:center;gap:8px;}
+.sec::after{content:"";flex:1;height:1px;background:var(--borde);}
+
+/* CHAT */
+.chat-area{display:flex;flex-direction:column;gap:10px;margin-bottom:10px;}
+.msg{max-width:90%;display:flex;flex-direction:column;gap:3px;}
+.msg.user{align-self:flex-end;align-items:flex-end;}
+.msg.agent{align-self:flex-start;align-items:flex-start;}
+.bubble{padding:10px 14px;border-radius:14px;font-size:13px;line-height:1.6;}
+.msg.user .bubble{background:var(--morado);color:#000;border-radius:14px 14px 4px 14px;}
+.msg.agent .bubble{background:var(--c2);border:1px solid var(--borde);color:var(--txt);border-radius:14px 14px 14px 4px;}
+.msg-time{font-size:10px;color:var(--txt3);}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+.chip{background:var(--c2);border:1px solid var(--borde);border-radius:20px;color:var(--txt2);font-size:11px;padding:6px 12px;cursor:pointer;}
+.chip:hover{border-color:var(--morado);color:var(--txt);}
+.input-bar{background:var(--c1);border:1px solid var(--borde);border-radius:24px;padding:6px 6px 6px 14px;display:flex;gap:6px;align-items:center;position:sticky;bottom:10px;}
+.msg-inp{flex:1;background:transparent;border:none;color:var(--txt);font-family:"DM Sans",sans-serif;font-size:14px;padding:8px 4px;outline:none;}
+.msg-inp::placeholder{color:var(--txt3);}
+.send-btn{width:36px;height:36px;border-radius:50%;background:var(--morado);border:none;color:#000;font-size:18px;cursor:pointer;font-weight:bold;flex-shrink:0;}
+
+/* DASHBOARD */
+.alert-card{background:var(--c2);border-left:3px solid;border-radius:10px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:10px;}
+.alert-card.urgente{border-left-color:var(--rojo);background:rgba(232,33,10,0.06);}
+.alert-card.media{border-left-color:var(--amarillo);background:rgba(245,197,24,0.05);}
+.alert-icon{font-size:20px;flex-shrink:0;}
+.alert-txt{flex:1;}
+.alert-titulo{font-size:13px;font-weight:600;}
+.alert-detalle{font-size:11px;color:var(--txt3);margin-top:2px;}
+.alert-btn{background:var(--rojo);border:none;border-radius:6px;color:#fff;font-family:"Syne",sans-serif;font-weight:700;font-size:11px;padding:6px 10px;cursor:pointer;flex-shrink:0;}
+
+.dia-card{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:12px;margin-bottom:8px;}
+.dia-num{font-family:"Syne",sans-serif;font-weight:800;font-size:22px;width:34px;height:34px;border-radius:50%;background:var(--c3);color:var(--morado);display:flex;align-items:center;justify-content:center;float:left;margin-right:10px;flex-shrink:0;}
+.dia-cliente{font-size:13px;font-weight:600;}
+.dia-meta{font-size:11px;color:var(--txt3);margin-top:2px;}
+.dia-prio{font-size:10px;padding:2px 6px;border-radius:4px;background:var(--c3);color:var(--txt3);margin-top:6px;display:inline-block;}
+
+/* TOP 3 TECNICOS */
+.tec-sug{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:12px;margin-bottom:8px;}
+.tec-top{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+.tec-rank{font-family:"Syne",sans-serif;font-weight:900;font-size:20px;width:30px;text-align:center;}
+.tec-rank.gold{color:var(--amarillo);}
+.tec-rank.silver{color:#C0C0C0;}
+.tec-rank.bronze{color:#CD7F32;}
+.tec-nombre{flex:1;font-family:"Syne",sans-serif;font-weight:700;font-size:13px;}
+.tec-score{font-family:"Syne",sans-serif;font-weight:800;font-size:13px;color:var(--verde);}
+.tec-just{font-size:11px;color:var(--txt2);line-height:1.5;background:var(--c3);border-radius:6px;padding:6px 8px;margin:6px 0;}
+.tec-asignar{width:100%;background:var(--verde);border:none;border-radius:6px;color:#000;font-family:"Syne",sans-serif;font-weight:700;font-size:11px;padding:8px;cursor:pointer;}
+
+.kpi-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
+.kpi{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:12px;text-align:center;}
+.kpi-val{font-family:"Syne",sans-serif;font-weight:800;font-size:22px;}
+.kpi-lbl{font-size:10px;color:var(--txt3);text-transform:uppercase;margin-top:2px;}
+
+.empty{text-align:center;padding:30px;color:var(--txt3);font-size:12px;}
+.update{font-size:10px;color:var(--txt3);text-align:center;margin-bottom:8px;}
+.typing{display:none;align-self:flex-start;}
+.typing .bubble{display:flex;gap:4px;align-items:center;padding:12px 16px;}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--txt3);animation:blink 1.2s infinite;}
+.dot:nth-child(2){animation-delay:0.2s;}
+.dot:nth-child(3){animation-delay:0.4s;}
+@keyframes blink{0%,80%,100%{opacity:0.3}40%{opacity:1}}
+</style>
+</head>
+<body>
+<div class="top">
+  <button class="top-back" onclick="location.href='menu-coordinador.html'">←</button>
+  <div class="top-av">🤖</div>
+  <div class="top-info">
+    <div class="top-nombre">Agente Coordinador</div>
+    <div class="top-estado">● Asistente IA · Monitoreo en vivo</div>
+  </div>
+  <button onclick="loadAll()" style="background:none;border:none;color:var(--txt3);cursor:pointer;font-size:20px">&#8635;</button>
+</div>
+
+<div class="body">
+  <div class="tabs">
+    <div class="tab active" id="tab0" onclick="goTab(0)">📊 Dashboard</div>
+    <div class="tab" id="tab1" onclick="goTab(1)">💬 Chat IA</div>
+    <div class="tab" id="tab2" onclick="goTab(2)">🎯 Asignar</div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="page active" id="pg0">
+    <div class="kpi-row">
+      <div class="kpi"><div class="kpi-val" id="k-activos" style="color:var(--naranja)">0</div><div class="kpi-lbl">Activos ahora</div></div>
+      <div class="kpi"><div class="kpi-val" id="k-pendientes" style="color:var(--azul)">0</div><div class="kpi-lbl">Pendientes hoy</div></div>
+    </div>
+    <div class="update" id="update-time">Actualizando...</div>
+
+    <div class="sec" style="color:var(--rojo)">⚠️ Alertas activas</div>
+    <div id="alertas-lista"></div>
+
+    <div class="sec">Orden sugerido del día</div>
+    <div id="dia-lista"></div>
+  </div>
+
+  <!-- CHAT IA -->
+  <div class="page" id="pg1">
+    <div class="chips" id="chips">
+      <div class="chip" onclick="usarChip(this)">¿Qué técnico está libre?</div>
+      <div class="chip" onclick="usarChip(this)">Resumen del día</div>
+      <div class="chip" onclick="usarChip(this)">¿Cuánto facturamos hoy?</div>
+      <div class="chip" onclick="usarChip(this)">Servicios atrasados</div>
+      <div class="chip" onclick="usarChip(this)">Mejor técnico para DPF</div>
+    </div>
+    <div class="chat-area" id="chat">
+      <div class="msg agent">
+        <div class="bubble">Hola coordinador! Soy tu asistente para gestionar el día.<br><br>Puedo ayudarte con: asignación de técnicos, estado de servicios, sugerencias de prioridad, alertas y reportes rápidos.</div>
+        <div class="msg-time">Ahora</div>
+      </div>
+    </div>
+    <div class="input-bar">
+      <input class="msg-inp" id="msg-inp" placeholder="Pregunta lo que necesites..." onkeydown="if(event.key==='Enter')enviar()">
+      <button class="send-btn" onclick="enviar()">↑</button>
+    </div>
+    <div class="typing" id="typing">
+      <div class="bubble"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+    </div>
+  </div>
+
+  <!-- ASIGNAR -->
+  <div class="page" id="pg2">
+    <div class="sec">Servicios sin asignar</div>
+    <div id="sin-asignar"></div>
+  </div>
+</div>
+
+<script>
+var SB='https://bqlgfmqcefledqyodkii.supabase.co'
+var SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+var db=null,servicios=[],tecnicos=[],historial=[]
+
+var TECNICOS=[
+  {nombre:'Reynaldo Aguas Bertel',tel:'+56935287199',especialidad:['embrague','general']},
+  {nombre:'Kiven Henz',tel:'+56964880196',especialidad:['DPF','dpf','diesel','general']},
+  {nombre:'Humberto Morales',tel:'+56994946414',especialidad:['alternador','electrico','general']},
+  {nombre:'Giovanino Perugini',tel:'+56933592097',especialidad:['general','frenos']},
+  {nombre:'Javier Honores',tel:'+56929161693',especialidad:['general','diagnostico']}
+]
+
+var SYSTEM_PROMPT=`Eres el asistente coordinador de Serviruta, empresa de mecánica a domicilio en Santiago Chile.
+Ayudas al coordinador a gestionar el día: asignación de técnicos, monitoreo, priorización de servicios.
+
+CRITERIOS DE ASIGNACION (en orden):
+1. Proximidad geografica (mismo sector/comuna)
+2. Especialidad tecnica del problema
+3. Carga de trabajo del dia (menos servicios = mas disponible)
+
+PRIORIDAD DEL DIA:
+1. Cliente nuevo
+2. Cliente recurrente
+3. Tipo de servicio (urgencia)
+4. Monto del servicio
+
+REGLAS:
+- Respuestas cortas y directas (max 5 lineas)
+- Si te preguntan por un servicio, da datos concretos (cliente, monto, estado)
+- Sugiere top 3 tecnicos con justificacion breve
+- Detecta alertas: servicios >2h sin avance, tecnicos sin actualizar >1h
+- Lenguaje profesional pero cercano
+- En espanol, sin acentos para evitar errores`
+
+function getDB(){if(!db)db=supabase.createClient(SB,SK);return db;}
+
+async function loadAll(){
+  var r=await getDB().from('presupuestos').select('*').order('created_at',{ascending:false}).limit(100)
+  servicios=r.data||[]
+  renderDashboard()
+  renderAsignar()
+  document.getElementById('update-time').textContent='Actualizado: '+new Date().toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'})
+}
+
+function renderDashboard(){
+  var hoy=new Date().toISOString().split('T')[0]
+  var activos=servicios.filter(function(s){return s.estado_servicio==='ejecucion'||s.estado_servicio==='aprobado'})
+  var pendientes=servicios.filter(function(s){return (s.estado_servicio==='nuevo'||s.estado_servicio==='enviado')&&(s.created_at||'').startsWith(hoy)})
+  document.getElementById('k-activos').textContent=activos.length
+  document.getElementById('k-pendientes').textContent=pendientes.length
+
+  // ALERTAS
+  var ahora=new Date()
+  var alertas=[]
+  activos.forEach(function(s){
+    var inicio=new Date(s.created_at)
+    var horas=(ahora-inicio)/(1000*60*60)
+    if(horas>=2){
+      alertas.push({tipo:'urgente',icon:'⏱️',titulo:s.tecnico+' lleva '+Math.floor(horas)+'h en servicio',detalle:s.cliente+(s.vehiculo?' · '+s.vehiculo:''),accion:'WA',tel:getTelTec(s.tecnico),msg:'Hola '+s.tecnico.split(' ')[0]+', ¿como va el servicio con '+s.cliente+'? Llevas '+Math.floor(horas)+'h, ¿necesitas algo?'})
+    }
+  })
+  pendientes.forEach(function(s){
+    var inicio=new Date(s.created_at)
+    var horas=(ahora-inicio)/(1000*60*60)
+    if(horas>=1){
+      alertas.push({tipo:'media',icon:'📞',titulo:'Cliente '+s.cliente+' esperando',detalle:'Lead sin asignar hace '+Math.floor(horas)+'h',accion:'Asignar',id:s.id})
+    }
+  })
+
+  var aLista=document.getElementById('alertas-lista')
+  if(!alertas.length){
+    aLista.innerHTML='<div class="empty">✅ Sin alertas. Todo bajo control.</div>'
+  }else{
+    aLista.innerHTML=alertas.map(function(a){
+      return '<div class="alert-card '+a.tipo+'">'+
+        '<div class="alert-icon">'+a.icon+'</div>'+
+        '<div class="alert-txt"><div class="alert-titulo">'+a.titulo+'</div><div class="alert-detalle">'+a.detalle+'</div></div>'+
+        (a.tel?'<button class="alert-btn" onclick="window.open(\'https://wa.me/'+a.tel.replace(/[^0-9]/g,'')+'?text='+encodeURIComponent(a.msg)+'\',\'_blank\')">WA</button>':'<button class="alert-btn" onclick="goTab(2)">Asignar</button>')+
+      '</div>'
+    }).join('')
+  }
+
+  // ORDEN DEL DIA
+  var hoyServicios=servicios.filter(function(s){return (s.created_at||'').startsWith(hoy)&&s.estado_servicio!=='completado'})
+  hoyServicios.sort(function(a,b){
+    // Cliente nuevo primero: si no aparece otro servicio con mismo cliente en el historial
+    var aNuevo=servicios.filter(function(x){return x.cliente===a.cliente}).length===1?1:0
+    var bNuevo=servicios.filter(function(x){return x.cliente===b.cliente}).length===1?1:0
+    if(aNuevo!==bNuevo)return bNuevo-aNuevo
+    // Por monto
+    return (b.total||0)-(a.total||0)
+  })
+
+  var dLista=document.getElementById('dia-lista')
+  if(!hoyServicios.length){
+    dLista.innerHTML='<div class="empty">Sin servicios hoy</div>'
+  }else{
+    dLista.innerHTML=hoyServicios.slice(0,8).map(function(s,i){
+      var esNuevo=servicios.filter(function(x){return x.cliente===s.cliente}).length===1
+      return '<div class="dia-card">'+
+        '<div class="dia-num">'+(i+1)+'</div>'+
+        '<div class="dia-cliente">'+s.cliente+(s.vehiculo?' · '+s.vehiculo:'')+'</div>'+
+        '<div class="dia-meta">'+(s.tecnico||'Sin asignar')+(s.total?' · $'+s.total.toLocaleString('es-CL'):'')+'</div>'+
+        '<div style="clear:both"></div>'+
+        '<div class="dia-prio" style="color:'+(esNuevo?'var(--verde)':'var(--azul)')+'">'+(esNuevo?'⭐ Cliente nuevo':'Recurrente')+'</div>'+
+      '</div>'
+    }).join('')
+  }
+}
+
+function renderAsignar(){
+  var sinAsignar=servicios.filter(function(s){return !s.tecnico&&s.estado_servicio!=='completado'})
+  var el=document.getElementById('sin-asignar')
+  if(!sinAsignar.length){
+    el.innerHTML='<div class="empty">Todos los servicios estan asignados</div>'
+    return
+  }
+  el.innerHTML=sinAsignar.slice(0,5).map(function(s){
+    var top3=sugerirTecnicos(s)
+    return '<div style="background:var(--c2);border:1px solid var(--borde);border-radius:12px;padding:14px;margin-bottom:12px">'+
+      '<div style="font-family:Syne,sans-serif;font-weight:700;font-size:14px;margin-bottom:2px">'+s.cliente+'</div>'+
+      '<div style="font-size:11px;color:var(--txt3);margin-bottom:10px">'+(s.vehiculo||'')+(s.direccion?' · '+s.direccion:'')+'</div>'+
+      top3.map(function(t,i){
+        var rankCls=['gold','silver','bronze'][i]
+        return '<div class="tec-sug">'+
+          '<div class="tec-top"><div class="tec-rank '+rankCls+'">#'+(i+1)+'</div><div class="tec-nombre">'+t.nombre+'</div><div class="tec-score">'+t.score+'pts</div></div>'+
+          '<div class="tec-just">'+t.justificacion+'</div>'+
+          '<button class="tec-asignar" onclick="asignarTecnico(\''+s.id+'\',\''+t.nombre+'\',\''+s.cliente+'\',\''+(t.tel||'')+'\')">Asignar a '+t.nombre.split(' ')[0]+'</button>'+
+        '</div>'
+      }).join('')+
+    '</div>'
+  }).join('')
+}
+
+function sugerirTecnicos(servicio){
+  var hoy=new Date().toISOString().split('T')[0]
+  var problema=((servicio.obs||'')+' '+(servicio.items||[]).map(function(i){return i.desc||''}).join(' ')).toLowerCase()
+  var comuna=(servicio.direccion||'').toLowerCase()
+
+  return TECNICOS.map(function(t){
+    var score=50
+    var razones=[]
+    // Especialidad
+    var matchEspecialidad=t.especialidad.some(function(e){return problema.indexOf(e.toLowerCase())>=0})
+    if(matchEspecialidad){score+=30;razones.push('especialista en '+t.especialidad[0])}
+    // Carga de trabajo
+    var cargaHoy=servicios.filter(function(s){return s.tecnico===t.nombre&&(s.created_at||'').startsWith(hoy)}).length
+    var puntosCarga=Math.max(0,20-cargaHoy*5)
+    score+=puntosCarga
+    if(cargaHoy===0)razones.push('sin servicios hoy')
+    else if(cargaHoy===1)razones.push('1 servicio hoy')
+    else razones.push(cargaHoy+' servicios hoy')
+    // Proximidad
+    var ultimoServicio=servicios.filter(function(s){return s.tecnico===t.nombre&&s.direccion}).slice(0,1)[0]
+    if(ultimoServicio&&comuna){
+      var ultDir=(ultimoServicio.direccion||'').toLowerCase()
+      var palabrasComuna=comuna.split(/\s+/).filter(function(p){return p.length>3})
+      var matchProx=palabrasComuna.some(function(p){return ultDir.indexOf(p)>=0})
+      if(matchProx){score+=20;razones.push('proximo al sector')}
+    }
+    return {nombre:t.nombre,tel:t.tel,score:score,justificacion:razones.join(' · ')}
+  }).sort(function(a,b){return b.score-a.score}).slice(0,3)
+}
+
+async function asignarTecnico(id,tecnico,cliente,tel){
+  if(!confirm('Asignar '+cliente+' a '+tecnico+'?'))return
+  await getDB().from('presupuestos').update({tecnico:tecnico,estado_servicio:'aprobado'}).eq('id',id)
+  if(tel){
+    var msg='Hola '+tecnico.split(' ')[0]+', te asigno un servicio con '+cliente+'. Revisa el hub y coordina con el cliente.'
+    window.open('https://wa.me/'+tel.replace(/[^0-9]/g,'')+'?text='+encodeURIComponent(msg),'_blank')
+  }
+  loadAll()
+}
+
+function getTelTec(nombre){
+  var t=TECNICOS.find(function(x){return x.nombre===nombre})
+  return t?t.tel:''
+}
+
+async function enviar(){
+  var txt=document.getElementById('msg-inp').value.trim()
+  if(!txt)return
+  agregarMensaje('user',txt)
+  document.getElementById('msg-inp').value=''
+  document.getElementById('chips').style.display='none'
+  historial.push({role:'user',content:txt})
+  mostrarTyping()
+  // Contexto enriquecido con datos actuales
+  var contexto='Datos actuales:\nServicios totales: '+servicios.length+'\nActivos: '+servicios.filter(function(s){return s.estado_servicio==='ejecucion'}).length+'\nTecnicos: '+TECNICOS.map(function(t){return t.nombre}).join(', ')
+  try{
+    var r=await fetch('https://hook.us2.make.com/hail5qzypi39pmsixxi167lviw8wahbq',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({system:SYSTEM_PROMPT+'\n\n'+contexto,messages:historial})
+    })
+    var raw=await r.text()
+    var respuesta=raw
+    try{
+      var p=JSON.parse(raw)
+      if(p.content&&p.content[0])respuesta=p.content[0].text
+      else if(p.text)respuesta=p.text
+    }catch(e){}
+    if(!respuesta||respuesta.trim()===''||respuesta.trim()==='Accepted')respuesta='Sin respuesta. Intenta de nuevo.'
+    ocultarTyping()
+    agregarMensaje('agent',respuesta)
+    historial.push({role:'assistant',content:respuesta})
+  }catch(e){
+    ocultarTyping()
+    agregarMensaje('agent','Error de conexion. Verifica tu señal.')
+  }
+}
+
+function agregarMensaje(rol,txt){
+  var chat=document.getElementById('chat')
+  var hora=new Date().toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'})
+  var div=document.createElement('div')
+  div.className='msg '+rol
+  div.innerHTML='<div class="bubble">'+txt.replace(/\n/g,'<br>')+'</div><div class="msg-time">'+hora+'</div>'
+  chat.appendChild(div)
+  chat.scrollTop=chat.scrollHeight
+}
+
+function mostrarTyping(){var t=document.getElementById('typing');t.style.display='flex';var chat=document.getElementById('chat');chat.appendChild(t);chat.scrollTop=chat.scrollHeight}
+function ocultarTyping(){document.getElementById('typing').style.display='none'}
+function usarChip(el){document.getElementById('msg-inp').value=el.textContent;enviar()}
+
+function goTab(n){
+  for(var i=0;i<3;i++){
+    document.getElementById('pg'+i).classList.toggle('active',i===n)
+    document.getElementById('tab'+i).classList.toggle('active',i===n)
+  }
+}
+
+loadAll()
+setInterval(loadAll,15*60*1000)
+</script>
+</body>
+</html>

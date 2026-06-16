@@ -84,7 +84,7 @@ function getDB(){if(!db)db=supabase.createClient(SB,SK);return db;}
 
 async function load(){
   var hoy=new Date().toISOString().split('T')[0]
-  var r=await getDB().from('presupuestos').select('*').in('estado_servicio',['ejecucion','aprobado','completado']).order('created_at',{ascending:false})
+  var r=await getDB().from('presupuestos').select('*').order('created_at',{ascending:false})
   var todos=r.data||[]
   var activos=todos.filter(function(s){return s.estado_servicio==='ejecucion'||s.estado_servicio==='aprobado'})
   var completadosHoy=todos.filter(function(s){return s.estado_servicio==='completado'&&(s.created_at||'').startsWith(hoy)})

@@ -102,22 +102,24 @@ async function load(){
   var fecha=getFechaStr(fechaActual)
   document.getElementById('fecha-txt').textContent=getFechaLegible(fechaActual)
 
-  var rs=await getDB().from('presupuestos').select('*').eq('estado_servicio','completado').like('created_at',fecha+'%')
+  var rs=await getDB().from('presupuestos').select('*').like('created_at',fecha+'%')
   var svcs=rs.data||[]
   var rg=await getDB().from('gastos').select('*').like('fecha',fecha+'%')
   var gastos=rg.data||[]
-  var rd=await getDB().from('diagnosticos').select('*').like('created_at',fecha+'%')
-  var diags=rd.data||[]
+  var diags=[]
+  try{var rd=await getDB().from('diagnosticos').select('*').like('created_at',fecha+'%');diags=rd.data||[]}catch(e){}
 
-  var ingresos=svcs.reduce(function(s,x){return s+(x.total||0)},0)
-  var cobrado=svcs.filter(function(s){return s.pago_cliente==='pagado'}).reduce(function(s,x){return s+(x.total||0)},0)
+  // svcs ahora trae TODOS los servicios del día; filtramos los relevantes
+  var svcsCompletados=svcs.filter(function(s){return s.estado_servicio==='completado'})
+  var ingresos=svcsCompletados.reduce(function(s,x){return s+(x.total||0)},0)
+  var cobrado=svcsCompletados.filter(function(s){return s.pago_cliente==='pagado'}).reduce(function(s,x){return s+(x.total||0)},0)
   var gastosTot=gastos.reduce(function(s,g){return s+(g.monto||0)},0)
   var margen=cobrado-gastosTot
 
   document.getElementById('k-ingresos').textContent='$'+ingresos.toLocaleString('es-CL')
   document.getElementById('k-cobrado').textContent='$'+cobrado.toLocaleString('es-CL')
   document.getElementById('k-pcobrar').textContent='$'+(ingresos-cobrado).toLocaleString('es-CL')
-  document.getElementById('k-svcs').textContent=svcs.length
+  document.getElementById('k-svcs').textContent=svcsCompletados.length
   document.getElementById('k-gastos').textContent='$'+gastosTot.toLocaleString('es-CL')
   var margenEl=document.getElementById('k-margen')
   margenEl.textContent='$'+margen.toLocaleString('es-CL')
@@ -125,17 +127,17 @@ async function load(){
 
   // Servicios
   var svcEl=document.getElementById('svcs-lista')
-  svcEl.innerHTML=svcs.length?svcs.map(function(s){
+  svcEl.innerHTML=svcsCompletados.length?svcsCompletados.map(function(s){
     var pagado=s.pago_cliente==='pagado'
     return '<div class="svc-row">'+
       '<div class="svc-info"><div class="svc-cliente">'+s.cliente+'</div><div class="svc-meta">'+s.tecnico+(s.vehiculo?' · '+s.vehiculo:'')+'</div></div>'+
       '<div><div class="svc-monto" style="color:'+(pagado?'var(--verde)':'var(--amarillo)')+'">$'+(s.total||0).toLocaleString('es-CL')+'</div><div style="font-size:10px;color:var(--txt3);text-align:right">'+(pagado?'Cobrado':'Pendiente')+'</div></div>'+
     '</div>'
-  }).join(''):'<div class="loading">Sin servicios este día</div>'
+  }).join(''):'<div class="loading">Sin servicios completados este día</div>'
 
   // Por técnico
   var porTec={}
-  svcs.forEach(function(s){
+  svcsCompletados.forEach(function(s){
     if(!porTec[s.tecnico])porTec[s.tecnico]={total:0,cnt:0}
     porTec[s.tecnico].total+=(s.total||0)
     porTec[s.tecnico].cnt++
@@ -178,7 +180,7 @@ async function generarResumenIA(){
   btn.disabled=true
   try{
     var fecha=getFechaStr(fechaActual)
-    var rs=await getDB().from('presupuestos').select('*').eq('estado_servicio','completado').like('created_at',fecha+'%')
+    var rs=await getDB().from('presupuestos').select('*').like('created_at',fecha+'%')
     var svcs=rs.data||[]
     var rg=await getDB().from('gastos').select('*').like('fecha',fecha+'%')
     var gastos=rg.data||[]

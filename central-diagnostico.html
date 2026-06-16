@@ -1,0 +1,2420 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#0a0a0c">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SRV Técnico">
+<title>Serviruta · Técnico</title>
+
+<!-- PWA manifest inline -->
+<link rel="manifest" href="data:application/json,{
+  %22name%22:%22Serviruta%20T%C3%A9cnico%22,
+  %22short_name%22:%22SRV%20Tech%22,
+  %22display%22:%22standalone%22,
+  %22background_color%22:%22%230a0a0c%22,
+  %22theme_color%22:%22%230a0a0c%22,
+  %22start_url%22:%22.%22
+}">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+
+/* ── TOKENS ── */
+:root {
+  --bg:       #0a0a0c;
+  --s1:       #111114;
+  --s2:       #1a1a1f;
+  --s3:       #222228;
+  --border:   #2a2a32;
+  --orange:   #f26419;
+  --orange-l: #ff7d35;
+  --amber:    #f0a500;
+  --green:    #1db954;
+  --red:      #e63946;
+  --blue:     #4361ee;
+  --text:     #f0f0f4;
+  --muted:    #6b6b7e;
+  --mono:     'JetBrains Mono', monospace;
+  --sans:     'Inter', sans-serif;
+
+  /* touch targets mínimo 48px */
+  --tap: 52px;
+}
+
+/* ── RESET ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+html { height: 100%; }
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  height: 100%;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  overscroll-behavior: none;
+}
+
+/* ── HEADER ── */
+.hdr {
+  background: var(--s1);
+  border-bottom: 1px solid var(--border);
+  padding: 0 16px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 20;
+}
+.hdr-logo {
+  width: 32px; height: 32px;
+  background: var(--orange);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono);
+  font-size: 11px; font-weight: 600;
+  color: #fff; letter-spacing: -0.5px;
+  flex-shrink: 0;
+}
+.hdr-title { font-size: 15px; font-weight: 700; flex: 1; }
+.hdr-back {
+  width: 36px; height: 36px;
+  display: none; align-items: center; justify-content: center;
+  background: var(--s2); border-radius: 8px;
+  border: none; color: var(--text); font-size: 18px; cursor: pointer;
+}
+.hdr-back.show { display: flex; }
+.hdr-save {
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--orange); border-radius: 8px;
+  border: none; color: #fff; font-size: 16px; cursor: pointer;
+}
+
+/* ── SCREEN CONTAINER ── */
+.screens {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+.screen {
+  position: absolute; inset: 0;
+  overflow-y: auto;
+  padding: 16px 16px 100px;
+  transform: translateX(100%);
+  transition: transform 0.28s cubic-bezier(0.4,0,0.2,1);
+  will-change: transform;
+  -webkit-overflow-scrolling: touch;
+}
+.screen.active   { transform: translateX(0); }
+.screen.prev     { transform: translateX(-40%); }
+
+/* ── BOTTOM NAV ── */
+.bottom-nav {
+  background: var(--s1);
+  border-top: 1px solid var(--border);
+  display: flex;
+  height: 64px;
+  flex-shrink: 0;
+  safe-area-inset-bottom: env(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+.bn-item {
+  flex: 1;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 4px;
+  cursor: pointer;
+  border: none; background: none;
+  color: var(--muted);
+  transition: color 0.15s;
+  min-height: var(--tap);
+}
+.bn-item.active { color: var(--orange); }
+.bn-icon { font-size: 20px; }
+.bn-label { font-size: 9px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; }
+
+/* ── SECTION HEADER ── */
+.sec-title { font-size: 20px; font-weight: 800; margin-bottom: 4px; line-height: 1.2; }
+.sec-desc  { font-size: 13px; color: var(--muted); margin-bottom: 20px; line-height: 1.55; }
+
+/* ── HOME CARDS ── */
+.home-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.home-card {
+  background: var(--s1);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 14px;
+  cursor: pointer;
+  display: flex; flex-direction: column; gap: 8px;
+  min-height: 110px;
+  transition: border-color 0.15s, background 0.15s;
+  -webkit-user-select: none; user-select: none;
+  active:scale: 0.97;
+}
+.home-card:active { background: var(--s2); border-color: var(--orange); transform: scale(0.97); }
+.hc-icon  { font-size: 26px; }
+.hc-title { font-size: 13px; font-weight: 700; line-height: 1.3; }
+.hc-desc  { font-size: 11px; color: var(--muted); line-height: 1.4; }
+
+/* ── BADGE ── */
+.badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 9px; font-family: var(--mono); font-weight: 600;
+  padding: 3px 7px; border-radius: 4px; letter-spacing: 0.3px;
+}
+.b-red    { background: rgba(230,57,70,0.15);  color: var(--red);    border: 1px solid rgba(230,57,70,0.3); }
+.b-amber  { background: rgba(240,165,0,0.15);  color: var(--amber);  border: 1px solid rgba(240,165,0,0.3); }
+.b-green  { background: rgba(29,185,84,0.15);  color: var(--green);  border: 1px solid rgba(29,185,84,0.3); }
+.b-blue   { background: rgba(67,97,238,0.15);  color: var(--blue);   border: 1px solid rgba(67,97,238,0.3); }
+.b-orange { background: rgba(242,100,25,0.15); color: var(--orange); border: 1px solid rgba(242,100,25,0.3); }
+
+/* ── LIST ROWS (symptom / protocol items) ── */
+.row-list { display: flex; flex-direction: column; gap: 8px; }
+.row {
+  background: var(--s1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex; align-items: center; gap: 12px;
+  cursor: pointer; min-height: var(--tap);
+  transition: border-color 0.15s;
+}
+.row:active { border-color: var(--orange); background: var(--s2); }
+.row-icon { font-size: 20px; flex-shrink: 0; }
+.row-body { flex: 1; min-width: 0; }
+.row-title { font-size: 14px; font-weight: 600; }
+.row-sub   { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.row-chevron { color: var(--muted); font-size: 14px; flex-shrink: 0; }
+
+/* ── STEP CARDS ── */
+.step-card {
+  background: var(--s1);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 10px;
+  display: flex; gap: 14px;
+}
+.step-num {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--orange);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 11px; font-weight: 600;
+  color: #fff; flex-shrink: 0; margin-top: 1px;
+}
+.step-body {}
+.step-title  { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+.step-detail { font-size: 12px; color: var(--muted); line-height: 1.6; }
+.step-code {
+  font-family: var(--mono); font-size: 10px;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 4px; padding: 4px 8px;
+  color: var(--amber); margin-top: 6px; display: block;
+  word-break: break-all;
+}
+
+/* ── ALERT ── */
+.alert {
+  display: flex; gap: 10px;
+  padding: 12px 14px; border-radius: 10px;
+  font-size: 12px; line-height: 1.6; margin-bottom: 12px;
+}
+.alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.a-red    { background: rgba(230,57,70,0.1);  border: 1px solid rgba(230,57,70,0.25);  color: #ff8a8a; }
+.a-amber  { background: rgba(240,165,0,0.1);  border: 1px solid rgba(240,165,0,0.25);  color: var(--amber); }
+.a-green  { background: rgba(29,185,84,0.1);  border: 1px solid rgba(29,185,84,0.25);  color: var(--green); }
+
+/* ── QUICK SCAN ── */
+.qs-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.qs-chip {
+  display: flex; align-items: center; gap: 6px;
+  padding: 10px 14px; border-radius: 24px;
+  background: var(--s1); border: 1.5px solid var(--border);
+  font-size: 13px; font-weight: 500; cursor: pointer;
+  transition: all 0.15s; min-height: 44px;
+}
+.qs-chip:active { transform: scale(0.95); }
+.qs-chip.on { background: rgba(242,100,25,0.12); border-color: var(--orange); color: var(--orange); }
+.qs-chip-icon { font-size: 16px; }
+
+.qs-result-card {
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: 12px; padding: 14px 16px; margin-bottom: 10px;
+}
+.qs-rc-label { font-size: 13px; font-weight: 700; margin-bottom: 4px; }
+.qs-rc-desc  { font-size: 12px; color: var(--muted); line-height: 1.6; margin-bottom: 10px; }
+
+/* ── BTN ── */
+.btn {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  height: var(--tap); border-radius: 12px;
+  font-size: 14px; font-weight: 700;
+  border: none; cursor: pointer; transition: all 0.15s;
+  width: 100%; margin-bottom: 8px;
+}
+.btn:active { transform: scale(0.97); }
+.btn-orange  { background: var(--orange); color: #fff; }
+.btn-ghost   { background: var(--s2); color: var(--text); border: 1px solid var(--border); }
+
+/* ── MANTENIMIENTO ── */
+.select-wrap {
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: 12px; padding: 14px;
+  margin-bottom: 12px; display: flex; flex-direction: column; gap: 10px;
+}
+.field-label { font-size: 10px; font-family: var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+.field-select, .field-input {
+  width: 100%; height: 44px; padding: 0 12px;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 8px; color: var(--text); font-size: 14px;
+  font-family: var(--sans); outline: none; appearance: none;
+}
+.field-select:focus, .field-input:focus { border-color: var(--orange); }
+
+.mant-row {
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: 12px; padding: 14px 16px;
+  display: flex; align-items: flex-start; gap: 12px;
+  margin-bottom: 8px;
+}
+.mant-dot {
+  width: 10px; height: 10px; border-radius: 50%;
+  flex-shrink: 0; margin-top: 5px;
+}
+.d-red   { background: var(--red);   box-shadow: 0 0 6px rgba(230,57,70,0.5); }
+.d-amber { background: var(--amber); box-shadow: 0 0 6px rgba(240,165,0,0.4); }
+.d-green { background: var(--green); }
+.d-blue  { background: var(--blue); }
+.mant-info { flex: 1; min-width: 0; }
+.mant-name   { font-size: 13px; font-weight: 700; margin-bottom: 2px; }
+.mant-detail { font-size: 11px; color: var(--muted); line-height: 1.5; }
+.mant-km-badge {
+  font-family: var(--mono); font-size: 10px; font-weight: 600;
+  flex-shrink: 0; padding: 3px 7px; border-radius: 6px;
+  white-space: nowrap;
+}
+.mant-km-venc { background: rgba(230,57,70,0.15); color: var(--red); border: 1px solid rgba(230,57,70,0.3); }
+.mant-km-near { background: rgba(240,165,0,0.15); color: var(--amber); border: 1px solid rgba(240,165,0,0.3); }
+.mant-km-ok   { background: rgba(29,185,84,0.1); color: var(--green); border: 1px solid rgba(29,185,84,0.2); }
+
+/* ── INMOVILIZADOR ── */
+.immo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+.immo-card {
+  background: var(--s1); border: 1.5px solid var(--border);
+  border-radius: 12px; padding: 14px 12px;
+  cursor: pointer; transition: all 0.15s; min-height: 100px;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.immo-card:active { border-color: var(--red); background: rgba(230,57,70,0.07); }
+.immo-card.sel    { border-color: var(--red); background: rgba(230,57,70,0.07); }
+.immo-icon  { font-size: 22px; }
+.immo-name  { font-size: 12px; font-weight: 700; line-height: 1.3; }
+.immo-sub   { font-size: 10px; color: var(--muted); line-height: 1.4; }
+.immo-proto {
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: 12px; padding: 16px;
+  margin-top: 4px; display: none;
+}
+.immo-proto.show { display: block; }
+.immo-proto-title { font-size: 14px; font-weight: 700; margin-bottom: 14px; }
+
+/* ── DTC TABLE ── */
+.dtc-list { display: flex; flex-direction: column; gap: 8px; }
+.dtc-row {
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px 14px;
+}
+.dtc-code-big { font-family: var(--mono); font-size: 13px; font-weight: 600; color: var(--amber); margin-bottom: 3px; }
+.dtc-desc-sm  { font-size: 12px; margin-bottom: 4px; }
+.dtc-act-sm   { font-size: 11px; color: var(--muted); line-height: 1.5; }
+
+.expand-group {
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: 12px; overflow: hidden; margin-bottom: 8px;
+}
+.expand-hdr {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 16px; cursor: pointer; min-height: var(--tap);
+}
+.expand-hdr:active { background: var(--s2); }
+.expand-hdr-text { flex: 1; font-size: 13px; font-weight: 600; }
+.expand-arrow { color: var(--muted); font-size: 12px; transition: transform 0.2s; flex-shrink: 0; }
+.expand-hdr.open .expand-arrow { transform: rotate(90deg); }
+.expand-body { display: none; padding: 0 14px 14px; }
+.expand-body.show { display: block; }
+
+/* ── CHECKLIST ── */
+.check-list { display: flex; flex-direction: column; gap: 8px; }
+.check-row {
+  display: flex; align-items: flex-start; gap: 12px;
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: 12px; padding: 14px 16px;
+  cursor: pointer; min-height: var(--tap);
+  transition: all 0.15s;
+}
+.check-row.done { border-color: rgba(29,185,84,0.4); background: rgba(29,185,84,0.05); }
+.check-box {
+  width: 22px; height: 22px; border-radius: 6px;
+  border: 2px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; font-size: 13px; margin-top: 1px;
+  transition: all 0.15s;
+}
+.check-row.done .check-box { background: var(--green); border-color: var(--green); color: #fff; }
+.check-text { font-size: 13px; font-weight: 500; line-height: 1.5; }
+.check-sub  { font-size: 11px; color: var(--muted); margin-top: 2px; line-height: 1.4; }
+.check-section-label {
+  font-size: 10px; font-family: var(--mono); color: var(--orange);
+  text-transform: uppercase; letter-spacing: 0.8px;
+  padding: 4px 0; margin-top: 8px;
+}
+
+/* ── IA CHAT ── */
+.chat-screen {
+  display: flex; flex-direction: column;
+  height: 100%; padding: 0;
+}
+.chat-msgs {
+  flex: 1; overflow-y: auto;
+  padding: 16px 16px 8px;
+  display: flex; flex-direction: column; gap: 10px;
+  -webkit-overflow-scrolling: touch;
+}
+.chat-msg { display: flex; gap: 8px; max-width: 90%; }
+.chat-msg.user { align-self: flex-end; flex-direction: row-reverse; }
+.chat-av {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--s2); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; flex-shrink: 0;
+}
+.chat-msg.user .chat-av { background: rgba(242,100,25,0.2); }
+.chat-bub {
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: 12px; padding: 10px 14px;
+  font-size: 13px; line-height: 1.65;
+}
+.chat-msg.user .chat-bub { background: var(--s2); border-color: rgba(242,100,25,0.3); }
+.typing-ind { display: flex; gap: 4px; padding: 8px 0; }
+.td { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); animation: pulse 1.2s infinite; }
+.td:nth-child(2){animation-delay:.2s} .td:nth-child(3){animation-delay:.4s}
+@keyframes pulse{0%,80%,100%{opacity:.2}40%{opacity:1}}
+
+.chat-bar {
+  padding: 10px 16px;
+  padding-bottom: max(10px, env(safe-area-inset-bottom));
+  background: var(--s1);
+  border-top: 1px solid var(--border);
+  display: flex; gap: 8px; align-items: flex-end;
+  flex-shrink: 0;
+}
+.chat-inp {
+  flex: 1; background: var(--s2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 10px 12px;
+  color: var(--text); font-size: 14px; font-family: var(--sans);
+  outline: none; resize: none; max-height: 90px;
+  line-height: 1.4;
+}
+.chat-inp:focus { border-color: var(--orange); }
+.chat-inp::placeholder { color: var(--muted); }
+.chat-send-btn {
+  width: 44px; height: 44px; flex-shrink: 0;
+  background: var(--orange); border: none; border-radius: 10px;
+  color: #fff; font-size: 18px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s;
+}
+.chat-send-btn:active { background: var(--orange-l); }
+.chat-send-btn:disabled { background: var(--s3); color: var(--muted); }
+.chat-sugs {
+  display: flex; gap: 6px; overflow-x: auto;
+  padding: 8px 16px 0;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.chat-sugs::-webkit-scrollbar { display: none; }
+.chat-sug {
+  background: var(--s2); border: 1px solid var(--border);
+  border-radius: 20px; padding: 7px 12px;
+  font-size: 12px; color: var(--muted); white-space: nowrap;
+  cursor: pointer; flex-shrink: 0; transition: all 0.15s;
+}
+.chat-sug:active { border-color: var(--orange); color: var(--orange); }
+
+/* ── SAVE SHEET ── */
+.sheet-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.6);
+  z-index: 100; display: none; align-items: flex-end;
+}
+.sheet-overlay.open { display: flex; }
+.sheet {
+  background: var(--s1); border-top: 1px solid var(--border);
+  border-radius: 20px 20px 0 0;
+  padding: 20px 20px max(20px, env(safe-area-inset-bottom));
+  width: 100%;
+  display: flex; flex-direction: column; gap: 12px;
+  animation: slideUp 0.3s ease;
+}
+@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.sheet-handle {
+  width: 36px; height: 4px; background: var(--border);
+  border-radius: 2px; margin: 0 auto -4px;
+}
+.sheet-title { font-size: 16px; font-weight: 700; }
+.sheet-field label { font-size: 10px; font-family: var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 5px; }
+.sheet-field input, .sheet-field select {
+  width: 100%; height: 46px; padding: 0 12px;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 10px; color: var(--text); font-size: 14px;
+  font-family: var(--sans); outline: none; appearance: none;
+}
+.sheet-field input:focus, .sheet-field select:focus { border-color: var(--orange); }
+.sheet-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.save-msg {
+  font-size: 12px; font-family: var(--mono); padding: 8px 12px;
+  border-radius: 8px; text-align: center; display: none;
+}
+.save-msg.ok  { display: block; background: rgba(29,185,84,0.1); color: var(--green); border: 1px solid rgba(29,185,84,0.3); }
+.save-msg.err { display: block; background: rgba(230,57,70,0.1); color: var(--red);   border: 1px solid rgba(230,57,70,0.3); }
+.save-msg.loading { display: block; background: rgba(240,165,0,0.1); color: var(--amber); border: 1px solid rgba(240,165,0,0.3); }
+
+/* ── CENTRAL DIAGNÓSTICO ── */
+.central-cats { display: flex; flex-direction: column; gap: 8px; }
+.cat-row {
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: 14px; padding: 16px;
+  display: flex; align-items: center; gap: 14px;
+  cursor: pointer; min-height: var(--tap);
+  transition: all 0.15s; position: relative;
+}
+.cat-row:active { border-color: var(--orange); background: var(--s2); }
+.cat-row-icon { font-size: 24px; flex-shrink: 0; }
+.cat-row-body { flex: 1; }
+.cat-row-title { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+.cat-row-sub   { font-size: 11px; color: var(--muted); }
+.cat-row-count {
+  font-family: var(--mono); font-size: 10px; font-weight: 600;
+  padding: 3px 8px; border-radius: 20px;
+  background: rgba(242,100,25,0.15); color: var(--orange);
+  border: 1px solid rgba(242,100,25,0.3);
+  flex-shrink: 0;
+}
+.cat-row-chevron { color: var(--muted); font-size: 16px; flex-shrink: 0; }
+
+/* falla detail screen */
+.falla-list { display: flex; flex-direction: column; gap: 8px; }
+.falla-item {
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: 12px; overflow: hidden;
+}
+.falla-hdr {
+  display: flex; align-items: center; gap: 10px;
+  padding: 13px 16px; cursor: pointer; min-height: var(--tap);
+}
+.falla-hdr:active { background: var(--s2); }
+.falla-hdr-sev { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.sev-red   { background: var(--red);   box-shadow: 0 0 6px rgba(230,57,70,0.5); }
+.sev-amber { background: var(--amber); box-shadow: 0 0 6px rgba(240,165,0,0.4); }
+.sev-blue  { background: var(--blue); }
+.falla-hdr-text { flex: 1; font-size: 13px; font-weight: 600; }
+.falla-hdr-arrow { color: var(--muted); font-size: 12px; transition: transform 0.2s; }
+.falla-hdr.open .falla-hdr-arrow { transform: rotate(90deg); }
+.falla-body { display: none; padding: 0 16px 16px; border-top: 1px solid var(--border); }
+.falla-body.show { display: block; }
+.falla-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 9px; font-family: var(--mono); font-weight: 600;
+  padding: 2px 7px; border-radius: 4px; margin: 8px 0 10px;
+}
+.tag-causa  { background: rgba(230,57,70,0.12);  color: var(--red);   border: 1px solid rgba(230,57,70,0.3); }
+.tag-solucion { background: rgba(29,185,84,0.12); color: var(--green); border: 1px solid rgba(29,185,84,0.3); }
+.tag-herramienta { background: rgba(67,97,238,0.12); color: var(--blue); border: 1px solid rgba(67,97,238,0.3); }
+
+/* ── FEEDBACK ── */
+.fb-form {
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: 14px; padding: 16px;
+  display: flex; flex-direction: column; gap: 12px;
+  margin-bottom: 12px;
+}
+.fb-label { font-size: 10px; font-family: var(--mono); color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 5px; }
+.fb-input, .fb-select, .fb-textarea {
+  width: 100%; padding: 10px 12px;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 8px; color: var(--text); font-size: 13px;
+  font-family: var(--sans); outline: none;
+}
+.fb-textarea { resize: vertical; min-height: 80px; line-height: 1.5; }
+.fb-input:focus, .fb-select:focus, .fb-textarea:focus { border-color: var(--orange); }
+.fb-stars { display: flex; gap: 8px; margin-top: 4px; }
+.fb-star {
+  font-size: 28px; cursor: pointer; transition: transform 0.1s;
+  color: var(--border); line-height: 1;
+}
+.fb-star.on { color: var(--amber); }
+.fb-star:active { transform: scale(0.9); }
+
+.kb-card {
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: 12px; padding: 14px 16px; margin-bottom: 8px;
+}
+.kb-card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+.kb-card-title  { font-size: 13px; font-weight: 700; flex: 1; }
+.kb-card-meta   { font-size: 10px; font-family: var(--mono); color: var(--muted); }
+.kb-card-body   { font-size: 12px; color: var(--muted); line-height: 1.6; }
+.kb-card-sol    { font-size: 12px; color: var(--green); line-height: 1.6; margin-top: 6px; }
+.kb-stars       { color: var(--amber); font-size: 11px; }
+.kb-empty { text-align: center; padding: 40px 20px; color: var(--muted); font-size: 13px; }
+.kb-filter { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; margin-bottom: 12px; scrollbar-width: none; }
+.kb-filter::-webkit-scrollbar { display: none; }
+.kb-chip {
+  background: var(--s1); border: 1px solid var(--border);
+  border-radius: 20px; padding: 6px 12px;
+  font-size: 11px; color: var(--muted); white-space: nowrap;
+  cursor: pointer; flex-shrink: 0; transition: all 0.15s;
+}
+.kb-chip.on { background: rgba(242,100,25,0.12); border-color: var(--orange); color: var(--orange); }
+.prog-bar { background: var(--s2); border-radius: 4px; height: 6px; overflow: hidden; margin: 4px 0 8px; }
+.prog-fill { height: 100%; border-radius: 4px; transition: width 0.4s ease; }
+
+/* ── MISC ── */
+.section-divider {
+  font-size: 10px; font-family: var(--mono); color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.8px;
+  margin: 18px 0 8px;
+}
+.regen-bar-wrap { background: var(--s3); border-radius: 4px; height: 8px; overflow: hidden; margin: 6px 0 2px; }
+.regen-bar      { height: 100%; border-radius: 4px; }
+</style>
+</head>
+<body>
+
+<!-- ── HEADER ── -->
+<div class="hdr" id="hdr">
+  <button class="hdr-back" id="hdr-back" onclick="goBack()">←</button>
+  <div class="hdr-logo">SRV</div>
+  <div class="hdr-title" id="hdr-title">Técnico</div>
+  <button class="hdr-save" onclick="openSheet()" title="Guardar diagnóstico">💾</button>
+</div>
+
+<!-- ── SCREENS ── -->
+<div class="screens" id="screens">
+
+  <!-- HOME = CENTRAL DE DIAGNÓSTICO -->
+  <div class="screen active" id="s-home">
+    <div class="sec-title">Central de diagnóstico</div>
+    <div class="sec-desc">Serviruta · Herramienta técnica en terreno</div>
+
+    <!-- ACCESO RÁPIDO TOP -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px;">
+      <div class="home-card" onclick="nav('s-quickscan','Diagnóstico rápido')" style="border-color:rgba(29,185,84,0.4);background:rgba(29,185,84,0.05);">
+        <div class="hc-icon">⚡</div>
+        <div class="hc-title">Diagnóstico rápido</div>
+        <div class="hc-desc">Síntomas → causa en 1 tap</div>
+        <div class="badge b-green">INICIO AQUÍ</div>
+      </div>
+      <div class="home-card" onclick="navChat()" style="border-color:rgba(242,100,25,0.4);background:rgba(242,100,25,0.05);">
+        <div class="hc-icon">🤖</div>
+        <div class="hc-title">IA Técnica</div>
+        <div class="hc-desc">Describe el problema en libre</div>
+        <div class="badge b-orange">CLAUDE</div>
+      </div>
+    </div>
+
+    <!-- SISTEMA ELÉCTRICO -->
+    <div class="section-divider">⚡ Sistema eléctrico</div>
+    <div class="central-cats">
+      <div class="cat-row" onclick="nav('s-cat-noarranca','No arranca')">
+        <div class="cat-row-icon">🚫</div>
+        <div class="cat-row-body"><div class="cat-row-title">No arranca</div><div class="cat-row-sub">Sin respuesta, cranea sin encender, clic</div></div>
+        <span class="cat-row-count">8 fallas</span>
+        <div class="cat-row-chevron">›</div>
+      </div>
+      <div class="cat-row" onclick="nav('s-cat-alternador','Alternador')">
+        <div class="cat-row-icon">⚡</div>
+        <div class="cat-row-body"><div class="cat-row-title">Alternador</div><div class="cat-row-sub">Luz batería, no carga, voltaje bajo</div></div>
+        <span class="cat-row-count">6 fallas</span>
+        <div class="cat-row-chevron">›</div>
+      </div>
+      <div class="cat-row" onclick="nav('s-cat-partida','Motor de partida')">
+        <div class="cat-row-icon">🔁</div>
+        <div class="cat-row-body"><div class="cat-row-title">Motor de partida</div><div class="cat-row-sub">Ruido clic, no gira, piñón</div></div>
+        <span class="cat-row-count">5 fallas</span>
+        <div class="cat-row-chevron">›</div>
+      </div>
+      <div class="cat-row" onclick="nav('s-bateria','Diagnóstico de batería')">
+        <div class="cat-row-icon">🔋</div>
+        <div class="cat-row-body"><div class="cat-row-title">Batería</div><div class="cat-row-sub">Voltajes, carga, reemplazo AGM</div></div>
+        <span class="cat-row-count">6 protocolos</span>
+        <div class="cat-row-chevron">›</div>
+      </div>
+      <div class="cat-row" onclick="nav('s-immo','Inmovilizador')">
+        <div class="cat-row-icon">🔒</div>
+        <div class="cat-row-body"><div class="cat-row-title">Inmovilizador</div><div class="cat-row-sub">Llave, ECU swap, alarma aftermarket</div></div>
+        <span class="cat-row-count">6 protocolos</span>
+        <div class="cat-row-chevron">›</div>
+      </div>
+    </div>
+
+    <!-- MOTOR Y EMISIONES -->
+    <div class="section-divider" style="margin-top:16px;">🔩 Motor y emisiones</div>
+    <div class="central-cats">
+      <div class="cat-row" onclick="nav('s-dpf-menu','DPF / FAP')">
+        <div class="cat-row-icon">🔴</div>
+        <div class="cat-row-body"><div class="cat-row-title">DPF / FAP</div><div class="cat-row-sub">Saturación, regeneración, códigos DPF</div></div>
+        <span class="cat-row-count">5 síntomas</span>
+        <div class="cat-row-chevron">›</div>
+      </div>
+      <div class="cat-row" onclick="nav('s-cat-motor','Motor general')">
+        <div class="cat-row-icon">🔩</div>
+        <div class="cat-row-body"><div class="cat-row-title">Motor general</div><div class="cat-row-sub">Golpeteo, aceite, humo, misfire</div></div>
+        <span class="cat-row-count">8 fallas</span>
+        <div class="cat-row-chevron">›</div>
+      </div>
+      <div class="cat-row" onclick="nav('s-cat-refrigeracion','Refrigeración')">
+        <div class="cat-row-icon">🌡️</div>
+        <div class="cat-row-body"><div class="cat-row-title">Refrigeración</div><div class="cat-row-sub">Sobrecalentamiento, pérdida, ventilador</div></div>
+        <span class="cat-row-count">7 fallas</span>
+        <div class="cat-row-chevron">›</div>
+      </div>
+    </div>
+
+    <!-- CHASIS Y SEGURIDAD -->
+    <div class="section-divider" style="margin-top:16px;">🚗 Chasis y seguridad</div>
+    <div class="central-cats">
+      <div class="cat-row" onclick="nav('s-cat-frenos','Frenos')">
+        <div class="cat-row-icon">🛑</div>
+        <div class="cat-row-body"><div class="cat-row-title">Frenos</div><div class="cat-row-sub">Ruido, vibración, pedal, ABS</div></div>
+        <span class="cat-row-count">7 fallas</span>
+        <div class="cat-row-chevron">›</div>
+      </div>
+      <div class="cat-row" onclick="nav('s-cat-suspension','Suspensión')">
+        <div class="cat-row-icon">🚗</div>
+        <div class="cat-row-body"><div class="cat-row-title">Suspensión</div><div class="cat-row-sub">Ruidos, vibración, geometría, escora</div></div>
+        <span class="cat-row-count">6 fallas</span>
+        <div class="cat-row-chevron">›</div>
+      </div>
+    </div>
+
+    <!-- HERRAMIENTAS -->
+    <div class="section-divider" style="margin-top:16px;">🛠️ Herramientas técnicas</div>
+    <div class="central-cats">
+      <div class="cat-row" onclick="nav('s-regen','Regeneración forzada')">
+        <div class="cat-row-icon">🔄</div>
+        <div class="cat-row-body"><div class="cat-row-title">Regeneración forzada DPF</div><div class="cat-row-sub">Pre-requisitos + procedimiento completo</div></div>
+        <div class="cat-row-chevron">›</div>
+      </div>
+      <div class="cat-row" onclick="nav('s-dtc','Códigos DTC')">
+        <div class="cat-row-icon">📋</div>
+        <div class="cat-row-body"><div class="cat-row-title">Códigos DTC</div><div class="cat-row-sub">P2002 · P244B · P203A · B1600 y más</div></div>
+        <div class="cat-row-chevron">›</div>
+      </div>
+      <div class="cat-row" onclick="nav('s-mant','Mantenimiento')">
+        <div class="cat-row-icon">🔧</div>
+        <div class="cat-row-body"><div class="cat-row-title">Plan de mantenimiento</div><div class="cat-row-sub">Por vehículo, kilometraje y tipo de uso</div></div>
+        <div class="cat-row-chevron">›</div>
+      </div>
+      <div class="cat-row" onclick="nav('s-checklist','Checklist DPF')">
+        <div class="cat-row-icon">✅</div>
+        <div class="cat-row-body"><div class="cat-row-title">Checklist DPF</div><div class="cat-row-sub">14 ítems de verificación paso a paso</div></div>
+        <div class="cat-row-chevron">›</div>
+      </div>
+      <div class="cat-row" onclick="nav('s-protocolo','Protocolo completo DPF')">
+        <div class="cat-row-icon">⚙️</div>
+        <div class="cat-row-body"><div class="cat-row-title">Protocolo completo DPF</div><div class="cat-row-sub">4 fases: recepción → diagnóstico → intervención → verificación</div></div>
+        <div class="cat-row-chevron">›</div>
+      </div>
+    </div>
+
+    <!-- BASE DE CONOCIMIENTO -->
+    <div class="section-divider" style="margin-top:16px;">💬 Conocimiento Serviruta</div>
+    <div class="central-cats">
+      <div class="cat-row" onclick="goBN('s-feedback','Feedback técnico','bn-fb')" style="border-color:rgba(29,185,84,0.3);background:rgba(29,185,84,0.04);">
+        <div class="cat-row-icon">💬</div>
+        <div class="cat-row-body"><div class="cat-row-title">Feedback y base de soluciones</div><div class="cat-row-sub">Reporta lo que funcionó · Ve soluciones de otros técnicos</div></div>
+        <div class="cat-row-chevron">›</div>
+      </div>
+    </div>
+
+    <div style="height:8px;"></div>
+  </div>
+
+  <!-- QUICK SCAN -->
+  <div class="screen" id="s-quickscan">
+    <div class="sec-title">⚡ Diagnóstico rápido</div>
+    <div class="sec-desc">Toca todos los síntomas que presenta el vehículo.</div>
+    <div class="qs-chips" id="qs-chips">
+      <div class="qs-chip" data-s="luz_dpf"     onclick="toggleChip(this)"><span class="qs-chip-icon">🟡</span>Luz DPF</div>
+      <div class="qs-chip" data-s="potencia"    onclick="toggleChip(this)"><span class="qs-chip-icon">🔻</span>Sin potencia</div>
+      <div class="qs-chip" data-s="humo_negro"  onclick="toggleChip(this)"><span class="qs-chip-icon">💨</span>Humo negro</div>
+      <div class="qs-chip" data-s="humo_azul"   onclick="toggleChip(this)"><span class="qs-chip-icon">🔵</span>Humo azul</div>
+      <div class="qs-chip" data-s="no_arranca"  onclick="toggleChip(this)"><span class="qs-chip-icon">🚫</span>No arranca</div>
+      <div class="qs-chip" data-s="consumo"     onclick="toggleChip(this)"><span class="qs-chip-icon">⛽</span>Consumo alto</div>
+      <div class="qs-chip" data-s="luz_check"   onclick="toggleChip(this)"><span class="qs-chip-icon">🔴</span>Check Engine</div>
+      <div class="qs-chip" data-s="aceite_alto" onclick="toggleChip(this)"><span class="qs-chip-icon">🛢️</span>Aceite sube</div>
+      <div class="qs-chip" data-s="vibra"       onclick="toggleChip(this)"><span class="qs-chip-icon">📳</span>Vibración</div>
+      <div class="qs-chip" data-s="adblue"      onclick="toggleChip(this)"><span class="qs-chip-icon">🟦</span>Luz AdBlue</div>
+      <div class="qs-chip" data-s="inmo"        onclick="toggleChip(this)"><span class="qs-chip-icon">🔒</span>Inmovilizador</div>
+      <div class="qs-chip" data-s="bateria"     onclick="toggleChip(this)"><span class="qs-chip-icon">🔋</span>Batería baja</div>
+      <div class="qs-chip" data-s="bat_muerta"  onclick="toggleChip(this)"><span class="qs-chip-icon">💀</span>Batería muerta</div>
+      <div class="qs-chip" data-s="alternador"  onclick="toggleChip(this)"><span class="qs-chip-icon">⚡</span>Luz batería ON</div>
+    </div>
+    <button class="btn btn-orange" onclick="runQS()">🔍 Analizar síntomas</button>
+    <div id="qs-results"></div>
+  </div>
+
+  <!-- DPF MENU -->
+  <div class="screen" id="s-dpf-menu">
+    <div class="sec-title">🔴 Fallas DPF / FAP</div>
+    <div class="sec-desc">Selecciona el síntoma principal del vehículo.</div>
+    <div class="row-list">
+      <div class="row" onclick="showSym('luz_dpf')">
+        <div class="row-icon">🟡</div>
+        <div class="row-body"><div class="row-title">Luz DPF encendida</div><div class="row-sub">Testigo activo en tablero</div></div>
+        <div class="badge b-amber">⚠ ALERTA</div>
+      </div>
+      <div class="row" onclick="showSym('perder_potencia')">
+        <div class="row-icon">🔻</div>
+        <div class="row-body"><div class="row-title">Pérdida de potencia</div><div class="row-sub">Motor en modo seguro</div></div>
+        <div class="badge b-red">🔴 CRÍTICO</div>
+      </div>
+      <div class="row" onclick="showSym('humo_negro')">
+        <div class="row-icon">💨</div>
+        <div class="row-body"><div class="row-title">Humo negro excesivo</div><div class="row-sub">Combustión incompleta</div></div>
+        <div class="badge b-red">🔴 CRÍTICO</div>
+      </div>
+      <div class="row" onclick="showSym('consumo_alto')">
+        <div class="row-icon">⛽</div>
+        <div class="row-body"><div class="row-title">Consumo elevado</div><div class="row-sub">Regens frecuentes</div></div>
+        <div class="badge b-amber">⚠ ALERTA</div>
+      </div>
+      <div class="row" onclick="showSym('motor_apagado')">
+        <div class="row-icon">🚫</div>
+        <div class="row-body"><div class="row-title">Motor se apaga solo</div><div class="row-sub">Corte por protección DPF</div></div>
+        <div class="badge b-red">🔴 CRÍTICO</div>
+      </div>
+    </div>
+    <div class="section-divider">Protocolo</div>
+    <div class="row-list">
+      <div class="row" onclick="nav('s-regen','Regeneración forzada')">
+        <div class="row-icon">🔄</div>
+        <div class="row-body"><div class="row-title">Regeneración forzada</div><div class="row-sub">Protocolo paso a paso</div></div>
+        <div class="row-chevron">›</div>
+      </div>
+      <div class="row" onclick="nav('s-protocolo','Protocolo completo')">
+        <div class="row-icon">⚙️</div>
+        <div class="row-body"><div class="row-title">Protocolo completo</div><div class="row-sub">4 fases de diagnóstico</div></div>
+        <div class="row-chevron">›</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SÍNTOMA DETAIL -->
+  <div class="screen" id="s-sym">
+    <div id="sym-content"></div>
+    <button class="btn btn-orange" onclick="nav('s-regen','Regeneración forzada')" style="margin-top:16px;">🔄 Ver regeneración forzada</button>
+    <button class="btn btn-ghost" onclick="goBack()">← Volver</button>
+  </div>
+
+  <!-- REGENERACIÓN -->
+  <div class="screen" id="s-regen">
+    <div class="sec-title">🔄 Regeneración forzada</div>
+    <div class="alert a-red"><div class="alert-icon">🚨</div><div>Alejar de materiales inflamables. Escape alcanza 600–800°C durante el proceso.</div></div>
+
+    <div class="section-divider">Pre-requisitos</div>
+    <div class="check-list">
+      <div class="check-row" onclick="this.classList.toggle('done');this.querySelector('.check-box').textContent=this.classList.contains('done')?'✓':''">
+        <div class="check-box"></div>
+        <div><div class="check-text">Combustible mínimo 1/4 tanque</div><div class="check-sub">La regen consume combustible adicional</div></div>
+      </div>
+      <div class="check-row" onclick="this.classList.toggle('done');this.querySelector('.check-box').textContent=this.classList.contains('done')?'✓':''">
+        <div class="check-box"></div>
+        <div><div class="check-text">Motor a temperatura normal ≥80°C</div><div class="check-sub">Verificar ECT en datos en vivo</div></div>
+      </div>
+      <div class="check-row" onclick="this.classList.toggle('done');this.querySelector('.check-box').textContent=this.classList.contains('done')?'✓':''">
+        <div class="check-box"></div>
+        <div><div class="check-text">Sin DTCs activos de inyección</div><div class="check-sub">EGR, inyectores y turbo operativos</div></div>
+      </div>
+      <div class="check-row" onclick="this.classList.toggle('done');this.querySelector('.check-box').textContent=this.classList.contains('done')?'✓':''">
+        <div class="check-box"></div>
+        <div><div class="check-text">Zona ventilada, motor en ralentí</div><div class="check-sub">No realizar en espacios cerrados</div></div>
+      </div>
+      <div class="check-row" onclick="this.classList.toggle('done');this.querySelector('.check-box').textContent=this.classList.contains('done')?'✓':''">
+        <div class="check-box"></div>
+        <div><div class="check-text">Escáner con función de regen activa</div><div class="check-sub">Launch, Autel, VCDS, Jaltest</div></div>
+      </div>
+    </div>
+
+    <div class="section-divider">Procedimiento</div>
+    <div class="step-card"><div class="step-num">1</div><div class="step-body"><div class="step-title">Leer datos en vivo DPF</div><div class="step-detail">Registrar saturación (%), presión diferencial (kPa), temperatura EGT1/EGT2.</div><span class="step-code">Umbral crítico: Soot Load >70% | ΔP >25 kPa a 2.000 RPM</span></div></div>
+    <div class="step-card"><div class="step-num">2</div><div class="step-body"><div class="step-title">Ingresar a función regen en escáner</div><div class="step-detail">Sistema motor → Emisiones → DPF/FAP → Regeneración estática. Confirmar que escáner indique "condiciones cumplidas".</div></div></div>
+    <div class="step-card"><div class="step-num">3</div><div class="step-body"><div class="step-title">Iniciar ciclo (20–45 min)</div><div class="step-detail">RPM subirá a 1.200–1.800 automáticamente. Temperatura escape 550–700°C. No interrumpir.</div></div></div>
+    <div class="step-card"><div class="step-num">4</div><div class="step-body"><div class="step-title">Monitorear en vivo</div><div class="step-detail">Presión diferencial debe bajar progresivamente. Si temperatura no supera 400°C en 10 min → DOC dañado.</div>
+      <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:12px;margin-top:8px;">
+        <div style="font-size:10px;font-family:var(--mono);color:var(--muted);margin-bottom:6px;">SATURACIÓN</div>
+        <div style="font-size:11px;color:var(--red);">Inicial: 75%</div>
+        <div class="regen-bar-wrap"><div class="regen-bar" style="width:75%;background:var(--red);"></div></div>
+        <div style="font-size:11px;color:var(--green);margin-top:8px;">Post-regen exitosa: 15%</div>
+        <div class="regen-bar-wrap"><div class="regen-bar" style="width:15%;background:var(--green);"></div></div>
+      </div>
+    </div></div>
+    <div class="step-card"><div class="step-num">5</div><div class="step-body"><div class="step-title">Verificar y borrar códigos</div><div class="step-detail">ΔP debe ser &lt;5 kPa en ralentí. Prueba dinámica 20 km en carretera.</div></div></div>
+
+    <div class="alert a-amber" style="margin-top:4px;"><div class="alert-icon">⚠️</div><div><strong>Si saturación no baja de 30%:</strong> DPF ultrasaturado — requiere limpieza química/neumática o sustitución.</div></div>
+    <button class="btn btn-ghost" onclick="goBack()" style="margin-top:12px;">← Volver</button>
+  </div>
+
+  <!-- PROTOCOLO COMPLETO -->
+  <div class="screen" id="s-protocolo">
+    <div class="sec-title">⚙️ Protocolo completo</div>
+    <div class="sec-desc">Secuencia de 4 fases para diagnóstico sistemático DPF.</div>
+
+    <div class="section-divider">FASE 1 — Recepción (5–10 min)</div>
+    <div class="step-card"><div class="step-num">1</div><div class="step-body"><div class="step-title">Entrevista al conductor</div><div class="step-detail">¿Cuándo comenzó? ¿Uso ciudad/carretera? ¿Apagó motor durante regen? ¿Cambios de aceite al día?</div></div></div>
+    <div class="step-card"><div class="step-num">2</div><div class="step-body"><div class="step-title">Inspección visual</div><div class="step-detail">Color humo, testigos tablero, nivel y color aceite (diluido = problema post-inyección).</div></div></div>
+    <div class="step-card"><div class="step-num">3</div><div class="step-body"><div class="step-title">Zona DPF</div><div class="step-detail">Mangueras presión diferencial sin grietas, conectores sin corrosión.</div></div></div>
+
+    <div class="section-divider">FASE 2 — Diagnóstico electrónico (15–20 min)</div>
+    <div class="step-card"><div class="step-num">4</div><div class="step-body"><div class="step-title">Lectura DTCs todos los sistemas</div><div class="step-detail">Motor, EGR, SCR, DPF. Fotografiar pantalla. Identificar activos vs históricos.</div></div></div>
+    <div class="step-card"><div class="step-num">5</div><div class="step-body"><div class="step-title">Datos en vivo DPF</div><div class="step-detail">Saturación (%), presión diferencial (kPa), km desde última regen, temperatura EGT1/EGT2.</div><span class="step-code">Crítico: Soot Load >70% | ΔP >25 kPa a 2.000 RPM</span></div></div>
+    <div class="step-card"><div class="step-num">6</div><div class="step-body"><div class="step-title">Balance de inyectores</div><div class="step-detail">Desviaciones >±2 mg/carrera = inyector defectuoso → exceso de partículas.</div></div></div>
+
+    <div class="section-divider">FASE 3 — Intervención</div>
+    <div class="step-card"><div class="step-num">7</div><div class="step-body"><div class="step-title">Regeneración forzada (saturación 40–75%)</div><div class="step-detail">Ver protocolo de regeneración.</div></div></div>
+    <div class="step-card"><div class="step-num">8</div><div class="step-body"><div class="step-title">Limpieza DPF si regen insuficiente</div><div class="step-detail">Química o neumática según condición del monolito.</div></div></div>
+    <div class="step-card"><div class="step-num">9</div><div class="step-body"><div class="step-title">Reparación causa raíz</div><div class="step-detail">EGR, inyectores, turbo o sensores según diagnóstico Fase 2.</div></div></div>
+
+    <div class="section-divider">FASE 4 — Verificación (20–30 min)</div>
+    <div class="step-card"><div class="step-num">10</div><div class="step-body"><div class="step-title">Borrar DTCs y verificar</div><div class="step-detail">Esperar 5 min para que ECU actualice. Releer todos los sistemas.</div></div></div>
+    <div class="step-card"><div class="step-num">11</div><div class="step-body"><div class="step-title">Prueba dinámica 20–30 km</div><div class="step-detail">Tramo carretera ≥60 km/h. Saturación final &lt;20%, sin DTCs activos.</div></div></div>
+
+    <button class="btn btn-ghost" onclick="goBack()" style="margin-top:12px;">← Volver</button>
+  </div>
+
+  <!-- DTC -->
+  <div class="screen" id="s-dtc">
+    <div class="sec-title">📋 Códigos DTC</div>
+    <div class="sec-desc">DPF / FAP / SCR — referencia rápida de fallas.</div>
+
+    <div class="expand-group">
+      <div class="expand-hdr" onclick="toggleExp(this)">
+        <span class="badge b-red">🔴</span>
+        <span class="expand-hdr-text">Presión diferencial DPF</span>
+        <span class="expand-arrow">›</span>
+      </div>
+      <div class="expand-body">
+        <div class="dtc-list">
+          <div class="dtc-row"><div class="dtc-code-big">P2002</div><div class="dtc-desc-sm">Eficiencia DPF baja (banco 1)</div><div class="dtc-act-sm">Verificar saturación, ejecutar regen forzada, evaluar limpieza o cambio</div></div>
+          <div class="dtc-row"><div class="dtc-code-big">P244A</div><div class="dtc-desc-sm">Presión diferencial muy baja</div><div class="dtc-act-sm">Revisar sensor y mangueras de conexión</div></div>
+          <div class="dtc-row"><div class="dtc-code-big">P244B</div><div class="dtc-desc-sm">Presión diferencial muy alta</div><div class="dtc-act-sm">DPF tapado — limpieza o sustitución urgente</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="expand-group">
+      <div class="expand-hdr" onclick="toggleExp(this)">
+        <span class="badge b-amber">⚠</span>
+        <span class="expand-hdr-text">Temperatura / regeneración</span>
+        <span class="expand-arrow">›</span>
+      </div>
+      <div class="expand-body">
+        <div class="dtc-list">
+          <div class="dtc-row"><div class="dtc-code-big">P2033</div><div class="dtc-desc-sm">Sensor temperatura salida DPF — circuito alto</div><div class="dtc-act-sm">Inspeccionar conector, medir resistencia sensor</div></div>
+          <div class="dtc-row"><div class="dtc-code-big">P2084</div><div class="dtc-desc-sm">Temperatura salida catalizador baja</div><div class="dtc-act-sm">DOC (catalizador de oxidación) posiblemente degradado</div></div>
+          <div class="dtc-row"><div class="dtc-code-big">P11E0</div><div class="dtc-desc-sm">Regeneración DPF inhibida</div><div class="dtc-act-sm">Revisar condiciones bloqueantes: AdBlue, temperatura, velocidad</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="expand-group">
+      <div class="expand-hdr" onclick="toggleExp(this)">
+        <span class="badge b-blue">ℹ</span>
+        <span class="expand-hdr-text">SCR / AdBlue</span>
+        <span class="expand-arrow">›</span>
+      </div>
+      <div class="expand-body">
+        <div class="dtc-list">
+          <div class="dtc-row"><div class="dtc-code-big">P203A</div><div class="dtc-desc-sm">Nivel bajo agente reductor (AdBlue)</div><div class="dtc-act-sm">Rellenar con AdBlue certificado 32.5%, verificar calidad</div></div>
+          <div class="dtc-row"><div class="dtc-code-big">P20EE</div><div class="dtc-desc-sm">Rendimiento SCR — NOx no reducido</div><div class="dtc-act-sm">Verificar inyector AdBlue, calidad fluido, sensor NOx aguas abajo</div></div>
+          <div class="dtc-row"><div class="dtc-code-big">P2BAD</div><div class="dtc-desc-sm">Concentración AdBlue incorrecta</div><div class="dtc-act-sm">Vaciar y rellenar con fluido nuevo homologado</div></div>
+          <div class="dtc-row"><div class="dtc-code-big">P249D</div><div class="dtc-desc-sm">Inyector AdBlue — caudal bajo</div><div class="dtc-act-sm">Limpiar o reemplazar inyector, verificar bomba dosificadora</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="expand-group">
+      <div class="expand-hdr" onclick="toggleExp(this)">
+        <span class="badge b-blue">ℹ</span>
+        <span class="expand-hdr-text">Inmovilizador</span>
+        <span class="expand-arrow">›</span>
+      </div>
+      <div class="expand-body">
+        <div class="dtc-list">
+          <div class="dtc-row"><div class="dtc-code-big">B1600</div><div class="dtc-desc-sm">Llave EEPROM no programada</div><div class="dtc-act-sm">Reprogramar llave con escáner compatible</div></div>
+          <div class="dtc-row"><div class="dtc-code-big">B2799</div><div class="dtc-desc-sm">Llave incorrecta — sistema IMMO (VAG)</div><div class="dtc-act-sm">Usar VCDS/ODIS para sincronización</div></div>
+          <div class="dtc-row"><div class="dtc-code-big">P1260</div><div class="dtc-desc-sm">Robo detectado — inmovilizado (Ford)</div><div class="dtc-act-sm">Procedimiento PATS con IDS / ForScan</div></div>
+          <div class="dtc-row"><div class="dtc-code-big">P1604</div><div class="dtc-desc-sm">Anti-robo no inicializado (Toyota)</div><div class="dtc-act-sm">Inicialización con Techstream</div></div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn btn-ghost" onclick="goBack()" style="margin-top:12px;">← Volver</button>
+  </div>
+
+  <!-- MANTENIMIENTO -->
+  <div class="screen" id="s-mant">
+    <div class="sec-title">🔧 Mantenimiento</div>
+    <div class="sec-desc">Plan de servicios por vehículo y uso.</div>
+    <div class="select-wrap">
+      <div>
+        <div class="field-label">Tipo de vehículo</div>
+        <select class="field-select" id="m-tipo" onchange="calcMant()">
+          <option value="">— Seleccionar —</option>
+          <option value="auto_diesel">Auto / SUV Diesel</option>
+          <option value="auto_bencina">Auto / SUV Bencina</option>
+          <option value="camion_leve">Camión leve (&lt;3.5 t) Diesel</option>
+          <option value="furgon">Furgón / Van Diesel</option>
+          <option value="pickup">Pickup / 4x4 Diesel</option>
+        </select>
+      </div>
+      <div>
+        <div class="field-label">Kilometraje actual</div>
+        <input class="field-input" type="number" id="m-km" placeholder="Ej: 85000" oninput="calcMant()">
+      </div>
+      <div>
+        <div class="field-label">Tipo de uso</div>
+        <select class="field-select" id="m-uso" onchange="calcMant()">
+          <option value="mixto">Mixto ciudad + carretera</option>
+          <option value="ciudad">Mayoría ciudad</option>
+          <option value="carretera">Mayoría carretera</option>
+          <option value="carga">Trabajo pesado / carga</option>
+        </select>
+      </div>
+    </div>
+    <div id="mant-results"></div>
+  </div>
+
+  <!-- INMOVILIZADOR -->
+  <div class="screen" id="s-immo">
+    <div class="sec-title">🔒 Inmovilizador</div>
+    <div class="sec-desc">Selecciona la situación del vehículo.</div>
+    <div class="immo-grid">
+      <div class="immo-card" onclick="showImmoMob(this,'transponder')">
+        <div class="immo-icon">🗝️</div>
+        <div class="immo-name">Llave no reconocida</div>
+        <div class="immo-sub">Motor cranea, no enciende</div>
+      </div>
+      <div class="immo-card" onclick="showImmoMob(this,'bateria')">
+        <div class="immo-icon">🔋</div>
+        <div class="immo-name">Tras corte batería</div>
+        <div class="immo-sub">Quedó bloqueado</div>
+      </div>
+      <div class="immo-card" onclick="showImmoMob(this,'ecu')">
+        <div class="immo-icon">🖥️</div>
+        <div class="immo-name">Cambio ECU / BCM</div>
+        <div class="immo-sub">No sincroniza llaves</div>
+      </div>
+      <div class="immo-card" onclick="showImmoMob(this,'alarma')">
+        <div class="immo-icon">📡</div>
+        <div class="immo-name">Alarma aftermarket</div>
+        <div class="immo-sub">No libera arranque</div>
+      </div>
+      <div class="immo-card" onclick="showImmoMob(this,'camion')">
+        <div class="immo-icon">🚛</div>
+        <div class="immo-name">Camión / furgón</div>
+        <div class="immo-sub">Sistema propietario</div>
+      </div>
+      <div class="immo-card" onclick="nav('s-dtc','Códigos DTC')">
+        <div class="immo-icon">📋</div>
+        <div class="immo-name">Tengo un DTC</div>
+        <div class="immo-sub">Ver tabla de códigos</div>
+      </div>
+    </div>
+    <div class="immo-proto" id="immo-proto">
+      <div class="immo-proto-title" id="immo-proto-title"></div>
+      <div id="immo-proto-body"></div>
+    </div>
+    <button class="btn btn-ghost" onclick="goBack()" style="margin-top:12px;">← Volver</button>
+  </div>
+
+  <!-- CHECKLIST -->
+  <div class="screen" id="s-checklist">
+    <div class="sec-title">✅ Checklist DPF</div>
+    <div style="font-size:12px;font-family:var(--mono);color:var(--muted);margin-bottom:4px;" id="cl-prog">0 / 14 completados</div>
+    <div class="prog-bar"><div class="prog-fill" id="cl-bar" style="width:0%;background:var(--orange);"></div></div>
+
+    <div class="check-section-label">Inspección inicial</div>
+    <div class="check-list" id="main-cl">
+      <div class="check-row" onclick="tapCheck(this)"><div class="check-box"></div><div><div class="check-text">Entrevista al conductor</div><div class="check-sub">Historial síntomas, uso, último cambio aceite</div></div></div>
+      <div class="check-row" onclick="tapCheck(this)"><div class="check-box"></div><div><div class="check-text">Inspección visual — humo escape</div><div class="check-sub">Negro = hollín · Azul = aceite · Blanco = refrigerante</div></div></div>
+      <div class="check-row" onclick="tapCheck(this)"><div class="check-box"></div><div><div class="check-text">Mangueras sensor presión diferencial</div><div class="check-sub">Sin grietas, aplastamiento ni desconexiones</div></div></div>
+      <div class="check-row" onclick="tapCheck(this)"><div class="check-box"></div><div><div class="check-text">Nivel y calidad del aceite</div><div class="check-sub">Aceite diluido = post-inyección fallida</div></div></div>
+
+      <div class="check-section-label">Diagnóstico electrónico</div>
+      <div class="check-row" onclick="tapCheck(this)"><div class="check-box"></div><div><div class="check-text">DTCs leídos — todos los sistemas</div><div class="check-sub">Fotografiar pantalla escáner</div></div></div>
+      <div class="check-row" onclick="tapCheck(this)"><div class="check-box"></div><div><div class="check-text">Saturación DPF registrada (%)</div><div class="check-sub">Crítico si supera 70%</div></div></div>
+      <div class="check-row" onclick="tapCheck(this)"><div class="check-box"></div><div><div class="check-text">Presión diferencial registrada (kPa)</div><div class="check-sub">Crítico: >25 kPa a 2.000 RPM</div></div></div>
+      <div class="check-row" onclick="tapCheck(this)"><div class="check-box"></div><div><div class="check-text">Temperaturas EGT1 y EGT2</div></div></div>
+      <div class="check-row" onclick="tapCheck(this)"><div class="check-box"></div><div><div class="check-text">Balance inyectores verificado</div><div class="check-sub">Tolerancia: ±2 mg/carrera</div></div></div>
+      <div class="check-row" onclick="tapCheck(this)"><div class="check-box"></div><div><div class="check-text">EGR — apertura y cierre verificados</div></div></div>
+
+      <div class="check-section-label">Intervención</div>
+      <div class="check-row" onclick="tapCheck(this)"><div class="check-box"></div><div><div class="check-text">Pre-requisitos regeneración cumplidos</div><div class="check-sub">Combustible, temperatura, sin DTCs bloqueantes</div></div></div>
+      <div class="check-row" onclick="tapCheck(this)"><div class="check-box"></div><div><div class="check-text">Regeneración forzada ejecutada</div></div></div>
+
+      <div class="check-section-label">Verificación final</div>
+      <div class="check-row" onclick="tapCheck(this)"><div class="check-box"></div><div><div class="check-text">DTCs borrados — sin fallas nuevas</div></div></div>
+      <div class="check-row" onclick="tapCheck(this)"><div class="check-box"></div><div><div class="check-text">Prueba dinámica completada</div><div class="check-sub">Saturación final &lt;20% | ΔP &lt;5 kPa</div></div></div>
+    </div>
+    <button class="btn btn-ghost" onclick="resetCL()" style="margin-top:16px;">↺ Reiniciar checklist</button>
+    <button class="btn btn-ghost" onclick="goBack()">← Volver</button>
+  </div>
+
+  <!-- IA CHAT -->
+  <div class="screen" id="s-chat" style="padding:0;">
+    <div class="chat-screen">
+      <div class="chat-sugs" id="chat-sugs">
+        <div class="chat-sug" onclick="sendSug(this)">Transit 2019, P244B, regen no baja</div>
+        <div class="chat-sug" onclick="sendSug(this)">No arranca, luz llave parpadea</div>
+        <div class="chat-sug" onclick="sendSug(this)">H350 humo negro en reparto</div>
+        <div class="chat-sug" onclick="sendSug(this)">Inmo activo tras batería</div>
+        <div class="chat-sug" onclick="sendSug(this)">¿Cada cuánto limpiar el DPF?</div>
+      </div>
+      <div class="chat-msgs" id="chat-msgs">
+        <div class="chat-msg">
+          <div class="chat-av">🔧</div>
+          <div class="chat-bub">Hola. Describe el vehículo y el problema — marca, modelo, año, síntomas y códigos DTC si tienes. Te doy orientación técnica específica.</div>
+        </div>
+      </div>
+      <div class="chat-bar">
+        <textarea class="chat-inp" id="chat-inp" rows="1" placeholder="Describe el problema..." onkeydown="chatKey(event)" oninput="resizeInp(this)"></textarea>
+        <button class="chat-send-btn" id="chat-btn" onclick="sendChat()">↑</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ CENTRAL (pantalla de navegación completa) ══ -->
+  <div class="screen" id="s-central">
+    <div class="sec-title">🗂️ Central de diagnóstico</div>
+    <div class="sec-desc">Todas las categorías — toca para abrir.</div>
+    <div class="section-divider">⚡ Sistema eléctrico</div>
+    <div class="central-cats">
+      <div class="cat-row" onclick="nav('s-cat-noarranca','No arranca')"><div class="cat-row-icon">🚫</div><div class="cat-row-body"><div class="cat-row-title">No arranca</div><div class="cat-row-sub">Sin respuesta, cranea sin encender</div></div><span class="cat-row-count">8 fallas</span><div class="cat-row-chevron">›</div></div>
+      <div class="cat-row" onclick="nav('s-cat-alternador','Alternador')"><div class="cat-row-icon">⚡</div><div class="cat-row-body"><div class="cat-row-title">Alternador</div><div class="cat-row-sub">Luz batería, no carga, voltaje bajo</div></div><span class="cat-row-count">6 fallas</span><div class="cat-row-chevron">›</div></div>
+      <div class="cat-row" onclick="nav('s-cat-partida','Motor de partida')"><div class="cat-row-icon">🔁</div><div class="cat-row-body"><div class="cat-row-title">Motor de partida</div><div class="cat-row-sub">Ruido clic, no gira, piñón</div></div><span class="cat-row-count">5 fallas</span><div class="cat-row-chevron">›</div></div>
+      <div class="cat-row" onclick="nav('s-bateria','Batería')"><div class="cat-row-icon">🔋</div><div class="cat-row-body"><div class="cat-row-title">Batería</div><div class="cat-row-sub">Voltajes, carga, reemplazo</div></div><span class="cat-row-count">6 protocolos</span><div class="cat-row-chevron">›</div></div>
+      <div class="cat-row" onclick="nav('s-immo','Inmovilizador')"><div class="cat-row-icon">🔒</div><div class="cat-row-body"><div class="cat-row-title">Inmovilizador</div><div class="cat-row-sub">Llave, ECU, alarma aftermarket</div></div><span class="cat-row-count">6 protocolos</span><div class="cat-row-chevron">›</div></div>
+    </div>
+    <div class="section-divider" style="margin-top:14px;">🔩 Motor y emisiones</div>
+    <div class="central-cats">
+      <div class="cat-row" onclick="nav('s-dpf-menu','DPF / FAP')"><div class="cat-row-icon">🔴</div><div class="cat-row-body"><div class="cat-row-title">DPF / FAP</div><div class="cat-row-sub">Saturación, regeneración, códigos</div></div><span class="cat-row-count">5 síntomas</span><div class="cat-row-chevron">›</div></div>
+      <div class="cat-row" onclick="nav('s-cat-motor','Motor general')"><div class="cat-row-icon">🔩</div><div class="cat-row-body"><div class="cat-row-title">Motor general</div><div class="cat-row-sub">Golpeteo, aceite, humo, misfire</div></div><span class="cat-row-count">8 fallas</span><div class="cat-row-chevron">›</div></div>
+      <div class="cat-row" onclick="nav('s-cat-refrigeracion','Refrigeración')"><div class="cat-row-icon">🌡️</div><div class="cat-row-body"><div class="cat-row-title">Refrigeración</div><div class="cat-row-sub">Sobrecalentamiento, pérdida, ventilador</div></div><span class="cat-row-count">7 fallas</span><div class="cat-row-chevron">›</div></div>
+    </div>
+    <div class="section-divider" style="margin-top:14px;">🚗 Chasis y seguridad</div>
+    <div class="central-cats">
+      <div class="cat-row" onclick="nav('s-cat-frenos','Frenos')"><div class="cat-row-icon">🛑</div><div class="cat-row-body"><div class="cat-row-title">Frenos</div><div class="cat-row-sub">Ruido, vibración, pedal, ABS</div></div><span class="cat-row-count">7 fallas</span><div class="cat-row-chevron">›</div></div>
+      <div class="cat-row" onclick="nav('s-cat-suspension','Suspensión')"><div class="cat-row-icon">🚗</div><div class="cat-row-body"><div class="cat-row-title">Suspensión</div><div class="cat-row-sub">Ruidos, vibración, geometría</div></div><span class="cat-row-count">6 fallas</span><div class="cat-row-chevron">›</div></div>
+    </div>
+    <div class="section-divider" style="margin-top:14px;">🛠️ Herramientas</div>
+    <div class="central-cats">
+      <div class="cat-row" onclick="nav('s-regen','Regeneración forzada')"><div class="cat-row-icon">🔄</div><div class="cat-row-body"><div class="cat-row-title">Regeneración forzada DPF</div><div class="cat-row-sub">Protocolo paso a paso</div></div><div class="cat-row-chevron">›</div></div>
+      <div class="cat-row" onclick="nav('s-dtc','Códigos DTC')"><div class="cat-row-icon">📋</div><div class="cat-row-body"><div class="cat-row-title">Códigos DTC</div><div class="cat-row-sub">P2002 · P244B · B1600 y más</div></div><div class="cat-row-chevron">›</div></div>
+      <div class="cat-row" onclick="nav('s-mant','Mantenimiento')"><div class="cat-row-icon">🔧</div><div class="cat-row-body"><div class="cat-row-title">Plan de mantenimiento</div><div class="cat-row-sub">Por vehículo y kilometraje</div></div><div class="cat-row-chevron">›</div></div>
+      <div class="cat-row" onclick="nav('s-checklist','Checklist DPF')"><div class="cat-row-icon">✅</div><div class="cat-row-body"><div class="cat-row-title">Checklist DPF</div><div class="cat-row-sub">14 ítems de verificación</div></div><div class="cat-row-chevron">›</div></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── BOTTOM NAV ── -->
+<nav class="bottom-nav">
+  <button class="bn-item active" id="bn-home" onclick="goBN('s-home','Central de diagnóstico','bn-home')">
+    <div class="bn-icon">🏠</div>
+    <div class="bn-label">Central</div>
+  </button>
+  <button class="bn-item" id="bn-scan" onclick="goBN('s-quickscan','Diagnóstico rápido','bn-scan')">
+    <div class="bn-icon">⚡</div>
+    <div class="bn-label">Rápido</div>
+  </button>
+  <button class="bn-item" id="bn-central" onclick="goBN('s-central','Central de fallas','bn-central')">
+    <div class="bn-icon">🗂️</div>
+    <div class="bn-label">Central</div>
+  </button>
+  <button class="bn-item" id="bn-ia" onclick="navChat()">
+    <div class="bn-icon">🤖</div>
+    <div class="bn-label">IA</div>
+  </button>
+  <button class="bn-item" id="bn-fb" onclick="goBN('s-feedback','Feedback técnico','bn-fb')">
+    <div class="bn-icon">💬</div>
+    <div class="bn-label">Feedback</div>
+  </button>
+</nav>
+
+<!-- BATERÍA -->
+  <div class="screen" id="s-bateria">
+    <div class="sec-title">🔋 Diagnóstico de batería</div>
+    <div class="sec-desc">Pruebas eléctricas, valores de referencia y protocolo de reemplazo para 12V plomo-ácido y AGM.</div>
+
+    <!-- VOLTAJE RÁPIDO -->
+    <div style="background:var(--s1);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px;">
+      <div style="font-size:10px;font-family:var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;">VOLTAJE DE REFERENCIA RÁPIDA</div>
+      <div style="display:flex;flex-direction:column;gap:6px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:rgba(29,185,84,0.08);border:1px solid rgba(29,185,84,0.2);border-radius:8px;">
+          <span style="font-size:13px;font-weight:600;">✅ Batería cargada</span>
+          <span style="font-family:var(--mono);font-size:13px;color:var(--green);font-weight:700;">12.6 – 12.8 V</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:rgba(240,165,0,0.08);border:1px solid rgba(240,165,0,0.2);border-radius:8px;">
+          <span style="font-size:13px;font-weight:600;">⚠️ Carga media</span>
+          <span style="font-family:var(--mono);font-size:13px;color:var(--amber);font-weight:700;">12.2 – 12.5 V</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:rgba(230,57,70,0.08);border:1px solid rgba(230,57,70,0.2);border-radius:8px;">
+          <span style="font-size:13px;font-weight:600;">🔴 Descargada</span>
+          <span style="font-family:var(--mono);font-size:13px;color:var(--red);font-weight:700;">11.9 – 12.1 V</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:rgba(230,57,70,0.12);border:1px solid rgba(230,57,70,0.3);border-radius:8px;">
+          <span style="font-size:13px;font-weight:600;">💀 Sulfatada / muerta</span>
+          <span style="font-family:var(--mono);font-size:13px;color:var(--red);font-weight:700;">&lt; 11.8 V</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:rgba(67,97,238,0.08);border:1px solid rgba(67,97,238,0.2);border-radius:8px;">
+          <span style="font-size:13px;font-weight:600;">⚡ Alternador cargando</span>
+          <span style="font-family:var(--mono);font-size:13px;color:var(--blue);font-weight:700;">13.8 – 14.7 V</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:rgba(230,57,70,0.08);border:1px solid rgba(230,57,70,0.2);border-radius:8px;">
+          <span style="font-size:13px;font-weight:600;">🔴 Alternador bajo</span>
+          <span style="font-family:var(--mono);font-size:13px;color:var(--red);font-weight:700;">&lt; 13.5 V</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:rgba(230,57,70,0.08);border:1px solid rgba(230,57,70,0.2);border-radius:8px;">
+          <span style="font-size:13px;font-weight:600;">⚠️ Alternador exceso</span>
+          <span style="font-family:var(--mono);font-size:13px;color:var(--amber);font-weight:700;">&gt; 15.0 V</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SELECTOR DE SÍNTOMA -->
+    <div class="section-divider">¿Cuál es el problema?</div>
+    <div class="row-list" style="margin-bottom:14px;">
+      <div class="row" onclick="showBat('no_arranca')">
+        <div class="row-icon">🚫</div>
+        <div class="row-body"><div class="row-title">No arranca / arranque lento</div><div class="row-sub">Motor cranea despacio o no responde</div></div>
+        <div class="badge b-red">CRÍTICO</div>
+      </div>
+      <div class="row" onclick="showBat('luz_bateria')">
+        <div class="row-icon">💡</div>
+        <div class="row-body"><div class="row-title">Luz batería encendida</div><div class="row-sub">Testigo activo mientras motor anda</div></div>
+        <div class="badge b-amber">ALERTA</div>
+      </div>
+      <div class="row" onclick="showBat('descarga_rapida')">
+        <div class="row-icon">📉</div>
+        <div class="row-body"><div class="row-title">Se descarga rápido / de noche</div><div class="row-sub">Batería no retiene carga</div></div>
+        <div class="badge b-amber">ALERTA</div>
+      </div>
+      <div class="row" onclick="showBat('corrosion')">
+        <div class="row-icon">🟢</div>
+        <div class="row-body"><div class="row-title">Corrosión en terminales</div><div class="row-sub">Depósito blanco/verdoso en bornes</div></div>
+        <div class="badge b-blue">REVISAR</div>
+      </div>
+      <div class="row" onclick="showBat('reemplazo')">
+        <div class="row-icon">🔄</div>
+        <div class="row-body"><div class="row-title">Reemplazo de batería</div><div class="row-sub">Protocolo completo de sustitución</div></div>
+        <div class="badge b-blue">PROTOCOLO</div>
+      </div>
+      <div class="row" onclick="showBat('alternador')">
+        <div class="row-icon">⚡</div>
+        <div class="row-body"><div class="row-title">Diagnóstico de alternador</div><div class="row-sub">Carga, diodos y regulador de voltaje</div></div>
+        <div class="badge b-blue">ELÉCTRICO</div>
+      </div>
+    </div>
+
+    <div class="immo-proto" id="bat-proto" style="display:none;">
+      <div class="immo-proto-title" id="bat-proto-title"></div>
+      <div id="bat-proto-body"></div>
+    </div>
+
+    <!-- DTC BATERÍA -->
+    <div class="section-divider">Códigos DTC relacionados</div>
+    <div class="expand-group">
+      <div class="expand-hdr" onclick="toggleExp(this)">
+        <span class="badge b-amber">⚠</span>
+        <span class="expand-hdr-text">Batería / sistema de carga</span>
+        <span class="expand-arrow">›</span>
+      </div>
+      <div class="expand-body">
+        <div class="dtc-list">
+          <div class="dtc-row"><div class="dtc-code-big">P0560</div><div class="dtc-desc-sm">Voltaje sistema — fuera de rango</div><div class="dtc-act-sm">Medir voltaje batería y alternador. Puede ser batería débil o regulador fallado</div></div>
+          <div class="dtc-row"><div class="dtc-code-big">P0562</div><div class="dtc-desc-sm">Voltaje sistema bajo</div><div class="dtc-act-sm">Batería descargada o alternador no carga. Medir en bornes con motor encendido</div></div>
+          <div class="dtc-row"><div class="dtc-code-big">P0563</div><div class="dtc-desc-sm">Voltaje sistema alto</div><div class="dtc-act-sm">Regulador de voltaje del alternador fallado. Puede dañar electrónica del vehículo</div></div>
+          <div class="dtc-row"><div class="dtc-code-big">P0620</div><div class="dtc-desc-sm">Circuito control alternador</div><div class="dtc-act-sm">Verificar conector B+ y señal de control de campo desde ECU</div></div>
+          <div class="dtc-row"><div class="dtc-code-big">B1000</div><div class="dtc-desc-sm">Voltaje bajo en módulo de control</div><div class="dtc-act-sm">ECU recibió tensión insuficiente — revisar batería y fusibles principales</div></div>
+          <div class="dtc-row"><div class="dtc-code-big">U0100</div><div class="dtc-desc-sm">Sin comunicación CAN — ECU motor</div><div class="dtc-act-sm">Puede aparecer por voltaje bajo. Verificar batería antes de asumir falla de CAN bus</div></div>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn btn-ghost" onclick="goBack()" style="margin-top:12px;">← Volver</button>
+  </div>
+
+<!-- ══ CENTRAL DE FALLAS ══ -->
+
+  <!-- ══ NO ARRANCA ══ -->
+  <div class="screen" id="s-cat-noarranca">
+    <div class="sec-title">🚫 No arranca</div>
+    <div class="sec-desc">Árbol de diagnóstico por síntoma. Expande la falla que corresponde.</div>
+    <div class="falla-list" id="fl-noarranca"></div>
+    <button class="btn btn-ghost" onclick="goBack()" style="margin-top:12px;">← Volver</button>
+  </div>
+
+  <!-- ══ ALTERNADOR ══ -->
+  <div class="screen" id="s-cat-alternador">
+    <div class="sec-title">⚡ Alternador</div>
+    <div class="sec-desc">Fallas del sistema de carga. Siempre verificar correa antes de desmontar.</div>
+    <div class="falla-list" id="fl-alternador"></div>
+    <button class="btn btn-ghost" onclick="goBack()" style="margin-top:12px;">← Volver</button>
+  </div>
+
+  <!-- ══ MOTOR DE PARTIDA ══ -->
+  <div class="screen" id="s-cat-partida">
+    <div class="sec-title">🔁 Motor de partida</div>
+    <div class="sec-desc">Diagnóstico del sistema de arranque eléctrico.</div>
+    <div class="falla-list" id="fl-partida"></div>
+    <button class="btn btn-ghost" onclick="goBack()" style="margin-top:12px;">← Volver</button>
+  </div>
+
+  <!-- ══ REFRIGERACIÓN ══ -->
+  <div class="screen" id="s-cat-refrigeracion">
+    <div class="sec-title">🌡️ Refrigeración</div>
+    <div class="sec-desc">Fallas del sistema de enfriamiento del motor.</div>
+    <div class="falla-list" id="fl-refrigeracion"></div>
+    <button class="btn btn-ghost" onclick="goBack()" style="margin-top:12px;">← Volver</button>
+  </div>
+
+  <!-- ══ SUSPENSIÓN ══ -->
+  <div class="screen" id="s-cat-suspension">
+    <div class="sec-title">🚗 Suspensión</div>
+    <div class="sec-desc">Diagnóstico de ruidos, vibraciones y geometría.</div>
+    <div class="falla-list" id="fl-suspension"></div>
+    <button class="btn btn-ghost" onclick="goBack()" style="margin-top:12px;">← Volver</button>
+  </div>
+
+  <!-- ══ FRENOS ══ -->
+  <div class="screen" id="s-cat-frenos">
+    <div class="sec-title">🛑 Frenos</div>
+    <div class="sec-desc">Diagnóstico del sistema de frenado y ABS.</div>
+    <div class="falla-list" id="fl-frenos"></div>
+    <button class="btn btn-ghost" onclick="goBack()" style="margin-top:12px;">← Volver</button>
+  </div>
+
+  <!-- ══ MOTOR GENERAL ══ -->
+  <div class="screen" id="s-cat-motor">
+    <div class="sec-title">🔩 Motor general</div>
+    <div class="sec-desc">Ruidos mecánicos, consumo de aceite, humos y fallas comunes.</div>
+    <div class="falla-list" id="fl-motor"></div>
+    <button class="btn btn-ghost" onclick="goBack()" style="margin-top:12px;">← Volver</button>
+  </div>
+
+  <!-- ══ FEEDBACK ══ -->
+  <div class="screen" id="s-feedback">
+    <div class="sec-title">💬 Feedback técnico</div>
+    <div class="sec-desc">Reporta la solución que aplicaste. Construye la base de conocimiento de Serviruta.</div>
+
+    <div class="fb-form">
+      <div>
+        <div class="fb-label">Patente del vehículo</div>
+        <input class="fb-input" id="fb-patente" type="text" placeholder="XXXX-XX" style="text-transform:uppercase">
+      </div>
+      <div>
+        <div class="fb-label">Modelo / año</div>
+        <input class="fb-input" id="fb-modelo" type="text" placeholder="Ford Transit 2019">
+      </div>
+      <div>
+        <div class="fb-label">Categoría de falla</div>
+        <select class="fb-select" id="fb-cat">
+          <option value="">— Seleccionar —</option>
+          <option value="no_arranca">No arranca</option>
+          <option value="alternador">Alternador</option>
+          <option value="partida">Motor de partida</option>
+          <option value="refrigeracion">Refrigeración</option>
+          <option value="suspension">Suspensión</option>
+          <option value="frenos">Frenos</option>
+          <option value="motor">Motor general</option>
+          <option value="dpf">DPF / FAP</option>
+          <option value="bateria">Batería</option>
+          <option value="inmovilizador">Inmovilizador</option>
+          <option value="otro">Otro</option>
+        </select>
+      </div>
+      <div>
+        <div class="fb-label">Descripción de la falla</div>
+        <textarea class="fb-textarea" id="fb-falla" placeholder="¿Qué síntomas presentaba el vehículo?"></textarea>
+      </div>
+      <div>
+        <div class="fb-label">Solución aplicada</div>
+        <textarea class="fb-textarea" id="fb-solucion" placeholder="¿Qué hiciste para resolverlo? Incluye piezas cambiadas, valores medidos, pasos seguidos..."></textarea>
+      </div>
+      <div>
+        <div class="fb-label">Herramientas / repuestos utilizados</div>
+        <input class="fb-input" id="fb-herramientas" type="text" placeholder="Multímetro, sensor O2, filtro DPF...">
+      </div>
+      <div>
+        <div class="fb-label">Tiempo de resolución</div>
+        <select class="fb-select" id="fb-tiempo">
+          <option value="menos_1h">Menos de 1 hora</option>
+          <option value="1_2h">1 a 2 horas</option>
+          <option value="2_4h">2 a 4 horas</option>
+          <option value="mas_4h">Más de 4 horas</option>
+          <option value="mas_1d">Más de 1 día</option>
+        </select>
+      </div>
+      <div>
+        <div class="fb-label">Dificultad</div>
+        <div class="fb-stars" id="fb-stars">
+          <span class="fb-star" data-v="1" onclick="setStar(1)">★</span>
+          <span class="fb-star" data-v="2" onclick="setStar(2)">★</span>
+          <span class="fb-star" data-v="3" onclick="setStar(3)">★</span>
+          <span class="fb-star" data-v="4" onclick="setStar(4)">★</span>
+          <span class="fb-star" data-v="5" onclick="setStar(5)">★</span>
+        </div>
+      </div>
+      <div id="fb-msg" class="save-msg"></div>
+      <button class="btn btn-orange" onclick="submitFeedback()">📤 Enviar a base de conocimiento</button>
+    </div>
+
+    <div class="section-divider">Soluciones reportadas por técnicos</div>
+    <div class="kb-filter" id="kb-filter">
+      <div class="kb-chip on" data-cat="all" onclick="filterKB(this)">Todas</div>
+      <div class="kb-chip" data-cat="no_arranca" onclick="filterKB(this)">No arranca</div>
+      <div class="kb-chip" data-cat="alternador" onclick="filterKB(this)">Alternador</div>
+      <div class="kb-chip" data-cat="refrigeracion" onclick="filterKB(this)">Refrigeración</div>
+      <div class="kb-chip" data-cat="frenos" onclick="filterKB(this)">Frenos</div>
+      <div class="kb-chip" data-cat="suspension" onclick="filterKB(this)">Suspensión</div>
+      <div class="kb-chip" data-cat="dpf" onclick="filterKB(this)">DPF</div>
+      <div class="kb-chip" data-cat="bateria" onclick="filterKB(this)">Batería</div>
+    </div>
+    <div id="kb-list"></div>
+    <button class="btn btn-ghost" onclick="goBack()" style="margin-top:12px;">← Volver</button>
+  </div>
+
+<!-- ── SAVE SHEET ── -->
+<div class="sheet-overlay" id="save-sheet" onclick="closeSheet(event)">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-title">💾 Guardar diagnóstico</div>
+    <div class="sheet-row">
+      <div class="sheet-field"><label>Patente</label><input type="text" id="sv-pat" placeholder="XXXX-XX" style="text-transform:uppercase"></div>
+      <div class="sheet-field"><label>KM actual</label><input type="number" id="sv-km" placeholder="85000"></div>
+    </div>
+    <div class="sheet-field"><label>Marca / Modelo</label><input type="text" id="sv-mod" placeholder="Ford Transit 2019"></div>
+    <div class="sheet-field">
+      <label>Tipo</label>
+      <select id="sv-tipo">
+        <option value="dpf">DPF / FAP</option>
+        <option value="bateria">Batería / Alternador</option>
+        <option value="inmovilizador">Inmovilizador</option>
+        <option value="mantenimiento">Mantenimiento</option>
+        <option value="general">General</option>
+      </select>
+    </div>
+    <div id="sv-msg" class="save-msg"></div>
+    <button class="btn btn-orange" onclick="saveNow()">💾 Guardar en Supabase</button>
+    <button class="btn btn-ghost" onclick="document.getElementById('save-sheet').classList.remove('open')">Cancelar</button>
+  </div>
+</div>
+
+<script>
+// ══ CONFIG ══
+const SUPA_URL = 'https://bqlgfmqcefledqyodkii.supabase.co';
+const SUPA_KEY = 'TU_ANON_KEY_AQUI'; // ← reemplazar con tu key real
+const MAKE_WEBHOOK = 'https://hook.us2.make.com/hail5qzypi39pmsixxi167lviw8wahbq';
+
+// ══ NAVEGACIÓN ══
+let history = ['s-home'];
+let currentScreen = 's-home';
+
+function nav(id, title) {
+  const from = document.getElementById(currentScreen);
+  const to   = document.getElementById(id);
+  from.classList.remove('active');
+  from.classList.add('prev');
+  to.classList.add('active');
+  setTimeout(() => from.classList.remove('prev'), 300);
+  currentScreen = id;
+  history.push(id);
+  document.getElementById('hdr-title').textContent = title;
+  document.getElementById('hdr-back').classList.add('show');
+  to.scrollTop = 0;
+}
+
+function goBack() {
+  if (history.length <= 1) return;
+  const from = document.getElementById(currentScreen);
+  history.pop();
+  const prevId = history[history.length - 1];
+  const to = document.getElementById(prevId);
+  from.classList.remove('active');
+  to.classList.remove('prev');
+  to.classList.add('active');
+  currentScreen = prevId;
+  const titles = { 's-home':'Técnico','s-quickscan':'Diagnóstico rápido','s-dpf-menu':'DPF / FAP','s-sym':'Diagnóstico','s-regen':'Regeneración forzada','s-protocolo':'Protocolo completo','s-dtc':'Códigos DTC','s-mant':'Mantenimiento','s-immo':'Inmovilizador','s-checklist':'Checklist DPF','s-chat':'IA Técnica','s-bateria':'Diagnóstico batería','s-central':'Central de fallas','s-feedback':'Feedback técnico','s-cat-noarranca':'No arranca','s-cat-alternador':'Alternador','s-cat-partida':'Motor de partida','s-cat-refrigeracion':'Refrigeración','s-cat-suspension':'Suspensión','s-cat-frenos':'Frenos','s-cat-motor':'Motor general' };
+  document.getElementById('hdr-title').textContent = titles[prevId] || 'Serviruta';
+  if (history.length <= 1) document.getElementById('hdr-back').classList.remove('show');
+}
+
+function goBN(id, title, bnId) {
+  const from = document.getElementById(currentScreen);
+  const to   = document.getElementById(id);
+  from.classList.remove('active','prev');
+  to.classList.add('active');
+  currentScreen = id;
+  history = [id];
+  document.getElementById('hdr-title').textContent = title;
+  document.getElementById('hdr-back').classList.remove('show');
+  document.querySelectorAll('.bn-item').forEach(b => b.classList.remove('active'));
+  document.getElementById(bnId).classList.add('active');
+  to.scrollTop = 0;
+}
+
+function navChat() {
+  nav('s-chat','IA Técnica');
+  document.querySelectorAll('.bn-item').forEach(b => b.classList.remove('active'));
+  document.getElementById('bn-ia').classList.add('active');
+}
+
+// ══ SÍNTOMAS DPF ══
+const syms = {
+  luz_dpf: {
+    title: '🟡 Luz DPF encendida',
+    steps: [
+      { n:1, t:'Verificar saturación con escáner', d:'Si está entre 40–75%, ejecutar regeneración forzada. Causa más frecuente: uso exclusivo en ciudad sin regeneraciones completas.' },
+      { n:2, t:'Si saturación > 75%', d:'Regen puede no ser suficiente. Evaluar limpieza mecánica o química del DPF.' },
+      { n:3, t:'Verificar sensor presión diferencial', d:'Si ΔP muestra 0 kPa constante o valores erráticos, el sensor puede estar fallado o con mangueras obstruidas.', code:'Esperado: 2–8 kPa ralentí | 10–20 kPa a 2.000 RPM (DPF sano)' },
+    ]
+  },
+  perder_potencia: {
+    title: '🔻 Pérdida de potencia',
+    alert: { type:'a-red', icon:'🚨', text:'No seguir operando en modo seguro. Puede causar daño al turbo por contrapresión elevada.' },
+    steps: [
+      { n:1, t:'Leer DTCs inmediatamente', d:'Buscar P244B (presión alta DPF), falla sensor temperatura, o múltiples fallas relacionadas.' },
+      { n:2, t:'Medir presión diferencial real', d:'Con motor a 2.000 RPM, si ΔP > 40 kPa → saturación crítica. Requiere limpieza o cambio.', code:'Umbral: ΔP > 40 kPa → no solo regeneración' },
+      { n:3, t:'Verificar turbo', d:'Contrapresión alta daña el turbo. Revisar aceite de retorno por carbonilla.' },
+    ]
+  },
+  humo_negro: {
+    title: '💨 Humo negro excesivo',
+    steps: [
+      { n:1, t:'Descartar falla en inyectores', d:'Medir balance de inyección. Inyector que gotea genera combustión incompleta y saturación acelerada del DPF.' },
+      { n:2, t:'Verificar EGR', d:'EGR atascada en posición abierta introduce demasiados gases de recirculación.' },
+      { n:3, t:'Evaluar turbo y admisión', d:'Turbo con fuga de aceite contamina el DPF con hidrocarbonos — lo vuelve irrecuperable.' },
+      { n:4, t:'Corregir causa raíz ANTES de limpiar DPF', d:'Limpiar sin resolver la causa raíz = resaturación en cientos de km.' },
+    ]
+  },
+  consumo_alto: {
+    title: '⛽ Consumo elevado',
+    steps: [
+      { n:1, t:'Revisar frecuencia de regeneraciones', d:'Normal: cada 300–600 km. Si es cada 50–100 km → problema activo de saturación acelerada.' },
+      { n:2, t:'Verificar aceite de motor', d:'Post-inyección interrumpida repetidamente puede diluir el aceite. Revisar nivel (puede estar alto) y calidad.' },
+      { n:3, t:'Completar regeneración forzada', d:'Si el sistema nunca completa el ciclo, está consumiendo combustible en intentos fallidos continuamente.' },
+    ]
+  },
+  motor_apagado: {
+    title: '🚫 Motor se apaga solo',
+    alert: { type:'a-red', icon:'🚨', text:'No arrancar repetidamente. El apagado es protección activa. Diagnóstico primero.' },
+    steps: [
+      { n:1, t:'Leer todos los DTCs con motor frío', d:'Buscar P2033, P2080 (sensores temperatura), P244B (presión alta), fallas sensor lambda.' },
+      { n:2, t:'Verificar sensor temperatura aguas abajo DPF', d:'Si reporta >900°C o 0°C con motor en marcha → sensor fallado, ECU corta motor por protección.' },
+      { n:3, t:'Evaluar AdBlue (Euro 6)', d:'Nivel bajo puede gatillar corte de motor progresivo en camiones Euro 6.' },
+    ]
+  }
+};
+
+function showSym(key) {
+  const s = syms[key];
+  let html = `<div class="sec-title">${s.title}</div>`;
+  if (s.alert) {
+    html += `<div class="alert ${s.alert.type}"><div class="alert-icon">${s.alert.icon}</div><div>${s.alert.text}</div></div>`;
+  }
+  s.steps.forEach(st => {
+    html += `<div class="step-card"><div class="step-num">${st.n}</div><div class="step-body"><div class="step-title">${st.t}</div><div class="step-detail">${st.d}</div>${st.code?`<span class="step-code">${st.code}</span>`:''}</div></div>`;
+  });
+  document.getElementById('sym-content').innerHTML = html;
+  nav('s-sym', s.title.replace(/[^\w\s]/g,'').trim().slice(0,20));
+}
+
+// ══ QUICK SCAN ══
+function toggleChip(el) { el.classList.toggle('on'); }
+
+function runQS() {
+  const on = [...document.querySelectorAll('.qs-chip.on')].map(c => c.dataset.s);
+  const res = document.getElementById('qs-results');
+  if (!on.length) { res.innerHTML = '<div class="alert a-amber"><div class="alert-icon">⚠️</div><div>Selecciona al menos un síntoma.</div></div>'; return; }
+
+  let diags = [];
+  if (on.includes('inmo') || (on.includes('no_arranca') && on.includes('bateria')))
+    diags.push({ sev:'b-red', label:'🔒 Inmovilizador activo', desc:'El vehículo no reconoce la llave o hay pérdida de sincronización en el sistema de seguridad.', btn:'Ver Inmovilizador', sc:'s-immo', st:'Inmovilizador' });
+  if (on.includes('bat_muerta') || (on.includes('no_arranca') && on.includes('bateria') && !on.includes('inmo')))
+    diags.push({ sev:'b-red', label:'💀 Batería muerta / descargada', desc:'Voltaje bajo impide el arranque. Verificar voltaje en bornes (debería ser ≥12.4 V en reposo).', btn:'Ver Batería', sc:'s-bateria', st:'Diagnóstico batería' });
+  if (on.includes('alternador'))
+    diags.push({ sev:'b-amber', label:'⚡ Falla de alternador', desc:'Luz de batería activa con motor andando indica que el alternador no está cargando. Medir voltaje con motor encendido (esperado: 13.8–14.7 V).', btn:'Ver Batería', sc:'s-bateria', st:'Diagnóstico batería' });
+  if (on.includes('potencia') && (on.includes('luz_dpf') || on.includes('humo_negro')))
+    diags.push({ sev:'b-red', label:'🔴 DPF en saturación crítica', desc:'Presión diferencial excedida. Limp mode activo. Requiere regeneración o limpieza urgente.', btn:'Ver Regeneración', sc:'s-regen', st:'Regeneración forzada' });
+  if (on.includes('aceite_alto') && on.includes('consumo'))
+    diags.push({ sev:'b-red', label:'🛢️ Aceite diluido con combustible', desc:'Post-inyecciones fallidas acumulan combustible en el cárter. Revisar inyectores y regeneraciones interrumpidas.', btn:'Ver Protocolo', sc:'s-protocolo', st:'Protocolo completo' });
+  if (on.includes('humo_azul'))
+    diags.push({ sev:'b-amber', label:'⚠️ Turbo con fuga de aceite', desc:'Humo azul indica aceite quemado. Contamina el DPF irrecuperablemente.', btn:'Ver DPF', sc:'s-dpf-menu', st:'DPF / FAP' });
+  if (on.includes('adblue'))
+    diags.push({ sev:'b-amber', label:'⚠️ Sistema AdBlue / SCR', desc:'Nivel bajo o calidad incorrecta. En Euro 6 puede causar corte progresivo del motor.', btn:'Ver Códigos DTC', sc:'s-dtc', st:'Códigos DTC' });
+  if (on.includes('luz_dpf') && !diags.length)
+    diags.push({ sev:'b-amber', label:'⚠️ Saturación DPF', desc:'Filtro requiere regeneración. Verificar nivel de saturación con escáner.', btn:'Ver Regeneración', sc:'s-regen', st:'Regeneración forzada' });
+  if (on.includes('no_arranca') && !on.includes('inmo') && !diags.find(d => d.label.includes('Inmo')))
+    diags.push({ sev:'b-amber', label:'⚠️ No arranca — múltiple origen', desc:'Revisar sensor cigüeñal (P0335), combustible, relé arranque y presión de inyección.', btn:'Ver Códigos DTC', sc:'s-dtc', st:'Códigos DTC' });
+  if (!diags.length)
+    diags.push({ sev:'b-blue', label:'🔍 Requiere escáner', desc:'La combinación no apunta a una causa única. Leer DTCs completos con escáner OBD-II avanzado.', btn:'Ver Códigos DTC', sc:'s-dtc', st:'Códigos DTC' });
+
+  res.innerHTML = `<div class="section-divider">${diags.length} causa(s) probable(s)</div>` +
+    diags.map(d => `
+      <div class="qs-result-card">
+        <div class="qs-rc-label"><span class="badge ${d.sev}">${d.label}</span></div>
+        <div class="qs-rc-desc">${d.desc}</div>
+        <button class="btn btn-ghost" style="height:40px;font-size:12px;" onclick="nav('${d.sc}','${d.st}')">→ ${d.btn}</button>
+      </div>
+    `).join('');
+}
+
+// ══ MANTENIMIENTO ══
+const mPlans = {
+  auto_diesel:  { nombre:'Auto / SUV Diesel',    items: [ {km:5000,n:'Aceite + filtro',d:'Low SAPS (C2/C3) para DPF',u:'red'},{km:10000,n:'Filtro combustible',d:'Drenar separador de agua',u:'amber'},{km:15000,n:'Filtro de aire',d:'Filtro sucio aumenta hollín',u:'amber'},{km:30000,n:'Limpieza EGR',d:'EGR sucia satura el DPF',u:'amber'},{km:60000,n:'Bujías precalentamiento',d:'Arranque frío y combustión incompleta',u:'amber'},{km:80000,n:'Inspección turbo',d:'Juego axial y actuador VGT',u:'amber'},{km:100000,n:'Correa distribución',d:'Con kit completo: tensores + bomba',u:'red'},{km:120000,n:'Limpieza DPF preventiva',d:'Cenizas no eliminables por regen',u:'red'} ] },
+  auto_bencina: { nombre:'Auto / SUV Bencina',   items: [ {km:5000,n:'Aceite + filtro',d:'Según especificación fabricante',u:'red'},{km:15000,n:'Filtro de aire',d:'Impacto directo en consumo',u:'amber'},{km:30000,n:'Bujías estándar',d:'Bujías gastadas = mayor consumo',u:'amber'},{km:60000,n:'Bujías iridio / platino',d:'Según especificación del fabricante',u:'amber'},{km:80000,n:'Distribución',d:'Inspección o cambio preventivo',u:'red'} ] },
+  camion_leve:  { nombre:'Camión leve Diesel',    items: [ {km:5000,n:'Aceite + filtro',d:'Low SAPS obligatorio con DPF',u:'red'},{km:10000,n:'Filtro combustible + drenaje',d:'Crítico en zonas remotas',u:'red'},{km:20000,n:'Frenos — inspección completa',d:'Carga constante acelera desgaste',u:'red'},{km:30000,n:'EGR + admisión — limpieza',d:'Más hollín en uso pesado',u:'amber'},{km:50000,n:'Inspección turbo',d:'Remolque y carga: peores enemigos',u:'amber'},{km:80000,n:'Distribución',d:'Anticipar en trabajo pesado',u:'red'},{km:100000,n:'Limpieza DPF',d:'Uso ciudad puede saturar antes',u:'red'} ] },
+  furgon:       { nombre:'Furgón / Van Diesel',   items: [ {km:7500,n:'Aceite + filtro',d:'Low SAPS si tiene DPF',u:'red'},{km:10000,n:'Filtro combustible',d:'Crítico en baja calidad combustible',u:'amber'},{km:30000,n:'Limpieza EGR',d:'Reparto urbano = EGR taponada más rápido',u:'amber'},{km:60000,n:'Bujías precalentamiento',d:'Arranques frecuentes en frío',u:'amber'},{km:80000,n:'Distribución',d:'Motor de trabajo = muchas horas',u:'red'},{km:80000,n:'Limpieza DPF',d:'Sin regens completas en ciudad',u:'red'} ] },
+  pickup:       { nombre:'Pickup / 4x4 Diesel',   items: [ {km:5000,n:'Aceite + filtro',d:'Low SAPS. Con remolque: cada 5.000 km',u:'red'},{km:20000,n:'Aceite diferencial(es)',d:'Delantero y trasero en uso 4x4',u:'amber'},{km:20000,n:'Transfer case — aceite',d:'Verificar nivel y calidad',u:'amber'},{km:30000,n:'Frenos — 4 ruedas',d:'Con carga/remolque: desgaste mayor',u:'red'},{km:40000,n:'EGR + admisión',d:'Carga pesada = más hollín',u:'amber'},{km:80000,n:'Distribución',d:'Anticipar con remolque frecuente',u:'red'},{km:100000,n:'Limpieza DPF',d:'Revisar nivel de cenizas',u:'red'} ] }
+};
+const factorUso = {mixto:1, ciudad:0.75, carretera:1.15, carga:0.65};
+const dotCls = {red:'d-red',amber:'d-amber',green:'d-green',blue:'d-blue'};
+
+function calcMant() {
+  const tipo = document.getElementById('m-tipo').value;
+  const km   = parseInt(document.getElementById('m-km').value) || 0;
+  const uso  = document.getElementById('m-uso').value;
+  const res  = document.getElementById('mant-results');
+  if (!tipo || !km) { res.innerHTML = ''; return; }
+  const data = mPlans[tipo];
+  const f = factorUso[uso] || 1;
+  const items = data.items.map(it => {
+    const adj = Math.round(it.km * f);
+    const next = Math.ceil(km / adj) * adj;
+    const left = next - km;
+    let dot = 'green', kmLabel = `+${left.toLocaleString()} km`, kmCls = 'mant-km-ok';
+    if (left <= 0)           { dot = 'red';   kmLabel = 'VENCIDO';                  kmCls = 'mant-km-venc'; }
+    else if (left <= adj*0.2){ dot = 'red';   kmLabel = `+${left.toLocaleString()}`; kmCls = 'mant-km-venc'; }
+    else if (left <= adj*0.4){ dot = 'amber'; kmCls = 'mant-km-near'; }
+    return { ...it, adj, left, dot, kmLabel, kmCls };
+  }).sort((a,b) => a.left - b.left);
+
+  res.innerHTML = `<div class="section-divider">${data.nombre} · ${km.toLocaleString()} km</div>` +
+    items.map(it => `
+      <div class="mant-row">
+        <div class="mant-dot ${dotCls[it.dot]}"></div>
+        <div class="mant-info">
+          <div class="mant-name">${it.n}</div>
+          <div class="mant-detail">${it.d}</div>
+          <div style="font-size:10px;font-family:var(--mono);color:var(--muted);margin-top:3px;">Cada ${it.adj.toLocaleString()} km</div>
+        </div>
+        <div class="mant-km-badge ${it.kmCls}">${it.kmLabel}</div>
+      </div>
+    `).join('');
+}
+
+// ══ INMOVILIZADOR ══
+const immoData = {
+  transponder: { title:'🗝️ Llave / transponder no reconocido', steps:[
+    {n:1,t:'Leer DTCs del módulo de seguridad',d:'Buscar B1600, B1601, B2799, P1260 según marca. Conectar en TODOS los módulos.',code:'B1600 (Toyota) · P1260 (Ford) · B2799 (VAG)'},
+    {n:2,t:'Probar con llave de repuesto',d:'Si arranca con segunda llave: primera llave tiene transponder dañado. Solución: reprogramación.'},
+    {n:3,t:'Verificar antena del inmovilizador',d:'Antena rodea el switch de llave. Verificar conector y continuidad. Antena rota = nunca lee el transponder.'},
+    {n:4,t:'Reprogramación con escáner especializado',d:'Requiere Launch X431, Autel IM608, VCDS, Techstream, IDS. Necesita al menos una llave registrada.',code:'Sin llaves → EEPROM dump o locksmith especializado'},
+  ]},
+  bateria: { title:'🔋 Activo tras corte de batería', steps:[
+    {n:1,t:'Verificar carga batería',d:'Batería < 12V puede impedir lectura del transponder. Cargar o reemplazar primero.'},
+    {n:2,t:'Insertar llave y esperar 30 seg',d:'En muchos modelos: llave en ON sin arrancar 10–30 seg. El inmovilizador re-aprende la señal.'},
+    {n:3,t:'Procedimiento por código',d:'Ej: Honda: ON-OFF-ON-OFF-ON · Nissan: doble giro en 10 seg. Consultar manual por marca.',code:'Honda / Nissan: secuencia de encendido específica'},
+    {n:4,t:'Revisar fusibles del módulo BCM',d:'Corte de batería puede disparar fusible protector. Verificar caja fusibles interior y motor.'},
+  ]},
+  ecu: { title:'🖥️ Cambio de ECU / BCM', steps:[
+    {n:1,t:'Identificar arquitectura IMMO',d:'El inmovilizador puede estar en ECU, BCM, cluster o distribuido. Determinar cuál fue reemplazado.',code:'VAG: IMMO en ECU · Toyota: cluster+ECU · Ford: PATS/BCM'},
+    {n:2,t:'Opción A — ECU virginizada',d:'Si la ECU fue preparada para nueva programación, usar escáner correcto + PIN del vehículo.'},
+    {n:3,t:'Opción B — Migrar IMMO data',d:'Leer/escribir EEPROM de ECU original a la de reemplazo. Requiere Orange5, Xprog o Yanhua.',code:'Chips: 93C56/86 · MC68HC11 · NEC'},
+    {n:4,t:'Sincronizar con escáner OEM',d:'VAG→VCDS/ODIS · Toyota→Techstream · Ford→IDS · GM→GDS2'},
+  ]},
+  alarma: { title:'📡 Alarma aftermarket', steps:[
+    {n:1,t:'Identificar marca de la alarma',d:'Revisar bajo tablero. Comunes en Chile: Cobra, Python, Prestige, Clifford, Viper, Autowatch.'},
+    {n:2,t:'Activar modo valet',d:'Botón físico bajo tablero o panel lateral. Desactiva funciones de seguridad.',code:'Viper/Cobra valet: ON → OFF → presionar valet 1 vez → ON'},
+    {n:3,t:'Verificar relé de corte',d:'La alarma corta arranque, inyección o combustible con un relé. Localizar y hacer bypass temporal para diagnóstico.'},
+    {n:4,t:'Cambiar batería del control',d:'CR2032 descargada = no libera la alarma. Cambiar batería y probar.'},
+  ]},
+  camion: { title:'🚛 Camión / furgón', steps:[
+    {n:1,t:'Verificar inmovilizador de flota / GPS',d:'Muchos furgones de empresa tienen GPS con corte remoto activo. Buscar dispositivo bajo tablero.',code:'Coban · Queclink · Teltonika · Ituran'},
+    {n:2,t:'Verificar corte por seguro',d:'Seguros de flota pueden activar el corte remotamente. Contactar área de flota o aseguradora.'},
+    {n:3,t:'Crafter / Transit / H350',d:'Sincronización con herramienta específica: VCDS (Crafter), IDS (Transit), GDS (H350).'},
+    {n:4,t:'JAC, Foton, DFSK y marcas chinas',d:'Transponders ID46 o ID48. Compatible con: Autel IM608, Launch X431 con módulo IMMO.',code:'Transponder: ID46 · PCF7936 · EM4305'},
+  ]}
+};
+
+function showImmoMob(el, key) {
+  document.querySelectorAll('.immo-card').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  const d = immoData[key];
+  let html = `<div class="immo-proto-title">${d.title}</div>`;
+  d.steps.forEach(st => {
+    html += `<div class="step-card"><div class="step-num">${st.n}</div><div class="step-body"><div class="step-title">${st.t}</div><div class="step-detail">${st.d}</div>${st.code?`<span class="step-code">${st.code}</span>`:''}</div></div>`;
+  });
+  const proto = document.getElementById('immo-proto');
+  proto.innerHTML = html;
+  proto.classList.add('show');
+  proto.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+// ══ EXPAND (DTC) ══
+function toggleExp(hdr) {
+  hdr.classList.toggle('open');
+  hdr.nextElementSibling.classList.toggle('show');
+}
+
+// ══ CHECKLIST ══
+function tapCheck(row) {
+  row.classList.toggle('done');
+  const box = row.querySelector('.check-box');
+  box.textContent = row.classList.contains('done') ? '✓' : '';
+  updateCL();
+}
+function updateCL() {
+  const all  = document.querySelectorAll('#main-cl .check-row');
+  const done = document.querySelectorAll('#main-cl .check-row.done');
+  const pct  = Math.round(done.length / all.length * 100);
+  document.getElementById('cl-prog').textContent = `${done.length} / ${all.length} completados`;
+  document.getElementById('cl-bar').style.width = pct + '%';
+  document.getElementById('cl-bar').style.background = pct === 100 ? 'var(--green)' : 'var(--orange)';
+}
+function resetCL() {
+  document.querySelectorAll('#main-cl .check-row').forEach(r => {
+    r.classList.remove('done');
+    r.querySelector('.check-box').textContent = '';
+  });
+  updateCL();
+}
+
+// ══ SUPABASE ══
+function openSheet() { document.getElementById('save-sheet').classList.add('open'); }
+function closeSheet(e) { if (e.target === e.currentTarget) e.currentTarget.classList.remove('open'); }
+
+async function saveNow() {
+  const pat  = document.getElementById('sv-pat').value.trim().toUpperCase();
+  const km   = parseInt(document.getElementById('sv-km').value) || null;
+  const mod  = document.getElementById('sv-mod').value.trim();
+  const tipo = document.getElementById('sv-tipo').value;
+  const msg  = document.getElementById('sv-msg');
+
+  if (!pat) { msg.className='save-msg err'; msg.textContent='Ingresa la patente'; return; }
+
+  msg.className = 'save-msg loading';
+  msg.textContent = '⏳ Guardando...';
+
+  try {
+    const r = await fetch(`${SUPA_URL}/rest/v1/diagnosticos`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPA_KEY,
+        'Authorization': `Bearer ${SUPA_KEY}`,
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({ patente:pat, km_actual:km, modelo:mod, tipo, created_at:new Date().toISOString() })
+    });
+    if (r.ok || r.status === 201) {
+      msg.className='save-msg ok';
+      msg.textContent=`✅ Guardado para ${pat}`;
+      setTimeout(() => document.getElementById('save-sheet').classList.remove('open'), 1600);
+    } else {
+      const err = await r.text();
+      msg.className='save-msg err';
+      msg.textContent=`Error ${r.status}: ${err.slice(0,80)}`;
+    }
+  } catch(e) {
+    msg.className='save-msg err';
+    msg.textContent='Sin conexión a Supabase. Verifica la API key.';
+  }
+}
+
+// ══ CLAUDE API CHAT ══
+let chatHist = [];
+const SYS = `Eres el asistente técnico de Serviruta, empresa de servicios mecánicos móviles en Chile especializada en autos y camiones de bajo tonelaje diesel y bencina.
+
+Ayudas a técnicos automotrices en terreno. Eres experto en DPF/FAP/SCR, regeneración, códigos DTC OBD-II, inmovilizadores, y mantenimiento. Marcas comunes: Ford Transit, VW Crafter, Hyundai H350, JAC, Foton, Toyota HiAce, Peugeot Boxer, Fiat Ducato.
+
+Reglas:
+- Responde en español
+- Sé directo y conciso — el técnico tiene las manos ocupadas
+- Máximo 5–6 pasos numerados o 3 párrafos cortos
+- DTCs en formato **P2002**
+- Valores técnicos con unidades (kPa, °C, mg/carrera)
+- Si algo es crítico (riesgo daño motor), dilo al inicio con 🚨`;
+
+async function sendChat() {
+  const inp  = document.getElementById('chat-inp');
+  const btn  = document.getElementById('chat-btn');
+  const text = inp.value.trim();
+  if (!text || btn.disabled) return;
+
+  appendMsg('user', text);
+  chatHist.push({ role:'user', content:text });
+  inp.value = ''; inp.style.height = 'auto';
+  btn.disabled = true;
+  document.getElementById('chat-sugs').style.display = 'none';
+
+  const tid = appendTyping();
+  try {
+    // Intentar primero Make.com webhook (proxy que evita CORS en GitHub Pages)
+    // Si estás en claude.ai artifacts, la API directa funciona
+    let reply = '';
+    try {
+      const r = await fetch('https://api.anthropic.com/v1/messages', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:1000, system:SYS, messages:chatHist })
+      });
+      const d = await r.json();
+      reply = d.content?.[0]?.text || '';
+    } catch {
+      // Fallback: Make.com webhook
+      const r = await fetch(MAKE_WEBHOOK, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:1000, system:SYS, messages:chatHist })
+      });
+      const d = await r.json();
+      reply = typeof d === 'string' ? d : (d.content?.[0]?.text || d.response || JSON.stringify(d));
+    }
+
+    removeTyping(tid);
+    appendMsg('bot', reply);
+    chatHist.push({ role:'assistant', content:reply });
+  } catch(e) {
+    removeTyping(tid);
+    appendMsg('bot','❌ Error de conexión. Verifica tu red e intenta nuevamente.');
+  }
+  btn.disabled = false;
+}
+
+function appendMsg(role, text) {
+  const c   = document.getElementById('chat-msgs');
+  const div = document.createElement('div');
+  div.className = `chat-msg ${role==='user'?'user':''}`;
+  const fmt = text
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/`(.+?)`/g,'<code style="font-family:var(--mono);font-size:11px;background:rgba(0,0,0,0.3);padding:1px 4px;border-radius:3px;color:var(--amber);">$1</code>')
+    .replace(/\n/g,'<br>');
+  div.innerHTML = `<div class="chat-av">${role==='user'?'👤':'🔧'}</div><div class="chat-bub">${fmt}</div>`;
+  c.appendChild(div);
+  c.scrollTop = c.scrollHeight;
+}
+
+function appendTyping() {
+  const c = document.getElementById('chat-msgs');
+  const id = 'ty' + Date.now();
+  const d = document.createElement('div');
+  d.className='chat-msg'; d.id=id;
+  d.innerHTML=`<div class="chat-av">🔧</div><div class="chat-bub"><div class="typing-ind"><div class="td"></div><div class="td"></div><div class="td"></div></div></div>`;
+  c.appendChild(d); c.scrollTop=c.scrollHeight; return id;
+}
+function removeTyping(id) { const e=document.getElementById(id); if(e) e.remove(); }
+
+function chatKey(e) { if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat();} }
+function resizeInp(el) { el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,90)+'px'; }
+function sendSug(el) { document.getElementById('chat-inp').value=el.textContent; sendChat(); }
+
+// ══ BATERÍA ══
+const batData = {
+  no_arranca: {
+    title: '🚫 No arranca / arranque lento',
+    alert: { type:'a-red', icon:'🚨', text:'Si el motor no gira en absoluto, verificar fusibles principales y relé de arranque antes de asumir batería muerta.' },
+    steps: [
+      { n:1, t:'Medir voltaje en reposo (motor frío)', d:'Conectar multímetro en bornes. Motor apagado, sin cargas eléctricas activas.', code:'OK: ≥12.4 V | Débil: 12.0–12.3 V | Muerta: <11.9 V' },
+      { n:2, t:'Prueba de carga (load test)', d:'Con cargador o analizador de baterías: aplicar carga de 50% CCA durante 15 seg. El voltaje no debe caer bajo 9.6 V. Si cae → batería a reemplazar.', code:'Umbral mínimo bajo carga: 9.6 V a 15 seg' },
+      { n:3, t:'Verificar terminales y cable masa', d:'Corrosión en bornes aumenta resistencia. Aflojar, limpiar con mezcla agua + bicarbonato, reapristar. Verificar también el cable de masa al chasis.' },
+      { n:4, t:'Revisar tensión durante el arranque', d:'Con ayudante intentando arrancar, medir voltaje. Caída mayor a 2 V indica batería débil o conexiones deficientes.', code:'Normal: caída 1–2 V durante arranque' },
+      { n:5, t:'Verificar el alternador', d:'Si la batería está bien pero vuelve a descargarse → ver diagnóstico de alternador.' },
+    ]
+  },
+  luz_bateria: {
+    title: '💡 Luz batería encendida (motor en marcha)',
+    alert: { type:'a-amber', icon:'⚠️', text:'Luz de batería activa con motor andando = alternador no está cargando. No apagar el motor hasta diagnosticar — puede quedar sin energía.' },
+    steps: [
+      { n:1, t:'Medir voltaje con motor a 1.500 RPM', d:'Conectar multímetro en bornes con motor encendido.', code:'Cargando bien: 13.8–14.7 V | Bajo: <13.5 V | Exceso: >15.0 V' },
+      { n:2, t:'Si voltaje < 13.5 V — verificar correa', d:'Correa de alternador rota o suelta = no genera. Inspeccionar visualmente y verificar tensión.' },
+      { n:3, t:'Verificar conector del alternador', d:'Terminal B+ (cable grueso hacia batería) y conector de señal de campo. Oxido o suelta = sin carga.' },
+      { n:4, t:'Prueba de diodos internos', d:'Con multímetro en AC: medir entre B+ del alternador y masa. Más de 0.5 V AC indica diodo rectificador quemado → alternador a reparar/cambiar.', code:'Normal: <0.5 V AC | Diodo malo: >0.5 V AC' },
+      { n:5, t:'Verificar regulador de voltaje', d:'Algunos alternadores tienen regulador externo (Bosch 14V). Si voltaje es 0 con correa buena, el regulador puede estar fallado.' },
+    ]
+  },
+  descarga_rapida: {
+    title: '📉 Se descarga rápido / de noche',
+    steps: [
+      { n:1, t:'Prueba de consumo en reposo (parasitic draw)', d:'Motor apagado, todas las puertas cerradas, esperar 5–10 min. Conectar amperímetro en serie con cable negativo.', code:'Normal: <50 mA | Exceso: >80 mA → hay fuga' },
+      { n:2, t:'Localizar el circuito con fuga', d:'Retirar fusibles uno por uno mientras mides el amperímetro. Cuando el consumo baje al quitar un fusible → ese circuito tiene la fuga.' },
+      { n:3, t:'Causas comunes de fuga', d:'Alarma aftermarket mal instalada, módulo GPS sin corte propio, luz de maletero que no apaga, radio con memoria activa permanente, ECU con reset pendiente.' },
+      { n:4, t:'Verificar edad y capacidad de la batería', d:'Batería > 3–4 años pierde capacidad. Aunque cargue bien en voltaje, puede no retener carga bajo demanda. Medir CCA real con analizador.', code:'Si CCA medido < 70% del nominal → reemplazar' },
+      { n:5, t:'Verificar el alternador', d:'Alternador que no carga completamente deja la batería siempre a 80%. Con el tiempo no tolera la descarga nocturna. Medir voltaje de carga.' },
+    ]
+  },
+  corrosion: {
+    title: '🟢 Corrosión en terminales',
+    steps: [
+      { n:1, t:'Identificar tipo de corrosión', d:'Depósito blanco-grisáceo en terminal positivo = gas SO₂ de la batería. Azul-verdoso en terminales de cobre = oxidación electrolítica. Ambos aumentan resistencia.', code:'Resistencia normal terminal: <0.1 Ω | Con corrosión: >0.5 Ω' },
+      { n:2, t:'Desconectar en orden correcto', d:'Siempre desconectar el NEGATIVO primero, luego el positivo. Evita cortocircuito accidental con herramientas.' },
+      { n:3, t:'Limpieza con bicarbonato', d:'Mezcla: 1 cucharada de bicarbonato en 250 ml de agua tibia. Aplicar con cepillo de cerdas duras (puede usarse cepillo de dientes). La reacción efervescente neutraliza el ácido.' },
+      { n:4, t:'Enjuagar y secar', d:'Enjuagar con agua tibia. Secar completamente con trapo limpio. NO usar aire comprimido cerca de la batería (hidrógeno inflamable).' },
+      { n:5, t:'Proteger y reconectar', d:'Aplicar vaselina, grasa dieléctrica o spray protector de bornes en terminales limpios. Reconectar positivo primero, luego negativo. Apretar con llave, no solo a mano.' },
+    ]
+  },
+  reemplazo: {
+    title: '🔄 Reemplazo de batería',
+    alert: { type:'a-amber', icon:'⚠️', text:'En vehículos con gestión inteligente de carga (BMW, Mercedes, VW, Audi post-2010): registrar la nueva batería en la ECU con escáner. Sin registro, el alternador cargará en exceso.' },
+    steps: [
+      { n:1, t:'Verificar especificaciones antes de comprar', d:'Revisar placa de la batería original: CCA (arranque en frío), Ah (capacidad) y tipo (AGM, calcio, EFB). Reemplazar con igual o superior especificación.', code:'Importante: AGM no puede reemplazarse con batería estándar en sistemas Start-Stop' },
+      { n:2, t:'Mantener memoria del vehículo', d:'Conectar fuente de alimentación auxiliar (12V, mín. 0.5A) a los bornes ANTES de desconectar la batería. Evita reseteo de radio, ventanas, puertas y configuraciones ECU.' },
+      { n:3, t:'Desconectar en orden correcto', d:'Negativo primero → Positivo. Retirar sujeción/abrazadera. Extraer batería (cuidado: peso 12–25 kg). Inspeccionar bandeja por corrosión.' },
+      { n:4, t:'Instalar nueva batería', d:'Limpiar bandeja. Colocar batería nueva. Instalar abrazadera/sujeción firmemente. Conectar Positivo primero → Negativo. Verificar que los terminales queden firmes.' },
+      { n:5, t:'Registrar la batería en la ECU (si aplica)', d:'Con escáner compatible, ir a: Gestión de energía / EEM → Registro de batería → Ingresar tipo (AGM/plomo), capacidad (Ah) y CCA.', code:'BMW: ISTA/Rheingold · VW-Audi: VCDS/ODIS · Mercedes: Xentry' },
+      { n:6, t:'Verificar voltaje y carga post-instalación', d:'Con motor encendido, medir voltaje en bornes. Debe estar entre 13.8–14.7 V. Hacer una conducción de 30 min para primera carga completa.' },
+    ]
+  },
+  alternador: {
+    title: '⚡ Diagnóstico de alternador',
+    steps: [
+      { n:1, t:'Prueba visual y auditiva', d:'Inspeccionar correa: tensión, grietas, desgaste. Escuchar: ruido de rodamiento (zumbido) o polea de sobremarcha (traqueteo). Ambos indican desgaste interno.' },
+      { n:2, t:'Medir voltaje de salida', d:'Motor a 1.500–2.000 RPM, sin cargas extra. Medir en bornes de batería.', code:'Normal: 13.8–14.7 V | Bajo: <13.5 V | Exceso: >15.0 V' },
+      { n:3, t:'Prueba de caída de voltaje en cable B+', d:'Medir entre terminal B+ del alternador y terminal positivo de la batería CON motor en marcha. Caída mayor a 0.5 V indica cable o conexión deficiente.', code:'Normal: <0.2 V de caída | Problema: >0.5 V' },
+      { n:4, t:'Prueba de rizado AC (diodos)', d:'Multímetro en modo AC, medir entre B+ y masa con motor a 2.000 RPM. Valor alto = diodo quemado.', code:'Normal: <0.5 V AC | Diodo malo: >0.5 V AC | Grave: >2.0 V AC' },
+      { n:5, t:'Prueba de campo (excitación)', d:'Desconectar conector de señal del alternador. Medir resistencia entre terminales de campo (F y D+). Bobina de campo normal: 3–5 Ω. Si circuito abierto → bobina quemada.', code:'Resistencia bobina de campo: 3–5 Ω' },
+      { n:6, t:'Decisión: reparar vs reemplazar', d:'Rodamiento malo o diodo quemado → reparación económica ($15–40 USD en taller). Bobina de campo quemada o carcasa dañada → reemplazo completo más económico.' },
+    ]
+  }
+};
+
+function showBat(key) {
+  const d = batData[key];
+  let html = '';
+  if (d.alert) {
+    html += `<div class="alert ${d.alert.type}" style="margin-bottom:12px;"><div class="alert-icon">${d.alert.icon}</div><div>${d.alert.text}</div></div>`;
+  }
+  d.steps.forEach(st => {
+    html += `<div class="step-card"><div class="step-num">${st.n}</div><div class="step-body"><div class="step-title">${st.t}</div><div class="step-detail">${st.d}</div>${st.code?`<span class="step-code">${st.code}</span>`:''}</div></div>`;
+  });
+  const proto = document.getElementById('bat-proto');
+  document.getElementById('bat-proto-title').textContent = d.title;
+  document.getElementById('bat-proto-body').innerHTML = html;
+  proto.style.display = 'block';
+  proto.classList.add('show');
+  proto.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+// ══ CENTRAL DE DIAGNÓSTICO ══
+// sev: red=crítico, amber=alerta, blue=info
+// estructura: { titulo, sev, causa, síntomas, pasos, herramienta, codigo? }
+
+const fallaDB = {
+  no_arranca: [
+    { t:'Motor no gira — sin respuesta al girar llave', sev:'red',
+      causa:'Batería descargada o muerta, fusible principal fundido, relé de arranque fallado',
+      sin:'Silencio total al girar llave. Sin click, sin luces interiores.',
+      pasos:['Medir voltaje batería con multímetro (debe ser ≥12.4 V)', 'Si voltaje OK, verificar fusible de caja principal (caja motor y caja interior)', 'Verificar relé de arranque: swap con otro relé del mismo tipo', 'Si relé OK, medir voltaje en terminal 30 del motor de arranque con llave en START', 'Ausencia de voltaje en 30 → problema en circuito de arranque (ignición o inmovilizador)'],
+      herramienta:'Multímetro, juego de fusibles de repuesto' },
+    { t:'Motor gira lento — arranque débil', sev:'red',
+      causa:'Batería débil (sulfatada o fin de vida), terminales corroídos, cable masa deficiente',
+      sin:'Motor cranea despacio, luces se apagan al intentar arranque.',
+      pasos:['Medir voltaje en reposo (≥12.4 V = OK)', 'Medir voltaje durante cranking (no debe bajar de 9.6 V)', 'Inspeccionar terminales batería: corrosión blanca/verde = alta resistencia', 'Limpiar terminales con bicarbonato + cepillo', 'Verificar cable de masa chasis-motor: medir resistencia (debe ser <0.1 Ω)', 'Si batería OK y cables OK → test de carga CCA con analizador'],
+      herramienta:'Multímetro, cepillo bicarbonato, analizador de batería', codigo:'P0562' },
+    { t:'Click único al girar llave', sev:'amber',
+      causa:'Relé de arranque fallado, motor de arranque con colector desgastado, batería con caída de voltaje severa',
+      sin:'Un "clic" fuerte al girar llave, luego silencio. Motor no gira.',
+      pasos:['Distinguir: click en relé (suave, interior) vs click en motor de arranque (fuerte, bajo capó)', 'Click en relé → relé soldado o batería muy baja: revisar batería primero', 'Click en motor de arranque → colector/carbones desgastados o piñón atascado', 'Golpe suave con mazo de goma al motor de arranque puede liberar piñón atascado temporalmente', 'Confirmar con prueba directa 12V al solenoide: si el motor gira → relé o cableado'],
+      herramienta:'Multímetro, mazo de goma' },
+    { t:'Clic repetido rápido (clic clic clic)', sev:'amber',
+      causa:'Batería insuficiente para sostener el solenoide del motor de arranque',
+      sin:'Clic repetido a alta frecuencia. Luces se apagan con cada clic.',
+      pasos:['Cargar batería con cargador externo mínimo 30 min a 10A antes de cualquier diagnóstico', 'Medir voltaje durante clic: <11 V = batería muerta', 'Si batería acepta carga y vuelve a crankear → batería débil (cambio preventivo)', 'Si no acepta carga → batería muerta: reemplazar'],
+      herramienta:'Cargador de batería 10A+, multímetro' },
+    { t:'Motor cranea pero no enciende — sin combustible', sev:'red',
+      causa:'Bomba de combustible fallada, filtro tapado, relé de bomba fundido, presión insuficiente',
+      sin:'Motor gira normal pero no enciende. Sin olor a combustible en escape.',
+      pasos:['Escuchar bombeo de combustible al poner llave en ON (2–3 seg de zumbido)', 'Ausencia de zumbido → verificar relé bomba y fusible', 'Con relé y fusible OK → medir voltaje en conector bomba (debe haber 12V con llave en ON)', 'Si hay voltaje pero sin zumbido → bomba muerta', 'Si hay zumbido → medir presión de riel: gasolina 3–4 bar | diesel common rail 250–2000 bar'],
+      herramienta:'Manómetro de presión de combustible, multímetro' },
+    { t:'Motor cranea pero no enciende — sin chispa / encendido', sev:'red',
+      causa:'Sensor cigüeñal fallado (P0335), bobina de encendido, cables bujías rotos',
+      sin:'Motor cranea perfectamente. Sin código de inmovilizador. Sin combustible tampoco quema.',
+      pasos:['Leer DTCs: P0335/P0336 = sensor cigüeñal', 'Verificar señal del sensor cigüeñal con osciloscopio o modo datos en vivo del escáner', 'Revisar cables de bobina: buscar arcos en oscuridad', 'Prueba de chispa: desconectar bujía, conectar a tierra, cranear — observar chispa', 'Sin chispa en ningún cilindro → bobina principal o módulo de encendido'],
+      herramienta:'Escáner OBD, osciloscopio (opcional)', codigo:'P0335 / P0336' },
+    { t:'Motor cranea pero no enciende — motor diesel frío', sev:'amber',
+      causa:'Bujías de precalentamiento defectuosas, tiempo de espera insuficiente, presión de compresión baja',
+      sin:'Arranca difícil en frío, humo blanco inicial, motor tarda en estabilizarse.',
+      pasos:['Verificar luz de espera (bobina) en tablero: debe encenderse y apagarse antes de girar llave', 'Medir resistencia bujías de precalentamiento: 0.5–2 Ω es normal. Circuito abierto = bujía rota', 'Verificar relé de precalentamiento: medir activación con multímetro', 'Si bujías OK → prueba de compresión: diesel necesita mínimo 22 bar por cilindro'],
+      herramienta:'Multímetro, compresímetro diesel' },
+    { t:'Motor cranea pero no enciende — inmovilizador activo', sev:'amber',
+      causa:'Transponder llave no reconocido, batería descargada reseteó módulo, cambio de llave sin programar',
+      sin:'Motor cranea perfectamente. Luz de candado o llave parpadeando en tablero.',
+      pasos:['Ver módulo Inmovilizador en la app para protocolo completo', 'Verificar DTCs en módulo BCM/IMMO: B1600, B2799, P1260', 'Probar con llave de repuesto', 'Si ninguna llave funciona → requiere reprogramación con escáner especializado'],
+      herramienta:'Escáner con función IMMO', codigo:'B1600 / B2799 / P1260' },
+  ],
+
+  alternador: [
+    { t:'Luz batería encendida con motor andando', sev:'red',
+      causa:'Correa rota o suelta, alternador defectuoso, regulador de voltaje fallado',
+      sin:'Testigo de batería activo. Vehículo puede quedarse sin energía.',
+      pasos:['Medir voltaje en bornes con motor a 1.500 RPM (debe ser 13.8–14.7 V)', 'Voltaje <13.5 V → alternador no carga', 'Inspeccionar correa: tensión, grietas, deslizamiento', 'Verificar conector B+ del alternador: sujeción y limpieza', 'Prueba de diodos: medir V AC entre B+ y masa — >0.5 V AC = diodo quemado'],
+      herramienta:'Multímetro', codigo:'P0562' },
+    { t:'Alternador no carga — correa OK', sev:'red',
+      causa:'Diodos rectificadores quemados, bobina de rotor abierta, regulador de voltaje fallado',
+      sin:'Voltaje en bornes <13.5 V con motor en marcha y correa tensa.',
+      pasos:['Medir voltaje AC en bornes: >0.5 V AC = diodos malos', 'Medir resistencia bobina de campo (terminales F y D+): 3–5 Ω normal, circuito abierto = bobina rota', 'Si bobina OK y diodos OK → regulador de voltaje', 'Algunos reguladores son externos (reemplazables solos, $15–30). Otros son parte del alternador'],
+      herramienta:'Multímetro' },
+    { t:'Voltaje excesivo — carga sobre 15V', sev:'red',
+      causa:'Regulador de voltaje bloqueado en posición alta, masa del alternador deficiente',
+      sin:'Luces muy brillantes, batería se gaseifica, olor a quemado.',
+      pasos:['Apagar motor inmediatamente: voltaje >15V daña ECU, BCM y actuadores electrónicos', 'Verificar masa del alternador a la carrocería (debe ser <0.1 Ω)', 'Si masa OK → regulador de voltaje bloqueado en alta: alternador a revisar/reemplazar', 'Verificar que la batería no haya sido dañada (sulfatación por sobrecarga)'],
+      herramienta:'Multímetro', codigo:'P0563' },
+    { t:'Ruido del alternador — zumbido o chillido', sev:'amber',
+      causa:'Rodamiento desgastado, polea de sobremarcha (OAP) trabada, correa mal tensada',
+      sin:'Zumbido que aumenta con las RPM, o chillido al acelerar.',
+      pasos:['Chillido al acelerar: casi siempre correa mal tensada o desgastada — verificar primero', 'Zumbido constante que sube con RPM: rodamiento del alternador', 'Prueba: desconectar correa y hacer girar el alternador con la mano — dureza o ruido = rodamiento', 'Polea OAP: girar en ambos sentidos — debe girar libre en un sentido y trabar en el otro'],
+      herramienta:'Herramienta de tensión de correa' },
+    { t:'Batería se descarga de noche con alternador bueno', sev:'amber',
+      causa:'Consumo parásito excesivo, alternador no carga completamente, batería al fin de vida',
+      sin:'Batería descargada cada mañana. Alternador midió bien.',
+      pasos:['Medir consumo parásito con amperímetro en cable negativo (debe ser <50 mA después de 5 min)', 'Retirar fusibles uno a uno mientras mides: cuando el amperímetro baja → ese circuito tiene la fuga', 'Verificar que el alternador cargue batería a plena carga (medir con cargas encendidas: AC, luces)', 'Si todo OK → test de capacidad de batería: CCA medido vs nominal'],
+      herramienta:'Multímetro con pinza de corriente' },
+    { t:'Alternador carga intermitente', sev:'amber',
+      causa:'Conector B+ con óxido o sujeción débil, carbones del alternador casi gastados',
+      sin:'La luz de batería parpadea al acelerar o en curvas. Voltaje varía erráticamente.',
+      pasos:['Verificar conector multi-pin del alternador: limpiar con spray limpia contactos', 'Inspeccionar cable B+ (cable grueso de alternador a batería): medir caída de voltaje en marcha (<0.2 V)', 'Carbones del alternador: algunos modelos permiten reemplazo sin cambiar el alternador completo ($5–15)'],
+      herramienta:'Limpia contactos, multímetro' },
+  ],
+
+  partida: [
+    { t:'Motor de arranque no gira — relé activa pero nada', sev:'red',
+      causa:'Motor de arranque quemado, colector oxidado, cable de masa deficiente al motor de arranque',
+      sin:'Se escucha el clic del relé bajo capó pero el motor no gira en absoluto.',
+      pasos:['Medir voltaje directo en terminal 30 del motor de arranque con llave en START (debe ser 12V)', 'Si hay 12V → probar 12V directo al solenoide (terminal S): si gira → cableado hacia START roto', 'Si no gira con 12V directo al S → solenoide quemado o colector oxidado', 'Verificar cable de masa del motor de arranque al bloque: limpieza y apriete', 'Desmontar y revisar colector: ranuras limpias y carbones con más de 5mm de largo'],
+      herramienta:'Multímetro, destornilladores, llaves' },
+    { t:'Motor de arranque gira pero no engrana el piñón', sev:'amber',
+      causa:'Piñón de arranque desgastado, corona del volante con dientes rotos, solenoide débil',
+      sin:'Se escucha el motor de arranque girar en vacío (sin resistencia). Motor no cranea.',
+      pasos:['Inspeccionar corona del volante por la apertura del capó del motor de arranque', 'Dientes rotos o muy desgastados → cambio de corona (trabajo de taller)', 'Si corona OK → piñón del arranque desgastado: desmontar motor de arranque e inspeccionar', 'Probar solenoide: debe proyectar el piñón con fuerza al activar — si lo hace suave → solenoide débil'],
+      herramienta:'Linterna, llave de motor de arranque' },
+    { t:'Motor de arranque no se desengrana — gira con motor encendido', sev:'red',
+      causa:'Contacto principal del solenoide soldado, piñón trabado en corona',
+      sin:'Motor de arranque sigue girando después de encender motor. Ruido metálico fuerte.',
+      pasos:['APAGAR MOTOR INMEDIATAMENTE: el motor de arranque se destruye en segundos', 'Desconectar terminal negativo de batería para detener el arranque', 'Desmontar motor de arranque: verificar contactos principales del solenoide soldados', 'Revisar piñón: dientes deformados que impiden retracción', 'Reemplazar solenoide o motor de arranque completo'],
+      herramienta:'Llave batería, herramientas extracción' },
+    { t:'Motor de arranque con ruido de rodamientos al cranear', sev:'amber',
+      causa:'Rodamiento delantero del motor de arranque desgastado',
+      sin:'Ruido metálico (rechinido o zumbido) solo durante el cranking.',
+      pasos:['Confirmar que el ruido viene del motor de arranque y no de la correa de distribución', 'Desmontar motor de arranque: girar con la mano para sentir rodamientos', 'Algunos modelos permiten reemplazo solo del rodamiento ($5–10)', 'Si rodamiento OK → verificar que el piñón no roce contra la campana del embrague'],
+      herramienta:'Destornilladores, extractor de rodamientos (opcional)' },
+    { t:'Arranque lento solo en frío', sev:'amber',
+      causa:'Aceite muy viscoso para la temperatura, batería con baja capacidad de arranque en frío (CCA)',
+      sin:'En invierno o mañanas frías cuesta arrancar. En caliente arranca normal.',
+      pasos:['Verificar viscosidad del aceite: diesel frío requiere 5W-30 o 0W-30, no 15W-40', 'Medir CCA real de la batería con analizador (debe ser ≥70% del nominal)', 'Verificar bujías de precalentamiento (diesel): tiempo de espera completo antes de girar', 'Si todo OK → normal en temperaturas muy bajas (<0°C)'],
+      herramienta:'Analizador de batería, multímetro' },
+  ],
+
+  refrigeracion: [
+    { t:'Temperatura sube — sobrecalentamiento', sev:'red',
+      causa:'Pérdida de refrigerante, termostato trancado cerrado, bomba de agua fallada, tapón radiador defectuoso',
+      sin:'Temperatura sube al rojo. Luz de temperatura activa.',
+      pasos:['APAGAR MOTOR INMEDIATAMENTE si llega al rojo — continuar puede fundir el motor', 'Esperar 30 min antes de abrir el tapón del radiador (quemaduras por vapor)', 'Verificar nivel de refrigerante en frío', 'Inspeccionar mangueras por grietas o filtraciones', 'Verificar termostato: en frío debe estar cerrado, abrir entre 85–95°C', 'Verificar que el ventilador eléctrico funcione con motor caliente'],
+      herramienta:'Termómetro infrarrojo, manómetro tapón radiador' },
+    { t:'Pérdida de refrigerante sin fuga visible', sev:'red',
+      causa:'Junta de culata fisurada, grieta interna en bloque, válvula de calefacción',
+      sin:'Se consume refrigerante pero no hay charco debajo del vehículo.',
+      pasos:['Revisar aceite: color café con leche = refrigerante mezclado = junta culata', 'Revisar escape: humo blanco constante (no solo al arrancar en frío) = refrigerante quemando', 'Prueba de combustión en refrigerante: tira reactiva en el depósito — cambia de color si hay gases', 'Verificar interior del vehículo: olor dulce, vidrios empañados constantemente = válvula calefactor', 'Prueba de presión del circuito: bombear a 1.2 bar y mantener 10 min sin caída'],
+      herramienta:'Kit prueba combustión, manómetro sistema refrigeración' },
+    { t:'Ventilador eléctrico no funciona', sev:'amber',
+      causa:'Relé de ventilador fundido, motor de ventilador quemado, sensor temperatura ECT defectuoso',
+      sin:'Motor llega a temperatura normal pero ventilador no arranca. Sobrecalentamiento en tráfico.',
+      pasos:['Verificar fusible y relé del ventilador (swap con otro relé del mismo tipo)', 'Con motor caliente (>95°C), medir voltaje en conector del ventilador: debe haber 12V', '12V sin que gire → motor de ventilador quemado', 'Sin 12V → verificar señal del sensor ECT a la ECU', 'Probar sensor ECT: en agua hirviendo debe medir 0–5 Ω según calibración'],
+      herramienta:'Multímetro, termómetro de agua', codigo:'P0480 / P0481' },
+    { t:'Refrigerante con espuma o burbujas', sev:'red',
+      causa:'Gases de combustión entrando al circuito (junta culata), bomba de agua con cavitación',
+      sin:'Depósito de expansión con espuma o burbujas. Nivel oscila.',
+      pasos:['Prueba de gases en refrigerante con tira reactiva (positivo = junta culata)', 'Verificar si la temperatura sube y baja erráticamente (bolsas de aire en el circuito)', 'Purgar el sistema de refrigeración correctamente antes de concluir diagnóstico', 'Si hay gases → junta culata: diagnóstico de motor especializado requerido'],
+      herramienta:'Kit tiras reactivas combustión refrigerante' },
+    { t:'Calefacción no calienta o calienta poco', sev:'blue',
+      causa:'Nivel bajo de refrigerante, termostato trancado abierto, válvula de calefacción obstruida',
+      sin:'El motor está a temperatura normal pero el aire caliente es tibio o frío.',
+      pasos:['Verificar nivel de refrigerante: nivel bajo = aire en el núcleo de calefactor', 'Palpar mangueras de entrada/salida del calefactor con motor caliente: ambas deben estar muy calientes', 'Una manguera fría → válvula de calefacción cerrada o tapada (limpiar o reemplazar)', 'Ambas frías → termostato trancado abierto (motor no llega a temperatura)', 'Purgar sistema: abrir purgas del circuito de calefacción'],
+      herramienta:'Termómetro infrarrojo' },
+    { t:'Pérdida de refrigerante con fuga visible', sev:'amber',
+      causa:'Manguera fisurada, abrazadera suelta, radiador con grieta, cuerpo de termostato',
+      sin:'Charco de color verde/rojo/naranja debajo del vehículo o vapor visible.',
+      pasos:['Identificar origen exacto de la fuga con motor frío (más seguro)', 'Presurizar el sistema a 1.2 bar con probador: la fuga se hace visible', 'Mangueras: grietas longitudinales o en zonas de flexión — reemplazar completa, no parchar', 'Radiador: grietas pequeñas se pueden sellar con soldadura de radiador en frío como solución temporal', 'Cuerpo termostato: juntas planas — siempre cambiar con el termostato'],
+      herramienta:'Probador presión sistema refrigeración, linterna' },
+    { t:'Bomba de agua ruidosa o con juego axial', sev:'red',
+      causa:'Rodamiento de bomba de agua desgastado, impulsor corroído',
+      sin:'Ruido de traqueteo o zumbido desde la zona de la bomba. Puede tener fuga por el sello.',
+      pasos:['Tomar el eje de la polea de la bomba con motor APAGADO y fijo: no debe tener juego axial', 'Juego = rodamiento desgastado: riesgo de rotura inminente', 'Fuga por el orificio de drenaje de la bomba = sello fallado', 'En motores con correa de distribución: cambiar bomba junto con la correa (mismo acceso)'],
+      herramienta:'Llave de poleas, kit distribución' },
+  ],
+
+  suspension: [
+    { t:'Ruido golpe al pasar por baches', sev:'amber',
+      causa:'Amortiguador agotado o roto, buje de barra estabilizadora partido, rotula desgastada',
+      sin:'Golpe sordo al pasar por irregularidades. Peor en curvas o frenada.',
+      pasos:['Prueba de rebote: empujar esquina del vehículo y soltar — debe detenerse en 1–1.5 rebotes', 'Más de 2 rebotes = amortiguador agotado', 'Inspección visual de amortiguadores: aceite en la carcasa = sello roto', 'Inspeccionar bujes de barra estabilizadora: goma partida o ausente', 'Para rótulas: con vehículo en el aire, mover rueda en diagonal — >2mm de juego = rótula gastada'],
+      herramienta:'Palanca de inspección, linterna' },
+    { t:'Vibración en el volante a velocidad', sev:'amber',
+      causa:'Ruedas desbalanceadas, neumático dañado (burbuja interna), rótula desgastada',
+      sin:'Vibración que aparece entre 80–120 km/h. Puede ser en el asiento también.',
+      pasos:['Vibración solo a velocidad específica → casi siempre desbalanceo de ruedas', 'Vibración constante aumentando con velocidad → neumático dañado (revisa visualmente burbuja lateral)', 'Inspeccionar neumáticos: desgaste irregular = problema de geometría o amortiguación', 'Si balanceo y neumáticos OK → rótulas o bujes de horquilla'],
+      herramienta:'Equilibradora de ruedas (taller)' },
+    { t:'Vehículo se va hacia un lado al frenar', sev:'red',
+      causa:'Pinza de freno atascada, manguera de freno colapsada, diferencia de presión entre pastillas',
+      sin:'Al frenar el vehículo se desplaza hacia la izquierda o derecha.',
+      pasos:['Verificar temperatura de llanta con termómetro infrarrojo post-frenada: la más caliente tiene la pinza trabada', 'Inspeccionar mangueras de freno: en freno viejo pueden colapsarse internamente y restringir el retorno', 'Medir espesor de pastillas lado a lado: diferencia >3mm = desgaste desigual por pinza', 'Verificar alineación: también puede causar tirón pero sin relación con el frenazo'],
+      herramienta:'Termómetro infrarrojo, calibre' },
+    { t:'Ruido chirrido al girar el volante', sev:'amber',
+      causa:'Rótula de dirección seca, columna de dirección desgastada, bomba de dirección hidráulica baja',
+      sin:'Chirrido o crujido al girar el volante, especialmente al máximo de giro.',
+      pasos:['Verificar nivel de aceite de dirección hidráulica (si aplica)', 'Inspeccionar rotulas de dirección con palanca: juego = desgaste', 'Chirrido en dirección eléctrica (EPS): puede ser DTC almacenado en módulo EPS', 'Columna de dirección con juego axial: verificar cruceta de columna'],
+      herramienta:'Palanca de inspección, escáner (para EPS)', codigo:'C0710 (EPS)' },
+    { t:'Desgaste irregular de neumáticos', sev:'blue',
+      causa:'Geometría de dirección incorrecta (convergencia/divergencia), amortiguadores agotados, presión incorrecta',
+      sin:'Neumáticos desgastados en el borde interior, exterior, o en parches.',
+      pasos:['Borde interior desgastado → exceso de convergencia o rueda con camber negativo', 'Borde exterior desgastado → falta de convergencia o camber positivo', 'Desgaste en parches → amortiguadores agotados (la rueda rebota y no contacta uniformemente)', 'Verificar presiones primero: presión baja desgasta los bordes, presión alta el centro'],
+      herramienta:'Comparador de convergencia (taller alineadora)' },
+    { t:'Vehículo con escora — cae a un lado', sev:'amber',
+      causa:'Resorte roto o asentado, amortiguador con pérdida total, carga desbalanceada crónica',
+      sin:'Un lado del vehículo visiblemente más bajo que el otro.',
+      pasos:['Medir altura de carrocería lado a lado en el mismo punto: diferencia >15mm es significativa', 'Inspeccionar resortes: grietas, fracturas, oxidación severa', 'En camiones con carga: verificar distribución de carga y ballestas', 'Amortiguador totalmente agotado también puede permitir escora bajo carga'],
+      herramienta:'Cinta métrica, linterna' },
+  ],
+
+  frenos: [
+    { t:'Ruido metálico chirrido al frenar', sev:'amber',
+      causa:'Pastillas de freno al límite (testigo metálico), disco con óxido superficial, pastilla suelta',
+      sin:'Chirrido constante o solo al frenar. Puede ser agudo o grave.',
+      pasos:['Chirrido constante (siempre, no solo al frenar) = testigo de desgaste de pastilla en contacto con disco', 'Medir espesor pastillas: <2mm = reemplazo urgente, <4mm = preventivo inmediato', 'Óxido en discos: chirrido solo en primeras frenadas del día, desaparece = normal', 'Chirrido irregular = pastilla suelta o partida: inspeccionar visualmente'],
+      herramienta:'Calibre de pastillas, linterna' },
+    { t:'Vibración al frenar', sev:'amber',
+      causa:'Disco de freno con deformación (runout), disco con variación de espesor, pastilla con transferencia irregular',
+      sin:'Vibración o pulsaciones en el pedal y en el volante al frenar.',
+      pasos:['Medir runout del disco con reloj comparador: máximo 0.05mm (algunos 0.08mm)', 'Medir variación de espesor del disco en 8 puntos: diferencia >0.01mm causa vibración', 'Si disco OK → transferencia de material de pastilla: limpiar disco con disco de desbaste y pastilla nueva', 'Causa frecuente: frenar fuerte con frenos calientes y quedar quieto'],
+      herramienta:'Reloj comparador, micrómetro de discos' },
+    { t:'Pedal esponjoso o va al piso', sev:'red',
+      causa:'Aire en el circuito hidráulico, fuga en manguera o cilindro de rueda, cilindro maestro fallado',
+      sin:'Pedal se siente blando, va más al fondo de lo normal, o toca el piso.',
+      pasos:['PELIGROSO: no conducir hasta resolver', 'Inspeccionar nivel de líquido de frenos: bajo = fuga activa en algún punto del circuito', 'Revisar ruedas: manchas de líquido en llanta interior = fuga en cilindro de rueda', 'Purgar el sistema si hay aire: comenzar por la rueda más lejana al cilindro maestro', 'Pedal que mejora al bombear = aire en circuito. Pedal que no mejora = cilindro maestro'],
+      herramienta:'Equipo de purga de frenos, líquido DOT4' },
+    { t:'Luz ABS encendida', sev:'amber',
+      causa:'Sensor de velocidad de rueda defectuoso o con suciedad, anillo fónico roto, falla en módulo ABS',
+      sin:'Testigo ABS activo permanentemente. ABS no funciona.',
+      pasos:['Leer DTCs en módulo ABS: identificar qué rueda tiene el problema', 'Inspeccionar sensor de velocidad: conectores, cable (frecuente en zona de flexión)', 'Limpiar anillo fónico (tono ring): depósitos metálicos o barro pueden activar la falla', 'Medir resistencia del sensor: típicamente 1–2 kΩ', 'Con escáner en datos en vivo: monitorear velocidad de cada rueda al empujar vehículo'],
+      herramienta:'Escáner OBD, multímetro', codigo:'C0035 / C0040 / C0045 / C0050' },
+    { t:'Freno de mano no sostiene o requiere mucho recorrido', sev:'amber',
+      causa:'Cable estirado o roto, zapatas traseras desgastadas, mecanismo de regulación bloqueado',
+      sin:'Vehículo se mueve con freno de mano tirado. Cable requiere más de 6–8 clics.',
+      pasos:['Verificar recorrido: más de 8 clics = requiere ajuste', 'Ajustar tensión del cable desde el igualador bajo el vehículo o desde la palanca interior', 'Si ajuste no es posible → inspeccionar zapatas traseras (en sistema tambor son las del freno de mano)', 'En freno de mano de disco: pastilla del freno de mano puede ser independiente de la principal'],
+      herramienta:'Llave ajuste cable, calibre zapatas' },
+    { t:'Freno se arrastra — rueda caliente sin frenar', sev:'red',
+      causa:'Pinza de freno atascada, manguera de freno colapsada internamente, regulador de zapatas bloqueado',
+      sin:'Rueda muy caliente después de conducir sin frenar. Olor a quemado.',
+      pasos:['Identificar rueda afectada: termómetro infrarrojo en llanta post-conducción', 'Aflojar levemente el tornillo de purga de la pinza: si el vehículo avanza más fácil → pinza trancada', 'Si no mejora con purga abierta → manguera colapsada (retiene la presión)', 'Desmontar pinza: pistón no debe poder retraerse a mano = pistón agarrotado'],
+      herramienta:'Termómetro infrarrojo, llave purga, prensa de pistón de pinza' },
+    { t:'Consumo alto de pastillas — se gastan rápido', sev:'blue',
+      causa:'Pinza arrastrando (arrastre leve), material de pastilla de baja calidad, conducción con frenos',
+      sin:'Las pastillas se gastan antes de lo esperado, sin otros síntomas claros.',
+      pasos:['Verificar arrastre de frenos: con disco frío, la rueda debe girar casi libremente a mano', 'Resistencia al girar = pinza con pequeño arrastre: reconstruir o reemplazar pinza', 'Verificar calidad de la pastilla: pastillas económicas pueden durar 40% menos que OEM', 'Revisar hábitos de conducción: frenada tardía y fuerte desgasta más que frenadas tempranas y suaves'],
+      herramienta:'Dinamómetro de arrastre (opcional)' },
+  ],
+
+  motor: [
+    { t:'Golpeteo metálico — knock o ping', sev:'red',
+      causa:'Golpeteo de biela (grave), holgura de válvulas (leve), detonación por combustible de baja octanaje',
+      sin:'Sonido metálico tipo "tok tok" o "tac tac" que cambia con las RPM.',
+      pasos:['Distinguir por posición: golpe de biela es grave y viene de abajo. Holgura válvulas es agudo y viene de arriba', 'Golpe de biela: apagar motor inmediatamente. Continuar destruye el motor', 'Verificar nivel y calidad de aceite: aceite muy bajo o degradado acelera desgaste de bielas', 'Detonación: sonido metálico al acelerar — verificar octanaje de combustible y avance de encendido'],
+      herramienta:'Estetoscopio mecánico, compresímetro' },
+    { t:'Consumo excesivo de aceite', sev:'amber',
+      causa:'Sellos de válvulas desgastados, segmentos de pistón gastados, turbo con fuga',
+      sin:'Nivel de aceite baja notoriamente entre cambios. Puede haber humo azul.',
+      pasos:['Humo azul al arrancar (luego desaparece) = sellos de válvulas', 'Humo azul constante = segmentos de pistón o turbo', 'Prueba de compresión: baja compresión en cilindro + aceite = segmentos', 'Verificar turbo: aceite en manguera de admisión o en intercooler = sello turbo', 'Cuantificar: >500ml cada 1.000 km es significativo'],
+      herramienta:'Compresímetro, kit prueba de estanqueidad' },
+    { t:'Fuga de aceite externa', sev:'amber',
+      causa:'Junta de válvulas envejecida, retén de cigüeñal desgastado, tapones de registro rotos',
+      sin:'Charco de aceite bajo el vehículo. Manchas en la parte inferior del motor.',
+      pasos:['Identificar origen exacto: limpiar todo el motor con desengrasante, luego conducir 10 km y buscar la fuga fresca', 'Junta de cubierta de válvulas: zona más alta del motor, fuga baja por los lados', 'Retén trasero de cigüeñal: fuga entre motor y caja de cambios', 'Tapón de cárter: verificar que esté apretado y con junta en buen estado'],
+      herramienta:'Desengrasante motor, linterna, espejo telescópico' },
+    { t:'Motor con vibración excesiva en ralentí', sev:'amber',
+      causa:'Bujías o inyectores defectuosos, soporte de motor roto, inyector diesel con desequilibrio',
+      sin:'Motor tiembla notoriamente en ralentí. Puede ser intermitente.',
+      pasos:['Leer DTCs: falla en inyector o cilindro específico (P0300–P0308)', 'Prueba de balance de cilindros con escáner: desactivar inyectores uno a uno', 'El cilindro que no cambia las RPM al desactivarlo = cilindro con problema', 'Verificar soporte de motor: con motor al ralentí, observar movimiento excesivo del motor'],
+      herramienta:'Escáner con función de balance cilindros', codigo:'P0300–P0308' },
+    { t:'Humo negro excesivo en escape', sev:'red',
+      causa:'Mezcla rica (exceso combustible), DPF saturado, inyector que gotea, EGR tapada',
+      sin:'Humo negro denso en escape, especialmente al acelerar.',
+      pasos:['Leer DTCs: fallas de inyectores, MAF, EGR o DPF', 'Medir sensor MAF: valor fuera de rango puede causar mezcla rica', 'Verificar saturación DPF: si está al límite, la opacidad del humo aumenta', 'Balance de inyectores: inyector que gotea genera combustible sin quemar'],
+      herramienta:'Escáner, opacímetro (opcional)', codigo:'P0100 / P0400 / P2002' },
+    { t:'Falla de encendido (misfire) intermitente', sev:'amber',
+      causa:'Bujía desgastada o con humedad, cable de bujía con ruptura, bobina de encendido débil',
+      sin:'Motor tiembla intermitentemente. Luz check engine parpadeando.',
+      pasos:['DTCs P0301–P0308 indica cilindro específico con misfire', 'Intercambiar bujías entre cilindros y ver si el código cambia de número → bujía defectuosa', 'Mismo procedimiento con bobinas (motores DIS/COP)', 'Verificar cables de bujías con multímetro: resistencia debe ser <15 kΩ por cable'],
+      herramienta:'Escáner, multímetro', codigo:'P0300 / P0301–P0308' },
+    { t:'Motor no llega a temperatura o tarda mucho', sev:'blue',
+      causa:'Termostato trancado abierto, sensor de temperatura defectuoso',
+      sin:'Indicador de temperatura no sube a la mitad. Calefacción no calienta. Consumo alto.',
+      pasos:['Verificar temperatura real con escáner: sensor ECT en datos en vivo', 'Si el motor tarda >15 min en llegar a 85°C → termostato abierto', 'Prueba de termostato fuera del motor: en agua a 90°C debe abrir completamente', 'Sensor ECT: medir resistencia en frío (>2 kΩ) y caliente (<200 Ω)'],
+      herramienta:'Termómetro de agua, multímetro', codigo:'P0128' },
+    { t:'Pérdida de potencia general sin códigos', sev:'amber',
+      causa:'Filtro de aire tapado, filtro de combustible obstruido, EGR sucia, turbo con pérdida de boost',
+      sin:'Motor sin la potencia habitual. Sin luces de falla. Escáner no muestra nada obvio.',
+      pasos:['Verificar estado del filtro de aire: tapado reduce potencia notoriamente en diesel', 'Medir presión de sobrealimentación con escáner: debe alcanzar el valor de mapa al acelerar', 'Revisar mangueras del intercooler: grieta pequeña = pérdida de boost', 'EGR sucia restringe la admisión: inspeccionar colector por depósitos'],
+      herramienta:'Escáner (datos en vivo turbo), manómetro de boost' },
+  ],
+};
+
+// Render falla lists on screen nav
+const fallaScreenMap = {
+  's-cat-noarranca':     'no_arranca',
+  's-cat-alternador':    'alternador',
+  's-cat-partida':       'partida',
+  's-cat-refrigeracion': 'refrigeracion',
+  's-cat-suspension':    'suspension',
+  's-cat-frenos':        'frenos',
+  's-cat-motor':         'motor',
+};
+
+function renderFallas(screenId) {
+  const cat = fallaScreenMap[screenId];
+  if (!cat) return;
+  const listId = 'fl-' + cat.replace('_','');
+  const el = document.getElementById(listId);
+  if (!el || el.children.length > 0) return; // already rendered
+  const items = fallaDB[cat] || [];
+  el.innerHTML = items.map((f, i) => `
+    <div class="falla-item">
+      <div class="falla-hdr" onclick="toggleFallaExp(this)">
+        <div class="falla-hdr-sev sev-${f.sev}"></div>
+        <div class="falla-hdr-text">${f.t}</div>
+        <div class="falla-hdr-arrow">›</div>
+      </div>
+      <div class="falla-body">
+        <span class="falla-tag tag-causa">CAUSA</span>
+        <div class="step-detail" style="margin-bottom:10px;">${f.causa}</div>
+        <span class="falla-tag tag-causa">SÍNTOMAS</span>
+        <div class="step-detail" style="margin-bottom:10px;">${f.sin}</div>
+        <span class="falla-tag tag-solucion">PROTOCOLO</span>
+        ${f.pasos.map((p,n) => `<div class="step-card" style="margin-top:6px;"><div class="step-num">${n+1}</div><div class="step-body"><div class="step-detail">${p}</div></div></div>`).join('')}
+        ${f.codigo ? `<span class="step-code" style="margin-top:8px;display:block;">DTC: ${f.codigo}</span>` : ''}
+        <span class="falla-tag tag-herramienta" style="margin-top:10px;">HERRAMIENTAS</span>
+        <div class="step-detail" style="margin-top:4px;">${f.herramienta}</div>
+        <button class="btn btn-ghost" style="height:36px;font-size:11px;margin-top:12px;" onclick="prefillFeedback('${cat}','${f.t.replace(/'/g,'')}')">💬 Reportar solución para esta falla</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleFallaExp(hdr) {
+  hdr.classList.toggle('open');
+  hdr.nextElementSibling.classList.toggle('show');
+}
+
+// Intercept nav to render fallas lazily
+const _origNav = nav;
+window.nav = function(id, title) {
+  _origNav(id, title);
+  renderFallas(id);
+};
+
+// Update goBack titles map
+const _origBack = goBack;
+window.goBack = function() {
+  _origBack();
+};
+
+// patch titles inside goBack
+const _allTitles = {
+  's-home':'Técnico','s-quickscan':'Diagnóstico rápido','s-dpf-menu':'DPF / FAP',
+  's-sym':'Diagnóstico','s-regen':'Regeneración forzada','s-protocolo':'Protocolo completo',
+  's-dtc':'Códigos DTC','s-mant':'Mantenimiento','s-immo':'Inmovilizador',
+  's-checklist':'Checklist DPF','s-chat':'IA Técnica','s-bateria':'Diagnóstico batería',
+  's-central':'Central de fallas','s-feedback':'Feedback técnico',
+  's-cat-noarranca':'No arranca','s-cat-alternador':'Alternador',
+  's-cat-partida':'Motor de partida','s-cat-refrigeracion':'Refrigeración',
+  's-cat-suspension':'Suspensión','s-cat-frenos':'Frenos','s-cat-motor':'Motor general',
+};
+
+// ══ FEEDBACK / BASE DE CONOCIMIENTO ══
+let fbStarVal = 0;
+let kbCurrentFilter = 'all';
+
+function setStar(v) {
+  fbStarVal = v;
+  document.querySelectorAll('.fb-star').forEach(s => {
+    s.classList.toggle('on', parseInt(s.dataset.v) <= v);
+  });
+}
+
+function prefillFeedback(cat, titulo) {
+  document.getElementById('fb-cat').value = cat;
+  document.getElementById('fb-falla').value = titulo;
+  goBN('s-feedback','Feedback técnico','bn-fb');
+  setTimeout(() => document.getElementById('fb-solucion').focus(), 400);
+}
+
+async function submitFeedback() {
+  const pat    = document.getElementById('fb-patente').value.trim().toUpperCase();
+  const modelo = document.getElementById('fb-modelo').value.trim();
+  const cat    = document.getElementById('fb-cat').value;
+  const falla  = document.getElementById('fb-falla').value.trim();
+  const sol    = document.getElementById('fb-solucion').value.trim();
+  const herra  = document.getElementById('fb-herramientas').value.trim();
+  const tiempo = document.getElementById('fb-tiempo').value;
+  const msg    = document.getElementById('fb-msg');
+
+  if (!cat || !falla || !sol) {
+    msg.className='save-msg err'; msg.textContent='Completa categoría, descripción y solución'; return;
+  }
+
+  msg.className='save-msg loading'; msg.textContent='⏳ Guardando...';
+
+  const payload = {
+    patente: pat || null, modelo: modelo || null,
+    categoria: cat, descripcion_falla: falla,
+    solucion_aplicada: sol, herramientas: herra || null,
+    tiempo_resolucion: tiempo, dificultad: fbStarVal || null,
+    created_at: new Date().toISOString()
+  };
+
+  try {
+    const r = await fetch(`${SUPA_URL}/rest/v1/feedback_tecnicos`, {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json','apikey':SUPA_KEY,'Authorization':`Bearer ${SUPA_KEY}`,'Prefer':'return=minimal' },
+      body: JSON.stringify(payload)
+    });
+    if (r.ok || r.status===201) {
+      msg.className='save-msg ok'; msg.textContent='✅ Solución guardada en la base de conocimiento';
+      // Agregar a KB local
+      addLocalKB(payload);
+      // Reset form
+      setTimeout(() => {
+        ['fb-patente','fb-modelo','fb-falla','fb-solucion','fb-herramientas'].forEach(id => document.getElementById(id).value='');
+        document.getElementById('fb-cat').value='';
+        fbStarVal=0; setStar(0);
+        msg.className='save-msg'; msg.textContent='';
+      }, 2500);
+    } else {
+      const err = await r.text();
+      // Si la tabla no existe aún, guardar localmente igual
+      addLocalKB(payload);
+      msg.className='save-msg ok'; msg.textContent='✅ Guardado localmente (configura tabla en Supabase)';
+    }
+  } catch(e) {
+    addLocalKB(payload);
+    msg.className='save-msg ok'; msg.textContent='✅ Guardado localmente (sin conexión)';
+  }
+}
+
+// Local KB (sessionStorage backup mientras se configura Supabase)
+let localKB = [];
+try { localKB = JSON.parse(sessionStorage.getItem('srv_kb') || '[]'); } catch(e){}
+
+function addLocalKB(entry) {
+  localKB.unshift({ ...entry, id: Date.now() });
+  try { sessionStorage.setItem('srv_kb', JSON.stringify(localKB.slice(0,50))); } catch(e){}
+  renderKB();
+}
+
+async function loadKBFromSupabase() {
+  if (!SUPA_KEY || SUPA_KEY === 'TU_ANON_KEY_AQUI') { renderKB(); return; }
+  try {
+    const r = await fetch(`${SUPA_URL}/rest/v1/feedback_tecnicos?order=created_at.desc&limit=50`, {
+      headers:{ 'apikey':SUPA_KEY,'Authorization':`Bearer ${SUPA_KEY}` }
+    });
+    if (r.ok) {
+      const data = await r.json();
+      if (Array.isArray(data) && data.length > 0) localKB = [...data, ...localKB];
+    }
+  } catch(e){}
+  renderKB();
+}
+
+const catLabels = {
+  no_arranca:'No arranca', alternador:'Alternador', partida:'Motor de partida',
+  refrigeracion:'Refrigeración', suspension:'Suspensión', frenos:'Frenos',
+  motor:'Motor general', dpf:'DPF / FAP', bateria:'Batería',
+  inmovilizador:'Inmovilizador', otro:'Otro'
+};
+const catColors = {
+  no_arranca:'var(--red)', alternador:'var(--amber)', partida:'var(--orange)',
+  refrigeracion:'var(--blue)', suspension:'var(--muted)', frenos:'var(--red)',
+  motor:'var(--orange)', dpf:'var(--amber)', bateria:'var(--blue)',
+  inmovilizador:'var(--red)', otro:'var(--muted)'
+};
+
+function filterKB(el) {
+  document.querySelectorAll('.kb-chip').forEach(c => c.classList.remove('on'));
+  el.classList.add('on');
+  kbCurrentFilter = el.dataset.cat;
+  renderKB();
+}
+
+function renderKB() {
+  const el = document.getElementById('kb-list');
+  if (!el) return;
+  const filtered = kbCurrentFilter === 'all'
+    ? localKB
+    : localKB.filter(e => e.categoria === kbCurrentFilter);
+
+  if (filtered.length === 0) {
+    el.innerHTML = `<div class="kb-empty">Aún no hay soluciones reportadas.<br>¡Sé el primero en agregar una!</div>`;
+    return;
+  }
+
+  el.innerHTML = filtered.map(e => {
+    const stars = e.dificultad ? '★'.repeat(e.dificultad) + '☆'.repeat(5 - e.dificultad) : '';
+    const fecha = e.created_at ? new Date(e.created_at).toLocaleDateString('es-CL') : '';
+    const catColor = catColors[e.categoria] || 'var(--muted)';
+    return `
+      <div class="kb-card">
+        <div class="kb-card-header">
+          <div>
+            <span style="font-size:9px;font-family:var(--mono);font-weight:600;padding:2px 7px;border-radius:4px;background:rgba(242,100,25,0.12);color:${catColor};border:1px solid rgba(242,100,25,0.2);">${catLabels[e.categoria]||e.categoria}</span>
+            <div class="kb-card-title" style="margin-top:5px;">${e.descripcion_falla||'Sin descripción'}</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0;">
+            <div class="kb-card-meta">${fecha}</div>
+            ${e.modelo ? `<div class="kb-card-meta" style="margin-top:2px;">${e.modelo}</div>` : ''}
+            ${stars ? `<div class="kb-stars" style="margin-top:2px;font-size:12px;">${stars}</div>` : ''}
+          </div>
+        </div>
+        <div class="kb-card-body">${e.solucion_aplicada||''}</div>
+        ${e.herramientas ? `<div class="kb-card-meta" style="margin-top:6px;">🔧 ${e.herramientas}</div>` : ''}
+        ${e.tiempo_resolucion ? `<div class="kb-card-meta">⏱ ${e.tiempo_resolucion.replace('_',' ')}</div>` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+// Load KB when feedback screen opens
+const _origGoBN = goBN;
+window.goBN = function(id, title, bnId) {
+  _origGoBN(id, title, bnId);
+  if (id === 's-feedback') { loadKBFromSupabase(); renderKB(); }
+  if (id === 's-central') { } // nothing special needed
+};
+
+</script>
+</body>
+</html>

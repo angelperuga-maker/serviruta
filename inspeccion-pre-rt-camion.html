@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta · Pre-RT Camión · Inspección</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:600px;margin:0 auto;}
+.top{background:var(--c1);border-bottom:1px solid var(--borde);padding:12px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;}
+.top-back{background:none;border:1px solid var(--borde);color:var(--txt3);font-size:11px;padding:5px 12px;border-radius:6px;cursor:pointer;}
+.top-icon{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--rojo),var(--naranja));display:flex;align-items:center;justify-content:center;font-size:16px;}
+.top-info{flex:1;}
+.top-titulo{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;}
+.top-sub{font-size:10px;color:var(--txt3);}
+.body{padding:14px 14px 90px;}
+
+/* LOGIN */
+.login{padding:30px 14px;text-align:center;}
+.login-logo{font-family:"Syne",sans-serif;font-weight:800;font-size:28px;margin-bottom:8px;}
+.login-logo span{color:var(--rojo);}
+.login-sub{color:var(--txt3);font-size:12px;margin-bottom:30px;}
+.tec-card{background:var(--c2);border:1px solid var(--borde);border-radius:12px;padding:14px;margin-bottom:8px;display:flex;align-items:center;gap:12px;cursor:pointer;text-align:left;}
+.tec-card:active{background:var(--c3);}
+.tec-av{width:44px;height:44px;border-radius:50%;background:var(--c3);display:flex;align-items:center;justify-content:center;font-family:"Syne",sans-serif;font-weight:800;color:var(--rojo);font-size:14px;}
+.tec-info{flex:1;}
+.tec-nom{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
+.tec-tel{font-size:11px;color:var(--txt3);}
+.pin-area{background:var(--c2);border:1px solid var(--borde);border-radius:12px;padding:20px;margin-top:14px;display:none;}
+.pin-area.show{display:block;}
+.pin-inp{width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:8px;color:var(--txt);font-size:24px;text-align:center;padding:12px;letter-spacing:8px;font-family:monospace;}
+
+/* SELECTOR INICIAL */
+.action-card{background:var(--c2);border:1px solid var(--borde);border-radius:12px;padding:16px;margin-bottom:10px;cursor:pointer;display:flex;align-items:center;gap:12px;}
+.action-card.primary{border-color:var(--rojo);background:linear-gradient(135deg,rgba(232,33,10,0.08),var(--c2));}
+.action-icon{width:42px;height:42px;border-radius:10px;background:var(--c3);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.action-card.primary .action-icon{background:var(--rojo);}
+.action-info{flex:1;}
+.action-titulo{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
+.action-sub{font-size:11px;color:var(--txt3);margin-top:2px;}
+
+/* DATOS INSPECCIÓN */
+.sec{font-family:"Syne",sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);margin:14px 0 8px;display:flex;align-items:center;gap:8px;}
+.sec::after{content:"";flex:1;height:1px;background:var(--borde);}
+.lbl{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--txt3);margin-bottom:5px;display:block;margin-top:10px;}
+.inp{width:100%;background:var(--c2);border:1px solid var(--borde);border-radius:8px;color:var(--txt);font-family:DM Sans,sans-serif;font-size:14px;padding:11px 12px;outline:none;-webkit-appearance:none;}
+.inp:focus{border-color:var(--rojo);}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+
+/* HEADER INSPECCIÓN ACTIVA */
+.insp-header{background:linear-gradient(135deg,var(--c2) 0%,var(--c1) 100%);border:1px solid var(--borde);border-radius:12px;padding:14px;margin-bottom:14px;}
+.insp-patente{font-family:"Syne",sans-serif;font-weight:800;font-size:22px;color:var(--rojo);letter-spacing:2px;}
+.insp-cliente{font-size:13px;font-weight:600;margin-top:2px;}
+.insp-meta{font-size:11px;color:var(--txt3);margin-top:4px;}
+
+/* PROGRESO */
+.progreso-box{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:12px;margin-bottom:14px;}
+.progreso-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.progreso-num{font-family:"Syne",sans-serif;font-weight:800;font-size:14px;}
+.progreso-bar{height:6px;background:var(--c3);border-radius:3px;overflow:hidden;}
+.progreso-fill{height:100%;background:linear-gradient(90deg,var(--rojo),var(--naranja));transition:width 0.3s;}
+.estados-resumen{display:flex;gap:6px;margin-top:8px;font-size:10px;}
+.est-tag{background:var(--c3);padding:3px 8px;border-radius:10px;display:flex;align-items:center;gap:4px;}
+.est-tag.ok{color:var(--verde);}
+.est-tag.obs{color:var(--amarillo);}
+.est-tag.no{color:var(--rojo);}
+
+/* ESTACIONES */
+.estacion{background:var(--c2);border:1px solid var(--borde);border-radius:12px;margin-bottom:8px;overflow:hidden;}
+.estacion-head{padding:14px;display:flex;align-items:center;gap:10px;cursor:pointer;}
+.estacion-num{width:32px;height:32px;border-radius:8px;background:var(--c3);display:flex;align-items:center;justify-content:center;font-family:"Syne",sans-serif;font-weight:800;font-size:13px;color:var(--rojo);flex-shrink:0;}
+.estacion-info{flex:1;}
+.estacion-titulo{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;}
+.estacion-sub{font-size:10px;color:var(--txt3);margin-top:2px;}
+.estacion-stat{display:flex;gap:4px;}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--c3);}
+.dot.ok{background:var(--verde);}
+.dot.obs{background:var(--amarillo);}
+.dot.no{background:var(--rojo);}
+.estacion-toggle{color:var(--txt3);font-size:16px;}
+.estacion.open .estacion-toggle{transform:rotate(180deg);}
+.estacion-body{display:none;padding:0 14px 14px;border-top:1px solid var(--borde);}
+.estacion.open .estacion-body{display:block;}
+
+/* ITEMS */
+.item{padding:10px 0;border-bottom:1px dashed var(--borde);}
+.item:last-child{border-bottom:none;}
+.item-nombre{font-size:13px;margin-bottom:6px;font-weight:500;}
+.item-acciones{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:6px;}
+.btn-eval{padding:8px;border-radius:6px;font-family:"Syne",sans-serif;font-weight:700;font-size:11px;border:1px solid var(--borde);background:var(--c3);color:var(--txt3);cursor:pointer;text-transform:uppercase;letter-spacing:0.5px;}
+.btn-eval:active{transform:scale(0.97);}
+.btn-eval.ok.sel{background:var(--verde);color:#000;border-color:var(--verde);}
+.btn-eval.obs.sel{background:var(--amarillo);color:#000;border-color:var(--amarillo);}
+.btn-eval.no.sel{background:var(--rojo);color:#fff;border-color:var(--rojo);}
+.item-nota{display:none;width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:6px;color:var(--txt);font-size:12px;padding:6px 8px;font-family:DM Sans,sans-serif;margin-top:6px;resize:vertical;}
+.item.has-nota .item-nota{display:block;}
+
+/* FOOTER ACCIONES */
+.footer-acciones{position:fixed;bottom:0;left:0;right:0;background:var(--c1);border-top:1px solid var(--borde);padding:10px 14px;display:flex;gap:8px;max-width:600px;margin:0 auto;}
+.btn-act{flex:1;padding:13px;border-radius:8px;font-family:"Syne",sans-serif;font-weight:800;font-size:13px;border:none;cursor:pointer;}
+.btn-act.save{background:var(--c3);color:var(--txt);border:1px solid var(--borde);}
+.btn-act.finish{background:var(--rojo);color:#fff;}
+
+/* RESUMEN FINAL */
+.resumen-pantalla{display:none;}
+.resumen-pantalla.active{display:block;}
+.score-circle{width:140px;height:140px;border-radius:50%;background:conic-gradient(var(--verde) 0deg, var(--verde) 0deg, var(--c3) 0deg);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;position:relative;}
+.score-circle::before{content:"";position:absolute;inset:10px;border-radius:50%;background:var(--c1);}
+.score-val{position:relative;z-index:1;font-family:"Syne",sans-serif;font-weight:900;font-size:38px;}
+.score-lbl{position:absolute;bottom:32px;font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:1px;z-index:1;}
+.veredicto{text-align:center;padding:14px;border-radius:10px;margin-bottom:14px;}
+.veredicto.aprob{background:rgba(34,197,94,0.1);border:1px solid var(--verde);}
+.veredicto.obs{background:rgba(245,197,24,0.1);border:1px solid var(--amarillo);}
+.veredicto.reprob{background:rgba(232,33,10,0.1);border:1px solid var(--rojo);}
+.veredicto-titulo{font-family:"Syne",sans-serif;font-weight:800;font-size:16px;margin-bottom:4px;}
+.veredicto-sub{font-size:12px;color:var(--txt2);}
+.fallas-lista{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:12px;margin-bottom:8px;}
+.falla-item{font-size:12px;padding:6px 0;border-bottom:1px dashed var(--borde);display:flex;gap:8px;align-items:flex-start;}
+.falla-item:last-child{border-bottom:none;}
+.falla-tag{font-size:10px;padding:2px 6px;border-radius:4px;flex-shrink:0;font-weight:700;}
+.falla-tag.obs{background:rgba(245,197,24,0.15);color:var(--amarillo);}
+.falla-tag.no{background:rgba(232,33,10,0.15);color:var(--rojo);}
+.falla-txt{flex:1;color:var(--txt);}
+.falla-nota{display:block;font-size:10px;color:var(--txt3);margin-top:2px;}
+
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--c3);border:1px solid var(--borde);border-radius:8px;padding:10px 16px;font-size:12px;opacity:0;transition:all 0.25s;pointer-events:none;z-index:999;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.ok{border-color:rgba(34,197,94,0.4);color:var(--verde);}
+.toast.err{border-color:rgba(232,33,10,0.4);color:var(--rojo);}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="pantalla-login" class="login">
+  <div class="login-logo">SERVI<span>RUTA</span></div>
+  <div class="login-sub">Pre-Revisión Técnica Camión · Selecciona tu usuario</div>
+  <div id="tecnicos-lista"></div>
+  <div class="pin-area" id="pin-area">
+    <div style="text-align:left;font-size:11px;color:var(--txt3);margin-bottom:8px">Ingresa tu PIN de 4 dígitos:</div>
+    <input class="pin-inp" type="tel" inputmode="numeric" maxlength="4" id="pin-inp" placeholder="••••">
+    <div id="pin-msg" style="font-size:11px;color:var(--rojo);margin-top:6px;min-height:14px;text-align:center"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" style="display:none">
+
+  <div class="top">
+    <button class="top-back" onclick="location.href='tecnico-menu.html'">←</button>
+    <div class="top-icon">🚛</div>
+    <div class="top-info">
+      <div class="top-titulo">Pre-RT Camión</div>
+      <div class="top-sub" id="tec-nombre-top"></div>
+    </div>
+    <button onclick="logout()" style="background:none;border:none;color:var(--txt3);cursor:pointer;font-size:16px">⎋</button>
+  </div>
+
+  <div class="body">
+
+    <!-- SELECTOR INICIAL -->
+    <div id="pantalla-inicio">
+      <div class="sec">Inspecciones</div>
+      <div class="action-card primary" onclick="nuevaInspeccion()">
+        <div class="action-icon">+</div>
+        <div class="action-info">
+          <div class="action-titulo">Nueva inspección Pre-RT</div>
+          <div class="action-sub">Iniciar revisión Clase A2 para un camión</div>
+        </div>
+      </div>
+      <div class="sec">Pendientes en proceso</div>
+      <div id="pendientes-lista"></div>
+    </div>
+
+    <!-- DATOS INICIALES -->
+    <div id="pantalla-datos" style="display:none">
+      <div class="sec">Datos del camión</div>
+      <label class="lbl">Cliente</label>
+      <input class="inp" id="d-cliente" placeholder="Nombre completo o empresa">
+      <div class="row2">
+        <div>
+          <label class="lbl">Teléfono</label>
+          <input class="inp" id="d-telefono" placeholder="+56 9 XXXX XXXX">
+        </div>
+        <div>
+          <label class="lbl">Patente</label>
+          <input class="inp" id="d-patente" placeholder="ABCD12" style="text-transform:uppercase">
+        </div>
+      </div>
+      <label class="lbl">Camión (marca, modelo, año)</label>
+      <input class="inp" id="d-camion" placeholder="Ej: Scania G440 2019">
+      <div class="row2">
+        <div>
+          <label class="lbl">Kilometraje</label>
+          <input class="inp" id="d-km" type="number" placeholder="0">
+        </div>
+        <div>
+          <label class="lbl">Comuna</label>
+          <input class="inp" id="d-comuna" placeholder="Ej: Quilicura">
+        </div>
+      </div>
+      <label class="lbl">Plan contratado</label>
+      <select class="inp" id="d-plan">
+        <option value="diagnostico">Diagnóstico Pre-RT ($89.000)</option>
+        <option value="reparacion">Pre-RT + Reparación ($249.000)</option>
+        <option value="dpf">Pre-RT + Limpieza DPF ($389.000)</option>
+      </select>
+      <label class="lbl">Tipo de camión</label>
+      <select class="inp" id="d-tipo">
+        <option>Liviano (hasta 3.500 kg)</option>
+        <option>Mediano (3.500 - 10.000 kg)</option>
+        <option>Pesado (sobre 10.000 kg)</option>
+        <option>Tracto-camión</option>
+        <option>Tolva</option>
+        <option>Grúa/pluma</option>
+        <option>Refrigerado</option>
+        <option>Cisterna</option>
+      </select>
+      <label class="lbl">Norma de emisión</label>
+      <select class="inp" id="d-norma">
+        <option>Euro 3</option>
+        <option>Euro 4</option>
+        <option>Euro 5</option>
+        <option>Euro 6</option>
+        <option>No identificada</option>
+      </select>
+      <button class="btn-act finish" style="margin-top:16px;width:100%" onclick="iniciarInspeccion()">Iniciar inspección</button>
+    </div>
+
+    <!-- INSPECCIÓN -->
+    <div id="pantalla-inspeccion" style="display:none">
+      <div class="insp-header">
+        <div class="insp-patente" id="i-patente"></div>
+        <div class="insp-cliente" id="i-cliente"></div>
+        <div class="insp-meta" id="i-meta"></div>
+      </div>
+
+      <div class="progreso-box">
+        <div class="progreso-row">
+          <div style="font-size:11px;color:var(--txt3);text-transform:uppercase">Progreso</div>
+          <div class="progreso-num"><span id="p-completados">0</span>/<span id="p-total">0</span></div>
+        </div>
+        <div class="progreso-bar"><div class="progreso-fill" id="p-fill" style="width:0%"></div></div>
+        <div class="estados-resumen">
+          <div class="est-tag ok">✓ <span id="r-ok">0</span></div>
+          <div class="est-tag obs">⚠ <span id="r-obs">0</span></div>
+          <div class="est-tag no">✗ <span id="r-no">0</span></div>
+        </div>
+      </div>
+
+      <div id="estaciones-lista"></div>
+
+      <div style="height:80px"></div>
+    </div>
+
+    <!-- RESUMEN -->
+    <div id="pantalla-resumen" class="resumen-pantalla">
+      <div class="sec">Resultado de la inspección</div>
+      <div style="text-align:center;padding:20px 0">
+        <div class="score-circle" id="score-c">
+          <div class="score-val" id="score-v">0%</div>
+          <div class="score-lbl">Aprobación</div>
+        </div>
+      </div>
+      <div class="veredicto" id="veredicto"></div>
+
+      <div id="seccion-fallas-no" style="display:none">
+        <div class="sec" style="color:var(--rojo)">✗ Fallas críticas (rechazo seguro)</div>
+        <div class="fallas-lista" id="lista-no"></div>
+      </div>
+
+      <div id="seccion-fallas-obs" style="display:none">
+        <div class="sec" style="color:var(--amarillo)">⚠ Observaciones (riesgo de rechazo)</div>
+        <div class="fallas-lista" id="lista-obs"></div>
+      </div>
+
+      <div class="sec">Notas finales del técnico</div>
+      <textarea class="inp" id="notas-finales" rows="3" placeholder="Recomendaciones, próximos pasos, repuestos sugeridos..."></textarea>
+
+      <div style="height:90px"></div>
+    </div>
+  </div>
+
+  <!-- FOOTER ACCIONES -->
+  <div class="footer-acciones" id="footer-inspeccion" style="display:none">
+    <button class="btn-act save" onclick="guardar()">💾 Guardar</button>
+    <button class="btn-act finish" onclick="verResumen()">Finalizar →</button>
+  </div>
+
+  <div class="footer-acciones" id="footer-resumen" style="display:none">
+    <button class="btn-act save" onclick="volverInspeccion()">← Editar</button>
+    <button class="btn-act finish" onclick="enviarReporte()">📤 Enviar reporte</button>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var SB='https://bqlgfmqcefledqyodkii.supabase.co'
+var SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+var db=null
+var TECNICOS=[
+  {nombre:'Reynaldo Aguas Bertel',tel:'+56935287199',pin:'1324'},
+  {nombre:'Kiven Henz',tel:'+56964880196',pin:'1313'},
+  {nombre:'Humberto Morales',tel:'+56994946414',pin:'1456'},
+  {nombre:'Giovanino Perugini',tel:'+56933592097',pin:'1515'},
+  {nombre:'Javier Honores',tel:'+56929161693',pin:'1693'}
+]
+var tecActual=null,inspActual=null,tecSel=null
+
+function getDB(){if(!db)db=supabase.createClient(SB,SK);return db}
+
+// ESTACIONES DEL MANUAL CLASE A2
+var ESTACIONES=[
+  {
+    id:1,nombre:'Identificación del vehículo',sub:'Documentos y placas',
+    items:[
+      {k:'permiso',n:'Permiso de circulación vigente'},
+      {k:'rt_ant',n:'Revisión técnica anterior y certificado de emisión'},
+      {k:'soap',n:'SOAP camión al día'},
+      {k:'placas',n:'Placas patentes en buen estado y legibles'},
+      {k:'chasis',n:'Número de chasis legible y coincide'},
+      {k:'motor',n:'Número de motor coincide con padrón'}
+    ]
+  },
+  {
+    id:2,nombre:'Inspección visual',sub:'Estado general, fugas y carrocería',
+    items:[
+      {k:'parabrisas',n:'Parabrisas sin grietas en zona crítica'},
+      {k:'plumillas',n:'Plumillas limpiaparabrisas funcionando'},
+      {k:'cinturones',n:'Cinturones de seguridad y anclajes OK'},
+      {k:'espejos',n:'Espejos retrovisores completos y firmes'},
+      {k:'bocina',n:'Bocina funcionando'},
+      {k:'fugas_aceite',n:'Sin fugas visibles de aceite motor/caja'},
+      {k:'fugas_refri',n:'Sin fugas de refrigerante'},
+      {k:'fugas_combustible',n:'Sin fugas de combustible/AdBlue'},
+      {k:'escape',n:'Sistema de escape sin perforaciones'},
+      {k:'carroceria',n:'Carrocería sin daños críticos (golpes, óxido estructural)'},
+      {k:'cinturones_extra',n:'Cinturones de seguridad de carga (camión cisterna/grúa)'},
+      {k:'kit_seguridad',n:'Kit de seguridad completo (triángulo, extintor, chaleco)'}
+    ]
+  },
+  {
+    id:3,nombre:'Luces (luxómetro)',sub:'Faros, intermitentes, baliza',
+    items:[
+      {k:'luz_baja',n:'Luz baja con altura e intensidad correctas'},
+      {k:'luz_alta',n:'Luz alta enfocada y operativa'},
+      {k:'luz_freno',n:'Luces de freno funcionan (las dos)'},
+      {k:'luz_pos_del',n:'Luces de posición delanteras OK'},
+      {k:'luz_pos_tra',n:'Luces de posición traseras OK'},
+      {k:'intermitentes',n:'Intermitentes delanteros y traseros'},
+      {k:'reversa',n:'Luz de reversa funcional'},
+      {k:'baliza',n:'Baliza superior funcional (si aplica)'},
+      {k:'tablero',n:'Tablero sin testigos críticos encendidos'},
+      {k:'placa_luz',n:'Luz de placa patente trasera'}
+    ]
+  },
+  {
+    id:4,nombre:'Alineación (medidor de deriva)',sub:'Tren delantero',
+    items:[
+      {k:'desv_eje',n:'Sin desviación lateral significativa'},
+      {k:'volante_centro',n:'Volante centrado en marcha recta'},
+      {k:'neumat_desg',n:'Neumáticos sin desgaste irregular'}
+    ]
+  },
+  {
+    id:5,nombre:'Frenos (frenómetro)',sub:'Frenos de servicio, parqueo y aire',
+    items:[
+      {k:'freno_serv',n:'Eficacia freno de servicio sobre 50% (camión cargado)'},
+      {k:'freno_balance',n:'Diferencia entre ruedas <30%'},
+      {k:'freno_parq',n:'Freno de parqueo con eficacia sobre 18%'},
+      {k:'sistema_aire',n:'Sistema de aire alcanza presión normal y mantiene'},
+      {k:'fugas_aire',n:'Sin fugas en circuito de aire'},
+      {k:'pastillas',n:'Pastillas/balatas sobre el mínimo'},
+      {k:'discos_tamb',n:'Discos o tambores sin desgaste excesivo'},
+      {k:'liq_freno',n:'Líquido de freno en nivel correcto y limpio'}
+    ]
+  },
+  {
+    id:6,nombre:'Detección de holguras',sub:'Inferior del camión',
+    items:[
+      {k:'rotulas',n:'Rótulas sin holgura excesiva'},
+      {k:'bujes',n:'Bujes de suspensión OK'},
+      {k:'barra_est',n:'Barra estabilizadora firme'},
+      {k:'cremallera',n:'Cremallera de dirección sin juego'},
+      {k:'crucetas',n:'Crucetas cardán sin holgura'},
+      {k:'soportes_motor',n:'Soportes de motor y caja firmes'},
+      {k:'rodajes_ruedas',n:'Rodajes de ruedas sin juego'}
+    ]
+  },
+  {
+    id:7,nombre:'Suspensión (verificador)',sub:'Eje delantero y trasero',
+    items:[
+      {k:'amort_del',n:'Amortiguadores delanteros responden'},
+      {k:'amort_tra',n:'Amortiguadores traseros responden (o ballestas OK)'},
+      {k:'ballestas',n:'Ballestas sin hojas quebradas (si aplica)'},
+      {k:'fuelles_aire',n:'Fuelles de aire sin fugas (suspensión neumática)'}
+    ]
+  },
+  {
+    id:8,nombre:'Emisiones de gases',sub:'Analizador de gases',
+    items:[
+      {k:'humo_vis',n:'Sin humo visible en aceleración'},
+      {k:'olor_quemado',n:'Sin olor a aceite quemado en escape'}
+    ]
+  },
+  {
+    id:9,nombre:'Opacidad (opacímetro)',sub:'Punto crítico Euro 5/6',
+    items:[
+      {k:'dpf_estado',n:'DPF/FAP sin saturación visible'},
+      {k:'egr_estado',n:'Sistema EGR limpio'},
+      {k:'adblue_nivel',n:'AdBlue con nivel correcto (Euro 5/6)'},
+      {k:'opacimetro_test',n:'Test con opacímetro portátil bajo límite'},
+      {k:'aceleracion_libre',n:'Aceleración libre sin humo negro'}
+    ]
+  }
+]
+
+// LOGIN
+function renderLogin(){
+  var el=document.getElementById('tecnicos-lista')
+  el.innerHTML=TECNICOS.map(function(t,i){
+    var init=t.nombre.split(' ').map(function(p){return p[0]}).slice(0,2).join('')
+    return '<div class="tec-card" data-i="'+i+'"><div class="tec-av">'+init+'</div><div class="tec-info"><div class="tec-nom">'+t.nombre+'</div><div class="tec-tel">'+t.tel+'</div></div></div>'
+  }).join('')
+  document.querySelectorAll('.tec-card').forEach(function(c){
+    c.onclick=function(){
+      tecSel=TECNICOS[parseInt(c.getAttribute('data-i'))]
+      document.getElementById('pin-area').classList.add('show')
+      document.getElementById('pin-inp').focus()
+    }
+  })
+  document.getElementById('pin-inp').oninput=function(e){
+    var v=e.target.value
+    if(v.length===4){
+      if(v===tecSel.pin){
+        tecActual=tecSel
+        document.getElementById('pantalla-login').style.display='none'
+        document.getElementById('app').style.display='block'
+        document.getElementById('tec-nombre-top').textContent=tecActual.nombre.split(' ')[0]
+        loadPendientes()
+      }else{
+        document.getElementById('pin-msg').textContent='PIN incorrecto'
+        e.target.value=''
+      }
+    }
+  }
+}
+
+function logout(){tecActual=null;location.reload()}
+
+// PANTALLAS
+function mostrar(p){
+  ['inicio','datos','inspeccion','resumen'].forEach(function(x){
+    document.getElementById('pantalla-'+x).style.display=(p===x?'block':'none')
+  })
+  document.getElementById('footer-inspeccion').style.display=(p==='inspeccion'?'flex':'none')
+  document.getElementById('footer-resumen').style.display=(p==='resumen'?'flex':'none')
+}
+
+function nuevaInspeccion(){mostrar('datos')}
+
+async function loadPendientes(){
+  var r=await getDB().from('inspecciones')
+    .select('*')
+    .eq('tecnico',tecActual.nombre)
+    .eq('estado_revision','en_proceso')
+    .order('created_at',{ascending:false})
+    .limit(5)
+  var data=r.data||[]
+  var el=document.getElementById('pendientes-lista')
+  if(!data.length){el.innerHTML='<div style="text-align:center;padding:20px;color:var(--txt3);font-size:12px">Sin inspecciones en curso</div>';return}
+  el.innerHTML=data.map(function(i){
+    var et=i.etiquetas||{}
+    return '<div class="action-card" data-id="'+i.id+'">'+
+      '<div class="action-icon">🚛</div>'+
+      '<div class="action-info">'+
+        '<div class="action-titulo">'+(i.patente||'Sin patente')+' · '+(i.cliente||'')+'</div>'+
+        '<div class="action-sub">'+(i.vehiculo||'')+' · Score '+(i.score||0)+'%</div>'+
+      '</div></div>'
+  }).join('')
+  document.querySelectorAll('#pendientes-lista [data-id]').forEach(function(c){
+    c.onclick=function(){retomar(c.getAttribute('data-id'))}
+  })
+}
+
+async function retomar(id){
+  var r=await getDB().from('inspecciones').select('*').eq('id',id).single()
+  if(!r.data){toast('No se pudo cargar','err');return}
+  inspActual=r.data
+  inspActual.evaluaciones=r.data.estados||{}
+  inspActual.notas_items=(r.data.etiquetas||{}).notas||{}
+  renderHeaderInsp()
+  renderEstaciones()
+  mostrar('inspeccion')
+}
+
+function iniciarInspeccion(){
+  var cliente=document.getElementById('d-cliente').value.trim()
+  var patente=document.getElementById('d-patente').value.trim().toUpperCase()
+  if(!cliente||!patente){toast('Completa cliente y patente','err');return}
+  inspActual={
+    tecnico:tecActual.nombre,
+    cliente:cliente,
+    telefono:document.getElementById('d-telefono').value.trim(),
+    patente:patente,
+    vehiculo:document.getElementById('d-camion').value.trim(),
+    kilometraje:parseInt(document.getElementById('d-km').value)||0,
+    zona:document.getElementById('d-comuna').value.trim(),
+    plan:document.getElementById('d-plan').value,
+    tipo:document.getElementById('d-tipo').value,
+    norma:document.getElementById('d-norma').value,
+    evaluaciones:{},
+    notas_items:{},
+    notas:'',
+    fecha:new Date().toISOString().split('T')[0]
+  }
+  renderHeaderInsp()
+  renderEstaciones()
+  mostrar('inspeccion')
+  // Guardar inicial
+  guardar(true)
+}
+
+function renderHeaderInsp(){
+  document.getElementById('i-patente').textContent=inspActual.patente
+  document.getElementById('i-cliente').textContent=inspActual.cliente
+  document.getElementById('i-meta').textContent=(inspActual.vehiculo||'')+' · '+(inspActual.norma||'')+' · '+(inspActual.tipo||'')
+}
+
+function renderEstaciones(){
+  var el=document.getElementById('estaciones-lista')
+  el.innerHTML=ESTACIONES.map(function(e){
+    var ev=inspActual.evaluaciones||{}
+    var stats=e.items.map(function(it){return ev[it.k]||''})
+    var ok=stats.filter(function(s){return s==='ok'}).length
+    var obs=stats.filter(function(s){return s==='obs'}).length
+    var no=stats.filter(function(s){return s==='no'}).length
+    return '<div class="estacion" data-eid="'+e.id+'">'+
+      '<div class="estacion-head">'+
+        '<div class="estacion-num">'+e.id.toString().padStart(2,'0')+'</div>'+
+        '<div class="estacion-info">'+
+          '<div class="estacion-titulo">'+e.nombre+'</div>'+
+          '<div class="estacion-sub">'+e.sub+'</div>'+
+        '</div>'+
+        '<div class="estacion-stat">'+
+          (ok>0?'<div class="dot ok" title="'+ok+' OK"></div>':'')+
+          (obs>0?'<div class="dot obs" title="'+obs+' obs"></div>':'')+
+          (no>0?'<div class="dot no" title="'+no+' rechazo"></div>':'')+
+        '</div>'+
+        '<div class="estacion-toggle">▼</div>'+
+      '</div>'+
+      '<div class="estacion-body">'+
+        e.items.map(function(it){
+          var sel=ev[it.k]||''
+          var nota=(inspActual.notas_items||{})[it.k]||''
+          return '<div class="item '+(nota?'has-nota':'')+'" data-k="'+it.k+'">'+
+            '<div class="item-nombre">'+it.n+'</div>'+
+            '<div class="item-acciones">'+
+              '<button class="btn-eval ok '+(sel==='ok'?'sel':'')+'" data-v="ok">✓ OK</button>'+
+              '<button class="btn-eval obs '+(sel==='obs'?'sel':'')+'" data-v="obs">⚠ Obs</button>'+
+              '<button class="btn-eval no '+(sel==='no'?'sel':'')+'" data-v="no">✗ Rechazo</button>'+
+            '</div>'+
+            '<textarea class="item-nota" placeholder="Nota / detalle / repuesto sugerido">'+nota+'</textarea>'+
+          '</div>'
+        }).join('')+
+      '</div>'+
+    '</div>'
+  }).join('')
+
+  // Listeners
+  document.querySelectorAll('.estacion-head').forEach(function(h){
+    h.onclick=function(){h.parentElement.classList.toggle('open')}
+  })
+  document.querySelectorAll('.btn-eval').forEach(function(b){
+    b.onclick=function(ev){
+      ev.stopPropagation()
+      var item=b.closest('.item')
+      var k=item.getAttribute('data-k')
+      var v=b.getAttribute('data-v')
+      // Deselect siblings
+      item.querySelectorAll('.btn-eval').forEach(function(x){x.classList.remove('sel')})
+      b.classList.add('sel')
+      inspActual.evaluaciones=inspActual.evaluaciones||{}
+      inspActual.evaluaciones[k]=v
+      // Si obs o no, mostrar nota
+      if(v==='obs'||v==='no'){item.classList.add('has-nota')}
+      updateProgreso()
+      updateDotEstacion(item)
+    }
+  })
+  document.querySelectorAll('.item-nota').forEach(function(n){
+    n.oninput=function(){
+      var item=n.closest('.item')
+      var k=item.getAttribute('data-k')
+      inspActual.notas_items=inspActual.notas_items||{}
+      inspActual.notas_items[k]=n.value
+    }
+  })
+  updateProgreso()
+}
+
+function updateDotEstacion(item){
+  var estacion=item.closest('.estacion')
+  var eid=parseInt(estacion.getAttribute('data-eid'))
+  var e=ESTACIONES.find(function(x){return x.id===eid})
+  var ev=inspActual.evaluaciones||{}
+  var stats=e.items.map(function(it){return ev[it.k]||''})
+  var ok=stats.filter(function(s){return s==='ok'}).length
+  var obs=stats.filter(function(s){return s==='obs'}).length
+  var no=stats.filter(function(s){return s==='no'}).length
+  var dots=estacion.querySelector('.estacion-stat')
+  dots.innerHTML=(ok>0?'<div class="dot ok"></div>':'')+(obs>0?'<div class="dot obs"></div>':'')+(no>0?'<div class="dot no"></div>':'')
+}
+
+function updateProgreso(){
+  var total=0
+  ESTACIONES.forEach(function(e){total+=e.items.length})
+  var ev=inspActual.evaluaciones||{}
+  var completos=Object.keys(ev).filter(function(k){return ev[k]}).length
+  var ok=Object.values(ev).filter(function(v){return v==='ok'}).length
+  var obs=Object.values(ev).filter(function(v){return v==='obs'}).length
+  var no=Object.values(ev).filter(function(v){return v==='no'}).length
+  document.getElementById('p-completados').textContent=completos
+  document.getElementById('p-total').textContent=total
+  document.getElementById('p-fill').style.width=(completos/total*100)+'%'
+  document.getElementById('r-ok').textContent=ok
+  document.getElementById('r-obs').textContent=obs
+  document.getElementById('r-no').textContent=no
+}
+
+async function guardar(silencioso){
+  if(!inspActual)return
+  var total=0
+  ESTACIONES.forEach(function(e){total+=e.items.length})
+  var ev=inspActual.evaluaciones||{}
+  var ok=Object.values(ev).filter(function(v){return v==='ok'}).length
+  var score=Math.round(ok/total*100)
+  inspActual.score=score
+
+  var payload={
+    tecnico:inspActual.tecnico,
+    cliente:inspActual.cliente,
+    telefono:inspActual.telefono,
+    vehiculo:inspActual.vehiculo,
+    patente:inspActual.patente,
+    kilometraje:inspActual.kilometraje,
+    zona:inspActual.zona,
+    estados:inspActual.evaluaciones,
+    etiquetas:{
+      notas:inspActual.notas_items,
+      plan:inspActual.plan,
+      tipo:inspActual.tipo,
+      norma:inspActual.norma,
+      tipo_inspeccion:'pre_rt_camion'
+    },
+    score:score,
+    notas:inspActual.notas||'',
+    fecha:inspActual.fecha,
+    estado_revision:'en_proceso'
+  }
+
+  var r
+  if(inspActual.id){
+    r=await getDB().from('inspecciones').update(payload).eq('id',inspActual.id)
+  }else{
+    r=await getDB().from('inspecciones').insert(payload).select().single()
+    if(r.data)inspActual.id=r.data.id
+  }
+  if(!silencioso){
+    if(r.error)toast('Error: '+r.error.message,'err')
+    else toast('Guardado','ok')
+  }
+}
+
+function verResumen(){
+  guardar(true)
+  // Calcular score y veredicto
+  var total=0
+  ESTACIONES.forEach(function(e){total+=e.items.length})
+  var ev=inspActual.evaluaciones||{}
+  var ok=Object.values(ev).filter(function(v){return v==='ok'}).length
+  var obs=Object.values(ev).filter(function(v){return v==='obs'}).length
+  var no=Object.values(ev).filter(function(v){return v==='no'}).length
+  var score=Math.round(ok/total*100)
+
+  document.getElementById('score-v').textContent=score+'%'
+  var color=score>=80?'var(--verde)':score>=60?'var(--amarillo)':'var(--rojo)'
+  document.getElementById('score-c').style.background='conic-gradient('+color+' 0deg, '+color+' '+(score*3.6)+'deg, var(--c3) '+(score*3.6)+'deg)'
+
+  var ver=document.getElementById('veredicto')
+  if(no>0){
+    ver.className='veredicto reprob'
+    ver.innerHTML='<div class="veredicto-titulo" style="color:var(--rojo)">⚠️ Reprobará la planta</div><div class="veredicto-sub">Hay '+no+' puntos de rechazo seguro. Hay que reparar antes de ir a la RT.</div>'
+  }else if(obs>2){
+    ver.className='veredicto obs'
+    ver.innerHTML='<div class="veredicto-titulo" style="color:var(--amarillo)">⚡ Riesgo de rechazo</div><div class="veredicto-sub">Hay '+obs+' observaciones que pueden hacer reprobar. Recomendamos corregir antes.</div>'
+  }else{
+    ver.className='veredicto aprob'
+    ver.innerHTML='<div class="veredicto-titulo" style="color:var(--verde)">✓ Listo para pasar la RT</div><div class="veredicto-sub">El camión está en condiciones de aprobar la revisión técnica.</div>'
+  }
+
+  // Listar fallas
+  var fallasNo=[],fallasObs=[]
+  ESTACIONES.forEach(function(e){
+    e.items.forEach(function(it){
+      var v=ev[it.k]
+      var n=(inspActual.notas_items||{})[it.k]||''
+      if(v==='no')fallasNo.push({nombre:it.n,nota:n,est:e.nombre})
+      if(v==='obs')fallasObs.push({nombre:it.n,nota:n,est:e.nombre})
+    })
+  })
+
+  if(fallasNo.length){
+    document.getElementById('seccion-fallas-no').style.display='block'
+    document.getElementById('lista-no').innerHTML=fallasNo.map(function(f){
+      return '<div class="falla-item"><span class="falla-tag no">RECHAZO</span><span class="falla-txt">'+f.nombre+(f.nota?'<span class="falla-nota">'+f.nota+'</span>':'')+'</span></div>'
+    }).join('')
+  }else{document.getElementById('seccion-fallas-no').style.display='none'}
+
+  if(fallasObs.length){
+    document.getElementById('seccion-fallas-obs').style.display='block'
+    document.getElementById('lista-obs').innerHTML=fallasObs.map(function(f){
+      return '<div class="falla-item"><span class="falla-tag obs">OBS</span><span class="falla-txt">'+f.nombre+(f.nota?'<span class="falla-nota">'+f.nota+'</span>':'')+'</span></div>'
+    }).join('')
+  }else{document.getElementById('seccion-fallas-obs').style.display='none'}
+
+  document.getElementById('notas-finales').value=inspActual.notas||''
+  mostrar('resumen')
+}
+
+function volverInspeccion(){
+  inspActual.notas=document.getElementById('notas-finales').value
+  mostrar('inspeccion')
+}
+
+async function enviarReporte(){
+  inspActual.notas=document.getElementById('notas-finales').value
+  // Marcar como finalizada
+  await getDB().from('inspecciones').update({
+    estado_revision:'finalizada',
+    notas:inspActual.notas
+  }).eq('id',inspActual.id)
+
+  // Generar mensaje WA
+  var ev=inspActual.evaluaciones||{}
+  var ok=Object.values(ev).filter(function(v){return v==='ok'}).length
+  var obs=Object.values(ev).filter(function(v){return v==='obs'}).length
+  var no=Object.values(ev).filter(function(v){return v==='no'}).length
+
+  var fallasNo=[],fallasObs=[]
+  ESTACIONES.forEach(function(e){
+    e.items.forEach(function(it){
+      var v=ev[it.k]
+      var n=(inspActual.notas_items||{})[it.k]||''
+      if(v==='no')fallasNo.push(it.n+(n?' ('+n+')':''))
+      if(v==='obs')fallasObs.push(it.n+(n?' ('+n+')':''))
+    })
+  })
+
+  var veredicto=no>0?'⚠️ REPROBARÁ - Hay que reparar antes de ir a planta':(obs>2?'⚡ RIESGO DE RECHAZO - Recomendamos corregir':'✅ LISTO PARA RT')
+
+  var msg='*INFORME PRE-REVISIÓN TÉCNICA*\n\n'
+  msg+='*Cliente:* '+inspActual.cliente+'\n'
+  msg+='*Patente:* '+inspActual.patente+'\n'
+  msg+='*Camión:* '+(inspActual.vehiculo||'-')+'\n'
+  msg+='*Score:* '+inspActual.score+'%\n\n'
+  msg+='*Veredicto:* '+veredicto+'\n\n'
+
+  if(fallasNo.length){
+    msg+='*🔴 Fallas críticas que reprobarán:*\n'
+    fallasNo.forEach(function(f,i){msg+=(i+1)+'. '+f+'\n'})
+    msg+='\n'
+  }
+  if(fallasObs.length){
+    msg+='*🟡 Observaciones:*\n'
+    fallasObs.forEach(function(f,i){msg+=(i+1)+'. '+f+'\n'})
+    msg+='\n'
+  }
+  msg+='Cumplimiento: '+ok+' OK · '+obs+' obs · '+no+' rechazo\n\n'
+  if(inspActual.notas)msg+='*Notas técnico:*\n'+inspActual.notas+'\n\n'
+  msg+='_Inspeccionado por '+inspActual.tecnico+'_\n'
+  msg+='_Serviruta · Pre-RT Camión_'
+
+  // Abrir WA al cliente
+  if(inspActual.telefono){
+    var tel=inspActual.telefono.replace(/[^0-9]/g,'')
+    if(!tel.startsWith('56'))tel='56'+tel
+    window.open('https://wa.me/'+tel+'?text='+encodeURIComponent(msg),'_blank')
+  }
+  // También enviar al coordinador
+  setTimeout(function(){
+    var coordMsg='*Nueva inspección Pre-RT finalizada*\n\n'+inspActual.cliente+' · '+inspActual.patente+'\nScore: '+inspActual.score+'%\nFallas críticas: '+fallasNo.length+'\nObservaciones: '+fallasObs.length+'\n\nTécnico: '+inspActual.tecnico
+    if(confirm('¿Enviar copia al coordinador?')){
+      window.open('https://wa.me/56985058250?text='+encodeURIComponent(coordMsg),'_blank')
+    }
+  },800)
+
+  // Abrir informe oficial en nueva pestaña
+  setTimeout(function(){
+    window.open('informe-pre-rt.html?id='+inspActual.id,'_blank')
+  },400)
+
+  toast('Reporte enviado · Informe generado','ok')
+  setTimeout(function(){
+    inspActual=null
+    mostrar('inicio')
+    loadPendientes()
+  },2000)
+}
+
+function toast(msg,type){
+  var t=document.getElementById('toast');t.textContent=msg
+  t.className='toast'+(type?' '+type:'')
+  t.classList.add('show')
+  setTimeout(function(){t.classList.remove('show')},2500)
+}
+
+renderLogin()
+</script>
+</body>
+</html>

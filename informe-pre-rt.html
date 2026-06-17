@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta · Informe Pre-RT Camión</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --rojo:#E8210A;--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;
+  --txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;
+  --verde:#22C55E;--amarillo:#F5C518;--naranja:#FB923C;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#1a1a1f;color:var(--txt);font-family:"DM Sans",sans-serif;padding:20px 0;min-height:100vh;}
+
+/* PANTALLA - WRAPPER */
+.print-wrap{max-width:820px;margin:0 auto;padding:0 14px;}
+
+/* HOJA DEL INFORME */
+.hoja{
+  background:#fff;
+  color:#1a1a1a;
+  border-radius:8px;
+  overflow:hidden;
+  box-shadow:0 8px 40px rgba(0,0,0,0.4);
+  padding:40px 36px;
+  font-family:"DM Sans",sans-serif;
+}
+
+/* CABECERA */
+.cab{display:flex;justify-content:space-between;align-items:flex-start;padding-bottom:18px;border-bottom:3px solid var(--rojo);}
+.cab-logo{font-family:"Syne",sans-serif;font-weight:900;font-size:26px;color:#080808;letter-spacing:-0.5px;}
+.cab-logo span{color:var(--rojo);}
+.cab-sub{font-size:10px;color:#666;margin-top:2px;text-transform:uppercase;letter-spacing:2px;font-weight:600;}
+.cab-info{text-align:right;font-size:10px;color:#666;line-height:1.6;}
+.cab-info b{color:#080808;}
+
+/* TÍTULO */
+.titulo-rep{text-align:center;padding:24px 0 18px;}
+.titulo-eyebrow{display:inline-block;background:rgba(232,33,10,0.1);color:var(--rojo);padding:5px 14px;border-radius:20px;font-family:"Syne",sans-serif;font-weight:700;font-size:10px;letter-spacing:2px;text-transform:uppercase;}
+.titulo-h1{font-family:"Syne",sans-serif;font-weight:800;font-size:28px;color:#080808;margin-top:10px;line-height:1.2;}
+.titulo-sub{font-size:12px;color:#666;margin-top:6px;}
+
+/* DATOS GRID */
+.datos-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;background:#f5f5f5;border-radius:8px;overflow:hidden;margin-bottom:24px;}
+.dato-box{padding:14px 16px;border-bottom:1px solid #e0e0e0;border-right:1px solid #e0e0e0;}
+.dato-box:nth-child(2n){border-right:none;}
+.dato-box:nth-last-child(-n+2){border-bottom:none;}
+.dato-lbl{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#999;margin-bottom:3px;}
+.dato-val{font-size:14px;color:#080808;font-weight:600;}
+.dato-val.patente{font-family:"Syne",sans-serif;font-weight:800;color:var(--rojo);font-size:18px;letter-spacing:2px;}
+
+/* SCORE Y VEREDICTO */
+.score-row{display:grid;grid-template-columns:200px 1fr;gap:24px;align-items:center;background:#080808;border-radius:10px;padding:22px;margin-bottom:24px;}
+.score-circle{width:160px;height:160px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto;position:relative;}
+.score-circle::before{content:"";position:absolute;inset:14px;border-radius:50%;background:#080808;}
+.score-val{position:relative;z-index:1;font-family:"Syne",sans-serif;font-weight:900;font-size:44px;color:#fff;line-height:1;}
+.score-lbl{position:relative;z-index:1;font-size:9px;color:#999;margin-top:6px;text-transform:uppercase;letter-spacing:1.5px;}
+.veredicto-text{color:#fff;}
+.veredicto-tag{display:inline-block;padding:4px 12px;border-radius:14px;font-family:"Syne",sans-serif;font-weight:800;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;}
+.veredicto-tag.aprob{background:rgba(34,197,94,0.2);color:var(--verde);border:1px solid var(--verde);}
+.veredicto-tag.obs{background:rgba(245,197,24,0.2);color:var(--amarillo);border:1px solid var(--amarillo);}
+.veredicto-tag.reprob{background:rgba(232,33,10,0.2);color:var(--rojo);border:1px solid var(--rojo);}
+.veredicto-h{font-family:"Syne",sans-serif;font-weight:800;font-size:22px;margin-bottom:6px;line-height:1.2;}
+.veredicto-d{font-size:13px;color:#cccccc;line-height:1.5;}
+
+/* RESUMEN BARRAS */
+.barras-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px;}
+.barra{background:#f9f9f9;border:1px solid #e8e8e8;border-radius:8px;padding:14px;text-align:center;}
+.barra-val{font-family:"Syne",sans-serif;font-weight:800;font-size:24px;line-height:1;}
+.barra-val.ok{color:var(--verde);}
+.barra-val.obs{color:#d97706;}
+.barra-val.no{color:var(--rojo);}
+.barra-lbl{font-size:10px;color:#666;text-transform:uppercase;letter-spacing:1px;margin-top:6px;font-weight:600;}
+
+/* SECCIONES */
+.sec-h{font-family:"Syne",sans-serif;font-weight:800;font-size:13px;color:#080808;margin:24px 0 10px;padding-bottom:6px;border-bottom:2px solid #080808;text-transform:uppercase;letter-spacing:1.5px;}
+
+/* FALLAS */
+.fallas-card{margin-bottom:10px;border-radius:8px;overflow:hidden;border:1px solid #e0e0e0;}
+.fallas-head{padding:10px 14px;font-family:"Syne",sans-serif;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#fff;}
+.fallas-head.no{background:var(--rojo);}
+.fallas-head.obs{background:#d97706;}
+.fallas-body{padding:0;}
+.falla-row{padding:10px 14px;border-bottom:1px solid #f0f0f0;display:flex;gap:10px;}
+.falla-row:last-child{border-bottom:none;}
+.falla-num{font-family:"Syne",sans-serif;font-weight:800;color:#999;font-size:12px;width:24px;flex-shrink:0;}
+.falla-cont{flex:1;}
+.falla-tit{font-size:13px;color:#080808;font-weight:600;}
+.falla-est{font-size:10px;color:#999;text-transform:uppercase;margin-top:2px;letter-spacing:0.5px;}
+.falla-nota{font-size:11px;color:#555;margin-top:4px;font-style:italic;background:#fafafa;padding:6px 10px;border-radius:4px;border-left:3px solid #ccc;}
+
+/* DETALLE COMPLETO */
+.detalle-est{margin-bottom:14px;border-radius:6px;background:#fafafa;border:1px solid #e8e8e8;overflow:hidden;}
+.detalle-est-head{background:#080808;color:#fff;padding:8px 12px;display:flex;align-items:center;gap:8px;}
+.detalle-est-num{font-family:"Syne",sans-serif;font-weight:800;font-size:11px;color:var(--rojo);background:#fff;padding:2px 6px;border-radius:3px;}
+.detalle-est-nom{font-family:"Syne",sans-serif;font-weight:700;font-size:12px;flex:1;}
+.detalle-est-stats{display:flex;gap:6px;font-size:10px;}
+.s-pill{padding:2px 6px;border-radius:8px;background:rgba(255,255,255,0.1);}
+.s-pill.ok{color:var(--verde);}
+.s-pill.obs{color:#fbbf24;}
+.s-pill.no{color:#fca5a5;}
+.detalle-est-body{padding:8px 12px;}
+.detalle-item{display:flex;gap:8px;padding:5px 0;font-size:11px;border-bottom:1px dashed #e0e0e0;align-items:flex-start;}
+.detalle-item:last-child{border-bottom:none;}
+.det-icon{width:16px;text-align:center;font-weight:bold;flex-shrink:0;}
+.det-icon.ok{color:var(--verde);}
+.det-icon.obs{color:#d97706;}
+.det-icon.no{color:var(--rojo);}
+.det-icon.np{color:#bbb;}
+.det-text{flex:1;color:#333;}
+
+/* NOTAS */
+.notas-box{background:#fafafa;border:1px solid #e8e8e8;border-radius:8px;padding:14px;font-size:13px;color:#333;line-height:1.6;}
+
+/* FIRMA */
+.firma-row{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:36px;}
+.firma-col{text-align:center;}
+.firma-linea{border-top:1.5px solid #080808;margin-bottom:6px;padding-top:6px;}
+.firma-nom{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;color:#080808;}
+.firma-rol{font-size:10px;color:#666;text-transform:uppercase;letter-spacing:1px;margin-top:2px;}
+
+/* FOOTER */
+.footer-info{margin-top:36px;padding-top:18px;border-top:1px solid #e0e0e0;text-align:center;font-size:10px;color:#999;line-height:1.6;}
+.footer-info b{color:#080808;}
+.qr-area{text-align:center;margin-top:14px;}
+
+/* ACCIONES (no se imprimen) */
+.acciones{max-width:820px;margin:18px auto 0;padding:0 14px;display:flex;gap:8px;flex-wrap:wrap;}
+.btn-act{flex:1;min-width:130px;padding:12px;border-radius:8px;font-family:"Syne",sans-serif;font-weight:800;font-size:12px;border:none;cursor:pointer;text-decoration:none;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px;}
+.btn-print{background:var(--rojo);color:#fff;}
+.btn-wa{background:#25D366;color:#000;}
+.btn-back{background:var(--c3);color:var(--txt);border:1px solid var(--borde);}
+
+/* LOADING / ERROR */
+.loading{text-align:center;padding:60px 20px;color:var(--txt2);}
+.loading-spin{width:40px;height:40px;border:3px solid var(--c3);border-top-color:var(--rojo);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 16px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* IMPRESIÓN */
+@media print{
+  body{background:#fff !important;padding:0 !important;}
+  .acciones,.no-print{display:none !important;}
+  .print-wrap{max-width:100%;padding:0;}
+  .hoja{box-shadow:none !important;border-radius:0;padding:30px 26px;}
+  .score-row{background:#080808 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .fallas-head.no{background:var(--rojo) !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .fallas-head.obs{background:#d97706 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .detalle-est-head{background:#080808 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .cab{border-bottom-color:var(--rojo) !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .veredicto-tag{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+}
+
+@media(max-width:640px){
+  .hoja{padding:24px 18px;}
+  .cab{flex-direction:column;gap:10px;}
+  .cab-info{text-align:left;}
+  .titulo-h1{font-size:22px;}
+  .score-row{grid-template-columns:1fr;}
+  .score-circle{width:130px;height:130px;}
+  .score-val{font-size:34px;}
+  .barras-row{grid-template-columns:1fr 1fr 1fr;gap:6px;}
+  .barra{padding:10px 6px;}
+  .barra-val{font-size:18px;}
+  .firma-row{grid-template-columns:1fr;gap:30px;}
+}
+</style>
+</head>
+<body>
+
+<div class="print-wrap">
+  <div id="contenido">
+    <div class="loading">
+      <div class="loading-spin"></div>
+      <div>Cargando informe...</div>
+    </div>
+  </div>
+</div>
+
+<div class="acciones no-print" id="acciones" style="display:none">
+  <a href="#" class="btn-act btn-back" onclick="history.back();return false">← Volver</a>
+  <button class="btn-act btn-print" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
+  <a class="btn-act btn-wa" id="btn-wa-share" target="_blank">💬 Compartir por WhatsApp</a>
+</div>
+
+<script>
+var SB='https://bqlgfmqcefledqyodkii.supabase.co'
+var SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+var db=null
+function getDB(){if(!db)db=supabase.createClient(SB,SK);return db}
+
+// MISMAS ESTACIONES que el módulo de inspección
+var ESTACIONES=[
+  {id:1,nombre:'Identificación del vehículo',sub:'Documentos y placas',items:[
+    {k:'permiso',n:'Permiso de circulación vigente'},
+    {k:'rt_ant',n:'Revisión técnica anterior y certificado de emisión'},
+    {k:'soap',n:'SOAP camión al día'},
+    {k:'placas',n:'Placas patentes en buen estado y legibles'},
+    {k:'chasis',n:'Número de chasis legible y coincide'},
+    {k:'motor',n:'Número de motor coincide con padrón'}
+  ]},
+  {id:2,nombre:'Inspección visual',sub:'Estado general, fugas y carrocería',items:[
+    {k:'parabrisas',n:'Parabrisas sin grietas en zona crítica'},
+    {k:'plumillas',n:'Plumillas limpiaparabrisas funcionando'},
+    {k:'cinturones',n:'Cinturones de seguridad y anclajes OK'},
+    {k:'espejos',n:'Espejos retrovisores completos y firmes'},
+    {k:'bocina',n:'Bocina funcionando'},
+    {k:'fugas_aceite',n:'Sin fugas visibles de aceite motor/caja'},
+    {k:'fugas_refri',n:'Sin fugas de refrigerante'},
+    {k:'fugas_combustible',n:'Sin fugas de combustible/AdBlue'},
+    {k:'escape',n:'Sistema de escape sin perforaciones'},
+    {k:'carroceria',n:'Carrocería sin daños críticos (golpes, óxido estructural)'},
+    {k:'cinturones_extra',n:'Cinturones de seguridad de carga (camión cisterna/grúa)'},
+    {k:'kit_seguridad',n:'Kit de seguridad completo (triángulo, extintor, chaleco)'}
+  ]},
+  {id:3,nombre:'Luces (luxómetro)',sub:'Faros, intermitentes, baliza',items:[
+    {k:'luz_baja',n:'Luz baja con altura e intensidad correctas'},
+    {k:'luz_alta',n:'Luz alta enfocada y operativa'},
+    {k:'luz_freno',n:'Luces de freno funcionan (las dos)'},
+    {k:'luz_pos_del',n:'Luces de posición delanteras OK'},
+    {k:'luz_pos_tra',n:'Luces de posición traseras OK'},
+    {k:'intermitentes',n:'Intermitentes delanteros y traseros'},
+    {k:'reversa',n:'Luz de reversa funcional'},
+    {k:'baliza',n:'Baliza superior funcional (si aplica)'},
+    {k:'tablero',n:'Tablero sin testigos críticos encendidos'},
+    {k:'placa_luz',n:'Luz de placa patente trasera'}
+  ]},
+  {id:4,nombre:'Alineación (medidor de deriva)',sub:'Tren delantero',items:[
+    {k:'desv_eje',n:'Sin desviación lateral significativa'},
+    {k:'volante_centro',n:'Volante centrado en marcha recta'},
+    {k:'neumat_desg',n:'Neumáticos sin desgaste irregular'}
+  ]},
+  {id:5,nombre:'Frenos (frenómetro)',sub:'Frenos de servicio, parqueo y aire',items:[
+    {k:'freno_serv',n:'Eficacia freno de servicio sobre 50% (camión cargado)'},
+    {k:'freno_balance',n:'Diferencia entre ruedas <30%'},
+    {k:'freno_parq',n:'Freno de parqueo con eficacia sobre 18%'},
+    {k:'sistema_aire',n:'Sistema de aire alcanza presión normal y mantiene'},
+    {k:'fugas_aire',n:'Sin fugas en circuito de aire'},
+    {k:'pastillas',n:'Pastillas/balatas sobre el mínimo'},
+    {k:'discos_tamb',n:'Discos o tambores sin desgaste excesivo'},
+    {k:'liq_freno',n:'Líquido de freno en nivel correcto y limpio'}
+  ]},
+  {id:6,nombre:'Detección de holguras',sub:'Inferior del camión',items:[
+    {k:'rotulas',n:'Rótulas sin holgura excesiva'},
+    {k:'bujes',n:'Bujes de suspensión OK'},
+    {k:'barra_est',n:'Barra estabilizadora firme'},
+    {k:'cremallera',n:'Cremallera de dirección sin juego'},
+    {k:'crucetas',n:'Crucetas cardán sin holgura'},
+    {k:'soportes_motor',n:'Soportes de motor y caja firmes'},
+    {k:'rodajes_ruedas',n:'Rodajes de ruedas sin juego'}
+  ]},
+  {id:7,nombre:'Suspensión (verificador)',sub:'Eje delantero y trasero',items:[
+    {k:'amort_del',n:'Amortiguadores delanteros responden'},
+    {k:'amort_tra',n:'Amortiguadores traseros responden (o ballestas OK)'},
+    {k:'ballestas',n:'Ballestas sin hojas quebradas (si aplica)'},
+    {k:'fuelles_aire',n:'Fuelles de aire sin fugas (suspensión neumática)'}
+  ]},
+  {id:8,nombre:'Emisiones de gases',sub:'Analizador de gases',items:[
+    {k:'humo_vis',n:'Sin humo visible en aceleración'},
+    {k:'olor_quemado',n:'Sin olor a aceite quemado en escape'}
+  ]},
+  {id:9,nombre:'Opacidad (opacímetro)',sub:'Punto crítico Euro 5/6',items:[
+    {k:'dpf_estado',n:'DPF/FAP sin saturación visible'},
+    {k:'egr_estado',n:'Sistema EGR limpio'},
+    {k:'adblue_nivel',n:'AdBlue con nivel correcto (Euro 5/6)'},
+    {k:'opacimetro_test',n:'Test con opacímetro portátil bajo límite'},
+    {k:'aceleracion_libre',n:'Aceleración libre sin humo negro'}
+  ]}
+]
+
+var PLAN_NOMBRES={
+  diagnostico:'Diagnóstico Pre-RT',
+  reparacion:'Pre-RT + Reparación',
+  dpf:'Pre-RT + Limpieza DPF'
+}
+
+function getParam(name){
+  var m=new RegExp('[?&]'+name+'=([^&]+)').exec(location.search)
+  return m?decodeURIComponent(m[1]):null
+}
+
+function fmtFecha(d){
+  if(!d)return ''
+  var f=new Date(d)
+  return f.toLocaleDateString('es-CL',{day:'2-digit',month:'long',year:'numeric'})
+}
+
+function numInforme(id){
+  if(!id)return 'PRT-'+Date.now().toString().slice(-6)
+  return 'PRT-'+id.replace(/-/g,'').slice(-8).toUpperCase()
+}
+
+async function cargar(){
+  var id=getParam('id')
+  if(!id){
+    document.getElementById('contenido').innerHTML='<div class="loading"><div style="color:var(--rojo);font-size:14px;margin-bottom:8px">⚠ No se especificó ID</div><div style="font-size:12px;color:var(--txt3)">El informe requiere un ID válido en la URL (?id=...)</div></div>'
+    return
+  }
+  var r=await getDB().from('inspecciones').select('*').eq('id',id).single()
+  if(!r.data){
+    document.getElementById('contenido').innerHTML='<div class="loading"><div style="color:var(--rojo);font-size:14px">⚠ Inspección no encontrada</div></div>'
+    return
+  }
+  render(r.data)
+}
+
+function render(insp){
+  var ev=insp.estados||{}
+  var et=insp.etiquetas||{}
+  var notas_items=et.notas||{}
+  var plan=PLAN_NOMBRES[et.plan]||'Inspección Pre-RT'
+  var tipo=et.tipo||'-'
+  var norma=et.norma||'-'
+
+  var totalItems=0
+  ESTACIONES.forEach(function(e){totalItems+=e.items.length})
+
+  var ok=0,obs=0,no=0
+  Object.values(ev).forEach(function(v){
+    if(v==='ok')ok++
+    else if(v==='obs')obs++
+    else if(v==='no')no++
+  })
+  var evaluados=ok+obs+no
+  var score=evaluados>0?Math.round(ok/totalItems*100):0
+
+  // Veredicto
+  var veredictoTag,veredictoCls,veredictoH,veredictoD
+  if(no>0){
+    veredictoCls='reprob'
+    veredictoTag='REPROBARÁ'
+    veredictoH='Camión NO está en condiciones de pasar la RT'
+    veredictoD='Se detectaron '+no+' falla(s) crítica(s) que generarán rechazo seguro en la planta de revisión técnica. Es indispensable reparar estos puntos antes de presentarse.'
+  }else if(obs>2){
+    veredictoCls='obs'
+    veredictoTag='RIESGO'
+    veredictoH='Riesgo medio de rechazo en la planta'
+    veredictoD='Se detectaron '+obs+' observación(es) que pueden derivar en rechazo. Se recomienda corregir antes de la presentación.'
+  }else if(obs>0){
+    veredictoCls='aprob'
+    veredictoTag='APROBADO'
+    veredictoH='El camión está en condiciones de aprobar la RT'
+    veredictoD='Con '+obs+' observación(es) menor(es). Se recomienda atender pero el camión puede presentarse a la planta.'
+  }else{
+    veredictoCls='aprob'
+    veredictoTag='APROBADO'
+    veredictoH='El camión está listo para la revisión técnica'
+    veredictoD='Todos los puntos críticos están en cumplimiento. Se puede presentar a la planta con tranquilidad.'
+  }
+
+  // Recolectar fallas
+  var fallasNo=[],fallasObs=[]
+  ESTACIONES.forEach(function(e){
+    e.items.forEach(function(it){
+      var v=ev[it.k]
+      var n=notas_items[it.k]||''
+      if(v==='no')fallasNo.push({nombre:it.n,nota:n,estacion:e.nombre})
+      else if(v==='obs')fallasObs.push({nombre:it.n,nota:n,estacion:e.nombre})
+    })
+  })
+
+  var colorScore=score>=80?'var(--verde)':score>=60?'#fbbf24':'var(--rojo)'
+
+  var html=''
+  html+='<div class="hoja">'
+
+  // CABECERA
+  html+='<div class="cab">'+
+    '<div><div class="cab-logo">SERVI<span>RUTA</span></div><div class="cab-sub">Mecánica móvil profesional</div></div>'+
+    '<div class="cab-info">'+
+      '<div><b>Informe Nº:</b> '+numInforme(insp.id)+'</div>'+
+      '<div><b>Fecha:</b> '+fmtFecha(insp.fecha||insp.created_at)+'</div>'+
+      '<div><b>Contacto:</b> +56 9 4521 0814</div>'+
+      '<div>serviruta.cl · contacto@serviruta.cl</div>'+
+    '</div>'+
+  '</div>'
+
+  // TÍTULO
+  html+='<div class="titulo-rep">'+
+    '<div class="titulo-eyebrow">Pre-Revisión Técnica Clase A2</div>'+
+    '<div class="titulo-h1">Informe Técnico de Inspección</div>'+
+    '<div class="titulo-sub">Servicio: <b>'+plan+'</b></div>'+
+  '</div>'
+
+  // DATOS GRID
+  html+='<div class="datos-grid">'+
+    '<div class="dato-box"><div class="dato-lbl">Cliente</div><div class="dato-val">'+(insp.cliente||'-')+'</div></div>'+
+    '<div class="dato-box"><div class="dato-lbl">Teléfono</div><div class="dato-val">'+(insp.telefono||'-')+'</div></div>'+
+    '<div class="dato-box"><div class="dato-lbl">Patente</div><div class="dato-val patente">'+(insp.patente||'-')+'</div></div>'+
+    '<div class="dato-box"><div class="dato-lbl">Vehículo</div><div class="dato-val">'+(insp.vehiculo||'-')+'</div></div>'+
+    '<div class="dato-box"><div class="dato-lbl">Tipo de camión</div><div class="dato-val">'+tipo+'</div></div>'+
+    '<div class="dato-box"><div class="dato-lbl">Norma emisión</div><div class="dato-val">'+norma+'</div></div>'+
+    '<div class="dato-box"><div class="dato-lbl">Kilometraje</div><div class="dato-val">'+(insp.kilometraje?insp.kilometraje.toLocaleString('es-CL')+' km':'-')+'</div></div>'+
+    '<div class="dato-box"><div class="dato-lbl">Comuna</div><div class="dato-val">'+(insp.zona||'-')+'</div></div>'+
+  '</div>'
+
+  // SCORE Y VEREDICTO
+  html+='<div class="score-row">'+
+    '<div class="score-circle" style="background:conic-gradient('+colorScore+' 0deg, '+colorScore+' '+(score*3.6)+'deg, #2a2a2f '+(score*3.6)+'deg)">'+
+      '<div style="position:relative;z-index:1;text-align:center"><div class="score-val">'+score+'%</div><div class="score-lbl">Aprobación</div></div>'+
+    '</div>'+
+    '<div class="veredicto-text">'+
+      '<div class="veredicto-tag '+veredictoCls+'">'+veredictoTag+'</div>'+
+      '<div class="veredicto-h">'+veredictoH+'</div>'+
+      '<div class="veredicto-d">'+veredictoD+'</div>'+
+    '</div>'+
+  '</div>'
+
+  // BARRAS RESUMEN
+  html+='<div class="barras-row">'+
+    '<div class="barra"><div class="barra-val ok">'+ok+'</div><div class="barra-lbl">✓ OK</div></div>'+
+    '<div class="barra"><div class="barra-val obs">'+obs+'</div><div class="barra-lbl">⚠ Observado</div></div>'+
+    '<div class="barra"><div class="barra-val no">'+no+'</div><div class="barra-lbl">✗ Rechazo</div></div>'+
+  '</div>'
+
+  // FALLAS CRÍTICAS
+  if(fallasNo.length){
+    html+='<div class="sec-h">🔴 Fallas críticas detectadas</div>'
+    html+='<div class="fallas-card">'+
+      '<div class="fallas-head no">Rechazo seguro en planta · Requiere reparación inmediata</div>'+
+      '<div class="fallas-body">'+
+        fallasNo.map(function(f,i){
+          return '<div class="falla-row">'+
+            '<div class="falla-num">'+(i+1).toString().padStart(2,'0')+'</div>'+
+            '<div class="falla-cont">'+
+              '<div class="falla-tit">'+f.nombre+'</div>'+
+              '<div class="falla-est">Estación: '+f.estacion+'</div>'+
+              (f.nota?'<div class="falla-nota">📝 '+f.nota+'</div>':'')+
+            '</div>'+
+          '</div>'
+        }).join('')+
+      '</div>'+
+    '</div>'
+  }
+
+  // OBSERVACIONES
+  if(fallasObs.length){
+    html+='<div class="sec-h">🟡 Observaciones</div>'
+    html+='<div class="fallas-card">'+
+      '<div class="fallas-head obs">Riesgo de rechazo · Recomendamos corregir</div>'+
+      '<div class="fallas-body">'+
+        fallasObs.map(function(f,i){
+          return '<div class="falla-row">'+
+            '<div class="falla-num">'+(i+1).toString().padStart(2,'0')+'</div>'+
+            '<div class="falla-cont">'+
+              '<div class="falla-tit">'+f.nombre+'</div>'+
+              '<div class="falla-est">Estación: '+f.estacion+'</div>'+
+              (f.nota?'<div class="falla-nota">📝 '+f.nota+'</div>':'')+
+            '</div>'+
+          '</div>'
+        }).join('')+
+      '</div>'+
+    '</div>'
+  }
+
+  // DETALLE COMPLETO POR ESTACIÓN
+  html+='<div class="sec-h">Detalle completo de inspección</div>'
+  ESTACIONES.forEach(function(e){
+    var stats=e.items.map(function(it){return ev[it.k]||''})
+    var okE=stats.filter(function(s){return s==='ok'}).length
+    var obsE=stats.filter(function(s){return s==='obs'}).length
+    var noE=stats.filter(function(s){return s==='no'}).length
+    html+='<div class="detalle-est">'+
+      '<div class="detalle-est-head">'+
+        '<div class="detalle-est-num">'+e.id.toString().padStart(2,'0')+'</div>'+
+        '<div class="detalle-est-nom">'+e.nombre+'</div>'+
+        '<div class="detalle-est-stats">'+
+          (okE>0?'<span class="s-pill ok">✓'+okE+'</span>':'')+
+          (obsE>0?'<span class="s-pill obs">⚠'+obsE+'</span>':'')+
+          (noE>0?'<span class="s-pill no">✗'+noE+'</span>':'')+
+        '</div>'+
+      '</div>'+
+      '<div class="detalle-est-body">'+
+        e.items.map(function(it){
+          var v=ev[it.k]||'np'
+          var icon=v==='ok'?'✓':v==='obs'?'⚠':v==='no'?'✗':'—'
+          return '<div class="detalle-item">'+
+            '<div class="det-icon '+v+'">'+icon+'</div>'+
+            '<div class="det-text">'+it.n+'</div>'+
+          '</div>'
+        }).join('')+
+      '</div>'+
+    '</div>'
+  })
+
+  // NOTAS DEL TÉCNICO
+  if(insp.notas){
+    html+='<div class="sec-h">Recomendaciones del técnico</div>'
+    html+='<div class="notas-box">'+insp.notas.replace(/\n/g,'<br>')+'</div>'
+  }
+
+  // FIRMAS
+  html+='<div class="firma-row">'+
+    '<div class="firma-col"><div class="firma-linea"></div><div class="firma-nom">'+(insp.tecnico||'-')+'</div><div class="firma-rol">Técnico Serviruta</div></div>'+
+    '<div class="firma-col"><div class="firma-linea"></div><div class="firma-nom">'+(insp.cliente||'-')+'</div><div class="firma-rol">Cliente / Recibe conforme</div></div>'+
+  '</div>'
+
+  // FOOTER
+  html+='<div class="footer-info">'+
+    '<div><b>Serviruta</b> · Mecánica móvil profesional · Región Metropolitana</div>'+
+    '<div>WhatsApp +56 9 4521 0814 · contacto@serviruta.cl · serviruta.cl</div>'+
+    '<div style="margin-top:8px">Este informe tiene validez como diagnóstico técnico. La aprobación final corresponde a la planta de revisión técnica certificada.</div>'+
+  '</div>'
+
+  html+='</div>'
+
+  document.getElementById('contenido').innerHTML=html
+  document.getElementById('acciones').style.display='flex'
+
+  // Configurar WhatsApp share
+  var msgWA='Hola '+(insp.cliente?insp.cliente.split(' ')[0]:'')+', te comparto el informe de la pre-revisión técnica de tu camión '+(insp.patente||'')+'.\n\nVer informe completo: '+location.href+'\n\nResumen rápido:\n• Score: '+score+'%\n• '+veredictoTag+'\n• Fallas críticas: '+fallasNo.length+'\n• Observaciones: '+fallasObs.length+'\n\nQuedo atento a tus dudas.\nEquipo Serviruta'
+  var telCliente=(insp.telefono||'').replace(/[^0-9]/g,'')
+  if(telCliente && !telCliente.startsWith('56'))telCliente='56'+telCliente
+  document.getElementById('btn-wa-share').href=telCliente?
+    'https://wa.me/'+telCliente+'?text='+encodeURIComponent(msgWA):
+    'https://wa.me/?text='+encodeURIComponent(msgWA)
+
+  document.title='Informe Pre-RT '+(insp.patente||'')+' · Serviruta'
+}
+
+cargar()
+</script>
+</body>
+</html>

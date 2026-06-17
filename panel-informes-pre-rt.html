@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta · Panel Informes Pre-RT</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:600px;margin:0 auto;}
+.top{background:var(--c1);border-bottom:1px solid var(--borde);padding:12px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;}
+.top-back{background:none;border:1px solid var(--borde);color:var(--txt3);font-size:11px;padding:5px 12px;border-radius:6px;cursor:pointer;}
+.top-icon{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--rojo),var(--naranja));display:flex;align-items:center;justify-content:center;font-size:16px;}
+.top-info{flex:1;}
+.top-titulo{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;}
+.top-sub{font-size:10px;color:var(--txt3);}
+.body{padding:14px 14px 80px;}
+
+/* KPIs */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px;}
+.kpi{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:10px 6px;text-align:center;}
+.kpi-val{font-family:"Syne",sans-serif;font-weight:800;font-size:18px;}
+.kpi-lbl{font-size:9px;color:var(--txt3);text-transform:uppercase;margin-top:2px;}
+
+/* CONVERSION */
+.conv-box{background:linear-gradient(135deg,rgba(34,197,94,0.08),var(--c2));border:1px solid rgba(34,197,94,0.3);border-radius:10px;padding:12px;margin-bottom:14px;display:flex;align-items:center;gap:12px;}
+.conv-icon{font-size:22px;}
+.conv-info{flex:1;}
+.conv-val{font-family:"Syne",sans-serif;font-weight:800;font-size:18px;color:var(--verde);}
+.conv-lbl{font-size:11px;color:var(--txt3);}
+
+/* FILTROS */
+.filtros{display:flex;gap:6px;overflow-x:auto;margin-bottom:12px;padding-bottom:4px;}
+.filtros::-webkit-scrollbar{display:none;}
+.filtro{background:var(--c2);border:1px solid var(--borde);border-radius:18px;padding:6px 14px;font-size:11px;font-weight:600;color:var(--txt3);white-space:nowrap;cursor:pointer;flex-shrink:0;}
+.filtro.active{background:var(--rojo);color:#fff;border-color:var(--rojo);}
+
+/* BÚSQUEDA */
+.search-bar{background:var(--c2);border:1px solid var(--borde);border-radius:10px;display:flex;align-items:center;padding:6px 12px;margin-bottom:12px;}
+.search-bar input{flex:1;background:transparent;border:none;color:var(--txt);font-family:DM Sans,sans-serif;font-size:13px;padding:6px;outline:none;}
+.search-bar input::placeholder{color:var(--txt3);}
+
+/* INFORME CARD */
+.inf-card{background:var(--c2);border:1px solid var(--borde);border-radius:12px;padding:12px;margin-bottom:8px;}
+.inf-top{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px;}
+.inf-score{width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:"Syne",sans-serif;font-weight:800;font-size:13px;}
+.inf-score.aprob{background:rgba(34,197,94,0.15);color:var(--verde);}
+.inf-score.obs{background:rgba(245,197,24,0.15);color:var(--amarillo);}
+.inf-score.reprob{background:rgba(232,33,10,0.15);color:var(--rojo);}
+.inf-info{flex:1;min-width:0;}
+.inf-patente{font-family:"Syne",sans-serif;font-weight:800;font-size:15px;letter-spacing:1px;}
+.inf-cliente{font-size:12px;color:var(--txt);margin-top:1px;}
+.inf-meta{font-size:10px;color:var(--txt3);margin-top:2px;display:flex;gap:6px;flex-wrap:wrap;}
+.inf-tag{font-size:9px;font-weight:700;padding:2px 6px;border-radius:6px;text-transform:uppercase;letter-spacing:0.5px;}
+.tag-aprob{background:rgba(34,197,94,0.15);color:var(--verde);}
+.tag-obs{background:rgba(245,197,24,0.15);color:var(--amarillo);}
+.tag-reprob{background:rgba(232,33,10,0.15);color:var(--rojo);}
+.tag-vendido{background:rgba(167,139,250,0.15);color:var(--morado);}
+
+.inf-resumen{background:var(--c3);border-radius:8px;padding:8px 10px;font-size:11px;color:var(--txt2);display:flex;gap:8px;margin-bottom:8px;}
+.r-ok{color:var(--verde);}
+.r-obs{color:var(--amarillo);}
+.r-no{color:var(--rojo);}
+
+.inf-acciones{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;}
+.act-btn{padding:7px;border-radius:6px;border:1px solid var(--borde);background:var(--c3);color:var(--txt2);font-family:"Syne",sans-serif;font-weight:700;font-size:10px;cursor:pointer;text-decoration:none;display:flex;align-items:center;justify-content:center;text-transform:uppercase;letter-spacing:0.5px;}
+.act-btn:active{background:var(--borde);}
+.act-btn.primary{background:var(--rojo);color:#fff;border:none;}
+
+/* MODAL */
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:300;align-items:flex-end;justify-content:center;}
+.modal.open{display:flex;}
+.modal-inner{background:var(--c2);border:1px solid var(--borde);border-radius:16px 16px 0 0;width:100%;max-width:600px;padding:20px 18px 30px;max-height:94vh;overflow-y:auto;}
+.modal-handle{width:36px;height:4px;background:var(--borde);border-radius:2px;margin:0 auto 16px;}
+.modal-titulo{font-family:"Syne",sans-serif;font-weight:800;font-size:17px;margin-bottom:4px;}
+.modal-sub{font-size:12px;color:var(--txt3);margin-bottom:14px;}
+.lbl{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--txt3);margin-bottom:5px;display:block;margin-top:10px;}
+.inp{width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:8px;color:var(--txt);font-family:DM Sans,sans-serif;font-size:14px;padding:10px 12px;outline:none;-webkit-appearance:none;}
+.btn-save{width:100%;background:var(--verde);border:none;border-radius:8px;color:#000;font-family:"Syne",sans-serif;font-weight:800;font-size:14px;padding:13px;cursor:pointer;margin-top:14px;}
+.btn-cancel{width:100%;background:var(--c3);border:1px solid var(--borde);border-radius:8px;color:var(--txt2);font-family:"Syne",sans-serif;font-weight:700;font-size:14px;padding:12px;cursor:pointer;margin-top:6px;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+
+.empty{text-align:center;padding:30px;color:var(--txt3);font-size:12px;}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--c3);border:1px solid var(--borde);border-radius:8px;padding:10px 16px;font-size:12px;opacity:0;transition:all 0.25s;pointer-events:none;z-index:999;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.ok{border-color:rgba(34,197,94,0.4);color:var(--verde);}
+
+.sec{font-family:"Syne",sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);margin:14px 0 8px;display:flex;align-items:center;gap:8px;}
+.sec::after{content:"";flex:1;height:1px;background:var(--borde);}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <button class="top-back" onclick="location.href='menu-coordinador.html'">←</button>
+  <div class="top-icon">🚛</div>
+  <div class="top-info">
+    <div class="top-titulo">Informes Pre-RT Camión</div>
+    <div class="top-sub">Seguimiento y conversión a venta</div>
+  </div>
+  <button onclick="load()" style="background:none;border:none;color:var(--txt3);cursor:pointer;font-size:18px">&#8635;</button>
+</div>
+
+<div class="body">
+
+  <!-- KPIs -->
+  <div class="kpi-row">
+    <div class="kpi"><div class="kpi-val" id="k-total" style="color:var(--txt)">0</div><div class="kpi-lbl">Total</div></div>
+    <div class="kpi"><div class="kpi-val" id="k-aprob" style="color:var(--verde)">0</div><div class="kpi-lbl">Aprobados</div></div>
+    <div class="kpi"><div class="kpi-val" id="k-obs" style="color:var(--amarillo)">0</div><div class="kpi-lbl">Riesgo</div></div>
+    <div class="kpi"><div class="kpi-val" id="k-no" style="color:var(--rojo)">0</div><div class="kpi-lbl">Reprob</div></div>
+  </div>
+
+  <!-- CONVERSIÓN -->
+  <div class="conv-box">
+    <div class="conv-icon">💰</div>
+    <div class="conv-info">
+      <div class="conv-val"><span id="k-conv">0</span>% conversión a venta</div>
+      <div class="conv-lbl"><span id="k-conv-num">0</span> informes con reparación cerrada · Ingresos: $<span id="k-conv-monto">0</span></div>
+    </div>
+  </div>
+
+  <!-- BÚSQUEDA -->
+  <div class="search-bar">
+    <span style="color:var(--txt3);font-size:14px">🔍</span>
+    <input type="text" id="search" placeholder="Buscar por patente, cliente o técnico" oninput="filtrar()">
+  </div>
+
+  <!-- FILTROS -->
+  <div class="filtros">
+    <div class="filtro active" data-f="todos">Todos</div>
+    <div class="filtro" data-f="reprob">⚠ Reprobará</div>
+    <div class="filtro" data-f="obs">⚡ Riesgo</div>
+    <div class="filtro" data-f="aprob">✓ Aprobado</div>
+    <div class="filtro" data-f="vendido">💰 Convertido</div>
+    <div class="filtro" data-f="hoy">Hoy</div>
+    <div class="filtro" data-f="semana">7 días</div>
+  </div>
+
+  <!-- LISTA -->
+  <div class="sec">Informes <span id="conteo-lista" style="color:var(--txt);font-weight:800;font-size:12px"></span></div>
+  <div id="lista"></div>
+
+</div>
+
+<!-- MODAL DE SEGUIMIENTO -->
+<div class="modal" id="modal-seg">
+  <div class="modal-inner">
+    <div class="modal-handle"></div>
+    <div class="modal-titulo">Seguimiento del informe</div>
+    <div class="modal-sub" id="seg-cliente"></div>
+
+    <label class="lbl">Estado de conversión</label>
+    <select class="inp" id="seg-estado">
+      <option value="pendiente">Pendiente seguimiento</option>
+      <option value="contactado">Contactado, en evaluación</option>
+      <option value="cotizado">Cotización enviada</option>
+      <option value="convertido">✓ Convertido a venta</option>
+      <option value="perdido">✗ No interesado / perdido</option>
+    </select>
+
+    <label class="lbl">Monto de la venta (si convertido)</label>
+    <input class="inp" type="number" id="seg-monto" placeholder="0">
+
+    <label class="lbl">Notas del coordinador</label>
+    <textarea class="inp" id="seg-notas" rows="3" placeholder="Próximos pasos, dudas del cliente, fecha de reparación..."></textarea>
+
+    <button class="btn-save" onclick="guardarSeguimiento()">Guardar seguimiento</button>
+    <button class="btn-cancel" onclick="document.getElementById('modal-seg').classList.remove('open')">Cancelar</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var SB='https://bqlgfmqcefledqyodkii.supabase.co'
+var SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+var db=null,informes=[],filtroActivo='todos',informeSel=null
+
+function getDB(){if(!db)db=supabase.createClient(SB,SK);return db}
+
+async function load(){
+  // Cargar todas las inspecciones tipo pre_rt_camion
+  var r=await getDB().from('inspecciones').select('*').order('created_at',{ascending:false}).limit(200)
+  var todas=r.data||[]
+  // Filtrar solo Pre-RT
+  informes=todas.filter(function(i){
+    var et=i.etiquetas||{}
+    return et.tipo_inspeccion==='pre_rt_camion'
+  })
+  renderKPIs()
+  filtrar()
+}
+
+function getVeredicto(insp){
+  var ev=insp.estados||{}
+  var no=Object.values(ev).filter(function(v){return v==='no'}).length
+  var obs=Object.values(ev).filter(function(v){return v==='obs'}).length
+  if(no>0)return 'reprob'
+  if(obs>2)return 'obs'
+  return 'aprob'
+}
+
+function getEstadoVenta(insp){
+  var et=insp.etiquetas||{}
+  return et.estado_venta||'pendiente'
+}
+
+function renderKPIs(){
+  var aprob=0,obs=0,no=0,conv=0,montoConv=0
+  informes.forEach(function(i){
+    var v=getVeredicto(i)
+    if(v==='aprob')aprob++
+    else if(v==='obs')obs++
+    else if(v==='no')no++
+    if(getEstadoVenta(i)==='convertido'){
+      conv++
+      montoConv+=parseInt((i.etiquetas||{}).monto_venta||0)
+    }
+  })
+  document.getElementById('k-total').textContent=informes.length
+  document.getElementById('k-aprob').textContent=aprob
+  document.getElementById('k-obs').textContent=obs
+  document.getElementById('k-no').textContent=no
+  var porc=informes.length>0?Math.round(conv/informes.length*100):0
+  document.getElementById('k-conv').textContent=porc
+  document.getElementById('k-conv-num').textContent=conv
+  document.getElementById('k-conv-monto').textContent=montoConv.toLocaleString('es-CL')
+}
+
+function filtrar(){
+  var q=(document.getElementById('search').value||'').toLowerCase().trim()
+  var hoy=new Date().toISOString().split('T')[0]
+  var hace7=new Date(Date.now()-7*24*3600*1000).toISOString().split('T')[0]
+
+  var filtrados=informes.filter(function(i){
+    // Search
+    if(q){
+      var texto=((i.patente||'')+' '+(i.cliente||'')+' '+(i.tecnico||'')+' '+(i.vehiculo||'')).toLowerCase()
+      if(texto.indexOf(q)<0)return false
+    }
+    // Filtros
+    if(filtroActivo==='reprob')return getVeredicto(i)==='reprob'
+    if(filtroActivo==='obs')return getVeredicto(i)==='obs'
+    if(filtroActivo==='aprob')return getVeredicto(i)==='aprob'
+    if(filtroActivo==='vendido')return getEstadoVenta(i)==='convertido'
+    if(filtroActivo==='hoy')return (i.fecha||i.created_at||'').startsWith(hoy)
+    if(filtroActivo==='semana')return (i.fecha||i.created_at||'')>=hace7
+    return true
+  })
+
+  document.getElementById('conteo-lista').textContent='('+filtrados.length+')'
+  renderLista(filtrados)
+}
+
+function renderLista(data){
+  var el=document.getElementById('lista')
+  if(!data.length){el.innerHTML='<div class="empty">Sin informes que coincidan</div>';return}
+  el.innerHTML=data.map(function(i){
+    var ev=i.estados||{}
+    var ok=Object.values(ev).filter(function(v){return v==='ok'}).length
+    var obs=Object.values(ev).filter(function(v){return v==='obs'}).length
+    var no=Object.values(ev).filter(function(v){return v==='no'}).length
+    var ver=getVeredicto(i)
+    var estado_venta=getEstadoVenta(i)
+    var verLabel=ver==='reprob'?'Reprobará':ver==='obs'?'Riesgo':'Aprobado'
+    var fecha=i.fecha?new Date(i.fecha).toLocaleDateString('es-CL',{day:'numeric',month:'short'}):''
+    var tipo=(i.etiquetas||{}).tipo||''
+    var norma=(i.etiquetas||{}).norma||''
+
+    return '<div class="inf-card">'+
+      '<div class="inf-top">'+
+        '<div class="inf-score '+ver+'">'+(i.score||0)+'%</div>'+
+        '<div class="inf-info">'+
+          '<div class="inf-patente">'+(i.patente||'-')+'</div>'+
+          '<div class="inf-cliente">'+(i.cliente||'-')+'</div>'+
+          '<div class="inf-meta">'+
+            '<span class="inf-tag tag-'+ver+'">'+verLabel+'</span>'+
+            (estado_venta==='convertido'?'<span class="inf-tag tag-vendido">VENDIDO</span>':'')+
+            '<span>'+fecha+'</span>'+
+            (i.tecnico?'<span>· '+i.tecnico.split(' ')[0]+'</span>':'')+
+            (norma?'<span>· '+norma+'</span>':'')+
+          '</div>'+
+        '</div>'+
+      '</div>'+
+      '<div class="inf-resumen">'+
+        '<span class="r-ok">✓ '+ok+'</span>'+
+        '<span class="r-obs">⚠ '+obs+'</span>'+
+        '<span class="r-no">✗ '+no+'</span>'+
+        (i.vehiculo?'<span style="margin-left:auto;color:var(--txt3)">'+i.vehiculo+'</span>':'')+
+      '</div>'+
+      '<div class="inf-acciones">'+
+        '<a class="act-btn primary" href="informe-pre-rt.html?id='+i.id+'" target="_blank">📄 Ver</a>'+
+        '<button class="act-btn" data-action="wa" data-id="'+i.id+'">💬 WA</button>'+
+        '<button class="act-btn" data-action="seg" data-id="'+i.id+'">📊 Segui</button>'+
+      '</div>'+
+    '</div>'
+  }).join('')
+
+  // Listeners
+  document.querySelectorAll('#lista [data-action]').forEach(function(b){
+    b.onclick=function(){
+      var id=b.getAttribute('data-id')
+      var insp=informes.find(function(x){return x.id===id})
+      if(!insp)return
+      var act=b.getAttribute('data-action')
+      if(act==='wa')compartirWA(insp)
+      else if(act==='seg')abrirSeguimiento(insp)
+    }
+  })
+}
+
+function compartirWA(insp){
+  var ev=insp.estados||{}
+  var ok=Object.values(ev).filter(function(v){return v==='ok'}).length
+  var obs=Object.values(ev).filter(function(v){return v==='obs'}).length
+  var no=Object.values(ev).filter(function(v){return v==='no'}).length
+  var ver=getVeredicto(insp)
+  var verLabel=ver==='reprob'?'⚠️ REPROBARÁ':ver==='obs'?'⚡ RIESGO':'✅ APROBADO'
+
+  var linkBase=location.origin+location.pathname.replace('panel-informes-pre-rt.html','')
+  var linkInforme=linkBase+'informe-pre-rt.html?id='+insp.id
+
+  var msg='Hola '+(insp.cliente?insp.cliente.split(' ')[0]:'')+'!\n\n'
+  msg+='Te comparto el informe oficial de la pre-revisión técnica de tu camión '+(insp.patente||'')+'.\n\n'
+  msg+='📄 Ver informe completo:\n'+linkInforme+'\n\n'
+  msg+='*Resumen:*\n'
+  msg+='• Score: '+(insp.score||0)+'%\n'
+  msg+='• Veredicto: '+verLabel+'\n'
+  msg+='• OK: '+ok+' · Observados: '+obs+' · Rechazos: '+no+'\n\n'
+  if(no>0||obs>2){
+    msg+='Te recomendamos coordinar la reparación antes de presentar el camión en la planta. Podemos hacerlo en tu base.\n\n'
+  }
+  msg+='Quedo atento a tus dudas.\nEquipo Serviruta\n+56 9 4521 0814'
+
+  var tel=(insp.telefono||'').replace(/[^0-9]/g,'')
+  if(tel && !tel.startsWith('56'))tel='56'+tel
+  if(tel){
+    window.open('https://wa.me/'+tel+'?text='+encodeURIComponent(msg),'_blank')
+  }else{
+    window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank')
+  }
+}
+
+function abrirSeguimiento(insp){
+  informeSel=insp
+  var et=insp.etiquetas||{}
+  document.getElementById('seg-cliente').textContent=(insp.cliente||'-')+' · '+(insp.patente||'-')
+  document.getElementById('seg-estado').value=et.estado_venta||'pendiente'
+  document.getElementById('seg-monto').value=et.monto_venta||''
+  document.getElementById('seg-notas').value=insp.notas_coord||''
+  document.getElementById('modal-seg').classList.add('open')
+}
+
+async function guardarSeguimiento(){
+  if(!informeSel)return
+  var estado=document.getElementById('seg-estado').value
+  var monto=parseInt(document.getElementById('seg-monto').value)||0
+  var notas=document.getElementById('seg-notas').value.trim()
+
+  var et=informeSel.etiquetas||{}
+  et.estado_venta=estado
+  if(monto>0)et.monto_venta=monto
+
+  var r=await getDB().from('inspecciones').update({
+    etiquetas:et,
+    notas_coord:notas
+  }).eq('id',informeSel.id)
+
+  if(r.error){toast('Error: '+r.error.message,'err');return}
+  toast('Seguimiento guardado','ok')
+  document.getElementById('modal-seg').classList.remove('open')
+  // Actualizar local
+  var idx=informes.findIndex(function(x){return x.id===informeSel.id})
+  if(idx>=0){
+    informes[idx].etiquetas=et
+    informes[idx].notas_coord=notas
+  }
+  renderKPIs()
+  filtrar()
+}
+
+// Listeners filtros
+document.querySelectorAll('.filtro').forEach(function(f){
+  f.onclick=function(){
+    document.querySelectorAll('.filtro').forEach(function(x){x.classList.remove('active')})
+    f.classList.add('active')
+    filtroActivo=f.getAttribute('data-f')
+    filtrar()
+  }
+})
+
+function toast(msg,type){
+  var t=document.getElementById('toast');t.textContent=msg
+  t.className='toast'+(type?' '+type:'')
+  t.classList.add('show')
+  setTimeout(function(){t.classList.remove('show')},2500)
+}
+
+load()
+setInterval(load,60*1000)
+</script>
+</body>
+</html>

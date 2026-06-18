@@ -182,7 +182,8 @@ body{background:#1a1a1f;color:var(--txt);font-family:"DM Sans",sans-serif;paddin
 <div class="acciones no-print" id="acciones" style="display:none">
   <a href="#" class="btn-act btn-back" onclick="history.back();return false">← Volver</a>
   <button class="btn-act btn-print" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
-  <a class="btn-act btn-wa" id="btn-wa-share" target="_blank">💬 Compartir por WhatsApp</a>
+  <a class="btn-act" id="btn-cert" style="background:var(--amarillo);color:#000" target="_blank">📜 Certificado</a>
+  <a class="btn-act btn-wa" id="btn-wa-share" target="_blank">💬 Compartir</a>
 </div>
 
 <script>
@@ -513,6 +514,7 @@ function render(insp){
   var msgWA='Hola '+(insp.cliente?insp.cliente.split(' ')[0]:'')+', te comparto el informe de la pre-revisión técnica de tu camión '+(insp.patente||'')+'.\n\nVer informe completo: '+location.href+'\n\nResumen rápido:\n• Score: '+score+'%\n• '+veredictoTag+'\n• Fallas críticas: '+fallasNo.length+'\n• Observaciones: '+fallasObs.length+'\n\nQuedo atento a tus dudas.\nEquipo Serviruta'
   var telCliente=(insp.telefono||'').replace(/[^0-9]/g,'')
   if(telCliente && !telCliente.startsWith('56'))telCliente='56'+telCliente
+  document.getElementById('btn-cert').href='certificado-garantia.html?id='+insp.id+'&plan='+(insp.etiquetas?.plan||'reparacion');
   document.getElementById('btn-wa-share').href=telCliente?
     'https://wa.me/'+telCliente+'?text='+encodeURIComponent(msgWA):
     'https://wa.me/?text='+encodeURIComponent(msgWA)

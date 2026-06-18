@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta · Certificado de Garantía Pre-RT</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=DM+Sans:wght@300;400;500;600&family=Cormorant+Garamond:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --rojo:#E8210A;--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;
+  --txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;
+  --verde:#22C55E;--amarillo:#F5C518;--naranja:#FB923C;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#1a1a1f;color:var(--txt);font-family:"DM Sans",sans-serif;padding:20px 0;min-height:100vh;}
+
+.print-wrap{max-width:780px;margin:0 auto;padding:0 14px;}
+
+/* HOJA - CERTIFICADO */
+.cert{
+  background:#fff;
+  color:#1a1a1a;
+  border-radius:8px;
+  overflow:hidden;
+  box-shadow:0 8px 40px rgba(0,0,0,0.4);
+  position:relative;
+  padding:50px 48px 40px;
+  font-family:"DM Sans",sans-serif;
+  background-image:
+    radial-gradient(circle at 0% 0%, rgba(232,33,10,0.04) 0%, transparent 30%),
+    radial-gradient(circle at 100% 100%, rgba(232,33,10,0.03) 0%, transparent 30%);
+}
+
+/* MARCO ORNAMENTAL */
+.cert::before{
+  content:"";
+  position:absolute;
+  inset:14px;
+  border:1px solid #c0c0c0;
+  border-radius:4px;
+  pointer-events:none;
+}
+.cert::after{
+  content:"";
+  position:absolute;
+  inset:18px;
+  border:3px solid var(--rojo);
+  border-radius:2px;
+  pointer-events:none;
+}
+
+.cert-content{position:relative;z-index:1;}
+
+/* CABECERA */
+.cert-cab{text-align:center;padding-bottom:18px;border-bottom:2px solid #f0f0f0;}
+.cert-logo{font-family:"Syne",sans-serif;font-weight:900;font-size:30px;color:#080808;letter-spacing:-0.5px;}
+.cert-logo span{color:var(--rojo);}
+.cert-tagline{font-size:9px;color:#666;letter-spacing:3px;text-transform:uppercase;margin-top:2px;font-weight:600;}
+
+/* TITULO */
+.cert-titulo{text-align:center;padding:28px 0 20px;}
+.cert-eyebrow{display:inline-block;background:var(--rojo);color:#fff;padding:5px 16px;border-radius:20px;font-family:"Syne",sans-serif;font-weight:800;font-size:10px;letter-spacing:3px;text-transform:uppercase;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+.cert-h1{font-family:"Cormorant Garamond",serif;font-weight:700;font-size:42px;color:#080808;line-height:1.1;margin-top:12px;letter-spacing:0.5px;}
+.cert-h1 .rojo{color:var(--rojo);font-style:italic;}
+.cert-sub{font-size:12px;color:#666;margin-top:8px;font-style:italic;}
+.cert-num{display:inline-block;background:#f5f5f5;border:1px dashed #ccc;padding:6px 16px;border-radius:6px;font-family:monospace;font-size:11px;color:#666;margin-top:12px;letter-spacing:2px;}
+
+/* DECLARACION */
+.declaracion{text-align:center;padding:20px 30px;font-size:14px;color:#333;line-height:1.7;font-family:"Cormorant Garamond",serif;}
+.declaracion .nombre{font-family:"Syne",sans-serif;font-weight:800;font-size:16px;color:var(--rojo);text-transform:uppercase;letter-spacing:1px;}
+.declaracion .servicio{font-weight:700;color:#080808;}
+
+/* DATOS GRID */
+.datos-grid{background:#fafafa;border:1px solid #ececec;border-radius:8px;padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0;}
+.dato{display:flex;flex-direction:column;gap:2px;}
+.dato-lbl{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#999;}
+.dato-val{font-size:13px;font-weight:600;color:#080808;}
+.dato-val.patente{font-family:"Syne",sans-serif;font-weight:800;color:var(--rojo);font-size:18px;letter-spacing:2px;}
+
+/* GARANTÍA - CAJA PRINCIPAL */
+.garantia-box{
+  background:linear-gradient(135deg,rgba(232,33,10,0.04),rgba(232,33,10,0.08));
+  border:2px solid var(--rojo);
+  border-radius:10px;
+  padding:20px;
+  margin:18px 0;
+  position:relative;
+}
+.garantia-sello{
+  position:absolute;
+  top:-12px;
+  left:50%;
+  transform:translateX(-50%);
+  background:var(--rojo);
+  color:#fff;
+  padding:5px 18px;
+  border-radius:20px;
+  font-family:"Syne",sans-serif;
+  font-weight:800;
+  font-size:10px;
+  letter-spacing:2px;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact;
+}
+.garantia-titulo{font-family:"Syne",sans-serif;font-weight:800;font-size:15px;color:var(--rojo);text-align:center;margin-bottom:14px;text-transform:uppercase;letter-spacing:1px;margin-top:6px;}
+.garantia-texto{font-size:13px;color:#333;line-height:1.8;text-align:justify;}
+.garantia-texto b{color:#080808;}
+
+.condiciones-h{font-family:"Syne",sans-serif;font-weight:700;font-size:11px;color:#080808;margin-top:14px;margin-bottom:6px;text-transform:uppercase;letter-spacing:1px;}
+.condiciones-list{list-style:none;padding-left:0;}
+.condiciones-list li{font-size:11px;color:#555;padding:4px 0 4px 18px;position:relative;line-height:1.6;}
+.condiciones-list li::before{content:"●";position:absolute;left:4px;color:var(--rojo);font-size:8px;top:8px;}
+
+/* VIGENCIA */
+.vigencia{background:#080808;color:#fff;border-radius:8px;padding:14px 18px;margin:16px 0;display:flex;align-items:center;justify-content:space-between;gap:12px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+.vig-info{flex:1;}
+.vig-lbl{font-size:9px;letter-spacing:2px;color:#999;text-transform:uppercase;margin-bottom:3px;font-weight:700;}
+.vig-fecha{font-family:"Syne",sans-serif;font-weight:800;font-size:18px;color:var(--rojo);}
+.vig-detalle{font-size:11px;color:#ccc;margin-top:2px;}
+
+/* TÉRMINOS */
+.terminos{background:#f8f8f8;border:1px solid #eee;border-radius:8px;padding:14px 16px;margin:14px 0;}
+.terminos-h{font-family:"Syne",sans-serif;font-weight:700;font-size:10px;color:#080808;margin-bottom:6px;text-transform:uppercase;letter-spacing:1.5px;}
+.terminos-t{font-size:10px;color:#666;line-height:1.6;text-align:justify;}
+
+/* FIRMAS */
+.firmas{display:grid;grid-template-columns:1fr 1fr;gap:36px;margin-top:30px;padding-top:10px;}
+.firma-col{text-align:center;}
+.firma-linea{border-top:1.5px solid #080808;margin-top:40px;padding-top:6px;}
+.firma-nom{font-family:"Syne",sans-serif;font-weight:700;font-size:12px;color:#080808;}
+.firma-rol{font-size:9px;color:#666;text-transform:uppercase;letter-spacing:1.5px;margin-top:2px;}
+.firma-rut{font-size:9px;color:#999;margin-top:1px;}
+
+/* PIE */
+.pie{margin-top:24px;padding-top:14px;border-top:1px solid #eee;display:grid;grid-template-columns:1fr 100px;gap:20px;align-items:center;}
+.pie-info{font-size:9px;color:#888;line-height:1.6;}
+.pie-info b{color:#080808;font-size:10px;}
+.qr-box{text-align:center;}
+.qr-img{background:#fff;padding:4px;border:1px solid #ddd;border-radius:4px;display:inline-block;}
+.qr-img img{display:block;width:80px;height:80px;}
+.qr-lbl{font-size:8px;color:#999;margin-top:3px;letter-spacing:1px;text-transform:uppercase;}
+
+/* SELLO AGUA */
+.sello-agua{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%) rotate(-25deg);
+  font-family:"Syne",sans-serif;
+  font-weight:900;
+  font-size:90px;
+  color:rgba(232,33,10,0.04);
+  pointer-events:none;
+  white-space:nowrap;
+  z-index:0;
+}
+
+/* ACCIONES */
+.acciones{max-width:780px;margin:18px auto 0;padding:0 14px;display:flex;gap:8px;flex-wrap:wrap;}
+.btn-act{flex:1;min-width:130px;padding:12px;border-radius:8px;font-family:"Syne",sans-serif;font-weight:800;font-size:12px;border:none;cursor:pointer;text-decoration:none;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px;}
+.btn-print{background:var(--rojo);color:#fff;}
+.btn-wa{background:#25D366;color:#000;}
+.btn-back{background:var(--c3);color:var(--txt);border:1px solid var(--borde);}
+
+/* LOADING */
+.loading{text-align:center;padding:60px 20px;color:var(--txt2);}
+.loading-spin{width:40px;height:40px;border:3px solid var(--c3);border-top-color:var(--rojo);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 16px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* IMPRESIÓN */
+@media print{
+  body{background:#fff !important;padding:0 !important;}
+  .acciones,.no-print{display:none !important;}
+  .print-wrap{max-width:100%;padding:0;}
+  .cert{box-shadow:none !important;border-radius:0;padding:30px 30px;page-break-inside:avoid;}
+  .cert::after,.cert::before{display:block !important;}
+  .vigencia{background:#080808 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .garantia-sello,.cert-eyebrow{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+}
+
+@media(max-width:640px){
+  .cert{padding:30px 22px;}
+  .cert::before{inset:8px;}
+  .cert::after{inset:11px;}
+  .cert-h1{font-size:28px;}
+  .datos-grid{grid-template-columns:1fr;gap:10px;padding:14px;}
+  .firmas{grid-template-columns:1fr;gap:30px;}
+  .vig-fecha{font-size:14px;}
+}
+</style>
+</head>
+<body>
+
+<div class="print-wrap">
+  <div id="contenido">
+    <div class="loading">
+      <div class="loading-spin"></div>
+      <div>Generando certificado...</div>
+    </div>
+  </div>
+</div>
+
+<div class="acciones no-print" id="acciones" style="display:none">
+  <a href="#" class="btn-act btn-back" onclick="history.back();return false">← Volver</a>
+  <button class="btn-act btn-print" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
+  <a class="btn-act btn-wa" id="btn-wa-share" target="_blank">💬 Compartir</a>
+</div>
+
+<script>
+var SB='https://bqlgfmqcefledqyodkii.supabase.co'
+var SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+var db=null
+function getDB(){if(!db)db=supabase.createClient(SB,SK);return db}
+
+var PLAN_DEFS={
+  diagnostico:{
+    nombre:'Diagnóstico Pre-RT',
+    valor:'$89.000',
+    badge:'CERTIFICADO DE INSPECCIÓN',
+    titulo_grande:'Inspección',
+    titulo_cursivo:'Técnica',
+    garantia_titulo:'Validez del informe técnico',
+    garantia_texto:'<b>Serviruta</b> certifica que ha ejecutado un proceso completo de inspección técnica preventiva sobre el camión arriba identificado, evaluando los <b>nueve puntos de la revisión técnica Clase A2</b> establecidos por el Ministerio de Transportes y Telecomunicaciones de Chile, a través de sus técnicos especializados en línea pesada y con instrumental adecuado (luxómetro, opacímetro portátil, scanner profesional y herramientas de medición certificadas).',
+    condiciones:[
+      'El informe técnico tiene una validez de 15 días corridos desde la fecha de emisión.',
+      'La evaluación se basa en el estado del camión en el momento de la inspección.',
+      'Esta modalidad incluye sólo el diagnóstico técnico. No incluye reparaciones.',
+      'Si el cliente decide reparar las fallas detectadas, podrá acceder a una bonificación equivalente al valor del Diagnóstico Pre-RT al contratar Modalidad 2 o 3 dentro de los siguientes 15 días.',
+      'La aprobación o rechazo final corresponde exclusivamente a la planta de revisión técnica certificada designada por el Ministerio de Transportes.'
+    ],
+    vigencia_titulo:'Validez del informe técnico',
+    vigencia_dias:15,
+    vigencia_detalle:'Bonificación al contratar reparación dentro de este plazo'
+  },
+  reparacion:{
+    nombre:'Pre-RT + Reparación',
+    valor:'$249.000',
+    badge:'CERTIFICADO DE GARANTÍA TÉCNICA',
+    titulo_grande:'Garantía',
+    titulo_cursivo:'Técnica',
+    garantia_titulo:'Compromiso de aprobación en planta',
+    garantia_texto:'<b>Serviruta</b> garantiza el trabajo técnico ejecutado sobre el camión arriba identificado, en virtud de la inspección y reparaciones realizadas bajo el protocolo <b>Pre-RT + Reparación</b>. Si el vehículo es rechazado en la planta de revisión técnica certificada por <b>causa atribuible a alguno de los puntos efectivamente revisados o reparados por nuestro equipo</b>, Serviruta se compromete a regresar al lugar designado por el cliente, sin costo adicional, y corregir el o los puntos que motivaron el rechazo.',
+    condiciones:[
+      'La presente garantía cubre exclusivamente los puntos evaluados y/o reparados consignados en el informe técnico emitido conjuntamente con este certificado.',
+      'No cubre fallas o desperfectos sobrevenidos por el uso posterior del vehículo entre la fecha del servicio y la fecha de revisión en planta.',
+      'El cliente debe comunicar el rechazo a Serviruta dentro de los 5 días corridos desde la planta, adjuntando el certificado de rechazo oficial.',
+      'No cubre puntos que el cliente decidió no reparar tras la cotización entregada.',
+      'No cubre fallas en componentes que requerían reemplazo y no fueron autorizados por el cliente.',
+      'Esta garantía aplica solo a la primera presentación a la planta posterior al servicio.'
+    ],
+    vigencia_titulo:'Vigencia de la garantía',
+    vigencia_dias:30,
+    vigencia_detalle:'Plazo para presentar el camión a la planta de revisión técnica'
+  },
+  dpf:{
+    nombre:'Pre-RT + Limpieza DPF',
+    valor:'$389.000',
+    badge:'CERTIFICADO DE GARANTÍA PREMIUM',
+    titulo_grande:'Garantía',
+    titulo_cursivo:'Premium DPF',
+    garantia_titulo:'Compromiso de aprobación por emisiones',
+    garantia_texto:'<b>Serviruta</b> certifica haber ejecutado el protocolo completo <b>Pre-RT + Limpieza DPF</b> sobre el camión arriba identificado, incluyendo diagnóstico integral, reparaciones menores, doble regeneración forzada del filtro de partículas (DPF/FAP), limpieza química del sistema de escape y verificación del sistema SCR/AdBlue cuando corresponde. Si el vehículo es rechazado en la planta de revisión técnica certificada por <b>causa de opacidad o emisiones de gases</b>, Serviruta se compromete a realizar un <b>segundo proceso completo de limpieza DPF sin costo adicional</b> al cliente.',
+    condiciones:[
+      'La presente garantía cubre el rechazo en planta por opacidad o emisiones gaseosas únicamente.',
+      'Para activar la garantía el cliente debe presentar el certificado de rechazo oficial emitido por la planta.',
+      'Esta garantía no cubre fallas mecánicas sobrevenidas posteriores al servicio (motor, inyectores, bomba inyectora).',
+      'Si el rechazo se debe a un componente colapsado físicamente (DPF cristalizado, inyectores con falla mecánica, sensores quemados), Serviruta cotizará por separado el reemplazo, descontando el valor de la limpieza ya ejecutada.',
+      'La garantía aplica solo a la primera presentación a la planta posterior al servicio, dentro del plazo de 30 días.',
+      'Para mantener la efectividad del servicio, el cliente debe seguir las recomendaciones de mantención entregadas en el informe (calidad del diésel, viajes en carretera periódicos, aceite Low SAPS, nivel adecuado de AdBlue).'
+    ],
+    vigencia_titulo:'Vigencia de la garantía',
+    vigencia_dias:30,
+    vigencia_detalle:'Segundo intento de limpieza DPF sin costo si reprueba por opacidad'
+  }
+}
+
+function getParam(name){
+  var m=new RegExp('[?&]'+name+'=([^&]+)').exec(location.search)
+  return m?decodeURIComponent(m[1]):null
+}
+
+function fmtFecha(d){
+  if(!d)return ''
+  var f=new Date(d)
+  return f.toLocaleDateString('es-CL',{day:'2-digit',month:'long',year:'numeric'})
+}
+
+function fmtFechaCorta(d){
+  if(!d)return ''
+  var f=new Date(d)
+  return f.toLocaleDateString('es-CL',{day:'2-digit',month:'2-digit',year:'numeric'})
+}
+
+function addDays(date,days){
+  var d=new Date(date)
+  d.setDate(d.getDate()+days)
+  return d
+}
+
+function numCert(id,plan){
+  var prefix=plan==='dpf'?'PRT-DPF':plan==='reparacion'?'PRT-REP':'PRT-DIA'
+  if(!id)return prefix+'-'+Date.now().toString().slice(-6)
+  return prefix+'-'+id.replace(/-/g,'').slice(-8).toUpperCase()
+}
+
+async function cargar(){
+  var id=getParam('id')
+  var planParam=getParam('plan')
+  if(!id){
+    document.getElementById('contenido').innerHTML='<div class="loading"><div style="color:var(--rojo);font-size:14px;margin-bottom:8px">⚠ ID requerido</div><div style="font-size:12px;color:var(--txt3)">URL: ?id=[uuid-inspeccion]&plan=[diagnostico|reparacion|dpf]</div></div>'
+    return
+  }
+  var r=await getDB().from('inspecciones').select('*').eq('id',id).single()
+  if(!r.data){
+    document.getElementById('contenido').innerHTML='<div class="loading"><div style="color:var(--rojo)">⚠ Inspección no encontrada</div></div>'
+    return
+  }
+  // Determinar plan: viene por URL o de las etiquetas
+  var plan=planParam||(r.data.etiquetas||{}).plan||'reparacion'
+  if(!PLAN_DEFS[plan])plan='reparacion'
+  render(r.data,plan)
+}
+
+function genQR(text){
+  try{
+    var qr=qrcode(0,'L')
+    qr.addData(text)
+    qr.make()
+    return qr.createImgTag(4,4)
+  }catch(e){
+    return ''
+  }
+}
+
+function render(insp,plan){
+  var def=PLAN_DEFS[plan]
+  var fechaServicio=insp.fecha||insp.created_at
+  var fechaVenc=addDays(fechaServicio,def.vigencia_dias)
+  var linkInforme=location.origin+location.pathname.replace('certificado-garantia.html','informe-pre-rt.html')+'?id='+insp.id
+
+  var qrHTML=genQR(linkInforme)
+
+  var html='<div class="cert">'
+  html+='<div class="sello-agua">SERVIRUTA</div>'
+  html+='<div class="cert-content">'
+
+  // CABECERA
+  html+='<div class="cert-cab">'+
+    '<div class="cert-logo">SERVI<span>RUTA</span></div>'+
+    '<div class="cert-tagline">Mecánica móvil profesional</div>'+
+  '</div>'
+
+  // TITULO
+  html+='<div class="cert-titulo">'+
+    '<div class="cert-eyebrow">'+def.badge+'</div>'+
+    '<div class="cert-h1">'+def.titulo_grande+' <span class="rojo">'+def.titulo_cursivo+'</span></div>'+
+    '<div class="cert-sub">Servicio: '+def.nombre+' · '+def.valor+'</div>'+
+    '<div class="cert-num">N° '+numCert(insp.id,plan)+'</div>'+
+  '</div>'
+
+  // DECLARACION
+  html+='<div class="declaracion">'+
+    'El presente documento se emite a favor de <span class="nombre">'+(insp.cliente||'el cliente')+'</span>'+
+    ' por la prestación del servicio <span class="servicio">'+def.nombre+'</span> ejecutado sobre el vehículo de su propiedad, con fecha '+fmtFecha(fechaServicio)+'.'+
+  '</div>'
+
+  // DATOS
+  html+='<div class="datos-grid">'+
+    '<div class="dato"><div class="dato-lbl">Cliente</div><div class="dato-val">'+(insp.cliente||'-')+'</div></div>'+
+    '<div class="dato"><div class="dato-lbl">Teléfono</div><div class="dato-val">'+(insp.telefono||'-')+'</div></div>'+
+    '<div class="dato"><div class="dato-lbl">Patente del vehículo</div><div class="dato-val patente">'+(insp.patente||'-')+'</div></div>'+
+    '<div class="dato"><div class="dato-lbl">Vehículo</div><div class="dato-val">'+(insp.vehiculo||'-')+'</div></div>'+
+    '<div class="dato"><div class="dato-lbl">Fecha del servicio</div><div class="dato-val">'+fmtFecha(fechaServicio)+'</div></div>'+
+    '<div class="dato"><div class="dato-lbl">Lugar</div><div class="dato-val">'+(insp.zona||'Región Metropolitana')+'</div></div>'+
+  '</div>'
+
+  // GARANTÍA
+  html+='<div class="garantia-box">'+
+    '<div class="garantia-sello">'+(plan==='diagnostico'?'INSPECCIÓN':'GARANTÍA')+'</div>'+
+    '<div class="garantia-titulo">'+def.garantia_titulo+'</div>'+
+    '<div class="garantia-texto">'+def.garantia_texto+'</div>'+
+    '<div class="condiciones-h">Condiciones y alcances</div>'+
+    '<ul class="condiciones-list">'+
+      def.condiciones.map(function(c){return '<li>'+c+'</li>'}).join('')+
+    '</ul>'+
+  '</div>'
+
+  // VIGENCIA
+  html+='<div class="vigencia">'+
+    '<div class="vig-info">'+
+      '<div class="vig-lbl">'+def.vigencia_titulo+'</div>'+
+      '<div class="vig-detalle">'+def.vigencia_detalle+'</div>'+
+    '</div>'+
+    '<div style="text-align:right">'+
+      '<div class="vig-fecha">Hasta '+fmtFechaCorta(fechaVenc)+'</div>'+
+      '<div class="vig-detalle">'+def.vigencia_dias+' días desde la emisión</div>'+
+    '</div>'+
+  '</div>'
+
+  // TÉRMINOS GENERALES
+  html+='<div class="terminos">'+
+    '<div class="terminos-h">Términos generales</div>'+
+    '<div class="terminos-t">'+
+      'Serviruta es una empresa chilena de mecánica móvil profesional con operación en la Región Metropolitana. El presente certificado se rige por las normas del Código de Comercio de Chile y la Ley del Consumidor N° 19.496. Para hacer efectivos los derechos derivados de este documento, el titular debe contactar a Serviruta a través de los canales oficiales: WhatsApp +56 9 4521 0814 o correo contacto@serviruta.cl. La prestación del servicio se realizó con consentimiento expreso del cliente, quien declara haber recibido conforme el informe técnico anexo y las recomendaciones correspondientes. El presente certificado constituye un compromiso voluntario de Serviruta más allá de las obligaciones legales aplicables.'+
+    '</div>'+
+  '</div>'
+
+  // FIRMAS
+  html+='<div class="firmas">'+
+    '<div class="firma-col">'+
+      '<div class="firma-linea"></div>'+
+      '<div class="firma-nom">'+(insp.tecnico||'Técnico Serviruta')+'</div>'+
+      '<div class="firma-rol">Técnico responsable</div>'+
+      '<div class="firma-rut">Serviruta SpA</div>'+
+    '</div>'+
+    '<div class="firma-col">'+
+      '<div class="firma-linea"></div>'+
+      '<div class="firma-nom">'+(insp.cliente||'Cliente')+'</div>'+
+      '<div class="firma-rol">Cliente / Recibe conforme</div>'+
+      '<div class="firma-rut">RUT: ____________________</div>'+
+    '</div>'+
+  '</div>'
+
+  // PIE
+  html+='<div class="pie">'+
+    '<div class="pie-info">'+
+      '<div><b>Serviruta</b> · Mecánica móvil profesional</div>'+
+      '<div>WhatsApp +56 9 4521 0814 · contacto@serviruta.cl · serviruta.cl</div>'+
+      '<div style="margin-top:6px">Emitido el '+fmtFecha(new Date())+' en la Región Metropolitana, Chile.</div>'+
+      '<div style="margin-top:4px;color:#bbb">Certificado N° '+numCert(insp.id,plan)+' · Documento original en formato digital y físico.</div>'+
+    '</div>'+
+    '<div class="qr-box">'+
+      '<div class="qr-img">'+qrHTML+'</div>'+
+      '<div class="qr-lbl">Ver informe</div>'+
+    '</div>'+
+  '</div>'
+
+  html+='</div></div>'
+
+  document.getElementById('contenido').innerHTML=html
+  document.getElementById('acciones').style.display='flex'
+
+  // WhatsApp share
+  var nom=insp.cliente?insp.cliente.split(' ')[0]:''
+  var msg='Hola '+nom+'!\n\nTe envío el '+def.badge.toLowerCase()+' oficial por el servicio '+def.nombre+' realizado en tu camión '+(insp.patente||'')+'.\n\n📄 Certificado: '+location.href+'\n\nGuárdalo para cualquier consulta o para hacer efectiva la garantía.\n\nEquipo Serviruta\n+56 9 4521 0814'
+  var tel=(insp.telefono||'').replace(/[^0-9]/g,'')
+  if(tel && !tel.startsWith('56'))tel='56'+tel
+  document.getElementById('btn-wa-share').href=tel?'https://wa.me/'+tel+'?text='+encodeURIComponent(msg):'https://wa.me/?text='+encodeURIComponent(msg)
+
+  document.title='Certificado '+def.badge+' · '+(insp.patente||'')
+}
+
+cargar()
+</script>
+</body>
+</html>

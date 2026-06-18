@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Serviruta · Protocolos Pre-RT Camión</title>
+<title>Serviruta · Protocolos RT Camión</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -139,16 +139,17 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;l
 
 <div class="nav-top no-print">
   <a href="tecnico-menu.html" class="nav-back">←</a>
-  <div class="nav-titulo">Protocolos Pre-RT Camión</div>
+  <div class="nav-titulo">Protocolos RT Camión</div>
   <div class="nav-btns">
     <button class="nav-btn print" onclick="window.print()">🖨️ PDF</button>
   </div>
 </div>
 
 <div class="selector no-print">
-  <div class="tab active" data-p="p1">Modalidad 1 · Diagnóstico</div>
-  <div class="tab" data-p="p2">Modalidad 2 · Reparación</div>
-  <div class="tab" data-p="p3">Modalidad 3 · DPF</div>
+  <div class="tab active" data-p="p1">Pre-RT · Diagnóstico</div>
+  <div class="tab" data-p="p2">Pre-RT · Reparación</div>
+  <div class="tab" data-p="p3">Pre-RT · DPF</div>
+  <div class="tab" data-p="p4" style="border-color:rgba(96,165,250,0.4)">📋 RT Oficial</div>
 </div>
 
 <div class="doc">
@@ -1033,6 +1034,202 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;l
   <div class="check-row"><div class="check-box"></div><div>Certificado de garantía 30 días entregado</div></div>
   <div class="check-row"><div class="check-box"></div><div>Recomendaciones de mantención explicadas al cliente</div></div>
   <div class="check-row"><div class="check-box"></div><div>Cobro confirmado: plan + AdBlue + repuestos si hubo</div></div>
+
+</div>
+
+
+<!-- ============ PROTOCOLO 4 — RT OFICIAL EN PLANTA ============ -->
+<div class="proto" id="p4">
+
+  <div class="portada">
+    <div class="portada-eyebrow">Información General · Revisión Técnica Oficial</div>
+    <div class="portada-h1">Revisión Técnica <span class="rojo">Clase A2</span></div>
+    <div class="portada-sub">Todo lo que el técnico Serviruta y el cliente deben saber sobre cómo funciona la revisión técnica oficial de camiones en Chile, las 9 estaciones de la planta certificada, multas vigentes y plantas autorizadas en la Región Metropolitana.</div>
+    <div class="specs-grid">
+      <div class="spec"><div class="spec-lbl">Marco legal</div><div class="spec-val">Ley 18.290 · DS 156</div></div>
+      <div class="spec"><div class="spec-lbl">Clase vehículo</div><div class="spec-val rojo">A2 / Pesados</div></div>
+      <div class="spec"><div class="spec-lbl">Frecuencia</div><div class="spec-val">Cada 6 a 12 meses</div></div>
+      <div class="spec"><div class="spec-lbl">Multa por vencer</div><div class="spec-val">$69K - $104K</div></div>
+    </div>
+  </div>
+
+  <h2 class="sec-h2"><span class="sec-num">01</span> ¿Qué evalúa la planta?</h2>
+  <div class="herramientas-box">
+    <div class="herramienta-row"><div class="h-icon">📄</div><div class="h-nom"><b>1. Identificación del vehículo</b></div><div class="h-uso">Permiso · SOAP · Padrón · Chasis</div></div>
+    <div class="herramienta-row"><div class="h-icon">👁️</div><div class="h-nom"><b>2. Inspección visual</b></div><div class="h-uso">Carrocería · Fugas · Documentación</div></div>
+    <div class="herramienta-row"><div class="h-icon">💡</div><div class="h-nom"><b>3. Sistema de luces</b></div><div class="h-uso">Luxómetro · Enfoque · Intensidad</div></div>
+    <div class="herramienta-row"><div class="h-icon">📐</div><div class="h-nom"><b>4. Alineación</b></div><div class="h-uso">Medidor de deriva lateral</div></div>
+    <div class="herramienta-row"><div class="h-icon">🛑</div><div class="h-nom"><b>5. Frenómetro</b></div><div class="h-uso">Eficacia y balance de frenos</div></div>
+    <div class="herramienta-row"><div class="h-icon">🔧</div><div class="h-nom"><b>6. Detector de holguras</b></div><div class="h-uso">Rótulas · Cremallera · Crucetas</div></div>
+    <div class="herramienta-row"><div class="h-icon">🌀</div><div class="h-nom"><b>7. Verificador de suspensión</b></div><div class="h-uso">Test EUSAMA o BOGE</div></div>
+    <div class="herramienta-row"><div class="h-icon">💨</div><div class="h-nom"><b>8. Analizador de gases</b></div><div class="h-uso">CO, HC, NOx (gasolina)</div></div>
+    <div class="herramienta-row"><div class="h-icon">🌫️</div><div class="h-nom"><b>9. Opacímetro</b></div><div class="h-uso">Coeficiente K - humo diésel</div></div>
+  </div>
+
+  <h2 class="sec-h2"><span class="sec-num">02</span> Frecuencia de revisión técnica camiones</h2>
+
+  <div class="estacion-proc">
+    <div class="estacion-head">
+      <div class="estacion-num">A</div>
+      <div class="estacion-info">
+        <div class="estacion-nom">Camión liviano (hasta 3.500 kg)</div>
+        <div class="estacion-tiempo">Carga liviana o transporte privado</div>
+      </div>
+    </div>
+    <div class="estacion-body">
+      <div class="paso-row">
+        <div class="paso-num">1</div>
+        <div class="paso-info">
+          <div class="paso-tit">Revisión técnica anual</div>
+          <div class="paso-desc">Una vez al año a partir del segundo año de inscripción. <b>Plantas Clase A2 o B</b> según uso.</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">2</div>
+        <div class="paso-info">
+          <div class="paso-tit">Análisis de gases adicional</div>
+          <div class="paso-desc">Si es diésel: <b>cada 4 meses certificación gases</b> (test de opacidad solamente).</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="estacion-proc">
+    <div class="estacion-head">
+      <div class="estacion-num">B</div>
+      <div class="estacion-info">
+        <div class="estacion-nom">Camión mediano y pesado (sobre 3.500 kg)</div>
+        <div class="estacion-tiempo">Transporte de carga remunerada</div>
+      </div>
+    </div>
+    <div class="estacion-body">
+      <div class="paso-row">
+        <div class="paso-num">1</div>
+        <div class="paso-info">
+          <div class="paso-tit">Revisión técnica cada 6 meses</div>
+          <div class="paso-desc">Camiones de carga sobre 3.500 kg deben revisar <b>cada 6 meses</b> en planta Clase A2.</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">2</div>
+        <div class="paso-info">
+          <div class="paso-tit">Tacógrafo</div>
+          <div class="paso-desc">Si el camión es de transporte interurbano, sustancias peligrosas, o sobre 360 HP: <b>requiere tacógrafo certificado vigente</b>. Sin certificado, reprueba.</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">3</div>
+        <div class="paso-info">
+          <div class="paso-tit">Gases adicional</div>
+          <div class="paso-desc">Para los meses en que no toca RT completa, los diésel sobre 3.500 kg requieren <b>análisis de gases cada 4 meses</b>.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="sec-h2"><span class="sec-num">03</span> Multas e infracciones</h2>
+  <div class="alerta peligro"><b>⚠ Circular sin RT vigente:</b> infracción grave según Ley de Tránsito.<br><br>
+  · Multa de <b>1 a 1.5 UTM</b> (entre $69.000 y $104.000 aproximadamente según valor UTM vigente).<br>
+  · Recargo automático al sistema TAG en autopistas urbanas.<br>
+  · Posible retiro del vehículo de circulación en fiscalización vial.<br>
+  · Si reincide, puede afectar permiso de circulación del año siguiente.</div>
+
+  <div class="alerta"><b>⚠ RT vencida en empresas:</b> si el camión es de empresa, además de la multa al conductor, la empresa propietaria también es responsable y puede recibir sanciones administrativas adicionales según fiscalización.</div>
+
+  <h2 class="sec-h2"><span class="sec-num">04</span> Plantas Clase A2 en la Región Metropolitana</h2>
+  <div class="repuestos-grid">
+    <div class="repuesto"><div class="rep-nom">Bureau Veritas</div><div class="rep-detalle">Quilicura · Maipú · San Bernardo · Pudahuel</div><div class="rep-precio">$25.000 - $40.000</div></div>
+    <div class="repuesto"><div class="rep-nom">CESMEC</div><div class="rep-detalle">Estación Central · Pudahuel</div><div class="rep-precio">$25.000 - $40.000</div></div>
+    <div class="repuesto"><div class="rep-nom">Applus</div><div class="rep-detalle">Maipú · Quilicura</div><div class="rep-precio">$25.000 - $40.000</div></div>
+    <div class="repuesto"><div class="rep-nom">DEKRA</div><div class="rep-detalle">Pudahuel · San Bernardo</div><div class="rep-precio">$25.000 - $40.000</div></div>
+    <div class="repuesto"><div class="rep-nom">SGS</div><div class="rep-detalle">Maipú</div><div class="rep-precio">$25.000 - $40.000</div></div>
+    <div class="repuesto"><div class="rep-nom">DICTUC</div><div class="rep-detalle">Macul</div><div class="rep-precio">$25.000 - $40.000</div></div>
+  </div>
+  <div class="alerta info"><b>ℹ Recomendación al cliente:</b> agendar con anticipación. Las plantas Clase A2 tienen menos horarios disponibles que las Clase B (autos particulares). En meses de fin de año la demanda sube y puede haber espera de 1-2 semanas.</div>
+
+  <h2 class="sec-h2"><span class="sec-num">05</span> Documentos que el cliente debe llevar</h2>
+  <div class="entregable"><div class="entregable-icon">📄</div><div class="entregable-info"><div class="entregable-tit">Permiso de circulación vigente</div><div class="entregable-desc">Original o copia validada electrónicamente.</div></div></div>
+  <div class="entregable"><div class="entregable-icon">📄</div><div class="entregable-info"><div class="entregable-tit">SOAP del año en curso</div><div class="entregable-desc">Seguro Obligatorio de Accidentes Personales vigente.</div></div></div>
+  <div class="entregable"><div class="entregable-icon">📄</div><div class="entregable-info"><div class="entregable-tit">Padrón o certificado de inscripción</div><div class="entregable-desc">Acreditando propiedad y datos técnicos del vehículo.</div></div></div>
+  <div class="entregable"><div class="entregable-icon">📄</div><div class="entregable-info"><div class="entregable-tit">Cédula de identidad del propietario o conductor</div><div class="entregable-desc">Para validar identidad en el ingreso.</div></div></div>
+  <div class="entregable"><div class="entregable-icon">📄</div><div class="entregable-info"><div class="entregable-tit">Certificado de tacógrafo (si aplica)</div><div class="entregable-desc">Vigente para camiones interurbanos, sustancias peligrosas o +360 HP.</div></div></div>
+  <div class="entregable"><div class="entregable-icon">📄</div><div class="entregable-info"><div class="entregable-tit">RT anterior</div><div class="entregable-desc">Para validar continuidad de cumplimiento.</div></div></div>
+
+  <h2 class="sec-h2"><span class="sec-num">06</span> Cómo Serviruta complementa la RT oficial</h2>
+
+  <div class="alerta info"><b>ℹ Importante diferenciación:</b><br><br>
+  <b>Serviruta NO es una planta de revisión técnica.</b> No emitimos certificados oficiales. Lo que hacemos es <b>preparar tu camión para que pase la RT a la primera</b>, ahorrando tiempo, dinero y multas.<br><br>
+  Nuestra propuesta es ejecutar la <b>misma evaluación que hace la planta</b>, pero en tu base (sin trasladar el camión), permitiendo corregir las fallas antes de presentarse oficialmente.</div>
+
+  <div class="estacion-proc">
+    <div class="estacion-head">
+      <div class="estacion-num">A</div>
+      <div class="estacion-info">
+        <div class="estacion-nom">Antes de la RT oficial</div>
+        <div class="estacion-tiempo">7-15 días antes</div>
+      </div>
+    </div>
+    <div class="estacion-body">
+      <div class="paso-row">
+        <div class="paso-num">1</div>
+        <div class="paso-info">
+          <div class="paso-tit">Pre-RT Serviruta</div>
+          <div class="paso-desc">Ejecutar Modalidad 1, 2 o 3 según condición del camión. Detectar y corregir fallas en el lugar.</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">2</div>
+        <div class="paso-info">
+          <div class="paso-tit">Entrega de informe y certificado</div>
+          <div class="paso-desc">El cliente recibe informe técnico, recomendaciones y certificado de garantía Serviruta.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="estacion-proc">
+    <div class="estacion-head">
+      <div class="estacion-num">B</div>
+      <div class="estacion-info">
+        <div class="estacion-nom">El día de la RT oficial</div>
+        <div class="estacion-tiempo">Cliente acude a planta</div>
+      </div>
+    </div>
+    <div class="estacion-body">
+      <div class="paso-row">
+        <div class="paso-num">1</div>
+        <div class="paso-info">
+          <div class="paso-tit">Cliente acude solo a la planta</div>
+          <div class="paso-desc">Llevando los documentos requeridos y el certificado Serviruta como respaldo.</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">2</div>
+        <div class="paso-info">
+          <div class="paso-tit">Si pasa: termina el ciclo</div>
+          <div class="paso-desc">Cliente queda con RT vigente y testimonio del trabajo de calidad de Serviruta.</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">3</div>
+        <div class="paso-info">
+          <div class="paso-tit">Si reprueba (con Modalidad 2 o 3)</div>
+          <div class="paso-desc">El cliente activa la garantía Serviruta: si reprueba en un punto que revisamos, volvemos sin costo a corregirlo en su base.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="sec-h2"><span class="sec-num">07</span> Checklist para entregar al cliente</h2>
+  <div class="check-row"><div class="check-box"></div><div>Permiso de circulación vigente confirmado</div></div>
+  <div class="check-row"><div class="check-box"></div><div>SOAP vigente confirmado</div></div>
+  <div class="check-row"><div class="check-box"></div><div>Padrón del vehículo en regla</div></div>
+  <div class="check-row"><div class="check-box"></div><div>Tacógrafo certificado (si aplica)</div></div>
+  <div class="check-row"><div class="check-box"></div><div>Pre-RT Serviruta ejecutada con score ≥80%</div></div>
+  <div class="check-row"><div class="check-box"></div><div>Cliente informado de la planta más cercana</div></div>
+  <div class="check-row"><div class="check-box"></div><div>Cliente conoce horario y hora estimada de espera</div></div>
+  <div class="check-row"><div class="check-box"></div><div>Cliente conoce la garantía Serviruta si reprueba</div></div>
+  <div class="check-row"><div class="check-box"></div><div>Certificado de inspección/garantía entregado al cliente</div></div>
 
 </div>
 

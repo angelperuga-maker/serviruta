@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta · Protocolos Pre-RT Camión</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --rojo:#E8210A;--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;
+  --txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;
+  --verde:#22C55E;--amarillo:#F5C518;--naranja:#FB923C;--azul:#60A5FA;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;line-height:1.6;}
+
+/* HEADER NAV */
+.nav-top{background:var(--c1);border-bottom:1px solid var(--borde);padding:12px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;max-width:900px;margin:0 auto;}
+.nav-back{background:none;border:1px solid var(--borde);color:var(--txt3);font-size:11px;padding:5px 12px;border-radius:6px;cursor:pointer;text-decoration:none;}
+.nav-titulo{font-family:"Syne",sans-serif;font-weight:800;font-size:14px;flex:1;}
+.nav-btns{display:flex;gap:6px;}
+.nav-btn{background:var(--c3);border:1px solid var(--borde);color:var(--txt);font-family:"Syne",sans-serif;font-weight:700;font-size:11px;padding:6px 12px;border-radius:6px;cursor:pointer;text-decoration:none;}
+.nav-btn.print{background:var(--rojo);color:#fff;border:none;}
+
+/* SELECTOR PROTOCOLOS */
+.selector{max-width:900px;margin:0 auto;padding:14px;display:flex;gap:6px;overflow-x:auto;}
+.tab{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:10px 16px;font-family:"Syne",sans-serif;font-weight:700;font-size:12px;color:var(--txt3);white-space:nowrap;cursor:pointer;flex-shrink:0;}
+.tab.active{background:var(--rojo);color:#fff;border-color:var(--rojo);}
+
+/* CONTAINER */
+.doc{max-width:900px;margin:0 auto;padding:0 14px 60px;}
+.proto{display:none;}
+.proto.active{display:block;}
+
+/* PORTADA PROTOCOLO */
+.portada{background:linear-gradient(135deg,var(--c1) 0%,var(--c2) 100%);border:1px solid var(--borde);border-radius:14px;padding:30px;margin-bottom:20px;}
+.portada-eyebrow{display:inline-block;background:rgba(232,33,10,0.12);color:var(--rojo);font-family:"Syne",sans-serif;font-weight:700;font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border-radius:20px;}
+.portada-h1{font-family:"Syne",sans-serif;font-weight:900;font-size:32px;line-height:1.15;margin:14px 0 10px;}
+.portada-h1 .rojo{color:var(--rojo);}
+.portada-sub{font-size:14px;color:var(--txt2);max-width:600px;margin-bottom:18px;}
+
+.specs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-top:14px;}
+.spec{background:var(--c3);border:1px solid var(--borde);border-radius:8px;padding:12px;}
+.spec-lbl{font-size:9px;font-weight:700;letter-spacing:1px;color:var(--txt3);text-transform:uppercase;margin-bottom:4px;}
+.spec-val{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;color:var(--txt);}
+.spec-val.rojo{color:var(--rojo);}
+.spec-val.verde{color:var(--verde);}
+
+/* SECCIONES */
+.sec-h2{font-family:"Syne",sans-serif;font-weight:800;font-size:18px;margin:28px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--rojo);display:flex;align-items:center;gap:8px;}
+.sec-num{background:var(--rojo);color:#fff;padding:3px 10px;border-radius:6px;font-size:13px;font-weight:800;}
+.sec-h3{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;color:var(--rojo);margin:18px 0 8px;}
+
+/* HERRAMIENTAS */
+.herramientas-box{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:16px;margin-bottom:16px;}
+.herramienta-row{display:flex;align-items:center;gap:10px;padding:6px 0;font-size:13px;border-bottom:1px dashed var(--borde);}
+.herramienta-row:last-child{border-bottom:none;}
+.h-icon{width:28px;height:28px;border-radius:6px;background:var(--c3);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.h-nom{flex:1;color:var(--txt);}
+.h-uso{font-size:11px;color:var(--txt3);}
+
+/* ESTACIONES PROCEDIMIENTO */
+.estacion-proc{background:var(--c2);border:1px solid var(--borde);border-radius:12px;margin-bottom:14px;overflow:hidden;}
+.estacion-head{background:linear-gradient(90deg,var(--c3),var(--c2));padding:14px 18px;display:flex;align-items:center;gap:12px;}
+.estacion-num{font-family:"Syne",sans-serif;font-weight:900;font-size:24px;color:var(--rojo);line-height:1;}
+.estacion-info{flex:1;}
+.estacion-nom{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;}
+.estacion-tiempo{font-size:11px;color:var(--txt3);margin-top:2px;}
+.estacion-body{padding:16px 18px;}
+
+/* PASOS */
+.paso-row{display:flex;gap:12px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px dashed var(--borde);}
+.paso-row:last-child{border-bottom:none;margin-bottom:0;padding-bottom:0;}
+.paso-num{width:28px;height:28px;background:var(--c3);color:var(--rojo);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:"Syne",sans-serif;font-weight:800;font-size:12px;flex-shrink:0;}
+.paso-info{flex:1;}
+.paso-tit{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;margin-bottom:4px;}
+.paso-desc{font-size:13px;color:var(--txt2);line-height:1.6;}
+.paso-desc b{color:var(--txt);}
+
+/* CRITERIOS */
+.criterios-box{background:linear-gradient(135deg,rgba(34,197,94,0.05),rgba(232,33,10,0.05));border:1px solid var(--borde);border-radius:10px;padding:14px;margin-top:10px;}
+.crit-row{display:grid;grid-template-columns:80px 1fr;gap:10px;padding:5px 0;font-size:12px;}
+.crit-tag{font-family:"Syne",sans-serif;font-weight:700;font-size:10px;text-align:center;padding:3px 6px;border-radius:4px;text-transform:uppercase;letter-spacing:0.5px;}
+.crit-ok{background:rgba(34,197,94,0.15);color:var(--verde);}
+.crit-obs{background:rgba(245,197,24,0.15);color:var(--amarillo);}
+.crit-no{background:rgba(232,33,10,0.15);color:var(--rojo);}
+
+/* ALERTA */
+.alerta{background:rgba(245,197,24,0.08);border:1px solid var(--amarillo);border-left:4px solid var(--amarillo);border-radius:8px;padding:12px 14px;margin:14px 0;font-size:13px;color:var(--txt2);}
+.alerta b{color:var(--amarillo);}
+.alerta.peligro{background:rgba(232,33,10,0.08);border-color:var(--rojo);border-left-color:var(--rojo);}
+.alerta.peligro b{color:var(--rojo);}
+.alerta.info{background:rgba(96,165,250,0.08);border-color:var(--azul);border-left-color:var(--azul);}
+.alerta.info b{color:var(--azul);}
+
+/* REPUESTOS */
+.repuestos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:10px;}
+.repuesto{background:var(--c3);border:1px solid var(--borde);border-radius:8px;padding:12px;}
+.rep-nom{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;}
+.rep-detalle{font-size:11px;color:var(--txt3);margin-top:3px;}
+.rep-precio{font-family:"Syne",sans-serif;font-weight:800;color:var(--verde);font-size:13px;margin-top:6px;}
+
+/* ENTREGABLES */
+.entregable{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin-bottom:8px;display:flex;align-items:flex-start;gap:12px;}
+.entregable-icon{width:36px;height:36px;border-radius:8px;background:rgba(232,33,10,0.1);color:var(--rojo);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.entregable-info{flex:1;}
+.entregable-tit{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;}
+.entregable-desc{font-size:11px;color:var(--txt3);margin-top:2px;}
+
+/* CHECKLIST FINAL */
+.check-row{display:flex;gap:10px;padding:8px 0;border-bottom:1px dashed var(--borde);font-size:13px;align-items:flex-start;}
+.check-row:last-child{border-bottom:none;}
+.check-box{width:18px;height:18px;border:1.5px solid var(--rojo);border-radius:4px;flex-shrink:0;margin-top:2px;}
+
+/* IMPRESIÓN */
+@media print{
+  body{background:#fff !important;color:#080808 !important;}
+  .nav-top,.selector,.no-print{display:none !important;}
+  .proto{display:block !important;page-break-after:always;}
+  .doc{max-width:100%;padding:0;}
+  .portada,.estacion-proc,.herramientas-box,.criterios-box,.alerta,.repuesto,.entregable,.spec{background:#fff !important;border:1px solid #ccc !important;color:#080808 !important;}
+  .portada{background:#f8f8f8 !important;}
+  .sec-h2{color:#080808 !important;border-bottom-color:var(--rojo) !important;-webkit-print-color-adjust:exact;}
+  .paso-num{background:#080808 !important;color:#fff !important;-webkit-print-color-adjust:exact;}
+  .estacion-num{color:var(--rojo) !important;-webkit-print-color-adjust:exact;}
+  .h-uso,.paso-desc,.rep-detalle,.entregable-desc,.estacion-tiempo,.crit-row,.spec-lbl{color:#666 !important;}
+  .paso-tit,.estacion-nom,.entregable-tit,.rep-nom,.spec-val,.portada-h1{color:#080808 !important;}
+  .sec-num{background:var(--rojo) !important;color:#fff !important;-webkit-print-color-adjust:exact;}
+}
+
+@media(max-width:640px){
+  .portada{padding:20px;}
+  .portada-h1{font-size:22px;}
+  .sec-h2{font-size:15px;}
+}
+</style>
+</head>
+<body>
+
+<div class="nav-top no-print">
+  <a href="tecnico-menu.html" class="nav-back">←</a>
+  <div class="nav-titulo">Protocolos Pre-RT Camión</div>
+  <div class="nav-btns">
+    <button class="nav-btn print" onclick="window.print()">🖨️ PDF</button>
+  </div>
+</div>
+
+<div class="selector no-print">
+  <div class="tab active" data-p="p1">Modalidad 1 · Diagnóstico</div>
+  <div class="tab" data-p="p2">Modalidad 2 · Reparación</div>
+  <div class="tab" data-p="p3">Modalidad 3 · DPF</div>
+</div>
+
+<div class="doc">
+
+<!-- ============ PROTOCOLO 1 — DIAGNÓSTICO ============ -->
+<div class="proto active" id="p1">
+
+  <div class="portada">
+    <div class="portada-eyebrow">Modalidad 1 · Pre-Revisión Técnica</div>
+    <div class="portada-h1">Protocolo de <span class="rojo">Diagnóstico Pre-RT</span></div>
+    <div class="portada-sub">Inspección completa de los 9 puntos que evalúa la planta de revisión técnica Clase A2. Sin reparación. Entrega de reporte técnico con cotización de fallas detectadas.</div>
+    <div class="specs-grid">
+      <div class="spec"><div class="spec-lbl">Valor del servicio</div><div class="spec-val verde">$89.000</div></div>
+      <div class="spec"><div class="spec-lbl">Tiempo estimado</div><div class="spec-val">1 a 2 horas</div></div>
+      <div class="spec"><div class="spec-lbl">Puntos de inspección</div><div class="spec-val rojo">57 puntos</div></div>
+      <div class="spec"><div class="spec-lbl">Garantía</div><div class="spec-val">Diagnóstico</div></div>
+    </div>
+  </div>
+
+  <h2 class="sec-h2"><span class="sec-num">01</span> Equipos y herramientas requeridas</h2>
+  <div class="herramientas-box">
+    <div class="herramienta-row"><div class="h-icon">🔌</div><div class="h-nom"><b>Scanner OBD-II / EOBD profesional</b></div><div class="h-uso">Línea pesada · Lectura DTC</div></div>
+    <div class="herramienta-row"><div class="h-icon">💡</div><div class="h-nom"><b>Luxómetro portátil</b></div><div class="h-uso">Medición de intensidad lumínica</div></div>
+    <div class="herramienta-row"><div class="h-icon">🌫️</div><div class="h-nom"><b>Opacímetro portátil</b></div><div class="h-uso">Test de opacidad humo diésel</div></div>
+    <div class="herramienta-row"><div class="h-icon">📏</div><div class="h-nom"><b>Profundímetro neumáticos</b></div><div class="h-uso">Verificación TWI (mín. 1.6mm)</div></div>
+    <div class="herramienta-row"><div class="h-icon">⚙️</div><div class="h-nom"><b>Manómetro de aire (0-15 bar)</b></div><div class="h-uso">Presión sistema frenos aire</div></div>
+    <div class="herramienta-row"><div class="h-icon">🔦</div><div class="h-nom"><b>Linterna LED de alta potencia</b></div><div class="h-uso">Inspección bajo chasis</div></div>
+    <div class="herramienta-row"><div class="h-icon">📐</div><div class="h-nom"><b>Calibre digital + galga frenos</b></div><div class="h-uso">Medición espesor pastillas/discos</div></div>
+    <div class="herramienta-row"><div class="h-icon">🪞</div><div class="h-nom"><b>Espejo telescópico</b></div><div class="h-uso">Inspección zonas no visibles</div></div>
+    <div class="herramienta-row"><div class="h-icon">📷</div><div class="h-nom"><b>Celular con cámara</b></div><div class="h-uso">Registro fotográfico de hallazgos</div></div>
+    <div class="herramienta-row"><div class="h-icon">📋</div><div class="h-nom"><b>App Serviruta Pre-RT Camión</b></div><div class="h-uso">Registro digital del proceso</div></div>
+  </div>
+
+  <h2 class="sec-h2"><span class="sec-num">02</span> Procedimiento paso a paso</h2>
+
+  <div class="estacion-proc">
+    <div class="estacion-head">
+      <div class="estacion-num">01</div>
+      <div class="estacion-info">
+        <div class="estacion-nom">Identificación del vehículo</div>
+        <div class="estacion-tiempo">⏱ 10 minutos · 6 puntos</div>
+      </div>
+    </div>
+    <div class="estacion-body">
+      <div class="paso-row">
+        <div class="paso-num">1</div>
+        <div class="paso-info">
+          <div class="paso-tit">Verificar documentación</div>
+          <div class="paso-desc">Solicitar al cliente <b>permiso de circulación, SOAP, RT anterior y padrón</b>. Fotografiar cada documento. Verificar vigencias y datos.</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">2</div>
+        <div class="paso-info">
+          <div class="paso-tit">Validar número de chasis y motor</div>
+          <div class="paso-desc">Ubicar <b>chasis</b> en larguero derecho cabina o columna de dirección. Validar <b>motor</b> en block, lado izquierdo. Cotejar contra padrón.</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">3</div>
+        <div class="paso-info">
+          <div class="paso-tit">Inspección de placas patente</div>
+          <div class="paso-desc">Verificar legibilidad, firmeza, sin alteraciones. <b>Placas dobladas, opacas, ilegibles o sueltas reprueban.</b></div>
+        </div>
+      </div>
+      <div class="criterios-box">
+        <div class="crit-row"><span class="crit-tag crit-ok">✓ OK</span><span>Documentación vigente, números coincidentes con padrón, placas legibles y firmes.</span></div>
+        <div class="crit-row"><span class="crit-tag crit-no">✗ RECHAZO</span><span>SOAP o permiso vencidos, chasis/motor adulterados o no coincidentes, placas ilegibles.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="estacion-proc">
+    <div class="estacion-head">
+      <div class="estacion-num">02</div>
+      <div class="estacion-info">
+        <div class="estacion-nom">Inspección visual completa</div>
+        <div class="estacion-tiempo">⏱ 20 minutos · 12 puntos</div>
+      </div>
+    </div>
+    <div class="estacion-body">
+      <div class="paso-row">
+        <div class="paso-num">1</div>
+        <div class="paso-info">
+          <div class="paso-tit">Cabina e interior</div>
+          <div class="paso-desc">Probar <b>plumillas, bocina, cinturones</b> (con anclajes), espejos retrovisores (laterales y panorámico), <b>tablero sin testigos críticos</b> encendidos (motor, ABS, airbag, freno).</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">2</div>
+        <div class="paso-info">
+          <div class="paso-tit">Inspección bajo chasis</div>
+          <div class="paso-desc">Con linterna LED revisar: <b>fugas de aceite</b> en cárter, caja, diferencial · <b>fugas de refrigerante</b> en radiador, mangueras · <b>fugas de combustible o AdBlue</b> · <b>sistema de escape</b> sin perforaciones ni reparaciones precarias.</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">3</div>
+        <div class="paso-info">
+          <div class="paso-tit">Carrocería estructural</div>
+          <div class="paso-desc">Revisar <b>óxido estructural</b> en largueros, soportes, montantes. Verificar parabrisas sin grietas en zona crítica (delante del volante). Inspeccionar kit de seguridad: triángulo reflectante, extintor vigente, chaleco reflectante.</div>
+        </div>
+      </div>
+      <div class="alerta peligro"><b>⚠ Atención:</b> Una fuga de combustible activa, un parabrisas con grieta de más de 30cm en zona del conductor, o óxido perforante en estructura son <b>causa de rechazo inmediato</b> en planta.</div>
+    </div>
+  </div>
+
+  <div class="estacion-proc">
+    <div class="estacion-head">
+      <div class="estacion-num">03</div>
+      <div class="estacion-info">
+        <div class="estacion-nom">Sistema de luces (con luxómetro)</div>
+        <div class="estacion-tiempo">⏱ 15 minutos · 10 puntos</div>
+      </div>
+    </div>
+    <div class="estacion-body">
+      <div class="paso-row">
+        <div class="paso-num">1</div>
+        <div class="paso-info">
+          <div class="paso-tit">Encender todas las luces</div>
+          <div class="paso-desc">Probar en secuencia: posición delantera/trasera · luz baja · luz alta · intermitentes · frenos · reversa · luz placa · baliza superior. <b>Verificar que ambos lados funcionen</b>.</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">2</div>
+        <div class="paso-info">
+          <div class="paso-tit">Medición con luxómetro</div>
+          <div class="paso-desc">Calibrar luxómetro. Medir <b>luz baja a 5 metros de pared</b>: altura de corte debe estar entre 1% y 1.5% bajo nivel del foco. Medir luz alta debe enfocarse al frente. Anotar valores.</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">3</div>
+        <div class="paso-info">
+          <div class="paso-tit">Inspección visual</div>
+          <div class="paso-desc">Lentes sin <b>cuarteaduras, opacidad o humedad</b> interior. Color correcto (blanco/amarillo delante, rojo/amarillo atrás).</div>
+        </div>
+      </div>
+      <div class="criterios-box">
+        <div class="crit-row"><span class="crit-tag crit-ok">✓ OK</span><span>Todas funcionan, intensidad y enfoque correctos, lentes limpios.</span></div>
+        <div class="crit-row"><span class="crit-tag crit-obs">⚠ OBS</span><span>Lente opaco pero funciona, foco quemado de un lado.</span></div>
+        <div class="crit-row"><span class="crit-tag crit-no">✗ RECHAZO</span><span>Luces de freno no funcionan, sin intermitentes, luz baja desenfocada o con color incorrecto.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="estacion-proc">
+    <div class="estacion-head">
+      <div class="estacion-num">04</div>
+      <div class="estacion-info">
+        <div class="estacion-nom">Alineación y dirección</div>
+        <div class="estacion-tiempo">⏱ 10 minutos · 3 puntos</div>
+      </div>
+    </div>
+    <div class="estacion-body">
+      <div class="paso-row">
+        <div class="paso-num">1</div>
+        <div class="paso-info">
+          <div class="paso-tit">Test dinámico de deriva</div>
+          <div class="paso-desc">Solicitar al conductor avanzar <b>10 metros en línea recta a 10 km/h sin tocar el volante</b>. Observar si el camión se desvía. Repetir.</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">2</div>
+        <div class="paso-info">
+          <div class="paso-tit">Verificación de volante</div>
+          <div class="paso-desc">Volante <b>centrado en marcha recta</b>. Sin juego excesivo (máx 30° libre). Sin vibraciones en marcha.</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">3</div>
+        <div class="paso-info">
+          <div class="paso-tit">Inspección neumáticos</div>
+          <div class="paso-desc">Medir profundidad de banda con profundímetro: <b>mínimo 1.6mm en TWI</b>. Buscar <b>desgaste irregular</b> (un solo lado, diente de sierra) que indica desalineación.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="estacion-proc">
+    <div class="estacion-head">
+      <div class="estacion-num">05</div>
+      <div class="estacion-info">
+        <div class="estacion-nom">Sistema de frenos</div>
+        <div class="estacion-tiempo">⏱ 15 minutos · 8 puntos</div>
+      </div>
+    </div>
+    <div class="estacion-body">
+      <div class="paso-row">
+        <div class="paso-num">1</div>
+        <div class="paso-info">
+          <div class="paso-tit">Test de presión de aire</div>
+          <div class="paso-desc">Encender motor. Verificar con manómetro que <b>sistema alcance 7-9 bar en menos de 5 minutos</b>. Apagar motor. <b>Caída máxima permitida: 0.6 bar/minuto</b>. Si cae más, hay fugas.</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">2</div>
+        <div class="paso-info">
+          <div class="paso-tit">Detección de fugas</div>
+          <div class="paso-desc">Con motor encendido y sistema cargado, revisar <b>mangueras, racores, válvulas y cámaras</b> con jabón disuelto o detector ultrasónico. Cualquier burbuja = fuga.</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">3</div>
+        <div class="paso-info">
+          <div class="paso-tit">Inspección de pastillas y discos</div>
+          <div class="paso-desc">Medir <b>espesor mínimo pastillas: 3mm</b>. Discos sin acanaladuras profundas ni ovalamiento. Tambores sin grietas. Verificar líquido de freno claro (no oscuro).</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">4</div>
+        <div class="paso-info">
+          <div class="paso-tit">Test de freno de parqueo</div>
+          <div class="paso-desc">Aplicar freno de parqueo. Intentar avanzar en primera con embrague soltado lento. <b>El camión debe quedar inmovilizado</b>.</div>
+        </div>
+      </div>
+      <div class="alerta info"><b>ℹ Nota técnica:</b> El test definitivo de eficacia (50% mín. en servicio, 18% mín. en parqueo) se hace con frenómetro en la planta. En pre-RT verificamos que el sistema esté en condiciones de pasarlo.</div>
+    </div>
+  </div>
+
+  <div class="estacion-proc">
+    <div class="estacion-head">
+      <div class="estacion-num">06</div>
+      <div class="estacion-info">
+        <div class="estacion-nom">Detección de holguras</div>
+        <div class="estacion-tiempo">⏱ 10 minutos · 7 puntos</div>
+      </div>
+    </div>
+    <div class="estacion-body">
+      <div class="paso-row">
+        <div class="paso-num">1</div>
+        <div class="paso-info">
+          <div class="paso-tit">Test de rótulas y bujes</div>
+          <div class="paso-desc">Camión elevado o sobre gata. <b>Mover rueda en sentido vertical y horizontal</b>. Sin holgura perceptible. Mover en sentido lateral con palanca.</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">2</div>
+        <div class="paso-info">
+          <div class="paso-tit">Cremallera y bielas de dirección</div>
+          <div class="paso-desc">Pedirle a alguien que mueva el volante mientras observas bajo el camión. <b>El movimiento debe transmitirse inmediato</b>, sin demora ni juego.</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">3</div>
+        <div class="paso-info">
+          <div class="paso-tit">Crucetas y soportes</div>
+          <div class="paso-desc">Inspeccionar <b>crucetas del cardán</b> con palanca. Soportes de motor y caja firmes, sin grietas en goma ni hule reseco.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="estacion-proc">
+    <div class="estacion-head">
+      <div class="estacion-num">07</div>
+      <div class="estacion-info">
+        <div class="estacion-nom">Suspensión</div>
+        <div class="estacion-tiempo">⏱ 5 minutos · 4 puntos</div>
+      </div>
+    </div>
+    <div class="estacion-body">
+      <div class="paso-row">
+        <div class="paso-num">1</div>
+        <div class="paso-info">
+          <div class="paso-tit">Test de rebote</div>
+          <div class="paso-desc">Empujar fuerte cada esquina del camión hacia abajo y soltar. <b>Debe rebotar 1 vez y estabilizarse</b>. Si rebota más, amortiguador vencido.</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">2</div>
+        <div class="paso-info">
+          <div class="paso-tit">Inspección de ballestas y fuelles</div>
+          <div class="paso-desc">Buscar <b>hojas de ballesta quebradas</b>, soportes agrietados. Fuelles de aire sin fugas, fisuras ni desgaste por rozamiento.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="estacion-proc">
+    <div class="estacion-head">
+      <div class="estacion-num">08</div>
+      <div class="estacion-info">
+        <div class="estacion-nom">Emisiones de gases</div>
+        <div class="estacion-tiempo">⏱ 5 minutos · 2 puntos</div>
+      </div>
+    </div>
+    <div class="estacion-body">
+      <div class="paso-row">
+        <div class="paso-num">1</div>
+        <div class="paso-info">
+          <div class="paso-tit">Inspección visual humo</div>
+          <div class="paso-desc">Con motor caliente, acelerar hasta media revolución. Observar humo. <b>Humo negro denso = exceso combustible / DPF saturado</b>. <b>Humo azul = quema aceite</b>. <b>Humo blanco persistente = refrigerante en cámara</b>.</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">2</div>
+        <div class="paso-info">
+          <div class="paso-tit">Test olor a quemado</div>
+          <div class="paso-desc">Verificar que no haya olor a aceite quemado en escape ni en el motor. Identifica fugas internas o turbo con aceite.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="estacion-proc">
+    <div class="estacion-head">
+      <div class="estacion-num">09</div>
+      <div class="estacion-info">
+        <div class="estacion-nom">Opacidad (con opacímetro)</div>
+        <div class="estacion-tiempo">⏱ 15 minutos · 5 puntos</div>
+      </div>
+    </div>
+    <div class="estacion-body">
+      <div class="paso-row">
+        <div class="paso-num">1</div>
+        <div class="paso-info">
+          <div class="paso-tit">Preparación del test</div>
+          <div class="paso-desc">Motor a temperatura normal de operación (mín 80°C). Caja en neutro, freno de parqueo aplicado. Conectar opacímetro al escape.</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">2</div>
+        <div class="paso-info">
+          <div class="paso-tit">Ejecutar aceleración libre</div>
+          <div class="paso-desc">Acelerar al máximo durante <b>3 segundos</b> y soltar. Repetir 4 veces. El opacímetro promedia las últimas 3 mediciones.</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">3</div>
+        <div class="paso-info">
+          <div class="paso-tit">Interpretar resultados</div>
+          <div class="paso-desc">Límites según norma:<br>
+            • <b>Euro 3:</b> máx K = 1.5 m⁻¹<br>
+            • <b>Euro 4:</b> máx K = 0.8 m⁻¹<br>
+            • <b>Euro 5:</b> máx K = 0.5 m⁻¹<br>
+            • <b>Euro 6:</b> máx K = 0.3 m⁻¹
+          </div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">4</div>
+        <div class="paso-info">
+          <div class="paso-tit">Verificar sistemas auxiliares</div>
+          <div class="paso-desc">Inspeccionar nivel de <b>AdBlue</b> (Euro 5/6). Conectar scanner y leer DTC del módulo SCR/DPF. Verificar regeneraciones recientes y saturación DPF.</div>
+        </div>
+      </div>
+      <div class="alerta"><b>⚠ Importante:</b> Si la opacidad supera el límite, el cliente debe ser informado de inmediato. El servicio Modalidad 1 NO incluye limpieza DPF. Cotizar Modalidad 3 (Pre-RT + DPF) o coordinar reparación aparte.</div>
+    </div>
+  </div>
+
+  <h2 class="sec-h2"><span class="sec-num">03</span> Entregables al cliente</h2>
+  <div class="entregable"><div class="entregable-icon">📄</div><div class="entregable-info"><div class="entregable-tit">Informe técnico digital</div><div class="entregable-desc">Generado automáticamente al finalizar. Link compartible y descargable como PDF.</div></div></div>
+  <div class="entregable"><div class="entregable-icon">📋</div><div class="entregable-info"><div class="entregable-tit">Reporte de hallazgos con fotos</div><div class="entregable-desc">Mínimo 5 fotos por inspección, más fotos específicas de cada falla.</div></div></div>
+  <div class="entregable"><div class="entregable-icon">💰</div><div class="entregable-info"><div class="entregable-tit">Cotización clara de reparaciones</div><div class="entregable-desc">Si hay fallas críticas, entregar cotización detallada para que el cliente decida si avanza a Modalidad 2 o 3.</div></div></div>
+  <div class="entregable"><div class="entregable-icon">📊</div><div class="entregable-info"><div class="entregable-tit">Veredicto: aprobado / riesgo / reprobará</div><div class="entregable-desc">Recomendación profesional sobre presentarse o no a la planta.</div></div></div>
+
+  <h2 class="sec-h2"><span class="sec-num">04</span> Checklist de cierre del servicio</h2>
+  <div class="check-row"><div class="check-box"></div><div>Datos del cliente y camión cargados correctamente en la app</div></div>
+  <div class="check-row"><div class="check-box"></div><div>Los 57 puntos evaluados (OK / Observado / Rechazo)</div></div>
+  <div class="check-row"><div class="check-box"></div><div>Notas técnicas en cada observación o rechazo</div></div>
+  <div class="check-row"><div class="check-box"></div><div>Mínimo 5 fotos del proceso registradas</div></div>
+  <div class="check-row"><div class="check-box"></div><div>Recomendaciones finales redactadas en notas</div></div>
+  <div class="check-row"><div class="check-box"></div><div>Informe generado y enviado al cliente por WhatsApp</div></div>
+  <div class="check-row"><div class="check-box"></div><div>Copia enviada al coordinador para seguimiento</div></div>
+  <div class="check-row"><div class="check-box"></div><div>Firma del cliente en informe físico (si imprime)</div></div>
+  <div class="check-row"><div class="check-box"></div><div>Cobro del servicio confirmado al coordinador</div></div>
+
+</div>
+
+<!-- ============ PROTOCOLO 2 — REPARACIÓN ============ -->
+<div class="proto" id="p2">
+
+  <div class="portada">
+    <div class="portada-eyebrow">Modalidad 2 · Pre-Revisión Técnica</div>
+    <div class="portada-h1">Protocolo de <span class="rojo">Pre-RT + Reparación</span></div>
+    <div class="portada-sub">Diagnóstico completo + ajustes y reparaciones menores en el lugar para que el camión pase la planta de revisión técnica a la primera. Garantía: si reprueba en los puntos revisados, volvemos sin costo.</div>
+    <div class="specs-grid">
+      <div class="spec"><div class="spec-lbl">Valor base</div><div class="spec-val verde">$249.000</div></div>
+      <div class="spec"><div class="spec-lbl">Tiempo estimado</div><div class="spec-val">3 a 5 horas</div></div>
+      <div class="spec"><div class="spec-lbl">Incluye</div><div class="spec-val rojo">Mano de obra</div></div>
+      <div class="spec"><div class="spec-lbl">Repuestos</div><div class="spec-val">Se cotizan aparte</div></div>
+    </div>
+  </div>
+
+  <h2 class="sec-h2"><span class="sec-num">01</span> Fase 1 — Diagnóstico completo</h2>
+  <div class="alerta info"><b>ℹ Procedimiento:</b> Ejecutar las 9 estaciones del <b>Protocolo Modalidad 1 (Diagnóstico Pre-RT)</b> de forma completa. Registrar todos los hallazgos en la app antes de iniciar cualquier reparación.</div>
+
+  <h2 class="sec-h2"><span class="sec-num">02</span> Equipos adicionales para reparación</h2>
+  <div class="herramientas-box">
+    <div class="herramienta-row"><div class="h-icon">🔧</div><div class="h-nom"><b>Caja de herramientas mecánica completa</b></div><div class="h-uso">Llaves, dados, vasos hasta 36mm</div></div>
+    <div class="herramienta-row"><div class="h-icon">⚡</div><div class="h-nom"><b>Multímetro digital + lámpara prueba</b></div><div class="h-uso">Test eléctrico y de luces</div></div>
+    <div class="herramienta-row"><div class="h-icon">🔩</div><div class="h-nom"><b>Llave de torque (5-300 Nm)</b></div><div class="h-uso">Apriete de tornillería crítica</div></div>
+    <div class="herramienta-row"><div class="h-icon">💧</div><div class="h-nom"><b>Equipo de sangrado de frenos</b></div><div class="h-uso">Purga circuito hidráulico</div></div>
+    <div class="herramienta-row"><div class="h-icon">🌬️</div><div class="h-nom"><b>Compresor portátil</b></div><div class="h-uso">Pruebas neumáticas</div></div>
+    <div class="herramienta-row"><div class="h-icon">🪛</div><div class="h-nom"><b>Set destornilladores + cortafríos</b></div><div class="h-uso">Trabajos eléctricos y ajustes</div></div>
+    <div class="herramienta-row"><div class="h-icon">💉</div><div class="h-nom"><b>Limpiador inyectores en circuito</b></div><div class="h-uso">Limpieza sin desmontaje</div></div>
+    <div class="herramienta-row"><div class="h-icon">📦</div><div class="h-nom"><b>Stock móvil de repuestos comunes</b></div><div class="h-uso">Bombillas H4/H7, fusibles, abrazaderas, retenes</div></div>
+  </div>
+
+  <h2 class="sec-h2"><span class="sec-num">03</span> Reparaciones incluidas en el plan</h2>
+
+  <div class="estacion-proc">
+    <div class="estacion-head">
+      <div class="estacion-num">A</div>
+      <div class="estacion-info">
+        <div class="estacion-nom">Regulación de luces altas y bajas</div>
+        <div class="estacion-tiempo">⏱ 30 minutos</div>
+      </div>
+    </div>
+    <div class="estacion-body">
+      <div class="paso-row">
+        <div class="paso-num">1</div>
+        <div class="paso-info">
+          <div class="paso-tit">Marcar pared de referencia</div>
+          <div class="paso-desc">Estacionar a <b>5 metros de pared lisa</b>. Marcar altura del centro del foco. Marcar línea de corte teórica 1.3% bajo (6.5 cm a 5 metros).</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">2</div>
+        <div class="paso-info">
+          <div class="paso-tit">Ajustar tornillos de regulación</div>
+          <div class="paso-desc">Cada faro tiene <b>2 tornillos: vertical y horizontal</b>. Tapar un faro mientras ajustas el otro. Mover lentamente hasta que línea de corte coincida con marca.</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">3</div>
+        <div class="paso-info">
+          <div class="paso-tit">Validar con luxómetro</div>
+          <div class="paso-desc">Confirmar intensidad mínima requerida y enfoque correcto. Anotar valores finales.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="estacion-proc">
+    <div class="estacion-head">
+      <div class="estacion-num">B</div>
+      <div class="estacion-info">
+        <div class="estacion-nom">Sangrado y ajuste del sistema de frenos</div>
+        <div class="estacion-tiempo">⏱ 60 minutos</div>
+      </div>
+    </div>
+    <div class="estacion-body">
+      <div class="paso-row">
+        <div class="paso-num">1</div>
+        <div class="paso-info">
+          <div class="paso-tit">Verificar nivel de líquido</div>
+          <div class="paso-desc">Completar con DOT 4 si está bajo. <b>Si está oscuro, cambiar completo</b> (no incluido en el plan base, cotizar).</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">2</div>
+        <div class="paso-info">
+          <div class="paso-tit">Sangrado por circuito</div>
+          <div class="paso-desc">Conectar equipo de sangrado. Orden estándar: <b>rueda trasera derecha → trasera izquierda → delantera derecha → delantera izquierda</b>. Hasta que salga líquido limpio sin burbujas.</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">3</div>
+        <div class="paso-info">
+          <div class="paso-tit">Verificación de fugas de aire</div>
+          <div class="paso-desc">Aplicar jabón disuelto en todas las uniones del sistema neumático. Apretar racores con fuga. Si la fuga es por manguera perforada, cotizar reemplazo.</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">4</div>
+        <div class="paso-info">
+          <div class="paso-tit">Ajuste de freno de parqueo</div>
+          <div class="paso-desc">Si tiene regulador, ajustar tensión. Verificar palanca de mano firme. Test final: camión inmovilizado.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="estacion-proc">
+    <div class="estacion-head">
+      <div class="estacion-num">C</div>
+      <div class="estacion-info">
+        <div class="estacion-nom">Regulación de varillaje y comandos</div>
+        <div class="estacion-tiempo">⏱ 30 minutos</div>
+      </div>
+    </div>
+    <div class="estacion-body">
+      <div class="paso-row">
+        <div class="paso-num">1</div>
+        <div class="paso-info">
+          <div class="paso-tit">Varillaje de cambios</div>
+          <div class="paso-desc">Si entra duro o se sale, ajustar varillaje exterior. Lubricar puntos de articulación.</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">2</div>
+        <div class="paso-info">
+          <div class="paso-tit">Pedales y articulaciones</div>
+          <div class="paso-desc">Lubricar pivotes de pedal embrague, freno y acelerador. Eliminar juegos excesivos.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="estacion-proc">
+    <div class="estacion-head">
+      <div class="estacion-num">D</div>
+      <div class="estacion-info">
+        <div class="estacion-nom">Limpieza de inyectores (sin desmontaje)</div>
+        <div class="estacion-tiempo">⏱ 45 minutos</div>
+      </div>
+    </div>
+    <div class="estacion-body">
+      <div class="paso-row">
+        <div class="paso-num">1</div>
+        <div class="paso-info">
+          <div class="paso-tit">Aplicar limpiador en circuito</div>
+          <div class="paso-desc">Conectar equipo de limpieza por línea de combustible (bypass al tanque). Mantener motor encendido <b>30-45 min</b> con producto químico.</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">2</div>
+        <div class="paso-info">
+          <div class="paso-tit">Verificación post-limpieza</div>
+          <div class="paso-desc">Borrar DTC con scanner. Test de aceleración libre. Idealmente complementar con análisis de humo.</div>
+        </div>
+      </div>
+      <div class="alerta info"><b>ℹ Nota:</b> Esta limpieza es PREVENTIVA. Si los inyectores están con falla mecánica (sellos quemados, electroinyector dañado), requieren desmontaje y cambio. Cotizar aparte.</div>
+    </div>
+  </div>
+
+  <div class="estacion-proc">
+    <div class="estacion-head">
+      <div class="estacion-num">E</div>
+      <div class="estacion-info">
+        <div class="estacion-nom">Cambios menores y ajustes</div>
+        <div class="estacion-tiempo">⏱ 30 minutos</div>
+      </div>
+    </div>
+    <div class="estacion-body">
+      <div class="paso-row">
+        <div class="paso-num">1</div>
+        <div class="paso-info">
+          <div class="paso-tit">Cambio de bombillas quemadas</div>
+          <div class="paso-desc">Stock móvil: H4, H7, H11, posición, freno, intermitentes (P21W, R10W). <b>Reemplazo incluido sin cobro extra hasta 4 bombillas</b>.</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">2</div>
+        <div class="paso-info">
+          <div class="paso-tit">Fusibles</div>
+          <div class="paso-desc">Cambio incluido si están quemados. Si se quema repetidamente, hay falla eléctrica que requiere diagnóstico (cotizar).</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">3</div>
+        <div class="paso-info">
+          <div class="paso-tit">Ajuste de espejos y cinturones</div>
+          <div class="paso-desc">Apriete de tornillería suelta. Ajuste de tensión de cinturones. Anclajes firmes.</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">4</div>
+        <div class="paso-info">
+          <div class="paso-tit">Apriete de tornillería visible</div>
+          <div class="paso-desc">Recorrer chasis verificando tornillería suelta de escape, suspensión, soportes. Llave de torque para puntos críticos.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="sec-h2"><span class="sec-num">04</span> Repuestos típicos y precios referenciales</h2>
+  <div class="alerta"><b>⚠ Importante:</b> El precio del Plan Modalidad 2 NO incluye repuestos. Cada repuesto se cotiza al cliente y debe ser aprobado antes de instalarlo.</div>
+  <div class="repuestos-grid">
+    <div class="repuesto"><div class="rep-nom">Bombilla H4 / H7</div><div class="rep-detalle">Faro delantero principal</div><div class="rep-precio">$3.500 - $8.000</div></div>
+    <div class="repuesto"><div class="rep-nom">Pastillas freno camión</div><div class="rep-detalle">Set 4 unidades calidad OEM</div><div class="rep-precio">$45.000 - $120.000</div></div>
+    <div class="repuesto"><div class="rep-nom">Manguera aire freno</div><div class="rep-detalle">Por metro, con racores</div><div class="rep-precio">$8.000 - $15.000</div></div>
+    <div class="repuesto"><div class="rep-nom">Líquido freno DOT 4</div><div class="rep-detalle">1 litro</div><div class="rep-precio">$6.000</div></div>
+    <div class="repuesto"><div class="rep-nom">Limpieza inyectores químico</div><div class="rep-detalle">Producto y aplicación</div><div class="rep-precio">$35.000</div></div>
+    <div class="repuesto"><div class="rep-nom">Cinturón seguridad camión</div><div class="rep-detalle">Cinturón completo con anclaje</div><div class="rep-precio">$28.000</div></div>
+    <div class="repuesto"><div class="rep-nom">Plumillas camión</div><div class="rep-detalle">Par de plumillas</div><div class="rep-precio">$12.000 - $22.000</div></div>
+    <div class="repuesto"><div class="rep-nom">Espejo retrovisor lateral</div><div class="rep-detalle">Universal o por marca</div><div class="rep-precio">$25.000 - $80.000</div></div>
+  </div>
+
+  <h2 class="sec-h2"><span class="sec-num">05</span> Garantía y entregables</h2>
+  <div class="entregable"><div class="entregable-icon">📄</div><div class="entregable-info"><div class="entregable-tit">Informe técnico digital (modalidad 2)</div><div class="entregable-desc">Con detalle pre-reparación, hallazgos corregidos y estado final.</div></div></div>
+  <div class="entregable"><div class="entregable-icon">✓</div><div class="entregable-info"><div class="entregable-tit">Certificado de garantía escrita</div><div class="entregable-desc">Si reprueba en alguno de los puntos revisados/reparados, volvemos sin costo. Vigencia 30 días desde la fecha del servicio.</div></div></div>
+  <div class="entregable"><div class="entregable-icon">📦</div><div class="entregable-info"><div class="entregable-tit">Boletas/facturas de repuestos</div><div class="entregable-desc">Si se instalaron repuestos, entregar boletas para garantía del fabricante.</div></div></div>
+  <div class="entregable"><div class="entregable-icon">📊</div><div class="entregable-info"><div class="entregable-tit">Veredicto final actualizado</div><div class="entregable-desc">Post-reparación. Idealmente: ✓ APROBADO para presentarse a planta.</div></div></div>
+
+  <h2 class="sec-h2"><span class="sec-num">06</span> Checklist de cierre del servicio</h2>
+  <div class="check-row"><div class="check-box"></div><div>Diagnóstico Modalidad 1 ejecutado completo</div></div>
+  <div class="check-row"><div class="check-box"></div><div>Cliente autorizó cada reparación con repuesto antes de instalarlo</div></div>
+  <div class="check-row"><div class="check-box"></div><div>Todas las reparaciones incluidas en el plan ejecutadas</div></div>
+  <div class="check-row"><div class="check-box"></div><div>Re-inspección de los puntos reparados (deben quedar ✓ OK)</div></div>
+  <div class="check-row"><div class="check-box"></div><div>Fotos antes y después de cada reparación</div></div>
+  <div class="check-row"><div class="check-box"></div><div>Informe actualizado con estado final</div></div>
+  <div class="check-row"><div class="check-box"></div><div>Certificado de garantía firmado y entregado</div></div>
+  <div class="check-row"><div class="check-box"></div><div>Boletas de repuestos entregadas al cliente</div></div>
+  <div class="check-row"><div class="check-box"></div><div>Cobro al cliente: plan + repuestos + extras autorizados</div></div>
+
+</div>
+
+<!-- ============ PROTOCOLO 3 — DPF ============ -->
+<div class="proto" id="p3">
+
+  <div class="portada">
+    <div class="portada-eyebrow">Modalidad 3 · Pre-Revisión Técnica</div>
+    <div class="portada-h1">Protocolo de <span class="rojo">Pre-RT + Limpieza DPF</span></div>
+    <div class="portada-sub">El más completo. Diagnóstico + reparación menor + regeneración doble y limpieza química del DPF/FAP para camiones diésel Euro 5 y Euro 6 que reprueban por opacidad. Garantía: segundo intento gratis si reprueba en la planta.</div>
+    <div class="specs-grid">
+      <div class="spec"><div class="spec-lbl">Valor base</div><div class="spec-val verde">$389.000</div></div>
+      <div class="spec"><div class="spec-lbl">Tiempo estimado</div><div class="spec-val">5 a 7 horas</div></div>
+      <div class="spec"><div class="spec-lbl">Norma objetivo</div><div class="spec-val rojo">Euro 5 / 6</div></div>
+      <div class="spec"><div class="spec-lbl">Garantía</div><div class="spec-val">2do intento gratis</div></div>
+    </div>
+  </div>
+
+  <h2 class="sec-h2"><span class="sec-num">01</span> Fase 1 — Diagnóstico completo</h2>
+  <div class="alerta info"><b>ℹ Procedimiento:</b> Ejecutar el <b>Protocolo Modalidad 1 (Diagnóstico Pre-RT)</b> de forma completa, prestando especial atención a las estaciones 8 (Emisiones) y 9 (Opacidad).</div>
+
+  <h2 class="sec-h2"><span class="sec-num">02</span> Fase 2 — Reparaciones menores</h2>
+  <div class="alerta info"><b>ℹ Procedimiento:</b> Ejecutar las reparaciones incluidas en el <b>Protocolo Modalidad 2</b>: regulación luces, sangrado frenos, varillaje, ajustes y cambios menores.</div>
+
+  <h2 class="sec-h2"><span class="sec-num">03</span> Fase 3 — Limpieza DPF profesional</h2>
+
+  <div class="alerta peligro"><b>⚠ Atención técnica:</b> El sistema DPF/FAP opera a temperaturas sobre 600°C en regeneración. Antes de cualquier intervención, <b>esperar enfriamiento mínimo 45 minutos</b>. Usar guantes térmicos, gafas y mascarilla con filtro de partículas.</div>
+
+  <div class="estacion-proc">
+    <div class="estacion-head">
+      <div class="estacion-num">A</div>
+      <div class="estacion-info">
+        <div class="estacion-nom">Diagnóstico inicial del DPF</div>
+        <div class="estacion-tiempo">⏱ 20 minutos</div>
+      </div>
+    </div>
+    <div class="estacion-body">
+      <div class="paso-row">
+        <div class="paso-num">1</div>
+        <div class="paso-info">
+          <div class="paso-tit">Lectura con scanner</div>
+          <div class="paso-desc">Conectar scanner profesional. Acceder al <b>módulo DPF/SCR</b>. Leer:<br>
+            • <b>Saturación DPF</b> (% de carbonilla)<br>
+            • <b>Distancia desde última regeneración</b><br>
+            • <b>Número de regeneraciones fallidas</b><br>
+            • <b>Estado de sensores diferenciales de presión</b><br>
+            • <b>Códigos DTC activos</b>
+          </div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">2</div>
+        <div class="paso-info">
+          <div class="paso-tit">Evaluar viabilidad de limpieza</div>
+          <div class="paso-desc">Si saturación es <b>menor al 80%</b>, la limpieza es muy probable que funcione.<br>
+          Si está entre <b>80% y 100%</b>, se puede intentar pero con riesgo.<br>
+          Si supera <b>120%</b>, el DPF está colapsado: la limpieza puede no ser suficiente. <b>Informar al cliente y cotizar reemplazo o limpieza intensiva en horno especializado</b>.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="estacion-proc">
+    <div class="estacion-head">
+      <div class="estacion-num">B</div>
+      <div class="estacion-info">
+        <div class="estacion-nom">Regeneración forzada (primera)</div>
+        <div class="estacion-tiempo">⏱ 40 minutos</div>
+      </div>
+    </div>
+    <div class="estacion-body">
+      <div class="paso-row">
+        <div class="paso-num">1</div>
+        <div class="paso-info">
+          <div class="paso-tit">Preparación del vehículo</div>
+          <div class="paso-desc">Camión en zona ventilada y abierta (<b>nunca en garage cerrado</b>). Caja en neutro, freno de parqueo aplicado. Tanque de combustible <b>mínimo 1/4 lleno</b> (la regeneración consume mucho).</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">2</div>
+        <div class="paso-info">
+          <div class="paso-tit">Iniciar regeneración con scanner</div>
+          <div class="paso-desc">En el scanner, acceder al menú de <b>"Forzar regeneración DPF"</b>. Confirmar todos los pre-requisitos del sistema. Iniciar.</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">3</div>
+        <div class="paso-info">
+          <div class="paso-tit">Monitorear el proceso</div>
+          <div class="paso-desc">El scanner mostrará temperatura del DPF subiendo gradualmente. Llega a <b>600-650°C</b>. Mantener por <b>30-40 minutos</b>. La saturación debe bajar progresivamente.<br><br>
+          <b>Síntomas normales:</b> humo blanco vapor, olor a quemado leve, ruido de inyección extra.<br>
+          <b>Síntomas anormales:</b> alarma del scanner, motor que se apaga, humo negro denso. <b>Abortar si ocurre</b>.
+          </div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">4</div>
+        <div class="paso-info">
+          <div class="paso-tit">Verificación post-regeneración</div>
+          <div class="paso-desc">Leer nuevamente saturación. <b>Objetivo: bajar al menos un 50% desde el valor inicial</b>. Si bajó poco, pasar a Fase C (limpieza química). Si quedó óptimo, igual hacer Fase C como refuerzo.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="estacion-proc">
+    <div class="estacion-head">
+      <div class="estacion-num">C</div>
+      <div class="estacion-info">
+        <div class="estacion-nom">Limpieza química del DPF y sistema de escape</div>
+        <div class="estacion-tiempo">⏱ 60 minutos</div>
+      </div>
+    </div>
+    <div class="estacion-body">
+      <div class="paso-row">
+        <div class="paso-num">1</div>
+        <div class="paso-info">
+          <div class="paso-tit">Aplicar producto químico</div>
+          <div class="paso-desc">Productos profesionales: <b>Wynn's DPF Cleaner Pro, JLM DPF Cleaner, Liqui Moly Diesel Particulate Filter Cleaner</b> o equivalente.<br><br>
+          Acceder al DPF a través de la sonda de presión diferencial o sensor de temperatura post-DPF (desconectar y aplicar producto por ese orificio con cánula). En modelos que lo permitan, también aplicar por el sensor de oxígeno aguas arriba.
+          </div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">2</div>
+        <div class="paso-info">
+          <div class="paso-tit">Tiempo de acción</div>
+          <div class="paso-desc">Dejar actuar el químico <b>15-20 minutos con motor apagado</b>. Volver a colocar sensores en su lugar correctamente.</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">3</div>
+        <div class="paso-info">
+          <div class="paso-tit">Aplicar limpiador EGR</div>
+          <div class="paso-desc">En paralelo, limpiar la válvula EGR con <b>limpiador específico aerosol</b> (Wynn's EGR Extreme Cleaner). Spray dirigido a admisión mientras motor está al ralentí.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="estacion-proc">
+    <div class="estacion-head">
+      <div class="estacion-num">D</div>
+      <div class="estacion-info">
+        <div class="estacion-nom">Segunda regeneración (consolidación)</div>
+        <div class="estacion-tiempo">⏱ 30 minutos</div>
+      </div>
+    </div>
+    <div class="estacion-body">
+      <div class="paso-row">
+        <div class="paso-num">1</div>
+        <div class="paso-info">
+          <div class="paso-tit">Forzar segunda regeneración</div>
+          <div class="paso-desc">Repetir el proceso con scanner. Esta vez la regeneración debería completarse más rápido y la saturación bajar de forma notoria al rango <b>5-20%</b>.</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">2</div>
+        <div class="paso-info">
+          <div class="paso-tit">Borrado de DTC</div>
+          <div class="paso-desc">Con scanner, borrar todos los códigos DTC del módulo motor y DPF. Reiniciar contadores de regeneración y kilómetros desde última regeneración.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="estacion-proc">
+    <div class="estacion-head">
+      <div class="estacion-num">E</div>
+      <div class="estacion-info">
+        <div class="estacion-nom">Verificación AdBlue / SCR (Euro 5/6)</div>
+        <div class="estacion-tiempo">⏱ 20 minutos</div>
+      </div>
+    </div>
+    <div class="estacion-body">
+      <div class="paso-row">
+        <div class="paso-num">1</div>
+        <div class="paso-info">
+          <div class="paso-tit">Nivel de AdBlue</div>
+          <div class="paso-desc">Verificar nivel. Si está bajo, rellenar con AdBlue de calidad ISO 22241 (DEF / NOx Reductor). <b>Nunca usar AdBlue casero ni agua urea</b>.</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">2</div>
+        <div class="paso-info">
+          <div class="paso-tit">Test del módulo SCR</div>
+          <div class="paso-desc">Con scanner, leer estado del sistema SCR:<br>
+            • Calidad AdBlue (sensor de calidad)<br>
+            • Funcionamiento de la bomba dosificadora<br>
+            • Inyector AdBlue sin obstrucción<br>
+            • Sensores de NOx pre y post-catalizador
+          </div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">3</div>
+        <div class="paso-info">
+          <div class="paso-tit">Cristales en inyector</div>
+          <div class="paso-desc">El AdBlue cristaliza. Si el inyector está obstruido, limpiar con <b>agua destilada caliente</b> (60°C) y aire comprimido. Si hay daño físico, cotizar cambio.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="estacion-proc">
+    <div class="estacion-head">
+      <div class="estacion-num">F</div>
+      <div class="estacion-info">
+        <div class="estacion-nom">Test final con opacímetro</div>
+        <div class="estacion-tiempo">⏱ 20 minutos</div>
+      </div>
+    </div>
+    <div class="estacion-body">
+      <div class="paso-row">
+        <div class="paso-num">1</div>
+        <div class="paso-info">
+          <div class="paso-tit">Pre-acondicionamiento</div>
+          <div class="paso-desc">Motor a temperatura normal (mín 80°C). Hacer un viaje de prueba de <b>10-15 km con cargas variables</b> antes del test. Esto permite a la ECU recalibrar parámetros.</div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">2</div>
+        <div class="paso-info">
+          <div class="paso-tit">Test aceleración libre con opacímetro</div>
+          <div class="paso-desc">Repetir el test del Protocolo Modalidad 1 (Estación 09). Anotar valor K. Comparar contra:<br>
+            • Euro 3: 1.5 m⁻¹<br>
+            • Euro 4: 0.8 m⁻¹<br>
+            • Euro 5: 0.5 m⁻¹<br>
+            • Euro 6: 0.3 m⁻¹
+          </div>
+        </div>
+      </div>
+      <div class="paso-row">
+        <div class="paso-num">3</div>
+        <div class="paso-info">
+          <div class="paso-tit">Documentar mejora</div>
+          <div class="paso-desc">Registrar valor pre-intervención y valor post-intervención. Esto es la prueba técnica del trabajo realizado. Adjuntar al informe.</div>
+        </div>
+      </div>
+      <div class="alerta"><b>⚠ Si el camión sigue sin pasar el límite:</b><br>
+      Hay que evaluar:<br>
+      1. <b>DPF colapsado físicamente</b> (carbonilla cristalizada, malla rota): requiere cambio o limpieza en horno especializado.<br>
+      2. <b>Inyectores con falla</b>: pulverización defectuosa, requieren cambio.<br>
+      3. <b>Sensores SCR/DPF dañados</b>: lectura incorrecta hace que ECU no controle bien la mezcla.<br>
+      4. <b>Bomba inyectora desgastada</b>: presión incorrecta, mucho combustible no quema.<br><br>
+      Informar al cliente con honestidad y cotizar el siguiente paso. Activar garantía de segundo intento dentro de 30 días si elige nueva limpieza intensiva.</div>
+    </div>
+  </div>
+
+  <h2 class="sec-h2"><span class="sec-num">04</span> Productos químicos y consumibles</h2>
+  <div class="repuestos-grid">
+    <div class="repuesto"><div class="rep-nom">Wynn's DPF Cleaner Pro</div><div class="rep-detalle">375ml · 1 aplicación</div><div class="rep-precio">$22.000</div></div>
+    <div class="repuesto"><div class="rep-nom">Wynn's EGR Extreme</div><div class="rep-detalle">500ml aerosol</div><div class="rep-precio">$18.000</div></div>
+    <div class="repuesto"><div class="rep-nom">AdBlue ISO 22241</div><div class="rep-detalle">10 litros</div><div class="rep-precio">$15.000</div></div>
+    <div class="repuesto"><div class="rep-nom">Aditivo regenerador DPF</div><div class="rep-detalle">Para tanque combustible</div><div class="rep-precio">$12.000</div></div>
+    <div class="repuesto"><div class="rep-nom">Sensor presión diferencial</div><div class="rep-detalle">Si está dañado</div><div class="rep-precio">$85.000 - $180.000</div></div>
+    <div class="repuesto"><div class="rep-nom">Inyector AdBlue</div><div class="rep-detalle">Cristalizado / dañado</div><div class="rep-precio">$140.000 - $320.000</div></div>
+  </div>
+
+  <h2 class="sec-h2"><span class="sec-num">05</span> Garantía y entregables</h2>
+  <div class="entregable"><div class="entregable-icon">📄</div><div class="entregable-info"><div class="entregable-tit">Informe técnico completo</div><div class="entregable-desc">Con lecturas pre y post intervención: saturación DPF, valor opacímetro K, regeneraciones realizadas.</div></div></div>
+  <div class="entregable"><div class="entregable-icon">📊</div><div class="entregable-info"><div class="entregable-tit">Gráfico de evolución de saturación</div><div class="entregable-desc">Captura del scanner mostrando bajada de saturación durante regeneración.</div></div></div>
+  <div class="entregable"><div class="entregable-icon">✓</div><div class="entregable-info"><div class="entregable-tit">Garantía 2do intento gratis</div><div class="entregable-desc">Si reprueba por opacidad o emisiones en planta dentro de 30 días, volvemos a hacer la limpieza sin costo.</div></div></div>
+  <div class="entregable"><div class="entregable-icon">📋</div><div class="entregable-info"><div class="entregable-tit">Recomendaciones de mantención</div><div class="entregable-desc">Plan para que el DPF no se vuelva a saturar: tipo de combustible, viajes en carretera periódicos, aceite correcto.</div></div></div>
+
+  <h2 class="sec-h2"><span class="sec-num">06</span> Recomendaciones al cliente post-servicio</h2>
+  <div class="alerta info">Entregar al cliente estas instrucciones (incluidas en el informe):<br><br>
+  <b>1. Usar diésel de calidad</b>, evitar diésel B5 económico en estaciones no confiables.<br>
+  <b>2. Hacer viajes de carretera</b> de mínimo 30 minutos a velocidad de crucero (80-90 km/h) al menos 1 vez por semana. Esto permite la regeneración natural del DPF.<br>
+  <b>3. No apagar el motor</b> si el tablero indica que está en regeneración activa.<br>
+  <b>4. Cambiar aceite con aceite Low SAPS</b> (bajo en cenizas) específico para motores con DPF.<br>
+  <b>5. Mantener nivel AdBlue</b> siempre sobre 1/4 de tanque (camiones Euro 5/6).<br>
+  <b>6. No utilizar aditivos genéricos</b> sin consultar con el técnico.</div>
+
+  <h2 class="sec-h2"><span class="sec-num">07</span> Checklist de cierre del servicio</h2>
+  <div class="check-row"><div class="check-box"></div><div>Diagnóstico Modalidad 1 ejecutado completo</div></div>
+  <div class="check-row"><div class="check-box"></div><div>Reparaciones Modalidad 2 ejecutadas</div></div>
+  <div class="check-row"><div class="check-box"></div><div>Lecturas pre-limpieza registradas (% saturación, opacidad K)</div></div>
+  <div class="check-row"><div class="check-box"></div><div>2 regeneraciones forzadas completadas con éxito</div></div>
+  <div class="check-row"><div class="check-box"></div><div>Limpieza química DPF + EGR aplicada</div></div>
+  <div class="check-row"><div class="check-box"></div><div>Sistema SCR/AdBlue verificado (Euro 5/6)</div></div>
+  <div class="check-row"><div class="check-box"></div><div>Test final con opacímetro bajo el límite</div></div>
+  <div class="check-row"><div class="check-box"></div><div>DTC borrados y contadores reseteados</div></div>
+  <div class="check-row"><div class="check-box"></div><div>Lecturas post-limpieza registradas (mejora demostrada)</div></div>
+  <div class="check-row"><div class="check-box"></div><div>Informe + gráficos enviados al cliente</div></div>
+  <div class="check-row"><div class="check-box"></div><div>Certificado de garantía 30 días entregado</div></div>
+  <div class="check-row"><div class="check-box"></div><div>Recomendaciones de mantención explicadas al cliente</div></div>
+  <div class="check-row"><div class="check-box"></div><div>Cobro confirmado: plan + AdBlue + repuestos si hubo</div></div>
+
+</div>
+
+</div>
+
+<script>
+document.querySelectorAll('.tab').forEach(function(t){
+  t.onclick=function(){
+    document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('active')})
+    t.classList.add('active')
+    var p=t.getAttribute('data-p')
+    document.querySelectorAll('.proto').forEach(function(x){x.classList.remove('active')})
+    document.getElementById(p).classList.add('active')
+    window.scrollTo(0,0)
+  }
+})
+</script>
+</body>
+</html>

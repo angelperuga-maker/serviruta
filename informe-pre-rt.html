@@ -166,6 +166,14 @@ body{background:#1a1a1f;color:var(--txt);font-family:"DM Sans",sans-serif;paddin
   .barra-val{font-size:18px;}
   .firma-row{grid-template-columns:1fr;gap:30px;}
 }
+
+.foto-galeria-sec{margin-top:20px;}
+.foto-grupo{background:#fafafa;border:1px solid #e8e8e8;border-radius:8px;padding:12px;margin-bottom:10px;}
+.foto-grupo-tit{font-family:"Syne",sans-serif;font-weight:700;font-size:11px;color:#080808;margin-bottom:8px;}
+.foto-grupo-est{font-size:9px;color:#999;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px;}
+.foto-galeria{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:6px;}
+.foto-galeria img{width:100%;height:120px;object-fit:cover;border-radius:6px;border:1px solid #ddd;cursor:pointer;}
+@media print{.foto-galeria img{height:80px;page-break-inside:avoid;}}
 </style>
 </head>
 <body>
@@ -490,6 +498,39 @@ function render(insp){
   if(insp.notas){
     html+='<div class="sec-h">Recomendaciones del técnico</div>'
     html+='<div class="notas-box">'+insp.notas.replace(/\n/g,'<br>')+'</div>'
+  }
+
+  // FOTOS - Galería
+  var fotos_items=et.fotos||{}
+  var grupos_fotos=[]
+  ESTACIONES.forEach(function(e){
+    var fotos_estacion=[]
+    e.items.forEach(function(it){
+      var fotos=fotos_items[it.k]||[]
+      if(fotos.length){
+        fotos_estacion.push({nombre:it.n,fotos:fotos,resultado:ev[it.k]||''})
+      }
+    })
+    if(fotos_estacion.length){grupos_fotos.push({estacion:e.nombre,items:fotos_estacion})}
+  })
+  
+  if(grupos_fotos.length){
+    html+='<div class="sec-h">📷 Galería de evidencias fotográficas</div>'
+    html+='<div class="foto-galeria-sec">'
+    grupos_fotos.forEach(function(g){
+      html+='<div class="foto-grupo">'
+      html+='<div class="foto-grupo-est">'+g.estacion+'</div>'
+      g.items.forEach(function(it){
+        html+='<div class="foto-grupo-tit">'+it.nombre+(it.resultado==='no'?' <span style="color:#E8210A">[RECHAZO]</span>':it.resultado==='obs'?' <span style="color:#d97706">[OBS]</span>':it.resultado==='ok'?' <span style="color:#22C55E">[OK]</span>':'')+'</div>'
+        html+='<div class="foto-galeria">'
+        it.fotos.forEach(function(f){
+          html+='<img src="'+f+'" onclick="window.open(this.src,\'_blank\')" alt="Evidencia">'
+        })
+        html+='</div>'
+      })
+      html+='</div>'
+    })
+    html+='</div>'
   }
 
   // FIRMAS

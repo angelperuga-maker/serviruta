@@ -204,14 +204,14 @@ section{padding:40px 0;}
 var DATA={
   mb:{nombre:'Mercedes-Benz',modelos:[
     {id:'lo914',nombre:'MB LO914 · Atego OH-1315',desc:'Kit 362mm',std:380000,orig:435990,prem:560000},
-    {id:'atego1718',nombre:'MB Atego 1718 · 1725',desc:'Kit 362mm',std:380000,orig:435990,prem:560000},
+    {id:'atego1718',nombre:'MB Atego 1718 · 1725',desc:'Kit 362mm',std:380000,orig:435990,prem:560000,topVentas:true},
     {id:'axor',nombre:'MB Axor 2640 · 3340',desc:'Kit 395mm',std:545000,orig:636990,prem:780000},
-    {id:'actros',nombre:'MB Actros 4144 · 4844',desc:'Kit 430mm pesado',std:680000,orig:799990,prem:949990},
+    {id:'actros',nombre:'MB Actros 4144 · 4844',desc:'Kit 430mm pesado',std:680000,orig:799990,prem:949990,topVentas:true},
     {id:'mb1620',nombre:'MB 1620 · 1622 · 1718',desc:'Kit 362mm reparto',std:380000,orig:435990,prem:550000}
   ]},
   scania:{nombre:'Scania',modelos:[
-    {id:'serie4',nombre:'Scania Serie 4 (P · G · R)',desc:'Kit estándar serie 4',std:540000,orig:634990,prem:799990},
-    {id:'serie5',nombre:'Scania Serie 5',desc:'Kit estándar serie 5',std:720000,orig:839990,prem:1000000},
+    {id:'serie4',nombre:'Scania Serie 4 (P · G · R)',desc:'Kit estándar serie 4',std:540000,orig:634990,prem:799990,topVentas:true},
+    {id:'serie5',nombre:'Scania Serie 5',desc:'Kit estándar serie 5',std:720000,orig:839990,prem:1000000,topVentas:true},
     {id:'p230',nombre:'Scania P230 · P270 · P310',desc:'Kit DC9 reparto-mediano',std:520000,orig:634990,prem:799990},
     {id:'p340',nombre:'Scania P340 · R340',desc:'Kit DC11',std:560000,orig:680000,prem:830000},
     {id:'r420',nombre:'Scania R420 · G420 · P420',desc:'Kit DC12 pesado',std:680000,orig:790000,prem:920000},
@@ -220,31 +220,31 @@ var DATA={
   volvo:{nombre:'Volvo',modelos:[
     {id:'vm270',nombre:'Volvo VM 220 · 270',desc:'Kit MWM 7.2L',std:480000,orig:560000,prem:720000},
     {id:'fm11',nombre:'Volvo FM 11 · FE',desc:'Kit D11',std:620000,orig:720000,prem:849990},
-    {id:'fh460',nombre:'Volvo FH 460 · FM 440',desc:'Kit D13A · D13B',std:690000,orig:799990,prem:949990},
+    {id:'fh460',nombre:'Volvo FH 460 · FM 440',desc:'Kit D13A · D13B',std:690000,orig:799990,prem:949990,topVentas:true},
     {id:'fh500',nombre:'Volvo FH 500 · 540 (nuevo)',desc:'Kit D13K Euro 5/6',std:720000,orig:830000,prem:1000000},
     {id:'fh700',nombre:'Volvo FH 700',desc:'Kit D16 alta potencia',std:850000,orig:980000,prem:1180000}
   ]},
   ford:{nombre:'Ford Cargo',modelos:[
     {id:'cargo814',nombre:'Ford Cargo 814',desc:'Conjunto disco y prensa',std:260000,orig:299990,prem:380000},
     {id:'cargo915e',nombre:'Ford Cargo 915E',desc:'Kit 330mm',std:285000,orig:327990,prem:420000},
-    {id:'cargo1723',nombre:'Ford Cargo 1723 · 1729',desc:'Kit 365mm',std:540000,orig:623990,prem:760000},
+    {id:'cargo1723',nombre:'Ford Cargo 1723 · 1729',desc:'Kit 365mm',std:540000,orig:623990,prem:760000,topVentas:true},
     {id:'cargo2429',nombre:'Ford Cargo 2429',desc:'Kit 395mm',std:600000,orig:698990,prem:840000},
     {id:'cargo3031',nombre:'Ford Cargo 1731 · 2431 · 3031 Torqshift',desc:'Kit 395mm Torqshift premium',std:920000,orig:1098990,prem:1300000},
     {id:'cargoeje',nombre:'Ford Cargo eje piloto',desc:'Kit 365mm sobre eje piloto',std:530000,orig:615990,prem:740000},
     {id:'cargodoble',nombre:'Ford Cargo doble disco',desc:'Kit 365mm doble disco 3 paletas',std:720000,orig:835990,prem:980000}
   ]},
   vw:{nombre:'Volkswagen',modelos:[
-    {id:'vw17280',nombre:'VW 17-280 · 24-280',desc:'Kit 395mm',std:660000,orig:763990,prem:910000},
-    {id:'constellation',nombre:'VW Constellation',desc:'Kit 430mm',std:720000,orig:840000,prem:1000000},
+    {id:'vw17280',nombre:'VW 17-280 · 24-280',desc:'Kit 395mm',std:660000,orig:763990,prem:910000,topVentas:true},
+    {id:'constellation',nombre:'VW Constellation',desc:'Kit 430mm',std:720000,orig:840000,prem:1000000,topVentas:true},
     {id:'vw362',nombre:'VW Worker 17.220 · 9.150',desc:'Kit 362mm',std:580000,orig:675990,prem:820000}
   ]},
   iveco:{nombre:'Iveco',modelos:[
-    {id:'daily',nombre:'Iveco Daily',desc:'Embrague Daily (camioneta-furgón)',std:290000,orig:334990,prem:420000},
+    {id:'daily',nombre:'Iveco Daily',desc:'Embrague Daily (camioneta-furgón)',std:290000,orig:334990,prem:420000,topVentas:true},
     {id:'stralis',nombre:'Iveco Stralis (Cursor 10/13)',desc:'Kit Cursor pesado',std:680000,orig:790000,prem:950000},
     {id:'trakker',nombre:'Iveco Trakker',desc:'Kit Trakker construcción',std:720000,orig:830000,prem:990000}
   ]},
   international:{nombre:'International',modelos:[
-    {id:'9800',nombre:'International 9800i 6x2 · 6x4',desc:'Kit 430mm americano',std:630000,orig:735990,prem:880000},
+    {id:'9800',nombre:'International 9800i 6x2 · 6x4',desc:'Kit 430mm americano',std:630000,orig:735990,prem:880000,topVentas:true},
     {id:'americano',nombre:'International 15½" 4 paletas',desc:'Kit 15½ 1700 lbs/pie',std:530000,orig:649990,prem:799990}
   ]},
   mack:{nombre:'Mack',modelos:[
@@ -273,9 +273,11 @@ function calcularKits(modelo){
   var EXTRAS_COMPLETO=275000  // collarín premium + horquilla + retén + aceite caja
   var EXTRAS_PLUS=540000  // todo lo anterior + servo embrague + bombín nuevo
   
-  var basico=Math.round((modelo.std + MO_STD + EXTRAS_BASICO) * MARGEN / 1000) * 1000
-  var premium=Math.round((modelo.orig + MO_STD + EXTRAS_COMPLETO) * MARGEN / 1000) * 1000
-  var plus=Math.round((modelo.prem + MO_PREMIUM + EXTRAS_PLUS) * MARGEN / 1000) * 1000
+  var DESCUENTO = modelo.topVentas ? 0.85 : 1.0  // 15% OFF en modelos top ventas
+
+  var basico=Math.round((modelo.std + MO_STD + EXTRAS_BASICO) * MARGEN * DESCUENTO / 1000) * 1000
+  var premium=Math.round((modelo.orig + MO_STD + EXTRAS_COMPLETO) * MARGEN * DESCUENTO / 1000) * 1000
+  var plus=Math.round((modelo.prem + MO_PREMIUM + EXTRAS_PLUS) * MARGEN * DESCUENTO / 1000) * 1000
 
   return [
     {
@@ -369,7 +371,8 @@ function renderModelos(){
   }
   
   grid.innerHTML=data.modelos.map(function(m){
-    return '<div class="modelo-btn" data-id="'+m.id+'"><div class="modelo-nombre">'+m.nombre+'</div><div class="modelo-motor">'+m.desc+'</div></div>'
+    var badge = m.topVentas ? '<span style="position:absolute;top:6px;right:6px;background:rgba(245,197,24,0.25);color:#F5C518;font-size:8px;padding:2px 6px;border-radius:4px;font-weight:700;letter-spacing:0.5px">🏆 TOP · 15% OFF</span>' : ''
+    return '<div class="modelo-btn" data-id="'+m.id+'" style="position:relative">'+badge+'<div class="modelo-nombre">'+m.nombre+'</div><div class="modelo-motor">'+m.desc+'</div></div>'
   }).join('')
   
   document.querySelectorAll('.modelo-btn').forEach(function(b){
@@ -396,6 +399,8 @@ function renderKits(){
   sub.textContent=modeloSeleccionado.desc+' · Servicio: 2 técnicos · 8 horas en tu base · Toda la RM'
   
   var kits=calcularKits(modeloSeleccionado)
+  var topBadge = modeloSeleccionado.topVentas ? '<div style="background:linear-gradient(135deg,rgba(245,197,24,0.18),rgba(245,197,24,0.05));border:1px solid rgba(245,197,24,0.4);border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:#F5C518;text-align:center;font-family:Syne,sans-serif;font-weight:700">🏆 MODELO TOP VENTAS · 15% DE DESCUENTO YA INCLUIDO</div>' : ''
+  document.getElementById('kit-sub').innerHTML += topBadge
   grid.innerHTML=kits.map(function(k){
     var msg='Hola%2C%20quiero%20cotizar%20el%20'+encodeURIComponent(k.nombre)+'%20de%20embrague%20para%20mi%20'+encodeURIComponent(DATA[marcaSeleccionada].nombre+' '+modeloSeleccionado.nombre)
     return '<div class="kit-card '+(k.destacado?'destacado':'')+'">'+

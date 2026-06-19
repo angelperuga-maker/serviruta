@@ -219,24 +219,24 @@ section{padding:40px 0;}
 // horas: tiempo total del trabajo en horas
 var DATA={
   toyota:{nombre:'Toyota',modelos:[
-    {id:'yaris',nombre:'Yaris (1.3 / 1.5)',desc:'Kit Sachs/Luk',std:75000,orig:110000,prem:155000,horas:4,tipo:'auto'},
+    {id:'yaris',nombre:'Yaris (1.3 / 1.5)',desc:'Kit Sachs/Luk',std:75000,orig:110000,prem:155000,horas:4,tipo:'auto',topVentas:true},
     {id:'corolla',nombre:'Corolla (1.8 sedán)',desc:'Kit estándar',std:85000,orig:125000,prem:175000,horas:4.5,tipo:'auto'},
     {id:'rav4',nombre:'RAV4 (2.0 / 2.5)',desc:'Kit SUV mediano',std:140000,orig:195000,prem:265000,horas:5.5,tipo:'suv'},
-    {id:'hilux24',nombre:'Hilux 2.4 Diésel',desc:'Kit pickup 4x4',std:240000,orig:320000,prem:420000,horas:6,tipo:'camioneta'},
+    {id:'hilux24',nombre:'Hilux 2.4 Diésel',desc:'Kit pickup 4x4',std:240000,orig:320000,prem:420000,horas:6,tipo:'camioneta',topVentas:true},
     {id:'hilux28',nombre:'Hilux 2.8 Diésel',desc:'Kit pickup reforzado',std:280000,orig:380000,prem:495000,horas:6.5,tipo:'camioneta'},
     {id:'fortuner',nombre:'Fortuner',desc:'Kit SUV grande 4x4',std:295000,orig:395000,prem:520000,horas:6.5,tipo:'suv'}
   ]},
   hyundai:{nombre:'Hyundai',modelos:[
-    {id:'accent',nombre:'Accent (1.4 / 1.6)',desc:'Kit Luk/Valeo',std:70000,orig:100000,prem:145000,horas:4,tipo:'auto'},
+    {id:'accent',nombre:'Accent (1.4 / 1.6)',desc:'Kit Luk/Valeo',std:70000,orig:100000,prem:145000,horas:4,tipo:'auto',topVentas:true},
     {id:'i10',nombre:'i10',desc:'Kit compacto Kappa',std:65000,orig:92000,prem:135000,horas:4,tipo:'auto'},
     {id:'i20',nombre:'i20',desc:'Kit compacto',std:72000,orig:105000,prem:150000,horas:4,tipo:'auto'},
     {id:'creta',nombre:'Creta',desc:'Kit SUV pequeño',std:115000,orig:165000,prem:230000,horas:5,tipo:'suv'},
-    {id:'tucson',nombre:'Tucson (2.0)',desc:'Kit SUV mediano',std:140000,orig:195000,prem:260000,horas:5.5,tipo:'suv'},
+    {id:'tucson',nombre:'Tucson (2.0)',desc:'Kit SUV mediano',std:140000,orig:195000,prem:260000,horas:5.5,tipo:'suv',topVentas:true},
     {id:'h100',nombre:'H100 / Porter',desc:'Kit furgón liviano',std:180000,orig:245000,prem:325000,horas:5.5,tipo:'camioneta'},
     {id:'santafe',nombre:'Santa Fe',desc:'Kit SUV grande',std:175000,orig:245000,prem:325000,horas:6,tipo:'suv'}
   ]},
   kia:{nombre:'Kia',modelos:[
-    {id:'morning',nombre:'Morning',desc:'Kit Sachs económico',std:60000,orig:88000,prem:130000,horas:4,tipo:'auto'},
+    {id:'morning',nombre:'Morning',desc:'Kit Sachs económico',std:60000,orig:88000,prem:130000,horas:4,tipo:'auto',topVentas:true},
     {id:'rio',nombre:'Rio / Soluto',desc:'Kit Sachs/Luk',std:72000,orig:105000,prem:150000,horas:4,tipo:'auto'},
     {id:'stonic',nombre:'Stonic',desc:'Kit SUV compacto',std:105000,orig:150000,prem:210000,horas:5,tipo:'suv'},
     {id:'sportage',nombre:'Sportage',desc:'Kit SUV mediano',std:145000,orig:200000,prem:270000,horas:5.5,tipo:'suv'},
@@ -245,8 +245,8 @@ var DATA={
     {id:'k2700',nombre:'K2700 / Frontier',desc:'Kit camioneta utilitaria',std:175000,orig:240000,prem:320000,horas:5.5,tipo:'camioneta'}
   ]},
   chevrolet:{nombre:'Chevrolet',modelos:[
-    {id:'spark',nombre:'Spark / Spark GT',desc:'Kit compacto',std:62000,orig:90000,prem:130000,horas:4,tipo:'auto'},
-    {id:'sail',nombre:'Sail',desc:'Kit Luk/Sachs',std:78000,orig:115000,prem:160000,horas:4,tipo:'auto'},
+    {id:'spark',nombre:'Spark / Spark GT',desc:'Kit compacto',std:62000,orig:90000,prem:130000,horas:4,tipo:'auto',topVentas:true},
+    {id:'sail',nombre:'Sail',desc:'Kit Luk/Sachs',std:78000,orig:115000,prem:160000,horas:4,tipo:'auto',topVentas:true},
     {id:'onix',nombre:'Onix Turbo',desc:'Kit Turbo 1.0/1.2',std:85000,orig:125000,prem:175000,horas:4.5,tipo:'auto'},
     {id:'tracker',nombre:'Tracker',desc:'Kit SUV pequeño',std:110000,orig:155000,prem:220000,horas:5,tipo:'suv'},
     {id:'cruze',nombre:'Cruze',desc:'Kit sedán mediano',std:95000,orig:140000,prem:195000,horas:4.5,tipo:'auto'},
@@ -265,9 +265,9 @@ var DATA={
     {id:'np300',nombre:'NP300',desc:'Kit camioneta liviana',std:215000,orig:295000,prem:390000,horas:6,tipo:'camioneta'}
   ]},
   suzuki:{nombre:'Suzuki',modelos:[
-    {id:'alto',nombre:'Alto / Alto 800',desc:'Kit ultracompacto',std:55000,orig:80000,prem:118000,horas:3.5,tipo:'auto'},
+    {id:'alto',nombre:'Alto / Alto 800',desc:'Kit ultracompacto',std:55000,orig:80000,prem:118000,horas:3.5,tipo:'auto',topVentas:true},
     {id:'celerio',nombre:'Celerio',desc:'Kit compacto K10',std:60000,orig:88000,prem:125000,horas:4,tipo:'auto'},
-    {id:'swift',nombre:'Swift',desc:'Kit Luk K12',std:70000,orig:102000,prem:145000,horas:4,tipo:'auto'},
+    {id:'swift',nombre:'Swift',desc:'Kit Luk K12',std:70000,orig:102000,prem:145000,horas:4,tipo:'auto',topVentas:true},
     {id:'baleno',nombre:'Baleno',desc:'Kit Luk K14',std:75000,orig:108000,prem:155000,horas:4,tipo:'auto'},
     {id:'vitara',nombre:'Vitara / Grand Vitara',desc:'Kit SUV compacto',std:115000,orig:160000,prem:225000,horas:5,tipo:'suv'},
     {id:'scross',nombre:'S-Cross',desc:'Kit SUV mediano',std:120000,orig:170000,prem:235000,horas:5,tipo:'suv'},
@@ -284,7 +284,7 @@ var DATA={
     {id:'mirage',nombre:'Mirage / Space Star',desc:'Kit compacto',std:62000,orig:90000,prem:130000,horas:4,tipo:'auto'},
     {id:'asx',nombre:'ASX',desc:'Kit SUV compacto',std:120000,orig:170000,prem:235000,horas:5,tipo:'suv'},
     {id:'outlander',nombre:'Outlander',desc:'Kit SUV mediano',std:155000,orig:215000,prem:290000,horas:5.5,tipo:'suv'},
-    {id:'l200',nombre:'L200 / Triton',desc:'Kit camioneta 2.4 diésel',std:265000,orig:355000,prem:465000,horas:6.5,tipo:'camioneta'},
+    {id:'l200',nombre:'L200 / Triton',desc:'Kit camioneta 2.4 diésel',std:265000,orig:355000,prem:465000,horas:6.5,tipo:'camioneta',topVentas:true},
     {id:'montero',nombre:'Montero Sport',desc:'Kit SUV grande 4x4',std:275000,orig:370000,prem:485000,horas:6.5,tipo:'suv'}
   ]},
   vw:{nombre:'Volkswagen',modelos:[
@@ -354,9 +354,11 @@ function calcularKits(modelo){
     EX_PLUS=355000
   }
 
-  var basico=Math.round((modelo.std + MO + EX_BASICO) * MARGEN / 1000) * 1000
-  var premium=Math.round((modelo.orig + MO + EX_COMPLETO) * MARGEN / 1000) * 1000
-  var plus=Math.round((modelo.prem + MO + EX_PLUS) * MARGEN / 1000) * 1000
+  var DESCUENTO = modelo.topVentas ? 0.85 : 1.0  // 15% OFF en modelos top ventas
+
+  var basico=Math.round((modelo.std + MO + EX_BASICO) * MARGEN * DESCUENTO / 1000) * 1000
+  var premium=Math.round((modelo.orig + MO + EX_COMPLETO) * MARGEN * DESCUENTO / 1000) * 1000
+  var plus=Math.round((modelo.prem + MO + EX_PLUS) * MARGEN * DESCUENTO / 1000) * 1000
 
   return [
     {
@@ -478,7 +480,8 @@ function renderModelos(){
   }else{
     grid.innerHTML=modelosFiltrados.map(function(m){
       var tagLabel = m.tipo==='auto'?'AUTO':(m.tipo==='suv'?'SUV':'CAMIONETA')
-      return '<div class="modelo-btn" data-id="'+m.id+'"><span class="modelo-tag">'+tagLabel+'</span><div class="modelo-nombre">'+m.nombre+'</div><div class="modelo-motor">'+m.desc+'</div></div>'
+      var topBadge = m.topVentas ? '<div style="position:absolute;bottom:8px;right:8px;background:rgba(245,197,24,0.25);color:#F5C518;font-size:9px;padding:2px 7px;border-radius:4px;font-weight:700;letter-spacing:0.5px">🏆 15% OFF</div>' : ''
+      return '<div class="modelo-btn" data-id="'+m.id+'" style="padding-bottom:'+(m.topVentas?'30px':'12px')+'"><span class="modelo-tag">'+tagLabel+'</span><div class="modelo-nombre">'+m.nombre+'</div><div class="modelo-motor">'+m.desc+'</div>'+topBadge+'</div>'
     }).join('')
   }
   
@@ -509,6 +512,9 @@ function renderKits(){
   sub.textContent=tipoLabel+' · '+modeloSeleccionado.desc+' · Servicio: 2 técnicos · '+modeloSeleccionado.horas+' horas en tu base · Toda la RM'
   
   var kits=calcularKits(modeloSeleccionado)
+  if(modeloSeleccionado.topVentas){
+    sub.innerHTML += '<div style="background:linear-gradient(135deg,rgba(245,197,24,0.18),rgba(245,197,24,0.05));border:1px solid rgba(245,197,24,0.4);border-radius:8px;padding:10px 14px;margin-top:12px;font-size:12px;color:#F5C518;text-align:center;font-family:Syne,sans-serif;font-weight:700">🏆 MODELO TOP VENTAS · 15% DE DESCUENTO YA INCLUIDO EN PRECIOS</div>'
+  }
   grid.innerHTML=kits.map(function(k){
     var msg='Hola%2C%20quiero%20cotizar%20el%20'+encodeURIComponent(k.nombre)+'%20de%20embrague%20para%20mi%20'+encodeURIComponent(DATA[marcaSeleccionada].nombre+' '+modeloSeleccionado.nombre)
     return '<div class="kit-card '+(k.destacado?'destacado':'')+'">'+

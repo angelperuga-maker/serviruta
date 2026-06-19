@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta · Servicios Públicos</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;--cyan:#22D3EE;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:680px;margin:0 auto;}
+.top{background:var(--c1);border-bottom:1px solid var(--borde);padding:12px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;}
+.top-back{background:none;border:1px solid var(--borde);color:var(--txt3);font-size:11px;padding:5px 12px;border-radius:6px;cursor:pointer;text-decoration:none;}
+.top-icon{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--azul),var(--morado));display:flex;align-items:center;justify-content:center;font-size:16px;}
+.top-info{flex:1;}
+.top-titulo{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;}
+.top-sub{font-size:10px;color:var(--txt3);}
+.body{padding:14px 14px 40px;}
+
+.sec{font-family:"Syne",sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);margin:14px 0 8px;display:flex;align-items:center;gap:8px;}
+.sec::after{content:"";flex:1;height:1px;background:var(--borde);}
+
+.intro{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:12px 14px;font-size:12px;color:var(--txt2);line-height:1.6;margin-bottom:14px;}
+.intro b{color:var(--txt);}
+
+.servicio{background:var(--c2);border:1px solid var(--borde);border-radius:14px;padding:0;margin-bottom:12px;overflow:hidden;}
+.servicio-head{padding:16px;display:flex;align-items:center;gap:12px;}
+.servicio-icon{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.servicio-info{flex:1;}
+.servicio-nombre{font-family:"Syne",sans-serif;font-weight:800;font-size:15px;}
+.servicio-tag{font-size:10px;color:var(--txt3);margin-top:2px;text-transform:uppercase;letter-spacing:0.5px;font-weight:600;}
+.servicio-ticket{font-family:"Syne",sans-serif;font-weight:700;font-size:11px;color:var(--verde);background:rgba(34,197,94,0.1);padding:3px 8px;border-radius:6px;}
+
+.url-row{background:var(--c3);padding:10px 14px;display:flex;align-items:center;gap:8px;font-family:DM Mono,monospace;font-size:10px;color:var(--azul);border-top:1px solid var(--borde);}
+.url-text{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.copy-btn{background:none;border:1px solid var(--borde);color:var(--txt3);font-family:"Syne",sans-serif;font-weight:700;font-size:9px;padding:3px 8px;border-radius:4px;cursor:pointer;flex-shrink:0;}
+.copy-btn:active{background:var(--azul);color:#000;}
+
+.acciones{display:grid;grid-template-columns:1fr 1fr;gap:4px;padding:10px 12px 12px;border-top:1px solid var(--borde);}
+.act-btn{padding:9px;border-radius:6px;font-family:"Syne",sans-serif;font-weight:700;font-size:11px;border:none;cursor:pointer;text-decoration:none;text-align:center;display:flex;align-items:center;justify-content:center;gap:5px;}
+.act-btn.ver{background:var(--c3);color:var(--txt);border:1px solid var(--borde);}
+.act-btn.wa{background:#25D366;color:#000;}
+
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:14px;}
+.stat-mini{background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:8px;text-align:center;}
+.stat-mini-val{font-family:"Syne",sans-serif;font-weight:800;font-size:15px;}
+.stat-mini-lbl{font-size:9px;color:var(--txt3);text-transform:uppercase;letter-spacing:0.5px;margin-top:2px;}
+
+.share-block{background:linear-gradient(135deg,rgba(167,139,250,0.08),rgba(96,165,250,0.04));border:1px solid rgba(167,139,250,0.25);border-radius:12px;padding:14px;margin-bottom:14px;}
+.share-titulo{font-family:"Syne",sans-serif;font-weight:700;font-size:12px;color:var(--morado);margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.share-texto{font-size:12px;color:var(--txt2);line-height:1.5;}
+
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--c3);border:1px solid var(--borde);border-radius:8px;padding:10px 16px;font-size:12px;opacity:0;transition:all 0.25s;pointer-events:none;z-index:999;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.ok{border-color:rgba(34,197,94,0.4);color:var(--verde);}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <a href="menu-coordinador.html" class="top-back">←</a>
+  <div class="top-icon">🌐</div>
+  <div class="top-info">
+    <div class="top-titulo">Servicios Públicos</div>
+    <div class="top-sub">Landings para compartir con clientes</div>
+  </div>
+</div>
+
+<div class="body">
+
+  <div class="intro">
+    Estas son las <b>landing pages SEO</b> de los servicios premium de Serviruta. Compártelas por WhatsApp con clientes potenciales para que vean precios, garantías y cotizar directo.
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-mini"><div class="stat-mini-val" style="color:var(--verde)">5</div><div class="stat-mini-lbl">Activas</div></div>
+    <div class="stat-mini"><div class="stat-mini-val" style="color:var(--amarillo)">$89K</div><div class="stat-mini-lbl">Mín ticket</div></div>
+    <div class="stat-mini"><div class="stat-mini-val" style="color:var(--rojo)">$4M</div><div class="stat-mini-lbl">Máx ticket</div></div>
+  </div>
+
+  <div class="sec">Servicios de camiones</div>
+
+  <!-- Pre-RT Camión -->
+  <div class="servicio">
+    <div class="servicio-head">
+      <div class="servicio-icon" style="background:rgba(232,33,10,0.15);color:var(--rojo)">🚛</div>
+      <div class="servicio-info">
+        <div class="servicio-nombre">Pre-Revisión Técnica Camión</div>
+        <div class="servicio-tag">Pre-RT · Clase A2 · A domicilio</div>
+      </div>
+      <div class="servicio-ticket">$89K-$389K</div>
+    </div>
+    <div class="url-row">
+      <span class="url-text" id="url-pre-rt">serviruta.cl/pre-revision-tecnica-camion</span>
+      <button class="copy-btn" data-target="url-pre-rt">Copiar</button>
+    </div>
+    <div class="acciones">
+      <a href="pre-revision-tecnica-camion.html" target="_blank" class="act-btn ver">👁️ Ver</a>
+      <button class="act-btn wa" data-share="pre-rt">💬 Compartir</button>
+    </div>
+  </div>
+
+  <!-- Thermo King -->
+  <div class="servicio">
+    <div class="servicio-head">
+      <div class="servicio-icon" style="background:rgba(34,211,238,0.15);color:var(--cyan)">❄️</div>
+      <div class="servicio-info">
+        <div class="servicio-nombre">Emergencia Thermo King 24/7</div>
+        <div class="servicio-tag">Refrigerado · Carrier · Mitsubishi</div>
+      </div>
+      <div class="servicio-ticket">$149K-$1.5M</div>
+    </div>
+    <div class="url-row">
+      <span class="url-text" id="url-thermo">serviruta.cl/emergencia-thermo-king-camion-refrigerado</span>
+      <button class="copy-btn" data-target="url-thermo">Copiar</button>
+    </div>
+    <div class="acciones">
+      <a href="emergencia-thermo-king-camion-refrigerado.html" target="_blank" class="act-btn ver">👁️ Ver</a>
+      <button class="act-btn wa" data-share="thermo">💬 Compartir</button>
+    </div>
+  </div>
+
+  <!-- Fuelle Suspensión -->
+  <div class="servicio">
+    <div class="servicio-head">
+      <div class="servicio-icon" style="background:rgba(251,146,60,0.15);color:var(--naranja)">🎈</div>
+      <div class="servicio-info">
+        <div class="servicio-nombre">Fuelle Suspensión Neumática</div>
+        <div class="servicio-tag">BPW · MAN · Volvo · Scania</div>
+      </div>
+      <div class="servicio-ticket">$79K-$459K</div>
+    </div>
+    <div class="url-row">
+      <span class="url-text" id="url-fuelle">serviruta.cl/fuelle-suspension-neumatica-camion</span>
+      <button class="copy-btn" data-target="url-fuelle">Copiar</button>
+    </div>
+    <div class="acciones">
+      <a href="fuelle-suspension-neumatica-camion.html" target="_blank" class="act-btn ver">👁️ Ver</a>
+      <button class="act-btn wa" data-share="fuelle">💬 Compartir</button>
+    </div>
+  </div>
+
+  <!-- Common Rail -->
+  <div class="servicio">
+    <div class="servicio-head">
+      <div class="servicio-icon" style="background:rgba(96,165,250,0.15);color:var(--azul)">🔌</div>
+      <div class="servicio-info">
+        <div class="servicio-nombre">Diagnóstico Common Rail</div>
+        <div class="servicio-tag">Bosch · Denso · Delphi · Siemens</div>
+      </div>
+      <div class="servicio-ticket">$129K-$4M</div>
+    </div>
+    <div class="url-row">
+      <span class="url-text" id="url-cr">serviruta.cl/diagnostico-common-rail-camion</span>
+      <button class="copy-btn" data-target="url-cr">Copiar</button>
+    </div>
+    <div class="acciones">
+      <a href="diagnostico-common-rail-camion.html" target="_blank" class="act-btn ver">👁️ Ver</a>
+      <button class="act-btn wa" data-share="cr">💬 Compartir</button>
+    </div>
+  </div>
+
+  <!-- Guía DPF -->
+  <div class="servicio">
+    <div class="servicio-head">
+      <div class="servicio-icon" style="background:rgba(167,139,250,0.15);color:var(--morado)">📚</div>
+      <div class="servicio-info">
+        <div class="servicio-nombre">Guía Interactiva DPF</div>
+        <div class="servicio-tag">Material de apoyo de venta · 3 soluciones</div>
+      </div>
+      <div class="servicio-ticket">$149K-$389K</div>
+    </div>
+    <div class="url-row">
+      <span class="url-text" id="url-dpf">serviruta.cl/guia-dpf-camion</span>
+      <button class="copy-btn" data-target="url-dpf">Copiar</button>
+    </div>
+    <div class="acciones">
+      <a href="guia-dpf-camion.html" target="_blank" class="act-btn ver">👁️ Ver</a>
+      <button class="act-btn wa" data-share="dpf">💬 Compartir</button>
+    </div>
+  </div>
+
+    <!-- Hidráulico -->
+  <div class="servicio">
+    <div class="servicio-head">
+      <div class="servicio-icon" style="background:rgba(245,197,24,0.15);color:var(--amarillo)">💪</div>
+      <div class="servicio-info">
+        <div class="servicio-nombre">Reparación Hidráulica</div>
+        <div class="servicio-tag">Tolva · Grúa · Volquete · Rampla</div>
+      </div>
+      <div class="servicio-ticket">$99K-$2.5M</div>
+    </div>
+    <div class="url-row">
+      <span class="url-text" id="url-hidra">serviruta.cl/reparacion-hidraulica-camion</span>
+      <button class="copy-btn" data-target="url-hidra">Copiar</button>
+    </div>
+    <div class="acciones">
+      <a href="reparacion-hidraulica-camion.html" target="_blank" class="act-btn ver">👁️ Ver</a>
+      <button class="act-btn wa" data-share="hidra">💬 Compartir</button>
+    </div>
+  </div>
+
+  <div class="share-block">
+    <div class="share-titulo">💡 Tip de venta</div>
+    <div class="share-texto">Cuando un cliente pregunta por WhatsApp por un servicio, mándale la <b>landing específica</b> en vez de explicar todo. Le da precios claros, garantía visible y CTAs para cotizar — convierte 3x más que la conversación libre.</div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var BASE='https://angelperuga-maker.github.io/serviruta/'
+
+var SERVICIOS={
+  'pre-rt':{
+    nombre:'Pre-Revisión Técnica Camión',
+    archivo:'pre-revision-tecnica-camion.html',
+    msg:'Hola! Te comparto la información de nuestro servicio de Pre-Revisión Técnica para Camión a domicilio. Revisamos los 9 puntos de la planta Clase A2 en tu base. Si hay fallas, las reparamos en el lugar. Garantía escrita si reprueba.\n\n📄 Ver detalles, precios y cotizar:\n'
+  },
+  'thermo':{
+    nombre:'Emergencia Thermo King',
+    archivo:'emergencia-thermo-king-camion-refrigerado.html',
+    msg:'Hola! Si tienes un camión refrigerado con falla, somos especialistas en emergencias Thermo King, Carrier y otros sistemas de frío. Atención 24/7 con respuesta <90 min en RM. Salvamos tu carga.\n\n📄 Ver más info y activar emergencia:\n'
+  },
+  'fuelle':{
+    nombre:'Fuelle Suspensión Neumática',
+    archivo:'fuelle-suspension-neumatica-camion.html',
+    msg:'Hola! Hacemos cambio de fuelle de suspensión neumática para camión en tu base. Stock de BPW, MAN, Volvo, Scania. Sin trasladar el camión, listo el mismo día. Garantía 6 meses.\n\n📄 Ver detalles y cotizar:\n'
+  },
+  'cr':{
+    nombre:'Diagnóstico Common Rail',
+    archivo:'diagnostico-common-rail-camion.html',
+    msg:'Hola! Si tu camión diésel pierde fuerza, humea o no parte, te ofrecemos diagnóstico Common Rail profesional a domicilio. Con scanner línea pesada. $249K te ahorran reparaciones equivocadas de millones.\n\n📄 Ver más info y agendar:\n'
+  },
+  'dpf':{
+    nombre:'Guía DPF Camión',
+    archivo:'guia-dpf-camion.html',
+    msg:'Hola! Antes de pensar en eliminar el DPF de tu camión, te recomiendo ver esta guía. Tenemos 3 soluciones reales según el estado del filtro (desde $149K) que te ahorran multas, mantienen la RT al día y el valor de reventa del camión.\n\n📚 Ver guía interactiva con test gratis:\n'
+  },
+  'hidra':{
+    nombre:'Reparación Hidráulica',
+    archivo:'reparacion-hidraulica-camion.html',
+    msg:'Hola! Reparamos sistema hidráulico de camión tolva, grúa, volquete y rampla en obra. Cilindros, bombas, mangueras alta presión. Sin trasladar el camión. La mayoría se resuelve el mismo día.\n\n📄 Ver detalles y cotizar:\n'
+  }
+}
+
+// Copiar URLs
+document.querySelectorAll('.copy-btn').forEach(function(b){
+  b.onclick=function(){
+    var id=b.getAttribute('data-target')
+    var url='https://'+document.getElementById(id).textContent
+    navigator.clipboard.writeText(url).then(function(){
+      toast('URL copiada','ok')
+    })
+  }
+})
+
+// Compartir por WhatsApp
+document.querySelectorAll('[data-share]').forEach(function(b){
+  b.onclick=function(){
+    var key=b.getAttribute('data-share')
+    var s=SERVICIOS[key]
+    var url=BASE+s.archivo
+    var msg=s.msg+url+'\n\nEquipo Serviruta\n+56 9 4521 0814'
+    window.open('https://wa.me/?text='+encodeURIComponent(msg),'_blank')
+  }
+})
+
+function toast(m,t){
+  var el=document.getElementById('toast')
+  el.textContent=m
+  el.className='toast'+(t?' '+t:'')
+  el.classList.add('show')
+  setTimeout(function(){el.classList.remove('show')},2000)
+}
+</script>
+</body>
+</html>

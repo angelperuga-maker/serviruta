@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guía DPF Camión · Serviruta · 3 soluciones reales</title>
+<meta name="description" content="¿Tu camión tiene problema con el DPF? Descubre por qué eliminarlo te sale más caro y conoce las 3 soluciones reales de Serviruta: regeneración, doble regeneración o DPF Revival.">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;line-height:1.6;}
+.container{max-width:900px;margin:0 auto;padding:0 16px;}
+
+/* HEADER */
+.header{background:rgba(15,15,18,0.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--borde);padding:12px 0;position:sticky;top:0;z-index:100;}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.logo{font-family:"Syne",sans-serif;font-weight:800;font-size:20px;color:var(--txt);text-decoration:none;}
+.logo span{color:var(--rojo);}
+.btn-wa-h{background:#25D366;color:#000;padding:7px 14px;border-radius:6px;font-family:"Syne",sans-serif;font-weight:700;font-size:12px;text-decoration:none;}
+
+/* HERO */
+.hero{padding:50px 0;text-align:center;border-bottom:1px solid var(--borde);background:radial-gradient(circle at 50% 0%,rgba(232,33,10,0.08) 0%,transparent 60%);}
+.hero-eyebrow{display:inline-block;background:rgba(232,33,10,0.12);border:1px solid rgba(232,33,10,0.4);color:var(--rojo);font-family:"Syne",sans-serif;font-weight:700;font-size:10px;letter-spacing:2px;padding:5px 12px;border-radius:20px;text-transform:uppercase;margin-bottom:18px;}
+.hero h1{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(28px,5vw,46px);line-height:1.1;margin-bottom:14px;max-width:800px;margin-left:auto;margin-right:auto;}
+.hero h1 .rojo{color:var(--rojo);}
+.hero p{font-size:clamp(14px,2vw,17px);color:var(--txt2);max-width:600px;margin:0 auto 24px;}
+
+/* PROGRESS NAV */
+.nav-pasos{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-bottom:30px;padding:0 16px;}
+.np-btn{background:var(--c2);border:1px solid var(--borde);color:var(--txt3);font-family:"Syne",sans-serif;font-weight:700;font-size:10px;padding:6px 12px;border-radius:20px;cursor:pointer;text-decoration:none;text-transform:uppercase;letter-spacing:0.5px;}
+.np-btn:hover{border-color:var(--rojo);color:var(--rojo);}
+
+/* SECCIONES */
+section{padding:50px 0;border-bottom:1px solid var(--c1);}
+.sec-eyebrow{color:var(--rojo);font-family:"Syne",sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;}
+.sec-titulo{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(24px,3.5vw,34px);line-height:1.2;margin-bottom:14px;}
+.sec-titulo .rojo{color:var(--rojo);}
+.sec-sub{font-size:15px;color:var(--txt2);max-width:680px;margin-bottom:28px;}
+
+/* DPF DIAGRAM */
+.dpf-info{background:var(--c2);border:1px solid var(--borde);border-radius:14px;padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:center;}
+.dpf-visual{background:var(--c1);border-radius:10px;padding:30px;text-align:center;font-size:60px;}
+.dpf-texto h3{font-family:"Syne",sans-serif;font-weight:700;font-size:18px;margin-bottom:8px;}
+.dpf-texto p{font-size:13px;color:var(--txt2);line-height:1.7;}
+.dpf-texto p b{color:var(--txt);}
+
+/* SINTOMAS */
+.sintomas{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-top:20px;}
+.sintoma{background:var(--c2);border:1px solid var(--borde);border-left:3px solid var(--amarillo);border-radius:10px;padding:14px;}
+.sintoma-icon{font-size:24px;margin-bottom:6px;}
+.sintoma-tit{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;margin-bottom:4px;}
+.sintoma-desc{font-size:11px;color:var(--txt2);line-height:1.5;}
+
+/* DANGER ZONE - ELIMINAR */
+.danger-zone{background:linear-gradient(135deg,rgba(232,33,10,0.1),rgba(232,33,10,0.03));border:2px solid var(--rojo);border-radius:16px;padding:24px;margin-top:20px;}
+.danger-titulo{font-family:"Syne",sans-serif;font-weight:800;font-size:18px;color:var(--rojo);margin-bottom:8px;display:flex;align-items:center;gap:8px;}
+.danger-sub{font-size:13px;color:var(--txt2);margin-bottom:18px;}
+.danger-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;}
+.danger-item{background:rgba(0,0,0,0.4);border-radius:8px;padding:12px;}
+.danger-item-icon{font-size:22px;margin-bottom:6px;}
+.danger-item-tit{font-family:"Syne",sans-serif;font-weight:700;font-size:12px;color:var(--rojo);margin-bottom:3px;}
+.danger-item-desc{font-size:11px;color:var(--txt2);line-height:1.5;}
+
+/* COMPARADOR INTERACTIVO */
+.comparador{margin-top:24px;}
+.tabla-comp{background:var(--c2);border:1px solid var(--borde);border-radius:12px;overflow:hidden;overflow-x:auto;}
+.tabla-comp table{width:100%;border-collapse:collapse;font-size:12px;min-width:600px;}
+.tabla-comp th{background:var(--c3);font-family:"Syne",sans-serif;font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--txt2);padding:14px 10px;text-align:left;border-bottom:1px solid var(--borde);}
+.tabla-comp th.eliminar{color:var(--rojo);}
+.tabla-comp th.serviruta{color:var(--verde);}
+.tabla-comp td{padding:12px 10px;border-bottom:1px solid var(--c3);color:var(--txt);font-size:12px;vertical-align:middle;}
+.tabla-comp tr:last-child td{border-bottom:none;}
+.tabla-comp td.label{font-family:"Syne",sans-serif;font-weight:700;font-size:11px;color:var(--txt3);text-transform:uppercase;letter-spacing:0.5px;}
+.check-ok{color:var(--verde);font-weight:bold;}
+.check-no{color:var(--rojo);font-weight:bold;}
+
+/* SOLUCIONES */
+.soluciones{margin-top:24px;}
+.solucion{background:var(--c2);border:1px solid var(--borde);border-radius:14px;margin-bottom:14px;overflow:hidden;}
+.sol-head{padding:18px 20px;display:flex;align-items:center;gap:14px;cursor:pointer;}
+.sol-letra{width:50px;height:50px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:"Syne",sans-serif;font-weight:900;font-size:22px;flex-shrink:0;}
+.sol-info{flex:1;}
+.sol-nombre{font-family:"Syne",sans-serif;font-weight:800;font-size:16px;}
+.sol-tag{font-size:11px;color:var(--txt3);margin-top:2px;}
+.sol-precio{font-family:"Syne",sans-serif;font-weight:800;color:var(--verde);font-size:14px;background:rgba(34,197,94,0.1);padding:5px 10px;border-radius:6px;flex-shrink:0;}
+.sol-arrow{color:var(--txt3);font-size:14px;transition:transform 0.2s;}
+.solucion.open .sol-arrow{transform:rotate(180deg);}
+.sol-body{display:none;padding:0 20px 20px;border-top:1px solid var(--borde);}
+.solucion.open .sol-body{display:block;}
+.sol-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:14px;}
+.sol-dato{background:var(--c3);border-radius:8px;padding:10px;}
+.sol-dato-lbl{font-size:9px;color:var(--txt3);text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:3px;}
+.sol-dato-val{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;}
+.sol-incluye{margin-top:14px;}
+.sol-incluye h4{font-family:"Syne",sans-serif;font-weight:700;font-size:11px;color:var(--rojo);margin-bottom:8px;text-transform:uppercase;letter-spacing:1px;}
+.sol-incluye ul{list-style:none;padding:0;}
+.sol-incluye li{font-size:12px;color:var(--txt);padding:5px 0 5px 22px;position:relative;}
+.sol-incluye li::before{content:"✓";position:absolute;left:0;color:var(--verde);font-weight:bold;}
+.sol-cuando{background:rgba(96,165,250,0.08);border-left:3px solid var(--azul);border-radius:6px;padding:10px 12px;margin-top:14px;font-size:12px;color:var(--txt2);}
+.sol-cuando b{color:var(--azul);}
+
+/* QUIZ */
+.quiz{background:var(--c2);border:1px solid var(--borde);border-radius:14px;padding:24px;margin-top:24px;}
+.quiz-titulo{font-family:"Syne",sans-serif;font-weight:800;font-size:18px;margin-bottom:6px;}
+.quiz-sub{font-size:12px;color:var(--txt2);margin-bottom:16px;}
+.q-pregunta{margin-bottom:14px;display:none;}
+.q-pregunta.active{display:block;}
+.q-num{font-family:"Syne",sans-serif;font-weight:700;font-size:10px;color:var(--rojo);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+.q-texto{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;margin-bottom:10px;}
+.q-opciones{display:grid;gap:8px;}
+.q-opcion{background:var(--c3);border:1px solid var(--borde);border-radius:8px;padding:10px 14px;cursor:pointer;font-size:12px;color:var(--txt);text-align:left;}
+.q-opcion:hover{border-color:var(--rojo);}
+.q-resultado{display:none;padding:20px;background:linear-gradient(135deg,rgba(34,197,94,0.08),rgba(34,197,94,0.02));border:1px solid var(--verde);border-radius:10px;margin-top:14px;}
+.q-resultado.active{display:block;}
+.q-resultado-tit{font-family:"Syne",sans-serif;font-weight:800;font-size:18px;color:var(--verde);margin-bottom:6px;}
+.q-resultado-sub{font-size:13px;color:var(--txt);margin-bottom:14px;}
+.q-resultado-precio{font-family:"Syne",sans-serif;font-weight:800;font-size:22px;color:var(--verde);}
+.q-resultado-cta{background:#25D366;color:#000;padding:12px 20px;border-radius:8px;font-family:"Syne",sans-serif;font-weight:800;font-size:13px;text-decoration:none;display:inline-block;margin-top:14px;}
+
+/* SAVINGS CALC */
+.calc{background:linear-gradient(135deg,rgba(34,197,94,0.05),rgba(232,33,10,0.05));border:1px solid var(--borde);border-radius:14px;padding:20px;margin-top:24px;}
+.calc-titulo{font-family:"Syne",sans-serif;font-weight:800;font-size:18px;margin-bottom:14px;}
+.calc-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed var(--c3);font-size:13px;}
+.calc-row:last-child{border-bottom:none;}
+.calc-row .opcion{color:var(--txt2);}
+.calc-row .monto{font-family:"Syne",sans-serif;font-weight:700;}
+.calc-row.bad .monto{color:var(--rojo);}
+.calc-row.good .monto{color:var(--verde);}
+.calc-row.total{margin-top:10px;padding-top:14px;border-top:2px solid var(--borde);font-family:"Syne",sans-serif;font-weight:800;font-size:15px;}
+
+/* CTA FINAL */
+.cta-final{background:linear-gradient(135deg,var(--rojo) 0%,#a8170a 100%);text-align:center;padding:60px 20px;}
+.cta-final h2{font-family:"Syne",sans-serif;font-weight:900;font-size:clamp(24px,4vw,34px);margin-bottom:12px;color:#fff;}
+.cta-final p{font-size:14px;color:rgba(255,255,255,0.9);max-width:550px;margin:0 auto 24px;}
+.cta-final .btn-wa-f{background:#fff;color:#000;padding:16px 32px;border-radius:10px;font-family:"Syne",sans-serif;font-weight:800;font-size:16px;text-decoration:none;display:inline-block;}
+
+/* WhatsApp FLOTANTE */
+.wa-float{position:fixed;bottom:24px;right:24px;width:58px;height:58px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;font-size:28px;text-decoration:none;box-shadow:0 6px 20px rgba(37,211,102,0.4);z-index:99;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 6px 20px rgba(37,211,102,0.4);}50%{box-shadow:0 6px 30px rgba(37,211,102,0.7);}}
+
+@media(max-width:640px){
+  .dpf-info{grid-template-columns:1fr;}
+  .dpf-visual{padding:20px;font-size:40px;}
+  section{padding:40px 0;}
+  .hero{padding:40px 0;}
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="container header-inner">
+    <a href="https://serviruta.cl" class="logo">SERVI<span>RUTA</span></a>
+    <a href="https://wa.me/56945210814?text=Hola%2C%20quiero%20cotizar%20servicio%20DPF" class="btn-wa-h" target="_blank">💬 WhatsApp</a>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">Guía interactiva DPF · Camión Diésel</div>
+    <h1>Antes de eliminar tu DPF, <span class="rojo">conoce las 3 soluciones</span> que sí funcionan.</h1>
+    <p>Eliminar el DPF te parece la opción más barata. En realidad es la más cara y te deja con multas, sin RT vigente y pierdes valor de reventa. Te explicamos por qué y qué opciones reales tienes con Serviruta.</p>
+    <div class="nav-pasos">
+      <a href="#que-es" class="np-btn">1 · ¿Qué es?</a>
+      <a href="#sintomas" class="np-btn">2 · Síntomas</a>
+      <a href="#eliminar" class="np-btn">3 · ¿Eliminar?</a>
+      <a href="#soluciones" class="np-btn">4 · Soluciones</a>
+      <a href="#quiz" class="np-btn">5 · ¿Cuál te conviene?</a>
+    </div>
+  </div>
+</section>
+
+<!-- ¿QUÉ ES? -->
+<section id="que-es">
+  <div class="container">
+    <div class="sec-eyebrow">Primero lo básico</div>
+    <h2 class="sec-titulo">¿Qué es el <span class="rojo">DPF</span> y por qué tu camión lo necesita?</h2>
+    <p class="sec-sub">DPF significa Diesel Particulate Filter (Filtro de Partículas Diésel). Es un componente obligatorio en camiones Euro 5 y Euro 6 desde 2011. Su función es capturar el hollín del escape antes de que salga al ambiente.</p>
+
+    <div class="dpf-info">
+      <div class="dpf-visual">🔧 → 🌫️ → ✨</div>
+      <div class="dpf-texto">
+        <h3>Cómo funciona</h3>
+        <p>El DPF es un filtro cerámico con canales microscópicos. Cuando los gases del motor pasan por él, atrapa más del <b>95% de las partículas de hollín</b>. Periódicamente el sistema hace una "regeneración": eleva la temperatura del escape a 600°C para quemar el hollín acumulado y convertirlo en cenizas.</p>
+      </div>
+    </div>
+
+    <div style="background:var(--c2);border-left:3px solid var(--azul);border-radius:8px;padding:14px 16px;margin-top:18px;font-size:13px;color:var(--txt2);line-height:1.7;">
+      <b style="color:var(--azul)">⚖️ Marco legal en Chile:</b> El Decreto Supremo 156 del Ministerio de Transportes obliga a todos los camiones diésel Euro 5 y Euro 6 a mantener el sistema de post-tratamiento de gases (DPF + SCR) en funcionamiento. Eliminarlo es una <b>infracción gravísima</b> y reprueba revisión técnica automáticamente.
+    </div>
+  </div>
+</section>
+
+<!-- SÍNTOMAS -->
+<section id="sintomas">
+  <div class="container">
+    <div class="sec-eyebrow">Diagnóstico previo</div>
+    <h2 class="sec-titulo">Señales de que tu DPF <span class="rojo">necesita atención</span></h2>
+    <p class="sec-sub">Cuando el DPF se satura, el camión empieza a dar síntomas claros. Identificarlos a tiempo te evita gastar millones en reparaciones mayores.</p>
+
+    <div class="sintomas">
+      <div class="sintoma">
+        <div class="sintoma-icon">📉</div>
+        <div class="sintoma-tit">Pérdida de potencia</div>
+        <div class="sintoma-desc">El camión cuesta arrancar, pierde fuerza en cuestas y no responde igual.</div>
+      </div>
+      <div class="sintoma">
+        <div class="sintoma-icon">⛽</div>
+        <div class="sintoma-tit">Mayor consumo</div>
+        <div class="sintoma-desc">Aumenta 10-20% el consumo de combustible. Cada km cuesta más.</div>
+      </div>
+      <div class="sintoma">
+        <div class="sintoma-icon">🚨</div>
+        <div class="sintoma-tit">Testigo encendido</div>
+        <div class="sintoma-desc">El testigo del DPF en el tablero queda fijo o parpadeando.</div>
+      </div>
+      <div class="sintoma">
+        <div class="sintoma-icon">🐢</div>
+        <div class="sintoma-tit">Modo emergencia</div>
+        <div class="sintoma-desc">La ECU limita potencia y revoluciones (Limp Mode). Casi no avanza.</div>
+      </div>
+      <div class="sintoma">
+        <div class="sintoma-icon">💨</div>
+        <div class="sintoma-tit">Humo negro</div>
+        <div class="sintoma-desc">Sale humo negro denso del escape al acelerar. Reprueba la planta.</div>
+      </div>
+      <div class="sintoma">
+        <div class="sintoma-icon">🔥</div>
+        <div class="sintoma-tit">Regeneraciones fallidas</div>
+        <div class="sintoma-desc">Intentos de regeneración automática que no completan.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ¿ELIMINAR? - DANGER ZONE -->
+<section id="eliminar" style="background:var(--c1);">
+  <div class="container">
+    <div class="sec-eyebrow" style="color:var(--rojo)">⚠️ Lo que muchos talleres te ofrecen</div>
+    <h2 class="sec-titulo"><span class="rojo">"Te elimino el DPF y listo"</span></h2>
+    <p class="sec-sub">Sí, es una práctica común. Sí, suena barato ($200-$400K). Pero te lo decimos en serio: <b>es la peor decisión que puedes tomar</b>. Acá las razones.</p>
+
+    <div class="danger-zone">
+      <div class="danger-titulo">🚨 Por qué eliminar el DPF te sale carísimo</div>
+      <div class="danger-sub">6 consecuencias directas que la gente ignora hasta que es tarde:</div>
+
+      <div class="danger-grid">
+        <div class="danger-item">
+          <div class="danger-item-icon">🚫</div>
+          <div class="danger-item-tit">REPRUEBA REVISIÓN TÉCNICA</div>
+          <div class="danger-item-desc">El opacímetro detecta el humo. Sin RT vigente no puedes circular legalmente.</div>
+        </div>
+        <div class="danger-item">
+          <div class="danger-item-icon">💸</div>
+          <div class="danger-item-tit">MULTA $69K-$104K</div>
+          <div class="danger-item-desc">Circular sin RT vigente o con escape modificado: 1 a 1.5 UTM por infracción.</div>
+        </div>
+        <div class="danger-item">
+          <div class="danger-item-icon">⚖️</div>
+          <div class="danger-item-tit">INFRACCIÓN AMBIENTAL</div>
+          <div class="danger-item-desc">Decreto 156 lo prohíbe expresamente. SMA puede sancionar a empresas.</div>
+        </div>
+        <div class="danger-item">
+          <div class="danger-item-icon">📉</div>
+          <div class="danger-item-tit">PIERDE VALOR REVENTA</div>
+          <div class="danger-item-desc">Camión sin DPF se vende 20-30% más barato. Comprador serio lo detecta.</div>
+        </div>
+        <div class="danger-item">
+          <div class="danger-item-icon">🔧</div>
+          <div class="danger-item-tit">RIESGO MOTOR</div>
+          <div class="danger-item-desc">Sin DPF, las temperaturas y presiones del escape cambian. Daño a turbo y válvulas.</div>
+        </div>
+        <div class="danger-item">
+          <div class="danger-item-icon">🚫</div>
+          <div class="danger-item-tit">SIN GARANTÍA FÁBRICA</div>
+          <div class="danger-item-desc">Modificar el sistema de escape anula cualquier garantía vigente del motor.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabla comparativa -->
+    <h3 style="font-family:'Syne',sans-serif;font-weight:800;font-size:18px;margin:30px 0 14px;">Comparación clara: <span class="rojo">eliminar</span> vs <span style="color:var(--verde)">soluciones Serviruta</span></h3>
+
+    <div class="comparador">
+      <div class="tabla-comp">
+        <table>
+          <tr>
+            <th>Concepto</th>
+            <th class="eliminar">❌ Eliminar DPF</th>
+            <th class="serviruta">✅ Serviruta</th>
+          </tr>
+          <tr>
+            <td class="label">Legal en Chile</td>
+            <td><span class="check-no">✗ NO</span></td>
+            <td><span class="check-ok">✓ SÍ</span></td>
+          </tr>
+          <tr>
+            <td class="label">Pasa RT</td>
+            <td><span class="check-no">✗ Reprueba</span></td>
+            <td><span class="check-ok">✓ Aprueba</span></td>
+          </tr>
+          <tr>
+            <td class="label">Costo inicial</td>
+            <td>$200K-$400K</td>
+            <td>$149K-$389K</td>
+          </tr>
+          <tr>
+            <td class="label">Multas potenciales</td>
+            <td style="color:var(--rojo)">$200K-$400K/año</td>
+            <td style="color:var(--verde)">$0</td>
+          </tr>
+          <tr>
+            <td class="label">Mantiene garantía motor</td>
+            <td><span class="check-no">✗</span></td>
+            <td><span class="check-ok">✓</span></td>
+          </tr>
+          <tr>
+            <td class="label">Valor reventa</td>
+            <td style="color:var(--rojo)">-20% a -30%</td>
+            <td style="color:var(--verde)">Mantiene 100%</td>
+          </tr>
+          <tr>
+            <td class="label">Vida útil DPF post-servicio</td>
+            <td>-</td>
+            <td>1-3 años</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3 SOLUCIONES -->
+<section id="soluciones">
+  <div class="container">
+    <div class="sec-eyebrow">Las 3 opciones reales</div>
+    <h2 class="sec-titulo">3 soluciones <span class="rojo">progresivas y rentables</span></h2>
+    <p class="sec-sub">Según el estado real del DPF, te ofrecemos la solución más eficiente. Empezamos por la menos invasiva y solo escalamos si es necesario. Diagnóstico previo siempre.</p>
+
+    <div class="soluciones">
+
+      <!-- SOLUCIÓN A -->
+      <div class="solucion open">
+        <div class="sol-head" onclick="this.parentElement.classList.toggle('open')">
+          <div class="sol-letra" style="background:rgba(34,197,94,0.15);color:var(--verde)">A</div>
+          <div class="sol-info">
+            <div class="sol-nombre">Regeneración forzada + aditivo</div>
+            <div class="sol-tag">Saturación 60-80% · La más simple y rápida</div>
+          </div>
+          <div class="sol-precio">$149.000</div>
+          <div class="sol-arrow">▼</div>
+        </div>
+        <div class="sol-body">
+          <div class="sol-grid">
+            <div class="sol-dato"><div class="sol-dato-lbl">Duración</div><div class="sol-dato-val">2-3 horas</div></div>
+            <div class="sol-dato"><div class="sol-dato-lbl">Efectividad</div><div class="sol-dato-val" style="color:var(--verde)">60-70%</div></div>
+            <div class="sol-dato"><div class="sol-dato-lbl">Desmontaje</div><div class="sol-dato-val">No requiere</div></div>
+            <div class="sol-dato"><div class="sol-dato-lbl">Vida útil ganada</div><div class="sol-dato-val">6-12 meses</div></div>
+          </div>
+          <div class="sol-incluye">
+            <h4>Qué incluye</h4>
+            <ul>
+              <li>Diagnóstico con scanner profesional</li>
+              <li>Aplicación de aditivo regenerador en el tanque</li>
+              <li>Regeneración forzada vía scanner (600°C)</li>
+              <li>Monitoreo de bajada de saturación</li>
+              <li>Reset de DTC y contadores</li>
+            </ul>
+          </div>
+          <div class="sol-cuando"><b>¿Cuándo usar esta opción?</b> Cuando el DPF tiene saturación leve a media (típicamente <80%), el camión muestra pérdida de potencia incipiente pero aún no está en limp mode, y el camionero hace mayormente trayectos cortos en ciudad que impiden regeneraciones naturales.</div>
+        </div>
+      </div>
+
+      <!-- SOLUCIÓN B -->
+      <div class="solucion">
+        <div class="sol-head" onclick="this.parentElement.classList.toggle('open')">
+          <div class="sol-letra" style="background:rgba(245,197,24,0.15);color:var(--amarillo)">B</div>
+          <div class="sol-info">
+            <div class="sol-nombre">Doble regeneración + limpieza química</div>
+            <div class="sol-tag">Saturación 80-100% · Solución intermedia más profunda</div>
+          </div>
+          <div class="sol-precio">$249.000</div>
+          <div class="sol-arrow">▼</div>
+        </div>
+        <div class="sol-body">
+          <div class="sol-grid">
+            <div class="sol-dato"><div class="sol-dato-lbl">Duración</div><div class="sol-dato-val">4-5 horas</div></div>
+            <div class="sol-dato"><div class="sol-dato-lbl">Efectividad</div><div class="sol-dato-val" style="color:var(--verde)">75-85%</div></div>
+            <div class="sol-dato"><div class="sol-dato-lbl">Desmontaje</div><div class="sol-dato-val">No requiere</div></div>
+            <div class="sol-dato"><div class="sol-dato-lbl">Vida útil ganada</div><div class="sol-dato-val">12-18 meses</div></div>
+          </div>
+          <div class="sol-incluye">
+            <h4>Qué incluye</h4>
+            <ul>
+              <li>Todo lo de la Solución A</li>
+              <li>1ra regeneración forzada con aditivo</li>
+              <li>Aplicación de limpiador químico DPF (Wynn's / Liqui Moly)</li>
+              <li>Limpieza de válvula EGR con aerosol</li>
+              <li>2da regeneración forzada de consolidación</li>
+              <li>Test final con opacímetro portátil</li>
+              <li>Verificación AdBlue/SCR</li>
+            </ul>
+          </div>
+          <div class="sol-cuando"><b>¿Cuándo usar esta opción?</b> El camión está en limp mode intermitente, hay testigo de DPF fijo, falla la regeneración automática y el scanner muestra saturación cercana al 100%. Aún se puede limpiar sin desmontar.</div>
+        </div>
+      </div>
+
+      <!-- SOLUCIÓN C - DPF REVIVAL -->
+      <div class="solucion">
+        <div class="sol-head" onclick="this.parentElement.classList.toggle('open')">
+          <div class="sol-letra" style="background:rgba(232,33,10,0.15);color:var(--rojo)">C</div>
+          <div class="sol-info">
+            <div class="sol-nombre">DPF Revival · Limpieza profunda</div>
+            <div class="sol-tag">Saturación crítica · La solución más completa</div>
+          </div>
+          <div class="sol-precio">$389.000</div>
+          <div class="sol-arrow">▼</div>
+        </div>
+        <div class="sol-body">
+          <div class="sol-grid">
+            <div class="sol-dato"><div class="sol-dato-lbl">Duración</div><div class="sol-dato-val">6-8 horas</div></div>
+            <div class="sol-dato"><div class="sol-dato-lbl">Efectividad</div><div class="sol-dato-val" style="color:var(--verde)">95%+</div></div>
+            <div class="sol-dato"><div class="sol-dato-lbl">Desmontaje</div><div class="sol-dato-val">Sí, profesional</div></div>
+            <div class="sol-dato"><div class="sol-dato-lbl">Vida útil ganada</div><div class="sol-dato-val">2-3 años</div></div>
+          </div>
+          <div class="sol-incluye">
+            <h4>Qué incluye</h4>
+            <ul>
+              <li>Diagnóstico completo previo</li>
+              <li>Desmontaje del DPF con equipo seguro</li>
+              <li>Inspección visual y prueba de contrapresión</li>
+              <li>Limpieza hidrodinámica con sistema DPF Revival</li>
+              <li>Lavado profundo de canales con químicos especializados</li>
+              <li>Secado térmico controlado</li>
+              <li>Test de eficiencia post-limpieza (medición de contrapresión)</li>
+              <li>Re-instalación con sellos nuevos</li>
+              <li>Regeneración de calibración</li>
+              <li>Test final con opacímetro</li>
+            </ul>
+          </div>
+          <div class="sol-cuando"><b>¿Cuándo usar esta opción?</b> Cuando las soluciones A y B no funcionaron, hay cristalización de hollín en el filtro, saturación de cenizas (que no se regeneran) o el cliente quiere maximizar la vida útil del DPF antes de un eventual cambio (un DPF nuevo cuesta $2M-$5M).</div>
+
+          <div style="background:rgba(232,33,10,0.08);border-left:3px solid var(--rojo);border-radius:6px;padding:10px 12px;margin-top:14px;font-size:12px;color:var(--txt);">
+            <b>💎 Comparado con cambio nuevo:</b> Un DPF nuevo original cuesta $2.000.000 - $5.000.000 según marca. DPF Revival profesional cuesta $389.000 y te deja el filtro al 95% de su capacidad. Ahorra entre 80% y 90% versus cambio nuevo.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- QUIZ INTERACTIVO -->
+<section id="quiz" style="background:var(--c1);">
+  <div class="container">
+    <div class="sec-eyebrow">Recomendador personalizado</div>
+    <h2 class="sec-titulo">¿Cuál solución es <span class="rojo">la correcta para tu camión?</span></h2>
+    <p class="sec-sub">Responde 3 preguntas rápidas y te decimos qué opción se ajusta mejor a tu situación.</p>
+
+    <div class="quiz">
+      <div class="quiz-titulo">🤔 Test rápido (30 segundos)</div>
+      <div class="quiz-sub">Respondes y te recomendamos la solución más adecuada según tu caso.</div>
+
+      <!-- PREGUNTA 1 -->
+      <div class="q-pregunta active" data-q="1">
+        <div class="q-num">Pregunta 1 de 3</div>
+        <div class="q-texto">¿Qué tan seguido se enciende el testigo del DPF en tu tablero?</div>
+        <div class="q-opciones">
+          <button class="q-opcion" data-puntos="1">A veces, hace tiempo que no veo regeneración natural</button>
+          <button class="q-opcion" data-puntos="2">Casi siempre, hace falta forzar regeneración seguido</button>
+          <button class="q-opcion" data-puntos="3">Fijo encendido, ya no se apaga con nada</button>
+        </div>
+      </div>
+
+      <!-- PREGUNTA 2 -->
+      <div class="q-pregunta" data-q="2">
+        <div class="q-num">Pregunta 2 de 3</div>
+        <div class="q-texto">¿Tu camión entra en modo emergencia (Limp Mode)?</div>
+        <div class="q-opciones">
+          <button class="q-opcion" data-puntos="1">No, solo siento pérdida leve de potencia</button>
+          <button class="q-opcion" data-puntos="2">A veces, sobre todo en cuestas o cargado</button>
+          <button class="q-opcion" data-puntos="3">Sí, frecuentemente, casi no avanza</button>
+        </div>
+      </div>
+
+      <!-- PREGUNTA 3 -->
+      <div class="q-pregunta" data-q="3">
+        <div class="q-num">Pregunta 3 de 3</div>
+        <div class="q-texto">¿Has intentado regeneraciones anteriores que no funcionaron?</div>
+        <div class="q-opciones">
+          <button class="q-opcion" data-puntos="1">No, es la primera vez que tengo este problema</button>
+          <button class="q-opcion" data-puntos="2">Sí, una vez, ayudó pero volvió el problema</button>
+          <button class="q-opcion" data-puntos="3">Sí, varias veces, ya no responde a regeneración simple</button>
+        </div>
+      </div>
+
+      <!-- RESULTADO -->
+      <div class="q-resultado" id="resultado">
+        <div class="q-resultado-tit" id="r-titulo"></div>
+        <div class="q-resultado-sub" id="r-sub"></div>
+        <div class="q-resultado-precio" id="r-precio"></div>
+        <a href="#" class="q-resultado-cta" id="r-cta" target="_blank">💬 Cotizar por WhatsApp</a>
+        <button style="background:none;border:none;color:var(--txt3);font-size:11px;margin-top:14px;cursor:pointer;display:block;" onclick="resetQuiz()">↻ Repetir test</button>
+      </div>
+    </div>
+
+    <!-- CALCULADORA DE AHORRO -->
+    <div class="calc">
+      <div class="calc-titulo">💰 Calculadora de ahorro real</div>
+      <div style="font-size:12px;color:var(--txt2);margin-bottom:14px">Comparación a 12 meses con un camión que requiere DPF Revival.</div>
+
+      <div class="calc-row bad">
+        <span class="opcion">Eliminar DPF (lo que parece más barato)</span>
+        <span class="monto">$300.000</span>
+      </div>
+      <div class="calc-row bad">
+        <span class="opcion">+ Reprobar RT y rehacer</span>
+        <span class="monto">$50.000</span>
+      </div>
+      <div class="calc-row bad">
+        <span class="opcion">+ Multa anual circulando sin RT</span>
+        <span class="monto">$200.000</span>
+      </div>
+      <div class="calc-row bad">
+        <span class="opcion">+ Pérdida valor reventa (-25%)</span>
+        <span class="monto">$2.500.000</span>
+      </div>
+      <div class="calc-row total bad">
+        <span class="opcion">Total real ELIMINAR</span>
+        <span class="monto">$3.050.000</span>
+      </div>
+
+      <div style="height:14px"></div>
+
+      <div class="calc-row good">
+        <span class="opcion">DPF Revival Serviruta</span>
+        <span class="monto">$389.000</span>
+      </div>
+      <div class="calc-row good">
+        <span class="opcion">Pasa RT</span>
+        <span class="monto">$0</span>
+      </div>
+      <div class="calc-row good">
+        <span class="opcion">Sin multas</span>
+        <span class="monto">$0</span>
+      </div>
+      <div class="calc-row good">
+        <span class="opcion">Mantiene valor reventa</span>
+        <span class="monto">$0</span>
+      </div>
+      <div class="calc-row total good">
+        <span class="opcion">Total real SERVIRUTA</span>
+        <span class="monto">$389.000</span>
+      </div>
+
+      <div style="background:linear-gradient(135deg,rgba(34,197,94,0.15),rgba(34,197,94,0.05));border:1px solid var(--verde);border-radius:10px;padding:12px;margin-top:14px;text-align:center;">
+        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:11px;color:var(--verde);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Ahorro real con Serviruta</div>
+        <div style="font-family:'Syne',sans-serif;font-weight:900;font-size:32px;color:var(--verde);">$2.661.000</div>
+        <div style="font-size:11px;color:var(--txt2);margin-top:4px;">en 12 meses · 87% menos costo total</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final">
+  <h2>No improvises con tu camión.</h2>
+  <p>Diagnostica primero, decide después. El diagnóstico del estado del DPF te entrega data real para elegir la solución correcta. Y si optas por Serviruta, descontamos el diagnóstico del servicio final.</p>
+  <a href="https://wa.me/56945210814?text=Hola%2C%20quiero%20cotizar%20diagn%C3%B3stico%20DPF%20para%20mi%20cami%C3%B3n" class="btn-wa-f" target="_blank">💬 Cotizar diagnóstico DPF</a>
+  <div style="margin-top:16px;color:rgba(255,255,255,0.85);font-family:'Syne',sans-serif;font-weight:700;font-size:20px;">+56 9 4521 0814</div>
+</section>
+
+<!-- FOOTER -->
+<footer style="background:#000;padding:30px 0;text-align:center;border-top:1px solid var(--borde);">
+  <div class="container">
+    <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:18px;margin-bottom:8px;">SERVI<span style="color:var(--rojo)">RUTA</span></div>
+    <div style="font-size:12px;color:var(--txt3);">Especialistas en DPF/FAP camión diésel · Toda la RM</div>
+    <div style="font-size:11px;color:var(--txt3);margin-top:6px;">+56 9 4521 0814 · serviruta.cl</div>
+  </div>
+</footer>
+
+<!-- WhatsApp flotante -->
+<a href="https://wa.me/56945210814?text=Hola%2C%20quiero%20cotizar%20servicio%20DPF" class="wa-float" target="_blank">💬</a>
+
+<script>
+// QUIZ LOGIC
+var puntajeTotal=0
+var preguntaActual=1
+
+document.querySelectorAll('.q-opcion').forEach(function(b){
+  b.onclick=function(){
+    var puntos=parseInt(b.getAttribute('data-puntos'))
+    puntajeTotal+=puntos
+    var qActual=b.closest('.q-pregunta')
+    qActual.classList.remove('active')
+    preguntaActual++
+    var siguiente=document.querySelector('.q-pregunta[data-q="'+preguntaActual+'"]')
+    if(siguiente){
+      siguiente.classList.add('active')
+    }else{
+      mostrarResultado()
+    }
+  }
+})
+
+function mostrarResultado(){
+  var titulo,sub,precio,opcion,msg
+  if(puntajeTotal<=4){
+    titulo='✓ Recomendamos: Solución A'
+    sub='Regeneración forzada + aditivo. Tu DPF está en estado leve. Esta solución es rápida, económica y suficiente.'
+    precio='$149.000'
+    opcion='A'
+    msg='Hola%2C%20completé el test DPF y me recomendaron la Solución A (Regeneración forzada). Quiero cotizar'
+  }else if(puntajeTotal<=6){
+    titulo='✓ Recomendamos: Solución B'
+    sub='Doble regeneración + limpieza química. Tu DPF necesita una limpieza más profunda pero aún sin desmontar.'
+    precio='$249.000'
+    opcion='B'
+    msg='Hola%2C%20completé el test DPF y me recomendaron la Solución B (Doble regeneración + limpieza). Quiero cotizar'
+  }else{
+    titulo='✓ Recomendamos: Solución C · DPF Revival'
+    sub='Tu DPF requiere limpieza profunda con desmontaje. Es la solución más completa para maximizar su vida útil antes de un cambio (que cuesta 5x más).'
+    precio='$389.000'
+    opcion='C'
+    msg='Hola%2C%20completé el test DPF y me recomendaron la Solución C (DPF Revival completo). Quiero cotizar'
+  }
+  document.getElementById('r-titulo').textContent=titulo
+  document.getElementById('r-sub').textContent=sub
+  document.getElementById('r-precio').textContent=precio
+  document.getElementById('r-cta').href='https://wa.me/56945210814?text='+msg
+  document.getElementById('resultado').classList.add('active')
+  document.getElementById('resultado').scrollIntoView({behavior:'smooth',block:'center'})
+}
+
+function resetQuiz(){
+  puntajeTotal=0
+  preguntaActual=1
+  document.querySelectorAll('.q-pregunta').forEach(function(q){q.classList.remove('active')})
+  document.querySelector('.q-pregunta[data-q="1"]').classList.add('active')
+  document.getElementById('resultado').classList.remove('active')
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kits Embrague Camión a Domicilio | Serviruta</title>
+<meta name="description" content="Cambio de kit de embrague para camiones en tu base. Mercedes-Benz, Scania, Volvo, Ford, Iveco, VW, International. 2 técnicos especialistas, 8 horas de trabajo.">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;line-height:1.6;}
+.container{max-width:1000px;margin:0 auto;padding:0 16px;}
+.header{background:rgba(15,15,18,0.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--borde);padding:12px 0;position:sticky;top:0;z-index:100;}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.logo{font-family:"Syne",sans-serif;font-weight:800;font-size:20px;color:var(--txt);text-decoration:none;}
+.logo span{color:var(--rojo);}
+.btn-wa-h{background:#25D366;color:#000;padding:7px 14px;border-radius:6px;font-family:"Syne",sans-serif;font-weight:700;font-size:12px;text-decoration:none;}
+.hero{padding:50px 0 30px;text-align:center;border-bottom:1px solid var(--borde);background:radial-gradient(circle at 50% 0%,rgba(232,33,10,0.06) 0%,transparent 60%);}
+.hero-eyebrow{display:inline-block;background:rgba(232,33,10,0.12);border:1px solid rgba(232,33,10,0.4);color:var(--rojo);font-family:"Syne",sans-serif;font-weight:700;font-size:10px;letter-spacing:2px;padding:5px 12px;border-radius:20px;text-transform:uppercase;margin-bottom:18px;}
+.hero h1{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(28px,5vw,46px);line-height:1.1;margin-bottom:14px;}
+.hero h1 .rojo{color:var(--rojo);}
+.hero p{font-size:15px;color:var(--txt2);max-width:600px;margin:0 auto 18px;}
+.hero-trust{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;font-size:11px;color:var(--txt3);margin-top:10px;}
+.hero-trust span::before{content:"●";color:var(--verde);margin-right:4px;}
+.alerta-servicio{background:linear-gradient(135deg,rgba(96,165,250,0.08),rgba(96,165,250,0.02));border:1px solid rgba(96,165,250,0.3);border-radius:12px;padding:14px 20px;margin:20px auto 0;max-width:680px;font-size:12px;color:var(--txt);display:flex;align-items:center;gap:12px;}
+.alerta-servicio b{color:var(--azul);}
+section{padding:40px 0;}
+.sec-eyebrow{color:var(--rojo);font-family:"Syne",sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;}
+.sec-titulo{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(22px,3.5vw,30px);line-height:1.2;margin-bottom:10px;}
+.sec-titulo .rojo{color:var(--rojo);}
+.sec-sub{font-size:14px;color:var(--txt2);max-width:650px;margin-bottom:24px;}
+.marcas-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:20px;}
+.marca-btn{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:18px 12px;cursor:pointer;text-align:center;transition:all 0.2s;}
+.marca-btn:hover{border-color:var(--rojo);transform:translateY(-2px);}
+.marca-btn.active{border-color:var(--rojo);background:rgba(232,33,10,0.08);}
+.marca-icon{font-size:26px;margin-bottom:6px;}
+.marca-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;color:var(--txt);}
+.marca-modelos{font-size:10px;color:var(--txt3);margin-top:2px;}
+.modelos-section{display:none;margin-top:30px;}
+.modelos-section.active{display:block;}
+.modelos-titulo{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;color:var(--rojo);margin-bottom:12px;text-transform:uppercase;letter-spacing:1px;}
+.modelos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px;}
+.modelo-btn{background:var(--c3);border:1px solid var(--borde);border-radius:8px;padding:12px;cursor:pointer;font-size:12px;text-align:left;}
+.modelo-btn:hover{border-color:var(--rojo);}
+.modelo-btn.active{background:var(--rojo);color:#fff;border-color:var(--rojo);}
+.modelo-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;}
+.modelo-motor{font-size:10px;opacity:0.8;margin-top:2px;}
+.kits-section{display:none;margin-top:30px;padding-top:30px;border-top:1px solid var(--borde);}
+.kits-section.active{display:block;}
+.kit-titulo{font-family:"Syne",sans-serif;font-weight:800;font-size:20px;margin-bottom:6px;}
+.kit-sub{font-size:13px;color:var(--txt3);margin-bottom:20px;}
+.kits-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;}
+.kit-card{background:var(--c2);border:1px solid var(--borde);border-radius:14px;padding:22px;position:relative;}
+.kit-card.destacado{border:2px solid var(--rojo);background:linear-gradient(180deg,rgba(232,33,10,0.06),var(--c2) 50%);}
+.kit-badge{position:absolute;top:-12px;right:20px;background:var(--rojo);color:#fff;padding:5px 12px;border-radius:20px;font-family:"Syne",sans-serif;font-weight:700;font-size:10px;letter-spacing:1px;}
+.kit-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;color:var(--rojo);margin-bottom:4px;}
+.kit-marca{font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;font-weight:600;}
+.kit-desc{font-size:11px;color:var(--txt3);margin-bottom:14px;}
+.kit-precio{font-family:"Syne",sans-serif;font-weight:900;font-size:30px;margin-bottom:2px;}
+.kit-precio .curr{font-size:16px;color:var(--txt3);}
+.kit-precio-desc{font-size:10px;color:var(--txt3);margin-bottom:16px;}
+.kit-features{list-style:none;margin-bottom:18px;}
+.kit-features li{font-size:12px;color:var(--txt);padding:6px 0 6px 20px;position:relative;border-bottom:1px dashed var(--c3);}
+.kit-features li:last-child{border-bottom:none;}
+.kit-features li::before{content:"✓";position:absolute;left:0;color:var(--verde);font-weight:bold;}
+.kit-cta{display:block;text-align:center;background:#25D366;color:#000;padding:11px;border-radius:8px;font-family:"Syne",sans-serif;font-weight:800;font-size:13px;text-decoration:none;}
+.kit-tiempo{display:flex;align-items:center;gap:8px;background:rgba(96,165,250,0.08);border-left:3px solid var(--azul);border-radius:6px;padding:8px 10px;margin-top:12px;font-size:11px;color:var(--txt2);}
+.info-block{background:var(--c1);}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:20px;}
+.info-card{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:18px;}
+.info-icon{font-size:24px;margin-bottom:8px;}
+.info-tit{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;margin-bottom:4px;}
+.info-desc{font-size:11px;color:var(--txt2);line-height:1.6;}
+.cta-final{background:linear-gradient(135deg,var(--rojo) 0%,#a8170a 100%);text-align:center;padding:50px 20px;}
+.cta-final h2{font-family:"Syne",sans-serif;font-weight:900;font-size:clamp(22px,4vw,30px);margin-bottom:10px;color:#fff;}
+.cta-final p{font-size:14px;color:rgba(255,255,255,0.9);max-width:550px;margin:0 auto 22px;}
+.cta-final .btn-wa-f{background:#fff;color:#000;padding:16px 30px;border-radius:10px;font-family:"Syne",sans-serif;font-weight:800;font-size:15px;text-decoration:none;display:inline-block;}
+.footer{background:#000;padding:30px 0;text-align:center;border-top:1px solid var(--borde);}
+.wa-float{position:fixed;bottom:24px;right:24px;width:56px;height:56px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 6px 20px rgba(37,211,102,0.4);z-index:99;}
+@media(max-width:640px){.marcas-grid{grid-template-columns:repeat(2,1fr);}.kit-card{padding:18px;}}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="container header-inner">
+    <a href="https://serviruta.cl" class="logo">SERVI<span>RUTA</span></a>
+    <a href="https://wa.me/56945210814?text=Hola%2C%20quiero%20cotizar%20kit%20de%20embrague%20para%20mi%20cami%C3%B3n" class="btn-wa-h" target="_blank">💬 WhatsApp</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">Kit Embrague Camión · A domicilio</div>
+    <h1>Cambio de embrague <span class="rojo">en tu base.</span> Sin grúa.</h1>
+    <p>Tu camión queda parado por embrague gastado. Te llegamos en tu patio con 2 técnicos especialistas y kit completo. Trabajo de jornada completa (8 horas) con marcas premium: Eaton, Sachs, Luk, Alliance.</p>
+    <div class="hero-trust">
+      <span>Eaton · Sachs · Luk · Alliance</span>
+      <span>2 técnicos especialistas</span>
+      <span>Garantía escrita 12 meses</span>
+    </div>
+    <div class="alerta-servicio">
+      <div style="font-size:20px">⚙️</div>
+      <div><b>Servicio especializado:</b> 2 técnicos en línea pesada trabajando durante 8 horas en tu base. Incluye desmontaje caja de cambios, cambio kit completo, instalación y prueba dinámica.</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="sec-eyebrow">Paso 1 · Selecciona la marca</div>
+    <h2 class="sec-titulo">¿Cuál es la <span class="rojo">marca</span> de tu camión?</h2>
+    <p class="sec-sub">Trabajamos con todas las marcas principales: europeos, brasileros y americanos.</p>
+
+    <div class="marcas-grid" id="marcas">
+      <div class="marca-btn" data-marca="mb"><div class="marca-icon">🚛</div><div class="marca-nombre">Mercedes-Benz</div><div class="marca-modelos">Atego · Axor · Actros · LO914</div></div>
+      <div class="marca-btn" data-marca="scania"><div class="marca-icon">🚛</div><div class="marca-nombre">Scania</div><div class="marca-modelos">Serie 4 · Serie 5 · P · G · R</div></div>
+      <div class="marca-btn" data-marca="volvo"><div class="marca-icon">🚛</div><div class="marca-nombre">Volvo</div><div class="marca-modelos">FH · FM · VM · D13A</div></div>
+      <div class="marca-btn" data-marca="ford"><div class="marca-icon">🚛</div><div class="marca-nombre">Ford Cargo</div><div class="marca-modelos">814 · 915E · 1723 · 2429 · 3031</div></div>
+      <div class="marca-btn" data-marca="vw"><div class="marca-icon">🚛</div><div class="marca-nombre">Volkswagen</div><div class="marca-modelos">17-280 · 24-280 · Constellation</div></div>
+      <div class="marca-btn" data-marca="iveco"><div class="marca-icon">🚛</div><div class="marca-nombre">Iveco</div><div class="marca-modelos">Daily · Stralis · Trakker</div></div>
+      <div class="marca-btn" data-marca="international"><div class="marca-icon">🚛</div><div class="marca-nombre">International</div><div class="marca-modelos">9800i · 4300</div></div>
+      <div class="marca-btn" data-marca="mack"><div class="marca-icon">🚛</div><div class="marca-nombre">Mack</div><div class="marca-modelos">CH · CL · Granite</div></div>
+      <div class="marca-btn" data-marca="volare"><div class="marca-icon">🚌</div><div class="marca-nombre">Volare / Bus</div><div class="marca-modelos">V8 · W8 · W9 · Agrale</div></div>
+      <div class="marca-btn" data-marca="otra"><div class="marca-icon">🔧</div><div class="marca-nombre">Otra marca</div><div class="marca-modelos">Cotizar WhatsApp</div></div>
+    </div>
+
+    <div class="modelos-section" id="modelos-section">
+      <div class="modelos-titulo">Paso 2 · Selecciona tu modelo</div>
+      <div class="modelos-grid" id="modelos"></div>
+    </div>
+
+    <div class="kits-section" id="kits-section">
+      <div class="kit-titulo" id="kit-titulo">Kits disponibles</div>
+      <div class="kit-sub" id="kit-sub">Precio incluye kit completo (disco + prensa + collarín), mano de obra de 2 técnicos durante 8 horas en tu base.</div>
+      <div class="kits-grid" id="kits-grid"></div>
+    </div>
+  </div>
+</section>
+
+<section class="info-block">
+  <div class="container">
+    <div class="sec-eyebrow">Cómo trabajamos</div>
+    <h2 class="sec-titulo">Cambio profesional <span class="rojo">en tu patio.</span></h2>
+    <p class="sec-sub">Cada cambio de embrague de camión es un trabajo serio que requiere herramienta pesada, gata de transmisión y experiencia. Por eso vamos con equipo completo.</p>
+
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-icon">👷‍♂️</div>
+        <div class="info-tit">2 técnicos especialistas</div>
+        <div class="info-desc">Equipo de 2 mecánicos certificados en línea pesada trabajando simultáneamente para optimizar tiempo.</div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">⏱️</div>
+        <div class="info-tit">8 horas de trabajo</div>
+        <div class="info-desc">Jornada completa. Desmontaje, retiro caja de cambios, cambio kit, instalación, sangrado, prueba dinámica.</div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">🔧</div>
+        <div class="info-tit">Equipo pesado portátil</div>
+        <div class="info-desc">Llevamos gata de transmisión, llaves neumáticas, torquímetros y herramientas especializadas.</div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">📋</div>
+        <div class="info-tit">Inspección integral</div>
+        <div class="info-desc">Revisamos cardán, crucetas, soportes motor, retén caja, servo y bombín. Te avisamos si hay algo más.</div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">📝</div>
+        <div class="info-tit">Garantía escrita 12 meses</div>
+        <div class="info-desc">Por defecto de repuesto o instalación. Volvemos sin costo si presenta falla en el plazo.</div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">🚛</div>
+        <div class="info-tit">Sin grúa, sin mover el camión</div>
+        <div class="info-desc">Trabajamos en tu base. Ahorras $300K-$500K de traslado y días de espera en taller.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-final">
+  <h2>Cambio embrague camión, hecho bien y rápido.</h2>
+  <p>Cotiza por WhatsApp con la marca y modelo de tu camión. Te confirmamos disponibilidad del kit y precio cerrado en menos de 1 hora.</p>
+  <a href="https://wa.me/56945210814?text=Hola%2C%20quiero%20cotizar%20cambio%20de%20kit%20embrague%20para%20mi%20cami%C3%B3n" class="btn-wa-f" target="_blank">💬 Cotizar mi kit embrague</a>
+  <div style="margin-top:16px;color:rgba(255,255,255,0.85);font-family:'Syne',sans-serif;font-weight:700;font-size:18px;">+56 9 4521 0814</div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:18px;margin-bottom:8px;">SERVI<span style="color:var(--rojo)">RUTA</span></div>
+    <div style="font-size:12px;color:var(--txt3);">Mecánica móvil profesional · Toda la RM</div>
+    <div style="font-size:11px;color:var(--txt3);margin-top:6px;">+56 9 4521 0814 · contacto@serviruta.cl · serviruta.cl</div>
+  </div>
+</footer>
+
+<a href="https://wa.me/56945210814?text=Hola%2C%20quiero%20cotizar%20kit%20de%20embrague%20para%20mi%20cami%C3%B3n" class="wa-float" target="_blank">💬</a>
+
+<script>
+// DATA: precios reales de implementos.cl + variantes por marca
+// Cada modelo tiene 3 niveles: precioStd (Alliance/genérico), precioOrig (Eaton OEM), precioPrem (Sachs/Luk)
+var DATA={
+  mb:{nombre:'Mercedes-Benz',modelos:[
+    {id:'lo914',nombre:'MB LO914 · Atego OH-1315',desc:'Kit 362mm',std:380000,orig:435990,prem:560000},
+    {id:'atego1718',nombre:'MB Atego 1718 · 1725',desc:'Kit 362mm',std:380000,orig:435990,prem:560000},
+    {id:'axor',nombre:'MB Axor 2640 · 3340',desc:'Kit 395mm',std:545000,orig:636990,prem:780000},
+    {id:'actros',nombre:'MB Actros 4144 · 4844',desc:'Kit 430mm pesado',std:680000,orig:799990,prem:949990},
+    {id:'mb1620',nombre:'MB 1620 · 1622 · 1718',desc:'Kit 362mm reparto',std:380000,orig:435990,prem:550000}
+  ]},
+  scania:{nombre:'Scania',modelos:[
+    {id:'serie4',nombre:'Scania Serie 4 (P · G · R)',desc:'Kit estándar serie 4',std:540000,orig:634990,prem:799990},
+    {id:'serie5',nombre:'Scania Serie 5',desc:'Kit estándar serie 5',std:720000,orig:839990,prem:1000000},
+    {id:'p230',nombre:'Scania P230 · P270 · P310',desc:'Kit DC9 reparto-mediano',std:520000,orig:634990,prem:799990},
+    {id:'p340',nombre:'Scania P340 · R340',desc:'Kit DC11',std:560000,orig:680000,prem:830000},
+    {id:'r420',nombre:'Scania R420 · G420 · P420',desc:'Kit DC12 pesado',std:680000,orig:790000,prem:920000},
+    {id:'r470',nombre:'Scania R470 · G470 · DT12',desc:'Kit DT12 tracto',std:740000,orig:839990,prem:1100000}
+  ]},
+  volvo:{nombre:'Volvo',modelos:[
+    {id:'vm270',nombre:'Volvo VM 220 · 270',desc:'Kit MWM 7.2L',std:480000,orig:560000,prem:720000},
+    {id:'fm11',nombre:'Volvo FM 11 · FE',desc:'Kit D11',std:620000,orig:720000,prem:849990},
+    {id:'fh460',nombre:'Volvo FH 460 · FM 440',desc:'Kit D13A · D13B',std:690000,orig:799990,prem:949990},
+    {id:'fh500',nombre:'Volvo FH 500 · 540 (nuevo)',desc:'Kit D13K Euro 5/6',std:720000,orig:830000,prem:1000000},
+    {id:'fh700',nombre:'Volvo FH 700',desc:'Kit D16 alta potencia',std:850000,orig:980000,prem:1180000}
+  ]},
+  ford:{nombre:'Ford Cargo',modelos:[
+    {id:'cargo814',nombre:'Ford Cargo 814',desc:'Conjunto disco y prensa',std:260000,orig:299990,prem:380000},
+    {id:'cargo915e',nombre:'Ford Cargo 915E',desc:'Kit 330mm',std:285000,orig:327990,prem:420000},
+    {id:'cargo1723',nombre:'Ford Cargo 1723 · 1729',desc:'Kit 365mm',std:540000,orig:623990,prem:760000},
+    {id:'cargo2429',nombre:'Ford Cargo 2429',desc:'Kit 395mm',std:600000,orig:698990,prem:840000},
+    {id:'cargo3031',nombre:'Ford Cargo 1731 · 2431 · 3031 Torqshift',desc:'Kit 395mm Torqshift premium',std:920000,orig:1098990,prem:1300000},
+    {id:'cargoeje',nombre:'Ford Cargo eje piloto',desc:'Kit 365mm sobre eje piloto',std:530000,orig:615990,prem:740000},
+    {id:'cargodoble',nombre:'Ford Cargo doble disco',desc:'Kit 365mm doble disco 3 paletas',std:720000,orig:835990,prem:980000}
+  ]},
+  vw:{nombre:'Volkswagen',modelos:[
+    {id:'vw17280',nombre:'VW 17-280 · 24-280',desc:'Kit 395mm',std:660000,orig:763990,prem:910000},
+    {id:'constellation',nombre:'VW Constellation',desc:'Kit 430mm',std:720000,orig:840000,prem:1000000},
+    {id:'vw362',nombre:'VW Worker 17.220 · 9.150',desc:'Kit 362mm',std:580000,orig:675990,prem:820000}
+  ]},
+  iveco:{nombre:'Iveco',modelos:[
+    {id:'daily',nombre:'Iveco Daily',desc:'Embrague Daily (camioneta-furgón)',std:290000,orig:334990,prem:420000},
+    {id:'stralis',nombre:'Iveco Stralis (Cursor 10/13)',desc:'Kit Cursor pesado',std:680000,orig:790000,prem:950000},
+    {id:'trakker',nombre:'Iveco Trakker',desc:'Kit Trakker construcción',std:720000,orig:830000,prem:990000}
+  ]},
+  international:{nombre:'International',modelos:[
+    {id:'9800',nombre:'International 9800i 6x2 · 6x4',desc:'Kit 430mm americano',std:630000,orig:735990,prem:880000},
+    {id:'americano',nombre:'International 15½" 4 paletas',desc:'Kit 15½ 1700 lbs/pie',std:530000,orig:649990,prem:799990}
+  ]},
+  mack:{nombre:'Mack',modelos:[
+    {id:'mack15',nombre:'Mack CH · CL 15½"',desc:'Kit 15½" Mack',std:580000,orig:679990,prem:830000},
+    {id:'mack14',nombre:'Mack Granite 14"',desc:'Kit 14" 1400 lbs/pie',std:570000,orig:665990,prem:830000},
+    {id:'mackpesado',nombre:'Mack tracto 15½" 6 paletas',desc:'Kit 15½ 2050 lbs/pie pesado',std:690000,orig:799990,prem:980000}
+  ]},
+  volare:{nombre:'Volare / Bus',modelos:[
+    {id:'volareisf',nombre:'Volare ISF 3.8',desc:'Kit 362mm Volare',std:380000,orig:435990,prem:560000},
+    {id:'volarev8',nombre:'Volare V8 · W8 · W9',desc:'Kit 330mm Volare bus reparto',std:285000,orig:329990,prem:420000},
+    {id:'agrale',nombre:'Agrale MA 8.5 · MA 10.0',desc:'Kit MF330 Agrale',std:600000,orig:699990,prem:830000}
+  ]},
+  otra:{nombre:'Otra marca',modelos:[]}
+}
+
+function calcularKits(modelo){
+  if(!modelo)return []
+  // MO: 2 técnicos × 8 horas × $25.000/h = $400.000
+  // Repuestos adicionales: collarín ($120K) + horquilla ($85K) + retén caja ($25K) + aceite caja ($45K) = $275K
+  // En la opción Plus se agrega servo embrague ($320K) + bombín ($120K)
+  // MARGEN 50% APLICADO sobre todo
+  var MARGEN=1.5
+  var MO_STD=400000  // 2 técnicos × 8h × $25K (estándar)
+  var MO_PREMIUM=440000  // técnico senior + ayudante
+  var EXTRAS_BASICO=180000  // collarín + horquilla básicos + aceite caja
+  var EXTRAS_COMPLETO=275000  // collarín premium + horquilla + retén + aceite caja
+  var EXTRAS_PLUS=540000  // todo lo anterior + servo embrague + bombín nuevo
+  
+  var basico=Math.round((modelo.std + MO_STD + EXTRAS_BASICO) * MARGEN / 1000) * 1000
+  var premium=Math.round((modelo.orig + MO_STD + EXTRAS_COMPLETO) * MARGEN / 1000) * 1000
+  var plus=Math.round((modelo.prem + MO_PREMIUM + EXTRAS_PLUS) * MARGEN / 1000) * 1000
+
+  return [
+    {
+      tipo:'basico',
+      nombre:'Kit Estándar',
+      marca:'Alliance · Marca alternativa',
+      desc:'Kit estándar para uso urbano regular',
+      precio:basico,
+      garantia:'6 meses',
+      destacado:false,
+      features:[
+        'Disco + plato (prensa) Alliance o equivalente',
+        'Rodamiento collarín nuevo',
+        'Horquilla embrague (revisada o nueva)',
+        'Retén caja de cambios',
+        'Aceite caja completo',
+        '2 técnicos · 8 horas en tu base',
+        'Prueba dinámica de embrague',
+        'Garantía escrita 6 meses'
+      ]
+    },
+    {
+      tipo:'premium',
+      nombre:'Kit Original',
+      marca:'EATON · Original OEM',
+      desc:'El más solicitado · La marca recomendada por fabricantes',
+      precio:premium,
+      garantia:'12 meses',
+      destacado:true,
+      features:[
+        'Kit completo EATON original (disco + prensa)',
+        'Collarín nuevo SACHS o equivalente',
+        'Horquilla nueva',
+        'Retén caja + retén cigüeñal',
+        'Aceite caja sintético',
+        'Lubricante específico para mecanismo',
+        '2 técnicos especialistas · 8 horas',
+        'Revisión cardán y crucetas incluida',
+        'Prueba dinámica + ajuste',
+        'Garantía escrita 12 meses'
+      ]
+    },
+    {
+      tipo:'plus',
+      nombre:'Kit Premium',
+      marca:'SACHS · LUK · Premium europeo',
+      desc:'Calidad alemana · Máxima durabilidad y rendimiento',
+      precio:plus,
+      garantia:'12 meses + servo',
+      destacado:false,
+      features:[
+        'Kit completo SACHS/LUK (alemán premium)',
+        'Disco reforzado para alto torque',
+        'Collarín premium SKF',
+        'Horquilla nueva original',
+        'Retén caja y cigüeñal nuevos',
+        'Servo embrague nuevo Kongsberg/SORL',
+        'Bombín embrague nuevo',
+        'Aceite caja sintético premium',
+        '2 técnicos senior + ayudante · 8 horas',
+        'Revisión integral cardán, soportes motor',
+        'Calibración punto de mordida',
+        'Garantía escrita 12 meses sobre kit y servo'
+      ]
+    }
+  ]
+}
+
+var marcaSeleccionada=null,modeloSeleccionado=null
+
+document.querySelectorAll('.marca-btn').forEach(function(b){
+  b.onclick=function(){
+    document.querySelectorAll('.marca-btn').forEach(function(x){x.classList.remove('active')})
+    b.classList.add('active')
+    marcaSeleccionada=b.getAttribute('data-marca')
+    renderModelos()
+    document.getElementById('kits-section').classList.remove('active')
+  }
+})
+
+function renderModelos(){
+  var data=DATA[marcaSeleccionada]
+  var sec=document.getElementById('modelos-section')
+  var grid=document.getElementById('modelos')
+  
+  if(marcaSeleccionada==='otra'){
+    sec.classList.add('active')
+    grid.innerHTML='<div style="grid-column:1/-1;background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:20px;text-align:center"><div style="font-size:13px;color:var(--txt2);margin-bottom:14px">Para otras marcas (DAF, MAN, Hino, Foton, JAC, Kenworth, Freightliner) coordinamos el kit específico en 24-48h.</div><a href="https://wa.me/56945210814?text=Hola%2C%20mi%20cami%C3%B3n%20no%20est%C3%A1%20en%20la%20lista%2C%20quiero%20cotizar%20cambio%20de%20embrague" target="_blank" style="background:#25D366;color:#000;padding:10px 18px;border-radius:6px;font-family:Syne,sans-serif;font-weight:700;font-size:12px;text-decoration:none;display:inline-block">💬 Cotizar mi camión</a></div>'
+    sec.scrollIntoView({behavior:'smooth',block:'start'})
+    return
+  }
+  
+  grid.innerHTML=data.modelos.map(function(m){
+    return '<div class="modelo-btn" data-id="'+m.id+'"><div class="modelo-nombre">'+m.nombre+'</div><div class="modelo-motor">'+m.desc+'</div></div>'
+  }).join('')
+  
+  document.querySelectorAll('.modelo-btn').forEach(function(b){
+    b.onclick=function(){
+      document.querySelectorAll('.modelo-btn').forEach(function(x){x.classList.remove('active')})
+      b.classList.add('active')
+      var id=b.getAttribute('data-id')
+      modeloSeleccionado=data.modelos.find(function(m){return m.id===id})
+      renderKits()
+    }
+  })
+  
+  sec.classList.add('active')
+  sec.scrollIntoView({behavior:'smooth',block:'start'})
+}
+
+function renderKits(){
+  var sec=document.getElementById('kits-section')
+  var grid=document.getElementById('kits-grid')
+  var titulo=document.getElementById('kit-titulo')
+  var sub=document.getElementById('kit-sub')
+  
+  titulo.textContent='Kits para '+DATA[marcaSeleccionada].nombre+' '+modeloSeleccionado.nombre.split(' ').slice(1).join(' ')
+  sub.textContent=modeloSeleccionado.desc+' · Servicio: 2 técnicos · 8 horas en tu base · Toda la RM'
+  
+  var kits=calcularKits(modeloSeleccionado)
+  grid.innerHTML=kits.map(function(k){
+    var msg='Hola%2C%20quiero%20cotizar%20el%20'+encodeURIComponent(k.nombre)+'%20de%20embrague%20para%20mi%20'+encodeURIComponent(DATA[marcaSeleccionada].nombre+' '+modeloSeleccionado.nombre)
+    return '<div class="kit-card '+(k.destacado?'destacado':'')+'">'+
+      (k.destacado?'<div class="kit-badge">MÁS ELEGIDO</div>':'')+
+      '<div class="kit-nombre">'+k.nombre+'</div>'+
+      '<div class="kit-marca">'+k.marca+'</div>'+
+      '<div class="kit-desc">'+k.desc+'</div>'+
+      '<div class="kit-precio"><span class="curr">$</span>'+k.precio.toLocaleString('es-CL')+'</div>'+
+      '<div class="kit-precio-desc">Precio cerrado · Repuesto + mano de obra + servicio en tu base</div>'+
+      '<ul class="kit-features">'+k.features.map(function(f){return '<li>'+f+'</li>'}).join('')+'</ul>'+
+      '<div class="kit-tiempo">⏱ Garantía '+k.garantia+'</div>'+
+      '<a href="https://wa.me/56945210814?text='+msg+'" target="_blank" class="kit-cta" style="margin-top:12px">💬 Cotizar este kit</a>'+
+    '</div>'
+  }).join('')
+  
+  sec.classList.add('active')
+  setTimeout(function(){sec.scrollIntoView({behavior:'smooth',block:'start'})},200)
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kit Embrague Auto y Camioneta a Domicilio | Serviruta</title>
+<meta name="description" content="Cambio de kit de embrague para autos y camionetas Toyota, Hyundai, Kia, Chevrolet, Ford, Nissan, Mitsubishi, VW. Marcas Luk, Sachs, Valeo, Exedy. En tu base.">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;line-height:1.6;}
+.container{max-width:1000px;margin:0 auto;padding:0 16px;}
+.header{background:rgba(15,15,18,0.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--borde);padding:12px 0;position:sticky;top:0;z-index:100;}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.logo{font-family:"Syne",sans-serif;font-weight:800;font-size:20px;color:var(--txt);text-decoration:none;}
+.logo span{color:var(--rojo);}
+.btn-wa-h{background:#25D366;color:#000;padding:7px 14px;border-radius:6px;font-family:"Syne",sans-serif;font-weight:700;font-size:12px;text-decoration:none;}
+.hero{padding:50px 0 30px;text-align:center;border-bottom:1px solid var(--borde);background:radial-gradient(circle at 50% 0%,rgba(232,33,10,0.06) 0%,transparent 60%);}
+.hero-eyebrow{display:inline-block;background:rgba(232,33,10,0.12);border:1px solid rgba(232,33,10,0.4);color:var(--rojo);font-family:"Syne",sans-serif;font-weight:700;font-size:10px;letter-spacing:2px;padding:5px 12px;border-radius:20px;text-transform:uppercase;margin-bottom:18px;}
+.hero h1{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(28px,5vw,46px);line-height:1.1;margin-bottom:14px;}
+.hero h1 .rojo{color:var(--rojo);}
+.hero p{font-size:15px;color:var(--txt2);max-width:600px;margin:0 auto 18px;}
+.hero-trust{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;font-size:11px;color:var(--txt3);margin-top:10px;}
+.hero-trust span::before{content:"●";color:var(--verde);margin-right:4px;}
+.alerta-servicio{background:linear-gradient(135deg,rgba(96,165,250,0.08),rgba(96,165,250,0.02));border:1px solid rgba(96,165,250,0.3);border-radius:12px;padding:14px 20px;margin:20px auto 0;max-width:680px;font-size:12px;color:var(--txt);display:flex;align-items:center;gap:12px;}
+.alerta-servicio b{color:var(--azul);}
+.tipo-tabs{display:flex;gap:8px;justify-content:center;margin-top:20px;flex-wrap:wrap;}
+.tipo-tab{background:var(--c2);border:1px solid var(--borde);color:var(--txt2);padding:8px 18px;border-radius:20px;cursor:pointer;font-family:"Syne",sans-serif;font-weight:700;font-size:12px;}
+.tipo-tab.active{background:var(--rojo);color:#fff;border-color:var(--rojo);}
+section{padding:40px 0;}
+.sec-eyebrow{color:var(--rojo);font-family:"Syne",sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;}
+.sec-titulo{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(22px,3.5vw,30px);line-height:1.2;margin-bottom:10px;}
+.sec-titulo .rojo{color:var(--rojo);}
+.sec-sub{font-size:14px;color:var(--txt2);max-width:650px;margin-bottom:24px;}
+.marcas-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-top:20px;}
+.marca-btn{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px 10px;cursor:pointer;text-align:center;transition:all 0.2s;}
+.marca-btn:hover{border-color:var(--rojo);transform:translateY(-2px);}
+.marca-btn.active{border-color:var(--rojo);background:rgba(232,33,10,0.08);}
+.marca-icon{font-size:22px;margin-bottom:4px;}
+.marca-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:12px;color:var(--txt);}
+.marca-modelos{font-size:9px;color:var(--txt3);margin-top:2px;}
+.modelos-section{display:none;margin-top:30px;}
+.modelos-section.active{display:block;}
+.modelos-titulo{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;color:var(--rojo);margin-bottom:12px;text-transform:uppercase;letter-spacing:1px;}
+.modelos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;}
+.modelo-btn{background:var(--c3);border:1px solid var(--borde);border-radius:8px;padding:12px;cursor:pointer;font-size:12px;text-align:left;position:relative;}
+.modelo-btn:hover{border-color:var(--rojo);}
+.modelo-btn.active{background:var(--rojo);color:#fff;border-color:var(--rojo);}
+.modelo-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;}
+.modelo-motor{font-size:10px;opacity:0.8;margin-top:2px;}
+.modelo-tag{position:absolute;top:6px;right:6px;background:rgba(245,197,24,0.2);color:var(--amarillo);font-size:8px;padding:2px 6px;border-radius:4px;font-weight:700;}
+.modelo-btn.active .modelo-tag{background:rgba(255,255,255,0.25);color:#fff;}
+.kits-section{display:none;margin-top:30px;padding-top:30px;border-top:1px solid var(--borde);}
+.kits-section.active{display:block;}
+.kit-titulo{font-family:"Syne",sans-serif;font-weight:800;font-size:20px;margin-bottom:6px;}
+.kit-sub{font-size:13px;color:var(--txt3);margin-bottom:20px;}
+.kits-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;}
+.kit-card{background:var(--c2);border:1px solid var(--borde);border-radius:14px;padding:22px;position:relative;}
+.kit-card.destacado{border:2px solid var(--rojo);background:linear-gradient(180deg,rgba(232,33,10,0.06),var(--c2) 50%);}
+.kit-badge{position:absolute;top:-12px;right:20px;background:var(--rojo);color:#fff;padding:5px 12px;border-radius:20px;font-family:"Syne",sans-serif;font-weight:700;font-size:10px;letter-spacing:1px;}
+.kit-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;color:var(--rojo);margin-bottom:4px;}
+.kit-marca{font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;font-weight:600;}
+.kit-desc{font-size:11px;color:var(--txt3);margin-bottom:14px;}
+.kit-precio{font-family:"Syne",sans-serif;font-weight:900;font-size:30px;margin-bottom:2px;}
+.kit-precio .curr{font-size:16px;color:var(--txt3);}
+.kit-precio-desc{font-size:10px;color:var(--txt3);margin-bottom:16px;}
+.kit-features{list-style:none;margin-bottom:18px;}
+.kit-features li{font-size:12px;color:var(--txt);padding:6px 0 6px 20px;position:relative;border-bottom:1px dashed var(--c3);}
+.kit-features li:last-child{border-bottom:none;}
+.kit-features li::before{content:"✓";position:absolute;left:0;color:var(--verde);font-weight:bold;}
+.kit-cta{display:block;text-align:center;background:#25D366;color:#000;padding:11px;border-radius:8px;font-family:"Syne",sans-serif;font-weight:800;font-size:13px;text-decoration:none;}
+.kit-tiempo{display:flex;align-items:center;gap:8px;background:rgba(96,165,250,0.08);border-left:3px solid var(--azul);border-radius:6px;padding:8px 10px;margin-top:12px;font-size:11px;color:var(--txt2);}
+.info-block{background:var(--c1);}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:20px;}
+.info-card{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:18px;}
+.info-icon{font-size:24px;margin-bottom:8px;}
+.info-tit{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;margin-bottom:4px;}
+.info-desc{font-size:11px;color:var(--txt2);line-height:1.6;}
+.cta-final{background:linear-gradient(135deg,var(--rojo) 0%,#a8170a 100%);text-align:center;padding:50px 20px;}
+.cta-final h2{font-family:"Syne",sans-serif;font-weight:900;font-size:clamp(22px,4vw,30px);margin-bottom:10px;color:#fff;}
+.cta-final p{font-size:14px;color:rgba(255,255,255,0.9);max-width:550px;margin:0 auto 22px;}
+.cta-final .btn-wa-f{background:#fff;color:#000;padding:16px 30px;border-radius:10px;font-family:"Syne",sans-serif;font-weight:800;font-size:15px;text-decoration:none;display:inline-block;}
+.footer{background:#000;padding:30px 0;text-align:center;border-top:1px solid var(--borde);}
+.wa-float{position:fixed;bottom:24px;right:24px;width:56px;height:56px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 6px 20px rgba(37,211,102,0.4);z-index:99;}
+@media(max-width:640px){.marcas-grid{grid-template-columns:repeat(3,1fr);}.kit-card{padding:18px;}}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="container header-inner">
+    <a href="https://serviruta.cl" class="logo">SERVI<span>RUTA</span></a>
+    <a href="https://wa.me/56945210814?text=Hola%2C%20quiero%20cotizar%20kit%20de%20embrague%20para%20mi%20auto" class="btn-wa-h" target="_blank">💬 WhatsApp</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">Kit Embrague Auto y Camioneta · A domicilio</div>
+    <h1>Cambio de embrague <span class="rojo">en tu casa o trabajo.</span></h1>
+    <p>Tu auto patina, raspa al cambiar o el pedal no agarra. Te llegamos a tu base con kit completo y técnicos especializados. Marcas premium: Luk, Sachs, Valeo, Exedy.</p>
+    <div class="hero-trust">
+      <span>Luk · Sachs · Valeo · Exedy</span>
+      <span>Técnicos especialistas</span>
+      <span>Garantía escrita 12 meses</span>
+    </div>
+    <div class="alerta-servicio">
+      <div style="font-size:20px">⚙️</div>
+      <div><b>Sin trasladar el auto:</b> 2 técnicos trabajan en tu base con gata de transmisión portátil. Tiempo: 4-7 horas según modelo. Auto vuelve a operar el mismo día.</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="sec-eyebrow">Paso 1 · Selecciona la marca</div>
+    <h2 class="sec-titulo">¿Cuál es la <span class="rojo">marca</span> de tu vehículo?</h2>
+    <p class="sec-sub">Atendemos autos, hatchbacks, sedanes, SUV y camionetas. Selecciona la marca para ver modelos disponibles.</p>
+
+    <div class="marcas-grid" id="marcas">
+      <div class="marca-btn" data-marca="toyota"><div class="marca-icon">🚗</div><div class="marca-nombre">Toyota</div><div class="marca-modelos">Yaris · Corolla · Hilux</div></div>
+      <div class="marca-btn" data-marca="hyundai"><div class="marca-icon">🚗</div><div class="marca-nombre">Hyundai</div><div class="marca-modelos">Accent · Tucson · H100</div></div>
+      <div class="marca-btn" data-marca="kia"><div class="marca-icon">🚗</div><div class="marca-nombre">Kia</div><div class="marca-modelos">Morning · Rio · Sportage</div></div>
+      <div class="marca-btn" data-marca="chevrolet"><div class="marca-icon">🚙</div><div class="marca-nombre">Chevrolet</div><div class="marca-modelos">Sail · Tracker · DMAX</div></div>
+      <div class="marca-btn" data-marca="nissan"><div class="marca-icon">🚗</div><div class="marca-nombre">Nissan</div><div class="marca-modelos">March · Versa · Navara</div></div>
+      <div class="marca-btn" data-marca="suzuki"><div class="marca-icon">🚗</div><div class="marca-nombre">Suzuki</div><div class="marca-modelos">Swift · Vitara · Jimny</div></div>
+      <div class="marca-btn" data-marca="mazda"><div class="marca-icon">🚗</div><div class="marca-nombre">Mazda</div><div class="marca-modelos">3 · CX-5 · BT-50</div></div>
+      <div class="marca-btn" data-marca="mitsubishi"><div class="marca-icon">🚙</div><div class="marca-nombre">Mitsubishi</div><div class="marca-modelos">ASX · Outlander · L200</div></div>
+      <div class="marca-btn" data-marca="vw"><div class="marca-icon">🚙</div><div class="marca-nombre">Volkswagen</div><div class="marca-modelos">Gol · Tiguan · Amarok</div></div>
+      <div class="marca-btn" data-marca="ford"><div class="marca-icon">🚙</div><div class="marca-nombre">Ford</div><div class="marca-modelos">Fiesta · EcoSport · Ranger</div></div>
+      <div class="marca-btn" data-marca="peugeot"><div class="marca-icon">🚗</div><div class="marca-nombre">Peugeot</div><div class="marca-modelos">208 · 2008 · Partner</div></div>
+      <div class="marca-btn" data-marca="renault"><div class="marca-icon">🚙</div><div class="marca-nombre">Renault</div><div class="marca-modelos">Kwid · Duster · Oroch</div></div>
+      <div class="marca-btn" data-marca="honda"><div class="marca-icon">🚗</div><div class="marca-nombre">Honda</div><div class="marca-modelos">City · Civic · CR-V</div></div>
+      <div class="marca-btn" data-marca="otra"><div class="marca-icon">🔧</div><div class="marca-nombre">Otra marca</div><div class="marca-modelos">Cotizar WhatsApp</div></div>
+    </div>
+
+    <div class="modelos-section" id="modelos-section">
+      <div class="modelos-titulo">Paso 2 · Selecciona tu modelo</div>
+      <div class="tipo-tabs" id="tipo-tabs" style="display:none">
+        <div class="tipo-tab active" data-tipo="todos">Todos</div>
+        <div class="tipo-tab" data-tipo="auto">Autos</div>
+        <div class="tipo-tab" data-tipo="suv">SUV</div>
+        <div class="tipo-tab" data-tipo="camioneta">Camionetas</div>
+      </div>
+      <div class="modelos-grid" id="modelos" style="margin-top:14px"></div>
+    </div>
+
+    <div class="kits-section" id="kits-section">
+      <div class="kit-titulo" id="kit-titulo">Kits disponibles</div>
+      <div class="kit-sub" id="kit-sub">Precio cerrado incluye kit completo, mano de obra y servicio en tu base.</div>
+      <div class="kits-grid" id="kits-grid"></div>
+    </div>
+  </div>
+</section>
+
+<section class="info-block">
+  <div class="container">
+    <div class="sec-eyebrow">Cómo trabajamos</div>
+    <h2 class="sec-titulo">Cambio profesional <span class="rojo">donde estés.</span></h2>
+    <p class="sec-sub">El cambio de embrague de auto requiere desmontar la caja de cambios. Nosotros lo hacemos en tu base con gata portátil de transmisión.</p>
+
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-icon">🏠</div>
+        <div class="info-tit">En tu base</div>
+        <div class="info-desc">Casa, edificio (espacio amplio), estacionamiento o trabajo. Sin trasladar el vehículo.</div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">⏱️</div>
+        <div class="info-tit">4-7 horas</div>
+        <div class="info-desc">Auto pequeño: 4h · Sedán: 5h · SUV: 5-6h · Camioneta 4x4: 6-7h. Mismo día.</div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">🔧</div>
+        <div class="info-tit">Gata de transmisión</div>
+        <div class="info-desc">Llevamos equipo profesional: gata transmisión, llaves dinamométricas, soportes motor.</div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">📋</div>
+        <div class="info-tit">Inspección integral</div>
+        <div class="info-desc">Revisamos volante motor, retén cigüeñal, palieres y soportes motor. Sin sorpresas.</div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">📝</div>
+        <div class="info-tit">Garantía 12 meses</div>
+        <div class="info-desc">Por defecto de repuesto o instalación. Volvemos sin costo si presenta falla en el plazo.</div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">💳</div>
+        <div class="info-tit">Pago en el lugar</div>
+        <div class="info-desc">Transferencia, débito, crédito en cuotas. Boleta o factura según necesites.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-final">
+  <h2>Cambio embrague, hecho en tu casa.</h2>
+  <p>Cotiza por WhatsApp con marca, modelo y año de tu auto. Te confirmamos disponibilidad del kit y agendamos el día que te acomode.</p>
+  <a href="https://wa.me/56945210814?text=Hola%2C%20quiero%20cotizar%20cambio%20de%20kit%20embrague%20para%20mi%20auto" class="btn-wa-f" target="_blank">💬 Cotizar mi kit embrague</a>
+  <div style="margin-top:16px;color:rgba(255,255,255,0.85);font-family:'Syne',sans-serif;font-weight:700;font-size:18px;">+56 9 4521 0814</div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:18px;margin-bottom:8px;">SERVI<span style="color:var(--rojo)">RUTA</span></div>
+    <div style="font-size:12px;color:var(--txt3);">Mecánica móvil profesional · Toda la RM</div>
+    <div style="font-size:11px;color:var(--txt3);margin-top:6px;">+56 9 4521 0814 · contacto@serviruta.cl · serviruta.cl</div>
+  </div>
+</footer>
+
+<a href="https://wa.me/56945210814?text=Hola%2C%20quiero%20cotizar%20kit%20de%20embrague%20para%20mi%20auto" class="wa-float" target="_blank">💬</a>
+
+<script>
+// DATA: precios reales aproximados de Autoplanet (sin MO)
+// tipo: auto / suv / camioneta
+// horas: tiempo total del trabajo en horas
+var DATA={
+  toyota:{nombre:'Toyota',modelos:[
+    {id:'yaris',nombre:'Yaris (1.3 / 1.5)',desc:'Kit Sachs/Luk',std:75000,orig:110000,prem:155000,horas:4,tipo:'auto'},
+    {id:'corolla',nombre:'Corolla (1.8 sedán)',desc:'Kit estándar',std:85000,orig:125000,prem:175000,horas:4.5,tipo:'auto'},
+    {id:'rav4',nombre:'RAV4 (2.0 / 2.5)',desc:'Kit SUV mediano',std:140000,orig:195000,prem:265000,horas:5.5,tipo:'suv'},
+    {id:'hilux24',nombre:'Hilux 2.4 Diésel',desc:'Kit pickup 4x4',std:240000,orig:320000,prem:420000,horas:6,tipo:'camioneta'},
+    {id:'hilux28',nombre:'Hilux 2.8 Diésel',desc:'Kit pickup reforzado',std:280000,orig:380000,prem:495000,horas:6.5,tipo:'camioneta'},
+    {id:'fortuner',nombre:'Fortuner',desc:'Kit SUV grande 4x4',std:295000,orig:395000,prem:520000,horas:6.5,tipo:'suv'}
+  ]},
+  hyundai:{nombre:'Hyundai',modelos:[
+    {id:'accent',nombre:'Accent (1.4 / 1.6)',desc:'Kit Luk/Valeo',std:70000,orig:100000,prem:145000,horas:4,tipo:'auto'},
+    {id:'i10',nombre:'i10',desc:'Kit compacto Kappa',std:65000,orig:92000,prem:135000,horas:4,tipo:'auto'},
+    {id:'i20',nombre:'i20',desc:'Kit compacto',std:72000,orig:105000,prem:150000,horas:4,tipo:'auto'},
+    {id:'creta',nombre:'Creta',desc:'Kit SUV pequeño',std:115000,orig:165000,prem:230000,horas:5,tipo:'suv'},
+    {id:'tucson',nombre:'Tucson (2.0)',desc:'Kit SUV mediano',std:140000,orig:195000,prem:260000,horas:5.5,tipo:'suv'},
+    {id:'h100',nombre:'H100 / Porter',desc:'Kit furgón liviano',std:180000,orig:245000,prem:325000,horas:5.5,tipo:'camioneta'},
+    {id:'santafe',nombre:'Santa Fe',desc:'Kit SUV grande',std:175000,orig:245000,prem:325000,horas:6,tipo:'suv'}
+  ]},
+  kia:{nombre:'Kia',modelos:[
+    {id:'morning',nombre:'Morning',desc:'Kit Sachs económico',std:60000,orig:88000,prem:130000,horas:4,tipo:'auto'},
+    {id:'rio',nombre:'Rio / Soluto',desc:'Kit Sachs/Luk',std:72000,orig:105000,prem:150000,horas:4,tipo:'auto'},
+    {id:'stonic',nombre:'Stonic',desc:'Kit SUV compacto',std:105000,orig:150000,prem:210000,horas:5,tipo:'suv'},
+    {id:'sportage',nombre:'Sportage',desc:'Kit SUV mediano',std:145000,orig:200000,prem:270000,horas:5.5,tipo:'suv'},
+    {id:'sorento',nombre:'Sorento',desc:'Kit SUV grande',std:185000,orig:250000,prem:335000,horas:6,tipo:'suv'},
+    {id:'soul',nombre:'Soul',desc:'Kit Gamma 1.6',std:90000,orig:130000,prem:180000,horas:4.5,tipo:'auto'},
+    {id:'k2700',nombre:'K2700 / Frontier',desc:'Kit camioneta utilitaria',std:175000,orig:240000,prem:320000,horas:5.5,tipo:'camioneta'}
+  ]},
+  chevrolet:{nombre:'Chevrolet',modelos:[
+    {id:'spark',nombre:'Spark / Spark GT',desc:'Kit compacto',std:62000,orig:90000,prem:130000,horas:4,tipo:'auto'},
+    {id:'sail',nombre:'Sail',desc:'Kit Luk/Sachs',std:78000,orig:115000,prem:160000,horas:4,tipo:'auto'},
+    {id:'onix',nombre:'Onix Turbo',desc:'Kit Turbo 1.0/1.2',std:85000,orig:125000,prem:175000,horas:4.5,tipo:'auto'},
+    {id:'tracker',nombre:'Tracker',desc:'Kit SUV pequeño',std:110000,orig:155000,prem:220000,horas:5,tipo:'suv'},
+    {id:'cruze',nombre:'Cruze',desc:'Kit sedán mediano',std:95000,orig:140000,prem:195000,horas:4.5,tipo:'auto'},
+    {id:'captiva',nombre:'Captiva',desc:'Kit SUV grande',std:165000,orig:225000,prem:300000,horas:6,tipo:'suv'},
+    {id:'colorado',nombre:'Colorado / Tornado',desc:'Kit camioneta media',std:225000,orig:305000,prem:400000,horas:6,tipo:'camioneta'},
+    {id:'dmax',nombre:'D-Max',desc:'Kit camioneta 4x4',std:255000,orig:340000,prem:445000,horas:6.5,tipo:'camioneta'}
+  ]},
+  nissan:{nombre:'Nissan',modelos:[
+    {id:'march',nombre:'March',desc:'Kit compacto HR12',std:68000,orig:98000,prem:140000,horas:4,tipo:'auto'},
+    {id:'versa',nombre:'Versa',desc:'Kit sedán HR16',std:78000,orig:112000,prem:160000,horas:4,tipo:'auto'},
+    {id:'kicks',nombre:'Kicks',desc:'Kit SUV compacto',std:115000,orig:160000,prem:220000,horas:5,tipo:'suv'},
+    {id:'qashqai',nombre:'Qashqai',desc:'Kit SUV mediano',std:135000,orig:190000,prem:260000,horas:5.5,tipo:'suv'},
+    {id:'xtrail',nombre:'X-Trail',desc:'Kit SUV grande',std:170000,orig:235000,prem:315000,horas:6,tipo:'suv'},
+    {id:'sentra',nombre:'Sentra',desc:'Kit sedán mediano',std:95000,orig:135000,prem:190000,horas:4.5,tipo:'auto'},
+    {id:'navara',nombre:'Navara / Frontier',desc:'Kit camioneta 2.3 diésel',std:265000,orig:355000,prem:465000,horas:6.5,tipo:'camioneta'},
+    {id:'np300',nombre:'NP300',desc:'Kit camioneta liviana',std:215000,orig:295000,prem:390000,horas:6,tipo:'camioneta'}
+  ]},
+  suzuki:{nombre:'Suzuki',modelos:[
+    {id:'alto',nombre:'Alto / Alto 800',desc:'Kit ultracompacto',std:55000,orig:80000,prem:118000,horas:3.5,tipo:'auto'},
+    {id:'celerio',nombre:'Celerio',desc:'Kit compacto K10',std:60000,orig:88000,prem:125000,horas:4,tipo:'auto'},
+    {id:'swift',nombre:'Swift',desc:'Kit Luk K12',std:70000,orig:102000,prem:145000,horas:4,tipo:'auto'},
+    {id:'baleno',nombre:'Baleno',desc:'Kit Luk K14',std:75000,orig:108000,prem:155000,horas:4,tipo:'auto'},
+    {id:'vitara',nombre:'Vitara / Grand Vitara',desc:'Kit SUV compacto',std:115000,orig:160000,prem:225000,horas:5,tipo:'suv'},
+    {id:'scross',nombre:'S-Cross',desc:'Kit SUV mediano',std:120000,orig:170000,prem:235000,horas:5,tipo:'suv'},
+    {id:'jimny',nombre:'Jimny',desc:'Kit 4x4 mecánico',std:135000,orig:185000,prem:255000,horas:5.5,tipo:'suv'}
+  ]},
+  mazda:{nombre:'Mazda',modelos:[
+    {id:'2',nombre:'Mazda 2',desc:'Kit SkyActiv 1.5',std:78000,orig:115000,prem:165000,horas:4,tipo:'auto'},
+    {id:'3',nombre:'Mazda 3',desc:'Kit SkyActiv 1.5/2.0',std:95000,orig:140000,prem:195000,horas:4.5,tipo:'auto'},
+    {id:'cx3',nombre:'CX-3',desc:'Kit SUV compacto',std:115000,orig:165000,prem:230000,horas:5,tipo:'suv'},
+    {id:'cx5',nombre:'CX-5',desc:'Kit SUV mediano',std:155000,orig:215000,prem:290000,horas:5.5,tipo:'suv'},
+    {id:'bt50',nombre:'BT-50',desc:'Kit camioneta 3.2 diésel',std:295000,orig:395000,prem:520000,horas:6.5,tipo:'camioneta'}
+  ]},
+  mitsubishi:{nombre:'Mitsubishi',modelos:[
+    {id:'mirage',nombre:'Mirage / Space Star',desc:'Kit compacto',std:62000,orig:90000,prem:130000,horas:4,tipo:'auto'},
+    {id:'asx',nombre:'ASX',desc:'Kit SUV compacto',std:120000,orig:170000,prem:235000,horas:5,tipo:'suv'},
+    {id:'outlander',nombre:'Outlander',desc:'Kit SUV mediano',std:155000,orig:215000,prem:290000,horas:5.5,tipo:'suv'},
+    {id:'l200',nombre:'L200 / Triton',desc:'Kit camioneta 2.4 diésel',std:265000,orig:355000,prem:465000,horas:6.5,tipo:'camioneta'},
+    {id:'montero',nombre:'Montero Sport',desc:'Kit SUV grande 4x4',std:275000,orig:370000,prem:485000,horas:6.5,tipo:'suv'}
+  ]},
+  vw:{nombre:'Volkswagen',modelos:[
+    {id:'gol',nombre:'Gol / Saveiro',desc:'Kit Luk',std:75000,orig:108000,prem:155000,horas:4,tipo:'auto'},
+    {id:'polo',nombre:'Polo',desc:'Kit Luk/Sachs',std:85000,orig:125000,prem:175000,horas:4.5,tipo:'auto'},
+    {id:'vento',nombre:'Vento',desc:'Kit sedán',std:90000,orig:130000,prem:180000,horas:4.5,tipo:'auto'},
+    {id:'tcross',nombre:'T-Cross',desc:'Kit SUV TSI',std:130000,orig:185000,prem:255000,horas:5,tipo:'suv'},
+    {id:'tiguan',nombre:'Tiguan',desc:'Kit SUV 2.0 TSI',std:175000,orig:240000,prem:325000,horas:5.5,tipo:'suv'},
+    {id:'amarok',nombre:'Amarok',desc:'Kit camioneta TDI',std:285000,orig:385000,prem:505000,horas:6.5,tipo:'camioneta'}
+  ]},
+  ford:{nombre:'Ford',modelos:[
+    {id:'fiesta',nombre:'Fiesta',desc:'Kit Luk/Valeo',std:75000,orig:108000,prem:155000,horas:4,tipo:'auto'},
+    {id:'focus',nombre:'Focus',desc:'Kit Luk/Sachs',std:90000,orig:130000,prem:180000,horas:4.5,tipo:'auto'},
+    {id:'ecosport',nombre:'EcoSport',desc:'Kit SUV pequeño',std:115000,orig:165000,prem:230000,horas:5,tipo:'suv'},
+    {id:'territory',nombre:'Territory',desc:'Kit SUV EcoBoost',std:155000,orig:215000,prem:290000,horas:5.5,tipo:'suv'},
+    {id:'ranger22',nombre:'Ranger 2.2 Diésel',desc:'Kit camioneta media',std:245000,orig:330000,prem:435000,horas:6.5,tipo:'camioneta'},
+    {id:'ranger32',nombre:'Ranger 3.2 Diésel',desc:'Kit camioneta pesada',std:295000,orig:395000,prem:520000,horas:6.5,tipo:'camioneta'}
+  ]},
+  peugeot:{nombre:'Peugeot',modelos:[
+    {id:'208',nombre:'Peugeot 208',desc:'Kit PureTech',std:85000,orig:125000,prem:175000,horas:4.5,tipo:'auto'},
+    {id:'2008',nombre:'Peugeot 2008',desc:'Kit SUV pequeño',std:115000,orig:165000,prem:230000,horas:5,tipo:'suv'},
+    {id:'301',nombre:'Peugeot 301',desc:'Kit sedán HDi',std:95000,orig:140000,prem:195000,horas:4.5,tipo:'auto'},
+    {id:'3008',nombre:'Peugeot 3008',desc:'Kit SUV mediano',std:155000,orig:215000,prem:290000,horas:5.5,tipo:'suv'},
+    {id:'partner',nombre:'Partner / Rifter',desc:'Kit furgón liviano',std:135000,orig:185000,prem:255000,horas:5,tipo:'camioneta'}
+  ]},
+  renault:{nombre:'Renault',modelos:[
+    {id:'kwid',nombre:'Kwid',desc:'Kit compacto',std:65000,orig:95000,prem:135000,horas:4,tipo:'auto'},
+    {id:'logan',nombre:'Logan / Sandero',desc:'Kit Valeo',std:75000,orig:108000,prem:155000,horas:4,tipo:'auto'},
+    {id:'duster',nombre:'Duster',desc:'Kit SUV mediano',std:130000,orig:180000,prem:250000,horas:5.5,tipo:'suv'},
+    {id:'oroch',nombre:'Duster Oroch',desc:'Kit pickup compacta',std:175000,orig:240000,prem:320000,horas:5.5,tipo:'camioneta'},
+    {id:'kangoo',nombre:'Kangoo',desc:'Kit furgón liviano',std:115000,orig:165000,prem:225000,horas:5,tipo:'camioneta'}
+  ]},
+  honda:{nombre:'Honda',modelos:[
+    {id:'city',nombre:'City',desc:'Kit Sachs L15',std:80000,orig:118000,prem:165000,horas:4,tipo:'auto'},
+    {id:'civic',nombre:'Civic',desc:'Kit Sachs R18 / L15B',std:105000,orig:150000,prem:210000,horas:4.5,tipo:'auto'},
+    {id:'hrv',nombre:'HR-V',desc:'Kit SUV compacto',std:125000,orig:175000,prem:245000,horas:5,tipo:'suv'},
+    {id:'crv',nombre:'CR-V',desc:'Kit SUV mediano',std:155000,orig:215000,prem:290000,horas:5.5,tipo:'suv'}
+  ]},
+  otra:{nombre:'Otra marca',modelos:[]}
+}
+
+function calcularKits(modelo){
+  if(!modelo)return []
+  // MO: 2 técnicos x horas x $25K/hora
+  // Para autos: 1 técnico + 1 ayudante (no se cobra como 2 senior)
+  // Tarifa real técnico líder $30K · ayudante $20K = $50K/hora combinado
+  // MARGEN: 50% para autos y SUV, 30% para camionetas
+  var horas=modelo.horas
+  var tipo=modelo.tipo
+  var MARGEN = tipo==='camioneta' ? 1.3 : 1.5
+  
+  var MO=horas*50000  // 2 personas x $25K promedio (técnico+ayudante)
+  
+  // Extras según tipo
+  var EX_BASICO, EX_COMPLETO, EX_PLUS
+  if(tipo==='auto'){
+    EX_BASICO=80000  // collarín + horquilla + aceite caja
+    EX_COMPLETO=120000  // + retén cigüeñal + sintético
+    EX_PLUS=210000  // + bombín + servo si aplica
+  }else if(tipo==='suv'){
+    EX_BASICO=100000
+    EX_COMPLETO=150000
+    EX_PLUS=265000
+  }else{ // camioneta
+    EX_BASICO=145000
+    EX_COMPLETO=205000
+    EX_PLUS=355000
+  }
+
+  var basico=Math.round((modelo.std + MO + EX_BASICO) * MARGEN / 1000) * 1000
+  var premium=Math.round((modelo.orig + MO + EX_COMPLETO) * MARGEN / 1000) * 1000
+  var plus=Math.round((modelo.prem + MO + EX_PLUS) * MARGEN / 1000) * 1000
+
+  return [
+    {
+      tipo:'basico',
+      nombre:'Kit Estándar',
+      marca:'NPR · DAIDO · Marca alternativa',
+      desc:'Kit estándar para uso urbano regular',
+      precio:basico,
+      garantia:'6 meses',
+      destacado:false,
+      features:[
+        'Disco + plato (prensa) marca alternativa',
+        'Rodamiento collarín nuevo',
+        'Horquilla embrague (revisada)',
+        'Retén caja de cambios',
+        'Aceite caja completo',
+        '2 técnicos · '+horas+' horas en tu base',
+        'Prueba dinámica',
+        'Garantía escrita 6 meses'
+      ]
+    },
+    {
+      tipo:'premium',
+      nombre:'Kit Original',
+      marca:'LUK · VALEO · EXEDY · Original OEM',
+      desc:'El más solicitado · Calidad fabricante original',
+      precio:premium,
+      garantia:'12 meses',
+      destacado:true,
+      features:[
+        'Kit completo LUK / VALEO / EXEDY original',
+        'Collarín nuevo de calidad OEM',
+        'Horquilla nueva o calibrada',
+        'Retén caja + retén cigüeñal',
+        'Aceite caja sintético',
+        'Lubricante específico para mecanismo',
+        '2 técnicos especialistas · '+horas+' horas',
+        'Revisión soportes motor y palieres',
+        'Calibración punto de mordida',
+        'Garantía escrita 12 meses'
+      ]
+    },
+    {
+      tipo:'plus',
+      nombre:'Kit Premium',
+      marca:'SACHS · AISIN · Premium alemán/japonés',
+      desc:'Calidad premium · Máxima durabilidad',
+      precio:plus,
+      garantia:'12 meses + extras',
+      destacado:false,
+      features:[
+        'Kit completo SACHS / AISIN (premium)',
+        'Disco reforzado',
+        'Collarín premium SKF / NTN',
+        'Horquilla nueva original',
+        'Retén caja y cigüeñal nuevos',
+        'Bombín embrague nuevo',
+        'Volante motor revisado y rectificado si requiere',
+        'Aceite caja sintético premium',
+        '2 técnicos senior · '+horas+' horas',
+        'Inspección integral con scanner',
+        'Calibración punto de mordida con datos en vivo',
+        'Garantía escrita 12 meses sobre kit completo'
+      ]
+    }
+  ]
+}
+
+var marcaSeleccionada=null,modeloSeleccionado=null,tipoFiltro='todos'
+
+document.querySelectorAll('.marca-btn').forEach(function(b){
+  b.onclick=function(){
+    document.querySelectorAll('.marca-btn').forEach(function(x){x.classList.remove('active')})
+    b.classList.add('active')
+    marcaSeleccionada=b.getAttribute('data-marca')
+    tipoFiltro='todos'
+    document.querySelectorAll('.tipo-tab').forEach(function(x){x.classList.remove('active')})
+    document.querySelector('.tipo-tab[data-tipo="todos"]').classList.add('active')
+    renderModelos()
+    document.getElementById('kits-section').classList.remove('active')
+  }
+})
+
+document.querySelectorAll('.tipo-tab').forEach(function(b){
+  b.onclick=function(){
+    document.querySelectorAll('.tipo-tab').forEach(function(x){x.classList.remove('active')})
+    b.classList.add('active')
+    tipoFiltro=b.getAttribute('data-tipo')
+    renderModelos()
+  }
+})
+
+function renderModelos(){
+  var data=DATA[marcaSeleccionada]
+  var sec=document.getElementById('modelos-section')
+  var grid=document.getElementById('modelos')
+  var tabs=document.getElementById('tipo-tabs')
+  
+  if(marcaSeleccionada==='otra'){
+    sec.classList.add('active')
+    tabs.style.display='none'
+    grid.innerHTML='<div style="grid-column:1/-1;background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:20px;text-align:center"><div style="font-size:13px;color:var(--txt2);margin-bottom:14px">Para otras marcas (Audi, BMW, Mercedes, Citroën, Fiat, Geely, Chery, JAC, MG, Foton) coordinamos el kit específico en 24-48h.</div><a href="https://wa.me/56945210814?text=Hola%2C%20mi%20auto%20no%20est%C3%A1%20en%20la%20lista%2C%20quiero%20cotizar%20cambio%20de%20embrague" target="_blank" style="background:#25D366;color:#000;padding:10px 18px;border-radius:6px;font-family:Syne,sans-serif;font-weight:700;font-size:12px;text-decoration:none;display:inline-block">💬 Cotizar mi auto</a></div>'
+    sec.scrollIntoView({behavior:'smooth',block:'start'})
+    return
+  }
+  
+  // Filtrar modelos según tipo
+  var modelosFiltrados = data.modelos
+  if(tipoFiltro!=='todos'){
+    modelosFiltrados = data.modelos.filter(function(m){return m.tipo===tipoFiltro})
+  }
+  
+  // Mostrar tabs solo si la marca tiene variedad de tipos
+  var tiposEnMarca = new Set(data.modelos.map(function(m){return m.tipo}))
+  tabs.style.display = tiposEnMarca.size > 1 ? 'flex' : 'none'
+  
+  if(modelosFiltrados.length===0){
+    grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--txt3);font-size:13px">No hay modelos de este tipo para '+data.nombre+'. Prueba otro filtro.</div>'
+  }else{
+    grid.innerHTML=modelosFiltrados.map(function(m){
+      var tagLabel = m.tipo==='auto'?'AUTO':(m.tipo==='suv'?'SUV':'CAMIONETA')
+      return '<div class="modelo-btn" data-id="'+m.id+'"><span class="modelo-tag">'+tagLabel+'</span><div class="modelo-nombre">'+m.nombre+'</div><div class="modelo-motor">'+m.desc+'</div></div>'
+    }).join('')
+  }
+  
+  document.querySelectorAll('.modelo-btn').forEach(function(b){
+    b.onclick=function(){
+      document.querySelectorAll('.modelo-btn').forEach(function(x){x.classList.remove('active')})
+      b.classList.add('active')
+      var id=b.getAttribute('data-id')
+      modeloSeleccionado=data.modelos.find(function(m){return m.id===id})
+      renderKits()
+    }
+  })
+  
+  sec.classList.add('active')
+  if(!document.getElementById('kits-section').classList.contains('active')){
+    sec.scrollIntoView({behavior:'smooth',block:'start'})
+  }
+}
+
+function renderKits(){
+  var sec=document.getElementById('kits-section')
+  var grid=document.getElementById('kits-grid')
+  var titulo=document.getElementById('kit-titulo')
+  var sub=document.getElementById('kit-sub')
+  
+  titulo.textContent='Kits para '+DATA[marcaSeleccionada].nombre+' '+modeloSeleccionado.nombre
+  var tipoLabel=modeloSeleccionado.tipo==='auto'?'Auto':(modeloSeleccionado.tipo==='suv'?'SUV':'Camioneta')
+  sub.textContent=tipoLabel+' · '+modeloSeleccionado.desc+' · Servicio: 2 técnicos · '+modeloSeleccionado.horas+' horas en tu base · Toda la RM'
+  
+  var kits=calcularKits(modeloSeleccionado)
+  grid.innerHTML=kits.map(function(k){
+    var msg='Hola%2C%20quiero%20cotizar%20el%20'+encodeURIComponent(k.nombre)+'%20de%20embrague%20para%20mi%20'+encodeURIComponent(DATA[marcaSeleccionada].nombre+' '+modeloSeleccionado.nombre)
+    return '<div class="kit-card '+(k.destacado?'destacado':'')+'">'+
+      (k.destacado?'<div class="kit-badge">MÁS ELEGIDO</div>':'')+
+      '<div class="kit-nombre">'+k.nombre+'</div>'+
+      '<div class="kit-marca">'+k.marca+'</div>'+
+      '<div class="kit-desc">'+k.desc+'</div>'+
+      '<div class="kit-precio"><span class="curr">$</span>'+k.precio.toLocaleString('es-CL')+'</div>'+
+      '<div class="kit-precio-desc">Precio cerrado · Repuesto + mano de obra + servicio en tu base</div>'+
+      '<ul class="kit-features">'+k.features.map(function(f){return '<li>'+f+'</li>'}).join('')+'</ul>'+
+      '<div class="kit-tiempo">⏱ Garantía '+k.garantia+'</div>'+
+      '<a href="https://wa.me/56945210814?text='+msg+'" target="_blank" class="kit-cta" style="margin-top:12px">💬 Cotizar este kit</a>'+
+    '</div>'
+  }).join('')
+  
+  sec.classList.add('active')
+  setTimeout(function(){sec.scrollIntoView({behavior:'smooth',block:'start'})},200)
+}
+</script>
+</body>
+</html>

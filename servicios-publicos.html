@@ -73,8 +73,8 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
   </div>
 
   <div class="stats-row">
-    <div class="stat-mini"><div class="stat-mini-val" style="color:var(--verde)">6</div><div class="stat-mini-lbl">Activas</div></div>
-    <div class="stat-mini"><div class="stat-mini-val" style="color:var(--amarillo)">$89K</div><div class="stat-mini-lbl">Mín ticket</div></div>
+    <div class="stat-mini"><div class="stat-mini-val" style="color:var(--verde)">7</div><div class="stat-mini-lbl">Activas</div></div>
+    <div class="stat-mini"><div class="stat-mini-val" style="color:var(--amarillo)">$65K</div><div class="stat-mini-lbl">Mín ticket</div></div>
     <div class="stat-mini"><div class="stat-mini-val" style="color:var(--rojo)">$4M</div><div class="stat-mini-lbl">Máx ticket</div></div>
   </div>
 
@@ -180,7 +180,27 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
     </div>
   </div>
 
-    <!-- Hidráulico -->
+    <!-- Kits Mantención Auto -->
+  <div class="servicio">
+    <div class="servicio-head">
+      <div class="servicio-icon" style="background:rgba(34,197,94,0.15);color:var(--verde)">🚗</div>
+      <div class="servicio-info">
+        <div class="servicio-nombre">Kits Mantención Auto</div>
+        <div class="servicio-tag">Toyota · Hyundai · Kia · Chevrolet · y +10 marcas</div>
+      </div>
+      <div class="servicio-ticket">$65K-$185K</div>
+    </div>
+    <div class="url-row">
+      <span class="url-text" id="url-autos">serviruta.cl/kits-mantencion-auto</span>
+      <button class="copy-btn" data-target="url-autos">Copiar</button>
+    </div>
+    <div class="acciones">
+      <a href="kits-mantencion-auto.html" target="_blank" class="act-btn ver">👁️ Ver</a>
+      <button class="act-btn wa" data-share="autos">💬 Compartir</button>
+    </div>
+  </div>
+
+  <!-- Hidráulico -->
   <div class="servicio">
     <div class="servicio-head">
       <div class="servicio-icon" style="background:rgba(245,197,24,0.15);color:var(--amarillo)">💪</div>
@@ -252,6 +272,11 @@ var SERVICIOS={
     nombre:'Diagnóstico Common Rail',
     archivo:'diagnostico-common-rail-camion.html',
     msg:'Hola! Si tu camión diésel pierde fuerza, humea o no parte, te ofrecemos diagnóstico Common Rail profesional a domicilio. Con scanner línea pesada. $249K te ahorran reparaciones equivocadas de millones.\n\n📄 Ver más info y agendar:\n'
+  },
+  'autos':{
+    nombre:'Kits Mantención Auto',
+    archivo:'kits-mantencion-auto.html',
+    msg:'Hola! Te comparto los kits de mantención para tu auto. Seleccionas marca y modelo (Toyota, Hyundai, Kia, Chevrolet, Nissan, Suzuki, Mazda, Mitsubishi, VW, Ford y más) y ves precios cerrados al instante. Vamos a tu casa o trabajo, sin que pierdas el día en el taller.\n\n🚗 Ver kits y cotizar:\n'
   },
   'kits':{
     nombre:'Kits Mantención Motor',

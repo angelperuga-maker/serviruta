@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kits Mantenimiento Auto a Domicilio | Serviruta</title>
+<meta name="description" content="Kits de mantenimiento para autos y camionetas Toyota, Hyundai, Kia, Chevrolet, Nissan, Suzuki, Mazda, Mitsubishi, VW, Ford y más. Cambio de aceite y filtros en tu base.">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;line-height:1.6;}
+.container{max-width:1000px;margin:0 auto;padding:0 16px;}
+.header{background:rgba(15,15,18,0.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--borde);padding:12px 0;position:sticky;top:0;z-index:100;}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.logo{font-family:"Syne",sans-serif;font-weight:800;font-size:20px;color:var(--txt);text-decoration:none;}
+.logo span{color:var(--rojo);}
+.btn-wa-h{background:#25D366;color:#000;padding:7px 14px;border-radius:6px;font-family:"Syne",sans-serif;font-weight:700;font-size:12px;text-decoration:none;}
+.hero{padding:50px 0 30px;text-align:center;border-bottom:1px solid var(--borde);background:radial-gradient(circle at 50% 0%,rgba(232,33,10,0.06) 0%,transparent 60%);}
+.hero-eyebrow{display:inline-block;background:rgba(232,33,10,0.12);border:1px solid rgba(232,33,10,0.4);color:var(--rojo);font-family:"Syne",sans-serif;font-weight:700;font-size:10px;letter-spacing:2px;padding:5px 12px;border-radius:20px;text-transform:uppercase;margin-bottom:18px;}
+.hero h1{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(28px,5vw,46px);line-height:1.1;margin-bottom:14px;}
+.hero h1 .rojo{color:var(--rojo);}
+.hero p{font-size:15px;color:var(--txt2);max-width:600px;margin:0 auto 18px;}
+.hero-trust{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;font-size:11px;color:var(--txt3);margin-top:10px;}
+.hero-trust span::before{content:"●";color:var(--verde);margin-right:4px;}
+section{padding:40px 0;}
+.sec-eyebrow{color:var(--rojo);font-family:"Syne",sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;}
+.sec-titulo{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(22px,3.5vw,30px);line-height:1.2;margin-bottom:10px;}
+.sec-titulo .rojo{color:var(--rojo);}
+.sec-sub{font-size:14px;color:var(--txt2);max-width:650px;margin-bottom:24px;}
+.marcas-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-top:20px;}
+.marca-btn{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px 10px;cursor:pointer;text-align:center;transition:all 0.2s;}
+.marca-btn:hover{border-color:var(--rojo);transform:translateY(-2px);}
+.marca-btn.active{border-color:var(--rojo);background:rgba(232,33,10,0.08);}
+.marca-icon{font-size:22px;margin-bottom:4px;}
+.marca-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:12px;color:var(--txt);}
+.marca-modelos{font-size:9px;color:var(--txt3);margin-top:2px;}
+.modelos-section{display:none;margin-top:30px;}
+.modelos-section.active{display:block;}
+.modelos-titulo{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;color:var(--rojo);margin-bottom:12px;text-transform:uppercase;letter-spacing:1px;}
+.modelos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;}
+.modelo-btn{background:var(--c3);border:1px solid var(--borde);border-radius:8px;padding:12px;cursor:pointer;font-size:12px;text-align:left;}
+.modelo-btn:hover{border-color:var(--rojo);}
+.modelo-btn.active{background:var(--rojo);color:#fff;border-color:var(--rojo);}
+.modelo-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;}
+.modelo-motor{font-size:10px;opacity:0.8;margin-top:2px;}
+.kits-section{display:none;margin-top:30px;padding-top:30px;border-top:1px solid var(--borde);}
+.kits-section.active{display:block;}
+.kit-titulo{font-family:"Syne",sans-serif;font-weight:800;font-size:20px;margin-bottom:6px;}
+.kit-sub{font-size:13px;color:var(--txt3);margin-bottom:20px;}
+.kits-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;}
+.kit-card{background:var(--c2);border:1px solid var(--borde);border-radius:14px;padding:22px;position:relative;}
+.kit-card.destacado{border:2px solid var(--rojo);background:linear-gradient(180deg,rgba(232,33,10,0.06),var(--c2) 50%);}
+.kit-badge{position:absolute;top:-12px;right:20px;background:var(--rojo);color:#fff;padding:5px 12px;border-radius:20px;font-family:"Syne",sans-serif;font-weight:700;font-size:10px;letter-spacing:1px;}
+.kit-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;color:var(--rojo);margin-bottom:4px;}
+.kit-desc{font-size:11px;color:var(--txt3);margin-bottom:14px;}
+.kit-precio{font-family:"Syne",sans-serif;font-weight:900;font-size:30px;margin-bottom:2px;}
+.kit-precio .curr{font-size:16px;color:var(--txt3);}
+.kit-precio-desc{font-size:10px;color:var(--txt3);margin-bottom:16px;}
+.kit-features{list-style:none;margin-bottom:18px;}
+.kit-features li{font-size:12px;color:var(--txt);padding:6px 0 6px 20px;position:relative;border-bottom:1px dashed var(--c3);}
+.kit-features li:last-child{border-bottom:none;}
+.kit-features li::before{content:"✓";position:absolute;left:0;color:var(--verde);font-weight:bold;}
+.kit-cta{display:block;text-align:center;background:#25D366;color:#000;padding:11px;border-radius:8px;font-family:"Syne",sans-serif;font-weight:800;font-size:13px;text-decoration:none;}
+.kit-tiempo{display:flex;align-items:center;gap:8px;background:rgba(96,165,250,0.08);border-left:3px solid var(--azul);border-radius:6px;padding:8px 10px;margin-top:12px;font-size:11px;color:var(--txt2);}
+.info-block{background:var(--c1);}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:20px;}
+.info-card{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:18px;}
+.info-icon{font-size:24px;margin-bottom:8px;}
+.info-tit{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;margin-bottom:4px;}
+.info-desc{font-size:11px;color:var(--txt2);line-height:1.6;}
+.cta-final{background:linear-gradient(135deg,var(--rojo) 0%,#a8170a 100%);text-align:center;padding:50px 20px;}
+.cta-final h2{font-family:"Syne",sans-serif;font-weight:900;font-size:clamp(22px,4vw,30px);margin-bottom:10px;color:#fff;}
+.cta-final p{font-size:14px;color:rgba(255,255,255,0.9);max-width:550px;margin:0 auto 22px;}
+.cta-final .btn-wa-f{background:#fff;color:#000;padding:16px 30px;border-radius:10px;font-family:"Syne",sans-serif;font-weight:800;font-size:15px;text-decoration:none;display:inline-block;}
+.footer{background:#000;padding:30px 0;text-align:center;border-top:1px solid var(--borde);}
+.wa-float{position:fixed;bottom:24px;right:24px;width:56px;height:56px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 6px 20px rgba(37,211,102,0.4);z-index:99;}
+@media(max-width:640px){.marcas-grid{grid-template-columns:repeat(3,1fr);}.kit-card{padding:18px;}}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="container header-inner">
+    <a href="https://serviruta.cl" class="logo">SERVI<span>RUTA</span></a>
+    <a href="https://wa.me/56945210814?text=Hola%2C%20quiero%20cotizar%20un%20kit%20de%20mantenci%C3%B3n%20para%20mi%20auto" class="btn-wa-h" target="_blank">💬 WhatsApp</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">Mantenimiento de auto · A domicilio</div>
+    <h1>Cambio de aceite y filtros <span class="rojo">en tu casa o trabajo.</span></h1>
+    <p>Selecciona la marca y modelo de tu auto y te mostramos los kits disponibles con precio cerrado. Sin filas, sin perder tu día. Llegamos donde estés.</p>
+    <div class="hero-trust">
+      <span>Filtros Mann · Bosch · Mahle · Sakura</span>
+      <span>Aceites Mobil · Shell · Total · Castrol</span>
+      <span>Garantía escrita 6 meses</span>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="sec-eyebrow">Paso 1 · Selecciona la marca</div>
+    <h2 class="sec-titulo">¿Cuál es la <span class="rojo">marca</span> de tu auto?</h2>
+    <p class="sec-sub">Trabajamos con todas las marcas principales del mercado chileno.</p>
+
+    <div class="marcas-grid" id="marcas">
+      <div class="marca-btn" data-marca="toyota"><div class="marca-icon">🚗</div><div class="marca-nombre">Toyota</div><div class="marca-modelos">Yaris · Corolla · RAV4</div></div>
+      <div class="marca-btn" data-marca="hyundai"><div class="marca-icon">🚗</div><div class="marca-nombre">Hyundai</div><div class="marca-modelos">Accent · Tucson · Creta</div></div>
+      <div class="marca-btn" data-marca="kia"><div class="marca-icon">🚗</div><div class="marca-nombre">Kia</div><div class="marca-modelos">Morning · Rio · Sportage</div></div>
+      <div class="marca-btn" data-marca="chevrolet"><div class="marca-icon">🚗</div><div class="marca-nombre">Chevrolet</div><div class="marca-modelos">Sail · Spark · Tracker</div></div>
+      <div class="marca-btn" data-marca="nissan"><div class="marca-icon">🚗</div><div class="marca-nombre">Nissan</div><div class="marca-modelos">March · Versa · Qashqai</div></div>
+      <div class="marca-btn" data-marca="suzuki"><div class="marca-icon">🚗</div><div class="marca-nombre">Suzuki</div><div class="marca-modelos">Swift · Vitara · S-Cross</div></div>
+      <div class="marca-btn" data-marca="mazda"><div class="marca-icon">🚗</div><div class="marca-nombre">Mazda</div><div class="marca-modelos">3 · CX-3 · CX-5</div></div>
+      <div class="marca-btn" data-marca="mitsubishi"><div class="marca-icon">🚙</div><div class="marca-nombre">Mitsubishi</div><div class="marca-modelos">ASX · Outlander · L200</div></div>
+      <div class="marca-btn" data-marca="vw"><div class="marca-icon">🚗</div><div class="marca-nombre">Volkswagen</div><div class="marca-modelos">Gol · Polo · Tiguan</div></div>
+      <div class="marca-btn" data-marca="ford"><div class="marca-icon">🚙</div><div class="marca-nombre">Ford</div><div class="marca-modelos">Fiesta · Ecosport · Ranger</div></div>
+      <div class="marca-btn" data-marca="peugeot"><div class="marca-icon">🚗</div><div class="marca-nombre">Peugeot</div><div class="marca-modelos">208 · 2008 · 3008</div></div>
+      <div class="marca-btn" data-marca="honda"><div class="marca-icon">🚗</div><div class="marca-nombre">Honda</div><div class="marca-modelos">City · Civic · HR-V</div></div>
+      <div class="marca-btn" data-marca="subaru"><div class="marca-icon">🚙</div><div class="marca-nombre">Subaru</div><div class="marca-modelos">Forester · Outback · XV</div></div>
+      <div class="marca-btn" data-marca="otra"><div class="marca-icon">🔧</div><div class="marca-nombre">Otra marca</div><div class="marca-modelos">Cotizar WhatsApp</div></div>
+    </div>
+
+    <div class="modelos-section" id="modelos-section">
+      <div class="modelos-titulo">Paso 2 · Selecciona tu modelo</div>
+      <div class="modelos-grid" id="modelos"></div>
+    </div>
+
+    <div class="kits-section" id="kits-section">
+      <div class="kit-titulo" id="kit-titulo">Kits disponibles</div>
+      <div class="kit-sub" id="kit-sub">Elige el plan según tu uso y presupuesto. Todos los kits incluyen mano de obra y trabajo en tu base.</div>
+      <div class="kits-grid" id="kits-grid"></div>
+    </div>
+  </div>
+</section>
+
+<section class="info-block">
+  <div class="container">
+    <div class="sec-eyebrow">Por qué Serviruta</div>
+    <h2 class="sec-titulo">Mantención completa, <span class="rojo">sin moverte de tu casa.</span></h2>
+    <p class="sec-sub">Cada mantención incluye revisión integral del auto y reporte escrito con observaciones de mantenimiento preventivo.</p>
+
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-icon">🏠</div>
+        <div class="info-tit">Donde tú estés</div>
+        <div class="info-desc">En tu casa, trabajo, edificio o estacionamiento. No vas al taller, el taller va a ti.</div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">⏱️</div>
+        <div class="info-tit">1 a 1.5 horas</div>
+        <div class="info-desc">Tiempo promedio del servicio. Sigue trabajando, atendiendo o haciendo lo tuyo.</div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">🔍</div>
+        <div class="info-tit">Revisión 20 puntos</div>
+        <div class="info-desc">Fugas, correa, mangueras, batería, frenos, líquidos. Reporte escrito con fotos.</div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">♻️</div>
+        <div class="info-tit">Eliminación residuos</div>
+        <div class="info-desc">Nos llevamos aceite usado y filtros para gestión ambiental correcta. Sin contaminar.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-final">
+  <h2>Una mantención bien hecha alarga la vida de tu auto.</h2>
+  <p>Cotiza por WhatsApp y agenda el día y la hora que te acomode. Aceptamos transferencia, débito y crédito en el lugar.</p>
+  <a href="https://wa.me/56945210814?text=Hola%2C%20quiero%20cotizar%20mantenci%C3%B3n%20a%20domicilio%20para%20mi%20auto" class="btn-wa-f" target="_blank">💬 Cotizar mi kit</a>
+  <div style="margin-top:16px;color:rgba(255,255,255,0.85);font-family:'Syne',sans-serif;font-weight:700;font-size:18px;">+56 9 4521 0814</div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:18px;margin-bottom:8px;">SERVI<span style="color:var(--rojo)">RUTA</span></div>
+    <div style="font-size:12px;color:var(--txt3);">Mecánica móvil profesional · Toda la RM</div>
+    <div style="font-size:11px;color:var(--txt3);margin-top:6px;">+56 9 4521 0814 · contacto@serviruta.cl · serviruta.cl</div>
+  </div>
+</footer>
+
+<a href="https://wa.me/56945210814?text=Hola%2C%20quiero%20cotizar%20un%20kit%20de%20mantenci%C3%B3n%20para%20mi%20auto" class="wa-float" target="_blank">💬</a>
+
+<script>
+var DATA={
+  toyota:{nombre:'Toyota',modelos:[
+    {id:'yaris',nombre:'Yaris (1.3 / 1.5)',motor:'1NR-FE · 1.3-1.5L',capAceite:3.7,horas:1},
+    {id:'corolla',nombre:'Corolla 1.8',motor:'2ZR-FE · 1.8L',capAceite:4.4,horas:1.2},
+    {id:'corollahyb',nombre:'Corolla Hybrid',motor:'2ZR-FXE · 1.8L híbrido',capAceite:4.4,horas:1.3},
+    {id:'rav4',nombre:'RAV4 (2.0 / 2.5)',motor:'A25A · 2.5L',capAceite:4.8,horas:1.3},
+    {id:'hilux',nombre:'Hilux 2.4 / 2.8 Diesel',motor:'2GD-FTV · 2.4L diésel',capAceite:7.5,horas:1.5},
+    {id:'chr',nombre:'C-HR',motor:'1.8L híbrido',capAceite:4.4,horas:1.3},
+    {id:'fortuner',nombre:'Fortuner',motor:'2GD-FTV · 2.4L diésel',capAceite:7.5,horas:1.5}
+  ]},
+  hyundai:{nombre:'Hyundai',modelos:[
+    {id:'accent',nombre:'Accent (1.4 / 1.6)',motor:'G4FC · 1.4-1.6L',capAceite:3.8,horas:1},
+    {id:'i10',nombre:'i10',motor:'Kappa 1.2L',capAceite:3.6,horas:1},
+    {id:'i20',nombre:'i20',motor:'Kappa 1.2-1.4L',capAceite:3.6,horas:1},
+    {id:'venue',nombre:'Venue',motor:'Kappa 1.6L',capAceite:3.8,horas:1.2},
+    {id:'creta',nombre:'Creta',motor:'Gamma 1.6L',capAceite:4.2,horas:1.2},
+    {id:'tucson',nombre:'Tucson (2.0 / 2.4)',motor:'Theta 2.0-2.4L',capAceite:4.5,horas:1.3},
+    {id:'h1',nombre:'H1 / H100 furgón',motor:'A-Diesel 2.5L CRDi',capAceite:6.5,horas:1.5},
+    {id:'santafe',nombre:'Santa Fe',motor:'Theta 2.4L',capAceite:4.5,horas:1.3}
+  ]},
+  kia:{nombre:'Kia',modelos:[
+    {id:'morning',nombre:'Morning',motor:'Kappa 1.0-1.25L',capAceite:3.3,horas:1},
+    {id:'soluto',nombre:'Soluto / Rio sedán',motor:'Kappa 1.4L',capAceite:3.8,horas:1},
+    {id:'rio',nombre:'Rio hatch',motor:'Gamma 1.4L',capAceite:3.8,horas:1},
+    {id:'stonic',nombre:'Stonic',motor:'Gamma 1.4-1.6L',capAceite:3.8,horas:1.2},
+    {id:'seltos',nombre:'Seltos',motor:'Smartstream 1.6L',capAceite:4.2,horas:1.2},
+    {id:'sportage',nombre:'Sportage',motor:'Theta II 2.0-2.4L',capAceite:4.5,horas:1.3},
+    {id:'sorento',nombre:'Sorento',motor:'Theta 2.4 / 2.2 diésel',capAceite:5.0,horas:1.5},
+    {id:'soul',nombre:'Soul',motor:'Gamma 1.6L',capAceite:3.8,horas:1.2}
+  ]},
+  chevrolet:{nombre:'Chevrolet',modelos:[
+    {id:'spark',nombre:'Spark / Spark GT',motor:'1.0-1.2L',capAceite:3.5,horas:1},
+    {id:'sail',nombre:'Sail',motor:'1.4-1.5L',capAceite:3.8,horas:1},
+    {id:'onix',nombre:'Onix',motor:'1.0-1.2L Turbo',capAceite:3.8,horas:1},
+    {id:'tracker',nombre:'Tracker',motor:'1.0-1.2L Turbo',capAceite:4.0,horas:1.2},
+    {id:'captiva',nombre:'Captiva',motor:'2.4L',capAceite:4.8,horas:1.3},
+    {id:'colorado',nombre:'Colorado / DMAX',motor:'2.5L diésel',capAceite:7.0,horas:1.5},
+    {id:'cruze',nombre:'Cruze',motor:'1.4-1.8L',capAceite:4.0,horas:1.2}
+  ]},
+  nissan:{nombre:'Nissan',modelos:[
+    {id:'march',nombre:'March',motor:'HR12 · 1.2L',capAceite:3.5,horas:1},
+    {id:'versa',nombre:'Versa',motor:'HR16 · 1.6L',capAceite:3.6,horas:1},
+    {id:'kicks',nombre:'Kicks',motor:'HR16 · 1.6L',capAceite:3.6,horas:1.2},
+    {id:'qashqai',nombre:'Qashqai',motor:'MR20 · 2.0L',capAceite:4.3,horas:1.2},
+    {id:'xtrail',nombre:'X-Trail',motor:'MR20 · 2.0-2.5L',capAceite:4.5,horas:1.3},
+    {id:'sentra',nombre:'Sentra',motor:'MRA8 · 1.8L',capAceite:4.0,horas:1.2},
+    {id:'navara',nombre:'Navara / Frontier',motor:'YS23 · 2.3L diésel',capAceite:7.0,horas:1.5}
+  ]},
+  suzuki:{nombre:'Suzuki',modelos:[
+    {id:'alto',nombre:'Alto / Alto 800',motor:'F8B · 0.8-1.0L',capAceite:2.7,horas:0.8},
+    {id:'celerio',nombre:'Celerio',motor:'K10B · 1.0L',capAceite:3.1,horas:0.9},
+    {id:'swift',nombre:'Swift',motor:'K12 · 1.2L',capAceite:3.1,horas:1},
+    {id:'baleno',nombre:'Baleno',motor:'K14 · 1.4L',capAceite:3.3,horas:1},
+    {id:'dzire',nombre:'Dzire',motor:'K12 · 1.2L',capAceite:3.1,horas:1},
+    {id:'vitara',nombre:'Vitara / Grand Vitara',motor:'M16A · 1.6L',capAceite:4.0,horas:1.2},
+    {id:'scross',nombre:'S-Cross',motor:'K15 · 1.5L Hybrid',capAceite:3.6,horas:1.2},
+    {id:'jimny',nombre:'Jimny',motor:'K15B · 1.5L',capAceite:3.6,horas:1.2}
+  ]},
+  mazda:{nombre:'Mazda',modelos:[
+    {id:'2',nombre:'Mazda 2',motor:'SkyActiv 1.5L',capAceite:3.6,horas:1},
+    {id:'3',nombre:'Mazda 3',motor:'SkyActiv 1.5-2.0L',capAceite:4.0,horas:1.2},
+    {id:'6',nombre:'Mazda 6',motor:'SkyActiv 2.0-2.5L',capAceite:4.5,horas:1.3},
+    {id:'cx3',nombre:'CX-3',motor:'SkyActiv 2.0L',capAceite:4.0,horas:1.2},
+    {id:'cx30',nombre:'CX-30',motor:'SkyActiv 2.0L',capAceite:4.2,horas:1.2},
+    {id:'cx5',nombre:'CX-5',motor:'SkyActiv 2.0-2.5L',capAceite:4.5,horas:1.3},
+    {id:'bt50',nombre:'BT-50',motor:'3.2L diésel',capAceite:8.0,horas:1.5}
+  ]},
+  mitsubishi:{nombre:'Mitsubishi',modelos:[
+    {id:'mirage',nombre:'Mirage / Space Star',motor:'3A92 · 1.2L',capAceite:3.3,horas:1},
+    {id:'asx',nombre:'ASX',motor:'4B11 · 2.0L',capAceite:4.4,horas:1.2},
+    {id:'eclipsecross',nombre:'Eclipse Cross',motor:'4J10 · 1.5T',capAceite:4.0,horas:1.2},
+    {id:'outlander',nombre:'Outlander',motor:'4J11 · 2.4L',capAceite:4.5,horas:1.3},
+    {id:'l200',nombre:'L200 / Triton',motor:'4N15 · 2.4L diésel',capAceite:6.5,horas:1.5},
+    {id:'montero',nombre:'Montero Sport',motor:'4N15 · 2.4L diésel',capAceite:6.5,horas:1.5}
+  ]},
+  vw:{nombre:'Volkswagen',modelos:[
+    {id:'gol',nombre:'Gol / Saveiro',motor:'1.6L MSI',capAceite:3.5,horas:1},
+    {id:'polo',nombre:'Polo',motor:'1.6L MSI',capAceite:3.6,horas:1},
+    {id:'vento',nombre:'Vento',motor:'1.6L MSI',capAceite:3.6,horas:1},
+    {id:'tcross',nombre:'T-Cross',motor:'1.0-1.4 TSI',capAceite:4.0,horas:1.2},
+    {id:'tiguan',nombre:'Tiguan',motor:'2.0 TSI',capAceite:5.0,horas:1.3},
+    {id:'amarok',nombre:'Amarok',motor:'2.0 TDI / 3.0 V6 TDI',capAceite:6.5,horas:1.5}
+  ]},
+  ford:{nombre:'Ford',modelos:[
+    {id:'fiesta',nombre:'Fiesta',motor:'1.5-1.6L',capAceite:4.0,horas:1},
+    {id:'focus',nombre:'Focus',motor:'2.0L',capAceite:4.3,horas:1.2},
+    {id:'ecosport',nombre:'EcoSport',motor:'1.5 Ti-VCT',capAceite:4.1,horas:1.2},
+    {id:'territory',nombre:'Territory',motor:'1.5 EcoBoost',capAceite:4.5,horas:1.3},
+    {id:'ranger',nombre:'Ranger',motor:'2.0-3.2L diésel',capAceite:7.5,horas:1.5},
+    {id:'f150',nombre:'F-150',motor:'3.5 EcoBoost / 5.0L',capAceite:6.5,horas:1.5}
+  ]},
+  peugeot:{nombre:'Peugeot',modelos:[
+    {id:'208',nombre:'208',motor:'1.2 PureTech',capAceite:3.7,horas:1},
+    {id:'2008',nombre:'2008',motor:'1.2 PureTech 130',capAceite:4.0,horas:1.2},
+    {id:'301',nombre:'301',motor:'1.6L HDi',capAceite:4.0,horas:1.2},
+    {id:'3008',nombre:'3008',motor:'1.6 THP / 2.0 BlueHDi',capAceite:5.0,horas:1.3},
+    {id:'5008',nombre:'5008',motor:'1.6 THP / 2.0 BlueHDi',capAceite:5.0,horas:1.3}
+  ]},
+  honda:{nombre:'Honda',modelos:[
+    {id:'city',nombre:'City',motor:'L15 · 1.5L',capAceite:3.7,horas:1},
+    {id:'civic',nombre:'Civic',motor:'R18 · 1.8L / L15B 1.5 Turbo',capAceite:4.2,horas:1.2},
+    {id:'hrv',nombre:'HR-V',motor:'R18 · 1.8L',capAceite:4.0,horas:1.2},
+    {id:'crv',nombre:'CR-V',motor:'L15B · 1.5 Turbo / 2.4L',capAceite:4.4,horas:1.3},
+    {id:'pilot',nombre:'Pilot',motor:'J35Y · 3.5L V6',capAceite:5.7,horas:1.5}
+  ]},
+  subaru:{nombre:'Subaru',modelos:[
+    {id:'impreza',nombre:'Impreza',motor:'FB20 · 2.0L boxer',capAceite:4.6,horas:1.3},
+    {id:'xv',nombre:'XV / Crosstrek',motor:'FB20 · 2.0L boxer',capAceite:4.6,horas:1.3},
+    {id:'forester',nombre:'Forester',motor:'FB25 · 2.5L boxer',capAceite:4.8,horas:1.3},
+    {id:'outback',nombre:'Outback',motor:'FB25 · 2.5L boxer',capAceite:4.8,horas:1.4},
+    {id:'ascent',nombre:'Ascent',motor:'FA24 · 2.4L Turbo',capAceite:5.0,horas:1.4}
+  ]},
+  otra:{nombre:'Otra marca',modelos:[]}
+}
+
+function calcularKits(modelo){
+  if(!modelo)return []
+  var capAceite=modelo.capAceite,horas=modelo.horas
+  // PRECIOS: Aceite mineral $4.500/L · semi-sintético $8.000/L · sintético $12.000/L
+  // Filtros básicos (aceite + aire): $22K-$50K según motor
+  // Filtros completos (+ polen + combustible): +$25K
+  // MO: $30K/hora
+  var esGrande=capAceite>5
+  var filtrosBasico=esGrande?(capAceite>6.5?52000:38000):26000
+  var filtrosCompleto=filtrosBasico+22000
+  var moBase=Math.round(horas*30000)
+
+  var basico=Math.round((capAceite*4500 + filtrosBasico + moBase)/1000)*1000
+  var premium=Math.round((capAceite*8000 + filtrosCompleto + moBase + 8000)/1000)*1000
+  var plus=Math.round((capAceite*12000 + filtrosCompleto + moBase + 20000)/1000)*1000
+
+  return [
+    {tipo:'basico',nombre:'Kit Básico',desc:'Mantención esencial · Trayectos urbanos cortos',precio:basico,cambio:'cada 5.000 km',destacado:false,
+      features:[
+        'Aceite mineral 10W40 ('+capAceite+'L)',
+        'Filtro de aceite Mann/Bosch',
+        'Filtro de aire',
+        'Mano de obra técnico Serviruta',
+        'Revisión visual del motor',
+        'Eliminación correcta de residuos'
+      ]},
+    {tipo:'premium',nombre:'Kit Premium',desc:'El más solicitado · Mejor relación calidad/precio',precio:premium,cambio:'cada 7.500-10.000 km',destacado:true,
+      features:[
+        'Aceite semi-sintético 5W30/5W40 ('+capAceite+'L)',
+        'Filtro de aceite premium (Mann/Mahle)',
+        'Filtro de aire',
+        'Filtro de polen cabina',
+        'Filtro de combustible (si aplica)',
+        'Mano de obra técnico especialista',
+        'Revisión 20 puntos + fotos',
+        'Garantía escrita 6 meses'
+      ]},
+    {tipo:'plus',nombre:'Kit Plus',desc:'Mantención larga · Para autos modernos con DPF/Turbo',precio:plus,cambio:'cada 10.000-15.000 km',destacado:false,
+      features:[
+        'Aceite 100% sintético Low SAPS ('+capAceite+'L)',
+        'Set completo de filtros premium',
+        'Aditivo limpiador inyectores',
+        'Revisión líquidos (freno, refrigerante, dirección)',
+        'Inspección extendida: correas, mangueras, batería',
+        'Diagnóstico con scanner OBD-II incluido',
+        'Reporte digital con histórico',
+        'Garantía escrita 6 meses'
+      ]}
+  ]
+}
+
+var marcaSeleccionada=null,modeloSeleccionado=null
+
+document.querySelectorAll('.marca-btn').forEach(function(b){
+  b.onclick=function(){
+    document.querySelectorAll('.marca-btn').forEach(function(x){x.classList.remove('active')})
+    b.classList.add('active')
+    marcaSeleccionada=b.getAttribute('data-marca')
+    renderModelos()
+    document.getElementById('kits-section').classList.remove('active')
+  }
+})
+
+function renderModelos(){
+  var data=DATA[marcaSeleccionada]
+  var sec=document.getElementById('modelos-section')
+  var grid=document.getElementById('modelos')
+  
+  if(marcaSeleccionada==='otra'){
+    sec.classList.add('active')
+    grid.innerHTML='<div style="grid-column:1/-1;background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:20px;text-align:center"><div style="font-size:13px;color:var(--txt2);margin-bottom:14px">Para otras marcas (Audi, BMW, Mercedes, Renault, Citroën, Fiat, Geely, Chery, JAC, MG, JAC, GAC y otras) coordinamos los repuestos específicos en 24-48h.</div><a href="https://wa.me/56945210814?text=Hola%2C%20mi%20auto%20no%20est%C3%A1%20en%20la%20lista%2C%20quiero%20cotizar%20mantenci%C3%B3n" target="_blank" style="background:#25D366;color:#000;padding:10px 18px;border-radius:6px;font-family:Syne,sans-serif;font-weight:700;font-size:12px;text-decoration:none;display:inline-block">💬 Cotizar mi auto</a></div>'
+    sec.scrollIntoView({behavior:'smooth',block:'start'})
+    return
+  }
+  
+  grid.innerHTML=data.modelos.map(function(m){
+    return '<div class="modelo-btn" data-id="'+m.id+'"><div class="modelo-nombre">'+m.nombre+'</div><div class="modelo-motor">'+m.motor+'</div></div>'
+  }).join('')
+  
+  document.querySelectorAll('.modelo-btn').forEach(function(b){
+    b.onclick=function(){
+      document.querySelectorAll('.modelo-btn').forEach(function(x){x.classList.remove('active')})
+      b.classList.add('active')
+      var id=b.getAttribute('data-id')
+      modeloSeleccionado=data.modelos.find(function(m){return m.id===id})
+      renderKits()
+    }
+  })
+  
+  sec.classList.add('active')
+  sec.scrollIntoView({behavior:'smooth',block:'start'})
+}
+
+function renderKits(){
+  var sec=document.getElementById('kits-section')
+  var grid=document.getElementById('kits-grid')
+  var titulo=document.getElementById('kit-titulo')
+  var sub=document.getElementById('kit-sub')
+  
+  titulo.textContent='Kits para '+DATA[marcaSeleccionada].nombre+' '+modeloSeleccionado.nombre
+  sub.textContent='Motor '+modeloSeleccionado.motor+' · Capacidad aceite: '+modeloSeleccionado.capAceite+' litros · Tiempo: '+modeloSeleccionado.horas+' horas'
+  
+  var kits=calcularKits(modeloSeleccionado)
+  grid.innerHTML=kits.map(function(k){
+    var msg='Hola%2C%20quiero%20cotizar%20el%20'+encodeURIComponent(k.nombre)+'%20para%20mi%20'+encodeURIComponent(DATA[marcaSeleccionada].nombre+' '+modeloSeleccionado.nombre)
+    return '<div class="kit-card '+(k.destacado?'destacado':'')+'">'+
+      (k.destacado?'<div class="kit-badge">MÁS ELEGIDO</div>':'')+
+      '<div class="kit-nombre">'+k.nombre+'</div>'+
+      '<div class="kit-desc">'+k.desc+'</div>'+
+      '<div class="kit-precio"><span class="curr">$</span>'+k.precio.toLocaleString('es-CL')+'</div>'+
+      '<div class="kit-precio-desc">Precio cerrado · Repuestos y mano de obra incluidos</div>'+
+      '<ul class="kit-features">'+k.features.map(function(f){return '<li>'+f+'</li>'}).join('')+'</ul>'+
+      '<div class="kit-tiempo">⏱ '+k.cambio+'</div>'+
+      '<a href="https://wa.me/56945210814?text='+msg+'" target="_blank" class="kit-cta" style="margin-top:12px">💬 Cotizar este kit</a>'+
+    '</div>'
+  }).join('')
+  
+  sec.classList.add('active')
+  setTimeout(function(){sec.scrollIntoView({behavior:'smooth',block:'start'})},200)
+}
+</script>
+</body>
+</html>

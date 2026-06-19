@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kits Mantenimiento Motor Camión a Domicilio | Serviruta</title>
+<meta name="description" content="Kits de mantenimiento de motor para camiones Mercedes-Benz, Scania, Volvo, Iveco, MAN, DAF. Filtros, aceite y mano de obra. Servicio a domicilio en RM.">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;line-height:1.6;}
+.container{max-width:1000px;margin:0 auto;padding:0 16px;}
+.header{background:rgba(15,15,18,0.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--borde);padding:12px 0;position:sticky;top:0;z-index:100;}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.logo{font-family:"Syne",sans-serif;font-weight:800;font-size:20px;color:var(--txt);text-decoration:none;}
+.logo span{color:var(--rojo);}
+.btn-wa-h{background:#25D366;color:#000;padding:7px 14px;border-radius:6px;font-family:"Syne",sans-serif;font-weight:700;font-size:12px;text-decoration:none;}
+
+/* HERO */
+.hero{padding:50px 0 30px;text-align:center;border-bottom:1px solid var(--borde);background:radial-gradient(circle at 50% 0%,rgba(232,33,10,0.06) 0%,transparent 60%);}
+.hero-eyebrow{display:inline-block;background:rgba(232,33,10,0.12);border:1px solid rgba(232,33,10,0.4);color:var(--rojo);font-family:"Syne",sans-serif;font-weight:700;font-size:10px;letter-spacing:2px;padding:5px 12px;border-radius:20px;text-transform:uppercase;margin-bottom:18px;}
+.hero h1{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(28px,5vw,46px);line-height:1.1;margin-bottom:14px;}
+.hero h1 .rojo{color:var(--rojo);}
+.hero p{font-size:15px;color:var(--txt2);max-width:600px;margin:0 auto 18px;}
+.hero-trust{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;font-size:11px;color:var(--txt3);margin-top:10px;}
+.hero-trust span::before{content:"●";color:var(--verde);margin-right:4px;}
+
+/* SELECTOR */
+section{padding:40px 0;}
+.sec-eyebrow{color:var(--rojo);font-family:"Syne",sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;}
+.sec-titulo{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(22px,3.5vw,30px);line-height:1.2;margin-bottom:10px;}
+.sec-titulo .rojo{color:var(--rojo);}
+.sec-sub{font-size:14px;color:var(--txt2);max-width:650px;margin-bottom:24px;}
+
+/* MARCAS GRID */
+.marcas-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:20px;}
+.marca-btn{background:var(--c2);border:1px solid var(--borde);border-radius:12px;padding:18px 14px;cursor:pointer;text-align:center;transition:all 0.2s;}
+.marca-btn:hover{border-color:var(--rojo);transform:translateY(-2px);}
+.marca-btn.active{border-color:var(--rojo);background:rgba(232,33,10,0.08);}
+.marca-icon{font-size:28px;margin-bottom:6px;}
+.marca-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;color:var(--txt);}
+.marca-modelos{font-size:10px;color:var(--txt3);margin-top:2px;}
+
+/* MODELOS */
+.modelos-section{display:none;margin-top:30px;}
+.modelos-section.active{display:block;}
+.modelos-titulo{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;color:var(--rojo);margin-bottom:12px;text-transform:uppercase;letter-spacing:1px;}
+.modelos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;}
+.modelo-btn{background:var(--c3);border:1px solid var(--borde);border-radius:8px;padding:12px;cursor:pointer;font-size:12px;text-align:left;}
+.modelo-btn:hover{border-color:var(--rojo);}
+.modelo-btn.active{background:var(--rojo);color:#fff;border-color:var(--rojo);}
+.modelo-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;}
+.modelo-motor{font-size:10px;opacity:0.8;margin-top:2px;}
+
+/* KITS */
+.kits-section{display:none;margin-top:30px;padding-top:30px;border-top:1px solid var(--borde);}
+.kits-section.active{display:block;}
+.kit-titulo{font-family:"Syne",sans-serif;font-weight:800;font-size:20px;margin-bottom:6px;}
+.kit-sub{font-size:13px;color:var(--txt3);margin-bottom:20px;}
+.kits-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;}
+.kit-card{background:var(--c2);border:1px solid var(--borde);border-radius:14px;padding:22px;position:relative;}
+.kit-card.destacado{border:2px solid var(--rojo);background:linear-gradient(180deg,rgba(232,33,10,0.06),var(--c2) 50%);}
+.kit-badge{position:absolute;top:-12px;right:20px;background:var(--rojo);color:#fff;padding:5px 12px;border-radius:20px;font-family:"Syne",sans-serif;font-weight:700;font-size:10px;letter-spacing:1px;}
+.kit-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;color:var(--rojo);margin-bottom:4px;}
+.kit-desc{font-size:11px;color:var(--txt3);margin-bottom:14px;}
+.kit-precio{font-family:"Syne",sans-serif;font-weight:900;font-size:30px;margin-bottom:2px;}
+.kit-precio .curr{font-size:16px;color:var(--txt3);}
+.kit-precio-desc{font-size:10px;color:var(--txt3);margin-bottom:16px;}
+.kit-features{list-style:none;margin-bottom:18px;}
+.kit-features li{font-size:12px;color:var(--txt);padding:6px 0 6px 20px;position:relative;border-bottom:1px dashed var(--c3);}
+.kit-features li:last-child{border-bottom:none;}
+.kit-features li::before{content:"✓";position:absolute;left:0;color:var(--verde);font-weight:bold;}
+.kit-cta{display:block;text-align:center;background:#25D366;color:#000;padding:11px;border-radius:8px;font-family:"Syne",sans-serif;font-weight:800;font-size:13px;text-decoration:none;}
+.kit-tiempo{display:flex;align-items:center;gap:8px;background:rgba(96,165,250,0.08);border-left:3px solid var(--azul);border-radius:6px;padding:8px 10px;margin-top:12px;font-size:11px;color:var(--txt2);}
+
+/* INFO BLOCK */
+.info-block{background:var(--c1);}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:20px;}
+.info-card{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:18px;}
+.info-icon{font-size:24px;margin-bottom:8px;}
+.info-tit{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;margin-bottom:4px;}
+.info-desc{font-size:11px;color:var(--txt2);line-height:1.6;}
+
+/* CTA */
+.cta-final{background:linear-gradient(135deg,var(--rojo) 0%,#a8170a 100%);text-align:center;padding:50px 20px;}
+.cta-final h2{font-family:"Syne",sans-serif;font-weight:900;font-size:clamp(22px,4vw,30px);margin-bottom:10px;color:#fff;}
+.cta-final p{font-size:14px;color:rgba(255,255,255,0.9);max-width:550px;margin:0 auto 22px;}
+.cta-final .btn-wa-f{background:#fff;color:#000;padding:16px 30px;border-radius:10px;font-family:"Syne",sans-serif;font-weight:800;font-size:15px;text-decoration:none;display:inline-block;}
+
+/* FOOTER */
+.footer{background:#000;padding:30px 0;text-align:center;border-top:1px solid var(--borde);}
+.wa-float{position:fixed;bottom:24px;right:24px;width:56px;height:56px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 6px 20px rgba(37,211,102,0.4);z-index:99;}
+
+@media(max-width:640px){
+  .marcas-grid{grid-template-columns:repeat(2,1fr);}
+  .kit-card{padding:18px;}
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="container header-inner">
+    <a href="https://serviruta.cl" class="logo">SERVI<span>RUTA</span></a>
+    <a href="https://wa.me/56945210814?text=Hola%2C%20quiero%20cotizar%20un%20kit%20de%20mantenci%C3%B3n" class="btn-wa-h" target="_blank">💬 WhatsApp</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">Mantenimiento de motor · A domicilio</div>
+    <h1>Kit de mantención para tu <span class="rojo">camión</span>, hecho en tu base.</h1>
+    <p>Selecciona la marca y modelo de tu camión y te mostramos los kits disponibles con precio cerrado. Filtros premium, aceite original y mano de obra de técnicos especialistas en línea pesada.</p>
+    <div class="hero-trust">
+      <span>Marcas Donaldson · Fleetguard · Sogefi</span>
+      <span>Aceites Total · Mobil · Shell</span>
+      <span>Garantía escrita 6 meses</span>
+    </div>
+  </div>
+</section>
+
+<!-- SELECTOR DE MARCA -->
+<section>
+  <div class="container">
+    <div class="sec-eyebrow">Paso 1 · Selecciona la marca</div>
+    <h2 class="sec-titulo">¿Cuál es la <span class="rojo">marca</span> de tu camión?</h2>
+    <p class="sec-sub">Trabajamos con repuestos para las principales marcas de camiones en Chile.</p>
+
+    <div class="marcas-grid" id="marcas">
+      <div class="marca-btn" data-marca="mb">
+        <div class="marca-icon">🚛</div>
+        <div class="marca-nombre">Mercedes-Benz</div>
+        <div class="marca-modelos">Actros · Atego · Axor</div>
+      </div>
+      <div class="marca-btn" data-marca="scania">
+        <div class="marca-icon">🚛</div>
+        <div class="marca-nombre">Scania</div>
+        <div class="marca-modelos">Serie 4 · P · G · R</div>
+      </div>
+      <div class="marca-btn" data-marca="volvo">
+        <div class="marca-icon">🚛</div>
+        <div class="marca-nombre">Volvo</div>
+        <div class="marca-modelos">FH · FM · FE · VM</div>
+      </div>
+      <div class="marca-btn" data-marca="iveco">
+        <div class="marca-icon">🚛</div>
+        <div class="marca-nombre">Iveco</div>
+        <div class="marca-modelos">Stralis · Trakker · Daily</div>
+      </div>
+      <div class="marca-btn" data-marca="man">
+        <div class="marca-icon">🚛</div>
+        <div class="marca-nombre">MAN</div>
+        <div class="marca-modelos">TGA · TGS · TGX</div>
+      </div>
+      <div class="marca-btn" data-marca="daf">
+        <div class="marca-icon">🚛</div>
+        <div class="marca-nombre">DAF</div>
+        <div class="marca-modelos">CF · XF 85</div>
+      </div>
+      <div class="marca-btn" data-marca="freightliner">
+        <div class="marca-icon">🚛</div>
+        <div class="marca-nombre">Freightliner</div>
+        <div class="marca-modelos">Columbia · Argosy</div>
+      </div>
+      <div class="marca-btn" data-marca="otra">
+        <div class="marca-icon">🔧</div>
+        <div class="marca-nombre">Otra marca</div>
+        <div class="marca-modelos">Cotizar por WhatsApp</div>
+      </div>
+    </div>
+
+    <!-- MODELOS POR MARCA -->
+    <div class="modelos-section" id="modelos-section">
+      <div class="modelos-titulo">Paso 2 · Selecciona tu modelo o motor</div>
+      <div class="modelos-grid" id="modelos"></div>
+    </div>
+
+    <!-- KITS -->
+    <div class="kits-section" id="kits-section">
+      <div class="kit-titulo" id="kit-titulo">Kits disponibles</div>
+      <div class="kit-sub" id="kit-sub">Elige el plan según tu uso y presupuesto. Todos los kits incluyen mano de obra del técnico Serviruta en tu base.</div>
+      <div class="kits-grid" id="kits-grid"></div>
+    </div>
+  </div>
+</section>
+
+<!-- INFO -->
+<section class="info-block">
+  <div class="container">
+    <div class="sec-eyebrow">Por qué Serviruta</div>
+    <h2 class="sec-titulo">No solo cambiamos aceite. <span class="rojo">Cuidamos tu motor.</span></h2>
+    <p class="sec-sub">Cada mantención incluye revisión integral del motor y reporte escrito con observaciones para que sepas cuándo hacer el próximo servicio.</p>
+
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="info-icon">🚛</div>
+        <div class="info-tit">A tu base</div>
+        <div class="info-desc">No trasladas el camión. Vamos a tu patio, faena o centro de distribución.</div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">🔍</div>
+        <div class="info-tit">Inspección incluida</div>
+        <div class="info-desc">Revisión visual del motor, fugas, correas, mangueras, batería y nivel de fluidos.</div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">📋</div>
+        <div class="info-tit">Reporte escrito</div>
+        <div class="info-desc">Detalle de la mantención + observaciones de mantención preventiva.</div>
+      </div>
+      <div class="info-card">
+        <div class="info-icon">♻️</div>
+        <div class="info-tit">Eliminación residuos</div>
+        <div class="info-desc">Nos llevamos el aceite usado y filtros para gestión ambiental correcta.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-final">
+  <h2>Una mantención bien hecha alarga la vida de tu motor.</h2>
+  <p>Cotiza por WhatsApp con la patente de tu camión y te confirmamos disponibilidad de repuestos y precio cerrado.</p>
+  <a href="https://wa.me/56945210814?text=Hola%2C%20quiero%20cotizar%20un%20kit%20de%20mantenci%C3%B3n%20para%20mi%20cami%C3%B3n" class="btn-wa-f" target="_blank">💬 Cotizar mi kit</a>
+  <div style="margin-top:16px;color:rgba(255,255,255,0.85);font-family:'Syne',sans-serif;font-weight:700;font-size:18px;">+56 9 4521 0814</div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:18px;margin-bottom:8px;">SERVI<span style="color:var(--rojo)">RUTA</span></div>
+    <div style="font-size:12px;color:var(--txt3);">Mecánica móvil profesional · Toda la RM</div>
+    <div style="font-size:11px;color:var(--txt3);margin-top:6px;">+56 9 4521 0814 · contacto@serviruta.cl · serviruta.cl</div>
+  </div>
+</footer>
+
+<a href="https://wa.me/56945210814?text=Hola%2C%20quiero%20cotizar%20un%20kit%20de%20mantenci%C3%B3n%20de%20motor" class="wa-float" target="_blank">💬</a>
+
+<script>
+// DATA DE MARCAS, MODELOS Y KITS
+var DATA={
+  mb:{
+    nombre:'Mercedes-Benz',
+    modelos:[
+      {id:'om904la',nombre:'MB 712 · 912 · 915',motor:'OM904LA · 4 cil · 4.25L',capAceite:14,horas:3},
+      {id:'om906la',nombre:'MB Atego 1718 · 1725',motor:'OM906LA · 6 cil · 6.4L',capAceite:24,horas:3.5},
+      {id:'om457la',nombre:'MB Axor 2640 · 3340',motor:'OM457LA · 6 cil · 12L',capAceite:32,horas:4},
+      {id:'om501la',nombre:'MB Actros 2641 · 3346',motor:'OM501LA · V6 · 11.9L',capAceite:34,horas:4},
+      {id:'om541la',nombre:'MB Actros 4144 · 4844',motor:'OM541LA · V6 · 11.9L',capAceite:34,horas:4},
+      {id:'om542la',nombre:'MB Actros 4855 · 6048',motor:'OM542LA · V8 · 15.9L',capAceite:38,horas:4.5}
+    ]
+  },
+  scania:{
+    nombre:'Scania',
+    modelos:[
+      {id:'dc9',nombre:'Scania P230 · P270 · P310',motor:'DC9 · 5 cil · 9L',capAceite:30,horas:3.5},
+      {id:'dc11',nombre:'Scania P340 · R340',motor:'DC11 · 6 cil · 10.6L',capAceite:35,horas:3.5},
+      {id:'dc12',nombre:'Scania P380 · R420 · G420',motor:'DC12 · 6 cil · 11.7L',capAceite:38,horas:4},
+      {id:'dt12',nombre:'Scania G440 · R440 · R470',motor:'DT12 · 6 cil · 11.7L Turbo',capAceite:38,horas:4},
+      {id:'dc13',nombre:'Scania R450 · R500 (Serie nueva)',motor:'DC13 · 6 cil · 12.7L',capAceite:40,horas:4.5},
+      {id:'dsc11',nombre:'Scania 113 · 114 (antiguos)',motor:'DSC11 · 6 cil · 11L',capAceite:34,horas:4}
+    ]
+  },
+  volvo:{
+    nombre:'Volvo',
+    modelos:[
+      {id:'d11',nombre:'Volvo FE · FM 11',motor:'D11A/B · 6 cil · 11L',capAceite:32,horas:3.5},
+      {id:'d13',nombre:'Volvo FH 460 · FM 440',motor:'D13A/B/C · 6 cil · 12.8L',capAceite:38,horas:4},
+      {id:'d13k',nombre:'Volvo FH 500 · 540 (nuevos)',motor:'D13K · 6 cil · 12.8L Euro 5/6',capAceite:38,horas:4},
+      {id:'d16',nombre:'Volvo FH 700 (tope línea)',motor:'D16G · 6 cil · 16.1L',capAceite:42,horas:4.5},
+      {id:'mwm',nombre:'Volvo VM 220 · 270',motor:'MWM · 6 cil · 7.2L',capAceite:22,horas:3}
+    ]
+  },
+  iveco:{
+    nombre:'Iveco',
+    modelos:[
+      {id:'cursor8',nombre:'Iveco Stralis 380',motor:'Cursor 8 · 7.8L',capAceite:26,horas:3.5},
+      {id:'cursor10',nombre:'Iveco Stralis 450 · Trakker',motor:'Cursor 10 · 10.3L',capAceite:32,horas:4},
+      {id:'cursor13',nombre:'Iveco Stralis Hi-Way 500',motor:'Cursor 13 · 12.9L',capAceite:38,horas:4},
+      {id:'daily',nombre:'Iveco Daily',motor:'F1A/F1C · 3L',capAceite:7,horas:1.5}
+    ]
+  },
+  man:{
+    nombre:'MAN',
+    modelos:[
+      {id:'d0836',nombre:'MAN TGS 18 · TGM 18',motor:'D0836 · 6 cil · 6.9L',capAceite:24,horas:3.5},
+      {id:'d2066',nombre:'MAN TGA 18 · TGS 26',motor:'D2066 · 6 cil · 10.5L',capAceite:33,horas:4},
+      {id:'d2676',nombre:'MAN TGX 18 · 26',motor:'D2676 · 6 cil · 12.4L',capAceite:38,horas:4}
+    ]
+  },
+  daf:{
+    nombre:'DAF',
+    modelos:[
+      {id:'mx11',nombre:'DAF CF 75 · 85',motor:'MX-11 · 10.8L',capAceite:34,horas:4},
+      {id:'mx13',nombre:'DAF XF 105 · 106 · 510',motor:'MX-13 · 12.9L',capAceite:38,horas:4}
+    ]
+  },
+  freightliner:{
+    nombre:'Freightliner',
+    modelos:[
+      {id:'c12',nombre:'Freightliner Columbia CL 112 · 120',motor:'Detroit C12 · 11.9L',capAceite:36,horas:4},
+      {id:'argosy',nombre:'Freightliner Argosy',motor:'Detroit C12 · 11.9L',capAceite:38,horas:4.5},
+      {id:'cascadia',nombre:'Freightliner Cascadia (más nuevo)',motor:'DD13/DD15',capAceite:40,horas:4.5}
+    ]
+  },
+  otra:{
+    nombre:'Otra marca',
+    modelos:[]
+  }
+}
+
+// KITS BASE - se ajustan según capacidad y horas del motor
+function calcularKits(modelo){
+  if(!modelo)return []
+  var capAceite=modelo.capAceite,horas=modelo.horas
+  // PRECIOS BASE (filtros + aceite + mano de obra)
+  // Aceite mineral 15W40: $4.500/L · Semi-sintético: $7.000/L · Sintético: $11.000/L
+  // Filtros set básico (aceite + petróleo + separador): $55K-$95K según motor
+  // Filtros set completo (+ aire + polen): +$45K
+  // Mano de obra: $25K/h
+  // MARGEN 50% APLICADO
+  var MARGEN=1.5
+  var filtrosBasico=capAceite<=20?55000:(capAceite<=30?75000:95000)
+  var filtrosCompleto=filtrosBasico+45000
+  var moBase=horas*25000
+
+  var basico=Math.round((capAceite*4500 + filtrosBasico + moBase)*MARGEN/1000)*1000
+  var premium=Math.round((capAceite*7000 + filtrosCompleto + moBase)*MARGEN/1000)*1000
+  var plus=Math.round((capAceite*11000 + filtrosCompleto + moBase + 35000)*MARGEN/1000)*1000
+
+  return [
+    {
+      tipo:'basico',
+      nombre:'Kit Básico',
+      desc:'Para uso urbano regular',
+      precio:basico,
+      cambio:'cada 20.000-30.000 km',
+      destacado:false,
+      features:[
+        'Aceite mineral 15W40 calidad CI-4 ('+capAceite+'L)',
+        'Filtro de aceite Donaldson o Fleetguard',
+        'Filtro de petróleo (combustible)',
+        'Separador de agua',
+        'Mano de obra técnico Serviruta',
+        'Inspección visual de motor incluida',
+        'Reporte escrito y eliminación residuos'
+      ]
+    },
+    {
+      tipo:'premium',
+      nombre:'Kit Premium',
+      desc:'El más solicitado · Mejor relación rendimiento/precio',
+      precio:premium,
+      cambio:'cada 30.000-40.000 km',
+      destacado:true,
+      features:[
+        'Aceite semi-sintético 15W40 CK-4 / CJ-4 ('+capAceite+'L)',
+        'Filtro de aceite premium (Donaldson/Sogefi)',
+        'Filtro de petróleo + separador de agua',
+        'Filtro de aire del motor',
+        'Filtro de polen cabina',
+        'Mano de obra técnico especialista',
+        'Inspección integral + reporte fotográfico',
+        'Garantía escrita 6 meses'
+      ]
+    },
+    {
+      tipo:'plus',
+      nombre:'Kit Plus',
+      desc:'Mantención extendida · Para flota de alto rendimiento',
+      precio:plus,
+      cambio:'cada 40.000-60.000 km',
+      destacado:false,
+      features:[
+        'Aceite sintético Low SAPS (compatible DPF) ('+capAceite+'L)',
+        'Set completo de filtros premium',
+        'Filtro de polen + revisión clima',
+        'Refrigerante revisado y completado si requiere',
+        'Inspección extendida (correas, mangueras, batería)',
+        'Diagnóstico con scanner incluido',
+        'Reporte técnico digital con histórico',
+        'Garantía escrita 6 meses'
+      ]
+    }
+  ]
+}
+
+// RENDER
+var marcaSeleccionada=null,modeloSeleccionado=null
+
+document.querySelectorAll('.marca-btn').forEach(function(b){
+  b.onclick=function(){
+    document.querySelectorAll('.marca-btn').forEach(function(x){x.classList.remove('active')})
+    b.classList.add('active')
+    marcaSeleccionada=b.getAttribute('data-marca')
+    renderModelos()
+    document.getElementById('kits-section').classList.remove('active')
+  }
+})
+
+function renderModelos(){
+  var data=DATA[marcaSeleccionada]
+  var sec=document.getElementById('modelos-section')
+  var grid=document.getElementById('modelos')
+  
+  if(marcaSeleccionada==='otra'){
+    sec.classList.add('active')
+    grid.innerHTML='<div style="grid-column:1/-1;background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:20px;text-align:center"><div style="font-size:13px;color:var(--txt2);margin-bottom:14px">Para otras marcas (Hino, JAC, Foton, Mitsubishi Fuso, Kenworth, International, Renault) coordinamos los repuestos específicos en 24-48h.</div><a href="https://wa.me/56945210814?text=Hola%2C%20mi%20cami%C3%B3n%20no%20est%C3%A1%20en%20la%20lista%2C%20quiero%20cotizar%20mantenci%C3%B3n" target="_blank" style="background:#25D366;color:#000;padding:10px 18px;border-radius:6px;font-family:Syne,sans-serif;font-weight:700;font-size:12px;text-decoration:none;display:inline-block">💬 Cotizar mi camión</a></div>'
+    sec.scrollIntoView({behavior:'smooth',block:'start'})
+    return
+  }
+  
+  grid.innerHTML=data.modelos.map(function(m){
+    return '<div class="modelo-btn" data-id="'+m.id+'"><div class="modelo-nombre">'+m.nombre+'</div><div class="modelo-motor">'+m.motor+'</div></div>'
+  }).join('')
+  
+  document.querySelectorAll('.modelo-btn').forEach(function(b){
+    b.onclick=function(){
+      document.querySelectorAll('.modelo-btn').forEach(function(x){x.classList.remove('active')})
+      b.classList.add('active')
+      var id=b.getAttribute('data-id')
+      modeloSeleccionado=data.modelos.find(function(m){return m.id===id})
+      renderKits()
+    }
+  })
+  
+  sec.classList.add('active')
+  sec.scrollIntoView({behavior:'smooth',block:'start'})
+}
+
+function renderKits(){
+  var sec=document.getElementById('kits-section')
+  var grid=document.getElementById('kits-grid')
+  var titulo=document.getElementById('kit-titulo')
+  var sub=document.getElementById('kit-sub')
+  
+  titulo.textContent='Kits para '+DATA[marcaSeleccionada].nombre+' '+modeloSeleccionado.nombre.split(' ').slice(1).join(' ')
+  sub.textContent='Motor '+modeloSeleccionado.motor+' · Capacidad aceite: '+modeloSeleccionado.capAceite+' litros · Tiempo estimado servicio: '+modeloSeleccionado.horas+' horas'
+  
+  var kits=calcularKits(modeloSeleccionado)
+  grid.innerHTML=kits.map(function(k){
+    var msg='Hola%2C%20quiero%20cotizar%20el%20'+encodeURIComponent(k.nombre)+'%20para%20mi%20'+encodeURIComponent(DATA[marcaSeleccionada].nombre+' '+modeloSeleccionado.nombre)
+    return '<div class="kit-card '+(k.destacado?'destacado':'')+'">'+
+      (k.destacado?'<div class="kit-badge">MÁS ELEGIDO</div>':'')+
+      '<div class="kit-nombre">'+k.nombre+'</div>'+
+      '<div class="kit-desc">'+k.desc+'</div>'+
+      '<div class="kit-precio"><span class="curr">$</span>'+k.precio.toLocaleString('es-CL')+'</div>'+
+      '<div class="kit-precio-desc">Precio cerrado · Incluye repuestos y mano de obra</div>'+
+      '<ul class="kit-features">'+
+        k.features.map(function(f){return '<li>'+f+'</li>'}).join('')+
+      '</ul>'+
+      '<div class="kit-tiempo">⏱ '+k.cambio+'</div>'+
+      '<a href="https://wa.me/56945210814?text='+msg+'" target="_blank" class="kit-cta" style="margin-top:12px">💬 Cotizar este kit</a>'+
+    '</div>'
+  }).join('')
+  
+  sec.classList.add('active')
+  setTimeout(function(){sec.scrollIntoView({behavior:'smooth',block:'start'})},200)
+}
+</script>
+
+</body>
+</html>

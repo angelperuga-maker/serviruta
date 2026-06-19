@@ -308,14 +308,16 @@ function calcularKits(modelo){
   // Filtros básicos (aceite + aire): $22K-$50K según motor
   // Filtros completos (+ polen + combustible): +$25K
   // MO: $30K/hora
+  // MARGEN 50% APLICADO
+  var MARGEN=1.5
   var esGrande=capAceite>5
   var filtrosBasico=esGrande?(capAceite>6.5?52000:38000):26000
   var filtrosCompleto=filtrosBasico+22000
   var moBase=Math.round(horas*30000)
 
-  var basico=Math.round((capAceite*4500 + filtrosBasico + moBase)/1000)*1000
-  var premium=Math.round((capAceite*8000 + filtrosCompleto + moBase + 8000)/1000)*1000
-  var plus=Math.round((capAceite*12000 + filtrosCompleto + moBase + 20000)/1000)*1000
+  var basico=Math.round((capAceite*4500 + filtrosBasico + moBase)*MARGEN/1000)*1000
+  var premium=Math.round((capAceite*8000 + filtrosCompleto + moBase + 8000)*MARGEN/1000)*1000
+  var plus=Math.round((capAceite*12000 + filtrosCompleto + moBase + 20000)*MARGEN/1000)*1000
 
   return [
     {tipo:'basico',nombre:'Kit Básico',desc:'Mantención esencial · Trayectos urbanos cortos',precio:basico,cambio:'cada 5.000 km',destacado:false,

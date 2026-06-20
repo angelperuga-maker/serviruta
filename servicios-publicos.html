@@ -53,6 +53,12 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--c3);border:1px solid var(--borde);border-radius:8px;padding:10px 16px;font-size:12px;opacity:0;transition:all 0.25s;pointer-events:none;z-index:999;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 .toast.ok{border-color:rgba(34,197,94,0.4);color:var(--verde);}
+
+.marcas-row{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;}
+.marca-chip{display:inline-flex;align-items:center;gap:4px;padding:2px 8px 2px 3px;border-radius:10px;font-family:"Syne",sans-serif;font-weight:700;font-size:9px;letter-spacing:0.3px;color:#fff;line-height:1.4;}
+.marca-chip img{width:14px;height:14px;object-fit:contain;background:#fff;border-radius:50%;padding:1px;}
+.marca-chip .logo{font-size:10px;line-height:1;display:inline-flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.95);color:inherit;width:14px;height:14px;border-radius:50%;font-weight:800;}
+.marca-chip.light{color:#000;}
 </style>
 </head>
 <body>
@@ -87,6 +93,13 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
       <div class="servicio-info">
         <div class="servicio-nombre">Pre-Revisión Técnica Camión</div>
         <div class="servicio-tag">Pre-RT · Clase A2 · A domicilio</div>
+        <div class="marcas-row">
+          <span class="marca-chip" style="background:#1A3865">🛡️ Plantas A2</span>
+          <span class="marca-chip" style="background:#000;color:#fff;"><img src="https://www.carlogos.org/car-logos/mercedes-benz-logo.png" alt="Mercedes-Benz" onerror="this.outerHTML=''"/>Mercedes-Benz</span>
+          <span class="marca-chip" style="background:#012169;color:#fff;"><img src="https://www.carlogos.org/car-logos/scania-logo.png" alt="Scania" onerror="this.outerHTML=''"/>Scania</span>
+          <span class="marca-chip" style="background:#003057;color:#fff;"><img src="https://www.carlogos.org/car-logos/volvo-logo.png" alt="Volvo" onerror="this.outerHTML=''"/>Volvo</span>
+          <span class="marca-chip" style="background:#003478"><img src="https://www.carlogos.org/car-logos/ford-logo.png" alt="Ford" onerror="this.outerHTML=''"/>Ford</span>
+        </div>
       </div>
       <div class="servicio-ticket">$89K-$389K</div>
     </div>
@@ -107,6 +120,11 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
       <div class="servicio-info">
         <div class="servicio-nombre">Emergencia Thermo King 24/7</div>
         <div class="servicio-tag">Refrigerado · Carrier · Mitsubishi</div>
+        <div class="marcas-row">
+          <span class="marca-chip" style="background:#003F87"><span class="logo">❄️</span>Thermo King</span>
+          <span class="marca-chip" style="background:#E11B22"><span class="logo">❄️</span>Carrier</span>
+          <span class="marca-chip" style="background:#E60012"><img src="https://www.carlogos.org/car-logos/mitsubishi-logo.png" alt="Mitsubishi" onerror="this.outerHTML=''"/>Mitsubishi</span>
+        </div>
       </div>
       <div class="servicio-ticket">$149K-$1.5M</div>
     </div>
@@ -127,6 +145,13 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
       <div class="servicio-info">
         <div class="servicio-nombre">Fuelle Suspensión Neumática</div>
         <div class="servicio-tag">BPW · MAN · Volvo · Scania</div>
+        <div class="marcas-row">
+          <span class="marca-chip" style="background:#E20613"><span class="logo">■</span>BPW</span>
+          <span class="marca-chip" style="background:#E40521"><img src="https://www.carlogos.org/car-logos/man-logo.png" alt="MAN" onerror="this.outerHTML=''"/>MAN</span>
+          <span class="marca-chip" style="background:#003057"><img src="https://www.carlogos.org/car-logos/volvo-logo.png" alt="Volvo" onerror="this.outerHTML=''"/>Volvo</span>
+          <span class="marca-chip" style="background:#012169"><img src="https://www.carlogos.org/car-logos/scania-logo.png" alt="Scania" onerror="this.outerHTML=''"/>Scania</span>
+          <span class="marca-chip" style="background:#000;color:#fff"><span class="logo">◆</span>SAF-ROR</span>
+        </div>
       </div>
       <div class="servicio-ticket">$79K-$459K</div>
     </div>
@@ -147,6 +172,12 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
       <div class="servicio-info">
         <div class="servicio-nombre">Diagnóstico Common Rail</div>
         <div class="servicio-tag">Bosch · Denso · Delphi · Siemens</div>
+        <div class="marcas-row">
+          <span class="marca-chip" style="background:#ED1C24"><span class="logo">⊕</span>Bosch</span>
+          <span class="marca-chip" style="background:#D6001C"><span class="logo">◇</span>Denso</span>
+          <span class="marca-chip" style="background:#003366"><span class="logo">△</span>Delphi</span>
+          <span class="marca-chip" style="background:#009999"><span class="logo">▣</span>Siemens</span>
+        </div>
       </div>
       <div class="servicio-ticket">$129K-$4M</div>
     </div>
@@ -167,6 +198,12 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
       <div class="servicio-info">
         <div class="servicio-nombre">Guía Interactiva DPF</div>
         <div class="servicio-tag">Material de apoyo de venta · 3 soluciones</div>
+        <div class="marcas-row">
+          <span class="marca-chip" style="background:#A78BFA;color:#000"><span class="logo">📚</span>Material venta</span>
+          <span class="marca-chip" style="background:#E60026"><span class="logo">A</span>Regen. Forzada</span>
+          <span class="marca-chip" style="background:#F59E0B;color:#000"><span class="logo">B</span>Doble Regen.</span>
+          <span class="marca-chip" style="background:#003F2D"><span class="logo">C</span>DPF Revival</span>
+        </div>
       </div>
       <div class="servicio-ticket">$149K-$389K</div>
     </div>
@@ -187,6 +224,21 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
       <div class="servicio-info">
         <div class="servicio-nombre">Kits Mantención Auto</div>
         <div class="servicio-tag">Toyota · Hyundai · Kia · Chevrolet · y +10 marcas</div>
+        <div class="marcas-row">
+          <span class="marca-chip" style="background:#EB0A1E"><img src="https://www.carlogos.org/car-logos/toyota-logo.png" alt="Toyota" onerror="this.outerHTML=''"/>Toyota</span>
+          <span class="marca-chip" style="background:#002C5F"><img src="https://www.carlogos.org/car-logos/hyundai-logo.png" alt="Hyundai" onerror="this.outerHTML=''"/>Hyundai</span>
+          <span class="marca-chip" style="background:#BB162B"><img src="https://www.carlogos.org/car-logos/kia-logo.png" alt="Kia" onerror="this.outerHTML=''"/>Kia</span>
+          <span class="marca-chip" style="background:#FFC72C;color:#000"><img src="https://www.carlogos.org/car-logos/chevrolet-logo.png" alt="Chevrolet" onerror="this.outerHTML=''"/>Chevrolet</span>
+          <span class="marca-chip" style="background:#C3002F"><img src="https://www.carlogos.org/car-logos/nissan-logo.png" alt="Nissan" onerror="this.outerHTML=''"/>Nissan</span>
+          <span class="marca-chip" style="background:#1C1B5E"><img src="https://www.carlogos.org/car-logos/suzuki-logo.png" alt="Suzuki" onerror="this.outerHTML=''"/>Suzuki</span>
+          <span class="marca-chip" style="background:#101820"><img src="https://www.carlogos.org/car-logos/mazda-logo.png" alt="Mazda" onerror="this.outerHTML=''"/>Mazda</span>
+          <span class="marca-chip" style="background:#E60012"><img src="https://www.carlogos.org/car-logos/mitsubishi-logo.png" alt="Mitsubishi" onerror="this.outerHTML=''"/>Mitsubishi</span>
+          <span class="marca-chip" style="background:#001E50"><img src="https://www.carlogos.org/car-logos/volkswagen-logo.png" alt="Volkswagen" onerror="this.outerHTML=''"/>Volkswagen</span>
+          <span class="marca-chip" style="background:#003478"><img src="https://www.carlogos.org/car-logos/ford-logo.png" alt="Ford" onerror="this.outerHTML=''"/>Ford</span>
+          <span class="marca-chip" style="background:#000;color:#fff"><img src="https://www.carlogos.org/car-logos/peugeot-logo.png" alt="Peugeot" onerror="this.outerHTML=''"/>Peugeot</span>
+          <span class="marca-chip" style="background:#CC0000"><img src="https://www.carlogos.org/car-logos/honda-logo.png" alt="Honda" onerror="this.outerHTML=''"/>Honda</span>
+          <span class="marca-chip" style="background:#003DA5"><img src="https://www.carlogos.org/car-logos/subaru-logo.png" alt="Subaru" onerror="this.outerHTML=''"/>Subaru</span>
+        </div>
       </div>
       <div class="servicio-ticket">$98K-$278K</div>
     </div>
@@ -207,6 +259,12 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
       <div class="servicio-info">
         <div class="servicio-nombre">Reparación Hidráulica</div>
         <div class="servicio-tag">Tolva · Grúa · Volquete · Rampla</div>
+        <div class="marcas-row">
+          <span class="marca-chip" style="background:#FFB81C;color:#000"><span class="logo">🛠️</span>Hyva</span>
+          <span class="marca-chip" style="background:#003D7A"><span class="logo">⚙</span>Parker</span>
+          <span class="marca-chip" style="background:#E2231A"><span class="logo">●</span>Bondioli</span>
+          <span class="marca-chip" style="background:#000;color:#fff"><span class="logo">◆</span>Eaton</span>
+        </div>
       </div>
       <div class="servicio-ticket">$99K-$2.5M</div>
     </div>
@@ -227,6 +285,19 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
       <div class="servicio-info">
         <div class="servicio-nombre">Kit Embrague Auto y Camioneta</div>
         <div class="servicio-tag">Luk · Sachs · Valeo · Exedy · 13 marcas</div>
+        <div class="marcas-row">
+          <span class="marca-chip" style="background:#E60026"><span class="logo">⚙</span>LUK</span>
+          <span class="marca-chip" style="background:#0066B3"><span class="logo">⊙</span>Sachs</span>
+          <span class="marca-chip" style="background:#003D7A"><span class="logo">V</span>Valeo</span>
+          <span class="marca-chip" style="background:#005BAC"><span class="logo">E</span>Exedy</span>
+          <span class="marca-chip" style="background:#EB0A1E"><img src="https://www.carlogos.org/car-logos/toyota-logo.png" alt="Toyota" onerror="this.outerHTML=''"/>Toyota</span>
+          <span class="marca-chip" style="background:#002C5F"><img src="https://www.carlogos.org/car-logos/hyundai-logo.png" alt="Hyundai" onerror="this.outerHTML=''"/>Hyundai</span>
+          <span class="marca-chip" style="background:#BB162B"><img src="https://www.carlogos.org/car-logos/kia-logo.png" alt="Kia" onerror="this.outerHTML=''"/>Kia</span>
+          <span class="marca-chip" style="background:#FFC72C;color:#000"><img src="https://www.carlogos.org/car-logos/chevrolet-logo.png" alt="Chevrolet" onerror="this.outerHTML=''"/>Chevrolet</span>
+          <span class="marca-chip" style="background:#C3002F"><img src="https://www.carlogos.org/car-logos/nissan-logo.png" alt="Nissan" onerror="this.outerHTML=''"/>Nissan</span>
+          <span class="marca-chip" style="background:#001E50"><img src="https://www.carlogos.org/car-logos/volkswagen-logo.png" alt="Volkswagen" onerror="this.outerHTML=''"/>Volkswagen</span>
+          <span class="marca-chip" style="background:#003478"><img src="https://www.carlogos.org/car-logos/ford-logo.png" alt="Ford" onerror="this.outerHTML=''"/>Ford</span>
+        </div>
       </div>
       <div class="servicio-ticket">$465K-$1.56M</div>
     </div>
@@ -247,6 +318,18 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
       <div class="servicio-info">
         <div class="servicio-nombre">Kit Embrague Camión</div>
         <div class="servicio-tag">Eaton · Sachs · Luk · 2 técnicos · 8h</div>
+        <div class="marcas-row">
+          <span class="marca-chip" style="background:#003F2D"><span class="logo">⊕</span>Eaton</span>
+          <span class="marca-chip" style="background:#0066B3"><span class="logo">⊙</span>Sachs</span>
+          <span class="marca-chip" style="background:#E60026"><span class="logo">⚙</span>LUK</span>
+          <span class="marca-chip" style="background:#FFB300;color:#000"><span class="logo">A</span>Alliance</span>
+          <span class="marca-chip" style="background:#000;color:#fff"><img src="https://www.carlogos.org/car-logos/mercedes-benz-logo.png" alt="Mercedes-Benz" onerror="this.outerHTML=''"/>Mercedes-Benz</span>
+          <span class="marca-chip" style="background:#012169"><img src="https://www.carlogos.org/car-logos/scania-logo.png" alt="Scania" onerror="this.outerHTML=''"/>Scania</span>
+          <span class="marca-chip" style="background:#003057"><img src="https://www.carlogos.org/car-logos/volvo-logo.png" alt="Volvo" onerror="this.outerHTML=''"/>Volvo</span>
+          <span class="marca-chip" style="background:#003478"><img src="https://www.carlogos.org/car-logos/ford-logo.png" alt="Ford Cargo" onerror="this.outerHTML=''"/>Ford Cargo</span>
+          <span class="marca-chip" style="background:#001E50"><img src="https://www.carlogos.org/car-logos/volkswagen-logo.png" alt="VW" onerror="this.outerHTML=''"/>VW</span>
+          <span class="marca-chip" style="background:#E2231A"><img src="https://www.carlogos.org/car-logos/iveco-logo.png" alt="Iveco" onerror="this.outerHTML=''"/>Iveco</span>
+        </div>
       </div>
       <div class="servicio-ticket">$1M-$2.4M</div>
     </div>
@@ -267,6 +350,17 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
       <div class="servicio-info">
         <div class="servicio-nombre">Kits Mantención Motor Camión</div>
         <div class="servicio-tag">MB · Scania · Volvo · Iveco · MAN · DAF</div>
+        <div class="marcas-row">
+          <span class="marca-chip" style="background:#000;color:#fff"><img src="https://www.carlogos.org/car-logos/mercedes-benz-logo.png" alt="Mercedes-Benz" onerror="this.outerHTML=''"/>Mercedes-Benz</span>
+          <span class="marca-chip" style="background:#012169"><img src="https://www.carlogos.org/car-logos/scania-logo.png" alt="Scania" onerror="this.outerHTML=''"/>Scania</span>
+          <span class="marca-chip" style="background:#003057"><img src="https://www.carlogos.org/car-logos/volvo-logo.png" alt="Volvo" onerror="this.outerHTML=''"/>Volvo</span>
+          <span class="marca-chip" style="background:#E2231A"><img src="https://www.carlogos.org/car-logos/iveco-logo.png" alt="Iveco" onerror="this.outerHTML=''"/>Iveco</span>
+          <span class="marca-chip" style="background:#E40521"><img src="https://www.carlogos.org/car-logos/man-logo.png" alt="MAN" onerror="this.outerHTML=''"/>MAN</span>
+          <span class="marca-chip" style="background:#FFB81C;color:#000"><img src="https://www.carlogos.org/car-logos/daf-logo.png" alt="DAF" onerror="this.outerHTML=''"/>DAF</span>
+          <span class="marca-chip" style="background:#003478"><img src="https://www.carlogos.org/car-logos/freightliner-logo.png" alt="Freightliner" onerror="this.outerHTML=''"/>Freightliner</span>
+          <span class="marca-chip" style="background:#005BB5"><span class="logo">D</span>Donaldson</span>
+          <span class="marca-chip" style="background:#0066B3"><span class="logo">⊙</span>Sogefi</span>
+        </div>
       </div>
       <div class="servicio-ticket">$186K-$948K</div>
     </div>

@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compresores de Aire Camión · Venta e Instalación | Serviruta</title>
+<meta name="description" content="Venta e instalación a domicilio de compresores de aire para camiones Mercedes-Benz, Scania, Volvo, Iveco, MAN, Ford Cargo. Knorr-Bremse, Wabco, Bendix.">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;line-height:1.6;}
+.container{max-width:1000px;margin:0 auto;padding:0 16px;}
+.header{background:rgba(15,15,18,0.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--borde);padding:12px 0;position:sticky;top:0;z-index:100;}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.logo{font-family:"Syne",sans-serif;font-weight:800;font-size:20px;color:var(--txt);text-decoration:none;}
+.logo span{color:var(--rojo);}
+.btn-wa-h{background:#25D366;color:#000;padding:7px 14px;border-radius:6px;font-family:"Syne",sans-serif;font-weight:700;font-size:12px;text-decoration:none;}
+.hero{padding:50px 0 30px;text-align:center;border-bottom:1px solid var(--borde);background:radial-gradient(circle at 50% 0%,rgba(232,33,10,0.06) 0%,transparent 60%);}
+.hero-eyebrow{display:inline-block;background:rgba(232,33,10,0.12);border:1px solid rgba(232,33,10,0.4);color:var(--rojo);font-family:"Syne",sans-serif;font-weight:700;font-size:10px;letter-spacing:2px;padding:5px 12px;border-radius:20px;text-transform:uppercase;margin-bottom:18px;}
+.hero h1{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(28px,5vw,46px);line-height:1.1;margin-bottom:14px;}
+.hero h1 .rojo{color:var(--rojo);}
+.hero p{font-size:15px;color:var(--txt2);max-width:600px;margin:0 auto 18px;}
+.hero-trust{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;font-size:11px;color:var(--txt3);margin-top:10px;}
+.hero-trust span::before{content:"●";color:var(--verde);margin-right:4px;}
+.alerta-servicio{background:linear-gradient(135deg,rgba(96,165,250,0.08),rgba(96,165,250,0.02));border:1px solid rgba(96,165,250,0.3);border-radius:12px;padding:14px 20px;margin:20px auto 0;max-width:680px;font-size:12px;color:var(--txt);display:flex;align-items:center;gap:12px;}
+.alerta-servicio b{color:var(--azul);}
+section{padding:40px 0;}
+.sec-eyebrow{color:var(--rojo);font-family:"Syne",sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;}
+.sec-titulo{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(22px,3.5vw,30px);line-height:1.2;margin-bottom:10px;}
+.sec-titulo .rojo{color:var(--rojo);}
+.sec-sub{font-size:14px;color:var(--txt2);max-width:650px;margin-bottom:24px;}
+.marcas-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-top:20px;}
+.marca-btn{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:18px 12px;cursor:pointer;text-align:center;transition:all 0.2s;}
+.marca-btn:hover{border-color:var(--rojo);transform:translateY(-2px);}
+.marca-btn.active{border-color:var(--rojo);background:rgba(232,33,10,0.08);}
+.marca-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;color:var(--txt);}
+.marca-modelos{font-size:10px;color:var(--txt3);margin-top:2px;}
+.modelos-section{display:none;margin-top:30px;}
+.modelos-section.active{display:block;}
+.modelos-titulo{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;color:var(--rojo);margin-bottom:12px;text-transform:uppercase;letter-spacing:1px;}
+.modelos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:8px;}
+.modelo-btn{background:var(--c3);border:1px solid var(--borde);border-radius:8px;padding:12px;cursor:pointer;font-size:12px;text-align:left;}
+.modelo-btn:hover{border-color:var(--rojo);}
+.modelo-btn.active{background:var(--rojo);color:#fff;border-color:var(--rojo);}
+.modelo-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;}
+.modelo-motor{font-size:10px;opacity:0.8;margin-top:2px;}
+.kits-section{display:none;margin-top:30px;padding-top:30px;border-top:1px solid var(--borde);}
+.kits-section.active{display:block;}
+.kit-titulo{font-family:"Syne",sans-serif;font-weight:800;font-size:20px;margin-bottom:6px;}
+.kit-sub{font-size:13px;color:var(--txt3);margin-bottom:20px;}
+.kits-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;}
+.kit-card{background:var(--c2);border:1px solid var(--borde);border-radius:14px;padding:22px;position:relative;}
+.kit-card.destacado{border:2px solid var(--rojo);background:linear-gradient(180deg,rgba(232,33,10,0.06),var(--c2) 50%);}
+.kit-badge{position:absolute;top:-12px;right:20px;background:var(--rojo);color:#fff;padding:5px 12px;border-radius:20px;font-family:"Syne",sans-serif;font-weight:700;font-size:10px;letter-spacing:1px;}
+.kit-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;color:var(--rojo);margin-bottom:4px;}
+.kit-marca{font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;font-weight:600;}
+.kit-desc{font-size:11px;color:var(--txt3);margin-bottom:14px;}
+.kit-precio{font-family:"Syne",sans-serif;font-weight:900;font-size:30px;margin-bottom:2px;}
+.kit-precio .curr{font-size:16px;color:var(--txt3);}
+.kit-precio-desc{font-size:10px;color:var(--txt3);margin-bottom:16px;}
+.kit-features{list-style:none;margin-bottom:18px;}
+.kit-features li{font-size:12px;color:var(--txt);padding:6px 0 6px 20px;position:relative;border-bottom:1px dashed var(--c3);}
+.kit-features li:last-child{border-bottom:none;}
+.kit-features li::before{content:"✓";position:absolute;left:0;color:var(--verde);font-weight:bold;}
+.kit-cta{display:block;text-align:center;background:#25D366;color:#000;padding:11px;border-radius:8px;font-family:"Syne",sans-serif;font-weight:800;font-size:13px;text-decoration:none;}
+.kit-tiempo{display:flex;align-items:center;gap:8px;background:rgba(96,165,250,0.08);border-left:3px solid var(--azul);border-radius:6px;padding:8px 10px;margin-top:12px;font-size:11px;color:var(--txt2);}
+.info-block{background:var(--c1);}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:20px;}
+.info-card{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:18px;}
+.info-icon{font-size:24px;margin-bottom:8px;}
+.info-tit{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;margin-bottom:4px;}
+.info-desc{font-size:11px;color:var(--txt2);line-height:1.6;}
+.cta-final{background:linear-gradient(135deg,var(--rojo) 0%,#a8170a 100%);text-align:center;padding:50px 20px;}
+.cta-final h2{font-family:"Syne",sans-serif;font-weight:900;font-size:clamp(22px,4vw,30px);margin-bottom:10px;color:#fff;}
+.cta-final p{font-size:14px;color:rgba(255,255,255,0.9);max-width:550px;margin:0 auto 22px;}
+.cta-final .btn-wa-f{background:#fff;color:#000;padding:16px 30px;border-radius:10px;font-family:"Syne",sans-serif;font-weight:800;font-size:15px;text-decoration:none;display:inline-block;}
+.footer{background:#000;padding:30px 0;text-align:center;border-top:1px solid var(--borde);}
+.wa-float{position:fixed;bottom:24px;right:24px;width:56px;height:56px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 6px 20px rgba(37,211,102,0.4);z-index:99;}
+@media(max-width:640px){.marcas-grid{grid-template-columns:repeat(2,1fr);}.kit-card{padding:18px;}}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="container header-inner">
+    <a href="https://serviruta.cl" class="logo">SERVI<span>RUTA</span></a>
+    <a href="https://wa.me/56945210814?text=Hola%2C%20quiero%20cotizar%20compresor%20de%20aire%20para%20mi%20cami%C3%B3n" class="btn-wa-h" target="_blank">💬 WhatsApp</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">Compresor de Aire Camión · Venta e Instalación</div>
+    <h1>Compresor para frenos, suspensión y aire <span class="rojo">de tu camión.</span></h1>
+    <p>Vendemos el compresor de aire nuevo de marcas Knorr-Bremse, Wabco, Bendix y Haldex con opción de instalación a domicilio. Tu camión vuelve a operar el mismo día.</p>
+    <div class="hero-trust">
+      <span>Knorr-Bremse · Wabco · Bendix · Haldex</span>
+      <span>Venta o venta + instalación</span>
+      <span>Garantía escrita 12 meses</span>
+    </div>
+    <div class="alerta-servicio">
+      <div style="font-size:20px">🔧</div>
+      <div><b>3 opciones disponibles:</b> Comprar solo el compresor (lo retiras o despachamos), comprar + instalación en tu base, o paquete completo con revisión de todo el sistema de aire (válvulas, secador, mangueras).</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="sec-eyebrow">Paso 1 · Selecciona la marca de tu camión</div>
+    <h2 class="sec-titulo">¿Cuál es la <span class="rojo">marca</span>?</h2>
+    <p class="sec-sub">Trabajamos con los principales camiones de transporte en Chile.</p>
+
+    <div class="marcas-grid" id="marcas"></div>
+
+    <div class="modelos-section" id="modelos-section">
+      <div class="modelos-titulo">Paso 2 · Selecciona tu modelo o motor</div>
+      <div class="modelos-grid" id="modelos"></div>
+    </div>
+
+    <div class="kits-section" id="kits-section">
+      <div class="kit-titulo" id="kit-titulo">Opciones disponibles</div>
+      <div class="kit-sub" id="kit-sub">Elige según necesites solo el compresor o también la instalación profesional.</div>
+      <div class="kits-grid" id="kits-grid"></div>
+    </div>
+  </div>
+</section>
+
+<section class="info-block">
+  <div class="container">
+    <div class="sec-eyebrow">Cómo trabajamos</div>
+    <h2 class="sec-titulo">Compresor original <span class="rojo">+ instalación en tu base.</span></h2>
+    <p class="sec-sub">El compresor de aire es crítico para frenos, suspensión y sistema neumático. Por eso solo trabajamos con marcas OEM y técnicos especializados.</p>
+
+    <div class="info-grid">
+      <div class="info-card"><div class="info-icon">📦</div><div class="info-tit">Stock o reposición rápida</div><div class="info-desc">Compresores de marcas premium en stock. Si no, los conseguimos en 24-72 horas.</div></div>
+      <div class="info-card"><div class="info-icon">🔧</div><div class="info-tit">Instalación a domicilio</div><div class="info-desc">Técnicos van a tu patio o faena con herramientas. Sin trasladar el camión.</div></div>
+      <div class="info-card"><div class="info-icon">⚙️</div><div class="info-tit">Revisión integral aire</div><div class="info-desc">Opcional: revisamos secador, válvulas, mangueras y depósitos. Detectamos fugas.</div></div>
+      <div class="info-card"><div class="info-icon">📝</div><div class="info-tit">Garantía 12 meses</div><div class="info-desc">Sobre el compresor y la instalación. Volvemos sin costo si presenta falla.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-final">
+  <h2>Compresor para tu camión, listo en 24-72 horas.</h2>
+  <p>Cotiza por WhatsApp con marca, modelo y patente. Confirmamos disponibilidad de stock y precio cerrado.</p>
+  <a href="https://wa.me/56945210814?text=Hola%2C%20quiero%20cotizar%20compresor%20de%20aire%20para%20mi%20cami%C3%B3n" class="btn-wa-f" target="_blank">💬 Cotizar mi compresor</a>
+  <div style="margin-top:16px;color:rgba(255,255,255,0.85);font-family:'Syne',sans-serif;font-weight:700;font-size:18px;">+56 9 4521 0814</div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:18px;margin-bottom:8px;">SERVI<span style="color:var(--rojo)">RUTA</span></div>
+    <div style="font-size:12px;color:var(--txt3);">Mecánica móvil profesional · Toda la RM</div>
+    <div style="font-size:11px;color:var(--txt3);margin-top:6px;">+56 9 4521 0814 · contacto@serviruta.cl · serviruta.cl</div>
+  </div>
+</footer>
+
+<a href="https://wa.me/56945210814?text=Hola%2C%20quiero%20cotizar%20compresor%20de%20aire%20para%20mi%20cami%C3%B3n" class="wa-float" target="_blank">💬</a>
+
+<script>
+// LOGOS por marca
+var LOGOS={
+  mb:{c:'#000',l:'⭐',n:'Mercedes-Benz',u:'https://www.carlogos.org/car-logos/mercedes-benz-logo.png'},
+  scania:{c:'#012169',l:'●',n:'Scania',u:'https://www.carlogos.org/car-logos/scania-logo.png'},
+  volvo:{c:'#003057',l:'▲',n:'Volvo',u:'https://www.carlogos.org/car-logos/volvo-logo.png'},
+  iveco:{c:'#E2231A',l:'▶',n:'Iveco',u:'https://www.carlogos.org/car-logos/iveco-logo.png'},
+  man:{c:'#E40521',l:'M',n:'MAN',u:'https://www.carlogos.org/car-logos/man-logo.png'},
+  ford:{c:'#003478',l:'F',n:'Ford Cargo',u:'https://www.carlogos.org/car-logos/ford-logo.png'},
+  vw:{c:'#001E50',l:'VW',n:'Volkswagen',u:'https://www.carlogos.org/car-logos/volkswagen-logo.png'},
+  international:{c:'#C8102E',l:'I',n:'International',u:'https://www.carlogos.org/car-logos/international-logo.png'},
+  otra:{c:'#55525E',l:'🔧',n:'Otra marca',u:null}
+}
+
+function logoHTML(id){
+  var m=LOGOS[id]
+  var tc=(id==='chevrolet'||id==='daf'||id==='mack'||id==='renault')?'#000':'#fff'
+  if(m.u){
+    return '<div class="marca-icon" style="width:50px;height:50px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;box-shadow:0 4px 12px rgba(0,0,0,0.5);border:2px solid '+m.c+';overflow:hidden;padding:5px"><img src="'+m.u+'" alt="'+m.n+'" style="max-width:100%;max-height:100%;object-fit:contain" onerror="this.parentElement.style.background=\''+m.c+'\';this.parentElement.style.color=\''+tc+'\';this.parentElement.style.fontFamily=\'Syne,sans-serif\';this.parentElement.style.fontWeight=\'800\';this.parentElement.style.fontSize=\'18px\';this.parentElement.innerHTML=\''+m.l+'\'"></div>'
+  }
+  return '<div class="marca-icon" style="width:50px;height:50px;border-radius:50%;background:'+m.c+';color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;font-family:Syne,sans-serif;font-weight:800;font-size:18px;box-shadow:0 4px 12px rgba(0,0,0,0.4)">'+m.l+'</div>'
+}
+
+// DATA: precios reales aproximados implementos.cl + variantes por marca de compresor
+// Cada modelo: nombre, desc, std (Brasil/genérico), orig (Wabco/Bendix OEM), prem (Knorr-Bremse premium)
+var DATA={
+  mb:{nombre:'Mercedes-Benz',modelos:[
+    {id:'om904',nombre:'MB 712/912/915',desc:'OM904LA · 1 cilindro',std:295000,orig:395000,prem:520000,horas:3.5},
+    {id:'om906',nombre:'MB Atego 1718/1725',desc:'OM906LA · 1 cilindro',std:320000,orig:420000,prem:545000,horas:3.5},
+    {id:'om457',nombre:'MB Axor 2640',desc:'OM457LA · doble cabezal',std:480000,orig:625000,prem:780000,horas:4},
+    {id:'om501',nombre:'MB Actros 2641/3346',desc:'OM501LA · V6 turbo',std:540000,orig:695000,prem:870000,horas:4},
+    {id:'om541',nombre:'MB Actros 4144/4844',desc:'OM541LA · V6',std:565000,orig:725000,prem:895000,horas:4.5}
+  ]},
+  scania:{nombre:'Scania',modelos:[
+    {id:'dc9',nombre:'Scania P230/P270',desc:'DC9 · 5 cil',std:425000,orig:545000,prem:695000,horas:3.5},
+    {id:'dc11',nombre:'Scania P340/R340',desc:'DC11 · 6 cil',std:465000,orig:595000,prem:755000,horas:3.5},
+    {id:'dc12',nombre:'Scania R420/G420/P380',desc:'DC12 · 6 cil',std:485000,orig:620000,prem:790000,horas:4},
+    {id:'dc13',nombre:'Scania R450/R500 (nuevo)',desc:'DC13 · 6 cil Euro 5/6',std:540000,orig:685000,prem:860000,horas:4}
+  ]},
+  volvo:{nombre:'Volvo',modelos:[
+    {id:'d11',nombre:'Volvo FE/FM 11',desc:'D11A/B',std:445000,orig:570000,prem:725000,horas:3.5},
+    {id:'d13',nombre:'Volvo FH 460/FM 440',desc:'D13A/B/C',std:510000,orig:650000,prem:825000,horas:4},
+    {id:'d16',nombre:'Volvo FH 700',desc:'D16G alta potencia',std:610000,orig:780000,prem:980000,horas:4.5}
+  ]},
+  iveco:{nombre:'Iveco',modelos:[
+    {id:'c8',nombre:'Iveco Stralis 380',desc:'Cursor 8 · 7.8L',std:395000,orig:510000,prem:650000,horas:3.5},
+    {id:'c10',nombre:'Iveco Stralis 450/Trakker',desc:'Cursor 10 · 10.3L',std:455000,orig:580000,prem:735000,horas:4},
+    {id:'c13',nombre:'Iveco Stralis Hi-Way 500',desc:'Cursor 13 · 12.9L',std:510000,orig:650000,prem:820000,horas:4}
+  ]},
+  man:{nombre:'MAN',modelos:[
+    {id:'d0836',nombre:'MAN TGS 18/TGM 18',desc:'D0836 · 6 cil',std:420000,orig:540000,prem:685000,horas:3.5},
+    {id:'d2066',nombre:'MAN TGA 18/TGS 26',desc:'D2066 · 6 cil',std:485000,orig:620000,prem:790000,horas:4},
+    {id:'d2676',nombre:'MAN TGX 18/26',desc:'D2676 · 6 cil',std:520000,orig:670000,prem:845000,horas:4}
+  ]},
+  ford:{nombre:'Ford Cargo',modelos:[
+    {id:'c814',nombre:'Ford Cargo 814',desc:'Compresor liviano',std:265000,orig:355000,prem:465000,horas:3},
+    {id:'c1723',nombre:'Ford Cargo 1723',desc:'Compresor mediano',std:395000,orig:510000,prem:650000,horas:3.5},
+    {id:'c2429',nombre:'Ford Cargo 2429',desc:'Compresor pesado',std:475000,orig:615000,prem:780000,horas:4}
+  ]},
+  vw:{nombre:'Volkswagen',modelos:[
+    {id:'vw17280',nombre:'VW 17-280/24-280',desc:'Compresor 1 cilindro',std:445000,orig:575000,prem:730000,horas:4},
+    {id:'constellation',nombre:'VW Constellation',desc:'Compresor doble cabezal',std:495000,orig:635000,prem:805000,horas:4}
+  ]},
+  international:{nombre:'International',modelos:[
+    {id:'9800',nombre:'International 9800i',desc:'Compresor Bendix americano',std:540000,orig:695000,prem:880000,horas:4}
+  ]},
+  otra:{nombre:'Otra',modelos:[]}
+}
+
+function calcularKits(modelo){
+  if(!modelo)return []
+  // Opciones:
+  // 1. Solo el compresor (sin MO) - margen 30% sobre precio repuesto
+  // 2. Compresor + Instalación: precio repuesto + MO + extras menores
+  // 3. Compresor + Instalación + Revisión sistema completo
+  // MO: 2 técnicos x horas x $25K
+  var MARGEN_REPUESTO=1.3  // 30% sobre solo el compresor
+  var MARGEN_SERVICIO=1.4  // 40% sobre el paquete con instalación
+  var horas=modelo.horas
+  var MO=horas*2*25000  // 2 técnicos
+  var EXTRAS_BASICOS=85000  // empaquetadura + mangueras + abrazaderas
+  var EXTRAS_COMPLETOS=220000  // + filtro secador + válvulas + revisión
+
+  var soloCompresor=Math.round(modelo.orig * MARGEN_REPUESTO / 1000) * 1000
+  var compreInstalacion=Math.round((modelo.orig + MO + EXTRAS_BASICOS) * MARGEN_SERVICIO / 1000) * 1000
+  var paqueteCompleto=Math.round((modelo.prem + MO + EXTRAS_COMPLETOS + 85000) * MARGEN_SERVICIO / 1000) * 1000
+
+  return [
+    {
+      tipo:'solo',
+      nombre:'Solo Compresor',
+      marca:'WABCO · BENDIX · OEM',
+      desc:'Venta del compresor original. Lo retiras o despachamos.',
+      precio:soloCompresor,
+      garantia:'12 meses sobre compresor',
+      destacado:false,
+      features:[
+        'Compresor original Wabco / Bendix',
+        'Empaquetaduras y juntas incluidas',
+        'Manual técnico de instalación',
+        'Despacho RM con costo adicional',
+        'Garantía 12 meses sobre compresor'
+      ]
+    },
+    {
+      tipo:'instalacion',
+      nombre:'Compresor + Instalación',
+      marca:'WABCO · BENDIX · Servicio a domicilio',
+      desc:'El más solicitado · Compresor instalado en tu base',
+      precio:compreInstalacion,
+      garantia:'12 meses compresor + 6 meses instalación',
+      destacado:true,
+      features:[
+        'Compresor original Wabco / Bendix',
+        '2 técnicos especialistas · '+horas+' horas',
+        'Empaquetaduras y juntas nuevas',
+        'Mangueras de admisión nuevas si requieren',
+        'Abrazaderas y conexiones nuevas',
+        'Prueba de presión post-instalación',
+        'Reemplazo aceite circuito si requiere',
+        'Garantía 12 meses compresor + 6 meses instalación'
+      ]
+    },
+    {
+      tipo:'completo',
+      nombre:'Paquete Completo Aire',
+      marca:'KNORR-BREMSE · Premium alemán',
+      desc:'Compresor premium + revisión integral del sistema neumático',
+      precio:paqueteCompleto,
+      garantia:'12 meses compresor + sistema',
+      destacado:false,
+      features:[
+        'Compresor Knorr-Bremse alemán premium',
+        '2 técnicos especialistas senior · '+(horas+1)+' horas',
+        'Set completo de juntas y empaquetaduras',
+        'Mangueras de admisión y descarga nuevas',
+        'Revisión y limpieza filtro secador de aire',
+        'Test de válvulas reguladora y de seguridad',
+        'Inspección depósitos de aire',
+        'Detección de fugas con jabón',
+        'Calibración presión del sistema',
+        'Reporte técnico escrito',
+        'Garantía 12 meses sobre compresor y sistema'
+      ]
+    }
+  ]
+}
+
+var marcaSeleccionada=null,modeloSeleccionado=null
+
+// Render marcas
+var marcasHTML=Object.keys(DATA).map(function(id){
+  var d=DATA[id]
+  var modelosTexto=id==='otra'?'Cotizar WhatsApp':(d.modelos.length+' modelos')
+  return '<div class="marca-btn" data-marca="'+id+'">'+logoHTML(id)+'<div class="marca-nombre">'+d.nombre+'</div><div class="marca-modelos">'+modelosTexto+'</div></div>'
+}).join('')
+document.getElementById('marcas').innerHTML=marcasHTML
+
+document.querySelectorAll('.marca-btn').forEach(function(b){
+  b.onclick=function(){
+    document.querySelectorAll('.marca-btn').forEach(function(x){x.classList.remove('active')})
+    b.classList.add('active')
+    marcaSeleccionada=b.getAttribute('data-marca')
+    renderModelos()
+    document.getElementById('kits-section').classList.remove('active')
+  }
+})
+
+function renderModelos(){
+  var data=DATA[marcaSeleccionada]
+  var sec=document.getElementById('modelos-section')
+  var grid=document.getElementById('modelos')
+  
+  if(marcaSeleccionada==='otra'){
+    sec.classList.add('active')
+    grid.innerHTML='<div style="grid-column:1/-1;background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:20px;text-align:center"><div style="font-size:13px;color:var(--txt2);margin-bottom:14px">Para otras marcas (DAF, Hino, Foton, Mack) cotizamos el compresor específico.</div><a href="https://wa.me/56945210814?text=Hola%2C%20necesito%20compresor%20de%20aire%20para%20mi%20cami%C3%B3n" target="_blank" style="background:#25D366;color:#000;padding:10px 18px;border-radius:6px;font-family:Syne,sans-serif;font-weight:700;font-size:12px;text-decoration:none;display:inline-block">💬 Cotizar</a></div>'
+    sec.scrollIntoView({behavior:'smooth',block:'start'})
+    return
+  }
+  
+  grid.innerHTML=data.modelos.map(function(m){
+    return '<div class="modelo-btn" data-id="'+m.id+'"><div class="modelo-nombre">'+m.nombre+'</div><div class="modelo-motor">'+m.desc+'</div></div>'
+  }).join('')
+  
+  document.querySelectorAll('.modelo-btn').forEach(function(b){
+    b.onclick=function(){
+      document.querySelectorAll('.modelo-btn').forEach(function(x){x.classList.remove('active')})
+      b.classList.add('active')
+      var id=b.getAttribute('data-id')
+      modeloSeleccionado=data.modelos.find(function(m){return m.id===id})
+      renderKits()
+    }
+  })
+  
+  sec.classList.add('active')
+  sec.scrollIntoView({behavior:'smooth',block:'start'})
+}
+
+function renderKits(){
+  var sec=document.getElementById('kits-section')
+  var grid=document.getElementById('kits-grid')
+  var titulo=document.getElementById('kit-titulo')
+  var sub=document.getElementById('kit-sub')
+  
+  titulo.textContent='Opciones para '+DATA[marcaSeleccionada].nombre+' '+modeloSeleccionado.nombre
+  sub.textContent=modeloSeleccionado.desc+' · Tiempo instalación: '+modeloSeleccionado.horas+' horas con 2 técnicos en tu base'
+  
+  var kits=calcularKits(modeloSeleccionado)
+  grid.innerHTML=kits.map(function(k){
+    var msg='Hola%2C%20quiero%20cotizar%20'+encodeURIComponent(k.nombre)+'%20para%20mi%20'+encodeURIComponent(DATA[marcaSeleccionada].nombre+' '+modeloSeleccionado.nombre)
+    return '<div class="kit-card '+(k.destacado?'destacado':'')+'">'+
+      (k.destacado?'<div class="kit-badge">MÁS ELEGIDO</div>':'')+
+      '<div class="kit-nombre">'+k.nombre+'</div>'+
+      '<div class="kit-marca">'+k.marca+'</div>'+
+      '<div class="kit-desc">'+k.desc+'</div>'+
+      '<div class="kit-precio"><span class="curr">$</span>'+k.precio.toLocaleString('es-CL')+'</div>'+
+      '<div class="kit-precio-desc">Precio cerrado</div>'+
+      '<ul class="kit-features">'+k.features.map(function(f){return '<li>'+f+'</li>'}).join('')+'</ul>'+
+      '<div class="kit-tiempo">⏱ '+k.garantia+'</div>'+
+      '<a href="https://wa.me/56945210814?text='+msg+'" target="_blank" class="kit-cta" style="margin-top:12px">💬 Cotizar esta opción</a>'+
+    '</div>'
+  }).join('')
+  
+  sec.classList.add('active')
+  setTimeout(function(){sec.scrollIntoView({behavior:'smooth',block:'start'})},200)
+}
+</script>
+</body>
+</html>

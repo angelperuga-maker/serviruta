@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Frenos Auto y Camioneta a Domicilio | Serviruta</title>
+<meta name="description" content="Cambio de frenos a domicilio para autos y camionetas. Pastillas, discos, sistema completo. Marcas Brembo, Akebono, Pagid, Textar, TRW. Sin trasladar el auto.">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;line-height:1.6;}
+.container{max-width:1000px;margin:0 auto;padding:0 16px;}
+.header{background:rgba(15,15,18,0.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--borde);padding:12px 0;position:sticky;top:0;z-index:100;}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.logo{font-family:"Syne",sans-serif;font-weight:800;font-size:20px;color:var(--txt);text-decoration:none;}
+.logo span{color:var(--rojo);}
+.btn-wa-h{background:#25D366;color:#000;padding:7px 14px;border-radius:6px;font-family:"Syne",sans-serif;font-weight:700;font-size:12px;text-decoration:none;}
+.hero{padding:50px 0 30px;text-align:center;border-bottom:1px solid var(--borde);background:radial-gradient(circle at 50% 0%,rgba(232,33,10,0.06) 0%,transparent 60%);}
+.hero-eyebrow{display:inline-block;background:rgba(232,33,10,0.12);border:1px solid rgba(232,33,10,0.4);color:var(--rojo);font-family:"Syne",sans-serif;font-weight:700;font-size:10px;letter-spacing:2px;padding:5px 12px;border-radius:20px;text-transform:uppercase;margin-bottom:18px;}
+.hero h1{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(28px,5vw,46px);line-height:1.1;margin-bottom:14px;}
+.hero h1 .rojo{color:var(--rojo);}
+.hero p{font-size:15px;color:var(--txt2);max-width:600px;margin:0 auto 18px;}
+.hero-trust{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;font-size:11px;color:var(--txt3);margin-top:10px;}
+.hero-trust span::before{content:"●";color:var(--verde);margin-right:4px;}
+.alerta-servicio{background:linear-gradient(135deg,rgba(232,33,10,0.1),rgba(232,33,10,0.02));border:1px solid rgba(232,33,10,0.4);border-radius:12px;padding:14px 20px;margin:20px auto 0;max-width:680px;font-size:12px;color:var(--txt);display:flex;align-items:center;gap:12px;}
+.alerta-servicio b{color:var(--rojo);}
+.tipo-tabs{display:flex;gap:8px;justify-content:center;margin-top:20px;flex-wrap:wrap;}
+.tipo-tab{background:var(--c2);border:1px solid var(--borde);color:var(--txt2);padding:8px 18px;border-radius:20px;cursor:pointer;font-family:"Syne",sans-serif;font-weight:700;font-size:12px;}
+.tipo-tab.active{background:var(--rojo);color:#fff;border-color:var(--rojo);}
+section{padding:40px 0;}
+.sec-eyebrow{color:var(--rojo);font-family:"Syne",sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;}
+.sec-titulo{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(22px,3.5vw,30px);line-height:1.2;margin-bottom:10px;}
+.sec-titulo .rojo{color:var(--rojo);}
+.sec-sub{font-size:14px;color:var(--txt2);max-width:650px;margin-bottom:24px;}
+.marcas-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-top:20px;}
+.marca-btn{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px 10px;cursor:pointer;text-align:center;transition:all 0.2s;}
+.marca-btn:hover{border-color:var(--rojo);transform:translateY(-2px);}
+.marca-btn.active{border-color:var(--rojo);background:rgba(232,33,10,0.08);}
+.marca-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:12px;color:var(--txt);}
+.marca-modelos{font-size:9px;color:var(--txt3);margin-top:2px;}
+.modelos-section{display:none;margin-top:30px;}
+.modelos-section.active{display:block;}
+.modelos-titulo{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;color:var(--rojo);margin-bottom:12px;text-transform:uppercase;letter-spacing:1px;}
+.modelos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;}
+.modelo-btn{background:var(--c3);border:1px solid var(--borde);border-radius:8px;padding:12px;cursor:pointer;font-size:12px;text-align:left;position:relative;}
+.modelo-btn:hover{border-color:var(--rojo);}
+.modelo-btn.active{background:var(--rojo);color:#fff;border-color:var(--rojo);}
+.modelo-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;}
+.modelo-motor{font-size:10px;opacity:0.8;margin-top:2px;}
+.modelo-tag{position:absolute;top:6px;right:6px;background:rgba(245,197,24,0.2);color:var(--amarillo);font-size:8px;padding:2px 6px;border-radius:4px;font-weight:700;}
+.modelo-btn.active .modelo-tag{background:rgba(255,255,255,0.25);color:#fff;}
+.kits-section{display:none;margin-top:30px;padding-top:30px;border-top:1px solid var(--borde);}
+.kits-section.active{display:block;}
+.kit-titulo{font-family:"Syne",sans-serif;font-weight:800;font-size:20px;margin-bottom:6px;}
+.kit-sub{font-size:13px;color:var(--txt3);margin-bottom:20px;}
+.kits-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;}
+.kit-card{background:var(--c2);border:1px solid var(--borde);border-radius:14px;padding:22px;position:relative;}
+.kit-card.destacado{border:2px solid var(--rojo);background:linear-gradient(180deg,rgba(232,33,10,0.06),var(--c2) 50%);}
+.kit-badge{position:absolute;top:-12px;right:20px;background:var(--rojo);color:#fff;padding:5px 12px;border-radius:20px;font-family:"Syne",sans-serif;font-weight:700;font-size:10px;letter-spacing:1px;}
+.kit-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;color:var(--rojo);margin-bottom:4px;}
+.kit-marca{font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;font-weight:600;}
+.kit-desc{font-size:11px;color:var(--txt3);margin-bottom:14px;}
+.kit-precio{font-family:"Syne",sans-serif;font-weight:900;font-size:30px;margin-bottom:2px;}
+.kit-precio .curr{font-size:16px;color:var(--txt3);}
+.kit-precio-desc{font-size:10px;color:var(--txt3);margin-bottom:16px;}
+.kit-features{list-style:none;margin-bottom:18px;}
+.kit-features li{font-size:12px;color:var(--txt);padding:6px 0 6px 20px;position:relative;border-bottom:1px dashed var(--c3);}
+.kit-features li:last-child{border-bottom:none;}
+.kit-features li::before{content:"✓";position:absolute;left:0;color:var(--verde);font-weight:bold;}
+.kit-cta{display:block;text-align:center;background:#25D366;color:#000;padding:11px;border-radius:8px;font-family:"Syne",sans-serif;font-weight:800;font-size:13px;text-decoration:none;}
+.kit-tiempo{display:flex;align-items:center;gap:8px;background:rgba(96,165,250,0.08);border-left:3px solid var(--azul);border-radius:6px;padding:8px 10px;margin-top:12px;font-size:11px;color:var(--txt2);}
+.info-block{background:var(--c1);}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:20px;}
+.info-card{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:18px;}
+.info-icon{font-size:24px;margin-bottom:8px;}
+.info-tit{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;margin-bottom:4px;}
+.info-desc{font-size:11px;color:var(--txt2);line-height:1.6;}
+.cta-final{background:linear-gradient(135deg,var(--rojo) 0%,#a8170a 100%);text-align:center;padding:50px 20px;}
+.cta-final h2{font-family:"Syne",sans-serif;font-weight:900;font-size:clamp(22px,4vw,30px);margin-bottom:10px;color:#fff;}
+.cta-final p{font-size:14px;color:rgba(255,255,255,0.9);max-width:550px;margin:0 auto 22px;}
+.cta-final .btn-wa-f{background:#fff;color:#000;padding:16px 30px;border-radius:10px;font-family:"Syne",sans-serif;font-weight:800;font-size:15px;text-decoration:none;display:inline-block;}
+.footer{background:#000;padding:30px 0;text-align:center;border-top:1px solid var(--borde);}
+.wa-float{position:fixed;bottom:24px;right:24px;width:56px;height:56px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 6px 20px rgba(37,211,102,0.4);z-index:99;}
+@media(max-width:640px){.marcas-grid{grid-template-columns:repeat(3,1fr);}.kit-card{padding:18px;}}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="container header-inner">
+    <a href="https://serviruta.cl" class="logo">SERVI<span>RUTA</span></a>
+    <a href="https://wa.me/56945210814?text=Hola%2C%20quiero%20cotizar%20frenos%20para%20mi%20auto" class="btn-wa-h" target="_blank">💬 WhatsApp</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">Frenos Auto y Camioneta · A domicilio</div>
+    <h1>Frenos profesionales <span class="rojo">en tu casa o trabajo.</span></h1>
+    <p>Cambio de pastillas, discos y sistema completo de frenos en tu base. Marcas Brembo, Akebono, Textar, TRW, Pagid. Sin trasladar el auto. 1-2 horas el servicio.</p>
+    <div class="hero-trust">
+      <span>Brembo · Akebono · Textar · TRW · Pagid</span>
+      <span>1 a 2 horas en tu base</span>
+      <span>Garantía escrita 6-12 meses</span>
+    </div>
+    <div class="alerta-servicio">
+      <div style="font-size:20px">🛑</div>
+      <div><b>NO ESPERES:</b> Chillido al frenar, pedal blando o vibración significa frenos al borde. Atendemos urgencias el mismo día. Tu seguridad y la de tu familia es primero.</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="sec-eyebrow">Paso 1 · Selecciona la marca</div>
+    <h2 class="sec-titulo">¿Cuál es la <span class="rojo">marca</span> de tu vehículo?</h2>
+    <p class="sec-sub">Atendemos autos, hatchbacks, sedanes, SUV y camionetas.</p>
+
+    <div class="marcas-grid" id="marcas"></div>
+
+    <div class="modelos-section" id="modelos-section">
+      <div class="modelos-titulo">Paso 2 · Selecciona tu modelo</div>
+      <div class="tipo-tabs" id="tipo-tabs" style="display:none">
+        <div class="tipo-tab active" data-tipo="todos">Todos</div>
+        <div class="tipo-tab" data-tipo="auto">Autos</div>
+        <div class="tipo-tab" data-tipo="suv">SUV</div>
+        <div class="tipo-tab" data-tipo="camioneta">Camionetas</div>
+      </div>
+      <div class="modelos-grid" id="modelos" style="margin-top:14px"></div>
+    </div>
+
+    <div class="kits-section" id="kits-section">
+      <div class="kit-titulo" id="kit-titulo">Opciones disponibles</div>
+      <div class="kit-sub" id="kit-sub">Precio cerrado en tu base.</div>
+      <div class="kits-grid" id="kits-grid"></div>
+    </div>
+  </div>
+</section>
+
+<section class="info-block">
+  <div class="container">
+    <div class="sec-eyebrow">Por qué Serviruta</div>
+    <h2 class="sec-titulo">Frenos profesionales <span class="rojo">donde estés.</span></h2>
+    <p class="sec-sub">El servicio de frenos es uno de los más sensibles del auto. Por eso usamos marcas top y técnicos especializados.</p>
+
+    <div class="info-grid">
+      <div class="info-card"><div class="info-icon">🏠</div><div class="info-tit">En tu casa o trabajo</div><div class="info-desc">No vas al taller, el taller va a ti. Casa, edificio, estacionamiento, oficina.</div></div>
+      <div class="info-card"><div class="info-icon">⏱️</div><div class="info-tit">1-2 horas</div><div class="info-desc">Auto: 1h pastillas · 1.5h discos · 2h sistema completo. Mismo día.</div></div>
+      <div class="info-card"><div class="info-icon">🛑</div><div class="info-tit">Marcas top</div><div class="info-desc">Brembo, Akebono, Pagid, Textar, TRW. Nada de genéricos de mala calidad.</div></div>
+      <div class="info-card"><div class="info-icon">📝</div><div class="info-tit">Garantía escrita</div><div class="info-desc">6 meses pastillas · 12 meses discos + pastillas · 12 meses sistema completo.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-final">
+  <h2>Frenos seguros, en tu casa.</h2>
+  <p>Cotiza por WhatsApp con marca, modelo y año. Agendamos el día que te acomode.</p>
+  <a href="https://wa.me/56945210814?text=Hola%2C%20quiero%20cotizar%20frenos%20para%20mi%20auto" class="btn-wa-f" target="_blank">💬 Cotizar mis frenos</a>
+  <div style="margin-top:16px;color:rgba(255,255,255,0.85);font-family:'Syne',sans-serif;font-weight:700;font-size:18px;">+56 9 4521 0814</div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:18px;margin-bottom:8px;">SERVI<span style="color:var(--rojo)">RUTA</span></div>
+    <div style="font-size:12px;color:var(--txt3);">Mecánica móvil profesional · Toda la RM</div>
+    <div style="font-size:11px;color:var(--txt3);margin-top:6px;">+56 9 4521 0814 · contacto@serviruta.cl · serviruta.cl</div>
+  </div>
+</footer>
+
+<a href="https://wa.me/56945210814?text=Hola%2C%20quiero%20cotizar%20frenos%20para%20mi%20auto" class="wa-float" target="_blank">💬</a>
+
+<script>
+var LOGOS={
+  toyota:{c:'#EB0A1E',l:'T',n:'Toyota',u:'https://www.carlogos.org/car-logos/toyota-logo.png'},
+  hyundai:{c:'#002C5F',l:'H',n:'Hyundai',u:'https://www.carlogos.org/car-logos/hyundai-logo.png'},
+  kia:{c:'#BB162B',l:'K',n:'Kia',u:'https://www.carlogos.org/car-logos/kia-logo.png'},
+  chevrolet:{c:'#FFC72C',l:'✚',n:'Chevrolet',u:'https://www.carlogos.org/car-logos/chevrolet-logo.png'},
+  nissan:{c:'#C3002F',l:'N',n:'Nissan',u:'https://www.carlogos.org/car-logos/nissan-logo.png'},
+  suzuki:{c:'#1C1B5E',l:'S',n:'Suzuki',u:'https://www.carlogos.org/car-logos/suzuki-logo.png'},
+  mazda:{c:'#101820',l:'M',n:'Mazda',u:'https://www.carlogos.org/car-logos/mazda-logo.png'},
+  mitsubishi:{c:'#E60012',l:'◆',n:'Mitsubishi',u:'https://www.carlogos.org/car-logos/mitsubishi-logo.png'},
+  vw:{c:'#001E50',l:'VW',n:'Volkswagen',u:'https://www.carlogos.org/car-logos/volkswagen-logo.png'},
+  ford:{c:'#003478',l:'F',n:'Ford',u:'https://www.carlogos.org/car-logos/ford-logo.png'},
+  peugeot:{c:'#000',l:'P',n:'Peugeot',u:'https://www.carlogos.org/car-logos/peugeot-logo.png'},
+  honda:{c:'#CC0000',l:'H',n:'Honda',u:'https://www.carlogos.org/car-logos/honda-logo.png'},
+  subaru:{c:'#003DA5',l:'★',n:'Subaru',u:'https://www.carlogos.org/car-logos/subaru-logo.png'},
+  otra:{c:'#55525E',l:'🔧',n:'Otra',u:null}
+}
+
+function logoHTML(id){
+  var m=LOGOS[id]
+  var tc=(id==='chevrolet')?'#000':'#fff'
+  if(m.u){
+    return '<div class="marca-icon" style="width:50px;height:50px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;box-shadow:0 4px 12px rgba(0,0,0,0.5);border:2px solid '+m.c+';overflow:hidden;padding:5px"><img src="'+m.u+'" alt="'+m.n+'" style="max-width:100%;max-height:100%;object-fit:contain" onerror="this.parentElement.style.background=\''+m.c+'\';this.parentElement.style.color=\''+tc+'\';this.parentElement.style.fontFamily=\'Syne,sans-serif\';this.parentElement.style.fontWeight=\'800\';this.parentElement.style.fontSize=\'18px\';this.parentElement.innerHTML=\''+m.l+'\'"></div>'
+  }
+  return '<div class="marca-icon" style="width:50px;height:50px;border-radius:50%;background:'+m.c+';color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;font-family:Syne,sans-serif;font-weight:800;font-size:18px;box-shadow:0 4px 12px rgba(0,0,0,0.4)">'+m.l+'</div>'
+}
+
+// DATA: precios kit frenos por modelo
+// std: TRW/Hella · orig: Akebono/Pagid · prem: Brembo/Textar
+var DATA={
+  toyota:{nombre:'Toyota',modelos:[
+    {id:'yaris',nombre:'Yaris',desc:'Frenos compactos',past1eje:42000,disc1eje:95000,sistema:165000,horas:1,tipo:'auto'},
+    {id:'corolla',nombre:'Corolla',desc:'Frenos sedán',past1eje:48000,disc1eje:115000,sistema:195000,horas:1.2,tipo:'auto'},
+    {id:'rav4',nombre:'RAV4',desc:'Frenos SUV',past1eje:65000,disc1eje:155000,sistema:265000,horas:1.5,tipo:'suv'},
+    {id:'hilux24',nombre:'Hilux 2.4',desc:'Frenos camioneta',past1eje:78000,disc1eje:195000,sistema:325000,horas:1.5,tipo:'camioneta'},
+    {id:'hilux28',nombre:'Hilux 2.8',desc:'Frenos pickup reforzado',past1eje:85000,disc1eje:215000,sistema:355000,horas:1.5,tipo:'camioneta'},
+    {id:'fortuner',nombre:'Fortuner',desc:'Frenos SUV grande',past1eje:88000,disc1eje:225000,sistema:375000,horas:1.5,tipo:'suv'}
+  ]},
+  hyundai:{nombre:'Hyundai',modelos:[
+    {id:'accent',nombre:'Accent',desc:'Frenos compactos',past1eje:38000,disc1eje:88000,sistema:155000,horas:1,tipo:'auto'},
+    {id:'i10',nombre:'i10',desc:'Frenos ultracompactos',past1eje:35000,disc1eje:82000,sistema:145000,horas:1,tipo:'auto'},
+    {id:'creta',nombre:'Creta',desc:'Frenos SUV pequeño',past1eje:55000,disc1eje:135000,sistema:225000,horas:1.3,tipo:'suv'},
+    {id:'tucson',nombre:'Tucson',desc:'Frenos SUV mediano',past1eje:62000,disc1eje:155000,sistema:265000,horas:1.5,tipo:'suv'},
+    {id:'h100',nombre:'H100/Porter',desc:'Frenos furgón',past1eje:58000,disc1eje:140000,sistema:235000,horas:1.3,tipo:'camioneta'},
+    {id:'santafe',nombre:'Santa Fe',desc:'Frenos SUV grande',past1eje:72000,disc1eje:175000,sistema:295000,horas:1.5,tipo:'suv'}
+  ]},
+  kia:{nombre:'Kia',modelos:[
+    {id:'morning',nombre:'Morning',desc:'Frenos ultracompactos',past1eje:32000,disc1eje:78000,sistema:135000,horas:1,tipo:'auto'},
+    {id:'rio',nombre:'Rio/Soluto',desc:'Frenos compactos',past1eje:40000,disc1eje:92000,sistema:160000,horas:1,tipo:'auto'},
+    {id:'sportage',nombre:'Sportage',desc:'Frenos SUV mediano',past1eje:62000,disc1eje:155000,sistema:265000,horas:1.5,tipo:'suv'},
+    {id:'sorento',nombre:'Sorento',desc:'Frenos SUV grande',past1eje:78000,disc1eje:195000,sistema:325000,horas:1.5,tipo:'suv'}
+  ]},
+  chevrolet:{nombre:'Chevrolet',modelos:[
+    {id:'spark',nombre:'Spark/Spark GT',desc:'Frenos compactos',past1eje:35000,disc1eje:82000,sistema:140000,horas:1,tipo:'auto'},
+    {id:'sail',nombre:'Sail',desc:'Frenos sedán económico',past1eje:38000,disc1eje:88000,sistema:155000,horas:1,tipo:'auto'},
+    {id:'onix',nombre:'Onix Turbo',desc:'Frenos hatch Turbo',past1eje:45000,disc1eje:105000,sistema:185000,horas:1.2,tipo:'auto'},
+    {id:'tracker',nombre:'Tracker',desc:'Frenos SUV pequeño',past1eje:52000,disc1eje:125000,sistema:215000,horas:1.3,tipo:'suv'},
+    {id:'captiva',nombre:'Captiva',desc:'Frenos SUV grande',past1eje:68000,disc1eje:165000,sistema:285000,horas:1.5,tipo:'suv'},
+    {id:'colorado',nombre:'Colorado',desc:'Frenos camioneta',past1eje:75000,disc1eje:185000,sistema:315000,horas:1.5,tipo:'camioneta'},
+    {id:'dmax',nombre:'D-Max',desc:'Frenos pickup 4x4',past1eje:82000,disc1eje:205000,sistema:345000,horas:1.5,tipo:'camioneta'}
+  ]},
+  nissan:{nombre:'Nissan',modelos:[
+    {id:'march',nombre:'March',desc:'Frenos compactos',past1eje:38000,disc1eje:88000,sistema:155000,horas:1,tipo:'auto'},
+    {id:'versa',nombre:'Versa',desc:'Frenos sedán',past1eje:42000,disc1eje:98000,sistema:170000,horas:1,tipo:'auto'},
+    {id:'qashqai',nombre:'Qashqai',desc:'Frenos SUV mediano',past1eje:58000,disc1eje:140000,sistema:235000,horas:1.5,tipo:'suv'},
+    {id:'xtrail',nombre:'X-Trail',desc:'Frenos SUV grande',past1eje:72000,disc1eje:175000,sistema:295000,horas:1.5,tipo:'suv'},
+    {id:'navara',nombre:'Navara/Frontier',desc:'Frenos camioneta 4x4',past1eje:82000,disc1eje:205000,sistema:345000,horas:1.5,tipo:'camioneta'}
+  ]},
+  suzuki:{nombre:'Suzuki',modelos:[
+    {id:'alto',nombre:'Alto/Alto 800',desc:'Frenos ultracompactos',past1eje:28000,disc1eje:68000,sistema:115000,horas:0.8,tipo:'auto'},
+    {id:'swift',nombre:'Swift',desc:'Frenos compactos',past1eje:38000,disc1eje:88000,sistema:155000,horas:1,tipo:'auto'},
+    {id:'baleno',nombre:'Baleno',desc:'Frenos compactos',past1eje:40000,disc1eje:92000,sistema:165000,horas:1,tipo:'auto'},
+    {id:'vitara',nombre:'Vitara/Grand Vitara',desc:'Frenos SUV compacto',past1eje:55000,disc1eje:130000,sistema:225000,horas:1.3,tipo:'suv'},
+    {id:'jimny',nombre:'Jimny',desc:'Frenos 4x4',past1eje:62000,disc1eje:155000,sistema:265000,horas:1.5,tipo:'suv'}
+  ]},
+  mazda:{nombre:'Mazda',modelos:[
+    {id:'3',nombre:'Mazda 3',desc:'Frenos SkyActiv',past1eje:48000,disc1eje:115000,sistema:195000,horas:1.2,tipo:'auto'},
+    {id:'cx5',nombre:'CX-5',desc:'Frenos SUV mediano',past1eje:68000,disc1eje:165000,sistema:285000,horas:1.5,tipo:'suv'},
+    {id:'bt50',nombre:'BT-50',desc:'Frenos camioneta 3.2',past1eje:88000,disc1eje:225000,sistema:375000,horas:1.5,tipo:'camioneta'}
+  ]},
+  mitsubishi:{nombre:'Mitsubishi',modelos:[
+    {id:'asx',nombre:'ASX',desc:'Frenos SUV compacto',past1eje:58000,disc1eje:140000,sistema:235000,horas:1.3,tipo:'suv'},
+    {id:'outlander',nombre:'Outlander',desc:'Frenos SUV mediano',past1eje:68000,disc1eje:165000,sistema:285000,horas:1.5,tipo:'suv'},
+    {id:'l200',nombre:'L200/Triton',desc:'Frenos camioneta 2.4',past1eje:82000,disc1eje:205000,sistema:345000,horas:1.5,tipo:'camioneta'},
+    {id:'montero',nombre:'Montero Sport',desc:'Frenos SUV grande 4x4',past1eje:85000,disc1eje:215000,sistema:355000,horas:1.5,tipo:'suv'}
+  ]},
+  vw:{nombre:'Volkswagen',modelos:[
+    {id:'gol',nombre:'Gol',desc:'Frenos compactos',past1eje:40000,disc1eje:92000,sistema:165000,horas:1,tipo:'auto'},
+    {id:'polo',nombre:'Polo',desc:'Frenos compactos',past1eje:42000,disc1eje:98000,sistema:170000,horas:1,tipo:'auto'},
+    {id:'tiguan',nombre:'Tiguan',desc:'Frenos SUV 2.0 TSI',past1eje:78000,disc1eje:195000,sistema:325000,horas:1.5,tipo:'suv'},
+    {id:'amarok',nombre:'Amarok',desc:'Frenos camioneta TDI',past1eje:88000,disc1eje:225000,sistema:375000,horas:1.5,tipo:'camioneta'}
+  ]},
+  ford:{nombre:'Ford',modelos:[
+    {id:'fiesta',nombre:'Fiesta',desc:'Frenos compactos',past1eje:40000,disc1eje:92000,sistema:165000,horas:1,tipo:'auto'},
+    {id:'focus',nombre:'Focus',desc:'Frenos sedán',past1eje:48000,disc1eje:115000,sistema:195000,horas:1.2,tipo:'auto'},
+    {id:'ecosport',nombre:'EcoSport',desc:'Frenos SUV pequeño',past1eje:55000,disc1eje:130000,sistema:225000,horas:1.3,tipo:'suv'},
+    {id:'ranger22',nombre:'Ranger 2.2',desc:'Frenos camioneta',past1eje:78000,disc1eje:195000,sistema:325000,horas:1.5,tipo:'camioneta'},
+    {id:'ranger32',nombre:'Ranger 3.2',desc:'Frenos pickup pesada',past1eje:88000,disc1eje:225000,sistema:375000,horas:1.5,tipo:'camioneta'}
+  ]},
+  peugeot:{nombre:'Peugeot',modelos:[
+    {id:'208',nombre:'208',desc:'Frenos PureTech',past1eje:48000,disc1eje:115000,sistema:195000,horas:1.2,tipo:'auto'},
+    {id:'2008',nombre:'2008',desc:'Frenos SUV pequeño',past1eje:58000,disc1eje:140000,sistema:235000,horas:1.3,tipo:'suv'},
+    {id:'3008',nombre:'3008',desc:'Frenos SUV mediano',past1eje:72000,disc1eje:175000,sistema:295000,horas:1.5,tipo:'suv'}
+  ]},
+  honda:{nombre:'Honda',modelos:[
+    {id:'city',nombre:'City',desc:'Frenos sedán',past1eje:45000,disc1eje:108000,sistema:185000,horas:1.2,tipo:'auto'},
+    {id:'civic',nombre:'Civic',desc:'Frenos sedán/hatch',past1eje:55000,disc1eje:130000,sistema:225000,horas:1.2,tipo:'auto'},
+    {id:'hrv',nombre:'HR-V',desc:'Frenos SUV compacto',past1eje:62000,disc1eje:150000,sistema:255000,horas:1.3,tipo:'suv'},
+    {id:'crv',nombre:'CR-V',desc:'Frenos SUV mediano',past1eje:72000,disc1eje:175000,sistema:295000,horas:1.5,tipo:'suv'}
+  ]},
+  subaru:{nombre:'Subaru',modelos:[
+    {id:'impreza',nombre:'Impreza',desc:'Frenos boxer',past1eje:55000,disc1eje:130000,sistema:225000,horas:1.3,tipo:'auto'},
+    {id:'xv',nombre:'XV/Crosstrek',desc:'Frenos SUV compacto',past1eje:62000,disc1eje:150000,sistema:255000,horas:1.3,tipo:'suv'},
+    {id:'forester',nombre:'Forester',desc:'Frenos SUV mediano',past1eje:68000,disc1eje:165000,sistema:285000,horas:1.5,tipo:'suv'},
+    {id:'outback',nombre:'Outback',desc:'Frenos SUV mediano',past1eje:68000,disc1eje:165000,sistema:285000,horas:1.5,tipo:'suv'}
+  ]},
+  otra:{nombre:'Otra',modelos:[]}
+}
+
+function calcularKits(modelo){
+  if(!modelo)return []
+  // 3 opciones:
+  // 1. Pastillas (1 eje) - cambio rápido
+  // 2. Pastillas + discos (1 eje) - servicio completo de un eje
+  // 3. Sistema completo 4 ruedas + líquido + sangrado
+  // Margen 50% para autos/SUV, 30% para camionetas
+  var tipo=modelo.tipo
+  var MARGEN = tipo==='camioneta' ? 1.3 : 1.5
+  var horas=modelo.horas
+  
+  var MO_PASTILLAS=horas*30000  // 1 técnico
+  var MO_COMPLETO=horas*60000  // técnico+ayudante
+  var MO_SISTEMA=(horas+0.5)*70000  // técnico+ayudante con tiempo extra
+
+  var EXTRAS_PASTILLAS=22000
+  var EXTRAS_DISCOS=45000
+  var EXTRAS_SISTEMA=95000
+
+  var soloEjeP=Math.round((modelo.past1eje + MO_PASTILLAS + EXTRAS_PASTILLAS) * MARGEN / 1000) * 1000
+  var ejeCompleto=Math.round((modelo.disc1eje + MO_COMPLETO + EXTRAS_DISCOS) * MARGEN / 1000) * 1000
+  var sistemaCompleto=Math.round((modelo.sistema + MO_SISTEMA + EXTRAS_SISTEMA) * MARGEN / 1000) * 1000
+
+  return [
+    {
+      tipo:'pastillas',
+      nombre:'Solo Pastillas (1 eje)',
+      marca:'TRW · HELLA · Estándar',
+      desc:'Cambio rápido de pastillas en un eje (delantero o trasero)',
+      precio:soloEjeP,
+      garantia:'6 meses',
+      destacado:false,
+      features:[
+        'Pastillas TRW / Hella calidad estándar',
+        'Limpieza de calipers',
+        'Revisión discos (sin cambio)',
+        'Líquido de freno completado',
+        '1 técnico · '+horas+' hora aprox.',
+        'Garantía 6 meses sobre pastillas'
+      ]
+    },
+    {
+      tipo:'completo',
+      nombre:'Pastillas + Discos (1 eje)',
+      marca:'AKEBONO · PAGID · OEM',
+      desc:'El más solicitado · Servicio completo de un eje',
+      precio:ejeCompleto,
+      garantia:'12 meses',
+      destacado:true,
+      features:[
+        'Pastillas premium Akebono / Pagid',
+        'Discos de freno nuevos del eje',
+        'Limpieza profunda de calipers',
+        'Cambio total de líquido de freno DOT4',
+        'Sangrado completo del circuito',
+        'Revisión cilindros del eje',
+        'Técnico + ayudante en tu base',
+        'Prueba dinámica de frenado',
+        'Garantía 12 meses'
+      ]
+    },
+    {
+      tipo:'sistema',
+      nombre:'Sistema Completo (4 ruedas)',
+      marca:'BREMBO · TEXTAR · Premium',
+      desc:'Frenos los 4 ejes + revisión integral del sistema',
+      precio:sistemaCompleto,
+      garantia:'12 meses + sistema',
+      destacado:false,
+      features:[
+        'Pastillas y discos Brembo / Textar en 4 ruedas',
+        'Cambio total líquido DOT4 premium',
+        'Sangrado completo del circuito',
+        'Revisión todos los cilindros',
+        'Inspección manguitos y latiguillos',
+        'Test bomba freno',
+        'Revisión freno de mano',
+        'Calibración ABS si requiere',
+        'Técnico senior + ayudante',
+        'Reporte técnico con fotos',
+        'Garantía 12 meses sobre sistema'
+      ]
+    }
+  ]
+}
+
+var marcaSeleccionada=null,modeloSeleccionado=null,tipoFiltro='todos'
+
+var marcasHTML=Object.keys(DATA).map(function(id){
+  var d=DATA[id]
+  var modelosTexto=id==='otra'?'Cotizar WhatsApp':(d.modelos.length+' modelos')
+  return '<div class="marca-btn" data-marca="'+id+'">'+logoHTML(id)+'<div class="marca-nombre">'+d.nombre+'</div><div class="marca-modelos">'+modelosTexto+'</div></div>'
+}).join('')
+document.getElementById('marcas').innerHTML=marcasHTML
+
+document.querySelectorAll('.marca-btn').forEach(function(b){
+  b.onclick=function(){
+    document.querySelectorAll('.marca-btn').forEach(function(x){x.classList.remove('active')})
+    b.classList.add('active')
+    marcaSeleccionada=b.getAttribute('data-marca')
+    tipoFiltro='todos'
+    document.querySelectorAll('.tipo-tab').forEach(function(x){x.classList.remove('active')})
+    document.querySelector('.tipo-tab[data-tipo="todos"]').classList.add('active')
+    renderModelos()
+    document.getElementById('kits-section').classList.remove('active')
+  }
+})
+
+document.querySelectorAll('.tipo-tab').forEach(function(b){
+  b.onclick=function(){
+    document.querySelectorAll('.tipo-tab').forEach(function(x){x.classList.remove('active')})
+    b.classList.add('active')
+    tipoFiltro=b.getAttribute('data-tipo')
+    renderModelos()
+  }
+})
+
+function renderModelos(){
+  var data=DATA[marcaSeleccionada]
+  var sec=document.getElementById('modelos-section')
+  var grid=document.getElementById('modelos')
+  var tabs=document.getElementById('tipo-tabs')
+  
+  if(marcaSeleccionada==='otra'){
+    sec.classList.add('active')
+    tabs.style.display='none'
+    grid.innerHTML='<div style="grid-column:1/-1;background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:20px;text-align:center"><div style="font-size:13px;color:var(--txt2);margin-bottom:14px">Para otras marcas (Audi, BMW, Mercedes, Renault, Citroën, Fiat) coordinamos los frenos específicos.</div><a href="https://wa.me/56945210814?text=Hola%2C%20mi%20auto%20no%20est%C3%A1%20en%20la%20lista%2C%20quiero%20cotizar%20frenos" target="_blank" style="background:#25D366;color:#000;padding:10px 18px;border-radius:6px;font-family:Syne,sans-serif;font-weight:700;font-size:12px;text-decoration:none;display:inline-block">💬 Cotizar</a></div>'
+    sec.scrollIntoView({behavior:'smooth',block:'start'})
+    return
+  }
+  
+  var modelosFiltrados=data.modelos
+  if(tipoFiltro!=='todos')modelosFiltrados=data.modelos.filter(function(m){return m.tipo===tipoFiltro})
+  
+  var tiposEnMarca=new Set(data.modelos.map(function(m){return m.tipo}))
+  tabs.style.display=tiposEnMarca.size>1?'flex':'none'
+  
+  if(modelosFiltrados.length===0){
+    grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--txt3);font-size:13px">No hay modelos de este tipo para '+data.nombre+'.</div>'
+  }else{
+    grid.innerHTML=modelosFiltrados.map(function(m){
+      var tagLabel=m.tipo==='auto'?'AUTO':(m.tipo==='suv'?'SUV':'CAMIONETA')
+      return '<div class="modelo-btn" data-id="'+m.id+'"><span class="modelo-tag">'+tagLabel+'</span><div class="modelo-nombre">'+m.nombre+'</div><div class="modelo-motor">'+m.desc+'</div></div>'
+    }).join('')
+  }
+  
+  document.querySelectorAll('.modelo-btn').forEach(function(b){
+    b.onclick=function(){
+      document.querySelectorAll('.modelo-btn').forEach(function(x){x.classList.remove('active')})
+      b.classList.add('active')
+      var id=b.getAttribute('data-id')
+      modeloSeleccionado=data.modelos.find(function(m){return m.id===id})
+      renderKits()
+    }
+  })
+  
+  sec.classList.add('active')
+  if(!document.getElementById('kits-section').classList.contains('active')){
+    sec.scrollIntoView({behavior:'smooth',block:'start'})
+  }
+}
+
+function renderKits(){
+  var sec=document.getElementById('kits-section')
+  var grid=document.getElementById('kits-grid')
+  var titulo=document.getElementById('kit-titulo')
+  var sub=document.getElementById('kit-sub')
+  
+  titulo.textContent='Frenos para '+DATA[marcaSeleccionada].nombre+' '+modeloSeleccionado.nombre
+  var tipoLabel=modeloSeleccionado.tipo==='auto'?'Auto':(modeloSeleccionado.tipo==='suv'?'SUV':'Camioneta')
+  sub.textContent=tipoLabel+' · '+modeloSeleccionado.desc+' · Servicio en tu base'
+  
+  var kits=calcularKits(modeloSeleccionado)
+  grid.innerHTML=kits.map(function(k){
+    var msg='Hola%2C%20quiero%20cotizar%20'+encodeURIComponent(k.nombre)+'%20para%20mi%20'+encodeURIComponent(DATA[marcaSeleccionada].nombre+' '+modeloSeleccionado.nombre)
+    return '<div class="kit-card '+(k.destacado?'destacado':'')+'">'+
+      (k.destacado?'<div class="kit-badge">MÁS ELEGIDO</div>':'')+
+      '<div class="kit-nombre">'+k.nombre+'</div>'+
+      '<div class="kit-marca">'+k.marca+'</div>'+
+      '<div class="kit-desc">'+k.desc+'</div>'+
+      '<div class="kit-precio"><span class="curr">$</span>'+k.precio.toLocaleString('es-CL')+'</div>'+
+      '<div class="kit-precio-desc">Precio cerrado · Repuesto + MO + servicio</div>'+
+      '<ul class="kit-features">'+k.features.map(function(f){return '<li>'+f+'</li>'}).join('')+'</ul>'+
+      '<div class="kit-tiempo">⏱ Garantía '+k.garantia+'</div>'+
+      '<a href="https://wa.me/56945210814?text='+msg+'" target="_blank" class="kit-cta" style="margin-top:12px">💬 Cotizar esta opción</a>'+
+    '</div>'
+  }).join('')
+  
+  sec.classList.add('active')
+  setTimeout(function(){sec.scrollIntoView({behavior:'smooth',block:'start'})},200)
+}
+</script>
+</body>
+</html>

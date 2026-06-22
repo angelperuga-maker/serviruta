@@ -47,15 +47,9 @@ h1 em{color:var(--azul);font-style:normal;}
   <label class="lbl">Tu nombre</label>
   <select class="inp" id="nombre">
     <option value="">Selecciona tu nombre...</option>
-    <option value="Jorge Ramirez">Jorge Ramírez</option>
-    
-    
-    <option value="Reynaldo Aguas">Reynaldo Aguas</option>
     <option value="Reynaldo Aguas Bertel">Reynaldo Aguas Bertel</option>
     <option value="Kiven Henz">Kiven Henz</option>
-    <option value="Humberto Morales">Humberto Morales</option>
     <option value="Giovanino Perugini">Giovanino Perugini</option>
-    <option value="Javier Honores">Javier Honores</option>
   </select>
 
   <label class="lbl">PIN de acceso</label>
@@ -66,6 +60,7 @@ h1 em{color:var(--azul);font-style:normal;}
   <button class="btn" onclick="entrar()">Entrar →</button>
   <button class="back" onclick="location.href='index.html'">← Volver al inicio</button>
 </div>
+
 <div id="screen-gps" style="display:none;min-height:100vh;flex-direction:column;align-items:center;justify-content:center;padding:36px 24px;text-align:center;background:#080808;">
   <div style="width:70px;height:70px;background:#E8210A;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:32px;margin-bottom:20px">📍</div>
   <div id="gps-nombre" style="font-family:Syne,sans-serif;font-weight:800;font-size:22px;margin-bottom:10px;color:#F0EDE6"></div>
@@ -76,12 +71,9 @@ h1 em{color:var(--azul);font-style:normal;}
 
 <script>
 const PINS = {
-        "Reynaldo Aguas": "1324",
   "Reynaldo Aguas Bertel": "1324",
   "Kiven Henz": "1313",
-  "Humberto Morales": "1456",
-  "Giovanino Perugini": "1515",
-  "Javier Honores": "1693"
+  "Giovanino Perugini": "1515"
 }
 function entrar() {
   const nombre = document.getElementById("nombre").value
@@ -111,7 +103,6 @@ function pedirUbicacion(nombre) {
 function activarGPS(nombre) {
   navigator.geolocation.getCurrentPosition(
     function(pos) {
-      // Guardar en Supabase
       var xhr = new XMLHttpRequest()
       xhr.open('POST', 'https://bqlgfmqcefledqyodkii.supabase.co/rest/v1/ubicaciones?on_conflict=tecnico')
       xhr.setRequestHeader('Content-Type', 'application/json')

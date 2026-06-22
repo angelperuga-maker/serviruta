@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Baterías a Domicilio · Auto, Camioneta y Camión | Serviruta</title>
+<meta name="description" content="Venta e instalación de baterías a domicilio para autos, camionetas y camiones. Marcas Bosch, Varta, LTH, Optima, Etna. Garantía escrita. Atención RM.">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;line-height:1.6;}
+.container{max-width:1000px;margin:0 auto;padding:0 16px;}
+.header{background:rgba(15,15,18,0.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--borde);padding:12px 0;position:sticky;top:0;z-index:100;}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.logo{font-family:"Syne",sans-serif;font-weight:800;font-size:20px;color:var(--txt);text-decoration:none;}
+.logo span{color:var(--rojo);}
+.btn-wa-h{background:#25D366;color:#000;padding:7px 14px;border-radius:6px;font-family:"Syne",sans-serif;font-weight:700;font-size:12px;text-decoration:none;}
+.hero{padding:50px 0 30px;text-align:center;border-bottom:1px solid var(--borde);background:radial-gradient(circle at 50% 0%,rgba(232,33,10,0.06) 0%,transparent 60%);}
+.hero-eyebrow{display:inline-block;background:rgba(232,33,10,0.12);border:1px solid rgba(232,33,10,0.4);color:var(--rojo);font-family:"Syne",sans-serif;font-weight:700;font-size:10px;letter-spacing:2px;padding:5px 12px;border-radius:20px;text-transform:uppercase;margin-bottom:18px;}
+.hero h1{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(28px,5vw,46px);line-height:1.1;margin-bottom:14px;}
+.hero h1 .rojo{color:var(--rojo);}
+.hero p{font-size:15px;color:var(--txt2);max-width:600px;margin:0 auto 18px;}
+.hero-trust{display:flex;gap:18px;justify-content:center;flex-wrap:wrap;font-size:11px;color:var(--txt3);margin-top:10px;}
+.hero-trust span::before{content:"●";color:var(--verde);margin-right:4px;}
+.alerta-servicio{background:linear-gradient(135deg,rgba(245,197,24,0.08),rgba(245,197,24,0.02));border:1px solid rgba(245,197,24,0.3);border-radius:12px;padding:14px 20px;margin:20px auto 0;max-width:680px;font-size:12px;color:var(--txt);display:flex;align-items:center;gap:12px;}
+.alerta-servicio b{color:var(--amarillo);}
+section{padding:40px 0;}
+.sec-eyebrow{color:var(--rojo);font-family:"Syne",sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;}
+.sec-titulo{font-family:"Syne",sans-serif;font-weight:800;font-size:clamp(22px,3.5vw,30px);line-height:1.2;margin-bottom:10px;}
+.sec-titulo .rojo{color:var(--rojo);}
+.sec-sub{font-size:14px;color:var(--txt2);max-width:650px;margin-bottom:24px;}
+
+/* Filter tipo de vehículo */
+.tipo-tabs{display:flex;gap:8px;justify-content:center;margin-bottom:24px;flex-wrap:wrap;}
+.tipo-tab{background:var(--c2);border:1px solid var(--borde);color:var(--txt2);padding:10px 20px;border-radius:24px;cursor:pointer;font-family:"Syne",sans-serif;font-weight:700;font-size:12px;display:flex;align-items:center;gap:6px;transition:all 0.2s;}
+.tipo-tab:hover{border-color:var(--rojo);}
+.tipo-tab.active{background:var(--rojo);color:#fff;border-color:var(--rojo);}
+
+.marcas-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-top:20px;}
+.marca-btn{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px 10px;cursor:pointer;text-align:center;transition:all 0.2s;}
+.marca-btn:hover{border-color:var(--rojo);transform:translateY(-2px);}
+.marca-btn.active{border-color:var(--rojo);background:rgba(232,33,10,0.08);}
+.marca-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:12px;color:var(--txt);}
+.marca-modelos{font-size:9px;color:var(--txt3);margin-top:2px;}
+.modelos-section{display:none;margin-top:30px;}
+.modelos-section.active{display:block;}
+.modelos-titulo{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;color:var(--rojo);margin-bottom:12px;text-transform:uppercase;letter-spacing:1px;}
+.modelos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;}
+.modelo-btn{background:var(--c3);border:1px solid var(--borde);border-radius:8px;padding:12px;cursor:pointer;font-size:12px;text-align:left;position:relative;}
+.modelo-btn:hover{border-color:var(--rojo);}
+.modelo-btn.active{background:var(--rojo);color:#fff;border-color:var(--rojo);}
+.modelo-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;}
+.modelo-motor{font-size:10px;opacity:0.8;margin-top:2px;}
+.amp-tag{position:absolute;top:6px;right:6px;background:rgba(96,165,250,0.2);color:var(--azul);font-size:9px;padding:2px 6px;border-radius:4px;font-weight:700;}
+.modelo-btn.active .amp-tag{background:rgba(255,255,255,0.25);color:#fff;}
+
+.kits-section{display:none;margin-top:30px;padding-top:30px;border-top:1px solid var(--borde);}
+.kits-section.active{display:block;}
+.kit-titulo{font-family:"Syne",sans-serif;font-weight:800;font-size:20px;margin-bottom:6px;}
+.kit-sub{font-size:13px;color:var(--txt3);margin-bottom:20px;}
+.kits-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;}
+.kit-card{background:var(--c2);border:1px solid var(--borde);border-radius:14px;padding:22px;position:relative;}
+.kit-card.destacado{border:2px solid var(--rojo);background:linear-gradient(180deg,rgba(232,33,10,0.06),var(--c2) 50%);}
+.kit-badge{position:absolute;top:-12px;right:20px;background:var(--rojo);color:#fff;padding:5px 12px;border-radius:20px;font-family:"Syne",sans-serif;font-weight:700;font-size:10px;letter-spacing:1px;}
+.kit-nombre{font-family:"Syne",sans-serif;font-weight:700;font-size:15px;color:var(--rojo);margin-bottom:4px;}
+.kit-marca{font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;font-weight:600;}
+.kit-desc{font-size:11px;color:var(--txt3);margin-bottom:14px;}
+.kit-precio{font-family:"Syne",sans-serif;font-weight:900;font-size:30px;margin-bottom:2px;}
+.kit-precio .curr{font-size:16px;color:var(--txt3);}
+.kit-precio-desc{font-size:10px;color:var(--txt3);margin-bottom:16px;}
+.kit-features{list-style:none;margin-bottom:18px;}
+.kit-features li{font-size:12px;color:var(--txt);padding:6px 0 6px 20px;position:relative;border-bottom:1px dashed var(--c3);}
+.kit-features li:last-child{border-bottom:none;}
+.kit-features li::before{content:"✓";position:absolute;left:0;color:var(--verde);font-weight:bold;}
+.kit-cta{display:block;text-align:center;background:#25D366;color:#000;padding:11px;border-radius:8px;font-family:"Syne",sans-serif;font-weight:800;font-size:13px;text-decoration:none;}
+.kit-tiempo{display:flex;align-items:center;gap:8px;background:rgba(96,165,250,0.08);border-left:3px solid var(--azul);border-radius:6px;padding:8px 10px;margin-top:12px;font-size:11px;color:var(--txt2);}
+.info-block{background:var(--c1);}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:20px;}
+.info-card{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:18px;}
+.info-icon{font-size:24px;margin-bottom:8px;}
+.info-tit{font-family:"Syne",sans-serif;font-weight:700;font-size:13px;margin-bottom:4px;}
+.info-desc{font-size:11px;color:var(--txt2);line-height:1.6;}
+.cta-final{background:linear-gradient(135deg,var(--rojo) 0%,#a8170a 100%);text-align:center;padding:50px 20px;}
+.cta-final h2{font-family:"Syne",sans-serif;font-weight:900;font-size:clamp(22px,4vw,30px);margin-bottom:10px;color:#fff;}
+.cta-final p{font-size:14px;color:rgba(255,255,255,0.9);max-width:550px;margin:0 auto 22px;}
+.cta-final .btn-wa-f{background:#fff;color:#000;padding:16px 30px;border-radius:10px;font-family:"Syne",sans-serif;font-weight:800;font-size:15px;text-decoration:none;display:inline-block;}
+.footer{background:#000;padding:30px 0;text-align:center;border-top:1px solid var(--borde);}
+.wa-float{position:fixed;bottom:24px;right:24px;width:56px;height:56px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 6px 20px rgba(37,211,102,0.4);z-index:99;}
+@media(max-width:640px){.marcas-grid{grid-template-columns:repeat(3,1fr);}.kit-card{padding:18px;}}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="container header-inner">
+    <a href="https://serviruta.cl" class="logo">SERVI<span>RUTA</span></a>
+    <a href="https://wa.me/56945210814?text=Hola%2C%20necesito%20cambiar%20la%20bater%C3%ADa%20de%20mi%20veh%C3%ADculo" class="btn-wa-h" target="_blank">💬 WhatsApp</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="container">
+    <div class="hero-eyebrow">Baterías · Venta + Instalación a domicilio</div>
+    <h1>Bateria nueva instalada <span class="rojo">donde tú estés.</span></h1>
+    <p>Vendemos baterías nuevas Bosch, Varta, LTH, Optima, Etna y las instalamos en tu base. Test gratuito del sistema. Garantía escrita. Atención el mismo día en RM.</p>
+    <div class="hero-trust">
+      <span>Bosch · Varta · LTH · Optima · Etna · Yuasa</span>
+      <span>Test alternador gratuito</span>
+      <span>Garantía hasta 24 meses</span>
+    </div>
+    <div class="alerta-servicio">
+      <div style="font-size:20px">🔋</div>
+      <div><b>¿Auto no parte? ¿Luces débiles?</b> Te llegamos en 1-2 horas, hacemos test de batería y alternador, instalamos batería nueva si la requieres. Llevamos cambio de batería ecológico (la usada se recicla).</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="sec-eyebrow">Paso 1 · Tipo de vehículo</div>
+    <h2 class="sec-titulo">¿Qué <span class="rojo">vehículo</span> es?</h2>
+    <p class="sec-sub">Atendemos todo tipo de vehículos: autos urbanos, SUV, camionetas, camiones diésel y vehículos pesados.</p>
+
+    <div class="tipo-tabs" id="tipo-tabs">
+      <div class="tipo-tab active" data-tipo="auto">🚗 Auto</div>
+      <div class="tipo-tab" data-tipo="suv">🚙 SUV</div>
+      <div class="tipo-tab" data-tipo="camioneta">🛻 Camioneta</div>
+      <div class="tipo-tab" data-tipo="camion">🚛 Camión</div>
+    </div>
+
+    <div class="sec-eyebrow" style="margin-top:24px">Paso 2 · Selecciona la marca</div>
+    <div class="marcas-grid" id="marcas"></div>
+
+    <div class="modelos-section" id="modelos-section">
+      <div class="modelos-titulo">Paso 3 · Selecciona tu modelo</div>
+      <div class="modelos-grid" id="modelos"></div>
+    </div>
+
+    <div class="kits-section" id="kits-section">
+      <div class="kit-titulo" id="kit-titulo">Opciones disponibles</div>
+      <div class="kit-sub" id="kit-sub">Precio cerrado incluye batería + instalación + test sistema.</div>
+      <div class="kits-grid" id="kits-grid"></div>
+    </div>
+  </div>
+</section>
+
+<section class="info-block">
+  <div class="container">
+    <div class="sec-eyebrow">Lo que incluye el servicio</div>
+    <h2 class="sec-titulo">No solo cambiamos la batería. <span class="rojo">Te revisamos el sistema completo.</span></h2>
+    <p class="sec-sub">Una batería nueva en mal sistema dura semanas. Por eso siempre incluimos test integral del sistema eléctrico antes y después de instalar.</p>
+
+    <div class="info-grid">
+      <div class="info-card"><div class="info-icon">🔋</div><div class="info-tit">Test de batería actual</div><div class="info-desc">Medimos voltaje, CCA, resistencia interna y estado de carga. Sabes si realmente necesitas cambiar.</div></div>
+      <div class="info-card"><div class="info-icon">⚡</div><div class="info-tit">Test de alternador</div><div class="info-desc">Verificamos voltaje de carga (debe ser 13.8-14.8V). Si está mal, una batería nueva dura poco.</div></div>
+      <div class="info-card"><div class="info-icon">🧪</div><div class="info-tit">Limpieza de bornes</div><div class="info-desc">Limpiamos bornes con cepillo y aplicamos protector antioxidante. Mejora la conexión.</div></div>
+      <div class="info-card"><div class="info-icon">♻️</div><div class="info-tit">Reciclaje ecológico</div><div class="info-desc">Nos llevamos tu batería vieja para reciclaje en planta certificada (Recylex Chile).</div></div>
+      <div class="info-card"><div class="info-icon">📝</div><div class="info-tit">Garantía escrita</div><div class="info-desc">12 meses estándar · 24 meses premium. Sin letra chica. Si falla, cambio inmediato.</div></div>
+      <div class="info-card"><div class="info-icon">💳</div><div class="info-tit">Pago digital</div><div class="info-desc">Transferencia, débito, crédito en cuotas. Boleta o factura según necesites.</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-final">
+  <h2>Batería nueva, instalada hoy.</h2>
+  <p>Cotiza por WhatsApp con marca, modelo y año. Te confirmamos disponibilidad y agendamos visita técnica el mismo día si hay stock.</p>
+  <a href="https://wa.me/56945210814?text=Hola%2C%20necesito%20cambiar%20la%20bater%C3%ADa%20de%20mi%20veh%C3%ADculo" class="btn-wa-f" target="_blank">💬 Cotizar mi batería</a>
+  <div style="margin-top:16px;color:rgba(255,255,255,0.85);font-family:'Syne',sans-serif;font-weight:700;font-size:18px;">+56 9 4521 0814</div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:18px;margin-bottom:8px;">SERVI<span style="color:var(--rojo)">RUTA</span></div>
+    <div style="font-size:12px;color:var(--txt3);">Mecánica móvil profesional · Toda la RM</div>
+    <div style="font-size:11px;color:var(--txt3);margin-top:6px;">+56 9 4521 0814 · contacto@serviruta.cl · serviruta.cl</div>
+  </div>
+</footer>
+
+<a href="https://wa.me/56945210814?text=Hola%2C%20necesito%20cambiar%20la%20bater%C3%ADa%20de%20mi%20veh%C3%ADculo" class="wa-float" target="_blank">💬</a>
+
+<script>
+// LOGOS por marca
+var LOGOS={
+  toyota:{c:'#EB0A1E',l:'T',n:'Toyota',u:'https://www.carlogos.org/car-logos/toyota-logo.png'},
+  hyundai:{c:'#002C5F',l:'H',n:'Hyundai',u:'https://www.carlogos.org/car-logos/hyundai-logo.png'},
+  kia:{c:'#BB162B',l:'K',n:'Kia',u:'https://www.carlogos.org/car-logos/kia-logo.png'},
+  chevrolet:{c:'#FFC72C',l:'✚',n:'Chevrolet',u:'https://www.carlogos.org/car-logos/chevrolet-logo.png'},
+  nissan:{c:'#C3002F',l:'N',n:'Nissan',u:'https://www.carlogos.org/car-logos/nissan-logo.png'},
+  suzuki:{c:'#1C1B5E',l:'S',n:'Suzuki',u:'https://www.carlogos.org/car-logos/suzuki-logo.png'},
+  mazda:{c:'#101820',l:'M',n:'Mazda',u:'https://www.carlogos.org/car-logos/mazda-logo.png'},
+  mitsubishi:{c:'#E60012',l:'◆',n:'Mitsubishi',u:'https://www.carlogos.org/car-logos/mitsubishi-logo.png'},
+  vw:{c:'#001E50',l:'VW',n:'Volkswagen',u:'https://www.carlogos.org/car-logos/volkswagen-logo.png'},
+  ford:{c:'#003478',l:'F',n:'Ford',u:'https://www.carlogos.org/car-logos/ford-logo.png'},
+  peugeot:{c:'#000',l:'P',n:'Peugeot',u:'https://www.carlogos.org/car-logos/peugeot-logo.png'},
+  renault:{c:'#FCC900',l:'R',n:'Renault',u:'https://www.carlogos.org/car-logos/renault-logo.png'},
+  honda:{c:'#CC0000',l:'H',n:'Honda',u:'https://www.carlogos.org/car-logos/honda-logo.png'},
+  subaru:{c:'#003DA5',l:'★',n:'Subaru',u:'https://www.carlogos.org/car-logos/subaru-logo.png'},
+  mb:{c:'#000',l:'⭐',n:'Mercedes-Benz',u:'https://www.carlogos.org/car-logos/mercedes-benz-logo.png'},
+  scania:{c:'#012169',l:'●',n:'Scania',u:'https://www.carlogos.org/car-logos/scania-logo.png'},
+  volvo:{c:'#003057',l:'▲',n:'Volvo',u:'https://www.carlogos.org/car-logos/volvo-logo.png'},
+  iveco:{c:'#E2231A',l:'▶',n:'Iveco',u:'https://www.carlogos.org/car-logos/iveco-logo.png'},
+  man:{c:'#E40521',l:'M',n:'MAN',u:'https://www.carlogos.org/car-logos/man-logo.png'},
+  otra:{c:'#55525E',l:'🔧',n:'Otra',u:null}
+}
+
+function logoHTML(id){
+  var m=LOGOS[id]
+  var tc=(id==='chevrolet'||id==='renault')?'#000':'#fff'
+  if(m.u){
+    return '<div class="marca-icon" style="width:46px;height:46px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;box-shadow:0 4px 12px rgba(0,0,0,0.5);border:2px solid '+m.c+';overflow:hidden;padding:4px"><img src="'+m.u+'" alt="'+m.n+'" style="max-width:100%;max-height:100%;object-fit:contain" onerror="this.parentElement.style.background=\''+m.c+'\';this.parentElement.style.color=\''+tc+'\';this.parentElement.style.fontFamily=\'Syne,sans-serif\';this.parentElement.style.fontWeight=\'800\';this.parentElement.style.fontSize=\'16px\';this.parentElement.innerHTML=\''+m.l+'\'"></div>'
+  }
+  return '<div class="marca-icon" style="width:46px;height:46px;border-radius:50%;background:'+m.c+';color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;font-family:Syne,sans-serif;font-weight:800;font-size:16px;box-shadow:0 4px 12px rgba(0,0,0,0.4)">'+m.l+'</div>'
+}
+
+// DATA: modelos con amperaje (Ah) y precio referencia de batería estándar
+// std: Etna/Bremen/Heliar · orig: Bosch/Varta/LTH · prem: Optima/Yuasa premium
+var DATA={
+  auto:{
+    toyota:[
+      {id:'yaris',nombre:'Yaris',amp:45,std:55000,orig:78000,prem:110000},
+      {id:'corolla',nombre:'Corolla',amp:60,std:68000,orig:95000,prem:135000},
+      {id:'aygo',nombre:'Aygo',amp:36,std:48000,orig:68000,prem:95000}
+    ],
+    hyundai:[
+      {id:'accent',nombre:'Accent',amp:55,std:60000,orig:85000,prem:120000},
+      {id:'i10',nombre:'i10',amp:40,std:50000,orig:72000,prem:100000},
+      {id:'i20',nombre:'i20',amp:50,std:58000,orig:82000,prem:115000},
+      {id:'elantra',nombre:'Elantra',amp:65,std:75000,orig:105000,prem:148000}
+    ],
+    kia:[
+      {id:'morning',nombre:'Morning',amp:40,std:50000,orig:70000,prem:98000},
+      {id:'rio',nombre:'Rio/Soluto',amp:55,std:62000,orig:85000,prem:120000},
+      {id:'cerato',nombre:'Cerato',amp:65,std:75000,orig:105000,prem:148000}
+    ],
+    chevrolet:[
+      {id:'spark',nombre:'Spark/Spark GT',amp:40,std:50000,orig:70000,prem:98000},
+      {id:'sail',nombre:'Sail',amp:55,std:60000,orig:85000,prem:120000},
+      {id:'onix',nombre:'Onix Turbo',amp:60,std:68000,orig:95000,prem:135000},
+      {id:'cruze',nombre:'Cruze',amp:65,std:75000,orig:105000,prem:148000}
+    ],
+    nissan:[
+      {id:'march',nombre:'March',amp:45,std:55000,orig:78000,prem:110000},
+      {id:'versa',nombre:'Versa',amp:55,std:62000,orig:85000,prem:120000},
+      {id:'sentra',nombre:'Sentra',amp:65,std:75000,orig:105000,prem:148000}
+    ],
+    suzuki:[
+      {id:'alto',nombre:'Alto/Alto 800',amp:36,std:46000,orig:65000,prem:92000},
+      {id:'celerio',nombre:'Celerio',amp:40,std:50000,orig:70000,prem:98000},
+      {id:'swift',nombre:'Swift',amp:45,std:55000,orig:78000,prem:110000},
+      {id:'baleno',nombre:'Baleno',amp:55,std:62000,orig:85000,prem:120000}
+    ],
+    mazda:[
+      {id:'2',nombre:'Mazda 2',amp:50,std:58000,orig:82000,prem:115000},
+      {id:'3',nombre:'Mazda 3',amp:60,std:68000,orig:95000,prem:135000}
+    ],
+    mitsubishi:[
+      {id:'mirage',nombre:'Mirage/Space Star',amp:40,std:50000,orig:70000,prem:98000}
+    ],
+    vw:[
+      {id:'gol',nombre:'Gol/Saveiro',amp:50,std:58000,orig:82000,prem:115000},
+      {id:'polo',nombre:'Polo',amp:55,std:62000,orig:85000,prem:120000},
+      {id:'vento',nombre:'Vento',amp:60,std:68000,orig:95000,prem:135000}
+    ],
+    ford:[
+      {id:'fiesta',nombre:'Fiesta',amp:50,std:58000,orig:82000,prem:115000},
+      {id:'focus',nombre:'Focus',amp:60,std:68000,orig:95000,prem:135000}
+    ],
+    peugeot:[
+      {id:'208',nombre:'208',amp:55,std:62000,orig:85000,prem:120000},
+      {id:'301',nombre:'301',amp:60,std:68000,orig:95000,prem:135000}
+    ],
+    renault:[
+      {id:'kwid',nombre:'Kwid',amp:45,std:55000,orig:78000,prem:110000},
+      {id:'logan',nombre:'Logan/Sandero',amp:55,std:62000,orig:85000,prem:120000}
+    ],
+    honda:[
+      {id:'city',nombre:'City',amp:55,std:65000,orig:90000,prem:125000},
+      {id:'civic',nombre:'Civic',amp:65,std:78000,orig:108000,prem:152000}
+    ],
+    subaru:[
+      {id:'impreza',nombre:'Impreza',amp:65,std:78000,orig:108000,prem:152000}
+    ]
+  },
+  suv:{
+    toyota:[
+      {id:'rav4',nombre:'RAV4',amp:70,std:85000,orig:118000,prem:165000},
+      {id:'fortuner',nombre:'Fortuner',amp:80,std:98000,orig:135000,prem:188000}
+    ],
+    hyundai:[
+      {id:'creta',nombre:'Creta',amp:60,std:72000,orig:100000,prem:140000},
+      {id:'tucson',nombre:'Tucson',amp:70,std:85000,orig:118000,prem:165000},
+      {id:'santafe',nombre:'Santa Fe',amp:80,std:98000,orig:135000,prem:188000}
+    ],
+    kia:[
+      {id:'stonic',nombre:'Stonic',amp:55,std:65000,orig:90000,prem:125000},
+      {id:'sportage',nombre:'Sportage',amp:70,std:85000,orig:118000,prem:165000},
+      {id:'sorento',nombre:'Sorento',amp:80,std:98000,orig:135000,prem:188000}
+    ],
+    chevrolet:[
+      {id:'tracker',nombre:'Tracker',amp:60,std:72000,orig:100000,prem:140000},
+      {id:'captiva',nombre:'Captiva',amp:75,std:92000,orig:128000,prem:178000}
+    ],
+    nissan:[
+      {id:'kicks',nombre:'Kicks',amp:60,std:72000,orig:100000,prem:140000},
+      {id:'qashqai',nombre:'Qashqai',amp:70,std:85000,orig:118000,prem:165000},
+      {id:'xtrail',nombre:'X-Trail',amp:75,std:92000,orig:128000,prem:178000}
+    ],
+    suzuki:[
+      {id:'vitara',nombre:'Vitara/Grand Vitara',amp:60,std:72000,orig:100000,prem:140000},
+      {id:'jimny',nombre:'Jimny',amp:55,std:65000,orig:90000,prem:125000}
+    ],
+    mazda:[
+      {id:'cx5',nombre:'CX-5',amp:70,std:85000,orig:118000,prem:165000}
+    ],
+    mitsubishi:[
+      {id:'asx',nombre:'ASX',amp:60,std:72000,orig:100000,prem:140000},
+      {id:'outlander',nombre:'Outlander',amp:75,std:92000,orig:128000,prem:178000},
+      {id:'montero',nombre:'Montero Sport',amp:85,std:105000,orig:145000,prem:200000}
+    ],
+    vw:[
+      {id:'tcross',nombre:'T-Cross',amp:60,std:72000,orig:100000,prem:140000},
+      {id:'tiguan',nombre:'Tiguan',amp:75,std:92000,orig:128000,prem:178000}
+    ],
+    ford:[
+      {id:'ecosport',nombre:'EcoSport',amp:60,std:72000,orig:100000,prem:140000},
+      {id:'territory',nombre:'Territory',amp:70,std:85000,orig:118000,prem:165000}
+    ],
+    peugeot:[
+      {id:'2008',nombre:'2008',amp:60,std:72000,orig:100000,prem:140000},
+      {id:'3008',nombre:'3008',amp:75,std:92000,orig:128000,prem:178000}
+    ],
+    renault:[
+      {id:'duster',nombre:'Duster',amp:65,std:78000,orig:108000,prem:152000}
+    ],
+    honda:[
+      {id:'hrv',nombre:'HR-V',amp:60,std:72000,orig:100000,prem:140000},
+      {id:'crv',nombre:'CR-V',amp:70,std:85000,orig:118000,prem:165000}
+    ],
+    subaru:[
+      {id:'forester',nombre:'Forester',amp:70,std:85000,orig:118000,prem:165000},
+      {id:'outback',nombre:'Outback',amp:75,std:92000,orig:128000,prem:178000}
+    ]
+  },
+  camioneta:{
+    toyota:[
+      {id:'hilux24',nombre:'Hilux 2.4 Diésel',amp:90,std:115000,orig:158000,prem:218000},
+      {id:'hilux28',nombre:'Hilux 2.8 Diésel',amp:100,std:135000,orig:185000,prem:255000}
+    ],
+    hyundai:[
+      {id:'h100',nombre:'H100/Porter',amp:90,std:115000,orig:158000,prem:218000}
+    ],
+    kia:[
+      {id:'k2700',nombre:'K2700/Frontier',amp:90,std:115000,orig:158000,prem:218000}
+    ],
+    chevrolet:[
+      {id:'colorado',nombre:'Colorado/Tornado',amp:90,std:115000,orig:158000,prem:218000},
+      {id:'dmax',nombre:'D-Max',amp:100,std:135000,orig:185000,prem:255000}
+    ],
+    nissan:[
+      {id:'navara',nombre:'Navara/Frontier',amp:100,std:135000,orig:185000,prem:255000},
+      {id:'np300',nombre:'NP300',amp:90,std:115000,orig:158000,prem:218000}
+    ],
+    mazda:[
+      {id:'bt50',nombre:'BT-50',amp:100,std:135000,orig:185000,prem:255000}
+    ],
+    mitsubishi:[
+      {id:'l200',nombre:'L200/Triton',amp:100,std:135000,orig:185000,prem:255000}
+    ],
+    vw:[
+      {id:'amarok',nombre:'Amarok',amp:100,std:135000,orig:185000,prem:255000}
+    ],
+    ford:[
+      {id:'ranger22',nombre:'Ranger 2.2 Diésel',amp:95,std:125000,orig:172000,prem:238000},
+      {id:'ranger32',nombre:'Ranger 3.2 Diésel',amp:110,std:148000,orig:205000,prem:280000}
+    ],
+    renault:[
+      {id:'oroch',nombre:'Duster Oroch',amp:75,std:92000,orig:128000,prem:178000},
+      {id:'kangoo',nombre:'Kangoo',amp:70,std:85000,orig:118000,prem:165000}
+    ],
+    peugeot:[
+      {id:'partner',nombre:'Partner/Rifter',amp:75,std:92000,orig:128000,prem:178000}
+    ]
+  },
+  camion:{
+    mb:[
+      {id:'atego',nombre:'MB Atego 1718',amp:150,std:195000,orig:268000,prem:368000,dual:false},
+      {id:'axor',nombre:'MB Axor 2640',amp:180,std:235000,orig:325000,prem:445000,dual:true},
+      {id:'actros',nombre:'MB Actros 4144',amp:220,std:285000,orig:395000,prem:545000,dual:true},
+      {id:'lo914',nombre:'MB LO914/1620',amp:130,std:165000,orig:228000,prem:315000,dual:false}
+    ],
+    scania:[
+      {id:'serie4',nombre:'Scania Serie 4 (P/G/R)',amp:180,std:235000,orig:325000,prem:445000,dual:true},
+      {id:'serie5',nombre:'Scania Serie 5',amp:200,std:265000,orig:365000,prem:500000,dual:true},
+      {id:'p230',nombre:'Scania P230/P270',amp:150,std:195000,orig:268000,prem:368000,dual:false}
+    ],
+    volvo:[
+      {id:'fm11',nombre:'Volvo FM 11/FE',amp:170,std:218000,orig:300000,prem:415000,dual:true},
+      {id:'fh460',nombre:'Volvo FH 460/FM 440',amp:200,std:265000,orig:365000,prem:500000,dual:true},
+      {id:'vm270',nombre:'Volvo VM 220/270',amp:150,std:195000,orig:268000,prem:368000,dual:false}
+    ],
+    ford:[
+      {id:'cargo814',nombre:'Ford Cargo 814',amp:130,std:165000,orig:228000,prem:315000,dual:false},
+      {id:'cargo1723',nombre:'Ford Cargo 1723',amp:160,std:208000,orig:285000,prem:395000,dual:true},
+      {id:'cargo2429',nombre:'Ford Cargo 2429',amp:180,std:235000,orig:325000,prem:445000,dual:true}
+    ],
+    vw:[
+      {id:'vw17280',nombre:'VW 17-280/24-280',amp:170,std:218000,orig:300000,prem:415000,dual:true},
+      {id:'constellation',nombre:'VW Constellation',amp:190,std:248000,orig:340000,prem:470000,dual:true}
+    ],
+    iveco:[
+      {id:'stralis',nombre:'Iveco Stralis Cursor 10/13',amp:180,std:235000,orig:325000,prem:445000,dual:true},
+      {id:'daily',nombre:'Iveco Daily',amp:95,std:125000,orig:172000,prem:238000,dual:false}
+    ],
+    man:[
+      {id:'tgs',nombre:'MAN TGS 18/26',amp:180,std:235000,orig:325000,prem:445000,dual:true}
+    ],
+    otra:[]
+  }
+}
+
+function calcularKits(modelo,tipo){
+  if(!modelo)return []
+  // MARGEN según tipo: 50% autos/SUV, 30% camioneta/camión
+  var MARGEN = (tipo==='auto'||tipo==='suv') ? 1.5 : 1.3
+  
+  // MO instalación
+  var MO_INSTALACION
+  if(tipo==='auto')MO_INSTALACION=25000  // 30 min · 1 técnico
+  else if(tipo==='suv')MO_INSTALACION=30000  // 35 min
+  else if(tipo==='camioneta')MO_INSTALACION=40000  // 45 min
+  else MO_INSTALACION=modelo.dual?80000:55000  // camión 1-2 técnicos · 60-90 min
+  
+  // Extras incluidos siempre
+  var EXTRAS=15000  // protector bornes + test + reciclaje
+  
+  var basico=Math.round((modelo.std + MO_INSTALACION + EXTRAS) * MARGEN / 1000) * 1000
+  var original=Math.round((modelo.orig + MO_INSTALACION + EXTRAS) * MARGEN / 1000) * 1000
+  var premium=Math.round((modelo.prem + MO_INSTALACION + EXTRAS + 10000) * MARGEN / 1000) * 1000
+  
+  var ampStr = modelo.amp + ' Ah'+(modelo.dual?' x2 (sistema 24V)':'')
+  
+  return [
+    {
+      tipo:'estandar',
+      nombre:'Batería Estándar',
+      marca:'ETNA · BREMEN · HELIAR',
+      desc:'Batería confiable para uso urbano regular · '+ampStr,
+      precio:basico,
+      garantia:'12 meses',
+      destacado:false,
+      features:[
+        'Batería '+ampStr+' marca Etna o Heliar',
+        'Instalación en tu base',
+        'Test de batería actual',
+        'Test de alternador (voltaje carga)',
+        'Limpieza de bornes con protector',
+        'Reciclaje ecológico batería usada',
+        'Garantía escrita 12 meses'
+      ]
+    },
+    {
+      tipo:'original',
+      nombre:'Batería Original (OEM)',
+      marca:'BOSCH · VARTA · LTH',
+      desc:'El más solicitado · Calidad fabricante original · '+ampStr,
+      precio:original,
+      garantia:'18 meses',
+      destacado:true,
+      features:[
+        'Batería '+ampStr+' marca Bosch, Varta o LTH',
+        'Tecnología EFB o AGM según vehículo',
+        'Instalación en tu base',
+        'Test completo del sistema eléctrico',
+        'Test de alternador con voltaje en marcha',
+        'Test de consumo en reposo (corriente fantasma)',
+        'Limpieza profunda de bornes',
+        'Protector antioxidante premium',
+        'Reciclaje ecológico batería usada',
+        'Garantía escrita 18 meses'
+      ]
+    },
+    {
+      tipo:'premium',
+      nombre:'Batería Premium',
+      marca:'OPTIMA · YUASA · Largo plazo',
+      desc:'Máxima durabilidad y rendimiento · '+ampStr,
+      precio:premium,
+      garantia:'24 meses',
+      destacado:false,
+      features:[
+        'Batería '+ampStr+' Optima o Yuasa premium',
+        'Tecnología AGM (Absorbed Glass Mat)',
+        'Mayor durabilidad: 4-6 años vs 2-3 estándar',
+        'Mejor resistencia a vibración',
+        'Apta para start-stop y autos modernos',
+        'Instalación en tu base',
+        'Test completo del sistema eléctrico',
+        'Test alternador con scanner',
+        'Reseteo BMS (sistema gestión batería)',
+        'Limpieza profunda + protector premium',
+        'Reciclaje ecológico batería usada',
+        'Garantía escrita 24 meses'
+      ]
+    }
+  ]
+}
+
+var tipoSeleccionado='auto', marcaSeleccionada=null, modeloSeleccionado=null
+
+function renderMarcas(){
+  var marcasDelTipo = Object.keys(DATA[tipoSeleccionado])
+  var marcasHTML=marcasDelTipo.map(function(id){
+    var modelos=DATA[tipoSeleccionado][id]
+    return '<div class="marca-btn" data-marca="'+id+'">'+logoHTML(id)+'<div class="marca-nombre">'+LOGOS[id].n+'</div><div class="marca-modelos">'+modelos.length+' modelo'+(modelos.length>1?'s':'')+'</div></div>'
+  }).join('')
+  // Agregar "Otra"
+  marcasHTML+='<div class="marca-btn" data-marca="otra">'+logoHTML('otra')+'<div class="marca-nombre">Otra</div><div class="marca-modelos">Cotizar</div></div>'
+  document.getElementById('marcas').innerHTML=marcasHTML
+  
+  document.querySelectorAll('.marca-btn').forEach(function(b){
+    b.onclick=function(){
+      document.querySelectorAll('.marca-btn').forEach(function(x){x.classList.remove('active')})
+      b.classList.add('active')
+      marcaSeleccionada=b.getAttribute('data-marca')
+      renderModelos()
+      document.getElementById('kits-section').classList.remove('active')
+    }
+  })
+}
+
+// Tipo tabs
+document.querySelectorAll('.tipo-tab').forEach(function(b){
+  b.onclick=function(){
+    document.querySelectorAll('.tipo-tab').forEach(function(x){x.classList.remove('active')})
+    b.classList.add('active')
+    tipoSeleccionado=b.getAttribute('data-tipo')
+    marcaSeleccionada=null
+    modeloSeleccionado=null
+    renderMarcas()
+    document.getElementById('modelos-section').classList.remove('active')
+    document.getElementById('kits-section').classList.remove('active')
+  }
+})
+
+function renderModelos(){
+  var sec=document.getElementById('modelos-section')
+  var grid=document.getElementById('modelos')
+  
+  if(marcaSeleccionada==='otra'){
+    sec.classList.add('active')
+    grid.innerHTML='<div style="grid-column:1/-1;background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:20px;text-align:center"><div style="font-size:13px;color:var(--txt2);margin-bottom:14px">Para otras marcas o modelos no listados, cotizamos la batería específica para tu vehículo.</div><a href="https://wa.me/56945210814?text=Hola%2C%20necesito%20cotizar%20bater%C3%ADa%20para%20mi%20veh%C3%ADculo" target="_blank" style="background:#25D366;color:#000;padding:10px 18px;border-radius:6px;font-family:Syne,sans-serif;font-weight:700;font-size:12px;text-decoration:none;display:inline-block">💬 Cotizar</a></div>'
+    sec.scrollIntoView({behavior:'smooth',block:'start'})
+    return
+  }
+  
+  var modelos = DATA[tipoSeleccionado][marcaSeleccionada] || []
+  
+  if(modelos.length===0){
+    grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--txt3);font-size:13px">No hay modelos de '+LOGOS[marcaSeleccionada].n+' para este tipo de vehículo.</div>'
+  } else {
+    grid.innerHTML=modelos.map(function(m){
+      return '<div class="modelo-btn" data-id="'+m.id+'"><span class="amp-tag">'+m.amp+' Ah'+(m.dual?' x2':'')+'</span><div class="modelo-nombre">'+m.nombre+'</div><div class="modelo-motor">Batería '+(m.dual?'sistema 24V (2 baterías)':m.amp+' Ah')+'</div></div>'
+    }).join('')
+  }
+  
+  document.querySelectorAll('.modelo-btn').forEach(function(b){
+    b.onclick=function(){
+      document.querySelectorAll('.modelo-btn').forEach(function(x){x.classList.remove('active')})
+      b.classList.add('active')
+      var id=b.getAttribute('data-id')
+      modeloSeleccionado=modelos.find(function(m){return m.id===id})
+      renderKits()
+    }
+  })
+  
+  sec.classList.add('active')
+  if(!document.getElementById('kits-section').classList.contains('active')){
+    sec.scrollIntoView({behavior:'smooth',block:'start'})
+  }
+}
+
+function renderKits(){
+  var sec=document.getElementById('kits-section')
+  var grid=document.getElementById('kits-grid')
+  var titulo=document.getElementById('kit-titulo')
+  var sub=document.getElementById('kit-sub')
+  
+  titulo.textContent='Baterías para '+LOGOS[marcaSeleccionada].n+' '+modeloSeleccionado.nombre
+  var tipoLabel={auto:'Auto',suv:'SUV',camioneta:'Camioneta',camion:'Camión'}[tipoSeleccionado]
+  sub.textContent=tipoLabel+' · '+modeloSeleccionado.amp+' Ah'+(modeloSeleccionado.dual?' (sistema 24V dual)':'')+' · Instalación en tu base'
+  
+  var kits=calcularKits(modeloSeleccionado,tipoSeleccionado)
+  grid.innerHTML=kits.map(function(k){
+    var msg='Hola%2C%20quiero%20cotizar%20'+encodeURIComponent(k.nombre)+'%20para%20mi%20'+encodeURIComponent(LOGOS[marcaSeleccionada].n+' '+modeloSeleccionado.nombre)
+    return '<div class="kit-card '+(k.destacado?'destacado':'')+'">'+
+      (k.destacado?'<div class="kit-badge">MÁS ELEGIDO</div>':'')+
+      '<div class="kit-nombre">'+k.nombre+'</div>'+
+      '<div class="kit-marca">'+k.marca+'</div>'+
+      '<div class="kit-desc">'+k.desc+'</div>'+
+      '<div class="kit-precio"><span class="curr">$</span>'+k.precio.toLocaleString('es-CL')+'</div>'+
+      '<div class="kit-precio-desc">Precio cerrado · Batería + instalación + test</div>'+
+      '<ul class="kit-features">'+k.features.map(function(f){return '<li>'+f+'</li>'}).join('')+'</ul>'+
+      '<div class="kit-tiempo">⏱ Garantía '+k.garantia+'</div>'+
+      '<a href="https://wa.me/56945210814?text='+msg+'" target="_blank" class="kit-cta" style="margin-top:12px">💬 Cotizar esta opción</a>'+
+    '</div>'
+  }).join('')
+  
+  sec.classList.add('active')
+  setTimeout(function(){sec.scrollIntoView({behavior:'smooth',block:'start'})},200)
+}
+
+// Inicializar con auto
+renderMarcas()
+</script>
+</body>
+</html>

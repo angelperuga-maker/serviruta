@@ -79,7 +79,7 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
   </div>
 
   <div class="stats-row">
-    <div class="stat-mini"><div class="stat-mini-val" style="color:var(--verde)">12</div><div class="stat-mini-lbl">Activas</div></div>
+    <div class="stat-mini"><div class="stat-mini-val" style="color:var(--verde)">13</div><div class="stat-mini-lbl">Activas</div></div>
     <div class="stat-mini"><div class="stat-mini-val" style="color:var(--amarillo)">$95K</div><div class="stat-mini-lbl">Mín ticket</div></div>
     <div class="stat-mini"><div class="stat-mini-val" style="color:var(--rojo)">$4M</div><div class="stat-mini-lbl">Máx ticket</div></div>
   </div>
@@ -473,6 +473,40 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
     </div>
   </div>
 
+  <!-- Baterías a domicilio -->
+  <div class="servicio">
+    <div class="servicio-head">
+      <div class="servicio-icon" style="background:rgba(245,197,24,0.15);color:var(--amarillo)">🔋</div>
+      <div class="servicio-info">
+        <div class="servicio-nombre">Baterías a Domicilio</div>
+        <div class="servicio-tag">Bosch · Varta · LTH · Optima · Etna</div>
+        <div class="marcas-row">
+          <span class="marca-chip" style="background:#ED1C24"><span class="logo">⊕</span>Bosch</span>
+          <span class="marca-chip" style="background:#003D7A"><span class="logo">V</span>Varta</span>
+          <span class="marca-chip" style="background:#FFB300;color:#000"><span class="logo">L</span>LTH</span>
+          <span class="marca-chip" style="background:#FF6600"><span class="logo">O</span>Optima</span>
+          <span class="marca-chip" style="background:#000;color:#fff"><span class="logo">Y</span>Yuasa</span>
+          <span class="marca-chip" style="background:#0066B3"><span class="logo">E</span>Etna</span>
+          <span class="marca-chip" style="background:#22C55E"><span class="logo">♻</span>Reciclaje incluido</span>
+          <span class="marca-chip" style="background:#EB0A1E"><img src="https://www.carlogos.org/car-logos/toyota-logo.png" alt="Toyota" onerror="this.outerHTML=''"/>Toyota</span>
+          <span class="marca-chip" style="background:#002C5F"><img src="https://www.carlogos.org/car-logos/hyundai-logo.png" alt="Hyundai" onerror="this.outerHTML=''"/>Hyundai</span>
+          <span class="marca-chip" style="background:#FFC72C;color:#000"><img src="https://www.carlogos.org/car-logos/chevrolet-logo.png" alt="Chevrolet" onerror="this.outerHTML=''"/>Chevrolet</span>
+          <span class="marca-chip" style="background:#000;color:#fff"><img src="https://www.carlogos.org/car-logos/mercedes-benz-logo.png" alt="Mercedes-Benz" onerror="this.outerHTML=''"/>Mercedes-Benz</span>
+          <span class="marca-chip" style="background:#012169"><img src="https://www.carlogos.org/car-logos/scania-logo.png" alt="Scania" onerror="this.outerHTML=''"/>Scania</span>
+        </div>
+      </div>
+      <div class="servicio-ticket">$95K - $810K</div>
+    </div>
+    <div class="url-row">
+      <span class="url-text" id="url-bat">serviruta.cl/baterias-auto-camion</span>
+      <button class="copy-btn" data-target="url-bat">Copiar</button>
+    </div>
+    <div class="acciones">
+      <a href="baterias-auto-camion.html" target="_blank" class="act-btn ver">👁️ Ver</a>
+      <button class="act-btn wa" data-share="bat">💬 Compartir</button>
+    </div>
+  </div>
+
   <div class="share-block">
     <div class="share-titulo">💡 Tip de venta</div>
     <div class="share-texto">Cuando un cliente pregunta por WhatsApp por un servicio, mándale la <b>landing específica</b> en vez de explicar todo. Le da precios claros, garantía visible y CTAs para cotizar — convierte 3x más que la conversación libre.</div>
@@ -540,6 +574,11 @@ var SERVICIOS={
     nombre:'Frenos Auto y Camioneta',
     archivo:'frenos-auto.html',
     msg:'Hola! Te comparto el servicio de frenos para autos y camionetas a domicilio. Atendemos 13 marcas. 3 opciones según necesidad: solo pastillas, pastillas+discos o sistema completo. Marcas premium Brembo, Akebono, TRW. 1-2 horas en tu base.\\n\\n🛑 Ver y cotizar:\\n'
+  },
+    'bat':{
+    nombre:'Baterías a Domicilio',
+    archivo:'baterias-auto-camion.html',
+    msg:'Hola! Te comparto el servicio de baterías a domicilio para autos, camionetas y camiones. Marcas Bosch, Varta, LTH, Optima, Etna y Yuasa. Incluye test gratuito de batería, alternador y sistema eléctrico. Reciclaje ecológico de la batería usada. Garantía hasta 24 meses.\n\n🔋 Ver y cotizar:\n'
   },
   'dpf':{
     nombre:'Guía DPF Camión',

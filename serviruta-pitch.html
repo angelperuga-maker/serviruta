@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta · Red Nacional de Mecánica Móvil | Pitch 2026</title>
+<meta name="description" content="Serviruta es la red de mecánica móvil profesional para autos, camionetas y camiones diésel. 13 categorías de servicio. De Santiago a toda Latam.">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--rojo-osc:#A8170A;--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;--cyan:#22D3EE;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;line-height:1.6;overflow-x:hidden;}
+.container{max-width:1100px;margin:0 auto;padding:0 20px;}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;background:rgba(8,8,8,0.92);backdrop-filter:blur(12px);z-index:100;border-bottom:1px solid var(--borde);padding:12px 0;}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;max-width:1100px;margin:0 auto;padding:0 20px;}
+.nav-logo{font-family:Syne,sans-serif;font-weight:900;font-size:22px;color:var(--txt);text-decoration:none;letter-spacing:-1px;}
+.nav-logo span{color:var(--rojo);}
+.nav-menu{display:flex;gap:18px;}
+.nav-menu a{color:var(--txt2);text-decoration:none;font-family:Syne,sans-serif;font-weight:700;font-size:11px;letter-spacing:1px;text-transform:uppercase;transition:color 0.2s;}
+.nav-menu a:hover{color:var(--rojo);}
+.nav-cta{background:#25D366;color:#000;padding:7px 14px;border-radius:6px;font-family:Syne,sans-serif;font-weight:700;font-size:12px;text-decoration:none;}
+@media(max-width:768px){.nav-menu{display:none;}}
+
+/* HERO */
+.hero{padding:140px 0 80px;text-align:center;position:relative;overflow:hidden;background:radial-gradient(circle at 50% 0%,rgba(232,33,10,0.15) 0%,transparent 50%);}
+.hero::before{content:"";position:absolute;top:0;left:0;right:0;bottom:0;background-image:radial-gradient(circle at 1px 1px,rgba(255,255,255,0.04) 1px,transparent 0);background-size:30px 30px;pointer-events:none;}
+.hero-eyebrow{display:inline-block;background:rgba(232,33,10,0.15);border:1px solid rgba(232,33,10,0.5);color:var(--rojo);font-family:Syne,sans-serif;font-weight:800;font-size:11px;letter-spacing:3px;padding:8px 18px;border-radius:30px;text-transform:uppercase;margin-bottom:30px;position:relative;}
+.hero h1{font-family:Syne,sans-serif;font-weight:900;font-size:clamp(38px,7vw,80px);line-height:0.95;margin-bottom:24px;letter-spacing:-2px;position:relative;}
+.hero h1 .rojo{color:var(--rojo);display:inline-block;}
+.hero h1 .gradient{background:linear-gradient(135deg,var(--rojo) 0%,var(--naranja) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero p.lead{font-size:clamp(16px,2.2vw,21px);color:var(--txt2);max-width:720px;margin:0 auto 36px;line-height:1.5;position:relative;}
+.hero-ctas{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative;}
+.btn{padding:16px 32px;border-radius:10px;font-family:Syne,sans-serif;font-weight:800;font-size:14px;text-decoration:none;display:inline-flex;align-items:center;gap:8px;transition:transform 0.2s;letter-spacing:0.5px;}
+.btn:hover{transform:translateY(-2px);}
+.btn-primary{background:linear-gradient(135deg,var(--rojo) 0%,var(--rojo-osc) 100%);color:#fff;box-shadow:0 8px 25px rgba(232,33,10,0.4);}
+.btn-secondary{background:transparent;border:1px solid var(--borde);color:var(--txt);}
+.hero-stats{display:flex;justify-content:center;gap:50px;margin-top:60px;flex-wrap:wrap;position:relative;}
+.stat{text-align:center;}
+.stat-num{font-family:Syne,sans-serif;font-weight:900;font-size:clamp(32px,5vw,52px);color:var(--rojo);line-height:1;letter-spacing:-2px;}
+.stat-lbl{font-size:12px;color:var(--txt3);text-transform:uppercase;letter-spacing:1.5px;margin-top:6px;font-family:Syne,sans-serif;font-weight:700;}
+
+/* SECTION GENERIC */
+section{padding:90px 0;position:relative;}
+.sec-eyebrow{display:inline-block;color:var(--rojo);font-family:Syne,sans-serif;font-weight:800;font-size:11px;letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;padding:5px 14px;background:rgba(232,33,10,0.1);border:1px solid rgba(232,33,10,0.3);border-radius:20px;}
+.sec-titulo{font-family:Syne,sans-serif;font-weight:900;font-size:clamp(28px,4.5vw,48px);line-height:1.1;margin-bottom:18px;letter-spacing:-1px;}
+.sec-titulo .rojo{color:var(--rojo);}
+.sec-sub{font-size:clamp(15px,2vw,18px);color:var(--txt2);max-width:680px;margin-bottom:50px;line-height:1.5;}
+
+/* PROBLEMA */
+.problema-bg{background:linear-gradient(180deg,var(--c1) 0%,var(--negro) 100%);}
+.problema-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;margin-top:30px;}
+.problema-card{background:var(--c2);border:1px solid var(--borde);border-radius:14px;padding:26px;position:relative;overflow:hidden;}
+.problema-card::before{content:"";position:absolute;top:0;left:0;width:4px;height:100%;background:var(--rojo);}
+.problema-num{font-family:Syne,sans-serif;font-weight:900;font-size:48px;color:rgba(232,33,10,0.2);line-height:1;}
+.problema-tit{font-family:Syne,sans-serif;font-weight:800;font-size:18px;margin:8px 0;}
+.problema-desc{font-size:13px;color:var(--txt2);line-height:1.6;}
+
+/* SOLUCIÓN HERO */
+.solucion-hero{background:radial-gradient(circle at 50% 50%,rgba(232,33,10,0.1) 0%,transparent 60%);text-align:center;}
+.solucion-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:30px;}
+.solucion-card{background:linear-gradient(135deg,var(--c2) 0%,var(--c1) 100%);border:1px solid var(--borde);border-radius:14px;padding:24px;text-align:left;transition:transform 0.2s,border-color 0.2s;}
+.solucion-card:hover{transform:translateY(-4px);border-color:var(--rojo);}
+.solucion-icon{font-size:32px;margin-bottom:12px;}
+.solucion-tit{font-family:Syne,sans-serif;font-weight:800;font-size:16px;margin-bottom:6px;}
+.solucion-desc{font-size:13px;color:var(--txt2);line-height:1.6;}
+
+/* CATEGORÍAS GRID */
+.cat-section{background:var(--c1);}
+.cat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-top:30px;}
+.cat-card{background:var(--c2);border:1px solid var(--borde);border-radius:14px;padding:22px;position:relative;overflow:hidden;transition:transform 0.2s;}
+.cat-card:hover{transform:translateY(-3px);border-color:var(--rojo);}
+.cat-card.featured{background:linear-gradient(180deg,rgba(232,33,10,0.08) 0%,var(--c2) 70%);border:2px solid rgba(232,33,10,0.4);}
+.cat-header{display:flex;align-items:flex-start;gap:14px;margin-bottom:14px;}
+.cat-icon-wrap{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;}
+.cat-info{flex:1;}
+.cat-nombre{font-family:Syne,sans-serif;font-weight:800;font-size:15px;line-height:1.2;}
+.cat-desc{font-size:11px;color:var(--txt3);margin-top:4px;}
+.cat-ticket{font-family:Syne,sans-serif;font-weight:800;font-size:12px;color:var(--verde);background:rgba(34,197,94,0.1);padding:4px 10px;border-radius:6px;display:inline-block;margin-top:8px;}
+.cat-marcas{display:flex;gap:6px;flex-wrap:wrap;font-size:10px;color:var(--txt3);}
+.cat-marcas span{background:var(--c3);padding:2px 7px;border-radius:8px;font-family:Syne,sans-serif;font-weight:700;}
+
+/* SISTEMA */
+.sistema-bg{background:linear-gradient(180deg,var(--negro) 0%,var(--c1) 100%);}
+.sistema-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px;}
+.sistema-card{background:var(--c2);border:1px solid var(--borde);border-radius:16px;padding:28px;text-align:center;position:relative;}
+.sistema-card.cliente{border-color:rgba(34,197,94,0.4);background:linear-gradient(180deg,rgba(34,197,94,0.05) 0%,var(--c2) 80%);}
+.sistema-card.coord{border-color:rgba(96,165,250,0.4);background:linear-gradient(180deg,rgba(96,165,250,0.05) 0%,var(--c2) 80%);}
+.sistema-card.tec{border-color:rgba(245,197,24,0.4);background:linear-gradient(180deg,rgba(245,197,24,0.05) 0%,var(--c2) 80%);}
+.sistema-emoji{font-size:42px;margin-bottom:12px;}
+.sistema-tit{font-family:Syne,sans-serif;font-weight:800;font-size:18px;margin-bottom:6px;}
+.sistema-sub{font-size:11px;color:var(--txt3);text-transform:uppercase;letter-spacing:1px;font-weight:700;margin-bottom:14px;}
+.sistema-features{list-style:none;text-align:left;padding:0;}
+.sistema-features li{font-size:12px;color:var(--txt);padding:6px 0 6px 18px;position:relative;border-bottom:1px dashed var(--c3);}
+.sistema-features li:last-child{border-bottom:none;}
+.sistema-features li::before{content:"●";position:absolute;left:0;color:var(--rojo);font-size:8px;top:9px;}
+@media(max-width:768px){.sistema-grid{grid-template-columns:1fr;}}
+
+/* ALIADOS */
+.aliados-section{background:var(--c1);}
+.aliados-hero{background:linear-gradient(135deg,rgba(232,33,10,0.08) 0%,rgba(232,33,10,0.02) 100%);border:1px solid rgba(232,33,10,0.3);border-radius:20px;padding:40px;text-align:center;margin-bottom:30px;}
+.aliados-hero h3{font-family:Syne,sans-serif;font-weight:900;font-size:clamp(24px,3vw,32px);margin-bottom:10px;}
+.aliados-hero p{font-size:14px;color:var(--txt2);max-width:600px;margin:0 auto;}
+.tipos-aliados{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;}
+.tipo-aliado{background:var(--c2);border:1px solid var(--borde);border-radius:12px;padding:24px;}
+.tipo-aliado-emoji{font-size:36px;margin-bottom:12px;}
+.tipo-aliado-tit{font-family:Syne,sans-serif;font-weight:800;font-size:15px;margin-bottom:6px;color:var(--rojo);}
+.tipo-aliado-desc{font-size:12px;color:var(--txt2);line-height:1.6;}
+.tipo-aliado-ben{font-family:Syne,sans-serif;font-weight:800;font-size:13px;color:var(--verde);margin-top:10px;}
+
+/* TECNOLOGÍA */
+.tech-bg{background:linear-gradient(180deg,var(--negro) 0%,var(--c1) 100%);}
+.tech-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:30px;}
+.tech-item{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:20px;text-align:center;}
+.tech-logo{font-family:Syne,sans-serif;font-weight:900;font-size:16px;margin-bottom:6px;}
+.tech-desc{font-size:11px;color:var(--txt3);}
+
+/* MERCADO */
+.mercado-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin-top:30px;}
+.mercado-card{background:var(--c2);border:1px solid var(--borde);border-radius:14px;padding:28px;}
+.mercado-big{font-family:Syne,sans-serif;font-weight:900;font-size:48px;color:var(--rojo);line-height:1;margin-bottom:8px;letter-spacing:-2px;}
+.mercado-tit{font-family:Syne,sans-serif;font-weight:800;font-size:14px;margin-bottom:10px;}
+.mercado-desc{font-size:12px;color:var(--txt2);line-height:1.6;}
+
+/* EXPANSIÓN */
+.expansion-bg{background:var(--c1);}
+.mapa-expansion{background:var(--c2);border:1px solid var(--borde);border-radius:20px;padding:40px;margin-top:30px;text-align:center;}
+.ciudades-row{display:flex;justify-content:center;gap:30px;flex-wrap:wrap;margin-top:30px;}
+.ciudad{text-align:center;padding:20px;}
+.ciudad-emoji{font-size:42px;margin-bottom:10px;}
+.ciudad-nombre{font-family:Syne,sans-serif;font-weight:800;font-size:14px;}
+.ciudad-pais{font-size:11px;color:var(--txt3);margin-top:4px;text-transform:uppercase;letter-spacing:1px;}
+.ciudad-estado{font-size:10px;color:var(--verde);margin-top:6px;font-family:Syne,sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:1px;}
+.ciudad-estado.futuro{color:var(--amarillo);}
+
+/* CTA FINAL */
+.cta-final{background:linear-gradient(135deg,var(--rojo) 0%,var(--rojo-osc) 100%);text-align:center;padding:90px 20px;position:relative;overflow:hidden;}
+.cta-final::before{content:"";position:absolute;inset:0;background-image:radial-gradient(circle at 1px 1px,rgba(255,255,255,0.06) 1px,transparent 0);background-size:30px 30px;}
+.cta-final h2{font-family:Syne,sans-serif;font-weight:900;font-size:clamp(28px,4.5vw,42px);margin-bottom:14px;color:#fff;position:relative;letter-spacing:-1px;}
+.cta-final p{font-size:clamp(14px,2vw,18px);color:rgba(255,255,255,0.95);max-width:600px;margin:0 auto 30px;position:relative;}
+.cta-ctas{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;position:relative;}
+.cta-final .btn-white{background:#fff;color:#000;padding:18px 36px;border-radius:10px;font-family:Syne,sans-serif;font-weight:800;font-size:15px;text-decoration:none;}
+.cta-final .btn-outline{background:transparent;color:#fff;border:2px solid #fff;padding:16px 34px;border-radius:10px;font-family:Syne,sans-serif;font-weight:800;font-size:15px;text-decoration:none;}
+
+/* FOOTER */
+.footer{background:#000;padding:40px 0 25px;text-align:center;border-top:1px solid var(--borde);}
+.footer-logo{font-family:Syne,sans-serif;font-weight:900;font-size:24px;margin-bottom:10px;letter-spacing:-1px;}
+.footer-logo span{color:var(--rojo);}
+.footer-info{font-size:12px;color:var(--txt3);margin:4px 0;}
+.footer-links{margin-top:18px;display:flex;gap:24px;justify-content:center;flex-wrap:wrap;}
+.footer-links a{color:var(--txt2);font-size:12px;text-decoration:none;font-family:Syne,sans-serif;font-weight:700;letter-spacing:0.5px;}
+.footer-links a:hover{color:var(--rojo);}
+
+.wa-float{position:fixed;bottom:24px;right:24px;width:60px;height:60px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;font-size:30px;text-decoration:none;box-shadow:0 6px 25px rgba(37,211,102,0.5);z-index:99;animation:pulse 2.5s infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 6px 25px rgba(37,211,102,0.5);}50%{box-shadow:0 6px 40px rgba(37,211,102,0.8);}}
+
+@media(max-width:640px){section{padding:60px 0;}.hero{padding:100px 0 60px;}.hero-stats{gap:30px;margin-top:40px;}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#top" class="nav-logo">SERVI<span>RUTA</span></a>
+    <div class="nav-menu">
+      <a href="#problema">Problema</a>
+      <a href="#solucion">Solución</a>
+      <a href="#categorias">Servicios</a>
+      <a href="#sistema">Sistema</a>
+      <a href="#aliados">Aliados</a>
+      <a href="#expansion">Expansión</a>
+    </div>
+    <a href="https://wa.me/56945210814" class="nav-cta" target="_blank">💬 Contacto</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="container">
+    <div class="hero-eyebrow">Red Nacional de Mecánica Móvil</div>
+    <h1>El taller que va <span class="gradient">donde tú estés.</span></h1>
+    <p class="lead">Serviruta es la red profesional de mecánica móvil para autos, camionetas y camiones diésel. 13 categorías de servicio, marcas premium, técnicos especializados. <strong style="color:var(--txt)">De Santiago a toda Latam.</strong></p>
+    <div class="hero-ctas">
+      <a href="#categorias" class="btn btn-primary">Ver servicios →</a>
+      <a href="https://wa.me/56945210814" class="btn btn-secondary" target="_blank">💬 Hablar con un asesor</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><div class="stat-num">13</div><div class="stat-lbl">Categorías de servicio</div></div>
+      <div class="stat"><div class="stat-num">+50</div><div class="stat-lbl">Marcas de vehículos</div></div>
+      <div class="stat"><div class="stat-num">RM+</div><div class="stat-lbl">Cobertura actual</div></div>
+      <div class="stat"><div class="stat-num">24/7</div><div class="stat-lbl">Emergencias</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEMA -->
+<section class="problema-bg" id="problema">
+  <div class="container">
+    <div class="sec-eyebrow">El problema</div>
+    <h2 class="sec-titulo">La mecánica tradicional <span class="rojo">no escala con el Chile de hoy.</span></h2>
+    <p class="sec-sub">Personas y empresas que dependen de sus vehículos para operar pierden tiempo, dinero y operación con el modelo de taller tradicional.</p>
+
+    <div class="problema-grid">
+      <div class="problema-card">
+        <div class="problema-num">01</div>
+        <div class="problema-tit">Trasladar el vehículo es caro</div>
+        <div class="problema-desc">Una grúa de camión cuesta $200K-$500K. Días de espera en taller. Operador parado sin sueldo productivo.</div>
+      </div>
+      <div class="problema-card">
+        <div class="problema-num">02</div>
+        <div class="problema-tit">Talleres saturados</div>
+        <div class="problema-desc">Esperas de semanas para una mantención. Filas que un dueño moderno no acepta. Servicios sin precio claro.</div>
+      </div>
+      <div class="problema-card">
+        <div class="problema-num">03</div>
+        <div class="problema-tit">Falta confianza</div>
+        <div class="problema-desc">No saben qué les van a cobrar. Repuestos sin marca clara. Sin garantía escrita. Sin reporte de hallazgos.</div>
+      </div>
+      <div class="problema-card">
+        <div class="problema-num">04</div>
+        <div class="problema-tit">Flotas sin proveedor único</div>
+        <div class="problema-desc">Empresas con autos + camionetas + camiones deben coordinar 3-4 proveedores distintos. Caos administrativo.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOLUCIÓN -->
+<section class="solucion-hero" id="solucion">
+  <div class="container">
+    <div class="sec-eyebrow">Nuestra solución</div>
+    <h2 class="sec-titulo">Un ecosistema <span class="rojo">end-to-end</span> de mecánica móvil.</h2>
+    <p class="sec-sub" style="margin-left:auto;margin-right:auto;">Un solo proveedor para todo tu parque vehicular. Vamos a tu base, faena, casa u oficina. Precios cerrados, marcas premium, garantía escrita.</p>
+
+    <div class="solucion-grid">
+      <div class="solucion-card">
+        <div class="solucion-icon">🚛</div>
+        <div class="solucion-tit">Mecánica móvil profesional</div>
+        <div class="solucion-desc">Técnicos especializados con herramientas pesadas portátiles. Trabajamos en tu patio o faena.</div>
+      </div>
+      <div class="solucion-card">
+        <div class="solucion-icon">💎</div>
+        <div class="solucion-tit">Marcas premium siempre</div>
+        <div class="solucion-desc">Eaton, Sachs, Knorr-Bremse, Brembo, Bosch, Wabco. Nada de genéricos. Repuestos OEM o equivalentes certificados.</div>
+      </div>
+      <div class="solucion-card">
+        <div class="solucion-icon">💰</div>
+        <div class="solucion-tit">Precios cerrados</div>
+        <div class="solucion-desc">Configurador online: seleccionas marca y modelo, ves precio cerrado al instante. Sin sorpresas, sin "cotizamos según".</div>
+      </div>
+      <div class="solucion-card">
+        <div class="solucion-icon">📝</div>
+        <div class="solucion-tit">Garantía escrita</div>
+        <div class="solucion-desc">6-12 meses sobre cada servicio. Documento firmado. Si falla, volvemos sin costo.</div>
+      </div>
+      <div class="solucion-card">
+        <div class="solucion-icon">🤖</div>
+        <div class="solucion-tit">Coordinación inteligente</div>
+        <div class="solucion-desc">IA atiende leads 24/7. Coordinador asigna técnico óptimo. Cliente recibe seguimiento en tiempo real.</div>
+      </div>
+      <div class="solucion-card">
+        <div class="solucion-icon">🌍</div>
+        <div class="solucion-tit">Red nacional</div>
+        <div class="solucion-desc">De Santiago a toda la Región Metropolitana. Próximamente Viña, Rancagua, Concepción. Visión Latam: Buenos Aires y Lima.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORÍAS -->
+<section class="cat-section" id="categorias">
+  <div class="container">
+    <div class="sec-eyebrow">13 categorías activas</div>
+    <h2 class="sec-titulo">Servicios <span class="rojo">para autos, camionetas y camiones.</span></h2>
+    <p class="sec-sub">Cobertura completa del parque vehicular chileno. Cada categoría con precios cerrados, marcas premium y garantía escrita.</p>
+
+    <div class="cat-grid">
+
+      <!-- CAMIONES -->
+      <div class="cat-card featured">
+        <div class="cat-header">
+          <div class="cat-icon-wrap" style="background:rgba(232,33,10,0.15);color:var(--rojo)">🚛</div>
+          <div class="cat-info">
+            <div class="cat-nombre">Pre-Revisión Técnica</div>
+            <div class="cat-desc">Camión · Clase A2</div>
+          </div>
+        </div>
+        <div class="cat-marcas">
+          <span>Mercedes-Benz</span><span>Scania</span><span>Volvo</span>
+        </div>
+        <div class="cat-ticket">$89K - $389K</div>
+      </div>
+
+      <div class="cat-card">
+        <div class="cat-header">
+          <div class="cat-icon-wrap" style="background:rgba(34,211,238,0.15);color:var(--cyan)">❄️</div>
+          <div class="cat-info">
+            <div class="cat-nombre">Emergencia Thermo King</div>
+            <div class="cat-desc">Refrigerado · 24/7</div>
+          </div>
+        </div>
+        <div class="cat-marcas"><span>Thermo King</span><span>Carrier</span></div>
+        <div class="cat-ticket">$149K - $1.5M</div>
+      </div>
+
+      <div class="cat-card">
+        <div class="cat-header">
+          <div class="cat-icon-wrap" style="background:rgba(251,146,60,0.15);color:var(--naranja)">🎈</div>
+          <div class="cat-info">
+            <div class="cat-nombre">Fuelle Suspensión</div>
+            <div class="cat-desc">Neumática · Camión</div>
+          </div>
+        </div>
+        <div class="cat-marcas"><span>BPW</span><span>MAN</span><span>Volvo</span></div>
+        <div class="cat-ticket">$79K - $459K</div>
+      </div>
+
+      <div class="cat-card">
+        <div class="cat-header">
+          <div class="cat-icon-wrap" style="background:rgba(96,165,250,0.15);color:var(--azul)">🔌</div>
+          <div class="cat-info">
+            <div class="cat-nombre">Common Rail</div>
+            <div class="cat-desc">Diagnóstico · Bosch · Denso</div>
+          </div>
+        </div>
+        <div class="cat-marcas"><span>Bosch</span><span>Denso</span><span>Delphi</span></div>
+        <div class="cat-ticket">$129K - $4M</div>
+      </div>
+
+      <div class="cat-card">
+        <div class="cat-header">
+          <div class="cat-icon-wrap" style="background:rgba(245,197,24,0.15);color:var(--amarillo)">💪</div>
+          <div class="cat-info">
+            <div class="cat-nombre">Reparación Hidráulica</div>
+            <div class="cat-desc">Tolva · Grúa · Volquete</div>
+          </div>
+        </div>
+        <div class="cat-marcas"><span>Parker</span><span>Hyva</span><span>Bondioli</span></div>
+        <div class="cat-ticket">$99K - $2.5M</div>
+      </div>
+
+      <div class="cat-card featured">
+        <div class="cat-header">
+          <div class="cat-icon-wrap" style="background:rgba(34,197,94,0.15);color:var(--verde)">🚗</div>
+          <div class="cat-info">
+            <div class="cat-nombre">Kits Mantención Auto</div>
+            <div class="cat-desc">13 marcas · A domicilio</div>
+          </div>
+        </div>
+        <div class="cat-marcas"><span>Toyota</span><span>Hyundai</span><span>Kia</span><span>+10</span></div>
+        <div class="cat-ticket">$98K - $278K</div>
+      </div>
+
+      <div class="cat-card">
+        <div class="cat-header">
+          <div class="cat-icon-wrap" style="background:rgba(251,146,60,0.15);color:var(--naranja)">🛑</div>
+          <div class="cat-info">
+            <div class="cat-nombre">Frenos Auto y Camioneta</div>
+            <div class="cat-desc">Brembo · Akebono · TRW</div>
+          </div>
+        </div>
+        <div class="cat-marcas"><span>Brembo</span><span>Akebono</span><span>+11</span></div>
+        <div class="cat-ticket">$95K - $555K</div>
+      </div>
+
+      <div class="cat-card">
+        <div class="cat-header">
+          <div class="cat-icon-wrap" style="background:rgba(167,139,250,0.15);color:var(--morado)">⚙️</div>
+          <div class="cat-info">
+            <div class="cat-nombre">Kit Embrague Auto/Camioneta</div>
+            <div class="cat-desc">Luk · Sachs · Valeo</div>
+          </div>
+        </div>
+        <div class="cat-marcas"><span>Luk</span><span>Sachs</span><span>Valeo</span></div>
+        <div class="cat-ticket">$465K - $1.56M</div>
+      </div>
+
+      <div class="cat-card">
+        <div class="cat-header">
+          <div class="cat-icon-wrap" style="background:rgba(96,165,250,0.15);color:var(--azul)">💨</div>
+          <div class="cat-info">
+            <div class="cat-nombre">Compresores Aire Camión</div>
+            <div class="cat-desc">Venta + Instalación</div>
+          </div>
+        </div>
+        <div class="cat-marcas"><span>Knorr-Bremse</span><span>Wabco</span><span>Bendix</span></div>
+        <div class="cat-ticket">$385K - $1.2M</div>
+      </div>
+
+      <div class="cat-card">
+        <div class="cat-header">
+          <div class="cat-icon-wrap" style="background:rgba(232,33,10,0.15);color:var(--rojo)">🛑</div>
+          <div class="cat-info">
+            <div class="cat-nombre">Frenos Camión</div>
+            <div class="cat-desc">Sistema neumático completo</div>
+          </div>
+        </div>
+        <div class="cat-marcas"><span>Knorr-Bremse</span><span>Wabco</span><span>Frasle</span></div>
+        <div class="cat-ticket">$235K - $1.4M</div>
+      </div>
+
+      <div class="cat-card">
+        <div class="cat-header">
+          <div class="cat-icon-wrap" style="background:rgba(245,197,24,0.15);color:var(--amarillo)">⚙️</div>
+          <div class="cat-info">
+            <div class="cat-nombre">Kit Embrague Camión</div>
+            <div class="cat-desc">2 técnicos · 8 horas</div>
+          </div>
+        </div>
+        <div class="cat-marcas"><span>Eaton</span><span>Sachs</span><span>Luk</span></div>
+        <div class="cat-ticket">$1M - $2.4M</div>
+      </div>
+
+      <div class="cat-card">
+        <div class="cat-header">
+          <div class="cat-icon-wrap" style="background:rgba(34,197,94,0.15);color:var(--verde)">🔧</div>
+          <div class="cat-info">
+            <div class="cat-nombre">Mantención Motor Camión</div>
+            <div class="cat-desc">7 marcas · Filtros premium</div>
+          </div>
+        </div>
+        <div class="cat-marcas"><span>Donaldson</span><span>Sogefi</span><span>+5</span></div>
+        <div class="cat-ticket">$186K - $948K</div>
+      </div>
+
+      <div class="cat-card">
+        <div class="cat-header">
+          <div class="cat-icon-wrap" style="background:rgba(167,139,250,0.15);color:var(--morado)">📚</div>
+          <div class="cat-info">
+            <div class="cat-nombre">Servicio DPF/FAP</div>
+            <div class="cat-desc">3 niveles · DPF Revival</div>
+          </div>
+        </div>
+        <div class="cat-marcas"><span>Regen.</span><span>Doble</span><span>Revival</span></div>
+        <div class="cat-ticket">$149K - $389K</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- SISTEMA -->
+<section class="sistema-bg" id="sistema">
+  <div class="container">
+    <div class="sec-eyebrow">Plataforma tecnológica</div>
+    <h2 class="sec-titulo">Un sistema integrado para <span class="rojo">cada actor</span> del servicio.</h2>
+    <p class="sec-sub">3 interfaces conectadas en tiempo real. Cliente solicita, Coordinador asigna, Técnico ejecuta. Todo registrado, todo trazable.</p>
+
+    <div class="sistema-grid">
+
+      <div class="sistema-card cliente">
+        <div class="sistema-emoji">👤</div>
+        <div class="sistema-tit">Hub Cliente</div>
+        <div class="sistema-sub">Para usuarios finales</div>
+        <ul class="sistema-features">
+          <li>Login por teléfono</li>
+          <li>Historial vehículos y servicios</li>
+          <li>Solicitud directa por categoría</li>
+          <li>Configurador con precio cerrado</li>
+          <li>Seguimiento en tiempo real</li>
+          <li>Pago digital + boleta/factura</li>
+        </ul>
+      </div>
+
+      <div class="sistema-card coord">
+        <div class="sistema-emoji">🎯</div>
+        <div class="sistema-tit">Hub Coordinador</div>
+        <div class="sistema-sub">Operaciones centrales</div>
+        <ul class="sistema-features">
+          <li>Panel control 13 servicios</li>
+          <li>Asignación inteligente de técnicos</li>
+          <li>WhatsApp prellenado por servicio</li>
+          <li>Gestión de leads + IA captadora</li>
+          <li>Reportes en tiempo real</li>
+          <li>Marketing y ventas integrado</li>
+        </ul>
+      </div>
+
+      <div class="sistema-card tec">
+        <div class="sistema-emoji">🔧</div>
+        <div class="sistema-tit">Hub Técnico</div>
+        <div class="sistema-sub">Para terreno</div>
+        <ul class="sistema-features">
+          <li>PWA mobile para terreno</li>
+          <li>21 pantallas de diagnóstico</li>
+          <li>Fault trees + códigos DTC</li>
+          <li>Captura foto + reporte digital</li>
+          <li>Firma digital cliente</li>
+          <li>Conexión Supabase tiempo real</li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ALIADOS -->
+<section class="aliados-section" id="aliados">
+  <div class="container">
+    <div class="sec-eyebrow">Red nacional · Programa aliados</div>
+    <h2 class="sec-titulo">No crecemos solos. <span class="rojo">Crecemos en red.</span></h2>
+    <p class="sec-sub">Mecánicos independientes, talleres, grúas y empresas se suman a la red Serviruta. Reciben capacitación, marca, sistema y leads. Ganan más, trabajan mejor.</p>
+
+    <div class="aliados-hero">
+      <h3>Programa Aliados Serviruta</h3>
+      <p>Comisiones por derivación + acceso al sistema + soporte técnico + capacitación continua. La nueva forma de hacer mecánica en Chile.</p>
+    </div>
+
+    <div class="tipos-aliados">
+      <div class="tipo-aliado">
+        <div class="tipo-aliado-emoji">🚜</div>
+        <div class="tipo-aliado-tit">Operadores de Grúa</div>
+        <div class="tipo-aliado-desc">Derivan clientes con problema mecánico (no de mover el vehículo). Reciben comisión por cada servicio cerrado.</div>
+        <div class="tipo-aliado-ben">$40K - $80K por derivación</div>
+      </div>
+
+      <div class="tipo-aliado">
+        <div class="tipo-aliado-emoji">🔧</div>
+        <div class="tipo-aliado-tit">Mecánicos Independientes</div>
+        <div class="tipo-aliado-desc">Se suman a la red, reciben leads en su zona, usan nuestro sistema de gestión y obtienen acceso a marcas premium con descuento.</div>
+        <div class="tipo-aliado-ben">Leads + marca + sistema</div>
+      </div>
+
+      <div class="tipo-aliado">
+        <div class="tipo-aliado-emoji">🏭</div>
+        <div class="tipo-aliado-tit">Talleres establecidos</div>
+        <div class="tipo-aliado-desc">Convertir su taller en punto Serviruta. Mantienen su operación y suman ingresos por servicios móviles que no podían atender antes.</div>
+        <div class="tipo-aliado-ben">Marca + leads B2B</div>
+      </div>
+
+      <div class="tipo-aliado">
+        <div class="tipo-aliado-emoji">🏗️</div>
+        <div class="tipo-aliado-tit">Empresas con Flota</div>
+        <div class="tipo-aliado-desc">Construcción, transporte, minería. Plan corporativo con mantención preventiva, atención prioritaria y precios B2B.</div>
+        <div class="tipo-aliado-ben">Tarifas B2B + SLA</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TECNOLOGÍA -->
+<section class="tech-bg">
+  <div class="container">
+    <div class="sec-eyebrow">Stack tecnológico</div>
+    <h2 class="sec-titulo">Tecnología <span class="rojo">de primer nivel.</span></h2>
+    <p class="sec-sub">Stack moderno que escala con el negocio. Cloud, IA, automatización end-to-end.</p>
+
+    <div class="tech-grid">
+      <div class="tech-item"><div class="tech-logo">⚡ Supabase</div><div class="tech-desc">Base de datos + Auth + Storage en tiempo real</div></div>
+      <div class="tech-item"><div class="tech-logo">🤖 Anthropic Claude</div><div class="tech-desc">IA conversacional para leads 24/7</div></div>
+      <div class="tech-item"><div class="tech-logo">🔗 Make.com</div><div class="tech-desc">Automatización flujos y webhooks</div></div>
+      <div class="tech-item"><div class="tech-logo">💬 WhatsApp Business</div><div class="tech-desc">Canal principal de comunicación</div></div>
+      <div class="tech-item"><div class="tech-logo">📱 PWA Mobile</div><div class="tech-desc">App para técnicos sin descargas</div></div>
+      <div class="tech-item"><div class="tech-logo">🌐 GitHub Pages</div><div class="tech-desc">Landings SEO de alto desempeño</div></div>
+      <div class="tech-item"><div class="tech-logo">📊 Meta + Google Ads</div><div class="tech-desc">Captación digital optimizada</div></div>
+      <div class="tech-item"><div class="tech-logo">📡 Starlink</div><div class="tech-desc">Conectividad en faena remota</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- MERCADO -->
+<section>
+  <div class="container">
+    <div class="sec-eyebrow">El mercado</div>
+    <h2 class="sec-titulo">Un mercado <span class="rojo">multibillonario</span> en transición.</h2>
+    <p class="sec-sub">Chile tiene más de 6 millones de vehículos en circulación. La mecánica móvil profesional aún no llega al 5% del mercado. Hay espacio enorme.</p>
+
+    <div class="mercado-grid">
+      <div class="mercado-card">
+        <div class="mercado-big">+6M</div>
+        <div class="mercado-tit">Vehículos en Chile</div>
+        <div class="mercado-desc">Parque automotor circulante creciendo 4-6% anual. Incluye 200K+ camiones diésel.</div>
+      </div>
+      <div class="mercado-card">
+        <div class="mercado-big">$2T</div>
+        <div class="mercado-tit">Mercado de mantención CL</div>
+        <div class="mercado-desc">Mercado anual de mantención y reparación vehicular en Chile (pesos chilenos).</div>
+      </div>
+      <div class="mercado-card">
+        <div class="mercado-big">95%</div>
+        <div class="mercado-tit">Sin mecánica móvil</div>
+        <div class="mercado-desc">Más del 95% del mercado sigue dependiendo del modelo taller tradicional. Oportunidad enorme.</div>
+      </div>
+      <div class="mercado-card">
+        <div class="mercado-big">3x</div>
+        <div class="mercado-tit">Crecimiento esperado</div>
+        <div class="mercado-desc">Proyección de crecimiento Serviruta 2026 vs 2024 con red nacional consolidada.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPANSIÓN -->
+<section class="expansion-bg" id="expansion">
+  <div class="container">
+    <div class="sec-eyebrow">Visión 2026 - 2030</div>
+    <h2 class="sec-titulo">De Santiago <span class="rojo">a toda Latinoamérica.</span></h2>
+    <p class="sec-sub">Modelo replicable. Mismo sistema, mismas marcas premium, misma calidad de servicio. Llegamos donde haya parque automotor y empresas que necesitan operar sin parar.</p>
+
+    <div class="mapa-expansion">
+      <div style="font-family:Syne,sans-serif;font-weight:800;font-size:18px;margin-bottom:8px;">🗺️ Mapa de expansión Serviruta</div>
+      <div style="font-size:12px;color:var(--txt3);">Desde Santiago, expansión orgánica a las principales ciudades de Chile y luego Latam.</div>
+
+      <div class="ciudades-row">
+        <div class="ciudad">
+          <div class="ciudad-emoji">🇨🇱</div>
+          <div class="ciudad-nombre">Santiago</div>
+          <div class="ciudad-pais">Chile · RM</div>
+          <div class="ciudad-estado">● ACTIVO</div>
+        </div>
+        <div class="ciudad">
+          <div class="ciudad-emoji">🇨🇱</div>
+          <div class="ciudad-nombre">Viña del Mar</div>
+          <div class="ciudad-pais">Chile · Valparaíso</div>
+          <div class="ciudad-estado futuro">▶ 2026 Q3</div>
+        </div>
+        <div class="ciudad">
+          <div class="ciudad-emoji">🇨🇱</div>
+          <div class="ciudad-nombre">Rancagua</div>
+          <div class="ciudad-pais">Chile · O'Higgins</div>
+          <div class="ciudad-estado futuro">▶ 2026 Q4</div>
+        </div>
+        <div class="ciudad">
+          <div class="ciudad-emoji">🇨🇱</div>
+          <div class="ciudad-nombre">Concepción</div>
+          <div class="ciudad-pais">Chile · Biobío</div>
+          <div class="ciudad-estado futuro">▶ 2027 Q1</div>
+        </div>
+        <div class="ciudad">
+          <div class="ciudad-emoji">🇦🇷</div>
+          <div class="ciudad-nombre">Buenos Aires</div>
+          <div class="ciudad-pais">Argentina</div>
+          <div class="ciudad-estado futuro">▶ 2027 Q3</div>
+        </div>
+        <div class="ciudad">
+          <div class="ciudad-emoji">🇵🇪</div>
+          <div class="ciudad-nombre">Lima</div>
+          <div class="ciudad-pais">Perú</div>
+          <div class="ciudad-estado futuro">▶ 2028 Q1</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final">
+  <h2>¿Te sumas a la red?</h2>
+  <p>Si eres mecánico, dueño de flota, gruero, taller o empresa que quiere ser parte de la nueva era de la mecánica en Latinoamérica, hablemos.</p>
+  <div class="cta-ctas">
+    <a href="https://wa.me/56945210814?text=Hola%2C%20quiero%20saber%20m%C3%A1s%20de%20Serviruta" class="btn-white" target="_blank">💬 Hablemos por WhatsApp</a>
+    <a href="mailto:contacto@serviruta.cl" class="btn-outline">✉️ contacto@serviruta.cl</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-logo">SERVI<span>RUTA</span></div>
+    <div class="footer-info">Red Nacional de Mecánica Móvil Profesional</div>
+    <div class="footer-info">+56 9 4521 0814 · contacto@serviruta.cl · serviruta.cl</div>
+    <div class="footer-links">
+      <a href="#problema">Problema</a>
+      <a href="#solucion">Solución</a>
+      <a href="#categorias">Servicios</a>
+      <a href="#aliados">Aliados</a>
+      <a href="#expansion">Expansión</a>
+    </div>
+    <div class="footer-info" style="margin-top:20px;font-size:10px;">© 2026 Serviruta · Todos los derechos reservados · Santiago, Chile</div>
+  </div>
+</footer>
+
+<a href="https://wa.me/56945210814?text=Hola%2C%20quiero%20saber%20m%C3%A1s%20de%20Serviruta" class="wa-float" target="_blank" rel="noopener" aria-label="WhatsApp">💬</a>
+
+</body>
+</html>

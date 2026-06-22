@@ -422,8 +422,8 @@ var DATA={
 
 function calcularKits(modelo,tipo){
   if(!modelo)return []
-  // MARGEN según tipo: 50% autos/SUV, 30% camioneta/camión
-  var MARGEN = (tipo==='auto'||tipo==='suv') ? 1.5 : 1.3
+  // MARGEN 30% en toda la categoría baterías (mercado competitivo a domicilio)
+  var MARGEN = 1.3
   
   // MO instalación
   var MO_INSTALACION

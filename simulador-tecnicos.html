@@ -272,7 +272,13 @@ tbody tr:hover{background:rgba(232,33,10,0.04);}
     <div class="resultado-card" style="text-align:center;padding:30px;background:linear-gradient(135deg,rgba(232,33,10,0.1) 0%,rgba(232,33,10,0.03) 100%);border:2px solid var(--rojo);">
       <div style="font-family:Syne,sans-serif;font-weight:700;font-size:11px;color:var(--txt3);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">Código de Prueba</div>
       <div id="codigo-creado" style="font-family:Syne,sans-serif;font-weight:900;font-size:52px;color:var(--rojo);letter-spacing:6px;"></div>
-      <div style="font-size:11px;color:var(--txt3);margin-top:8px;">Comparte este código con los técnicos</div>
+      
+      <div style="height:1px;background:var(--borde);margin:18px 0;"></div>
+      
+      <div style="font-family:Syne,sans-serif;font-weight:700;font-size:11px;color:var(--txt3);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">🔒 Clave de Acceso</div>
+      <div id="clave-creada" style="font-family:Syne,sans-serif;font-weight:900;font-size:42px;color:var(--amarillo);letter-spacing:8px;"></div>
+      
+      <div style="font-size:11px;color:var(--txt3);margin-top:12px;">Comparte AMBOS con los técnicos. La clave protege el acceso aunque el código se filtre.</div>
     </div>
 
     <div class="form-row">
@@ -312,6 +318,10 @@ tbody tr:hover{background:rgba(232,33,10,0.04);}
       <div>
         <label>Código de prueba (6 letras)</label>
         <input type="text" id="codigo-input" placeholder="Ej. SRVB42" style="text-transform:uppercase;letter-spacing:4px;font-family:Syne,sans-serif;font-weight:700;font-size:18px;text-align:center;">
+      </div>
+      <div>
+        <label>🔒 Clave de acceso (4 dígitos)</label>
+        <input type="text" id="clave-input" placeholder="0000" maxlength="4" inputmode="numeric" style="letter-spacing:8px;font-family:Syne,sans-serif;font-weight:700;font-size:20px;text-align:center;">
       </div>
       <button class="btn btn-primary btn-block" onclick="iniciarPrueba()">🚀 Iniciar Diagnóstico</button>
     </div>
@@ -647,6 +657,12 @@ function generarCodigo(){
   return c
 }
 
+function generarClave(){
+  var c = ''
+  for(var i=0;i<4;i++) c += Math.floor(Math.random()*10)
+  return c
+}
+
 async function crearPrueba(){
   var sisActiva = document.querySelector('#sistema-grid .sistema-btn.active')
   if(!sisActiva){ alert('Selecciona el sistema con falla'); return }
@@ -658,6 +674,7 @@ async function crearPrueba(){
   
   var prueba = {
     codigo: generarCodigo(),
+    clave: generarClave(),
     tipo: TIPO_SEL,
     marca: marca,
     modelo: modelo,
@@ -674,6 +691,7 @@ async function crearPrueba(){
   await savePrueba(prueba)
   
   document.getElementById('codigo-creado').textContent = prueba.codigo
+  document.getElementById('clave-creada').textContent = prueba.clave
   document.getElementById('resumen-caso').innerHTML = `
     <div class="resultado-card">
       <div class="resultado-tit">Vehículo</div>
@@ -689,11 +707,12 @@ async function crearPrueba(){
     </div>
   `
   
-  // WhatsApp share
-  var msg = '🔧 Hola! Te invito a una prueba de diagnóstico Serviruta.%0A%0ACódigo: *' + prueba.codigo + '*%0A%0AAccede aquí:%0Ahttps://angelperuga-maker.github.io/serviruta/simulador-tecnicos.html'
+  // WhatsApp share con código + clave
+  var msg = '🔧 Hola! Te invito a una prueba de diagnóstico Serviruta.%0A%0A📋 *Código:* ' + prueba.codigo + '%0A🔒 *Clave:* ' + prueba.clave + '%0A%0AAccede aquí:%0Ahttps://angelperuga-maker.github.io/serviruta/simulador-tecnicos.html'
   document.getElementById('btn-share-wa').onclick = () => window.open('https://wa.me/?text='+msg, '_blank')
   document.getElementById('btn-copy-codigo').onclick = () => {
-    navigator.clipboard.writeText(prueba.codigo).then(()=>alert('Código copiado: ' + prueba.codigo))
+    var txt = 'Código: '+prueba.codigo+'\nClave: '+prueba.clave
+    navigator.clipboard.writeText(txt).then(()=>alert('Copiado:\n' + txt))
   }
   
   goScreen('prueba-creada')
@@ -711,11 +730,20 @@ var CRONO_INTERVAL = null
 async function iniciarPrueba(){
   var nombre = document.getElementById('tecnico-nombre').value.trim()
   var codigo = document.getElementById('codigo-input').value.trim().toUpperCase()
-  if(!nombre || !codigo){ alert('Ingresa tu nombre y el código'); return }
+  var clave = document.getElementById('clave-input').value.trim()
+  if(!nombre){ alert('Ingresa tu nombre completo'); return }
+  if(!codigo){ alert('Ingresa el código de prueba'); return }
+  if(!clave || clave.length!==4){ alert('Ingresa la clave de 4 dígitos'); return }
   
   var pruebas = await loadPruebas()
   var p = pruebas.find(x=>x.codigo === codigo)
-  if(!p){ alert('Código no válido: ' + codigo); return }
+  if(!p){ alert('❌ Código no válido: ' + codigo); return }
+  
+  // Validar clave (solo si la prueba la tiene; pruebas antiguas sin clave funcionan)
+  if(p.clave && p.clave !== clave){
+    alert('🔒 Clave incorrecta. Verifica con quien te envió el código.')
+    return
+  }
   
   PRUEBA_ACTUAL = p
   TECNICO_DATA = {nombre: nombre, esp: document.getElementById('tecnico-esp').value}
@@ -945,15 +973,18 @@ async function renderPruebasActivas(){
     var resultadosPrueba = resultados.filter(r=>r.codigo===p.codigo)
     return `
       <div class="banco-card">
-        <div class="banco-codigo">${p.codigo}</div>
-        <div class="banco-vehiculo">${p.marca} ${p.modelo} (${p.tipo})</div>
-        <div style="font-size:11px;color:var(--txt2);margin-top:4px;">Falla: ${SISTEMAS[p.sistema].emoji} ${FALLAS[p.sistema].find(f=>f.id===p.falla).n}</div>
-        <div class="banco-meta">
-          <span>📅 ${new Date(p.creada).toLocaleDateString('es-CL')}</span>
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap">
+          <div>
+            <div class="banco-codigo">${p.codigo}</div>
+            ${p.clave?`<div style="font-family:Syne,sans-serif;font-weight:700;font-size:13px;color:var(--amarillo);letter-spacing:3px;margin-top:2px">🔒 ${p.clave}</div>`:''}
+          </div>
           <span class="estado-pill ${resultadosPrueba.length?'completada':'activa'}">${resultadosPrueba.length?resultadosPrueba.length+' eval':'Activa'}</span>
         </div>
-        <div style="display:flex;gap:6px;margin-top:10px;">
-          <button class="btn btn-secondary" style="font-size:11px;padding:6px 10px;" onclick="compartirPrueba('${p.codigo}')">💬 Compartir</button>
+        <div class="banco-vehiculo">${p.marca} ${p.modelo} (${p.tipo})</div>
+        <div style="font-size:11px;color:var(--txt2);margin-top:4px;">Falla: ${SISTEMAS[p.sistema].emoji} ${FALLAS[p.sistema].find(f=>f.id===p.falla).n}</div>
+        <div style="font-size:10px;color:var(--txt3);margin-top:4px;">📅 ${new Date(p.creada).toLocaleDateString('es-CL')}</div>
+        <div style="display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;">
+          <button class="btn btn-secondary" style="font-size:11px;padding:6px 10px;" onclick="compartirPrueba('${p.codigo}','${p.clave||''}')">💬 Compartir</button>
           <button class="btn btn-warn" style="font-size:11px;padding:6px 10px;" onclick="verResultadosPrueba('${p.codigo}')">📊 Ver evals</button>
           <button class="btn btn-secondary" style="font-size:11px;padding:6px 10px;background:rgba(232,33,10,0.15);color:var(--rojo);" onclick="eliminarPrueba('${p.codigo}')">🗑</button>
         </div>
@@ -962,8 +993,8 @@ async function renderPruebasActivas(){
   }).join('')
 }
 
-function compartirPrueba(codigo){
-  var msg = '🔧 Hola! Te invito a una prueba de diagnóstico Serviruta.%0A%0ACódigo: *' + codigo + '*%0A%0AAccede aquí:%0Ahttps://angelperuga-maker.github.io/serviruta/simulador-tecnicos.html'
+function compartirPrueba(codigo, clave){
+  var msg = '🔧 Hola! Te invito a una prueba de diagnóstico Serviruta.%0A%0A📋 *Código:* ' + codigo + (clave?'%0A🔒 *Clave:* ' + clave:'') + '%0A%0AAccede aquí:%0Ahttps://angelperuga-maker.github.io/serviruta/simulador-tecnicos.html'
   window.open('https://wa.me/?text='+msg, '_blank')
 }
 

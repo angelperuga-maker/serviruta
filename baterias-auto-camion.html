@@ -420,24 +420,62 @@ var DATA={
   }
 }
 
+function precioPromedioMercado(amp, tipo, dual) {
+  // Tabla basada en investigación del mercado chileno (Autoplanet, Electrobaterias, BateriasaDomicilio, etc.)
+  // Precio FINAL con instalación a domicilio · Marca OEM (Bosch/Varta)
+  if (tipo === 'auto') {
+    if (amp <= 36) return 95000      // Suzuki Alto, ultracompactos
+    if (amp <= 40) return 108000     // i10, Morning, Spark
+    if (amp <= 45) return 120000     // Yaris, Swift, Accent
+    if (amp <= 50) return 130000     // Polo, Mazda 2, Gol
+    if (amp <= 55) return 138000     // Sail, Versa, Rio
+    if (amp <= 60) return 148000     // Corolla, Onix, City
+    return 165000                     // 65Ah Civic, Cerato, Sentra
+  }
+  if (tipo === 'suv') {
+    if (amp <= 55) return 145000     // Jimny
+    if (amp <= 60) return 165000     // Creta, Tracker, Kicks
+    if (amp <= 70) return 200000     // RAV4, Tucson, Sportage
+    if (amp <= 75) return 220000     // CX-5, Outlander, Tiguan
+    if (amp <= 80) return 240000     // Santa Fe, Fortuner, Sorento
+    return 265000                     // 85Ah Montero Sport
+  }
+  if (tipo === 'camioneta') {
+    if (amp <= 70) return 180000     // Kangoo
+    if (amp <= 75) return 200000     // Oroch, Partner
+    if (amp <= 90) return 255000     // Hilux 2.4, H100, K2700
+    if (amp <= 95) return 280000     // Ranger 2.2
+    if (amp <= 100) return 295000    // Hilux 2.8, L200, Amarok, BT-50
+    return 320000                     // Ranger 3.2 (110Ah)
+  }
+  if (tipo === 'camion') {
+    if (dual) {
+      // Sistema 24V con 2 baterías
+      if (amp <= 170) return 540000
+      if (amp <= 180) return 580000
+      if (amp <= 190) return 620000
+      if (amp <= 200) return 660000
+      return 720000                   // 220Ah Actros
+    } else {
+      if (amp <= 95) return 240000   // Daily
+      if (amp <= 130) return 315000  // Cargo 814, LO914
+      if (amp <= 150) return 380000  // Atego 1718, Serie 4
+      return 430000                   // 160Ah single
+    }
+  }
+  return 200000
+}
+
 function calcularKits(modelo,tipo){
   if(!modelo)return []
-  // MARGEN 30% en toda la categoría baterías (mercado competitivo a domicilio)
-  var MARGEN = 1.3
+  // ESTRATEGIA: 2% bajo promedio del mercado para el nivel Original (más elegido)
+  // Estándar: 22% menos que Original · Premium: 32% más que Original
+  var FACTOR_VS_MERCADO = 0.98  // 2% bajo promedio
   
-  // MO instalación
-  var MO_INSTALACION
-  if(tipo==='auto')MO_INSTALACION=25000  // 30 min · 1 técnico
-  else if(tipo==='suv')MO_INSTALACION=30000  // 35 min
-  else if(tipo==='camioneta')MO_INSTALACION=40000  // 45 min
-  else MO_INSTALACION=modelo.dual?80000:55000  // camión 1-2 técnicos · 60-90 min
-  
-  // Extras incluidos siempre
-  var EXTRAS=15000  // protector bornes + test + reciclaje
-  
-  var basico=Math.round((modelo.std + MO_INSTALACION + EXTRAS) * MARGEN / 1000) * 1000
-  var original=Math.round((modelo.orig + MO_INSTALACION + EXTRAS) * MARGEN / 1000) * 1000
-  var premium=Math.round((modelo.prem + MO_INSTALACION + EXTRAS + 10000) * MARGEN / 1000) * 1000
+  var promedioMercado = precioPromedioMercado(modelo.amp, tipo, modelo.dual)
+  var original = Math.round(promedioMercado * FACTOR_VS_MERCADO / 1000) * 1000
+  var basico = Math.round(original * 0.78 / 1000) * 1000   // 22% más barato
+  var premium = Math.round(original * 1.32 / 1000) * 1000  // 32% más caro
   
   var ampStr = modelo.amp + ' Ah'+(modelo.dual?' x2 (sistema 24V)':'')
   

@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulador Diagnóstico Serviruta · Evaluación Técnicos</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;--cyan:#22D3EE;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;line-height:1.5;min-height:100vh;}
+.container{max-width:1100px;margin:0 auto;padding:16px;}
+.header{background:rgba(15,15,18,0.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--borde);padding:12px 0;position:sticky;top:0;z-index:100;}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;max-width:1100px;margin:0 auto;padding:0 16px;}
+.logo{font-family:Syne,sans-serif;font-weight:800;font-size:18px;color:var(--txt);text-decoration:none;}
+.logo span{color:var(--rojo);}
+.badge-mode{background:var(--rojo);color:#fff;padding:5px 12px;border-radius:14px;font-family:Syne,sans-serif;font-weight:700;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;}
+
+.screen{display:none;padding:24px 0;}
+.screen.active{display:block;}
+
+.hero{text-align:center;padding:30px 16px 20px;}
+.hero h1{font-family:Syne,sans-serif;font-weight:800;font-size:clamp(24px,4vw,38px);line-height:1.1;margin-bottom:8px;letter-spacing:-1px;}
+.hero h1 .rojo{color:var(--rojo);}
+.hero p{color:var(--txt2);font-size:14px;max-width:520px;margin:0 auto;}
+
+/* Cards de selección */
+.modo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin-top:30px;}
+.modo-card{background:var(--c2);border:2px solid var(--borde);border-radius:14px;padding:24px;cursor:pointer;transition:all 0.2s;}
+.modo-card:hover{border-color:var(--rojo);transform:translateY(-3px);}
+.modo-icon{font-size:36px;margin-bottom:10px;}
+.modo-tit{font-family:Syne,sans-serif;font-weight:800;font-size:17px;margin-bottom:4px;}
+.modo-desc{font-size:12px;color:var(--txt2);}
+
+/* Stats globales */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:24px;}
+.stat-card{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;text-align:center;}
+.stat-num{font-family:Syne,sans-serif;font-weight:900;font-size:22px;color:var(--rojo);line-height:1;}
+.stat-lbl{font-size:9px;color:var(--txt3);text-transform:uppercase;letter-spacing:1px;margin-top:6px;font-weight:700;}
+@media(max-width:600px){.stats-row{grid-template-columns:repeat(2,1fr);}}
+
+/* Botones */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:11px 20px;border-radius:8px;font-family:Syne,sans-serif;font-weight:800;font-size:12px;text-decoration:none;border:none;cursor:pointer;transition:transform 0.15s;}
+.btn:hover{transform:translateY(-1px);}
+.btn-primary{background:var(--rojo);color:#fff;}
+.btn-secondary{background:var(--c3);color:var(--txt);border:1px solid var(--borde);}
+.btn-success{background:var(--verde);color:#000;}
+.btn-warn{background:var(--amarillo);color:#000;}
+.btn-block{width:100%;padding:14px;}
+
+/* Sección titulo */
+.sec-tit{font-family:Syne,sans-serif;font-weight:800;font-size:18px;margin-bottom:8px;}
+.sec-sub{font-size:12px;color:var(--txt3);margin-bottom:14px;}
+.divider{height:1px;background:var(--borde);margin:18px 0;}
+
+/* Formulario */
+.form-grid{display:grid;gap:12px;}
+.form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;}
+label{display:block;font-family:Syne,sans-serif;font-weight:700;font-size:10px;color:var(--txt3);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;}
+input,select,textarea{width:100%;background:var(--c3);border:1px solid var(--borde);color:var(--txt);padding:10px 12px;border-radius:7px;font-family:DM Sans,sans-serif;font-size:13px;}
+input:focus,select:focus,textarea:focus{outline:1px solid var(--rojo);border-color:var(--rojo);}
+textarea{resize:vertical;min-height:60px;}
+
+/* Vehículo SVG container */
+.vehiculo-wrap{background:linear-gradient(180deg,var(--c1) 0%,var(--c2) 100%);border:1px solid var(--borde);border-radius:14px;padding:20px;position:relative;overflow:hidden;}
+.vehiculo-svg{width:100%;max-width:600px;display:block;margin:0 auto;}
+
+/* Síntomas card */
+.sintomas-card{background:linear-gradient(135deg,rgba(232,33,10,0.08) 0%,rgba(232,33,10,0.02) 100%);border:1px solid rgba(232,33,10,0.4);border-radius:12px;padding:18px;margin:18px 0;}
+.sintomas-tit{font-family:Syne,sans-serif;font-weight:800;font-size:13px;color:var(--rojo);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;}
+.sintomas-lista{list-style:none;}
+.sintomas-lista li{padding:8px 0;border-bottom:1px dashed var(--borde);font-size:13px;display:flex;align-items:flex-start;gap:8px;}
+.sintomas-lista li:last-child{border-bottom:none;}
+.sintomas-lista li::before{content:"●";color:var(--rojo);font-size:10px;margin-top:4px;}
+
+/* Sistema selector */
+.sistema-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin:14px 0;}
+.sistema-btn{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:12px;cursor:pointer;text-align:center;transition:all 0.15s;}
+.sistema-btn:hover{border-color:var(--rojo);}
+.sistema-btn.active{background:rgba(232,33,10,0.1);border-color:var(--rojo);}
+.sistema-emoji{font-size:24px;}
+.sistema-name{font-family:Syne,sans-serif;font-weight:700;font-size:11px;margin-top:4px;}
+
+/* Pruebas técnico */
+.pruebas-grid{display:grid;gap:8px;margin:14px 0;}
+.prueba-btn{background:var(--c2);border:1px solid var(--borde);border-radius:8px;padding:12px;cursor:pointer;text-align:left;display:flex;align-items:center;gap:10px;transition:all 0.15s;}
+.prueba-btn:hover{border-color:var(--rojo);}
+.prueba-btn.usada{opacity:0.55;cursor:default;}
+.prueba-btn.usada:hover{transform:none;}
+.prueba-icon{font-size:18px;}
+.prueba-info{flex:1;}
+.prueba-nombre{font-family:Syne,sans-serif;font-weight:700;font-size:12px;}
+.prueba-tiempo{font-size:10px;color:var(--txt3);}
+
+/* Modal */
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;align-items:center;justify-content:center;padding:16px;}
+.modal.active{display:flex;}
+.modal-content{background:var(--c2);border:1px solid var(--borde);border-radius:14px;padding:24px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;}
+.modal-tit{font-family:Syne,sans-serif;font-weight:800;font-size:18px;margin-bottom:10px;}
+
+/* Resultado prueba */
+.resultado-card{background:var(--c3);border:1px solid var(--borde);border-radius:10px;padding:14px;margin:12px 0;}
+.resultado-tit{font-family:Syne,sans-serif;font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--txt3);margin-bottom:6px;}
+.resultado-val{font-size:14px;color:var(--txt);}
+.resultado-val.ok{color:var(--verde);}
+.resultado-val.warn{color:var(--amarillo);}
+.resultado-val.bad{color:var(--rojo);}
+
+/* Banco pruebas */
+.banco-card{background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin-bottom:10px;cursor:pointer;transition:border-color 0.15s;}
+.banco-card:hover{border-color:var(--rojo);}
+.banco-codigo{font-family:Syne,sans-serif;font-weight:900;font-size:18px;color:var(--rojo);}
+.banco-vehiculo{font-size:13px;font-weight:600;margin-top:2px;}
+.banco-meta{display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-size:11px;color:var(--txt3);}
+.estado-pill{padding:2px 8px;border-radius:10px;font-family:Syne,sans-serif;font-weight:700;font-size:9px;text-transform:uppercase;letter-spacing:0.5px;}
+.estado-pill.activa{background:rgba(34,197,94,0.18);color:var(--verde);}
+.estado-pill.completada{background:rgba(96,165,250,0.18);color:var(--azul);}
+
+/* Score grande */
+.score-circle{width:140px;height:140px;border-radius:50%;background:conic-gradient(var(--verde) 0deg,var(--verde) calc(var(--score,0)*3.6deg),var(--c3) calc(var(--score,0)*3.6deg));display:flex;align-items:center;justify-content:center;margin:20px auto;position:relative;}
+.score-circle::before{content:"";position:absolute;inset:10px;border-radius:50%;background:var(--c2);}
+.score-num{position:relative;z-index:2;font-family:Syne,sans-serif;font-weight:900;font-size:42px;color:var(--verde);}
+.score-num.medio{color:var(--amarillo);}
+.score-num.malo{color:var(--rojo);}
+
+/* Tabla técnicos */
+table{width:100%;border-collapse:collapse;margin-top:14px;}
+th,td{padding:10px;text-align:left;border-bottom:1px solid var(--borde);font-size:12px;}
+th{background:var(--c3);font-family:Syne,sans-serif;font-weight:700;font-size:11px;color:var(--txt3);text-transform:uppercase;letter-spacing:1px;}
+tbody tr:hover{background:rgba(232,33,10,0.04);}
+.medalla{font-size:16px;}
+
+.alert{background:rgba(245,197,24,0.1);border-left:3px solid var(--amarillo);border-radius:6px;padding:10px 14px;font-size:12px;color:var(--amarillo);margin:12px 0;}
+.alert-ok{background:rgba(34,197,94,0.1);border-color:var(--verde);color:var(--verde);}
+.alert-info{background:rgba(96,165,250,0.1);border-color:var(--azul);color:var(--azul);}
+
+.back-btn{background:none;border:none;color:var(--rojo);font-family:Syne,sans-serif;font-weight:700;font-size:11px;cursor:pointer;padding:0;display:flex;align-items:center;gap:4px;margin-bottom:12px;}
+.back-btn::before{content:"←";}
+
+/* Vehículo zona overlay */
+.zonas-overlay{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;}
+.zona-hot{position:absolute;width:10%;height:14%;border-radius:50%;background:rgba(232,33,10,0.6);animation:pulse-zona 1.5s infinite;cursor:pointer;pointer-events:auto;}
+@keyframes pulse-zona{0%,100%{transform:scale(1);opacity:0.5;}50%{transform:scale(1.2);opacity:0.9;}}
+
+#cronometro{position:fixed;top:60px;right:20px;background:var(--c2);border:1px solid var(--borde);padding:8px 14px;border-radius:8px;font-family:Syne,sans-serif;font-weight:700;font-size:14px;z-index:50;display:none;}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <a href="#" onclick="goHome()" class="logo">SERVI<span>RUTA</span></a>
+    <div class="badge-mode" id="mode-badge">SIMULADOR</div>
+  </div>
+</header>
+
+<div id="cronometro">⏱ <span id="tiempo-val">00:00</span></div>
+
+<!-- ========== HOME ========== -->
+<section class="screen active" id="screen-home">
+  <div class="container">
+    <div class="hero">
+      <h1>Simulador <span class="rojo">Diagnóstico</span></h1>
+      <p>Crea casos con fallas inducidas. Evalúa el conocimiento técnico de tu equipo en diagnóstico mecánico real. Resultados guardados y ranking automático.</p>
+    </div>
+
+    <div class="modo-grid">
+      <div class="modo-card" onclick="goScreen('admin-crear')">
+        <div class="modo-icon">🎯</div>
+        <div class="modo-tit">Crear Prueba</div>
+        <div class="modo-desc">Configura un caso con falla específica para evaluar técnicos. Define síntomas, marca y modelo del vehículo.</div>
+      </div>
+      <div class="modo-card" onclick="goScreen('tecnico-codigo')">
+        <div class="modo-icon">🔧</div>
+        <div class="modo-tit">Realizar Prueba</div>
+        <div class="modo-desc">Ingresa el código de prueba y diagnostica. Tu tiempo y aciertos serán evaluados automáticamente.</div>
+      </div>
+      <div class="modo-card" onclick="goScreen('pruebas-activas')">
+        <div class="modo-icon">📋</div>
+        <div class="modo-tit">Pruebas Activas</div>
+        <div class="modo-desc">Lista de evaluaciones disponibles y completadas. Comparte códigos por WhatsApp con técnicos.</div>
+      </div>
+      <div class="modo-card" onclick="goScreen('ranking')">
+        <div class="modo-icon">🏆</div>
+        <div class="modo-tit">Ranking</div>
+        <div class="modo-desc">Tabla de posiciones de técnicos. Promedio de aciertos, tiempo de diagnóstico y especialidad.</div>
+      </div>
+    </div>
+
+    <div class="stats-row" id="stats-home"></div>
+  </div>
+</section>
+
+<!-- ========== ADMIN CREAR ========== -->
+<section class="screen" id="screen-admin-crear">
+  <div class="container">
+    <button class="back-btn" onclick="goHome()">Volver</button>
+    <div class="sec-tit">🎯 Crear Nueva Prueba</div>
+    <div class="sec-sub">Configura el vehículo, la falla a inducir y los síntomas que verá el técnico evaluado.</div>
+
+    <div class="form-grid">
+      <div>
+        <label>Tipo de vehículo</label>
+        <div class="sistema-grid" id="tipo-vehiculo-grid">
+          <div class="sistema-btn active" data-tipo="auto"><div class="sistema-emoji">🚗</div><div class="sistema-name">Auto</div></div>
+          <div class="sistema-btn" data-tipo="suv"><div class="sistema-emoji">🚙</div><div class="sistema-name">SUV</div></div>
+          <div class="sistema-btn" data-tipo="camioneta"><div class="sistema-emoji">🛻</div><div class="sistema-name">Camioneta</div></div>
+          <div class="sistema-btn" data-tipo="camion"><div class="sistema-emoji">🚛</div><div class="sistema-name">Camión</div></div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div>
+          <label>Marca</label>
+          <input type="text" id="marca-input" placeholder="Ej. Toyota, Mercedes-Benz">
+        </div>
+        <div>
+          <label>Modelo</label>
+          <input type="text" id="modelo-input" placeholder="Ej. Hilux, Atego 1718">
+        </div>
+        <div>
+          <label>Año</label>
+          <input type="number" id="anio-input" min="1990" max="2026" placeholder="2018">
+        </div>
+        <div>
+          <label>Kilometraje</label>
+          <input type="text" id="km-input" placeholder="120.000 km">
+        </div>
+      </div>
+
+      <div>
+        <label>Sistema con falla</label>
+        <div class="sistema-grid" id="sistema-grid"></div>
+      </div>
+
+      <div>
+        <label>Falla específica a inducir</label>
+        <select id="falla-select"><option value="">Selecciona primero un sistema</option></select>
+      </div>
+
+      <div>
+        <label>Síntomas que reporta el cliente</label>
+        <textarea id="sintomas-textarea" rows="3" placeholder="Aparecen automáticamente según falla, puedes editar"></textarea>
+      </div>
+
+      <div class="form-row">
+        <div>
+          <label>Códigos DTC (si aplica)</label>
+          <input type="text" id="dtc-input" placeholder="Ej. P0420, P2002">
+        </div>
+        <div>
+          <label>Tiempo límite (minutos)</label>
+          <input type="number" id="tiempo-limite" value="15" min="5" max="60">
+        </div>
+      </div>
+
+      <div class="alert-info alert">💡 Una vez creada la prueba, recibirás un código de 6 letras para compartir con los técnicos por WhatsApp.</div>
+
+      <button class="btn btn-primary btn-block" onclick="crearPrueba()">🎯 Generar Prueba y Código</button>
+    </div>
+  </div>
+</section>
+
+<!-- ========== ADMIN PRUEBA CREADA ========== -->
+<section class="screen" id="screen-prueba-creada">
+  <div class="container">
+    <button class="back-btn" onclick="goHome()">Volver al inicio</button>
+    <div class="sec-tit">✅ Prueba Creada</div>
+    <div class="sec-sub">Comparte el código con los técnicos para que realicen la evaluación.</div>
+
+    <div class="resultado-card" style="text-align:center;padding:30px;background:linear-gradient(135deg,rgba(232,33,10,0.1) 0%,rgba(232,33,10,0.03) 100%);border:2px solid var(--rojo);">
+      <div style="font-family:Syne,sans-serif;font-weight:700;font-size:11px;color:var(--txt3);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;">Código de Prueba</div>
+      <div id="codigo-creado" style="font-family:Syne,sans-serif;font-weight:900;font-size:52px;color:var(--rojo);letter-spacing:6px;"></div>
+      <div style="font-size:11px;color:var(--txt3);margin-top:8px;">Comparte este código con los técnicos</div>
+    </div>
+
+    <div class="form-row">
+      <button class="btn btn-success btn-block" id="btn-share-wa">💬 Compartir por WhatsApp</button>
+      <button class="btn btn-secondary btn-block" id="btn-copy-codigo">📋 Copiar código</button>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="sec-tit" style="font-size:14px;">📋 Resumen del caso</div>
+    <div id="resumen-caso"></div>
+  </div>
+</section>
+
+<!-- ========== TÉCNICO INGRESAR CÓDIGO ========== -->
+<section class="screen" id="screen-tecnico-codigo">
+  <div class="container">
+    <button class="back-btn" onclick="goHome()">Volver</button>
+    <div class="sec-tit">🔧 Realizar Prueba</div>
+    <div class="sec-sub">Ingresa tu nombre y el código de prueba que recibiste para comenzar la evaluación.</div>
+
+    <div class="form-grid">
+      <div>
+        <label>Tu nombre completo</label>
+        <input type="text" id="tecnico-nombre" placeholder="Ej. Juan Pérez">
+      </div>
+      <div>
+        <label>Especialidad</label>
+        <select id="tecnico-esp">
+          <option value="auto">Mecánica automotriz</option>
+          <option value="camion">Mecánica línea pesada</option>
+          <option value="diesel">Especialista diésel</option>
+          <option value="electricista">Electricista automotriz</option>
+          <option value="aprendiz">Aprendiz / Ayudante</option>
+        </select>
+      </div>
+      <div>
+        <label>Código de prueba (6 letras)</label>
+        <input type="text" id="codigo-input" placeholder="Ej. SRVB42" style="text-transform:uppercase;letter-spacing:4px;font-family:Syne,sans-serif;font-weight:700;font-size:18px;text-align:center;">
+      </div>
+      <button class="btn btn-primary btn-block" onclick="iniciarPrueba()">🚀 Iniciar Diagnóstico</button>
+    </div>
+  </div>
+</section>
+
+<!-- ========== TÉCNICO DIAGNÓSTICO ========== -->
+<section class="screen" id="screen-tecnico-diag">
+  <div class="container">
+    <div class="sec-tit">🚗 <span id="diag-vehiculo">Diagnóstico en curso</span></div>
+    <div class="sec-sub" id="diag-km"></div>
+
+    <!-- Síntomas del cliente -->
+    <div class="sintomas-card">
+      <div class="sintomas-tit">🗣️ Síntomas reportados por el cliente</div>
+      <ul class="sintomas-lista" id="sintomas-lista-tec"></ul>
+      <div id="dtc-info" style="margin-top:10px;font-size:11px;color:var(--azul);"></div>
+    </div>
+
+    <!-- Pruebas disponibles -->
+    <div class="sec-tit" style="font-size:14px;margin-top:18px;">🔬 Pruebas disponibles</div>
+    <div class="sec-sub">Cada prueba consume tiempo. Realiza las mínimas necesarias para llegar al diagnóstico.</div>
+    <div class="pruebas-grid" id="pruebas-grid"></div>
+
+    <!-- Resultados de pruebas realizadas -->
+    <div id="resultados-pruebas"></div>
+
+    <button class="btn btn-warn btn-block" onclick="abrirDiagnostico()" style="margin-top:14px;">⚖️ Confirmar Diagnóstico</button>
+  </div>
+</section>
+
+<!-- ========== TÉCNICO RESULTADO ========== -->
+<section class="screen" id="screen-resultado">
+  <div class="container" style="text-align:center;">
+    <div class="sec-tit">📊 Resultado de la Evaluación</div>
+    
+    <div class="score-circle" id="score-circle">
+      <div class="score-num" id="score-num">0</div>
+    </div>
+    <div style="font-family:Syne,sans-serif;font-weight:700;font-size:13px;color:var(--txt3);margin-top:-10px;">PUNTAJE</div>
+
+    <div id="resultado-detalle" style="text-align:left;margin-top:24px;"></div>
+
+    <div class="form-row" style="margin-top:20px;">
+      <button class="btn btn-primary btn-block" onclick="goHome()">🏠 Volver al inicio</button>
+      <button class="btn btn-secondary btn-block" onclick="goScreen('ranking')">🏆 Ver ranking</button>
+    </div>
+  </div>
+</section>
+
+<!-- ========== PRUEBAS ACTIVAS ========== -->
+<section class="screen" id="screen-pruebas-activas">
+  <div class="container">
+    <button class="back-btn" onclick="goHome()">Volver</button>
+    <div class="sec-tit">📋 Pruebas Disponibles</div>
+    <div class="sec-sub">Lista de evaluaciones creadas. Toca una para ver detalles, compartir o eliminar.</div>
+    <div id="pruebas-lista"></div>
+  </div>
+</section>
+
+<!-- ========== RANKING ========== -->
+<section class="screen" id="screen-ranking">
+  <div class="container">
+    <button class="back-btn" onclick="goHome()">Volver</button>
+    <div class="sec-tit">🏆 Ranking de Técnicos</div>
+    <div class="sec-sub">Posición según puntaje promedio, aciertos y tiempo de diagnóstico.</div>
+    <div id="ranking-tabla"></div>
+  </div>
+</section>
+
+<!-- MODAL DIAGNÓSTICO -->
+<div class="modal" id="modal-diagnostico">
+  <div class="modal-content">
+    <div class="modal-tit">⚖️ Tu diagnóstico final</div>
+    <div class="sec-sub">Basado en las pruebas que realizaste, ¿cuál es tu diagnóstico?</div>
+    
+    <div class="form-grid">
+      <div>
+        <label>Sistema afectado</label>
+        <select id="diag-sistema"></select>
+      </div>
+      <div>
+        <label>Falla específica detectada</label>
+        <select id="diag-falla"><option value="">Selecciona primero el sistema</option></select>
+      </div>
+      <div>
+        <label>Reparación recomendada</label>
+        <textarea id="diag-reparacion" rows="3" placeholder="Describe brevemente la solución que propones..."></textarea>
+      </div>
+      <div class="form-row">
+        <button class="btn btn-secondary" onclick="cerrarModal()">Cancelar</button>
+        <button class="btn btn-primary" onclick="confirmarDiagnostico()">✓ Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL RESULTADO PRUEBA -->
+<div class="modal" id="modal-prueba">
+  <div class="modal-content">
+    <div class="modal-tit" id="modal-prueba-tit">Resultado</div>
+    <div id="modal-prueba-body"></div>
+    <button class="btn btn-primary btn-block" onclick="cerrarModalPrueba()" style="margin-top:14px;">Continuar</button>
+  </div>
+</div>
+
+<script>
+// ===============================================
+// BANCO DE FALLAS POR SISTEMA
+// ===============================================
+var SISTEMAS = {
+  motor: {nombre:'Motor / Combustión', emoji:'🔥'},
+  electrico: {nombre:'Sistema Eléctrico', emoji:'⚡'},
+  frenos: {nombre:'Frenos', emoji:'🛑'},
+  embrague: {nombre:'Transmisión / Embrague', emoji:'⚙️'},
+  refrigeracion: {nombre:'Refrigeración', emoji:'🌡️'},
+  combustible: {nombre:'Combustible / Inyección', emoji:'⛽'},
+  emisiones: {nombre:'Emisiones / DPF / EGR', emoji:'💨'},
+  aire: {nombre:'Aire Comprimido (Camión)', emoji:'🌪️'},
+  suspension: {nombre:'Suspensión / Dirección', emoji:'🎈'},
+  carroceria: {nombre:'Carrocería / Vidrios', emoji:'🪟'}
+}
+
+var FALLAS = {
+  motor: [
+    {id:'bujias',n:'Bujías sucias o malas',sintomas:['Marcha mínima inestable','Pérdida de potencia','Mayor consumo','Falla al acelerar'],dtc:'P0300, P0301',sol:'Cambio de juego de bujías originales'},
+    {id:'distribucion',n:'Correa distribución desalineada',sintomas:['Pérdida total de compresión','Motor no enciende','Ruido metálico al intentar arrancar'],dtc:'P0016, P0017',sol:'Cambio kit distribución y sincronización'},
+    {id:'inyectores',n:'Inyectores tapados o sucios',sintomas:['Tirones al acelerar','Humo negro en aceleración','Consumo elevado','Encendido difícil en frío'],dtc:'P0201, P0203',sol:'Limpieza ultrasonido o cambio inyectores'},
+    {id:'turbo',n:'Turbo desgastado o roto',sintomas:['Pérdida notable de potencia','Humo azul por escape','Silbido o ruido metálico','Consumo de aceite'],dtc:'P0234, P0299',sol:'Reparación o cambio del turbocompresor'},
+    {id:'compresion',n:'Pérdida compresión cilindro',sintomas:['Vibración constante','Cilindro frío al tacto','Pérdida potencia severa','Humo blanco persistente'],dtc:'P0301-P0306',sol:'Diagnóstico interno motor (válvulas/anillos)'}
+  ],
+  electrico: [
+    {id:'bateria',n:'Batería descargada o sulfatada',sintomas:['Auto no parte','Luces tablero débiles','Click al girar llave','Mayor a 4 años de uso'],dtc:'No aplica',sol:'Cambio de batería + test alternador'},
+    {id:'alternador',n:'Alternador no carga',sintomas:['Luz batería encendida en marcha','Auto se apaga al andar','Luces se atenúan a bajas revoluciones','Voltímetro marca <13.5V'],dtc:'P0620, P0622',sol:'Cambio alternador o regulador de voltaje'},
+    {id:'motor-arranque',n:'Motor de arranque dañado',sintomas:['Click al girar llave','No gira el motor','Olor a quemado al intentar','Batería en buen estado'],dtc:'No aplica',sol:'Cambio del motor de arranque'},
+    {id:'fusibles',n:'Fusible quemado',sintomas:['Pierde funciones puntuales','Vidrios no suben','Luces no funcionan','Radio no enciende'],dtc:'No aplica',sol:'Identificar y reemplazar fusible afectado'}
+  ],
+  frenos: [
+    {id:'pastillas',n:'Pastillas de freno gastadas',sintomas:['Chillido al frenar','Pedal más bajo','Distancia frenado mayor','Avisador luminoso'],dtc:'No aplica',sol:'Cambio de pastillas + revisión discos'},
+    {id:'discos',n:'Discos alabeados o gastados',sintomas:['Vibración al frenar','Pulsación en pedal','Volante vibra al frenar','Surcos visibles en discos'],dtc:'No aplica',sol:'Cambio de discos + pastillas nuevas'},
+    {id:'liquido',n:'Líquido de freno bajo o aire',sintomas:['Pedal blando','Pedal va al fondo','Hay que bombear el pedal','Luz tablero encendida'],dtc:'No aplica',sol:'Sangrado del sistema + recarga líquido'},
+    {id:'caliper',n:'Caliper trabado',sintomas:['Auto se va a un lado al frenar','Olor a quemado en rueda','Disco caliente al detenerse','Desgaste irregular pastillas'],dtc:'No aplica',sol:'Reparación o cambio del caliper'}
+  ],
+  embrague: [
+    {id:'patinaje',n:'Embrague patinando',sintomas:['Motor revoluciona pero auto no acelera','Pérdida tracción en subidas','Olor a quemado','Cambio difícil'],dtc:'No aplica',sol:'Cambio kit embrague completo'},
+    {id:'cojinete',n:'Cojinete de empuje gastado',sintomas:['Ruido al pisar pedal embrague','Ruido desaparece al soltar pedal','Vibración en pedal'],dtc:'No aplica',sol:'Cambio kit embrague + cojinete'},
+    {id:'sincros',n:'Sincros caja desgastados',sintomas:['Cambios entran con golpe','Ruido al cambiar','Cambio difícil sin embragar a fondo','Salta cambio'],dtc:'No aplica',sol:'Reparación interior caja de cambios'}
+  ],
+  refrigeracion: [
+    {id:'termostato',n:'Termostato pegado cerrado',sintomas:['Sobrecalentamiento','Temperatura sube en marcha','Calefacción no calienta','Ventilador no para'],dtc:'P0128, P0125',sol:'Cambio termostato + flush sistema'},
+    {id:'bomba-agua',n:'Bomba de agua dañada',sintomas:['Sobrecalentamiento','Fuga visible bajo motor','Ruido en zona bomba','Refrigerante bajo'],dtc:'No aplica',sol:'Cambio bomba de agua + correa'},
+    {id:'radiador',n:'Radiador tapado o roto',sintomas:['Sobrecalentamiento en tráfico','Fuga refrigerante','Vapor saliendo','Reservorio se vacía'],dtc:'No aplica',sol:'Cambio o limpieza profunda radiador'}
+  ],
+  combustible: [
+    {id:'bomba-comb',n:'Bomba de combustible mala',sintomas:['Motor no parte','Motor de partida gira pero no enciende','Auto se apaga en marcha','Pérdida potencia'],dtc:'P0087, P0230',sol:'Cambio bomba combustible'},
+    {id:'filtro-comb',n:'Filtro combustible saturado',sintomas:['Pérdida potencia progresiva','Auto se apaga en aceleración','Tirones a alta velocidad','+50.000 km sin cambio'],dtc:'P0087',sol:'Cambio filtro de combustible'},
+    {id:'comm-rail',n:'Bomba Common Rail desgastada',sintomas:['Difícil arranque en frío','Pérdida potencia notable','Humo negro','Consumo elevado'],dtc:'P0087, P0093',sol:'Diagnóstico Bosch + reparación bomba CR'}
+  ],
+  emisiones: [
+    {id:'dpf',n:'DPF saturado',sintomas:['Luz check encendida','Modo emergencia','Pérdida potencia notable','Humo negro al acelerar'],dtc:'P2002, P244A',sol:'Regeneración forzada o limpieza DPF Revival'},
+    {id:'egr',n:'Válvula EGR sucia',sintomas:['Humo negro','Marcha mínima inestable','Pérdida potencia','Mayor consumo'],dtc:'P0401, P0402',sol:'Limpieza EGR o reemplazo'},
+    {id:'lambda',n:'Sensor lambda defectuoso',sintomas:['Marcha mínima irregular','Mayor consumo','Luz check intermitente','Humo del escape varía'],dtc:'P0130, P0135',sol:'Cambio del sensor de oxígeno (lambda)'}
+  ],
+  aire: [
+    {id:'compresor-aire',n:'Compresor de aire dañado',sintomas:['Sistema no carga presión','Compresor no para nunca','Aire con aceite','Frenos sin presión'],dtc:'No aplica',sol:'Cambio compresor + revisión sistema'},
+    {id:'fuga-aire',n:'Fuga en circuito aire',sintomas:['Sistema pierde presión rápido','Ruido de aire','Frenos sin presión al rato','Suspensión baja sola'],dtc:'No aplica',sol:'Detección con jabón + cambio empalmes'},
+    {id:'valvula-4circ',n:'Válvula 4 circuitos falla',sintomas:['Sistema no balanced','Manómetro varía mucho','Frenos posteriores débiles'],dtc:'No aplica',sol:'Cambio válvula 4 circuitos'},
+    {id:'secador-aire',n:'Secador de aire saturado',sintomas:['Agua en depósitos','Frenos congelados en frío','Compresor trabaja demasiado'],dtc:'No aplica',sol:'Cambio cartucho secador + drenaje'}
+  ],
+  suspension: [
+    {id:'amortiguador',n:'Amortiguadores gastados',sintomas:['Auto rebota mucho','Desgaste irregular neumáticos','Inestabilidad en curvas','Frenado más largo'],dtc:'No aplica',sol:'Cambio par de amortiguadores'},
+    {id:'fuelle',n:'Fuelle suspensión neumática roto',sintomas:['Camión inclinado a un lado','Compresor trabaja constantemente','Suspensión baja al detenerse','Ruido aire'],dtc:'No aplica',sol:'Cambio fuelle de suspensión'},
+    {id:'rotula',n:'Rótula de dirección suelta',sintomas:['Ruido al girar volante','Volante se siente flojo','Vibración en velocidad','Desgaste interior neumático'],dtc:'No aplica',sol:'Cambio rótula + alineación'}
+  ],
+  carroceria: [
+    {id:'vidrios',n:'Vidrios eléctricos no suben',sintomas:['Switch no responde','Vidrio baja pero no sube','Ruido motor sin movimiento','Funciona solo desde una puerta'],dtc:'No aplica',sol:'Cambio motor vidrio o switch'},
+    {id:'central',n:'Cierre centralizado falla',sintomas:['No cierra todas las puertas','Funciona intermitente','No responde control remoto','Ruido cierre constante'],dtc:'No aplica',sol:'Diagnóstico módulo + cambio actuador'}
+  ]
+}
+
+// ===============================================
+// PRUEBAS DIAGNÓSTICAS DISPONIBLES
+// ===============================================
+var PRUEBAS = {
+  visual: {n:'Inspección visual',ico:'👁️',t:1},
+  multimetro: {n:'Voltímetro / Multímetro',ico:'🔌',t:3},
+  scanner: {n:'Scanner OBD-II',ico:'📱',t:2},
+  compresion: {n:'Test de compresión motor',ico:'📊',t:5},
+  ruido: {n:'Análisis de ruidos',ico:'🔊',t:2},
+  testLuces: {n:'Test luces tablero',ico:'💡',t:1},
+  testPresion: {n:'Test presión combustible',ico:'⛽',t:4},
+  pruebaRuta: {n:'Prueba en ruta',ico:'🛣️',t:6},
+  manometroAire: {n:'Manómetro sistema aire',ico:'🌬️',t:3},
+  termometro: {n:'Test temperatura motor',ico:'🌡️',t:2}
+}
+
+// PRUEBAS por SISTEMA (cuáles aplicar para cada falla)
+var PRUEBAS_POR_SISTEMA = {
+  motor:['visual','scanner','compresion','ruido','pruebaRuta'],
+  electrico:['visual','multimetro','testLuces','scanner'],
+  frenos:['visual','ruido','pruebaRuta'],
+  embrague:['visual','ruido','pruebaRuta'],
+  refrigeracion:['visual','termometro','testLuces','scanner'],
+  combustible:['visual','testPresion','scanner','pruebaRuta'],
+  emisiones:['visual','scanner','pruebaRuta'],
+  aire:['visual','manometroAire','ruido'],
+  suspension:['visual','pruebaRuta','ruido'],
+  carroceria:['visual','multimetro']
+}
+
+// ===============================================
+// STORAGE
+// ===============================================
+async function loadPruebas(){
+  try{
+    var r = await window.storage.list('prueba:', true)
+    if(!r || !r.keys) return []
+    var pruebas = []
+    for(var k of r.keys){
+      try{
+        var p = await window.storage.get(k, true)
+        if(p && p.value) pruebas.push(JSON.parse(p.value))
+      }catch(e){}
+    }
+    return pruebas
+  }catch(e){console.warn('No pruebas:', e); return []}
+}
+
+async function loadResultados(){
+  try{
+    var r = await window.storage.list('resultado:', true)
+    if(!r || !r.keys) return []
+    var res = []
+    for(var k of r.keys){
+      try{
+        var p = await window.storage.get(k, true)
+        if(p && p.value) res.push(JSON.parse(p.value))
+      }catch(e){}
+    }
+    return res
+  }catch(e){return []}
+}
+
+async function savePrueba(p){
+  await window.storage.set('prueba:'+p.codigo, JSON.stringify(p), true)
+}
+async function saveResultado(r){
+  await window.storage.set('resultado:'+Date.now()+':'+r.codigo, JSON.stringify(r), true)
+}
+
+// ===============================================
+// NAVEGACIÓN
+// ===============================================
+function goScreen(name){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'))
+  document.getElementById('screen-'+name).classList.add('active')
+  window.scrollTo(0,0)
+  stopCronometro()
+  if(name==='pruebas-activas') renderPruebasActivas()
+  if(name==='ranking') renderRanking()
+}
+function goHome(){
+  goScreen('home')
+  document.getElementById('mode-badge').textContent='SIMULADOR'
+  renderStatsHome()
+}
+
+// ===============================================
+// HOME STATS
+// ===============================================
+async function renderStatsHome(){
+  var pruebas = await loadPruebas()
+  var resultados = await loadResultados()
+  var tecnicos = [...new Set(resultados.map(r=>r.tecnico))]
+  var promedio = resultados.length ? Math.round(resultados.reduce((a,b)=>a+b.score,0)/resultados.length) : 0
+  
+  document.getElementById('stats-home').innerHTML = `
+    <div class="stat-card"><div class="stat-num">${pruebas.length}</div><div class="stat-lbl">Pruebas Creadas</div></div>
+    <div class="stat-card"><div class="stat-num">${resultados.length}</div><div class="stat-lbl">Evaluaciones</div></div>
+    <div class="stat-card"><div class="stat-num">${tecnicos.length}</div><div class="stat-lbl">Técnicos</div></div>
+    <div class="stat-card"><div class="stat-num">${promedio}</div><div class="stat-lbl">Score Promedio</div></div>
+  `
+}
+
+// ===============================================
+// ADMIN: CREAR PRUEBA
+// ===============================================
+var TIPO_SEL = 'auto'
+
+document.querySelectorAll('#tipo-vehiculo-grid .sistema-btn').forEach(b=>{
+  b.onclick = () => {
+    document.querySelectorAll('#tipo-vehiculo-grid .sistema-btn').forEach(x=>x.classList.remove('active'))
+    b.classList.add('active')
+    TIPO_SEL = b.dataset.tipo
+  }
+})
+
+function renderSistemas(){
+  var grid = document.getElementById('sistema-grid')
+  grid.innerHTML = Object.keys(SISTEMAS).map(k=>{
+    var s = SISTEMAS[k]
+    return `<div class="sistema-btn" data-sis="${k}"><div class="sistema-emoji">${s.emoji}</div><div class="sistema-name">${s.nombre}</div></div>`
+  }).join('')
+  grid.querySelectorAll('.sistema-btn').forEach(b=>{
+    b.onclick = () => {
+      grid.querySelectorAll('.sistema-btn').forEach(x=>x.classList.remove('active'))
+      b.classList.add('active')
+      var sis = b.dataset.sis
+      renderFallas(sis)
+    }
+  })
+}
+renderSistemas()
+
+function renderFallas(sis){
+  var sel = document.getElementById('falla-select')
+  sel.innerHTML = '<option value="">Selecciona falla</option>' + 
+    FALLAS[sis].map(f=>`<option value="${f.id}">${f.n}</option>`).join('')
+  sel.onchange = () => {
+    var fid = sel.value
+    var f = FALLAS[sis].find(x=>x.id===fid)
+    if(f){
+      document.getElementById('sintomas-textarea').value = f.sintomas.join('\n')
+      document.getElementById('dtc-input').value = f.dtc==='No aplica'?'':f.dtc
+    }
+  }
+}
+
+function generarCodigo(){
+  var letras = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'
+  var c = ''
+  for(var i=0;i<6;i++) c += letras.charAt(Math.floor(Math.random()*letras.length))
+  return c
+}
+
+async function crearPrueba(){
+  var sisActiva = document.querySelector('#sistema-grid .sistema-btn.active')
+  if(!sisActiva){ alert('Selecciona el sistema con falla'); return }
+  var falla = document.getElementById('falla-select').value
+  if(!falla){ alert('Selecciona la falla específica'); return }
+  var marca = document.getElementById('marca-input').value.trim()
+  var modelo = document.getElementById('modelo-input').value.trim()
+  if(!marca || !modelo){ alert('Completa marca y modelo'); return }
+  
+  var prueba = {
+    codigo: generarCodigo(),
+    tipo: TIPO_SEL,
+    marca: marca,
+    modelo: modelo,
+    anio: document.getElementById('anio-input').value || '',
+    km: document.getElementById('km-input').value || '',
+    sistema: sisActiva.dataset.sis,
+    falla: falla,
+    sintomas: document.getElementById('sintomas-textarea').value.split('\n').filter(x=>x.trim()),
+    dtc: document.getElementById('dtc-input').value.trim(),
+    tiempoLimite: parseInt(document.getElementById('tiempo-limite').value) || 15,
+    creada: new Date().toISOString()
+  }
+  
+  await savePrueba(prueba)
+  
+  document.getElementById('codigo-creado').textContent = prueba.codigo
+  document.getElementById('resumen-caso').innerHTML = `
+    <div class="resultado-card">
+      <div class="resultado-tit">Vehículo</div>
+      <div class="resultado-val">${prueba.marca} ${prueba.modelo} ${prueba.anio} · ${prueba.km}</div>
+    </div>
+    <div class="resultado-card">
+      <div class="resultado-tit">Falla inducida (oculta al técnico)</div>
+      <div class="resultado-val bad">${SISTEMAS[prueba.sistema].nombre} → ${FALLAS[prueba.sistema].find(f=>f.id===prueba.falla).n}</div>
+    </div>
+    <div class="resultado-card">
+      <div class="resultado-tit">Síntomas que verá el técnico</div>
+      <div class="resultado-val">${prueba.sintomas.join(' · ')}</div>
+    </div>
+  `
+  
+  // WhatsApp share
+  var msg = '🔧 Hola! Te invito a una prueba de diagnóstico Serviruta.%0A%0ACódigo: *' + prueba.codigo + '*%0A%0AAccede aquí:%0Ahttps://angelperuga-maker.github.io/serviruta/simulador-tecnicos.html'
+  document.getElementById('btn-share-wa').onclick = () => window.open('https://wa.me/?text='+msg, '_blank')
+  document.getElementById('btn-copy-codigo').onclick = () => {
+    navigator.clipboard.writeText(prueba.codigo).then(()=>alert('Código copiado: ' + prueba.codigo))
+  }
+  
+  goScreen('prueba-creada')
+}
+
+// ===============================================
+// TÉCNICO: REALIZAR PRUEBA
+// ===============================================
+var PRUEBA_ACTUAL = null
+var TECNICO_DATA = null
+var PRUEBAS_REALIZADAS = []
+var TIEMPO_INICIO = null
+var CRONO_INTERVAL = null
+
+async function iniciarPrueba(){
+  var nombre = document.getElementById('tecnico-nombre').value.trim()
+  var codigo = document.getElementById('codigo-input').value.trim().toUpperCase()
+  if(!nombre || !codigo){ alert('Ingresa tu nombre y el código'); return }
+  
+  var pruebas = await loadPruebas()
+  var p = pruebas.find(x=>x.codigo === codigo)
+  if(!p){ alert('Código no válido: ' + codigo); return }
+  
+  PRUEBA_ACTUAL = p
+  TECNICO_DATA = {nombre: nombre, esp: document.getElementById('tecnico-esp').value}
+  PRUEBAS_REALIZADAS = []
+  TIEMPO_INICIO = Date.now()
+  
+  // Render diagnóstico
+  document.getElementById('diag-vehiculo').textContent = p.marca + ' ' + p.modelo + ' (' + p.tipo.toUpperCase() + ')'
+  document.getElementById('diag-km').textContent = (p.anio?'Año '+p.anio+' · ':'') + (p.km||'kilometraje no especificado')
+  document.getElementById('sintomas-lista-tec').innerHTML = p.sintomas.map(s=>`<li>${s}</li>`).join('')
+  document.getElementById('dtc-info').textContent = p.dtc ? '📱 Códigos DTC reportados: ' + p.dtc : ''
+  
+  renderPruebasDisponibles()
+  iniciarCronometro()
+  goScreen('tecnico-diag')
+}
+
+function renderPruebasDisponibles(){
+  var grid = document.getElementById('pruebas-grid')
+  // Mostrar todas las pruebas, no solo las del sistema correcto (para que el técnico decida cuál usar)
+  grid.innerHTML = Object.keys(PRUEBAS).map(k=>{
+    var p = PRUEBAS[k]
+    var usada = PRUEBAS_REALIZADAS.some(x=>x.id===k)
+    return `<div class="prueba-btn ${usada?'usada':''}" data-prueba="${k}">
+      <div class="prueba-icon">${p.ico}</div>
+      <div class="prueba-info">
+        <div class="prueba-nombre">${p.n}</div>
+        <div class="prueba-tiempo">${p.t} min de trabajo${usada?' · ✓ realizada':''}</div>
+      </div>
+    </div>`
+  }).join('')
+  
+  grid.querySelectorAll('.prueba-btn').forEach(b=>{
+    b.onclick = () => {
+      if(b.classList.contains('usada')) return
+      ejecutarPrueba(b.dataset.prueba)
+    }
+  })
+}
+
+function ejecutarPrueba(idPrueba){
+  var prueba = PRUEBAS[idPrueba]
+  var sisActual = PRUEBA_ACTUAL.sistema
+  var fallaActual = FALLAS[sisActual].find(f=>f.id===PRUEBA_ACTUAL.falla)
+  
+  // Es relevante esta prueba para el sistema?
+  var esRelevante = (PRUEBAS_POR_SISTEMA[sisActual]||[]).includes(idPrueba)
+  
+  var resultado
+  if(esRelevante){
+    // Da pista útil
+    if(idPrueba==='visual') resultado = 'Inspección visual revela: ' + fallaActual.sintomas[Math.floor(Math.random()*fallaActual.sintomas.length)].toLowerCase()
+    else if(idPrueba==='scanner') resultado = PRUEBA_ACTUAL.dtc ? 'Códigos DTC: ' + PRUEBA_ACTUAL.dtc + ' detectados' : 'Sin códigos almacenados, pero se observa: ' + fallaActual.sintomas[0].toLowerCase()
+    else if(idPrueba==='multimetro') resultado = sisActual==='electrico' ? 'Lectura anormal: ' + (Math.random()<0.5?'12.4V (debería ser 13.8-14.8V)':'menos de 9.6V bajo carga') : 'Lecturas normales en circuito'
+    else if(idPrueba==='compresion') resultado = sisActual==='motor' ? 'Compresión irregular detectada en algún cilindro' : 'Compresión OK en todos los cilindros'
+    else if(idPrueba==='ruido') resultado = 'Ruido anormal detectado en zona: ' + SISTEMAS[sisActual].nombre.toLowerCase()
+    else if(idPrueba==='testLuces') resultado = sisActual==='electrico' ? 'Luz tablero encendida: ' + (fallaActual.dtc.includes('P0620')?'batería/alternador':'check engine') : 'Tablero sin avisos'
+    else if(idPrueba==='testPresion') resultado = sisActual==='combustible' ? 'Presión baja detectada: ' + (Math.random()<0.5?'2.1 bar (debería ser 3.5 bar)':'inestable') : 'Presión OK'
+    else if(idPrueba==='pruebaRuta') resultado = fallaActual.sintomas.slice(0,2).join('. Además se nota: ').toLowerCase()
+    else if(idPrueba==='manometroAire') resultado = sisActual==='aire' ? 'Presión sistema: ' + (Math.random()<0.5?'5.4 bar (baja, debería 8 bar)':'no carga sobre 4 bar') : 'Presión 8.0 bar OK'
+    else if(idPrueba==='termometro') resultado = sisActual==='refrigeracion' ? 'Temperatura excede 105°C en marcha mínima' : 'Temperatura 88°C normal'
+  } else {
+    // No es relevante, da info neutra
+    resultado = 'Sin hallazgos significativos en este sistema. Considera revisar otros sistemas.'
+  }
+  
+  PRUEBAS_REALIZADAS.push({id:idPrueba, nombre:prueba.n, ico:prueba.ico, resultado:resultado, relevante:esRelevante, tiempo:prueba.t})
+  
+  // Mostrar resultado modal
+  document.getElementById('modal-prueba-tit').textContent = prueba.ico + ' ' + prueba.n
+  document.getElementById('modal-prueba-body').innerHTML = `
+    <div class="alert ${esRelevante?'alert-ok':''}">${resultado}</div>
+    <div style="font-size:11px;color:var(--txt3);margin-top:6px;">⏱ Esta prueba consumió ${prueba.t} minutos de trabajo</div>
+  `
+  document.getElementById('modal-prueba').classList.add('active')
+}
+
+function cerrarModalPrueba(){
+  document.getElementById('modal-prueba').classList.remove('active')
+  renderPruebasDisponibles()
+  renderResultadosPruebas()
+}
+
+function renderResultadosPruebas(){
+  if(!PRUEBAS_REALIZADAS.length){
+    document.getElementById('resultados-pruebas').innerHTML = ''
+    return
+  }
+  document.getElementById('resultados-pruebas').innerHTML = `
+    <div class="sec-tit" style="font-size:13px;margin-top:18px;">📝 Hallazgos recolectados (${PRUEBAS_REALIZADAS.length})</div>
+    ${PRUEBAS_REALIZADAS.map(p=>`
+      <div class="resultado-card">
+        <div class="resultado-tit">${p.ico} ${p.nombre}</div>
+        <div class="resultado-val ${p.relevante?'ok':''}">${p.resultado}</div>
+      </div>
+    `).join('')}
+  `
+}
+
+// CRONÓMETRO
+function iniciarCronometro(){
+  document.getElementById('cronometro').style.display='block'
+  CRONO_INTERVAL = setInterval(()=>{
+    var s = Math.floor((Date.now()-TIEMPO_INICIO)/1000)
+    var m = Math.floor(s/60)
+    s = s%60
+    document.getElementById('tiempo-val').textContent = String(m).padStart(2,'0')+':'+String(s).padStart(2,'0')
+  }, 1000)
+}
+function stopCronometro(){
+  if(CRONO_INTERVAL) clearInterval(CRONO_INTERVAL)
+  document.getElementById('cronometro').style.display='none'
+}
+
+// MODAL DIAGNÓSTICO
+function abrirDiagnostico(){
+  var sel = document.getElementById('diag-sistema')
+  sel.innerHTML = '<option value="">Selecciona sistema</option>' + 
+    Object.keys(SISTEMAS).map(k=>`<option value="${k}">${SISTEMAS[k].emoji} ${SISTEMAS[k].nombre}</option>`).join('')
+  sel.onchange = () => {
+    var sFalla = document.getElementById('diag-falla')
+    var sis = sel.value
+    if(!sis){ sFalla.innerHTML = '<option value="">Selecciona primero el sistema</option>'; return }
+    sFalla.innerHTML = '<option value="">Selecciona la falla</option>' + 
+      FALLAS[sis].map(f=>`<option value="${f.id}">${f.n}</option>`).join('')
+  }
+  document.getElementById('modal-diagnostico').classList.add('active')
+}
+function cerrarModal(){
+  document.getElementById('modal-diagnostico').classList.remove('active')
+}
+
+async function confirmarDiagnostico(){
+  var sis = document.getElementById('diag-sistema').value
+  var falla = document.getElementById('diag-falla').value
+  var rep = document.getElementById('diag-reparacion').value.trim()
+  if(!sis || !falla || !rep){ alert('Completa todos los campos'); return }
+  
+  stopCronometro()
+  cerrarModal()
+  
+  var tiempoUsado = Math.floor((Date.now()-TIEMPO_INICIO)/1000/60)  // minutos
+  var minutosPruebas = PRUEBAS_REALIZADAS.reduce((a,b)=>a+b.tiempo, 0)
+  
+  // EVALUACIÓN
+  var score = 0
+  var detalles = []
+  
+  // 50 pts si acierta sistema y falla específica
+  var sisOK = (sis === PRUEBA_ACTUAL.sistema)
+  var fallaOK = (falla === PRUEBA_ACTUAL.falla)
+  if(sisOK && fallaOK){ score += 50; detalles.push({l:'Diagnóstico correcto',v:'+50',c:'ok'}) }
+  else if(sisOK){ score += 20; detalles.push({l:'Sistema correcto pero falla específica errada',v:'+20',c:'warn'}) }
+  else { detalles.push({l:'Diagnóstico incorrecto',v:'0',c:'bad'}) }
+  
+  // 25 pts según pruebas eficientes (menos = mejor, mínimo 2-3)
+  var pruebasRelev = PRUEBAS_REALIZADAS.filter(p=>p.relevante).length
+  var pruebasTotal = PRUEBAS_REALIZADAS.length
+  var eficiencia = pruebasTotal>0 ? pruebasRelev/pruebasTotal : 0
+  var puntoEf = Math.round(eficiencia * 25)
+  score += puntoEf
+  detalles.push({l:'Eficiencia diagnóstica ('+pruebasRelev+'/'+pruebasTotal+' pruebas relevantes)',v:'+'+puntoEf,c:puntoEf>=15?'ok':puntoEf>=8?'warn':'bad'})
+  
+  // 25 pts por tiempo (rango: hasta tiempoLimite minutos)
+  var puntoTiempo = 0
+  if(tiempoUsado <= PRUEBA_ACTUAL.tiempoLimite * 0.5) puntoTiempo = 25
+  else if(tiempoUsado <= PRUEBA_ACTUAL.tiempoLimite * 0.75) puntoTiempo = 18
+  else if(tiempoUsado <= PRUEBA_ACTUAL.tiempoLimite) puntoTiempo = 12
+  else puntoTiempo = 5
+  score += puntoTiempo
+  detalles.push({l:'Tiempo usado: '+tiempoUsado+' min (límite '+PRUEBA_ACTUAL.tiempoLimite+' min)',v:'+'+puntoTiempo,c:puntoTiempo>=18?'ok':puntoTiempo>=12?'warn':'bad'})
+  
+  // Guardar resultado
+  var resultado = {
+    codigo: PRUEBA_ACTUAL.codigo,
+    tecnico: TECNICO_DATA.nombre,
+    esp: TECNICO_DATA.esp,
+    vehiculo: PRUEBA_ACTUAL.marca + ' ' + PRUEBA_ACTUAL.modelo,
+    score: score,
+    diagSistema: sis,
+    diagFalla: falla,
+    diagReparacion: rep,
+    correctaSistema: PRUEBA_ACTUAL.sistema,
+    correctaFalla: PRUEBA_ACTUAL.falla,
+    tiempo: tiempoUsado,
+    pruebasRealizadas: PRUEBAS_REALIZADAS.length,
+    pruebasRelevantes: pruebasRelev,
+    fecha: new Date().toISOString()
+  }
+  await saveResultado(resultado)
+  
+  // Render pantalla resultado
+  document.getElementById('score-num').textContent = score
+  document.getElementById('score-num').className = 'score-num ' + (score>=80?'':score>=60?'medio':'malo')
+  document.getElementById('score-circle').style.setProperty('--score', score)
+  
+  var fallaCorrecta = FALLAS[PRUEBA_ACTUAL.sistema].find(f=>f.id===PRUEBA_ACTUAL.falla)
+  document.getElementById('resultado-detalle').innerHTML = `
+    <div class="resultado-card">
+      <div class="resultado-tit">Tu diagnóstico</div>
+      <div class="resultado-val ${sisOK && fallaOK?'ok':sisOK?'warn':'bad'}">${SISTEMAS[sis].nombre} → ${FALLAS[sis].find(f=>f.id===falla).n}</div>
+    </div>
+    <div class="resultado-card">
+      <div class="resultado-tit">Diagnóstico correcto</div>
+      <div class="resultado-val">${SISTEMAS[PRUEBA_ACTUAL.sistema].nombre} → ${fallaCorrecta.n}</div>
+      <div style="font-size:11px;color:var(--txt3);margin-top:6px;">Reparación: ${fallaCorrecta.sol}</div>
+    </div>
+    ${detalles.map(d=>`<div class="resultado-card"><div class="resultado-tit">${d.l}</div><div class="resultado-val ${d.c}">${d.v} puntos</div></div>`).join('')}
+  `
+  
+  goScreen('resultado')
+}
+
+// ===============================================
+// PRUEBAS ACTIVAS
+// ===============================================
+async function renderPruebasActivas(){
+  var pruebas = await loadPruebas()
+  var resultados = await loadResultados()
+  
+  if(!pruebas.length){
+    document.getElementById('pruebas-lista').innerHTML = '<div class="alert">Aún no hay pruebas creadas. Toca "Crear Prueba" en el inicio.</div>'
+    return
+  }
+  
+  document.getElementById('pruebas-lista').innerHTML = pruebas.sort((a,b)=>b.creada.localeCompare(a.creada)).map(p=>{
+    var resultadosPrueba = resultados.filter(r=>r.codigo===p.codigo)
+    return `
+      <div class="banco-card">
+        <div class="banco-codigo">${p.codigo}</div>
+        <div class="banco-vehiculo">${p.marca} ${p.modelo} (${p.tipo})</div>
+        <div style="font-size:11px;color:var(--txt2);margin-top:4px;">Falla: ${SISTEMAS[p.sistema].emoji} ${FALLAS[p.sistema].find(f=>f.id===p.falla).n}</div>
+        <div class="banco-meta">
+          <span>📅 ${new Date(p.creada).toLocaleDateString('es-CL')}</span>
+          <span class="estado-pill ${resultadosPrueba.length?'completada':'activa'}">${resultadosPrueba.length?resultadosPrueba.length+' eval':'Activa'}</span>
+        </div>
+        <div style="display:flex;gap:6px;margin-top:10px;">
+          <button class="btn btn-secondary" style="font-size:11px;padding:6px 10px;" onclick="compartirPrueba('${p.codigo}')">💬 Compartir</button>
+          <button class="btn btn-warn" style="font-size:11px;padding:6px 10px;" onclick="verResultadosPrueba('${p.codigo}')">📊 Ver evals</button>
+          <button class="btn btn-secondary" style="font-size:11px;padding:6px 10px;background:rgba(232,33,10,0.15);color:var(--rojo);" onclick="eliminarPrueba('${p.codigo}')">🗑</button>
+        </div>
+      </div>
+    `
+  }).join('')
+}
+
+function compartirPrueba(codigo){
+  var msg = '🔧 Hola! Te invito a una prueba de diagnóstico Serviruta.%0A%0ACódigo: *' + codigo + '*%0A%0AAccede aquí:%0Ahttps://angelperuga-maker.github.io/serviruta/simulador-tecnicos.html'
+  window.open('https://wa.me/?text='+msg, '_blank')
+}
+
+async function eliminarPrueba(codigo){
+  if(!confirm('¿Eliminar la prueba ' + codigo + '? Los resultados quedan guardados.')) return
+  await window.storage.delete('prueba:'+codigo, true)
+  renderPruebasActivas()
+}
+
+async function verResultadosPrueba(codigo){
+  var resultados = await loadResultados()
+  var r = resultados.filter(x=>x.codigo===codigo)
+  if(!r.length){ alert('Esta prueba aún no tiene evaluaciones'); return }
+  var html = '<div class="modal-tit">📊 Evaluaciones de prueba ' + codigo + '</div>'
+  r.sort((a,b)=>b.score-a.score).forEach((x,i)=>{
+    html += '<div class="resultado-card"><div class="resultado-tit">' + (i===0?'🥇 ':i===1?'🥈 ':i===2?'🥉 ':'') + x.tecnico + ' (' + x.esp + ')</div><div class="resultado-val ' + (x.score>=80?'ok':x.score>=60?'warn':'bad') + '">Score: ' + x.score + '/100 · ' + x.tiempo + ' min · ' + x.pruebasRealizadas + ' pruebas</div></div>'
+  })
+  document.getElementById('modal-prueba-tit').innerHTML = ''
+  document.getElementById('modal-prueba-body').innerHTML = html
+  document.getElementById('modal-prueba').classList.add('active')
+}
+
+// ===============================================
+// RANKING
+// ===============================================
+async function renderRanking(){
+  var resultados = await loadResultados()
+  if(!resultados.length){
+    document.getElementById('ranking-tabla').innerHTML = '<div class="alert">Aún no hay evaluaciones. Cuando los técnicos completen pruebas, aparecerán aquí.</div>'
+    return
+  }
+  
+  // Agrupar por técnico
+  var stats = {}
+  resultados.forEach(r=>{
+    if(!stats[r.tecnico]) stats[r.tecnico] = {nombre:r.tecnico, esp:r.esp, evals:0, total:0, tiempo:0, mejores:0}
+    stats[r.tecnico].evals++
+    stats[r.tecnico].total += r.score
+    stats[r.tecnico].tiempo += r.tiempo
+    if(r.score>=80) stats[r.tecnico].mejores++
+  })
+  
+  var ranking = Object.values(stats).map(s=>({
+    ...s,
+    promedio: Math.round(s.total/s.evals),
+    tiempoProm: Math.round(s.tiempo/s.evals)
+  })).sort((a,b)=>b.promedio-a.promedio)
+  
+  var html = `
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Técnico</th>
+          <th>Especialidad</th>
+          <th>Evals</th>
+          <th>Promedio</th>
+          <th>Tiempo prom.</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${ranking.map((r,i)=>`
+          <tr>
+            <td><span class="medalla">${i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1)}</span></td>
+            <td><b>${r.nombre}</b></td>
+            <td style="color:var(--txt3)">${r.esp}</td>
+            <td>${r.evals}</td>
+            <td style="color:${r.promedio>=80?'var(--verde)':r.promedio>=60?'var(--amarillo)':'var(--rojo)'};font-weight:700;">${r.promedio}/100</td>
+            <td>${r.tiempoProm} min</td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `
+  document.getElementById('ranking-tabla').innerHTML = html
+}
+
+// INIT
+renderStatsHome()
+</script>
+</body>
+</html>

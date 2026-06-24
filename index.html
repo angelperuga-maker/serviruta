@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nanys — Personas de confianza para tu casa</title>
-<meta name="description" content="Encontramos niñeras, nanas con horario, babysitters, asesoras del hogar, cuidadoras de adultos mayores, paseadores de mascotas, jardineros, limpiavidrios y planchado. Cada persona verificada: entrevista, antecedentes y referencias.">
+<meta name="description" content="Encontramos niñeras, nanas puertas adentro/afuera/por día, babysitters, matrimonios cuidadores de casa patronal, choferes, asesoras del hogar, cuidadoras de adultos mayores, paseadores, jardineros, limpiavidrios y planchado. Cada persona verificada: entrevista, antecedentes y referencias.">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -134,8 +134,9 @@
   .step .ic svg{width:22px;height:22px}
 
   /* services grid */
-  .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .svc-grid{display:flex;flex-wrap:wrap;gap:20px;justify-content:center}
   .svc{
+    flex:1 1 300px;max-width:352px;
     background:var(--blanco);border:1px solid var(--linea);border-radius:var(--radio);
     padding:26px 22px;transition:.22s;position:relative;overflow:hidden;
   }
@@ -278,7 +279,7 @@
     <div>
       <span class="eyebrow">Personal de hogar verificado · Chile</span>
       <h1>Personas de confianza para <span class="acc">cuidar tu hogar</span> y a quienes amas.</h1>
-      <p class="lead">Te conectamos con niñeras y nanas, asesoras del hogar, cuidadoras de adultos mayores, paseadores y más. Cada persona pasa por entrevista, revisión de antecedentes y verificación de referencias antes de llegar a tu casa.</p>
+      <p class="lead">Te conectamos con niñeras y nanas, asesoras del hogar, cuidadoras de adultos mayores, choferes, matrimonios cuidadores y más. Cada persona pasa por entrevista, revisión de antecedentes y verificación de referencias antes de llegar a tu casa.</p>
       <div class="hero-cta">
         <a href="#contacto" class="btn btn-wa">Buscar a mi persona ideal</a>
         <a href="#como" class="btn btn-ghost">Cómo funciona</a>
@@ -300,6 +301,8 @@
         <button class="chip" aria-pressed="false" data-svc="Paseador de mascotas">Paseador de mascotas <svg class="tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></button>
         <button class="chip" aria-pressed="false" data-svc="Asesora del hogar">Asesora del hogar <svg class="tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></button>
         <button class="chip" aria-pressed="false" data-svc="Cuidado de adulto mayor">Cuidado adulto mayor <svg class="tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></button>
+        <button class="chip" aria-pressed="false" data-svc="Matrimonio cuidador de casa patronal">Matrimonio cuidador <svg class="tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></button>
+        <button class="chip" aria-pressed="false" data-svc="Chofer">Chofer <svg class="tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></button>
         <button class="chip" aria-pressed="false" data-svc="Jardinería">Jardinero <svg class="tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></button>
         <button class="chip" aria-pressed="false" data-svc="Limpieza de vidrios">Limpiavidrios <svg class="tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></button>
         <button class="chip" aria-pressed="false" data-svc="Planchado">Planchado <svg class="tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></button>
@@ -358,7 +361,7 @@
       <article class="svc reveal">
         <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.6" r="2.6"/><path d="M12 7.2v6"/><path d="M8.5 10h7"/><path d="M9 20l3-6.8 3 6.8"/></svg></div>
         <h3>Niñeras y nanas</h3>
-        <p>Niñeras, babysitters y nanas con horario o puertas adentro. Personas cariñosas y con experiencia para tus hijos.</p>
+        <p>Niñeras, babysitters y nanas puertas adentro, afuera o por día. Personas cariñosas y con experiencia para tus hijos y tu hogar.</p>
         <span class="verif"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Persona verificada</span>
       </article>
 
@@ -373,6 +376,20 @@
         <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A4.5 4.5 0 0 0 12 5.5 4.5 4.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7z"/></svg></div>
         <h3>Cuidado de adultos mayores</h3>
         <p>Acompañamiento, medicación, higiene y cariño. Cuidadoras con experiencia y paciencia para tu familia.</p>
+        <span class="verif"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Persona verificada</span>
+      </article>
+
+      <article class="svc reveal">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="7" r="3"/><circle cx="16" cy="7" r="3"/><path d="M3 21v-1a5 5 0 0 1 10 0v1"/><path d="M13 21v-1a5 5 0 0 1 8-4.2"/></svg></div>
+        <h3>Matrimonio cuidador</h3>
+        <p>Parejas de confianza para cuidar y mantener tu casa patronal, parcela o segunda vivienda. Puertas adentro, con experiencia en campo.</p>
+        <span class="verif"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Persona verificada</span>
+      </article>
+
+      <article class="svc reveal">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2"/><path d="M3.3 11h6.2M14.5 11h6.2M12 14v6.7"/></svg></div>
+        <h3>Choferes</h3>
+        <p>Choferes responsables y con licencia al día. Para traslados diarios, colegio, trámites o acompañamiento de adultos mayores.</p>
         <span class="verif"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Persona verificada</span>
       </article>
 
@@ -498,11 +515,15 @@
           <label for="servicio">¿Qué necesitas?</label>
           <select id="servicio">
             <option value="">Selecciona…</option>
-            <option>Niñera o nana con horario</option>
-            <option>Babysitter por horas</option>
-            <option>Paseador de mascotas</option>
+            <option>Niñera o babysitter</option>
+            <option>Nana puertas adentro</option>
+            <option>Nana puertas afuera</option>
+            <option>Nana por día</option>
             <option>Asesora del hogar</option>
             <option>Cuidado de adulto mayor</option>
+            <option>Matrimonio cuidador (casa patronal)</option>
+            <option>Chofer</option>
+            <option>Paseador de mascotas</option>
             <option>Jardinería</option>
             <option>Limpieza de vidrios</option>
             <option>Planchado y lavandería</option>
@@ -535,15 +556,15 @@
           </span>
           Nanys
         </a>
-        <p>Personal de hogar verificado en la Región Metropolitana. Niñeras y nanas, babysitters, paseadores de mascotas, asesoras del hogar, cuidado de adultos mayores, jardinería, limpiavidrios, planchado y aseo profundo.</p>
+        <p>Personal de hogar verificado en la Región Metropolitana. Niñeras y nanas (puertas adentro, afuera o por día), matrimonios cuidadores de casa patronal, choferes, asesoras del hogar, cuidado de adultos mayores, paseadores, jardinería, limpiavidrios, planchado y aseo profundo.</p>
       </div>
       <div class="foot-col">
         <h4>Servicios</h4>
         <a href="#servicios">Niñeras y nanas</a>
-        <a href="#servicios">Babysitter y paseadores</a>
-        <a href="#servicios">Asesora del hogar</a>
+        <a href="#servicios">Matrimonio cuidador</a>
+        <a href="#servicios">Choferes</a>
         <a href="#servicios">Cuidado adulto mayor</a>
-        <a href="#servicios">Jardinería, limpiavidrios y planchado</a>
+        <a href="#servicios">Asesora, jardinería y aseo</a>
       </div>
       <div class="foot-col">
         <h4>Contacto</h4>
@@ -566,7 +587,25 @@
 <script>
   // ====== CONFIGURACIÓN: cambia este número por tu WhatsApp (formato 56 9 ...) ======
   const WHATSAPP = "56961218105";
+  // ====== Supabase: guarda los leads del formulario (tabla leads_nanys) ======
+  const SUPABASE_URL = "https://bqlgfmqcefledqyodkii.supabase.co";
+  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s";
   // =================================================================================
+
+  async function saveLead(data){
+    try{
+      await fetch(`${SUPABASE_URL}/rest/v1/leads_nanys`, {
+        method:'POST',
+        headers:{
+          'apikey': SUPABASE_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_KEY,
+          'Content-Type':'application/json',
+          'Prefer':'return=minimal'
+        },
+        body: JSON.stringify(data)
+      });
+    }catch(err){ console.warn('No se pudo guardar el lead:', err); }
+  }
 
   const wa = (msg) => `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
   document.getElementById('year').textContent = new Date().getFullYear();
@@ -613,6 +652,13 @@
   }
   formWa.addEventListener('click', (e)=>{
     e.preventDefault();
+    saveLead({
+      nombre: document.getElementById('nombre').value.trim() || null,
+      comuna: document.getElementById('comuna').value.trim() || null,
+      servicio: document.getElementById('servicio').value || null,
+      detalle: document.getElementById('detalle').value.trim() || null,
+      origen: 'landing_nanys'
+    });
     window.open(wa(buildFormMsg()), '_blank');
   });
 

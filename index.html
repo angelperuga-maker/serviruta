@@ -1,81 +1,637 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es-CL">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>Serviruta · Acceso</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nanys — Personas de confianza para tu casa</title>
+<meta name="description" content="Encontramos niñeras, nanas con horario, babysitters, asesoras del hogar, cuidadoras de adultos mayores, paseadores de mascotas, jardineros, limpiavidrios y planchado. Cada persona verificada: entrevista, antecedentes y referencias.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,600&family=Mulish:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
 <style>
-:root{--rojo:#E8210A;--rojo-d:#B01A08;--negro:#080808;--c1:#0F0F12;--c2:#161619;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:460px;margin:0 auto;}
-.screen{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:36px 24px;position:relative;overflow:hidden;}
-.screen::before{content:"";position:absolute;top:-80px;right:-80px;width:320px;height:320px;background:radial-gradient(circle,rgba(232,33,10,0.15) 0%,transparent 65%);pointer-events:none;}
-.logo{display:flex;align-items:center;gap:12px;margin-bottom:44px;}
-.logo-mark{width:46px;height:46px;background:var(--rojo);border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:"Syne",sans-serif;font-weight:800;font-size:15px;color:#fff;}
-.logo-brand{font-family:"Syne",sans-serif;font-weight:800;font-size:22px;}
-.logo-brand span{color:var(--rojo);}
-.logo-sub{font-size:11px;color:var(--txt3);margin-top:1px;}
-h1{font-family:"Syne",sans-serif;font-weight:800;font-size:28px;line-height:1.1;letter-spacing:-0.8px;margin-bottom:8px;}
-h1 em{color:var(--amarillo);font-style:normal;}
-.desc{font-size:14px;color:var(--txt3);margin-bottom:32px;line-height:1.6;}
-.roles{display:flex;flex-direction:column;gap:12px;}
-.rol{background:var(--c2);border:1px solid var(--borde);border-radius:12px;padding:18px 20px;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:16px;text-decoration:none;color:var(--txt);}
-.rol:hover{transform:translateX(4px);}
-.rol.tec:hover{border-color:var(--azul);background:rgba(96,165,250,0.06);}
-.rol.coo:hover{border-color:var(--rojo);background:rgba(232,33,10,0.06);}
-.rol.ali:hover{border-color:var(--verde);background:rgba(34,197,94,0.06);}
-.rol-icon{width:46px;height:46px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
-.rol-icon.tec{background:rgba(96,165,250,0.1);}
-.rol-icon.coo{background:rgba(232,33,10,0.08);}
-.rol-icon.ali{background:rgba(34,197,94,0.1);}
-.rol-info{flex:1;}
-.rol-name{font-family:"Syne",sans-serif;font-weight:700;font-size:16px;margin-bottom:3px;}
-.rol-desc{font-size:12px;color:var(--txt3);line-height:1.4;}
-.rol-apps{font-size:11px;color:var(--txt3);margin-top:4px;}
-.arrow{font-size:20px;color:var(--txt3);}
+  :root{
+    --verde:#1F4035;
+    --verde-2:#2E5A4A;
+    --verde-3:#16302a;
+    --lino:#FAF6EF;
+    --salvia:#E7EEE6;
+    --salvia-2:#D7E3D6;
+    --miel:#E8A13A;
+    --miel-dark:#C9831F;
+    --tinta:#23211C;
+    --tinta-soft:#5A574E;
+    --linea:#E3DCCF;
+    --blanco:#FFFFFF;
+    --radio:18px;
+    --radio-lg:28px;
+    --sombra:0 18px 40px -22px rgba(31,64,53,.45);
+    --sombra-soft:0 10px 28px -18px rgba(31,64,53,.35);
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Mulish',system-ui,sans-serif;
+    background:var(--lino);
+    color:var(--tinta);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  h1,h2,h3{font-family:'Fraunces',Georgia,serif;font-weight:600;line-height:1.08;letter-spacing:-.01em}
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%}
+  .wrap{width:100%;max-width:1140px;margin:0 auto;padding:0 22px}
+
+  .eyebrow{
+    font-size:.74rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--miel-dark);display:inline-flex;align-items:center;gap:.55em;
+  }
+  .eyebrow::before{content:"";width:26px;height:2px;background:var(--miel);border-radius:2px}
+
+  /* ---------- NAV ---------- */
+  header.nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(250,246,239,.86);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--linea);
+  }
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:70px}
+  .brand{display:flex;align-items:center;gap:11px;font-family:'Fraunces',serif;font-weight:600;font-size:1.22rem;color:var(--verde)}
+  .seal{
+    width:34px;height:34px;border-radius:50%;flex:0 0 auto;
+    background:var(--verde);color:var(--lino);display:grid;place-items:center;
+    box-shadow:inset 0 0 0 2px rgba(232,161,58,.6);
+  }
+  .seal svg{width:18px;height:18px}
+  .nav-links{display:flex;gap:30px;align-items:center}
+  .nav-links a{font-size:.92rem;font-weight:600;color:var(--tinta-soft)}
+  .nav-links a:hover{color:var(--verde)}
+  .btn{
+    display:inline-flex;align-items:center;gap:9px;font-weight:700;font-size:.95rem;
+    padding:12px 22px;border-radius:100px;border:0;cursor:pointer;transition:.2s;font-family:inherit;
+  }
+  .btn-wa{background:var(--miel);color:var(--verde-3)}
+  .btn-wa:hover{background:var(--miel-dark);color:#fff;transform:translateY(-1px)}
+  .btn-ghost{background:transparent;color:var(--verde);box-shadow:inset 0 0 0 1.5px var(--verde)}
+  .btn-ghost:hover{background:var(--verde);color:var(--lino)}
+  .nav .btn-wa{padding:10px 18px}
+  .menu-toggle{display:none;background:none;border:0;cursor:pointer}
+
+  /* ---------- HERO ---------- */
+  .hero{background:var(--verde);color:var(--lino);position:relative;overflow:hidden}
+  .hero::after{
+    content:"";position:absolute;right:-160px;top:-160px;width:520px;height:520px;border-radius:50%;
+    background:radial-gradient(circle at 30% 30%, rgba(232,161,58,.28), transparent 62%);pointer-events:none;
+  }
+  .hero-in{position:relative;z-index:2;padding:72px 0 84px;display:grid;grid-template-columns:1.05fr .95fr;gap:54px;align-items:center}
+  .hero .eyebrow{color:var(--miel)}
+  .hero h1{font-size:clamp(2.4rem,5.3vw,3.9rem);color:var(--lino);margin:18px 0 16px}
+  .hero h1 .acc{font-style:italic;color:var(--miel);font-weight:500}
+  .hero p.lead{font-size:1.12rem;color:#DCE6DD;max-width:30em;margin-bottom:30px}
+  .hero-cta{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-bottom:26px}
+  .hero-cta .btn-ghost{color:var(--lino);box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.45)}
+  .hero-cta .btn-ghost:hover{background:rgba(255,255,255,.1);color:#fff}
+  .hero-trust{display:flex;gap:24px;flex-wrap:wrap;font-size:.86rem;color:#BFD0C2}
+  .hero-trust span{display:flex;align-items:center;gap:7px}
+  .hero-trust svg{width:16px;height:16px;color:var(--miel)}
+
+  /* picker card */
+  .picker{
+    background:var(--lino);color:var(--tinta);border-radius:var(--radio-lg);
+    padding:26px 24px 24px;box-shadow:var(--sombra);
+  }
+  .picker h3{font-size:1.18rem;color:var(--verde);margin-bottom:4px}
+  .picker .ph{font-size:.88rem;color:var(--tinta-soft);margin-bottom:16px}
+  .chips{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:18px}
+  .chip{
+    font-family:inherit;font-size:.88rem;font-weight:600;cursor:pointer;
+    padding:9px 15px;border-radius:100px;background:var(--blanco);
+    border:1.5px solid var(--linea);color:var(--tinta-soft);transition:.16s;display:inline-flex;align-items:center;gap:7px;
+  }
+  .chip:hover{border-color:var(--verde-2)}
+  .chip[aria-pressed="true"]{background:var(--verde);border-color:var(--verde);color:var(--lino)}
+  .chip[aria-pressed="true"] .tick{opacity:1;transform:scale(1)}
+  .chip .tick{opacity:0;transform:scale(.4);transition:.16s;width:14px;height:14px}
+  .picker .btn-wa{width:100%;justify-content:center;padding:14px;font-size:1rem}
+  .picker .small{font-size:.76rem;color:var(--tinta-soft);text-align:center;margin-top:11px}
+
+  /* ---------- SECTIONS ---------- */
+  section{padding:78px 0}
+  .sec-head{max-width:38em;margin-bottom:42px}
+  .sec-head h2{font-size:clamp(1.9rem,3.8vw,2.7rem);margin:14px 0 12px;color:var(--verde)}
+  .sec-head p{color:var(--tinta-soft);font-size:1.06rem}
+
+  /* trust steps */
+  .trust{background:var(--salvia)}
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .step{background:var(--blanco);border-radius:var(--radio);padding:28px 24px;box-shadow:var(--sombra-soft);position:relative}
+  .step .num{font-family:'Fraunces',serif;font-size:1rem;font-weight:600;color:var(--miel-dark);letter-spacing:.04em}
+  .step h3{font-size:1.18rem;margin:12px 0 8px;color:var(--verde)}
+  .step p{font-size:.95rem;color:var(--tinta-soft)}
+  .step .ic{width:42px;height:42px;border-radius:12px;background:var(--salvia);display:grid;place-items:center;color:var(--verde);margin-bottom:16px}
+  .step .ic svg{width:22px;height:22px}
+
+  /* services grid */
+  .svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .svc{
+    background:var(--blanco);border:1px solid var(--linea);border-radius:var(--radio);
+    padding:26px 22px;transition:.22s;position:relative;overflow:hidden;
+  }
+  .svc:hover{transform:translateY(-4px);box-shadow:var(--sombra);border-color:var(--salvia-2)}
+  .svc .ic{width:48px;height:48px;border-radius:13px;background:var(--verde);color:var(--lino);display:grid;place-items:center;margin-bottom:16px}
+  .svc .ic svg{width:24px;height:24px}
+  .svc h3{font-size:1.16rem;color:var(--verde);margin-bottom:7px}
+  .svc p{font-size:.93rem;color:var(--tinta-soft)}
+  .svc .verif{
+    margin-top:14px;display:inline-flex;align-items:center;gap:6px;font-size:.76rem;font-weight:700;
+    color:var(--verde-2);background:var(--salvia);padding:5px 11px;border-radius:100px;
+  }
+  .svc .verif svg{width:13px;height:13px;color:var(--miel-dark)}
+
+  /* como funciona */
+  .how{background:var(--verde);color:var(--lino)}
+  .how .sec-head h2{color:var(--lino)}
+  .how .sec-head p{color:#C7D6C9}
+  .how .eyebrow{color:var(--miel)}
+  .flow{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;counter-reset:f}
+  .flow-item{position:relative;padding-top:8px}
+  .flow-item .big{font-family:'Fraunces',serif;font-size:2.6rem;color:var(--miel);line-height:1;display:block;margin-bottom:14px;font-weight:500}
+  .flow-item h3{font-size:1.22rem;color:var(--lino);margin-bottom:8px}
+  .flow-item p{font-size:.97rem;color:#C7D6C9}
+
+  /* por que */
+  .why-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:48px;align-items:center}
+  .why-list{display:flex;flex-direction:column;gap:20px}
+  .why-item{display:flex;gap:16px}
+  .why-item .ic{flex:0 0 auto;width:44px;height:44px;border-radius:12px;background:var(--salvia);color:var(--verde);display:grid;place-items:center}
+  .why-item .ic svg{width:22px;height:22px}
+  .why-item h3{font-size:1.1rem;color:var(--verde);margin-bottom:3px}
+  .why-item p{font-size:.95rem;color:var(--tinta-soft)}
+  .why-card{
+    background:var(--verde);color:var(--lino);border-radius:var(--radio-lg);padding:38px 32px;box-shadow:var(--sombra);
+  }
+  .why-card .quote{font-family:'Fraunces',serif;font-size:1.35rem;font-style:italic;line-height:1.4;color:var(--lino);margin-bottom:22px}
+  .why-card .stat-row{display:flex;gap:30px;padding-top:22px;border-top:1px solid rgba(255,255,255,.16)}
+  .why-card .stat b{font-family:'Fraunces',serif;font-size:1.9rem;color:var(--miel);display:block;line-height:1}
+  .why-card .stat span{font-size:.82rem;color:#C7D6C9}
+
+  /* contacto */
+  .contacto{background:var(--salvia)}
+  .form-card{background:var(--blanco);border-radius:var(--radio-lg);padding:40px 34px;box-shadow:var(--sombra-soft);max-width:620px;margin:0 auto}
+  .form-card h2{font-size:clamp(1.7rem,3.4vw,2.3rem);color:var(--verde);text-align:center;margin-bottom:8px}
+  .form-card .sub{text-align:center;color:var(--tinta-soft);margin-bottom:26px}
+  .field{margin-bottom:16px}
+  .field label{display:block;font-size:.82rem;font-weight:700;color:var(--verde);margin-bottom:6px}
+  .field input,.field select,.field textarea{
+    width:100%;font-family:inherit;font-size:.97rem;padding:13px 15px;border-radius:13px;
+    border:1.5px solid var(--linea);background:var(--lino);color:var(--tinta);transition:.16s;
+  }
+  .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--verde-2);background:#fff}
+  .field textarea{resize:vertical;min-height:88px}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .form-card .btn-wa{width:100%;justify-content:center;padding:15px;font-size:1.02rem;margin-top:6px}
+  .form-card .legal{font-size:.78rem;color:var(--tinta-soft);text-align:center;margin-top:14px}
+
+  /* footer */
+  footer{background:var(--verde-3);color:#BFD0C2;padding:56px 0 30px}
+  .foot-top{display:flex;justify-content:space-between;gap:40px;flex-wrap:wrap;margin-bottom:36px}
+  .foot-brand{max-width:25em}
+  .foot-brand .brand{color:var(--lino);margin-bottom:12px}
+  .foot-brand p{font-size:.92rem;color:#9FB4A4}
+  .foot-col h4{font-family:'Mulish';font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--miel);margin-bottom:14px;font-weight:800}
+  .foot-col a{display:block;font-size:.92rem;color:#BFD0C2;margin-bottom:9px}
+  .foot-col a:hover{color:#fff}
+  .foot-bottom{border-top:1px solid rgba(255,255,255,.1);padding-top:22px;font-size:.82rem;color:#8AA193;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+
+  /* float WA */
+  .wa-float{
+    position:fixed;right:18px;bottom:18px;z-index:60;width:58px;height:58px;border-radius:50%;
+    background:#25D366;display:grid;place-items:center;box-shadow:0 10px 26px -8px rgba(0,0,0,.4);transition:.2s;
+  }
+  .wa-float:hover{transform:scale(1.07)}
+  .wa-float svg{width:30px;height:30px;fill:#fff}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(22px);transition:opacity .6s ease,transform .6s ease}
+  .reveal.in{opacity:1;transform:none}
+
+  /* responsive */
+  @media(max-width:900px){
+    .hero-in{grid-template-columns:1fr;gap:38px;padding:54px 0 64px}
+    .why-grid{grid-template-columns:1fr;gap:34px}
+    .steps,.svc-grid,.flow{grid-template-columns:1fr 1fr}
+  }
+  @media(max-width:680px){
+    .nav-links{display:none}
+    .nav-links.open{
+      display:flex;flex-direction:column;position:absolute;top:70px;left:0;right:0;
+      background:var(--lino);padding:18px 22px 24px;gap:16px;border-bottom:1px solid var(--linea);
+    }
+    .menu-toggle{display:block;color:var(--verde)}
+    .steps,.svc-grid,.flow{grid-template-columns:1fr}
+    .row2{grid-template-columns:1fr}
+    .foot-top{flex-direction:column;gap:28px}
+    section{padding:58px 0}
+    .form-card{padding:32px 22px}
+  }
+
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+    .reveal{opacity:1;transform:none}
+  }
+  a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{
+    outline:3px solid var(--miel);outline-offset:2px;border-radius:6px;
+  }
 </style>
 </head>
 <body>
-<div class="screen">
-  <div class="logo">
-    <div class="logo-mark">SRV</div>
+
+<!-- NAV -->
+<header class="nav">
+  <div class="wrap nav-in">
+    <a href="#inicio" class="brand">
+      <span class="seal" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M9 21v-6h6v6"/></svg>
+      </span>
+      Nanys
+    </a>
+    <nav class="nav-links" id="navlinks" aria-label="Principal">
+      <a href="#servicios">Servicios</a>
+      <a href="#confianza">Cómo verificamos</a>
+      <a href="#como">Cómo funciona</a>
+      <a href="#contacto" class="btn btn-wa">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2zm0 2a8 8 0 1 1-4.2 14.8l-.3-.2-2.8.7.8-2.7-.2-.3A8 8 0 0 1 12 4zm-2.7 4c-.2 0-.5.1-.7.4-.3.3-.9.9-.9 2.1s.9 2.5 1 2.6c.1.2 1.7 2.7 4.2 3.7 2.1.8 2.5.7 2.9.6.4 0 1.4-.5 1.6-1.1.2-.6.2-1 .1-1.1l-.7-.4c-.3-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.5.1l-.7.9c-.1.2-.3.2-.5.1-.3-.1-1.1-.4-2-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5l.4-.4.3-.5c.1-.2 0-.4 0-.5l-.7-1.8c-.2-.5-.4-.4-.5-.4z"/></svg>
+        Pedir personal
+      </a>
+    </nav>
+    <button class="menu-toggle" id="menuBtn" aria-label="Abrir menú" aria-expanded="false">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="inicio">
+  <div class="wrap hero-in">
     <div>
-      <div class="logo-brand">SERVI<span>RUTA</span></div>
-      <div class="logo-sub">Hub Digital · Santiago RM</div>
+      <span class="eyebrow">Personal de hogar verificado · Chile</span>
+      <h1>Personas de confianza para <span class="acc">cuidar tu hogar</span> y a quienes amas.</h1>
+      <p class="lead">Te conectamos con niñeras y nanas, asesoras del hogar, cuidadoras de adultos mayores, paseadores y más. Cada persona pasa por entrevista, revisión de antecedentes y verificación de referencias antes de llegar a tu casa.</p>
+      <div class="hero-cta">
+        <a href="#contacto" class="btn btn-wa">Buscar a mi persona ideal</a>
+        <a href="#como" class="btn btn-ghost">Cómo funciona</a>
+      </div>
+      <div class="hero-trust">
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Antecedentes revisados</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Referencias comprobadas</span>
+        <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Reemplazo garantizado</span>
+      </div>
+    </div>
+
+    <!-- Interactive picker (signature element) -->
+    <div class="picker" id="picker">
+      <h3>¿Qué necesitas en casa?</h3>
+      <p class="ph">Elige uno o varios. Armamos tu solicitud y la enviamos por WhatsApp.</p>
+      <div class="chips" id="chips" role="group" aria-label="Servicios">
+        <button class="chip" aria-pressed="false" data-svc="Niñera o nana con horario">Niñera / nana <svg class="tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></button>
+        <button class="chip" aria-pressed="false" data-svc="Babysitter por horas">Babysitter <svg class="tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></button>
+        <button class="chip" aria-pressed="false" data-svc="Paseador de mascotas">Paseador de mascotas <svg class="tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></button>
+        <button class="chip" aria-pressed="false" data-svc="Asesora del hogar">Asesora del hogar <svg class="tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></button>
+        <button class="chip" aria-pressed="false" data-svc="Cuidado de adulto mayor">Cuidado adulto mayor <svg class="tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></button>
+        <button class="chip" aria-pressed="false" data-svc="Jardinería">Jardinero <svg class="tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></button>
+        <button class="chip" aria-pressed="false" data-svc="Limpieza de vidrios">Limpiavidrios <svg class="tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></button>
+        <button class="chip" aria-pressed="false" data-svc="Planchado">Planchado <svg class="tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></button>
+        <button class="chip" aria-pressed="false" data-svc="Aseo profundo">Aseo profundo <svg class="tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg></button>
+      </div>
+      <a href="#" class="btn btn-wa" id="pickerWa">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2zm0 2a8 8 0 1 1-4.2 14.8l-.3-.2-2.8.7.8-2.7-.2-.3A8 8 0 0 1 12 4zm-2.7 4c-.2 0-.5.1-.7.4-.3.3-.9.9-.9 2.1s.9 2.5 1 2.6c.1.2 1.7 2.7 4.2 3.7 2.1.8 2.5.7 2.9.6.4 0 1.4-.5 1.6-1.1.2-.6.2-1 .1-1.1l-.7-.4c-.3-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.5.1l-.7.9c-.1.2-.3.2-.5.1-.3-.1-1.1-.4-2-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5l.4-.4.3-.5c.1-.2 0-.4 0-.5l-.7-1.8c-.2-.5-.4-.4-.5-.4z"/></svg>
+        Enviar solicitud por WhatsApp
+      </a>
+      <p class="small">Respuesta el mismo día hábil · Sin costo por cotizar</p>
     </div>
   </div>
-  <h1>¿Cómo<br>ingresas <em>hoy?</em></h1>
-  <p class="desc">Selecciona tu rol para acceder a tus herramientas.</p>
-  <div class="roles">
-    <a class="rol tec" href="login-tecnico.html">
-      <div class="rol-icon tec">🔧</div>
-      <div class="rol-info">
-        <div class="rol-name">Soy Técnico</div>
-        <div class="rol-desc">Herramientas de trabajo en terreno</div>
-        <div class="rol-apps">Presupuestos · Inspección · Stock</div>
+</section>
+
+<!-- CONFIANZA / CÓMO VERIFICAMOS -->
+<section class="trust" id="confianza">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Nuestra promesa</span>
+      <h2>Antes de llegar a tu casa, verificamos a cada persona</h2>
+      <p>Sabemos que estás abriendo la puerta de tu hogar. Por eso nadie entra a nuestra red sin pasar por tres filtros.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <span class="num">Filtro 01</span>
+        <h3>Entrevista personal</h3>
+        <p>Conversamos con cada candidata o candidato para conocer su experiencia, trato y expectativas reales.</p>
       </div>
-      <span class="arrow">›</span>
-    </a>
-    <a class="rol coo" href="login-coordinador.html">
-      <div class="rol-icon coo">📊</div>
-      <div class="rol-info">
-        <div class="rol-name">Soy Coordinador</div>
-        <div class="rol-desc">Panel completo de operaciones</div>
-        <div class="rol-apps">Panel · Servicios · Aliados · Stock</div>
+      <div class="step reveal">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 15l2 2 4-4"/></svg></div>
+        <span class="num">Filtro 02</span>
+        <h3>Antecedentes</h3>
+        <p>Revisamos antecedentes y documentación al día para que recibas a alguien confiable, sin sorpresas.</p>
       </div>
-      <span class="arrow">›</span>
-    </a>
-    <a class="rol ali" href="aliados.html">
-      <div class="rol-icon ali">🤝</div>
-      <div class="rol-info">
-        <div class="rol-name">Soy Aliado</div>
-        <div class="rol-desc">Comisiones y referidos en tiempo real</div>
-        <div class="rol-apps">Comisiones · Referidos · Ranking</div>
+      <div class="step reveal">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8l2 2 4-4"/></svg></div>
+        <span class="num">Filtro 03</span>
+        <h3>Referencias</h3>
+        <p>Llamamos a empleadores anteriores para comprobar su desempeño y responsabilidad en hogares reales.</p>
       </div>
-      <span class="arrow">›</span>
-    </a>
+    </div>
   </div>
-</div>
+</section>
+
+<!-- SERVICIOS -->
+<section id="servicios">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Lo que cubrimos</span>
+      <h2>Todo el cuidado de tu hogar, en un solo lugar</h2>
+      <p>Desde la limpieza diaria hasta el acompañamiento de un adulto mayor. Tú nos dices qué necesitas y nosotros buscamos a la persona indicada.</p>
+    </div>
+    <div class="svc-grid">
+
+      <article class="svc reveal">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4.6" r="2.6"/><path d="M12 7.2v6"/><path d="M8.5 10h7"/><path d="M9 20l3-6.8 3 6.8"/></svg></div>
+        <h3>Niñeras y nanas</h3>
+        <p>Niñeras, babysitters y nanas con horario o puertas adentro. Personas cariñosas y con experiencia para tus hijos.</p>
+        <span class="verif"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Persona verificada</span>
+      </article>
+
+      <article class="svc reveal">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 0 0 1 1h3m10-11l2 2m-2-2v10a1 1 0 0 1-1 1h-3m-6 0a1 1 0 0 0 1-1v-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v4a1 1 0 0 0 1 1m-6 0h6"/></svg></div>
+        <h3>Asesora del hogar</h3>
+        <p>Aseo, orden, cocina y apoyo diario. Por día, media jornada o jornada completa, puertas adentro o afuera.</p>
+        <span class="verif"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Persona verificada</span>
+      </article>
+
+      <article class="svc reveal">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.5-1.5 3-3.2 3-5.5A4.5 4.5 0 0 0 12 5.5 4.5 4.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7z"/></svg></div>
+        <h3>Cuidado de adultos mayores</h3>
+        <p>Acompañamiento, medicación, higiene y cariño. Cuidadoras con experiencia y paciencia para tu familia.</p>
+        <span class="verif"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Persona verificada</span>
+      </article>
+
+      <article class="svc reveal">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.6" cy="11" r="1.6"/><circle cx="9.6" cy="7" r="1.6"/><circle cx="14.4" cy="7" r="1.6"/><circle cx="18.4" cy="11" r="1.6"/><path d="M12 12.5c-2.3 0-4.2 1.6-4.2 3.7 0 1.7 1.3 2.7 2.7 3 1 .2 2 .2 3 0 1.4-.3 2.7-1.3 2.7-3 0-2.1-1.9-3.7-4.2-3.7z"/></svg></div>
+        <h3>Paseadores de mascotas</h3>
+        <p>Paseo y cuidado de tu perro o gato, con horario fijo o por encargo. Personas responsables que aman a los animales.</p>
+        <span class="verif"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Persona verificada</span>
+      </article>
+
+      <article class="svc reveal">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22v-6m0 0c-3 0-6-1.5-6-5 0 0 3 .5 4.5 2M12 16c3 0 6-1.5 6-5 0 0-3 .5-4.5 2M12 16V9m0 0a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"/></svg></div>
+        <h3>Jardineros</h3>
+        <p>Poda, mantención de áreas verdes, riego y limpieza de patios. Para casas, condominios y comunidades.</p>
+        <span class="verif"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Persona verificada</span>
+      </article>
+
+      <article class="svc reveal">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/></svg></div>
+        <h3>Limpiavidrios</h3>
+        <p>Ventanales, fachadas y vidrios en altura. Resultado sin marcas para que entre toda la luz.</p>
+        <span class="verif"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Persona verificada</span>
+      </article>
+
+      <article class="svc reveal">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 14h12l2 6H4l2-6z"/><path d="M9 14V8a3 3 0 0 1 6 0"/></svg></div>
+        <h3>Planchado y lavandería</h3>
+        <p>Planchado prolijo y orden de ropa, por hora o a domicilio. Tu armario impecable sin que muevas un dedo.</p>
+        <span class="verif"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Persona verificada</span>
+      </article>
+
+      <article class="svc reveal">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21l3-3m0 0l8-8 3 3-8 8H6v-0zm8-8l3-3a2 2 0 0 1 3 3l-3 3"/><path d="M14 7l3 3"/></svg></div>
+        <h3>Aseo profundo</h3>
+        <p>Limpieza completa antes o después de una mudanza, evento o fin de obra. Dejamos todo listo para usar.</p>
+        <span class="verif"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg> Persona verificada</span>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- CÓMO FUNCIONA -->
+<section class="how" id="como">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Así de simple</span>
+      <h2>De tu necesidad a la persona indicada, en 3 pasos</h2>
+      <p>Sin filas, sin avisos clasificados y sin entrevistar a desconocidos. Nosotros hacemos el trabajo difícil.</p>
+    </div>
+    <div class="flow">
+      <div class="flow-item reveal">
+        <span class="big">1</span>
+        <h3>Cuéntanos qué necesitas</h3>
+        <p>Escríbenos por WhatsApp con el tipo de ayuda, la comuna y los días u horarios que buscas.</p>
+      </div>
+      <div class="flow-item reveal">
+        <span class="big">2</span>
+        <h3>Te presentamos candidatas verificadas</h3>
+        <p>En poco tiempo recibes perfiles que calzan con tu hogar, ya filtrados por nosotros.</p>
+      </div>
+      <div class="flow-item reveal">
+        <span class="big">3</span>
+        <h3>Eliges con tranquilidad</h3>
+        <p>Coordinas, pruebas y decides. Si algo no funciona, te buscamos un reemplazo sin costo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- POR QUE -->
+<section id="porque">
+  <div class="wrap why-grid">
+    <div class="reveal">
+      <span class="eyebrow">Por qué elegirnos</span>
+      <h2 style="font-size:clamp(1.9rem,3.8vw,2.7rem);color:var(--verde);margin:14px 0 26px">Tranquilidad, no solo un servicio</h2>
+      <div class="why-list">
+        <div class="why-item">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <div><h3>Cada persona, verificada</h3><p>Entrevista, antecedentes y referencias comprobadas. Sin atajos.</p></div>
+        </div>
+        <div class="why-item">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+          <div><h3>Respuesta rápida</h3><p>Te contactamos el mismo día hábil. Las urgencias de un hogar no esperan.</p></div>
+        </div>
+        <div class="why-item">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9"/><path d="M3 4v5h5"/><path d="M12 7v5l3 2"/></svg></div>
+          <div><h3>Reemplazo garantizado</h3><p>Si la persona no se acomoda a tu casa, te buscamos otra sin costo adicional.</p></div>
+        </div>
+        <div class="why-item">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1v22M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+          <div><h3>Precios claros</h3><p>Te explicamos los valores antes de empezar. Cotizar siempre es gratis.</p></div>
+        </div>
+      </div>
+    </div>
+    <div class="why-card reveal">
+      <p class="quote">“Buscar a alguien de confianza para tu casa no debería dar miedo. Esa es la tranquilidad que entregamos.”</p>
+      <div class="stat-row">
+        <div class="stat"><b>3</b><span>filtros antes de llegar a tu hogar</span></div>
+        <div class="stat"><b>1 día</b><span>hábil para responderte</span></div>
+        <div class="stat"><b>0</b><span>costo por cotizar</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTO -->
+<section class="contacto" id="contacto">
+  <div class="wrap">
+    <div class="form-card reveal">
+      <h2>Cuéntanos qué necesitas</h2>
+      <p class="sub">Completa y te respondemos por WhatsApp el mismo día hábil.</p>
+      <div class="field">
+        <label for="nombre">Tu nombre</label>
+        <input type="text" id="nombre" placeholder="Ej: María José">
+      </div>
+      <div class="row2">
+        <div class="field">
+          <label for="comuna">Comuna</label>
+          <input type="text" id="comuna" placeholder="Ej: Providencia">
+        </div>
+        <div class="field">
+          <label for="servicio">¿Qué necesitas?</label>
+          <select id="servicio">
+            <option value="">Selecciona…</option>
+            <option>Niñera o nana con horario</option>
+            <option>Babysitter por horas</option>
+            <option>Paseador de mascotas</option>
+            <option>Asesora del hogar</option>
+            <option>Cuidado de adulto mayor</option>
+            <option>Jardinería</option>
+            <option>Limpieza de vidrios</option>
+            <option>Planchado y lavandería</option>
+            <option>Aseo profundo</option>
+            <option>Otro</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="detalle">Detalles (días, horarios, lo que necesitas)</label>
+        <textarea id="detalle" placeholder="Ej: 2 veces por semana, en la mañana, casa de 3 dormitorios…"></textarea>
+      </div>
+      <a href="#" class="btn btn-wa" id="formWa">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2zm0 2a8 8 0 1 1-4.2 14.8l-.3-.2-2.8.7.8-2.7-.2-.3A8 8 0 0 1 12 4zm-2.7 4c-.2 0-.5.1-.7.4-.3.3-.9.9-.9 2.1s.9 2.5 1 2.6c.1.2 1.7 2.7 4.2 3.7 2.1.8 2.5.7 2.9.6.4 0 1.4-.5 1.6-1.1.2-.6.2-1 .1-1.1l-.7-.4c-.3-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.5.1l-.7.9c-.1.2-.3.2-.5.1-.3-.1-1.1-.4-2-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5l.4-.4.3-.5c.1-.2 0-.4 0-.5l-.7-1.8c-.2-.5-.4-.4-.5-.4z"/></svg>
+        Enviar por WhatsApp
+      </a>
+      <p class="legal">Al enviar abres una conversación de WhatsApp con nosotros. No compartimos tus datos con terceros.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <a href="#inicio" class="brand">
+          <span class="seal" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/><path d="M9 21v-6h6v6"/></svg>
+          </span>
+          Nanys
+        </a>
+        <p>Personal de hogar verificado en la Región Metropolitana. Niñeras y nanas, babysitters, paseadores de mascotas, asesoras del hogar, cuidado de adultos mayores, jardinería, limpiavidrios, planchado y aseo profundo.</p>
+      </div>
+      <div class="foot-col">
+        <h4>Servicios</h4>
+        <a href="#servicios">Niñeras y nanas</a>
+        <a href="#servicios">Babysitter y paseadores</a>
+        <a href="#servicios">Asesora del hogar</a>
+        <a href="#servicios">Cuidado adulto mayor</a>
+        <a href="#servicios">Jardinería, limpiavidrios y planchado</a>
+      </div>
+      <div class="foot-col">
+        <h4>Contacto</h4>
+        <a href="#contacto">Pedir personal</a>
+        <a id="footWa" href="#">WhatsApp</a>
+        <a href="mailto:hola@nanys.cl">hola@nanys.cl</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© <span id="year"></span> Nanys. Todos los derechos reservados.</span>
+      <span>Hecho con cuidado en Chile 🇨🇱</span>
+    </div>
+  </div>
+</footer>
+
+<a class="wa-float" id="floatWa" href="#" aria-label="Escríbenos por WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15l-1.3 4.7 4.8-1.3A10 10 0 1 0 12 2zm0 2a8 8 0 1 1-4.2 14.8l-.3-.2-2.8.7.8-2.7-.2-.3A8 8 0 0 1 12 4zm-2.7 4c-.2 0-.5.1-.7.4-.3.3-.9.9-.9 2.1s.9 2.5 1 2.6c.1.2 1.7 2.7 4.2 3.7 2.1.8 2.5.7 2.9.6.4 0 1.4-.5 1.6-1.1.2-.6.2-1 .1-1.1l-.7-.4c-.3-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.5.1l-.7.9c-.1.2-.3.2-.5.1-.3-.1-1.1-.4-2-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5l.4-.4.3-.5c.1-.2 0-.4 0-.5l-.7-1.8c-.2-.5-.4-.4-.5-.4z"/></svg>
+</a>
+
+<script>
+  // ====== CONFIGURACIÓN: cambia este número por tu WhatsApp (formato 56 9 ...) ======
+  const WHATSAPP = "56961218105";
+  // =================================================================================
+
+  const wa = (msg) => `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // base WA links
+  const baseMsg = "¡Hola Nanys! Quiero pedir información sobre personal para mi hogar.";
+  document.getElementById('floatWa').href = wa(baseMsg);
+  document.getElementById('footWa').href = wa(baseMsg);
+  document.querySelectorAll('.nav-links .btn-wa').forEach(a => a.href = "#contacto");
+
+  // ===== Picker (signature) =====
+  const selected = new Set();
+  const pickerWa = document.getElementById('pickerWa');
+  function buildPickerMsg(){
+    if(selected.size === 0) return "¡Hola Nanys! Quiero pedir información sobre personal para mi hogar.";
+    return "¡Hola Nanys! Necesito: " + [...selected].join(", ") + ". ¿Me ayudan?";
+  }
+  function refreshPicker(){ pickerWa.href = wa(buildPickerMsg()); }
+  refreshPicker();
+
+  document.querySelectorAll('#chips .chip').forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      const on = chip.getAttribute('aria-pressed') === 'true';
+      chip.setAttribute('aria-pressed', String(!on));
+      const svc = chip.dataset.svc;
+      on ? selected.delete(svc) : selected.add(svc);
+      refreshPicker();
+    });
+  });
+
+  // ===== Form -> WhatsApp =====
+  const formWa = document.getElementById('formWa');
+  function buildFormMsg(){
+    const n = document.getElementById('nombre').value.trim();
+    const c = document.getElementById('comuna').value.trim();
+    const s = document.getElementById('servicio').value;
+    const d = document.getElementById('detalle').value.trim();
+    let m = "¡Hola Nanys!";
+    if(n) m += ` Soy ${n}.`;
+    m += s ? ` Necesito: ${s}.` : " Quiero pedir información sobre personal de hogar.";
+    if(c) m += ` Comuna: ${c}.`;
+    if(d) m += ` Detalles: ${d}.`;
+    return m;
+  }
+  formWa.addEventListener('click', (e)=>{
+    e.preventDefault();
+    window.open(wa(buildFormMsg()), '_blank');
+  });
+
+  // ===== Mobile menu =====
+  const menuBtn = document.getElementById('menuBtn');
+  const navlinks = document.getElementById('navlinks');
+  menuBtn.addEventListener('click', ()=>{
+    const open = navlinks.classList.toggle('open');
+    menuBtn.setAttribute('aria-expanded', String(open));
+  });
+  navlinks.querySelectorAll('a').forEach(a=> a.addEventListener('click', ()=>{
+    navlinks.classList.remove('open'); menuBtn.setAttribute('aria-expanded','false');
+  }));
+
+  // ===== Reveal on scroll =====
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(en=>{ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); }});
+  }, {threshold:.14});
+  document.querySelectorAll('.reveal').forEach(el=> io.observe(el));
+</script>
 </body>
 </html>

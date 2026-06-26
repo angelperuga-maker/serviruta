@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="es-CL">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta Repuestos — Demo flujo mecánico</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700;800&family=Archivo:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#16181D;
+    --graphite:#1C1F26;
+    --graphite-2:#262A33;
+    --paper:#ECE8DF;
+    --panel:#FFFFFF;
+    --steel:#5C6470;
+    --steel-soft:#8A909B;
+    --line:#E4DFD4;
+    --line-2:#EEEAE1;
+    --signal:#FF5A1F;
+    --signal-deep:#DC4710;
+    --stock:#1C8A4C;
+    --stock-bg:#E7F4EC;
+    --cotiza:#A9710D;
+    --cotiza-bg:#F8EFD9;
+    --shadow:0 1px 0 rgba(0,0,0,.04), 0 8px 24px -12px rgba(20,24,30,.22);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:'Archivo',system-ui,sans-serif;
+    background:
+      radial-gradient(1100px 600px at 50% -10%, #2A2E38 0%, var(--graphite) 55%, #131519 100%);
+    color:var(--ink);
+    min-height:100%;
+    display:flex;justify-content:center;align-items:flex-start;
+    padding:0;
+    -webkit-font-smoothing:antialiased;
+  }
+  .app{
+    width:100%;max-width:440px;min-height:100vh;
+    background:var(--paper);
+    position:relative;display:flex;flex-direction:column;
+    box-shadow:0 0 80px -20px rgba(0,0,0,.6);
+  }
+  @media(min-width:480px){
+    body{padding:26px 16px}
+    .app{min-height:calc(100vh - 52px);border-radius:26px;overflow:hidden;border:1px solid #0c0d10}
+  }
+
+  /* ---------- top bar ---------- */
+  .topbar{
+    background:var(--graphite);
+    color:#fff;padding:14px 18px 13px;
+    position:sticky;top:0;z-index:30;
+    border-bottom:1px solid #0c0d10;
+  }
+  .brand{display:flex;align-items:center;gap:9px}
+  .brand .mark{
+    width:26px;height:26px;border-radius:7px;
+    background:var(--signal);display:grid;place-items:center;
+    box-shadow:0 0 0 3px rgba(255,90,31,.18);
+    flex:none;
+  }
+  .brand .mark svg{display:block}
+  .brand .wordmark{font-family:'Saira Condensed';font-weight:800;font-size:19px;letter-spacing:.04em;text-transform:uppercase;line-height:1}
+  .brand .wordmark b{color:var(--signal)}
+  .brand .tag{font-size:10px;color:#9AA1AC;letter-spacing:.16em;text-transform:uppercase;margin-top:2px;font-weight:500}
+
+  /* plate that travels with the user */
+  .plate-wrap{margin-top:12px;display:none}
+  .plate-wrap.on{display:block;animation:plateIn .35s ease}
+  @keyframes plateIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+  .plate{
+    display:flex;align-items:stretch;gap:0;
+    background:linear-gradient(#F7F5EF,#E9E5DA);
+    border:1.5px solid #0c0d10;border-radius:7px;
+    color:var(--ink);overflow:hidden;
+    box-shadow:inset 0 0 0 2px #fff, 0 2px 0 rgba(0,0,0,.35);
+  }
+  .plate .plate-band{
+    background:var(--graphite);color:#fff;
+    display:flex;flex-direction:column;justify-content:center;align-items:center;
+    padding:0 9px;flex:none;
+  }
+  .plate .plate-band .cl{font-family:'Saira Condensed';font-weight:800;font-size:11px;letter-spacing:.1em}
+  .plate .plate-band svg{margin-top:1px}
+  .plate .plate-main{padding:6px 11px;flex:1;min-width:0}
+  .plate .pm-veh{font-family:'Saira Condensed';font-weight:700;font-size:16px;letter-spacing:.02em;text-transform:uppercase;line-height:1.05;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .plate .pm-eng{font-family:'Space Mono';font-size:10.5px;color:#3c4049;margin-top:1px;letter-spacing:.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .plate .plate-edit{
+    background:transparent;border:none;border-left:1px solid rgba(0,0,0,.12);
+    padding:0 12px;font-family:'Saira Condensed';font-weight:600;font-size:11px;
+    text-transform:uppercase;letter-spacing:.08em;color:var(--signal-deep);cursor:pointer;flex:none;
+  }
+  .plate .plate-edit:hover{background:rgba(255,90,31,.08)}
+
+  /* ---------- step header ---------- */
+  .stage{flex:1;padding:18px 18px 110px;animation:stageIn .3s ease}
+  @keyframes stageIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .eyebrow{font-family:'Space Mono';font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--signal-deep);font-weight:700;display:flex;align-items:center;gap:8px}
+  .eyebrow .dash{height:1px;width:18px;background:var(--signal);display:inline-block}
+  h1.head{font-family:'Saira Condensed';font-weight:700;font-size:30px;line-height:1.02;letter-spacing:.005em;margin:7px 0 3px}
+  .sub{color:var(--steel);font-size:14px;line-height:1.45;max-width:34ch}
+
+  /* progress rail */
+  .rail{display:flex;gap:6px;margin:16px 0 4px}
+  .rail i{height:3px;flex:1;border-radius:3px;background:var(--line);transition:background .3s}
+  .rail i.done{background:var(--ink)}
+  .rail i.now{background:var(--signal)}
+
+  /* ---------- selector chips ---------- */
+  .field-label{font-family:'Space Mono';font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--steel);margin:18px 0 9px;font-weight:700}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{
+    font-family:'Archivo';font-weight:600;font-size:14px;
+    background:var(--panel);border:1.5px solid var(--line);
+    padding:10px 14px;border-radius:11px;cursor:pointer;
+    transition:transform .12s, border-color .15s, background .15s;
+    color:var(--ink);
+  }
+  .chip:hover{border-color:#cfc9bb;transform:translateY(-1px)}
+  .chip.sel{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .chip.yr{font-family:'Space Mono';font-weight:700;letter-spacing:.02em}
+  .chip.eng{display:block;width:100%;text-align:left;font-weight:500}
+  .chip.eng .en-main{font-family:'Saira Condensed';font-weight:700;font-size:16px;letter-spacing:.02em}
+  .chip.eng .en-sub{font-family:'Space Mono';font-size:11px;color:var(--steel);display:block;margin-top:2px}
+  .chip.eng.sel .en-sub{color:#C9CDD4}
+
+  /* category grid */
+  .cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
+  .cat{
+    background:var(--panel);border:1.5px solid var(--line);border-radius:14px;
+    padding:14px;cursor:pointer;text-align:left;
+    transition:transform .12s, border-color .15s, box-shadow .15s;
+    display:flex;flex-direction:column;gap:10px;min-height:96px;
+  }
+  .cat:hover{transform:translateY(-2px);border-color:#cfc9bb;box-shadow:var(--shadow)}
+  .cat .ico{width:34px;height:34px;border-radius:9px;background:var(--paper);display:grid;place-items:center;color:var(--signal-deep)}
+  .cat .ct{font-family:'Saira Condensed';font-weight:700;font-size:17px;letter-spacing:.01em;line-height:1.05}
+  .cat .cc{font-size:11.5px;color:var(--steel);margin-top:-4px}
+
+  /* part list */
+  .part-row{
+    background:var(--panel);border:1.5px solid var(--line);border-radius:12px;
+    padding:13px 15px;margin-bottom:9px;cursor:pointer;display:flex;align-items:center;gap:12px;
+    transition:transform .12s, border-color .15s, box-shadow .15s;
+  }
+  .part-row:hover{transform:translateX(2px);border-color:#cfc9bb;box-shadow:var(--shadow)}
+  .part-row .pr-body{flex:1;min-width:0}
+  .part-row .pr-name{font-weight:600;font-size:15px}
+  .part-row .pr-oem{font-family:'Space Mono';font-size:11px;color:var(--steel);margin-top:2px;letter-spacing:.01em}
+  .part-row .arr{color:var(--steel-soft);flex:none}
+
+  .compat-banner{
+    display:flex;align-items:center;gap:9px;
+    background:var(--stock-bg);border:1px solid #BFE3CC;color:#15633A;
+    border-radius:11px;padding:10px 13px;margin-bottom:16px;font-size:13px;font-weight:600;
+  }
+  .compat-banner svg{flex:none}
+  .compat-banner .pl{font-family:'Space Mono';font-weight:700}
+
+  /* ---------- offers ---------- */
+  .seg-label{display:flex;align-items:center;gap:10px;margin:18px 0 11px}
+  .seg-label .sl-dot{width:8px;height:8px;border-radius:50%;flex:none}
+  .seg-label .sl-dot.live{background:var(--stock)}
+  .seg-label .sl-dot.quote{background:var(--cotiza)}
+  .seg-label .sl-t{font-family:'Saira Condensed';font-weight:700;font-size:16px;letter-spacing:.03em;text-transform:uppercase}
+  .seg-label .sl-c{font-family:'Space Mono';font-size:11px;color:var(--steel);margin-left:auto}
+
+  .offer{
+    background:var(--panel);border:1.5px solid var(--line);border-radius:14px;
+    padding:14px;margin-bottom:10px;transition:border-color .15s, box-shadow .15s, transform .12s;
+  }
+  .offer:hover{border-color:#cfc9bb;box-shadow:var(--shadow)}
+  .offer.picked{border-color:var(--signal);box-shadow:0 0 0 3px rgba(255,90,31,.14)}
+  .offer .o-top{display:flex;align-items:flex-start;gap:10px}
+  .offer .o-store{flex:1;min-width:0}
+  .offer .o-name{font-weight:700;font-size:15px;display:flex;align-items:center;gap:7px}
+  .offer .o-verified{color:var(--signal-deep);flex:none}
+  .offer .o-meta{font-size:12px;color:var(--steel);margin-top:3px;display:flex;flex-wrap:wrap;gap:4px 10px}
+  .offer .o-meta .star{color:#C7901B;font-weight:700}
+  .offer .o-price{font-family:'Space Mono';font-weight:700;font-size:19px;text-align:right;flex:none;letter-spacing:-.01em}
+  .offer .o-price small{display:block;font-size:10px;color:var(--steel);font-weight:400;letter-spacing:.06em;text-transform:uppercase;margin-top:1px}
+  .offer .o-foot{display:flex;align-items:center;gap:10px;margin-top:12px;padding-top:11px;border-top:1px dashed var(--line)}
+  .badge{font-family:'Space Mono';font-size:11px;font-weight:700;padding:4px 9px;border-radius:7px;letter-spacing:.02em;display:inline-flex;align-items:center;gap:5px}
+  .badge.stock{background:var(--stock-bg);color:var(--stock)}
+  .badge.eta{background:var(--paper);color:#3c4049}
+  .badge.save{background:#1C8A4C;color:#fff}
+  .o-price-wrap{flex:none;text-align:right}
+  .o-ref{font-family:'Space Mono';font-size:10.5px;color:var(--steel-soft);text-decoration:line-through;text-align:right;margin-top:3px;letter-spacing:.01em}
+  .offer .o-pick{
+    margin-left:auto;font-family:'Saira Condensed';font-weight:700;font-size:14px;letter-spacing:.04em;text-transform:uppercase;
+    background:var(--ink);color:#fff;border:none;border-radius:9px;padding:9px 16px;cursor:pointer;transition:background .15s, transform .12s;
+  }
+  .offer .o-pick:hover{background:#000;transform:translateY(-1px)}
+  .offer.picked .o-pick{background:var(--signal)}
+
+  /* quote card */
+  .quote-card{
+    background:linear-gradient(180deg,#fff, #FBF7EF);
+    border:1.5px dashed var(--cotiza);border-radius:14px;padding:15px;margin-bottom:10px;
+  }
+  .quote-card .q-head{display:flex;align-items:center;gap:9px}
+  .quote-card .q-ico{width:30px;height:30px;border-radius:8px;background:var(--cotiza-bg);display:grid;place-items:center;color:var(--cotiza);flex:none}
+  .quote-card .q-t{font-family:'Saira Condensed';font-weight:700;font-size:16px;letter-spacing:.02em}
+  .quote-card .q-d{font-size:12.5px;color:var(--steel);margin-top:2px;line-height:1.4}
+  .q-btn{
+    width:100%;margin-top:12px;font-family:'Saira Condensed';font-weight:700;font-size:15px;letter-spacing:.05em;text-transform:uppercase;
+    background:var(--cotiza);color:#fff;border:none;border-radius:10px;padding:12px;cursor:pointer;transition:filter .15s}
+  .q-btn:hover{filter:brightness(1.06)}
+  .q-btn:disabled{opacity:.6;cursor:default}
+
+  .q-pending{display:flex;align-items:center;gap:11px;padding:13px 14px;background:var(--panel);border:1.5px solid var(--line);border-radius:12px;margin-bottom:9px}
+  .spin{width:18px;height:18px;border-radius:50%;border:2.5px solid var(--line);border-top-color:var(--cotiza);animation:sp .8s linear infinite;flex:none}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  .q-pending .qp-t{font-size:13px;color:var(--steel)}
+  .q-pending .qp-t b{color:var(--ink);font-weight:600}
+  .quote-in{animation:qin .4s ease}
+  @keyframes qin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+  /* ---------- checkout ---------- */
+  .summary{background:var(--panel);border:1.5px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:16px}
+  .sum-row{display:flex;justify-content:space-between;align-items:center;padding:13px 15px;gap:10px}
+  .sum-row+.sum-row{border-top:1px solid var(--line-2)}
+  .sum-row .sk{font-size:13px;color:var(--steel)}
+  .sum-row .sv{font-weight:600;font-size:14px;text-align:right}
+  .sum-row .sv small{display:block;font-size:11px;color:var(--steel);font-weight:400}
+  .sum-row.total{background:var(--graphite);color:#fff}
+  .sum-row.total .sk{color:#B9BEC8;font-weight:600;text-transform:uppercase;letter-spacing:.06em;font-size:12px;font-family:'Saira Condensed'}
+  .sum-row.total .sv{font-family:'Space Mono';font-weight:700;font-size:20px}
+
+  .opt-row{
+    display:flex;align-items:center;gap:12px;background:var(--panel);border:1.5px solid var(--line);
+    border-radius:12px;padding:13px 14px;margin-bottom:9px;cursor:pointer;transition:border-color .15s, box-shadow .15s}
+  .opt-row.sel{border-color:var(--signal);box-shadow:0 0 0 3px rgba(255,90,31,.12)}
+  .opt-row .radio{width:20px;height:20px;border-radius:50%;border:2px solid var(--line);flex:none;display:grid;place-items:center;transition:border-color .15s}
+  .opt-row.sel .radio{border-color:var(--signal)}
+  .opt-row.sel .radio::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--signal)}
+  .opt-row .opt-body{flex:1}
+  .opt-row .opt-t{font-weight:600;font-size:14px}
+  .opt-row .opt-s{font-size:12px;color:var(--steel);margin-top:1px}
+  .opt-row .opt-p{font-family:'Space Mono';font-weight:700;font-size:14px}
+
+  .courier-logo{font-family:'Saira Condensed';font-weight:800;font-size:13px;padding:5px 8px;border-radius:6px;color:#fff;letter-spacing:.02em;flex:none}
+
+  /* confirmation */
+  .confirm-hero{text-align:center;padding:30px 8px 18px}
+  .check-burst{width:78px;height:78px;border-radius:50%;background:var(--stock);display:grid;place-items:center;margin:0 auto 16px;box-shadow:0 0 0 10px rgba(28,138,76,.12);animation:pop .5s cubic-bezier(.2,1.4,.4,1)}
+  @keyframes pop{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+  .confirm-hero h1{font-family:'Saira Condensed';font-weight:700;font-size:28px;letter-spacing:.01em}
+  .confirm-hero .oid{font-family:'Space Mono';font-size:12px;color:var(--steel);margin-top:5px;letter-spacing:.06em}
+
+  .track{background:var(--panel);border:1.5px solid var(--line);border-radius:14px;padding:18px 16px;margin-top:8px}
+  .track .t-store{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+  .track .t-store .ts-ava{width:36px;height:36px;border-radius:9px;background:var(--graphite);color:#fff;display:grid;place-items:center;font-family:'Saira Condensed';font-weight:800;flex:none}
+  .track .t-store .ts-t{font-weight:700;font-size:15px}
+  .track .t-store .ts-s{font-size:12px;color:var(--steel)}
+  .steps{position:relative;padding-left:10px}
+  .tstep{display:flex;gap:13px;padding-bottom:18px;position:relative}
+  .tstep:last-child{padding-bottom:0}
+  .tstep .dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--line);background:#fff;flex:none;margin-top:1px;z-index:2}
+  .tstep.done .dot{background:var(--stock);border-color:var(--stock)}
+  .tstep.active .dot{border-color:var(--signal);background:var(--signal);box-shadow:0 0 0 4px rgba(255,90,31,.16)}
+  .tstep::before{content:"";position:absolute;left:6px;top:14px;bottom:-2px;width:2px;background:var(--line)}
+  .tstep:last-child::before{display:none}
+  .tstep.done::before{background:var(--stock)}
+  .tstep .tt{font-weight:600;font-size:14px}
+  .tstep.pending .tt{color:var(--steel-soft)}
+  .tstep .td{font-size:12px;color:var(--steel);margin-top:1px}
+
+  /* ---------- footer CTA ---------- */
+  .footer{
+    position:sticky;bottom:0;z-index:20;
+    background:linear-gradient(180deg,rgba(236,232,223,0), var(--paper) 28%);
+    padding:14px 18px 18px;margin-top:auto;
+  }
+  .cta{
+    width:100%;border:none;border-radius:14px;cursor:pointer;
+    font-family:'Saira Condensed';font-weight:700;font-size:18px;letter-spacing:.04em;text-transform:uppercase;
+    padding:16px;color:#fff;background:var(--ink);
+    display:flex;align-items:center;justify-content:center;gap:10px;
+    transition:transform .12s, background .15s, opacity .15s;
+    box-shadow:0 8px 20px -8px rgba(20,24,30,.5);
+  }
+  .cta:hover:not(:disabled){transform:translateY(-2px)}
+  .cta.go{background:var(--signal)}
+  .cta.go:hover:not(:disabled){background:var(--signal-deep)}
+  .cta:disabled{opacity:.4;cursor:default;box-shadow:none}
+  .cta .price-pill{font-family:'Space Mono';margin-left:auto;background:rgba(255,255,255,.16);padding:4px 10px;border-radius:8px;font-size:15px}
+
+  .back{
+    background:none;border:none;color:var(--steel);font-family:'Archivo';font-weight:600;font-size:13px;
+    cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:4px 0;margin-bottom:2px}
+  .back:hover{color:var(--ink)}
+
+  .demo-flag{position:absolute;top:8px;right:10px;font-family:'Space Mono';font-size:9px;letter-spacing:.14em;color:#6b7280;text-transform:uppercase;z-index:40;background:rgba(255,255,255,.06);padding:3px 7px;border-radius:5px}
+  .hidden{display:none!important}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <span class="demo-flag">Demo</span>
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="brand">
+      <span class="mark">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M3 13l2-5a3 3 0 012.8-2h8.4A3 3 0 0119 8l2 5M5 13h14M5 13v4a1 1 0 001 1h1a1 1 0 001-1v-1h8v1a1 1 0 001 1h1a1 1 0 001-1v-4" stroke="#16181D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8" cy="15.5" r="1.2" fill="#16181D"/><circle cx="16" cy="15.5" r="1.2" fill="#16181D"/></svg>
+      </span>
+      <div>
+        <div class="wordmark">Servi<b>ruta</b></div>
+        <div class="tag">Repuestos · entrega a domicilio</div>
+      </div>
+    </div>
+    <div class="plate-wrap" id="plateWrap">
+      <div class="plate">
+        <div class="plate-band">
+          <span class="cl">CL</span>
+          <svg width="14" height="9" viewBox="0 0 14 9"><rect width="14" height="9" rx="1" fill="#fff"/><rect width="14" height="3" fill="#0A3DA8"/><rect y="3" width="14" height="3" fill="#fff"/><rect y="6" width="14" height="3" fill="#D72027"/><path d="M2.4 2.6l.3.9h.95l-.77.56.3.9-.78-.56-.77.56.29-.9-.77-.56h.95z" fill="#fff"/></svg>
+        </div>
+        <div class="plate-main">
+          <div class="pm-veh" id="plateVeh">—</div>
+          <div class="pm-eng" id="plateEng">—</div>
+        </div>
+        <button class="plate-edit" onclick="goStep(0)">Cambiar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE -->
+  <div class="stage" id="stage"></div>
+
+  <!-- FOOTER -->
+  <div class="footer" id="footer"></div>
+</div>
+
+<script>
+/* ============ DATA ============ */
+const FLEET = {
+  "Toyota":   { "Hilux":["2.4 2GD-FTV Diésel","2.8 1GD-FTV Diésel","2.7 Dual VVT-i Bencina"],
+                "Corolla":["1.8 2ZR-FE Bencina","1.8 Hybrid"],
+                "Yaris":["1.5 2NR-FE Bencina"] },
+  "Hyundai":  { "Tucson":["2.0 CRDi Diésel","2.0 GDi Bencina"],
+                "Accent":["1.4 Kappa Bencina","1.6 Gamma Bencina"] },
+  "Chevrolet":{ "Sail":["1.5 DOHC Bencina"],
+                "D-Max":["3.0 4JJ1 Diésel","2.5 4JK1 Diésel"] },
+  "Nissan":   { "Navara":["2.3 dCi Diésel"], "Versa":["1.6 HR16 Bencina"] },
+  "Hino":     { "300 Series (Dutro)":["4.0 N04C Diésel"],
+                "500 Series (GH)":["7.7 J08E Diésel"] },
+  "Mercedes-Benz":{ "Sprinter 515":["2.1 OM651 Diésel"],
+                    "Accelo 1016":["4.8 OM924 Diésel"] },
+  "Foton":    { "Aumark":["3.8 Cummins ISF Diésel"] }
+};
+const BRANDS_TRUCK = new Set(["Hino","Mercedes-Benz","Foton"]);
+
+const CATS = [
+  { id:"frenos", t:"Frenos", c:"Pastillas, discos, balatas", ico:"M12 3a9 9 0 100 18 9 9 0 000-18zm0 4a5 5 0 100 10 5 5 0 000-10zm0 3a2 2 0 100 4 2 2 0 000-4z",
+    parts:["Pastillas de freno delanteras","Pastillas de freno traseras","Discos de freno delanteros","Balatas traseras","Líquido de freno DOT 4"] },
+  { id:"embrague", t:"Embrague", c:"Kit, disco, prensa", ico:"M12 2a10 10 0 100 20 10 10 0 000-20zm0 3v4m0 6v4m7-7h-4M9 12H5",
+    parts:["Kit de embrague completo","Disco de embrague","Prensa / plato","Collarín hidráulico","Bomba de embrague"] },
+  { id:"filtros", t:"Filtros", c:"Aceite, aire, petróleo", ico:"M5 4h14l-2 5v7l-4 3v-9L5 4z",
+    parts:["Filtro de aceite","Filtro de aire","Filtro de combustible","Filtro de cabina (polen)"] },
+  { id:"suspension", t:"Suspensión", c:"Amortiguadores, rótulas", ico:"M12 3v4m0 10v4M8 7h8M8 17h8M10 7l-1 10m6-10l1 10",
+    parts:["Amortiguador delantero","Rótula de suspensión","Bujes de bandeja","Terminal de dirección"] },
+  { id:"motor", t:"Motor", c:"Distribución, bujías", ico:"M7 8h2V6h6v2h2l2 3v6H5v-6l2-3zM9 13h6",
+    parts:["Kit de distribución","Bomba de agua","Bujías (juego)","Inyector diésel"] },
+  { id:"electrico", t:"Eléctrico", c:"Batería, alternador", ico:"M13 2L4 14h6l-1 8 9-12h-6l1-8z",
+    parts:["Batería 12V","Alternador","Motor de partida","Sensor de cigüeñal"] },
+  { id:"dpf", t:"DPF / FAP", c:"Sensores, EGR, escape", ico:"M3 12h4l2-6 4 12 2-6h6",
+    parts:["Sensor de presión diferencial DPF","Válvula EGR","Sensor de temperatura de escape","Filtro de partículas (DPF/FAP)"] },
+  { id:"refrigeracion", t:"Refrigeración", c:"Radiador, termostato", ico:"M7 4v16m10-16v16M7 8h10M7 12h10M7 16h10",
+    parts:["Radiador","Termostato","Bomba de agua","Ventilador electroventilador"] },
+];
+
+const STORES = [
+  { n:"Repuestos San Diego",      com:"Santiago Centro",  r:4.8, av:"SD" },
+  { n:"AutoParts Recoleta",       com:"Recoleta",         r:4.6, av:"AR" },
+  { n:"DiéselPro Quilicura",      com:"Quilicura",        r:4.9, av:"DP" },
+  { n:"Casa del Repuesto Ñuñoa",  com:"Ñuñoa",            r:4.5, av:"CR" },
+  { n:"Repuestos Maipú Motor",    com:"Maipú",            r:4.4, av:"RM" },
+  { n:"TruckParts Pudahuel",      com:"Pudahuel",         r:4.7, av:"TP" },
+  { n:"Frenos y Embragues Macul", com:"Macul",            r:4.6, av:"FM" },
+  { n:"Importadora La Vega Motor",com:"Independencia",    r:4.3, av:"LV" },
+];
+
+const COURIERS = [
+  { id:"uber", n:"Uber Direct", s:"Retiro y entrega exprés", price:3200, eta:"Hoy · 45–70 min", color:"#000000" },
+  { id:"peya", n:"PedidosYa Envíos", s:"Mensajero en moto", price:2790, eta:"Hoy · 50–80 min", color:"#FF5252" },
+];
+
+/* ============ STATE ============ */
+const S = { brand:null, model:null, year:null, engine:null, cat:null, part:null,
+            offers:[], quotes:[], quotesRequested:false, picked:null, courier:"uber" };
+let step = 0;
+const stage = document.getElementById('stage');
+const footer = document.getElementById('footer');
+
+/* ============ HELPERS ============ */
+const clp = n => "$" + n.toLocaleString('es-CL');
+const rng = (seed) => { let x = Math.sin(seed)*10000; return x - Math.floor(x); };
+function oem(part){
+  let h=0; const str=(S.brand||"")+(S.model||"")+part;
+  for(let i=0;i<str.length;i++){h=(h*31+str.charCodeAt(i))>>>0;}
+  const a=(S.brand||"X").slice(0,2).toUpperCase();
+  return `${a}-${(h%900000+100000)}`;
+}
+// REF = precio de referencia de mercado (Autoplanet Chile, jun-2026)
+function basePrice(part){
+  const map={"Pastillas de freno delanteras":26900,"Pastillas de freno traseras":19900,"Discos de freno delanteros":32900,
+    "Balatas traseras":23900,"Líquido de freno DOT 4":6990,"Kit de embrague completo":159900,"Disco de embrague":69900,
+    "Prensa / plato":64900,"Collarín hidráulico":35900,"Bomba de embrague":39900,"Filtro de aceite":6990,"Filtro de aire":12900,
+    "Filtro de combustible":14900,"Filtro de cabina (polen)":8990,"Amortiguador delantero":39900,"Rótula de suspensión":18900,
+    "Bujes de bandeja":14900,"Terminal de dirección":13900,"Kit de distribución":119900,"Bomba de agua":38900,
+    "Bujías (juego)":28900,"Inyector diésel":189900,"Batería 12V":89900,"Alternador":149900,"Motor de partida":129900,
+    "Sensor de cigüeñal":34900,"Sensor de presión diferencial DPF":64900,"Válvula EGR":159900,
+    "Sensor de temperatura de escape":49900,"Filtro de partículas (DPF/FAP)":689900,"Radiador":109900,"Termostato":22900,
+    "Ventilador electroventilador":89900};
+  let b = map[part] || 34900;
+  if(BRANDS_TRUCK.has(S.brand)) b = Math.round(b*1.9/100)*100; // camión = más caro
+  return b;
+}
+function savings(price){
+  const ref = S.ref || price;
+  const pct = Math.round((1 - price/ref)*100);
+  return { ref, pct };
+}
+function buildOffers(){
+  const base = basePrice(S.part);
+  S.ref = base; // referencia Autoplanet
+  // 2-3 live + 3-4 cotización, deterministic-ish
+  const shuffled = [...STORES].sort((a,b)=> rng(base+a.n.length) - rng(base+b.n.length));
+  const liveCount = 2 + (Math.round(rng(base)*1) );
+  const live = shuffled.slice(0,liveCount).map((s,i)=>{
+    // repuestera compite alrededor/por debajo del mercado: 0.85x – 1.06x
+    const price = Math.round((base*(0.85+rng(base+i+s.r)*0.21))/100)*100;
+    const stock = 2 + Math.floor(rng(base+i)*8);
+    const etas = ["Hoy 14:00–16:00","Hoy 16:00–18:30","Mañana 09:00–11:00","Hoy · 2 hrs"];
+    return { store:s, price, stock, eta:etas[i%etas.length], live:true };
+  });
+  const quotePool = shuffled.slice(liveCount, liveCount+3);
+  S.offers = live;
+  S.quotePool = quotePool;
+  S.quotes = [];
+  S.quotesRequested = false;
+  S.picked = null;
+}
+
+/* ============ RENDER ============ */
+function rail(active){
+  const labels=["Vehículo","Pieza","Ofertas","Pago","Listo"];
+  return `<div class="rail">${labels.map((l,i)=>`<i class="${i<active?'done':''} ${i===active?'now':''}"></i>`).join('')}</div>`;
+}
+function syncPlate(){
+  const w=document.getElementById('plateWrap');
+  if(S.brand&&S.model){
+    w.classList.add('on');
+    document.getElementById('plateVeh').textContent = `${S.brand} ${S.model}`.replace(/\s*\(.*\)/,'');
+    document.getElementById('plateEng').textContent = `${S.year||''} · ${S.engine||''}`;
+  } else w.classList.remove('on');
+}
+
+function render(){
+  syncPlate();
+  footer.innerHTML="";
+  if(step===0) renderVehicle();
+  else if(step===1) renderParts();
+  else if(step===2) renderOffers();
+  else if(step===3) renderCheckout();
+  else if(step===4) renderConfirm();
+  stage.scrollIntoView({behavior:'instant',block:'start'});
+  document.querySelector('.app').scrollTop=0;
+  window.scrollTo(0,0);
+}
+
+/* --- step 0: vehicle --- */
+function renderVehicle(){
+  const brands=Object.keys(FLEET);
+  const models=S.brand?Object.keys(FLEET[S.brand]):[];
+  const engines=(S.brand&&S.model)?FLEET[S.brand][S.model]:[];
+  const isTruck=BRANDS_TRUCK.has(S.brand);
+  const yearStart=isTruck?2014:2015, yearEnd=2025;
+  const years=[];for(let y=yearEnd;y>=yearStart;y--)years.push(y);
+
+  stage.innerHTML=`
+    ${rail(0)}
+    <div class="eyebrow"><span class="dash"></span>Paso 1 de 4</div>
+    <h1 class="head">¿Para qué vehículo?</h1>
+    <p class="sub">Arma la ficha del vehículo. Con esto verificamos que cada repuesto calce — sin equivocaciones de compatibilidad.</p>
+
+    <div class="field-label">Marca</div>
+    <div class="chips">${brands.map(b=>`<button class="chip ${S.brand===b?'sel':''}" onclick="pick('brand','${b}')">${b}${BRANDS_TRUCK.has(b)?' ⬢':''}</button>`).join('')}</div>
+
+    ${S.brand?`<div class="field-label">Modelo</div>
+      <div class="chips">${models.map(m=>`<button class="chip ${S.model===m?'sel':''}" onclick="pick('model','${m.replace(/'/g,"\\'")}')">${m}</button>`).join('')}</div>`:''}
+
+    ${S.model?`<div class="field-label">Año</div>
+      <div class="chips">${years.map(y=>`<button class="chip yr ${S.year===y?'sel':''}" onclick="pick('year',${y})">${y}</button>`).join('')}</div>`:''}
+
+    ${S.year?`<div class="field-label">Motor</div>
+      <div class="chips">${engines.map(e=>`<button class="chip eng ${S.engine===e?'sel':''}" onclick="pick('engine','${e.replace(/'/g,"\\'")}')"><span class="en-main">${e.split(' ').slice(0,2).join(' ')}</span><span class="en-sub">${e}</span></button>`).join('')}</div>`:''}
+  `;
+  const ready = S.brand&&S.model&&S.year&&S.engine;
+  footer.innerHTML=`<button class="cta go" ${ready?'':'disabled'} onclick="goStep(1)">Buscar repuestos
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M5 12h14m-6-6l6 6-6 6" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>`;
+}
+function pick(k,v){
+  if(k==='brand'){ if(S.brand!==v){S.model=null;S.year=null;S.engine=null;} S.brand=v; }
+  if(k==='model'){ if(S.model!==v){S.year=null;S.engine=null;} S.model=v; }
+  if(k==='year'){ if(S.year!==v){S.engine=null;} S.year=v; }
+  if(k==='engine'){ S.engine=v; }
+  render();
+}
+
+/* --- step 1: category + part --- */
+function renderParts(){
+  if(!S.cat){
+    stage.innerHTML=`
+      ${rail(1)}
+      <button class="back" onclick="goStep(0)">‹ Vehículo</button>
+      <div class="eyebrow"><span class="dash"></span>Paso 2 de 4</div>
+      <h1 class="head">¿Qué necesitas?</h1>
+      <p class="sub">Elige el sistema. Te mostramos solo repuestos que calzan con tu ${S.brand} ${S.model}.</p>
+      <div class="cat-grid" style="margin-top:16px">
+        ${CATS.map(c=>`<button class="cat" onclick="setCat('${c.id}')">
+          <span class="ico"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="${c.ico}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <div><div class="ct">${c.t}</div><div class="cc">${c.c}</div></div>
+        </button>`).join('')}
+      </div>`;
+    footer.innerHTML="";
+  } else {
+    const c=CATS.find(x=>x.id===S.cat);
+    stage.innerHTML=`
+      ${rail(1)}
+      <button class="back" onclick="S.cat=null;render()">‹ Categorías</button>
+      <div class="eyebrow"><span class="dash"></span>${c.t}</div>
+      <h1 class="head">${c.t}</h1>
+      <p class="sub">Repuestos verificados para tu vehículo. Toca uno para ver ofertas.</p>
+      <div style="margin-top:16px">
+        ${c.parts.map(p=>`<div class="part-row" onclick="setPart('${p.replace(/'/g,"\\'")}')">
+          <div class="pr-body"><div class="pr-name">${p}</div><div class="pr-oem">REF ${oem(p)} · compatible</div></div>
+          <svg class="arr" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>`).join('')}
+      </div>`;
+    footer.innerHTML="";
+  }
+}
+function setCat(id){ S.cat=id; render(); }
+function setPart(p){ S.part=p; buildOffers(); goStep(2); }
+
+/* --- step 2: offers --- */
+function renderOffers(){
+  const liveSorted=[...S.offers].sort((a,b)=>a.price-b.price);
+  stage.innerHTML=`
+    ${rail(2)}
+    <button class="back" onclick="goStep(1)">‹ Piezas</button>
+    <div class="eyebrow"><span class="dash"></span>Paso 3 de 4</div>
+    <h1 class="head">${S.part}</h1>
+    <div class="compat-banner">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 12l2 2 4-4" stroke="#15633A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9" stroke="#15633A" stroke-width="2"/></svg>
+      <span>Compatibilidad verificada con <span class="pl">${S.brand} ${S.model} ${S.year}</span></span>
+    </div>
+
+    <div class="seg-label"><span class="sl-dot live"></span><span class="sl-t">Disponible ahora</span><span class="sl-c">${liveSorted.length} con stock</span></div>
+    <div id="liveList">
+      ${liveSorted.map(o=>offerCard(o)).join('')}
+    </div>
+
+    <div class="seg-label"><span class="sl-dot quote"></span><span class="sl-t">Pedir cotización</span><span class="sl-c">${S.quotePool.length} repuesteras</span></div>
+    <div id="quoteZone">${renderQuoteZone()}</div>
+  `;
+  renderOfferFooter();
+}
+function offerCard(o){
+  const id=o.store.av;
+  const sv=savings(o.price);
+  const picked = S.picked && S.picked.store.av===id && S.picked.live;
+  return `<div class="offer ${picked?'picked':''}" id="of-${id}">
+    <div class="o-top">
+      <div class="o-store">
+        <div class="o-name">${o.store.n}
+          <svg class="o-verified" width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 1.8 3 .2.9 2.9 2.2 2-1 2.9 1 2.9-2.2 2-.9 2.9-3 .2L12 22l-2.4-1.8-3-.2-.9-2.9-2.2-2 1-2.9-1-2.9 2.2-2 .9-2.9 3-.2L12 2z" fill="#FF5A1F"/><path d="M9 12l2 2 4-4" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="o-meta"><span class="star">★ ${o.store.r}</span><span>${o.store.com}</span><span>· ${o.eta}</span></div>
+      </div>
+      <div class="o-price-wrap">
+        <div class="o-price">${clp(o.price)}<small>IVA incl.</small></div>
+        ${sv.pct>0?`<div class="o-ref">Mercado ${clp(sv.ref)}</div>`:''}
+      </div>
+    </div>
+    <div class="o-foot">
+      <span class="badge stock">● ${o.stock} en stock</span>
+      ${sv.pct>0?`<span class="badge save">−${sv.pct}% vs mercado</span>`:''}
+      <button class="o-pick" onclick="pickOffer('${id}')">${picked?'Elegido':'Elegir'}</button>
+    </div>
+  </div>`;
+}
+function renderQuoteZone(){
+  if(!S.quotesRequested){
+    return `<div class="quote-card">
+      <div class="q-head">
+        <span class="q-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <div><div class="q-t">¿No te convence el stock?</div><div class="q-d">Mandamos tu pedido a ${S.quotePool.length} repuesteras más. Te responden con precio y disponibilidad en minutos.</div></div>
+      </div>
+      <button class="q-btn" onclick="requestQuotes()">Pedir cotización a ${S.quotePool.length} repuesteras</button>
+    </div>`;
+  }
+  // requested: pending + arriving quotes
+  let html="";
+  S.quotePool.forEach((s,i)=>{
+    const q=S.quotes.find(q=>q.store.av===s.av);
+    if(q){
+      const picked = S.picked && S.picked.store.av===s.av && !S.picked.live;
+      const sv=savings(q.price);
+      html+=`<div class="offer quote-in ${picked?'picked':''}">
+        <div class="o-top">
+          <div class="o-store"><div class="o-name">${s.n}</div>
+            <div class="o-meta"><span class="star">★ ${s.r}</span><span>${s.com}</span><span style="color:var(--cotiza);font-weight:700">Cotizado</span></div>
+          </div>
+          <div class="o-price-wrap">
+            <div class="o-price">${clp(q.price)}<small>IVA incl.</small></div>
+            ${sv.pct>0?`<div class="o-ref">Mercado ${clp(sv.ref)}</div>`:''}
+          </div>
+        </div>
+        <div class="o-foot">
+          <span class="badge stock">${q.note}</span>
+          ${sv.pct>0?`<span class="badge save">−${sv.pct}%</span>`:''}
+          <span class="badge eta">${q.eta}</span>
+          <button class="o-pick" onclick="pickQuote('${s.av}')">${picked?'Elegido':'Elegir'}</button>
+        </div></div>`;
+    } else {
+      html+=`<div class="q-pending"><span class="spin"></span><div class="qp-t"><b>${s.n}</b> está revisando stock…</div></div>`;
+    }
+  });
+  return html;
+}
+function requestQuotes(){
+  S.quotesRequested=true;
+  render();
+  const base=basePrice(S.part);
+  S.quotePool.forEach((s,i)=>{
+    setTimeout(()=>{
+      const price=Math.round((base*(0.80+rng(base+s.r+i)*0.24))/100)*100;
+      const notes=["Stock confirmado","1 unidad","Llega en 24h","Original importado"];
+      const etas=["Mañana 10:00–12:00","Hoy 17:00–19:00","48 hrs","Mañana AM"];
+      S.quotes.push({store:s,price,note:notes[i%notes.length],eta:etas[i%etas.length]});
+      if(step===2) document.getElementById('quoteZone').innerHTML=renderQuoteZone();
+    }, 1300 + i*1400);
+  });
+}
+function pickOffer(id){
+  const o=S.offers.find(x=>x.store.av===id);
+  S.picked={...o, live:true}; render();
+}
+function pickQuote(id){
+  const s=S.quotePool.find(x=>x.av===id);
+  const q=S.quotes.find(x=>x.store.av===id);
+  S.picked={store:s, price:q.price, eta:q.eta, live:false}; render();
+}
+function renderOfferFooter(){
+  if(S.picked){
+    footer.innerHTML=`<button class="cta go" onclick="goStep(3)">Continuar con ${S.picked.store.n.split(' ')[0]}
+      <span class="price-pill">${clp(S.picked.price)}</span></button>`;
+  } else {
+    footer.innerHTML=`<button class="cta" disabled>Elige una oferta para continuar</button>`;
+  }
+}
+
+/* --- step 3: checkout --- */
+function renderCheckout(){
+  const part=S.picked.price;
+  const ref=S.ref||part;
+  const ahorro=Math.max(0, ref-part);
+  const courier=COURIERS.find(c=>c.id===S.courier);
+  const total=part+courier.price;
+  stage.innerHTML=`
+    ${rail(3)}
+    <button class="back" onclick="goStep(2)">‹ Ofertas</button>
+    <div class="eyebrow"><span class="dash"></span>Paso 4 de 4</div>
+    <h1 class="head">Confirmar pedido</h1>
+
+    <div class="summary" style="margin-top:16px">
+      <div class="sum-row"><span class="sk">Repuesto</span><span class="sv">${S.part}<small>REF ${oem(S.part)}</small></span></div>
+      <div class="sum-row"><span class="sk">Repuestera</span><span class="sv">${S.picked.store.n}<small>${S.picked.store.com} · ★ ${S.picked.store.r}</small></span></div>
+      <div class="sum-row"><span class="sk">Vehículo</span><span class="sv">${S.brand} ${S.model}<small>${S.year} · compatible ✓</small></span></div>
+    </div>
+
+    <div class="field-label">Entrega a domicilio</div>
+    ${COURIERS.map(c=>`<div class="opt-row ${S.courier===c.id?'sel':''}" onclick="setCourier('${c.id}')">
+      <span class="radio"></span>
+      <span class="courier-logo" style="background:${c.color}">${c.n.split(' ')[0]}</span>
+      <div class="opt-body"><div class="opt-t">${c.n}</div><div class="opt-s">${c.s} · ${c.eta}</div></div>
+      <span class="opt-p">${clp(c.price)}</span>
+    </div>`).join('')}
+
+    <div class="field-label">Pago</div>
+    <div id="payZone">
+      <div class="opt-row sel"><span class="radio"></span>
+        <span class="courier-logo" style="background:#4C2A86">Flow</span>
+        <div class="opt-body"><div class="opt-t">Flow</div><div class="opt-s">Webpay, transferencia o tarjeta</div></div>
+      </div>
+      <div class="opt-row"><span class="radio"></span>
+        <span class="courier-logo" style="background:#009EE3">MP</span>
+        <div class="opt-body"><div class="opt-t">Mercado Pago</div><div class="opt-s">Tarjeta o saldo</div></div>
+      </div>
+    </div>
+
+    <div class="summary" style="margin-top:16px">
+      <div class="sum-row"><span class="sk">Repuesto</span><span class="sv">${clp(part)}</span></div>
+      ${ahorro>0?`<div class="sum-row"><span class="sk">Ahorro vs mercado</span><span class="sv" style="color:var(--stock)">−${clp(ahorro)}</span></div>`:''}
+      <div class="sum-row"><span class="sk">Envío (${courier.n})</span><span class="sv">${clp(courier.price)}</span></div>
+      <div class="sum-row total"><span class="sk">Total</span><span class="sv">${clp(total)}</span></div>
+    </div>
+  `;
+  footer.innerHTML=`<button class="cta go" onclick="pay()">Pagar ${clp(total)}
+    <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 6" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>`;
+}
+function setCourier(id){ S.courier=id; render(); }
+function pay(){
+  footer.innerHTML=`<button class="cta" disabled><span class="spin" style="border-top-color:#fff;border-color:rgba(255,255,255,.3);border-top-color:#fff"></span> Procesando pago…</button>`;
+  setTimeout(()=>goStep(4), 1400);
+}
+
+/* --- step 4: confirm --- */
+function renderConfirm(){
+  const courier=COURIERS.find(c=>c.id===S.courier);
+  const oid = "SRV-" + (Math.floor(rng(Date.now())*9000)+1000);
+  stage.innerHTML=`
+    <div class="confirm-hero">
+      <div class="check-burst"><svg width="38" height="38" viewBox="0 0 24 24" fill="none"><path d="M5 12l4 4L19 7" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <h1>¡Pedido confirmado!</h1>
+      <div class="oid">N° ${oid} · pago aprobado vía Flow</div>
+    </div>
+
+    <div class="track">
+      <div class="t-store">
+        <div class="ts-ava">${S.picked.store.av}</div>
+        <div><div class="ts-t">${S.picked.store.n}</div><div class="ts-s">${S.part} · ${clp(S.picked.price)}</div></div>
+      </div>
+      <div class="steps">
+        <div class="tstep done"><span class="dot"></span><div><div class="tt">Pago confirmado</div><div class="td">Recién</div></div></div>
+        <div class="tstep done"><span class="dot"></span><div><div class="tt">Repuestera preparando</div><div class="td">${S.picked.store.com}</div></div></div>
+        <div class="tstep active"><span class="dot"></span><div><div class="tt">${courier.n} en camino al retiro</div><div class="td">${courier.eta}</div></div></div>
+        <div class="tstep pending"><span class="dot"></span><div><div class="tt">Entrega en tu taller</div><div class="td">Te avisamos por WhatsApp</div></div></div>
+      </div>
+    </div>
+  `;
+  footer.innerHTML=`<button class="cta" onclick="reset()">Hacer otro pedido</button>`;
+}
+
+/* ============ NAV ============ */
+function goStep(n){
+  if(n===1){ S.cat=null; }
+  step=n; render();
+}
+function reset(){
+  Object.assign(S,{cat:null,part:null,offers:[],quotes:[],quotePool:[],quotesRequested:false,picked:null,courier:"uber"});
+  step=0; render();
+}
+render();
+</script>
+</body>
+</html>

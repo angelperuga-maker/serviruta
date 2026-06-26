@@ -83,6 +83,21 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
 .dot:nth-child(3){animation-delay:0.4s;}
 @keyframes blink{0%,80%,100%{opacity:0.3}40%{opacity:1}}
 </style>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '2047126482467549');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=2047126482467549&ev=PageView&noscript=1" /></noscript>
+<!-- End Meta Pixel Code -->
 </head>
 <body>
 <div class="top">
@@ -92,7 +107,8 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
     <div class="top-nombre">Agente Coordinador</div>
     <div class="top-estado">● Asistente IA · Monitoreo en vivo</div>
   </div>
-  <button onclick="loadAll()" style="background:none;border:none;color:var(--txt3);cursor:pointer;font-size:20px">&#8635;</button>
+  <button onclick="configurarAPIKey()" title="Configurar API Key" style="background:none;border:none;color:var(--txt3);cursor:pointer;font-size:18px;padding:0 6px">⚙️</button>
+  <button onclick="loadAll()" title="Refrescar datos" style="background:none;border:none;color:var(--txt3);cursor:pointer;font-size:20px">&#8635;</button>
 </div>
 
 <div class="body">
@@ -331,34 +347,94 @@ function getTelTec(nombre){
 async function enviar(){
   var txt=document.getElementById('msg-inp').value.trim()
   if(!txt)return
+  
+  // Verificar API Key
+  var apiKey = localStorage.getItem('anthropic_api_key')
+  if(!apiKey){
+    if(confirm('Necesitas configurar tu API Key de Anthropic para usar el agente.\n\n¿Configurarla ahora?')){
+      configurarAPIKey()
+    }
+    return
+  }
+  
   agregarMensaje('user',txt)
   document.getElementById('msg-inp').value=''
   document.getElementById('chips').style.display='none'
   historial.push({role:'user',content:txt})
   mostrarTyping()
-  // Contexto enriquecido con datos actuales
-  var contexto='Datos actuales:\nServicios totales: '+servicios.length+'\nActivos: '+servicios.filter(function(s){return s.estado_servicio==='ejecucion'}).length+'\nTecnicos: '+TECNICOS.map(function(t){return t.nombre}).join(', ')
-  try{
-    var r=await fetch('https://hook.us2.make.com/hail5qzypi39pmsixxi167lviw8wahbq',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({system:SYSTEM_PROMPT+'\n\n'+contexto,messages:historial})
+  
+  // Contexto enriquecido con datos reales en vivo
+  var hoy=new Date().toISOString().slice(0,10)
+  var activos=servicios.filter(function(s){return s.estado_servicio==='ejecucion'||s.estado_servicio==='aprobado'})
+  var pendientes=servicios.filter(function(s){return (s.estado_servicio==='nuevo'||s.estado_servicio==='enviado')&&(s.created_at||'').startsWith(hoy)})
+  var sinAsignar=servicios.filter(function(s){return !s.tecnico&&s.estado_servicio!=='completado'})
+  
+  var contexto='[DATOS EN VIVO - '+new Date().toLocaleString('es-CL')+']\n'
+  contexto+='Servicios totales (últimos 100): '+servicios.length+'\n'
+  contexto+='Activos en ejecución: '+activos.length+'\n'
+  contexto+='Pendientes de hoy: '+pendientes.length+'\n'
+  contexto+='Sin asignar técnico: '+sinAsignar.length+'\n\n'
+  
+  contexto+='TÉCNICOS DISPONIBLES:\n'
+  TECNICOS.forEach(function(t){
+    var carga=servicios.filter(function(s){return s.tecnico===t.nombre&&(s.created_at||'').startsWith(hoy)}).length
+    contexto+='- '+t.nombre+' (Especialidad: '+t.especialidad.join(', ')+') · Carga hoy: '+carga+' servicios\n'
+  })
+  
+  if(sinAsignar.length>0){
+    contexto+='\nSERVICIOS SIN ASIGNAR (primeros 5):\n'
+    sinAsignar.slice(0,5).forEach(function(s){
+      contexto+='- ID '+s.id+': '+(s.cliente||'?')+' · '+(s.direccion||'sin dirección')+' · $'+(s.total||0).toLocaleString('es-CL')+' · "'+(s.obs||'').slice(0,80)+'"\n'
     })
-    var raw=await r.text()
-    var respuesta=raw
-    try{
-      var p=JSON.parse(raw)
-      if(p.content&&p.content[0])respuesta=p.content[0].text
-      else if(p.text)respuesta=p.text
-    }catch(e){}
-    if(!respuesta||respuesta.trim()===''||respuesta.trim()==='Accepted')respuesta='Sin respuesta. Intenta de nuevo.'
+  }
+  
+  try{
+    var r=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key':apiKey,
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body:JSON.stringify({
+        model:'claude-haiku-4-5-20251001',
+        max_tokens:1024,
+        system:SYSTEM_PROMPT+'\n\n'+contexto,
+        messages:historial
+      })
+    })
+    
+    var data=await r.json()
+    if(data.error){
+      throw new Error(data.error.message||'Error desconocido')
+    }
+    
+    var respuesta=data.content[0].text
     ocultarTyping()
     agregarMensaje('agent',respuesta)
     historial.push({role:'assistant',content:respuesta})
   }catch(e){
     ocultarTyping()
-    agregarMensaje('agent','Error de conexion. Verifica tu señal.')
+    var msg='⚠️ Error: '+e.message
+    if(e.message.includes('401')||e.message.includes('authentication')){
+      msg='🔑 API Key inválida. Toca el botón ⚙️ arriba para reconfigurar.'
+    }else if(e.message.includes('credit')||e.message.includes('balance')){
+      msg='💳 Sin créditos. Recarga en console.anthropic.com'
+    }
+    agregarMensaje('agent',msg)
   }
+}
+
+function configurarAPIKey(){
+  var actual=localStorage.getItem('anthropic_api_key')||''
+  var masked=actual?actual.slice(0,12)+'...'+actual.slice(-4):'(sin configurar)'
+  var key=prompt('🔑 Configurar API Key de Anthropic\n\nActual: '+masked+'\n\nIngresa nueva API Key (sk-ant-...) o deja vacío para mantener la actual:')
+  if(key===null)return  // canceló
+  if(key.trim()===''){alert('API Key sin cambios.');return}
+  if(!key.startsWith('sk-ant-')){alert('⚠️ Formato incorrecto. Debe empezar con sk-ant-');return}
+  localStorage.setItem('anthropic_api_key',key.trim())
+  alert('✅ API Key guardada.\n\nYa puedes chatear con el coordinador IA.')
 }
 
 function agregarMensaje(rol,txt){

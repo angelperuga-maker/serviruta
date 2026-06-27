@@ -28,6 +28,21 @@ body{background:#080808;color:#F0EDE6;font-family:"DM Sans",sans-serif;min-heigh
 .date{font-size:12px;color:#55525E;text-align:center;margin-top:24px;}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '2047126482467549');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=2047126482467549&ev=PageView&noscript=1" /></noscript>
+<!-- End Meta Pixel Code -->
 </head>
 <body>
 <script>
@@ -57,34 +72,9 @@ var n = sessionStorage.getItem("tecnico_nombre") || "Técnico";
     <div><div class="cn" style="color:#60A5FA">Presupuestos</div><div class="cd">Registra trabajos — el coordinador asigna precios</div></div>
     <span class="arr">›</span>
   </a>
-  <a class="card" href="inspeccion-tecnico.html">
-    <div class="ci" style="background:rgba(34,197,94,0.1)">🔍</div>
-    <div><div class="cn" style="color:#22C55E">Inspección</div><div class="cd">Protocolo de 10 min al llegar al servicio</div></div>
-    <span class="arr">›</span>
-  </a>
-  <a class="card" href="inspeccion-camion.html">
-    <div class="ci" style="background:rgba(251,146,60,0.1)">🚛</div>
-    <div><div class="cn" style="color:var(--naranja)">Inspección Camión</div><div class="cd">Sistema de aire, frenos, fugas, luces y MP</div></div>
-    <span class="arr">›</span>
-  </a>
-  <a class="card" href="protocolos-pre-rt-camion.html" style="background:linear-gradient(135deg,rgba(167,139,250,0.08),rgba(232,33,10,0.04));border-color:rgba(167,139,250,0.25)">
-    <div class="ci" style="background:linear-gradient(135deg,#A78BFA,#E8210A);color:#fff">📋</div>
-    <div><div class="cn" style="color:#A78BFA">Protocolos RT Camión</div><div class="cd">Pre-RT 3 modalidades + RT oficial Clase A2</div></div>
-    <span class="arr">›</span>
-  </a>
-  <a class="card" href="inspeccion-pre-rt-camion.html" style="background:linear-gradient(135deg,rgba(251,146,60,0.12),rgba(232,33,10,0.04));border-color:rgba(251,146,60,0.3)">
-    <div class="ci" style="background:linear-gradient(135deg,#FB923C,#E8210A);color:#fff">🚛</div>
-    <div><div class="cn" style="color:#FB923C">Pre-RT Camión</div><div class="cd">Inspección Clase A2 para preparar revisión técnica</div></div>
-    <span class="arr">›</span>
-  </a>
-  <a class="card" href="simulador-tecnicos.html" style="background:linear-gradient(135deg,rgba(245,197,24,0.12),rgba(232,33,10,0.04));border-color:rgba(245,197,24,0.3)">
-    <div class="ci" style="background:linear-gradient(135deg,#F5C518,#FB923C);color:#000">🎯</div>
-    <div><div class="cn" style="color:#F5C518">Simulador Diagnóstico</div><div class="cd">Pon a prueba tu conocimiento técnico · Ranking de equipo</div></div>
-    <span class="arr">›</span>
-  </a>
-  <a class="card" href="central-diagnostico.html" style="background:linear-gradient(135deg,rgba(232,33,10,0.12),rgba(232,33,10,0.04));border-color:rgba(232,33,10,0.3)">
-    <div class="ci" style="background:var(--rojo);color:#fff">🔧</div>
-    <div><div class="cn" style="color:var(--rojo)">Central de Diagnóstico</div><div class="cd">Protocolos, fallas, DTCs y guías técnicas en terreno</div></div>
+  <a class="card" href="inspecciones-diagnosticos.html" style="background:linear-gradient(135deg,rgba(34,197,94,0.1),rgba(167,139,250,0.06));border-color:rgba(34,197,94,0.3)">
+    <div class="ci" style="background:linear-gradient(135deg,#22C55E,#A78BFA);color:#fff">🔍</div>
+    <div><div class="cn" style="color:#22C55E">Inspecciones y Diagnósticos</div><div class="cd">Protocolos, inspecciones de camión, Pre-RT y diagnósticos técnicos</div></div>
     <span class="arr">›</span>
   </a>
   <a class="card" href="agente-tecnico.html">
@@ -95,11 +85,6 @@ var n = sessionStorage.getItem("tecnico_nombre") || "Técnico";
   <a class="card" href="mis-servicios.html">
     <div class="ci" style="background:rgba(34,197,94,0.1)">✅</div>
     <div><div class="cn" style="color:var(--verde)">Mis servicios</div><div class="cd">Ver servicios activos y marcar como finalizado</div></div>
-    <span class="arr">›</span>
-  </a>
-  <a class="card" href="diagnostico-tecnico.html">
-    <div class="ci" style="background:rgba(251,146,60,0.1)">🔍</div>
-    <div><div class="cn" style="color:var(--naranja)">Diagnostico rapido</div><div class="cd">Registra problemas con fotos y envia al coordinador</div></div>
     <span class="arr">›</span>
   </a>
   <a class="card" href="gastos-tecnico.html">

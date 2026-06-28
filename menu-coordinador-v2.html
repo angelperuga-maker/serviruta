@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Serviruta · Coordinación</title>
+<meta name="theme-color" content="#0A0A0D">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;700;800&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   SERVIRUTA · DESIGN TOKENS · v2
+   ============================================================ */
+:root{
+  /* Surfaces (jerarquía de profundidad) */
+  --bg:       #0A0A0D;          /* Canvas base */
+  --surface-1:#111114;          /* Cards default */
+  --surface-2:#16161B;          /* Cards elevated */
+  --surface-3:#1C1C23;          /* Inputs / interactive */
+  --line:     #26262E;          /* Borders default */
+  --line-2:   #353541;          /* Borders elevated */
+
+  /* Brand & accents */
+  --brand:    #E8210A;          /* Rojo Serviruta */
+  --brand-d:  #B01608;
+  --brand-l:  #FF4D2E;
+  --brand-bg: rgba(232,33,10,0.08);
+
+  /* Status semantics */
+  --ok:       #22C55E;
+  --ok-bg:    rgba(34,197,94,0.10);
+  --warn:     #F5C518;
+  --warn-bg:  rgba(245,197,24,0.10);
+  --alert:    #FB923C;
+  --alert-bg: rgba(251,146,60,0.10);
+  --info:     #60A5FA;
+  --info-bg:  rgba(96,165,250,0.10);
+  --think:    #A78BFA;
+  --think-bg: rgba(167,139,250,0.10);
+
+  /* Text (jerarquía 4 niveles) */
+  --t-1:      #F6F4EF;          /* Headings */
+  --t-2:      #C7C5BF;          /* Body */
+  --t-3:      #8B8990;          /* Captions */
+  --t-4:      #56555C;          /* Muted */
+
+  /* Spacing scale (4px base) */
+  --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px;
+  --s-5: 20px; --s-6: 24px; --s-7: 32px; --s-8: 40px; --s-9: 56px;
+
+  /* Radius scale */
+  --r-1: 6px; --r-2: 10px; --r-3: 14px; --r-4: 18px; --r-pill: 999px;
+
+  /* Type scale */
+  --display: "Syne", system-ui, sans-serif;
+  --body:    "DM Sans", system-ui, sans-serif;
+  --mono:    "JetBrains Mono", ui-monospace, monospace;
+
+  /* Motion */
+  --ease:     cubic-bezier(0.4, 0, 0.2, 1);
+  --dur-1:    120ms;
+  --dur-2:    200ms;
+  --dur-3:    320ms;
+
+  /* Touch targets (faena con guantes) */
+  --touch:    48px;
+}
+
+@media (prefers-reduced-motion: reduce){
+  *, *::before, *::after{
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+*{box-sizing:border-box; margin:0; padding:0;}
+html{ -webkit-tap-highlight-color: transparent;}
+body{
+  background: var(--bg);
+  color: var(--t-2);
+  font-family: var(--body);
+  font-size: 14px;
+  line-height: 1.5;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+button{ font-family: inherit; cursor: pointer; border: none; background: none; color: inherit;}
+a{ color: inherit; text-decoration: none;}
+:focus-visible{ outline: 2px solid var(--brand-l); outline-offset: 2px; border-radius: var(--r-1);}
+
+/* ============================================================
+   LAYOUT
+   ============================================================ */
+.shell{
+  max-width: 1100px;
+  margin: 0 auto;
+  padding-bottom: var(--s-9);
+}
+
+/* ============================================================
+   TOP BAR (signature)
+   ============================================================ */
+.bar{
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(10,10,13,0.85);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-bottom: 1px solid var(--line);
+}
+.bar-inner{
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: var(--s-3) var(--s-4);
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--s-4);
+  min-height: 56px;
+}
+.brand-mark{
+  display: flex; align-items: center; gap: var(--s-3);
+}
+.brand-mark .sigil{
+  width: 36px; height: 36px;
+  background: var(--brand);
+  border-radius: var(--r-1);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--display); font-weight: 800; font-size: 16px; color: #fff;
+  position: relative;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.05) inset;
+}
+.brand-mark .sigil::after{
+  content: ""; position: absolute; inset: -2px;
+  border: 1px solid var(--brand);
+  border-radius: var(--r-2);
+  opacity: 0.3;
+  pointer-events: none;
+}
+.brand-mark .wordmark{
+  font-family: var(--display); font-weight: 800;
+  font-size: 14px; letter-spacing: 0.04em;
+  color: var(--t-1);
+  line-height: 1;
+}
+.brand-mark .sub{
+  font-family: var(--mono); font-size: 9px;
+  color: var(--t-4); letter-spacing: 0.18em;
+  margin-top: 3px;
+}
+
+.session{
+  display: flex; align-items: center; gap: var(--s-3);
+  font-family: var(--mono); font-size: 11px;
+  color: var(--t-3);
+}
+.session .dot{
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--ok);
+  box-shadow: 0 0 0 3px var(--ok-bg);
+  animation: live 2s ease-in-out infinite;
+}
+@keyframes live{
+  0%,100%{ opacity: 1; transform: scale(1); }
+  50%{ opacity: 0.7; transform: scale(0.85); }
+}
+.session strong{ color: var(--t-1); font-family: var(--display); font-weight: 700; }
+.logout{
+  height: 36px; padding: 0 var(--s-3);
+  border: 1px solid var(--line);
+  border-radius: var(--r-1);
+  color: var(--t-3); font-size: 12px;
+  transition: all var(--dur-1) var(--ease);
+}
+.logout:hover{ border-color: var(--brand); color: var(--brand-l); }
+
+/* ============================================================
+   OPERATIONS STRIP (signature element)
+   ============================================================ */
+.ops{
+  margin: var(--s-5) var(--s-4) 0;
+  background: var(--surface-1);
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+  overflow: hidden;
+  position: relative;
+}
+.ops::before{
+  content: ""; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--brand) 30%, var(--brand) 70%, transparent);
+  opacity: 0.6;
+}
+.ops-head{
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--s-4) var(--s-5) var(--s-3);
+  border-bottom: 1px solid var(--line);
+}
+.ops-head h2{
+  font-family: var(--display); font-weight: 700; font-size: 12px;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--t-1);
+  display: flex; align-items: center; gap: var(--s-2);
+}
+.ops-head h2::before{
+  content: "OP";
+  font-family: var(--mono); font-size: 9px; font-weight: 700;
+  background: var(--brand); color: #fff;
+  padding: 2px 5px; border-radius: var(--r-1);
+  letter-spacing: 0.05em;
+}
+.ops-head .stamp{
+  font-family: var(--mono); font-size: 10px; color: var(--t-4);
+  letter-spacing: 0.08em;
+}
+.ops-grid{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--line);
+}
+.ops-cell{
+  background: var(--surface-1);
+  padding: var(--s-4) var(--s-5);
+  position: relative;
+}
+.ops-cell .label{
+  font-family: var(--mono); font-size: 9px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--t-4); margin-bottom: var(--s-2);
+}
+.ops-cell .value{
+  font-family: var(--display); font-weight: 800; font-size: 28px;
+  color: var(--t-1); line-height: 1; letter-spacing: -0.02em;
+  font-feature-settings: "tnum" 1;
+}
+.ops-cell .value sub{
+  font-family: var(--mono); font-size: 10px; font-weight: 500;
+  color: var(--t-3); margin-left: var(--s-1);
+}
+.ops-cell .meta{
+  display: flex; align-items: center; gap: var(--s-2);
+  margin-top: var(--s-2);
+  font-family: var(--mono); font-size: 10px;
+  color: var(--t-3);
+}
+.ops-cell .meta .dot{
+  width: 6px; height: 6px; border-radius: 50%;
+}
+.ops-cell.alert .value{ color: var(--brand-l); }
+.ops-cell.alert .meta .dot{ background: var(--brand); animation: live 1.5s ease-in-out infinite; }
+.ops-cell.warn .value{ color: var(--warn); }
+.ops-cell.warn .meta .dot{ background: var(--warn); }
+.ops-cell.ok .meta .dot{ background: var(--ok); }
+.ops-cell.info .meta .dot{ background: var(--info); }
+
+/* ============================================================
+   PAGE HEADING
+   ============================================================ */
+.page-head{
+  padding: var(--s-7) var(--s-4) var(--s-5);
+}
+.page-head h1{
+  font-family: var(--display); font-weight: 800;
+  font-size: clamp(28px, 5vw, 42px);
+  line-height: 1.05; letter-spacing: -0.02em;
+  color: var(--t-1);
+  margin-bottom: var(--s-2);
+}
+.page-head h1 em{
+  font-style: normal; color: var(--brand);
+}
+.page-head .summary{
+  display: flex; align-items: center; gap: var(--s-3); flex-wrap: wrap;
+  font-family: var(--mono); font-size: 11px; color: var(--t-3);
+  letter-spacing: 0.05em;
+}
+.page-head .summary .sep{ color: var(--t-4); }
+.page-head .summary time{ color: var(--t-2); }
+
+/* ============================================================
+   QUICK ACTIONS (3-4 cards prominentes)
+   ============================================================ */
+.quick{
+  padding: 0 var(--s-4);
+  margin-bottom: var(--s-7);
+}
+.quick-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--s-3);
+}
+.q-card{
+  position: relative;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-3);
+  padding: var(--s-5);
+  display: flex; flex-direction: column; gap: var(--s-3);
+  min-height: 140px;
+  transition: border-color var(--dur-2) var(--ease), transform var(--dur-2) var(--ease);
+  overflow: hidden;
+}
+.q-card::before{
+  content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  background: var(--brand);
+  opacity: 0; transition: opacity var(--dur-2) var(--ease);
+}
+.q-card:hover{ border-color: var(--line-2); transform: translateY(-2px); }
+.q-card:hover::before{ opacity: 1; }
+.q-card .badge{
+  position: absolute; top: var(--s-3); right: var(--s-3);
+  font-family: var(--mono); font-size: 9px; font-weight: 700;
+  padding: 3px var(--s-2); border-radius: var(--r-pill);
+  letter-spacing: 0.1em; text-transform: uppercase;
+}
+.q-card .badge.live{
+  background: var(--brand); color: #fff;
+}
+.q-card .badge.live::before{
+  content: ""; display: inline-block;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #fff; margin-right: 4px;
+  animation: live 1.5s ease-in-out infinite;
+  vertical-align: middle;
+}
+.q-card .badge.count{
+  background: var(--surface-3); color: var(--t-1);
+}
+.q-card .icon{
+  width: 40px; height: 40px;
+  border-radius: var(--r-2);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--display); font-weight: 800; font-size: 14px;
+  background: var(--brand-bg); color: var(--brand-l);
+  border: 1px solid var(--brand-bg);
+}
+.q-card .title{
+  font-family: var(--display); font-weight: 700; font-size: 15px;
+  color: var(--t-1);
+}
+.q-card .desc{
+  font-size: 12px; color: var(--t-3);
+  line-height: 1.5;
+}
+.q-card .action{
+  margin-top: auto;
+  display: flex; align-items: center; gap: var(--s-2);
+  font-family: var(--mono); font-size: 11px; font-weight: 700;
+  color: var(--brand-l);
+  letter-spacing: 0.05em; text-transform: uppercase;
+}
+.q-card .action::after{
+  content: "→"; transition: transform var(--dur-2) var(--ease);
+}
+.q-card:hover .action::after{ transform: translateX(4px); }
+
+/* ============================================================
+   SECTIONS (grupos de módulos)
+   ============================================================ */
+.section{
+  padding: 0 var(--s-4);
+  margin-bottom: var(--s-6);
+}
+.section-head{
+  display: flex; align-items: baseline; justify-content: space-between;
+  margin-bottom: var(--s-4);
+  padding-bottom: var(--s-3);
+  border-bottom: 1px solid var(--line);
+}
+.section-head .label{
+  display: flex; align-items: center; gap: var(--s-3);
+}
+.section-head .num{
+  font-family: var(--mono); font-size: 10px; font-weight: 700;
+  color: var(--t-4); letter-spacing: 0.15em;
+}
+.section-head h2{
+  font-family: var(--display); font-weight: 700; font-size: 14px;
+  color: var(--t-1);
+  letter-spacing: 0.02em;
+}
+.section-head .count{
+  font-family: var(--mono); font-size: 10px;
+  color: var(--t-4);
+  letter-spacing: 0.05em;
+}
+
+/* ============================================================
+   MODULE CARDS (lista de módulos)
+   ============================================================ */
+.modules{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--s-2);
+}
+.m-card{
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
+  align-items: center;
+  gap: var(--s-3);
+  padding: var(--s-3) var(--s-4);
+  background: var(--surface-1);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  min-height: var(--touch);
+  transition: all var(--dur-1) var(--ease);
+  position: relative;
+}
+.m-card:hover{
+  background: var(--surface-2);
+  border-color: var(--line-2);
+}
+.m-card .m-icon{
+  width: 32px; height: 32px;
+  border-radius: var(--r-1);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--display); font-weight: 700; font-size: 12px;
+  background: var(--surface-3);
+  color: var(--t-2);
+  letter-spacing: 0.02em;
+}
+.m-card .m-body{
+  min-width: 0;
+}
+.m-card .m-name{
+  font-family: var(--display); font-weight: 700; font-size: 13px;
+  color: var(--t-1);
+  line-height: 1.2;
+  margin-bottom: 2px;
+}
+.m-card .m-desc{
+  font-size: 11px; color: var(--t-3);
+  line-height: 1.4;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.m-card .m-trail{
+  display: flex; align-items: center; gap: var(--s-2);
+  font-family: var(--mono); font-size: 10px;
+  color: var(--t-4);
+}
+.m-card .m-trail .pill{
+  padding: 2px var(--s-2);
+  border-radius: var(--r-pill);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+.m-card .m-trail .pill.live{
+  background: var(--brand-bg); color: var(--brand-l);
+}
+.m-card .m-trail .pill.count{
+  background: var(--surface-3); color: var(--t-2);
+}
+.m-card .arrow{
+  color: var(--t-4);
+  font-size: 16px;
+  transition: transform var(--dur-1) var(--ease), color var(--dur-1) var(--ease);
+}
+.m-card:hover .arrow{ color: var(--brand-l); transform: translateX(3px); }
+
+/* Status accents on m-card */
+.m-card.has-alert{ border-color: rgba(232,33,10,0.3); }
+.m-card.has-alert .m-icon{ background: var(--brand-bg); color: var(--brand-l); }
+.m-card.featured{
+  background: linear-gradient(180deg, var(--surface-2), var(--surface-1));
+  border-color: var(--line-2);
+}
+.m-card.featured .m-icon{
+  background: var(--brand);
+  color: #fff;
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.foot{
+  margin-top: var(--s-7);
+  padding: var(--s-4);
+  text-align: center;
+  font-family: var(--mono); font-size: 10px;
+  color: var(--t-4);
+  letter-spacing: 0.1em;
+}
+.foot .lines{
+  display: flex; justify-content: center; gap: var(--s-3);
+}
+.foot .lines span{ color: var(--t-3); }
+.foot .lines em{ color: var(--ok); font-style: normal; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 640px){
+  .ops-grid{ grid-template-columns: repeat(2, 1fr); }
+  .ops-cell{ padding: var(--s-3) var(--s-4); }
+  .ops-cell .value{ font-size: 22px; }
+  .bar-inner{ padding: var(--s-3); min-height: 52px; }
+  .brand-mark .sub{ display: none; }
+  .session{ font-size: 10px; }
+  .session .session-name{ display: none; }
+  .page-head{ padding: var(--s-5) var(--s-4) var(--s-4); }
+  .modules{ grid-template-columns: 1fr; }
+  .quick-grid{ grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<header class="bar">
+  <div class="bar-inner">
+    <div class="brand-mark">
+      <div class="sigil">S</div>
+      <div>
+        <div class="wordmark">SERVIRUTA</div>
+        <div class="sub">CTRL · STGO-01</div>
+      </div>
+    </div>
+    <div class="session" aria-live="polite">
+      <span class="dot" aria-hidden="true"></span>
+      <span>Sesión activa</span>
+      <strong class="session-name" id="user">Coordinador</strong>
+    </div>
+    <button class="logout" onclick="cerrar()" aria-label="Cerrar sesión">Salir</button>
+  </div>
+</header>
+
+<div class="shell">
+
+  <!-- OPERATIONS STRIP (signature element) -->
+  <div class="ops" role="region" aria-label="Estado de operaciones en vivo">
+    <div class="ops-head">
+      <h2>Operaciones en curso</h2>
+      <div class="stamp" id="stamp">— — —</div>
+    </div>
+    <div class="ops-grid">
+      <div class="ops-cell ok">
+        <div class="label">Técnicos activos</div>
+        <div class="value">07<sub>/ 11</sub></div>
+        <div class="meta"><span class="dot"></span><span>4 en faena ahora</span></div>
+      </div>
+      <div class="ops-cell info">
+        <div class="label">Servicios hoy</div>
+        <div class="value">12</div>
+        <div class="meta"><span class="dot"></span><span>$3.4M cotizados</span></div>
+      </div>
+      <div class="ops-cell warn">
+        <div class="label">Sin asignar</div>
+        <div class="value">04</div>
+        <div class="meta"><span class="dot"></span><span>Pendientes desde 09:42</span></div>
+      </div>
+      <div class="ops-cell alert">
+        <div class="label">Por cobrar</div>
+        <div class="value">$3.8M</div>
+        <div class="meta"><span class="dot"></span><span>15 servicios atrasados</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE HEADING -->
+  <div class="page-head">
+    <h1>Buenos días, <em id="userName">Coordinador</em></h1>
+    <div class="summary">
+      <time id="fecha">—</time>
+      <span class="sep">·</span>
+      <span>Santiago RM</span>
+      <span class="sep">·</span>
+      <span>Operación 24/7</span>
+    </div>
+  </div>
+
+  <!-- QUICK ACTIONS -->
+  <div class="quick">
+    <div class="quick-grid">
+      <a class="q-card" href="agente-coordinador.html">
+        <span class="badge live">Online</span>
+        <div class="icon">AI</div>
+        <div class="title">Agente Coordinador</div>
+        <div class="desc">Chat con IA · Asigna, consulta y registra acciones en vivo</div>
+        <div class="action">Abrir agente</div>
+      </a>
+      <a class="q-card" href="agenda.html">
+        <span class="badge count">12</span>
+        <div class="icon">AG</div>
+        <div class="title">Agenda del día</div>
+        <div class="desc">Servicios programados por técnico y franja horaria</div>
+        <div class="action">Ver agenda</div>
+      </a>
+      <a class="q-card" href="mapa-tecnicos.html">
+        <span class="badge live">4 en ruta</span>
+        <div class="icon">GPS</div>
+        <div class="title">Mapa de técnicos</div>
+        <div class="desc">Ubicación en tiempo real · Actualiza cada 30 seg</div>
+        <div class="action">Ver mapa</div>
+      </a>
+      <a class="q-card" href="leads.html">
+        <span class="badge count">08</span>
+        <div class="icon">LD</div>
+        <div class="title">Leads nuevos</div>
+        <div class="desc">Captados por agentes IA, redes y aliados</div>
+        <div class="action">Revisar</div>
+      </a>
+    </div>
+  </div>
+
+  <!-- SECTION 01 · OPERACIÓN -->
+  <section class="section">
+    <div class="section-head">
+      <div class="label">
+        <span class="num">01</span>
+        <h2>Operación</h2>
+      </div>
+      <span class="count">7 módulos</span>
+    </div>
+    <div class="modules">
+      <a class="m-card has-alert" href="servicios-coord.html">
+        <div class="m-icon">SV</div>
+        <div class="m-body">
+          <div class="m-name">Gestión de servicios</div>
+          <div class="m-desc">Aprobar, ejecutar, completar</div>
+        </div>
+        <div class="m-trail"><span class="pill live">4</span></div>
+      </a>
+      <a class="m-card" href="presupuestos-coord.html">
+        <div class="m-icon">PR</div>
+        <div class="m-body">
+          <div class="m-name">Presupuestos</div>
+          <div class="m-desc">Valoriza trabajos y envía al cliente</div>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+      <a class="m-card" href="inspecciones-coord.html">
+        <div class="m-icon">IN</div>
+        <div class="m-body">
+          <div class="m-name">Inspecciones</div>
+          <div class="m-desc">Historial por técnico y cliente</div>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+      <a class="m-card" href="diagnosticos-coord.html">
+        <div class="m-icon">DG</div>
+        <div class="m-body">
+          <div class="m-name">Diagnósticos</div>
+          <div class="m-desc">Revisa y gestiona del equipo</div>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+      <a class="m-card" href="panel-informes-pre-rt.html">
+        <div class="m-icon">RT</div>
+        <div class="m-body">
+          <div class="m-name">Informes Pre-RT</div>
+          <div class="m-desc">Seguimiento y conversión a venta</div>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+      <a class="m-card" href="monitor-operaciones.html">
+        <div class="m-icon">MN</div>
+        <div class="m-body">
+          <div class="m-name">Monitor operaciones</div>
+          <div class="m-desc">Alertas y tiempos en tiempo real</div>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+      <a class="m-card" href="central-diagnostico.html">
+        <div class="m-icon">CD</div>
+        <div class="m-body">
+          <div class="m-name">Central de Diagnóstico</div>
+          <div class="m-desc">Protocolos y supervisión técnica</div>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- SECTION 02 · EQUIPO -->
+  <section class="section">
+    <div class="section-head">
+      <div class="label">
+        <span class="num">02</span>
+        <h2>Equipo</h2>
+      </div>
+      <span class="count">5 módulos</span>
+    </div>
+    <div class="modules">
+      <a class="m-card featured" href="simulador-tecnicos.html">
+        <div class="m-icon">SM</div>
+        <div class="m-body">
+          <div class="m-name">Simulador Diagnóstico</div>
+          <div class="m-desc">Crea pruebas técnicas y evalúa</div>
+        </div>
+        <div class="m-trail"><span class="pill count">Nuevo</span></div>
+      </a>
+      <a class="m-card" href="desempeno-coord.html">
+        <div class="m-icon">RK</div>
+        <div class="m-body">
+          <div class="m-name">Desempeño del equipo</div>
+          <div class="m-desc">Ranking, evaluaciones y métricas</div>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+      <a class="m-card" href="ficha-tecnico.html">
+        <div class="m-icon">FT</div>
+        <div class="m-body">
+          <div class="m-name">Incorporar técnico</div>
+          <div class="m-desc">Formulario de postulación</div>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+      <a class="m-card has-alert" href="postulaciones-coord.html">
+        <div class="m-icon">PT</div>
+        <div class="m-body">
+          <div class="m-name">Postulaciones recibidas</div>
+          <div class="m-desc">Revisar candidatos</div>
+        </div>
+        <div class="m-trail"><span class="pill live">3</span></div>
+      </a>
+      <a class="m-card" href="login-tecnico.html">
+        <div class="m-icon">AP</div>
+        <div class="m-body">
+          <div class="m-name">App técnico</div>
+          <div class="m-desc">Vista del técnico en terreno</div>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- SECTION 03 · MARKETING & CRECIMIENTO -->
+  <section class="section">
+    <div class="section-head">
+      <div class="label">
+        <span class="num">03</span>
+        <h2>Marketing y crecimiento</h2>
+      </div>
+      <span class="count">5 módulos</span>
+    </div>
+    <div class="modules">
+      <a class="m-card" href="servicios-publicos.html">
+        <div class="m-icon">SP</div>
+        <div class="m-body">
+          <div class="m-name">Servicios públicos</div>
+          <div class="m-desc">14 landings SEO para compartir</div>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+      <a class="m-card" href="agente-captador.html">
+        <div class="m-icon">AC</div>
+        <div class="m-body">
+          <div class="m-name">Agente Captador IA</div>
+          <div class="m-desc">Califica leads Meta y Google</div>
+        </div>
+        <div class="m-trail"><span class="pill live">Online</span></div>
+      </a>
+      <a class="m-card" href="remarketing.html">
+        <div class="m-icon">RM</div>
+        <div class="m-body">
+          <div class="m-name">Remarketing</div>
+          <div class="m-desc">WhatsApp masivo por etiqueta</div>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+      <a class="m-card" href="aliados-admin.html">
+        <div class="m-icon">AL</div>
+        <div class="m-body">
+          <div class="m-name">Gestionar aliados</div>
+          <div class="m-desc">Crear, editar y dar acceso</div>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+      <a class="m-card" href="beneficios-aliados.html">
+        <div class="m-icon">BN</div>
+        <div class="m-body">
+          <div class="m-name">Programa beneficios</div>
+          <div class="m-desc">Niveles, comisiones, premios</div>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- SECTION 04 · FINANZAS -->
+  <section class="section">
+    <div class="section-head">
+      <div class="label">
+        <span class="num">04</span>
+        <h2>Finanzas</h2>
+      </div>
+      <span class="count">4 módulos</span>
+    </div>
+    <div class="modules">
+      <a class="m-card has-alert" href="admin.html">
+        <div class="m-icon">AD</div>
+        <div class="m-body">
+          <div class="m-name">Panel de administración</div>
+          <div class="m-desc">Ingresos totales y por técnico</div>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+      <a class="m-card" href="resumen-diario.html">
+        <div class="m-icon">RS</div>
+        <div class="m-body">
+          <div class="m-name">Resumen diario</div>
+          <div class="m-desc">Ingresos, gastos, margen del día</div>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+      <a class="m-card" href="gastos-coord.html">
+        <div class="m-icon">GS</div>
+        <div class="m-body">
+          <div class="m-name">Control de gastos</div>
+          <div class="m-desc">Boletas, facturas, sueldos</div>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+      <a class="m-card" href="pagos-coord.html">
+        <div class="m-icon">PG</div>
+        <div class="m-body">
+          <div class="m-name">Pagos a aliados</div>
+          <div class="m-desc">Comisiones pendientes</div>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- SECTION 05 · BASE DE DATOS -->
+  <section class="section">
+    <div class="section-head">
+      <div class="label">
+        <span class="num">05</span>
+        <h2>Base de datos</h2>
+      </div>
+      <span class="count">2 módulos</span>
+    </div>
+    <div class="modules">
+      <a class="m-card" href="clientes.html">
+        <div class="m-icon">CL</div>
+        <div class="m-body">
+          <div class="m-name">Clientes y vehículos</div>
+          <div class="m-desc">Historial y registro</div>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+      <a class="m-card" href="proveedores.html">
+        <div class="m-icon">PV</div>
+        <div class="m-body">
+          <div class="m-name">Proveedores</div>
+          <div class="m-desc">Registro de compras</div>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <div class="lines">
+      <span>SERVIRUTA</span>
+      <span>STGO RM</span>
+      <em>SISTEMA OPERATIVO</em>
+      <span>24/7</span>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+// Auth check
+if (!sessionStorage.getItem("coord_auth")) {
+  location.href = "login-coordinador.html";
+}
+
+// Personalización por usuario
+const usuario = sessionStorage.getItem("coord_usuario") || "Coordinador";
+document.getElementById("user").textContent = usuario;
+document.getElementById("userName").textContent = usuario;
+
+// Saludo según hora
+const hora = new Date().getHours();
+const saludo = hora < 12 ? "Buenos días" : hora < 19 ? "Buenas tardes" : "Buenas noches";
+const heading = document.querySelector(".page-head h1");
+heading.firstChild.textContent = saludo + ", ";
+
+// Fecha legible
+const fechaEl = document.getElementById("fecha");
+const f = new Date();
+const dias = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
+const meses = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+fechaEl.textContent = `${dias[f.getDay()]} ${f.getDate()} de ${meses[f.getMonth()]}`;
+
+// Timestamp en operations strip (estilo instrumento)
+const stamp = document.getElementById("stamp");
+function updateStamp(){
+  const t = new Date();
+  const hh = String(t.getHours()).padStart(2,"0");
+  const mm = String(t.getMinutes()).padStart(2,"0");
+  const ss = String(t.getSeconds()).padStart(2,"0");
+  stamp.textContent = `${hh}:${mm}:${ss} CLT · LIVE`;
+}
+updateStamp();
+setInterval(updateStamp, 1000);
+
+// Cerrar sesión limpio
+function cerrar(){
+  if (confirm("¿Cerrar sesión?")) {
+    sessionStorage.removeItem("coord_auth");
+    sessionStorage.removeItem("coord_usuario");
+    location.href = "login-coordinador.html";
+  }
+}
+</script>
+
+</body>
+</html>

@@ -136,11 +136,14 @@ fbq('track', 'PageView');
   <!-- CHAT IA -->
   <div class="page" id="pg1">
     <div class="chips" id="chips">
-      <div class="chip" onclick="usarChip(this)">¿Qué técnico está libre?</div>
-      <div class="chip" onclick="usarChip(this)">Resumen del día</div>
-      <div class="chip" onclick="usarChip(this)">¿Cuánto facturamos hoy?</div>
-      <div class="chip" onclick="usarChip(this)">Servicios atrasados</div>
-      <div class="chip" onclick="usarChip(this)">Mejor técnico para DPF</div>
+      <div class="chip" onclick="usarChip(this)">📊 Reporte del día</div>
+      <div class="chip" onclick="usarChip(this)">📲 Notifica a los técnicos del día</div>
+      <div class="chip" onclick="usarChip(this)">⏰ Recordar pagos pendientes</div>
+      <div class="chip" onclick="usarChip(this)">🔎 Corroborar estado servicios activos</div>
+      <div class="chip" onclick="usarChip(this)">💰 Marcar servicio como pagado</div>
+      <div class="chip" onclick="usarChip(this)">👷 ¿Qué técnico está más libre hoy?</div>
+      <div class="chip" onclick="usarChip(this)">🤝 Pagar comisión a un aliado</div>
+      <div class="chip" onclick="usarChip(this)">🎯 Crear lead nuevo</div>
     </div>
     <div class="chat-area" id="chat">
       <div class="msg agent">
@@ -177,36 +180,139 @@ var TECNICOS=[
   {nombre:'Javier Honores',tel:'+56929161693',especialidad:['general','diagnostico']}
 ]
 
-var SYSTEM_PROMPT=`Eres el asistente coordinador de Serviruta, empresa de mecánica a domicilio en Santiago Chile.
-Ayudas al coordinador a gestionar el día: asignación de técnicos, monitoreo, priorización de servicios.
+var SYSTEM_PROMPT=`Eres el Agente Coordinador IA de Serviruta, empresa chilena de mecanica movil profesional.
 
-CRITERIOS DE ASIGNACION (en orden):
+ROL Y MISION
+Asistes a coordinadores (Angel, Humberto, Javier) con ACCESO TOTAL al ecosistema:
+- 90+ presupuestos/servicios
+- 45+ gastos
+- 17+ aliados
+- 11 tecnicos
+- Inspecciones, postulantes, agenda, leads, pagos
+
+HERRAMIENTAS DISPONIBLES (20 totales):
+
+GESTION DE SERVICIOS:
+1. consultar_datos - consulta cualquier tabla con filtros
+2. asignar_tecnico - asigna tecnico a servicio
+3. actualizar_servicio - cambia estado/observaciones
+4. corroborar_estado_servicio - pide al tecnico via WhatsApp confirmar estado
+
+MENSAJERIA WHATSAPP:
+5. notificar_tecnico - WhatsApp directo a tecnico (asignacion, recordatorio, urgente, felicitacion)
+6. notificar_cliente - WhatsApp a cliente (confirmacion, tecnico_en_camino, trabajo_listo, cobro, feedback)
+7. mensaje_masivo_tecnicos - broadcast a multiples tecnicos
+8. generar_whatsapp - link wa.me con mensaje custom
+9. enviar_recordatorio_pago - recordatorios masivos a clientes con pagos pendientes
+
+FINANZAS:
+10. registrar_pago_cliente - marca servicio como pagado (transferencia, efectivo, etc)
+11. registrar_gasto - crea nuevo gasto en sistema
+12. pagar_comision_aliado - registra pago a aliado
+
+EQUIPO Y POSTULANTES:
+13. buscar_postulantes - filtra postulantes
+14. actualizar_postulante - cambia estado del proceso seleccion
+
+CRECIMIENTO:
+15. crear_lead - registra lead nuevo manualmente
+16. crear_evento_agenda - agrega evento al calendario
+17. confirmar_agenda - confirma cita a cliente y tecnico
+
+NAVEGACION Y REPORTES:
+18. abrir_modulo - sugiere abrir un modulo del hub (cualquiera de los 28+)
+19. generar_reporte - resumen ejecutivo (hoy, semana, mes)
+
+MODULOS DEL HUB COORDINADOR (todos accesibles via abrir_modulo):
+OPERACION: servicios-coord, presupuestos-coord, inspecciones-coord, diagnosticos-coord, panel-informes-pre-rt, monitor-operaciones, central-diagnostico
+EQUIPO: simulador-tecnicos, desempeno-coord, ficha-tecnico, postulaciones-coord, login-tecnico
+MARKETING: servicios-publicos, agente-captador, remarketing, aliados-admin, beneficios-aliados
+FINANZAS: admin, resumen-diario, gastos-coord, pagos-coord, ppto-coordinador
+BASE DATOS: clientes, proveedores
+HERRAMIENTAS: agente-coordinador (yo), agenda, mapa-tecnicos, leads, hub-reclutamiento
+
+REGLAS DE COMUNICACION:
+- Si pides una accion irreversible (pago, eliminar, contratar) PIDE CONFIRMACION antes
+- Cuando generes links WhatsApp, mostralos como links clickeables al usuario
+- Da datos REALES de los registros, NUNCA inventes
+- Si una accion requiere multiples pasos, hazlos en secuencia automaticamente
+- Detecta alertas: servicios sin asignar +2h, sin avance +4h, pagos pendientes +30d
+- Lenguaje profesional pero cercano, en espanol sin acentos
+- Mensajes WhatsApp: usa emojis, son cortos y claros
+
+EQUIPO TECNICO (con telefonos):
+- Reynaldo Aguas Bertel (+56935287199) - embrague, general
+- Kiven Henz (+56964880196) - DPF, diesel, general
+- Humberto Morales (+56994946414) - alternador, electrico, general
+- Giovanino Perugini (+56933592097) - general, frenos
+- Javier Honores (+56929161693) - general, diagnostico
+
+CRITERIOS DE ASIGNACION:
 1. Proximidad geografica (mismo sector/comuna)
 2. Especialidad tecnica del problema
-3. Carga de trabajo del dia (menos servicios = mas disponible)
+3. Carga del dia (menos servicios = mas disponible)
+4. Historial desempeno (NPS, rating)
 
-PRIORIDAD DEL DIA:
-1. Cliente nuevo
-2. Cliente recurrente
-3. Tipo de servicio (urgencia)
-4. Monto del servicio
-
-REGLAS:
-- Respuestas cortas y directas (max 5 lineas)
-- Si te preguntan por un servicio, da datos concretos (cliente, monto, estado)
-- Sugiere top 3 tecnicos con justificacion breve
-- Detecta alertas: servicios >2h sin avance, tecnicos sin actualizar >1h
-- Lenguaje profesional pero cercano
-- En espanol, sin acentos para evitar errores`
+PRIORIDAD:
+1. Cliente B2B grande (flota)
+2. Cliente nuevo (primera vez)
+3. Cliente recurrente
+4. Tipo servicio (averias > preventivo)
+5. Monto del servicio`
 
 function getDB(){if(!db)db=supabase.createClient(SB,SK);return db;}
 
+// DATOS GLOBALES - acceso total
+var DATOS = {
+  presupuestos: [],
+  gastos: [],
+  aliados: [],
+  tecnicos_db: [],
+  inspecciones: [],
+  ubicaciones: [],
+  leads: [],
+  postulantes: [],
+  agenda: [],
+  evaluaciones: []
+}
+
 async function loadAll(){
-  var r=await getDB().from('presupuestos').select('*').order('created_at',{ascending:false}).limit(100)
-  servicios=r.data||[]
-  renderDashboard()
-  renderAsignar()
-  document.getElementById('update-time').textContent='Actualizado: '+new Date().toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'})
+  try {
+    // Cargar TODAS las tablas en paralelo
+    var results = await Promise.all([
+      getDB().from('presupuestos').select('*').order('created_at',{ascending:false}).limit(150),
+      getDB().from('gastos').select('*').order('created_at',{ascending:false}).limit(100),
+      getDB().from('aliados').select('*').order('created_at',{ascending:false}).limit(50),
+      getDB().from('tecnicos').select('*'),
+      getDB().from('inspecciones').select('*').order('created_at',{ascending:false}).limit(50),
+      getDB().from('ubicaciones').select('*'),
+      getDB().from('leads').select('*').order('created_at',{ascending:false}).limit(50),
+      getDB().from('postulantes_tecnicos').select('*').order('created_at',{ascending:false}).limit(50),
+      getDB().from('agenda').select('*').order('fecha',{ascending:true}).limit(30),
+      getDB().from('evaluaciones').select('*').order('created_at',{ascending:false}).limit(30)
+    ])
+    
+    DATOS.presupuestos = results[0].data || []
+    DATOS.gastos = results[1].data || []
+    DATOS.aliados = results[2].data || []
+    DATOS.tecnicos_db = results[3].data || []
+    DATOS.inspecciones = results[4].data || []
+    DATOS.ubicaciones = results[5].data || []
+    DATOS.leads = results[6].data || []
+    DATOS.postulantes = results[7].data || []
+    DATOS.agenda = results[8].data || []
+    DATOS.evaluaciones = results[9].data || []
+    
+    // Mantener compatibilidad con código previo
+    servicios = DATOS.presupuestos
+    
+    renderDashboard()
+    renderAsignar()
+    document.getElementById('update-time').textContent='Actualizado: '+new Date().toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'})+' · '+DATOS.presupuestos.length+'s '+DATOS.gastos.length+'g '+DATOS.aliados.length+'a'
+  } catch(e) {
+    console.error('Error loading:', e)
+    document.getElementById('update-time').textContent='⚠️ Error de carga'
+  }
 }
 
 function renderDashboard(){
@@ -344,14 +450,663 @@ function getTelTec(nombre){
   return t?t.tel:''
 }
 
+// =========================
+// TOOLS - Herramientas que el agente puede usar
+// =========================
+var TOOLS = [
+  {
+    name: "consultar_datos",
+    description: "Consulta cualquier tabla del ecosistema Serviruta. Tablas: presupuestos, gastos, aliados, tecnicos, inspecciones, ubicaciones, leads, postulantes, agenda, evaluaciones.",
+    input_schema: {
+      type: "object",
+      properties: {
+        tabla: { type: "string", description: "Nombre de la tabla a consultar" },
+        filtro: { type: "string", description: "Texto a buscar en cualquier campo (opcional)" },
+        limite: { type: "number", description: "Cantidad maxima de resultados (default 10)" }
+      },
+      required: ["tabla"]
+    }
+  },
+  {
+    name: "asignar_tecnico",
+    description: "Asigna un tecnico a un servicio especifico (actualiza campo tecnico en presupuestos).",
+    input_schema: {
+      type: "object",
+      properties: {
+        servicio_id: { type: "number", description: "ID del servicio (presupuesto)" },
+        tecnico: { type: "string", description: "Nombre completo del tecnico" }
+      },
+      required: ["servicio_id", "tecnico"]
+    }
+  },
+  {
+    name: "actualizar_servicio",
+    description: "Actualiza estado, pago u observaciones de un servicio. Estado validos: nuevo, enviado, aprobado, ejecucion, completado, cancelado. Pago: pendiente, pagado, anticipo.",
+    input_schema: {
+      type: "object",
+      properties: {
+        servicio_id: { type: "number" },
+        estado: { type: "string", description: "Nuevo estado (opcional)" },
+        pago: { type: "string", description: "Nuevo estado de pago (opcional)" },
+        observaciones: { type: "string", description: "Texto a agregar a observaciones (opcional)" }
+      },
+      required: ["servicio_id"]
+    }
+  },
+  {
+    name: "registrar_gasto",
+    description: "Registra un nuevo gasto en la tabla gastos.",
+    input_schema: {
+      type: "object",
+      properties: {
+        descripcion: { type: "string" },
+        monto: { type: "number", description: "Monto en pesos chilenos" },
+        categoria: { type: "string", description: "Ej: combustible, herramientas, repuestos, oficina" },
+        tecnico: { type: "string", description: "Tecnico asociado si aplica" }
+      },
+      required: ["descripcion", "monto", "categoria"]
+    }
+  },
+  {
+    name: "buscar_postulantes",
+    description: "Busca postulantes a tecnicos filtrando por ciudad, estado o especialidad.",
+    input_schema: {
+      type: "object",
+      properties: {
+        ciudad: { type: "string", description: "Santiago, Vina, Otra (opcional)" },
+        estado: { type: "string", description: "nuevo, contactado, entrevista, prueba, seleccionado, rechazado (opcional)" },
+        especialidad: { type: "string", description: "auto, camion, ambos, electricidad, diesel (opcional)" }
+      }
+    }
+  },
+  {
+    name: "abrir_modulo",
+    description: "Sugiere al usuario abrir un modulo del hub. La URL se incluye en la respuesta.",
+    input_schema: {
+      type: "object",
+      properties: {
+        modulo: { type: "string", description: "Nombre del modulo. Ej: admin, gastos-coord, postulaciones-coord, simulador-tecnicos, hub-reclutamiento" },
+        razon: { type: "string", description: "Por que sugieres este modulo" }
+      },
+      required: ["modulo", "razon"]
+    }
+  },
+  {
+    name: "generar_whatsapp",
+    description: "Genera un link wa.me para WhatsApp con mensaje prellenado.",
+    input_schema: {
+      type: "object",
+      properties: {
+        telefono: { type: "string", description: "Telefono con codigo pais. Ej: +56994946414" },
+        mensaje: { type: "string", description: "Texto del mensaje" }
+      },
+      required: ["telefono", "mensaje"]
+    }
+  },
+  {
+    name: "crear_evento_agenda",
+    description: "Crea un evento en la agenda.",
+    input_schema: {
+      type: "object",
+      properties: {
+        titulo: { type: "string" },
+        fecha: { type: "string", description: "Formato YYYY-MM-DD HH:MM" },
+        tecnico: { type: "string" },
+        cliente: { type: "string" },
+        notas: { type: "string" }
+      },
+      required: ["titulo", "fecha"]
+    }
+  },
+  {
+    name: "generar_reporte",
+    description: "Genera un resumen ejecutivo de un periodo. Periodo: hoy, semana, mes.",
+    input_schema: {
+      type: "object",
+      properties: {
+        periodo: { type: "string", enum: ["hoy", "semana", "mes"] }
+      },
+      required: ["periodo"]
+    }
+  },
+  {
+    name: "notificar_tecnico",
+    description: "Envia notificacion WhatsApp directa a un tecnico especifico con mensaje contextual. Usa para asignaciones, recordatorios, cambios urgentes.",
+    input_schema: {
+      type: "object",
+      properties: {
+        tecnico: { type: "string", description: "Nombre del tecnico (busca telefono automaticamente)" },
+        tipo: { type: "string", enum: ["asignacion", "recordatorio", "urgente", "cambio_estado", "felicitacion"], description: "Tipo de mensaje" },
+        servicio_id: { type: "number", description: "ID del servicio relacionado (opcional)" },
+        mensaje_custom: { type: "string", description: "Mensaje personalizado adicional" }
+      },
+      required: ["tecnico", "tipo"]
+    }
+  },
+  {
+    name: "notificar_cliente",
+    description: "Envia WhatsApp al cliente del servicio con confirmacion, avance o consulta.",
+    input_schema: {
+      type: "object",
+      properties: {
+        servicio_id: { type: "number", description: "ID del presupuesto/servicio" },
+        tipo: { type: "string", enum: ["confirmacion", "tecnico_en_camino", "trabajo_listo", "cobro", "feedback"], description: "Tipo de mensaje" },
+        mensaje_custom: { type: "string", description: "Mensaje personalizado" }
+      },
+      required: ["servicio_id", "tipo"]
+    }
+  },
+  {
+    name: "corroborar_estado_servicio",
+    description: "Pide al tecnico via WhatsApp confirmar el estado actual del servicio. Marca el servicio para seguimiento.",
+    input_schema: {
+      type: "object",
+      properties: {
+        servicio_id: { type: "number" }
+      },
+      required: ["servicio_id"]
+    }
+  },
+  {
+    name: "registrar_pago_cliente",
+    description: "Marca un servicio como pagado por el cliente. Actualiza pago_cliente y fecha_pago.",
+    input_schema: {
+      type: "object",
+      properties: {
+        servicio_id: { type: "number" },
+        metodo: { type: "string", description: "transferencia, efectivo, tarjeta, cheque" },
+        monto: { type: "number", description: "Monto pagado (si distinto al total)" },
+        observaciones: { type: "string" }
+      },
+      required: ["servicio_id", "metodo"]
+    }
+  },
+  {
+    name: "enviar_recordatorio_pago",
+    description: "Genera mensajes WhatsApp para clientes con pagos pendientes. Devuelve lista de links wa.me listos para enviar.",
+    input_schema: {
+      type: "object",
+      properties: {
+        dias_atraso: { type: "number", description: "Filtrar servicios con N+ dias de atraso (default 7)" }
+      }
+    }
+  },
+  {
+    name: "pagar_comision_aliado",
+    description: "Registra pago de comision a un aliado y marca presupuestos como comision_pagada.",
+    input_schema: {
+      type: "object",
+      properties: {
+        aliado_codigo: { type: "string", description: "Codigo del aliado (ej ALI001)" },
+        monto: { type: "number" },
+        servicios_count: { type: "number" }
+      },
+      required: ["aliado_codigo", "monto"]
+    }
+  },
+  {
+    name: "actualizar_postulante",
+    description: "Cambia estado de un postulante a tecnico. Estados: nuevo, contactado, entrevista, prueba, seleccionado, contratado, rechazado.",
+    input_schema: {
+      type: "object",
+      properties: {
+        postulante_id: { type: "number" },
+        nuevo_estado: { type: "string", enum: ["nuevo", "contactado", "entrevista", "prueba", "seleccionado", "contratado", "rechazado"] },
+        notas: { type: "string" }
+      },
+      required: ["postulante_id", "nuevo_estado"]
+    }
+  },
+  {
+    name: "mensaje_masivo_tecnicos",
+    description: "Envia mensaje broadcast a multiples tecnicos (todos o filtrados). Util para anuncios o coordinaciones.",
+    input_schema: {
+      type: "object",
+      properties: {
+        mensaje: { type: "string", description: "Texto del mensaje" },
+        solo_activos: { type: "boolean", description: "Solo a tecnicos con servicios hoy (default true)" }
+      },
+      required: ["mensaje"]
+    }
+  },
+  {
+    name: "crear_lead",
+    description: "Registra un lead nuevo manualmente en la tabla leads.",
+    input_schema: {
+      type: "object",
+      properties: {
+        nombre: { type: "string" },
+        telefono: { type: "string" },
+        servicio: { type: "string", description: "Tipo de servicio que busca" },
+        fuente: { type: "string", description: "meta, google, whatsapp, referido, otro" },
+        observaciones: { type: "string" }
+      },
+      required: ["nombre", "telefono"]
+    }
+  },
+  {
+    name: "confirmar_agenda",
+    description: "Confirma una cita de agenda al cliente y tecnico via WhatsApp.",
+    input_schema: {
+      type: "object",
+      properties: {
+        agenda_id: { type: "string" }
+      },
+      required: ["agenda_id"]
+    }
+  }
+]
+
+// =========================
+// EJECUTOR DE TOOLS
+// =========================
+async function ejecutarTool(nombre, input){
+  try {
+    switch(nombre) {
+      case "consultar_datos": {
+        var tabla = input.tabla
+        var datos = DATOS[tabla] || DATOS[tabla+'_db'] || []
+        if(input.filtro){
+          var f = input.filtro.toLowerCase()
+          datos = datos.filter(function(x){return JSON.stringify(x).toLowerCase().indexOf(f)>=0})
+        }
+        var limite = input.limite || 10
+        return {
+          ok: true,
+          total: datos.length,
+          mostrando: Math.min(limite, datos.length),
+          datos: datos.slice(0, limite)
+        }
+      }
+      
+      case "asignar_tecnico": {
+        var r = await getDB().from('presupuestos').update({tecnico: input.tecnico}).eq('id', input.servicio_id).select()
+        if(r.error) return {ok:false, error: r.error.message}
+        await loadAll()
+        return {ok:true, mensaje: 'Tecnico '+input.tecnico+' asignado al servicio '+input.servicio_id, datos: r.data}
+      }
+      
+      case "actualizar_servicio": {
+        var update = {}
+        if(input.estado) update.estado_servicio = input.estado
+        if(input.pago) update.pago_cliente = input.pago
+        if(input.observaciones) update.obs = input.observaciones
+        var r = await getDB().from('presupuestos').update(update).eq('id', input.servicio_id).select()
+        if(r.error) return {ok:false, error: r.error.message}
+        await loadAll()
+        return {ok:true, mensaje: 'Servicio '+input.servicio_id+' actualizado', datos: r.data}
+      }
+      
+      case "registrar_gasto": {
+        var gasto = {
+          descripcion: input.descripcion,
+          monto: input.monto,
+          categoria: input.categoria,
+          tecnico: input.tecnico||null,
+          fecha: new Date().toISOString().slice(0,10)
+        }
+        var r = await getDB().from('gastos').insert([gasto]).select()
+        if(r.error) return {ok:false, error: r.error.message}
+        await loadAll()
+        return {ok:true, mensaje: 'Gasto registrado: $'+input.monto.toLocaleString('es-CL'), datos: r.data}
+      }
+      
+      case "buscar_postulantes": {
+        var p = DATOS.postulantes
+        if(input.ciudad) p = p.filter(function(x){return (x.ciudad||'').toLowerCase().indexOf(input.ciudad.toLowerCase())>=0})
+        if(input.estado) p = p.filter(function(x){return x.estado===input.estado})
+        if(input.especialidad) p = p.filter(function(x){return (x.especialidad||'').toLowerCase().indexOf(input.especialidad.toLowerCase())>=0})
+        return {ok:true, total: p.length, datos: p.slice(0,15)}
+      }
+      
+      case "abrir_modulo": {
+        var url = 'https://angelperuga-maker.github.io/serviruta/'+input.modulo+'.html'
+        return {ok:true, url: url, razon: input.razon, mensaje: 'Modulo sugerido: '+url}
+      }
+      
+      case "generar_whatsapp": {
+        var t = input.telefono.replace(/[^0-9]/g, '')
+        var m = encodeURIComponent(input.mensaje)
+        return {ok:true, url: 'https://wa.me/'+t+'?text='+m, mensaje:'Link WhatsApp generado'}
+      }
+      
+      case "crear_evento_agenda": {
+        var ev = {
+          titulo: input.titulo,
+          fecha: input.fecha,
+          tecnico: input.tecnico||null,
+          cliente: input.cliente||null,
+          notas: input.notas||null
+        }
+        var r = await getDB().from('agenda').insert([ev]).select()
+        if(r.error) return {ok:false, error: r.error.message}
+        await loadAll()
+        return {ok:true, mensaje: 'Evento agendado: '+input.titulo, datos: r.data}
+      }
+      
+      case "generar_reporte": {
+        var ahora = new Date()
+        var desde = new Date()
+        if(input.periodo==='hoy') desde.setHours(0,0,0,0)
+        else if(input.periodo==='semana') desde.setDate(ahora.getDate()-7)
+        else desde.setMonth(ahora.getMonth()-1)
+        
+        var desdeStr = desde.toISOString().slice(0,10)
+        var serv = DATOS.presupuestos.filter(function(s){return (s.created_at||'')>=desdeStr})
+        var gast = DATOS.gastos.filter(function(g){return (g.fecha||g.created_at||'')>=desdeStr})
+        
+        var totalVentas = serv.reduce(function(a,b){return a+(b.total||0)},0)
+        var totalCobrado = serv.filter(function(s){return s.pago_cliente==='pagado'}).reduce(function(a,b){return a+(b.total||0)},0)
+        var totalGastos = gast.reduce(function(a,b){return a+(b.monto||0)},0)
+        
+        return {
+          ok: true,
+          periodo: input.periodo,
+          servicios: serv.length,
+          ventas_total: totalVentas,
+          cobrado: totalCobrado,
+          pendiente: totalVentas - totalCobrado,
+          gastos: totalGastos,
+          utilidad_estimada: totalCobrado - totalGastos,
+          ticket_promedio: serv.length ? Math.round(totalVentas/serv.length) : 0
+        }
+      }
+      
+      case "notificar_tecnico": {
+        // Buscar telefono del tecnico
+        var t = TECNICOS.find(function(x){return x.nombre.toLowerCase().includes(input.tecnico.toLowerCase())})
+        if(!t){
+          // Buscar en BD
+          t = DATOS.tecnicos_db.find(function(x){return (x.nombre||'').toLowerCase().includes(input.tecnico.toLowerCase())})
+          if(!t) return {ok:false, error: 'No encontre el tecnico: '+input.tecnico}
+          t.tel = t.telefono
+        }
+        
+        var servicio = input.servicio_id ? DATOS.presupuestos.find(function(s){return s.id===input.servicio_id}) : null
+        var msg = ''
+        
+        if(input.tipo === 'asignacion' && servicio){
+          msg = '🔧 Hola '+t.nombre.split(' ')[0]+'! Te asignamos un servicio nuevo:%0A%0A'+
+                '📋 *Servicio #'+servicio.id+'*%0A'+
+                '👤 Cliente: '+(servicio.cliente||'-')+'%0A'+
+                '📍 Direccion: '+(servicio.notas||servicio.obs||'Ver hub')+'%0A'+
+                '🚗 Vehiculo: '+(servicio.vehiculo||servicio.auto||'-')+'%0A'+
+                '💰 Total: $'+(servicio.total||0).toLocaleString('es-CL')+'%0A%0A'+
+                'Confirma recepcion y agenda con el cliente.'
+        } else if(input.tipo === 'recordatorio'){
+          msg = '⏰ Recordatorio Serviruta:%0A%0A'+(input.mensaje_custom||'Por favor actualiza el estado de tus servicios del dia.')
+        } else if(input.tipo === 'urgente'){
+          msg = '🚨 URGENTE - '+t.nombre.split(' ')[0]+':%0A%0A'+(input.mensaje_custom||'Necesitamos coordinar algo urgente. Por favor llama al coordinador.')
+        } else if(input.tipo === 'cambio_estado' && servicio){
+          msg = '📝 Actualizacion servicio #'+servicio.id+':%0A%0AEstado: '+servicio.estado_servicio+'%0A'+(input.mensaje_custom||'Por favor confirma recibido.')
+        } else if(input.tipo === 'felicitacion'){
+          msg = '🎉 '+t.nombre.split(' ')[0]+'!%0A%0A'+(input.mensaje_custom||'Excelente trabajo este mes. Gracias por tu compromiso con Serviruta!')
+        } else {
+          msg = input.mensaje_custom || 'Mensaje del coordinador Serviruta'
+        }
+        
+        var tel = (t.tel||t.telefono||'').replace(/[^0-9]/g,'')
+        return {
+          ok: true,
+          tecnico: t.nombre,
+          telefono: t.tel||t.telefono,
+          url: 'https://wa.me/'+tel+'?text='+msg,
+          mensaje: 'Link WhatsApp generado para '+t.nombre+'. El coordinador debe abrir el link para enviar.'
+        }
+      }
+      
+      case "notificar_cliente": {
+        var servicio = DATOS.presupuestos.find(function(s){return s.id===input.servicio_id})
+        if(!servicio) return {ok:false, error: 'Servicio '+input.servicio_id+' no encontrado'}
+        if(!servicio.telefono) return {ok:false, error: 'Servicio sin telefono de cliente'}
+        
+        var nombre = (servicio.cliente||'').split(' ')[0] || 'estimado/a cliente'
+        var msg = ''
+        
+        if(input.tipo === 'confirmacion'){
+          msg = '👋 Hola '+nombre+'!%0A%0AConfirmamos tu servicio Serviruta #'+servicio.id+':%0A'+
+                '🔧 '+(servicio.obs||'Servicio mecanico')+'%0A'+
+                '💰 Total: $'+(servicio.total||0).toLocaleString('es-CL')+'%0A%0A'+
+                'Te coordinaremos pronto la visita. Gracias por elegir Serviruta!'
+        } else if(input.tipo === 'tecnico_en_camino'){
+          msg = '🚗 '+nombre+'! Tu tecnico Serviruta esta en camino. Llega en aprox 20-30 min.'+(input.mensaje_custom?' '+input.mensaje_custom:'')
+        } else if(input.tipo === 'trabajo_listo'){
+          msg = '✅ Hola '+nombre+'!%0A%0ATu vehiculo esta listo. Total del servicio: $'+(servicio.total||0).toLocaleString('es-CL')+'.%0A%0AGracias por confiar en Serviruta!'
+        } else if(input.tipo === 'cobro'){
+          msg = '💰 Hola '+nombre+'!%0A%0ATe recordamos el pago pendiente del servicio #'+servicio.id+' por $'+(servicio.total||0).toLocaleString('es-CL')+'.%0A%0ADatos transferencia:%0AServiruta SpA%0A(solicita los detalles al +56 9 4521 0814)'
+        } else if(input.tipo === 'feedback'){
+          msg = '⭐ Hola '+nombre+'!%0A%0ANos encantaria saber tu opinion del servicio Serviruta. Te tomaria 1 minuto? Tu feedback nos ayuda mucho a mejorar.'
+        } else {
+          msg = input.mensaje_custom || 'Saludos desde Serviruta'
+        }
+        
+        var tel = (servicio.telefono||'').replace(/[^0-9]/g,'')
+        return {
+          ok: true,
+          cliente: servicio.cliente,
+          telefono: servicio.telefono,
+          url: 'https://wa.me/'+tel+'?text='+msg,
+          mensaje: 'Link WhatsApp para '+nombre+' generado.'
+        }
+      }
+      
+      case "corroborar_estado_servicio": {
+        var servicio = DATOS.presupuestos.find(function(s){return s.id===input.servicio_id})
+        if(!servicio) return {ok:false, error: 'Servicio no encontrado'}
+        if(!servicio.tecnico) return {ok:false, error: 'Servicio sin tecnico asignado'}
+        
+        var t = TECNICOS.find(function(x){return x.nombre===servicio.tecnico})
+        if(!t) t = DATOS.tecnicos_db.find(function(x){return x.nombre===servicio.tecnico})
+        if(!t) return {ok:false, error: 'Telefono del tecnico no encontrado'}
+        
+        var tel = (t.tel||t.telefono||'').replace(/[^0-9]/g,'')
+        var msg = '🔍 '+t.nombre.split(' ')[0]+', necesitamos actualizacion del servicio #'+servicio.id+':%0A%0A'+
+                  '👤 '+servicio.cliente+'%0A'+
+                  '📊 Estado actual: '+servicio.estado_servicio+'%0A%0A'+
+                  'Responde: %0A'+
+                  '1️⃣ En camino%0A'+
+                  '2️⃣ En el sitio trabajando%0A'+
+                  '3️⃣ Trabajo terminado%0A'+
+                  '4️⃣ Hay problema'
+        
+        return {
+          ok: true,
+          tecnico: t.nombre,
+          url: 'https://wa.me/'+tel+'?text='+msg,
+          mensaje: 'Solicitud de corroboracion enviada a '+t.nombre+' por WhatsApp'
+        }
+      }
+      
+      case "registrar_pago_cliente": {
+        var update = {
+          pago_cliente: 'pagado',
+          fecha_pago: new Date().toISOString().slice(0,10)
+        }
+        if(input.observaciones){
+          var servicio = DATOS.presupuestos.find(function(s){return s.id===input.servicio_id})
+          var notas = (servicio && servicio.notas ? servicio.notas+'\n' : '') + 'Pago '+input.metodo+': '+input.observaciones
+          update.notas = notas
+        }
+        var r = await getDB().from('presupuestos').update(update).eq('id', input.servicio_id).select()
+        if(r.error) return {ok:false, error: r.error.message}
+        await loadAll()
+        var monto = input.monto || (r.data[0] ? r.data[0].total : 0)
+        return {
+          ok: true,
+          mensaje: 'Pago registrado: $'+monto.toLocaleString('es-CL')+' via '+input.metodo+' en servicio #'+input.servicio_id,
+          datos: r.data
+        }
+      }
+      
+      case "enviar_recordatorio_pago": {
+        var diasMin = input.dias_atraso || 7
+        var hoy = new Date()
+        var pendientes = DATOS.presupuestos.filter(function(s){
+          if(s.pago_cliente==='pagado') return false
+          if(s.estado_servicio!=='completado') return false
+          var fecha = new Date(s.created_at)
+          var dias = (hoy - fecha)/(1000*60*60*24)
+          return dias >= diasMin && s.telefono
+        })
+        
+        var recordatorios = pendientes.slice(0,10).map(function(s){
+          var nombre = (s.cliente||'').split(' ')[0]
+          var msg = '👋 Hola '+nombre+'! Te recordamos el pago pendiente del servicio Serviruta #'+s.id+
+                    ' por $'+(s.total||0).toLocaleString('es-CL')+'. Tienes alguna duda?'
+          var tel = (s.telefono||'').replace(/[^0-9]/g,'')
+          return {
+            cliente: s.cliente,
+            monto: s.total,
+            dias: Math.round((hoy - new Date(s.created_at))/(1000*60*60*24)),
+            telefono: s.telefono,
+            url: 'https://wa.me/'+tel+'?text='+encodeURIComponent(msg)
+          }
+        })
+        
+        return {
+          ok: true,
+          total_pendientes: pendientes.length,
+          recordatorios_generados: recordatorios.length,
+          monto_total: pendientes.reduce(function(a,b){return a+(b.total||0)},0),
+          links: recordatorios
+        }
+      }
+      
+      case "pagar_comision_aliado": {
+        var aliado = DATOS.aliados.find(function(a){return a.codigo===input.aliado_codigo})
+        if(!aliado) return {ok:false, error: 'Aliado no encontrado: '+input.aliado_codigo}
+        
+        // Registrar pago en tabla pagos
+        var pago = {
+          aliado_id: aliado.id,
+          monto: input.monto,
+          servicios_count: input.servicios_count || 1,
+          fecha_pago: new Date().toISOString().slice(0,10),
+          estado: 'pagado'
+        }
+        var r = await getDB().from('pagos').insert([pago]).select()
+        if(r.error) return {ok:false, error: r.error.message}
+        
+        // Marcar presupuestos del aliado como comision pagada
+        await getDB().from('presupuestos').update({comision_pagada: true})
+          .eq('aliado_codigo', input.aliado_codigo)
+          .eq('comision_pagada', false)
+        
+        await loadAll()
+        return {
+          ok: true,
+          mensaje: 'Comision pagada a '+aliado.nombre+': $'+input.monto.toLocaleString('es-CL'),
+          datos: r.data
+        }
+      }
+      
+      case "actualizar_postulante": {
+        var update = {estado: input.nuevo_estado}
+        if(input.notas) update.notas_coord = input.notas
+        if(input.nuevo_estado==='contratado') update.notas_coord = (update.notas_coord||'')+' [Contratado el '+new Date().toISOString().slice(0,10)+']'
+        
+        var r = await getDB().from('postulantes_tecnicos').update(update).eq('id', input.postulante_id).select()
+        if(r.error) return {ok:false, error: r.error.message}
+        await loadAll()
+        return {
+          ok: true,
+          mensaje: 'Postulante #'+input.postulante_id+' actualizado a estado: '+input.nuevo_estado,
+          datos: r.data
+        }
+      }
+      
+      case "mensaje_masivo_tecnicos": {
+        var hoy = new Date().toISOString().slice(0,10)
+        var tecnicosLista = TECNICOS
+        
+        if(input.solo_activos !== false){
+          var activos = new Set(DATOS.presupuestos
+            .filter(function(s){return (s.created_at||'').startsWith(hoy)})
+            .map(function(s){return s.tecnico}))
+          tecnicosLista = TECNICOS.filter(function(t){return activos.has(t.nombre)})
+        }
+        
+        var links = tecnicosLista.map(function(t){
+          var tel = (t.tel||'').replace(/[^0-9]/g,'')
+          var msg = encodeURIComponent('📢 '+t.nombre.split(' ')[0]+': '+input.mensaje)
+          return {
+            tecnico: t.nombre,
+            url: 'https://wa.me/'+tel+'?text='+msg
+          }
+        })
+        
+        return {
+          ok: true,
+          total_destinatarios: links.length,
+          links: links,
+          mensaje: 'Mensaje masivo preparado para '+links.length+' tecnicos. El coordinador debe enviar cada uno desde su WhatsApp.'
+        }
+      }
+      
+      case "crear_lead": {
+        var lead = {
+          nombre: input.nombre,
+          telefono: input.telefono,
+          servicio: input.servicio || null,
+          fuente: input.fuente || 'otro',
+          observaciones: input.observaciones || null,
+          estado: 'nuevo'
+        }
+        var r = await getDB().from('leads').insert([lead]).select()
+        if(r.error) return {ok:false, error: r.error.message}
+        await loadAll()
+        return {
+          ok: true,
+          mensaje: 'Lead creado: '+input.nombre+' ('+input.telefono+')',
+          datos: r.data
+        }
+      }
+      
+      case "confirmar_agenda": {
+        var ev = DATOS.agenda.find(function(a){return a.id===input.agenda_id})
+        if(!ev) return {ok:false, error: 'Evento de agenda no encontrado'}
+        
+        var resultado = {ok:true, mensaje:'Confirmaciones generadas', links:[]}
+        
+        if(ev.telefono){
+          var msgC = encodeURIComponent('✅ Hola '+(ev.cliente||'').split(' ')[0]+'! Confirmamos tu cita Serviruta para '+ev.fecha+' a las '+(ev.hora||'')+'. Te visitara nuestro tecnico para '+(ev.servicio||'servicio mecanico')+'. Cualquier cambio avisanos!')
+          var tel = ev.telefono.replace(/[^0-9]/g,'')
+          resultado.links.push({tipo:'cliente', destinatario:ev.cliente, url:'https://wa.me/'+tel+'?text='+msgC})
+        }
+        
+        if(ev.tecnico){
+          var t = TECNICOS.find(function(x){return x.nombre===ev.tecnico})
+          if(t){
+            var msgT = encodeURIComponent('📅 '+t.nombre.split(' ')[0]+': cita confirmada para '+ev.fecha+' a las '+(ev.hora||'')+'%0A👤 Cliente: '+(ev.cliente||'-')+'%0A📍 '+(ev.direccion||'-')+'%0A🔧 '+(ev.servicio||'-'))
+            var telT = (t.tel||'').replace(/[^0-9]/g,'')
+            resultado.links.push({tipo:'tecnico', destinatario:t.nombre, url:'https://wa.me/'+telT+'?text='+msgT})
+          }
+        }
+        
+        // Marcar agenda como confirmada
+        await getDB().from('agenda').update({estado:'confirmado'}).eq('id', input.agenda_id)
+        await loadAll()
+        return resultado
+      }
+      
+      default:
+        return {ok:false, error: 'Tool no implementado: '+nombre}
+    }
+  } catch(e) {
+    return {ok:false, error: e.message}
+  }
+}
+
+// =========================
+// ENVIAR MENSAJE CON TOOL LOOP
+// =========================
 async function enviar(){
   var txt=document.getElementById('msg-inp').value.trim()
   if(!txt)return
   
-  // Verificar API Key
   var apiKey = localStorage.getItem('anthropic_api_key')
   if(!apiKey){
-    if(confirm('Necesitas configurar tu API Key de Anthropic para usar el agente.\n\n¿Configurarla ahora?')){
+    if(confirm('Necesitas configurar tu API Key de Anthropic.\n\n¿Configurar ahora?')){
       configurarAPIKey()
     }
     return
@@ -363,78 +1118,169 @@ async function enviar(){
   historial.push({role:'user',content:txt})
   mostrarTyping()
   
-  // Contexto enriquecido con datos reales en vivo
+  // Contexto en vivo
   var hoy=new Date().toISOString().slice(0,10)
-  var activos=servicios.filter(function(s){return s.estado_servicio==='ejecucion'||s.estado_servicio==='aprobado'})
-  var pendientes=servicios.filter(function(s){return (s.estado_servicio==='nuevo'||s.estado_servicio==='enviado')&&(s.created_at||'').startsWith(hoy)})
-  var sinAsignar=servicios.filter(function(s){return !s.tecnico&&s.estado_servicio!=='completado'})
+  var activos=DATOS.presupuestos.filter(function(s){return s.estado_servicio==='ejecucion'||s.estado_servicio==='aprobado'})
+  var pendientes=DATOS.presupuestos.filter(function(s){return (s.estado_servicio==='nuevo'||s.estado_servicio==='enviado')&&(s.created_at||'').startsWith(hoy)})
+  var sinAsignar=DATOS.presupuestos.filter(function(s){return !s.tecnico&&s.estado_servicio!=='completado'})
   
   var contexto='[DATOS EN VIVO - '+new Date().toLocaleString('es-CL')+']\n'
-  contexto+='Servicios totales (últimos 100): '+servicios.length+'\n'
-  contexto+='Activos en ejecución: '+activos.length+'\n'
+  contexto+='Servicios totales cargados: '+DATOS.presupuestos.length+'\n'
+  contexto+='Gastos registrados: '+DATOS.gastos.length+'\n'
+  contexto+='Aliados activos: '+DATOS.aliados.length+'\n'
+  contexto+='Tecnicos en BD: '+DATOS.tecnicos_db.length+'\n'
+  contexto+='Postulantes: '+DATOS.postulantes.length+'\n'
+  contexto+='Inspecciones: '+DATOS.inspecciones.length+'\n'
+  contexto+='Leads: '+DATOS.leads.length+'\n'
+  contexto+='Eventos agenda: '+DATOS.agenda.length+'\n\n'
+  contexto+='Activos en ejecucion: '+activos.length+'\n'
   contexto+='Pendientes de hoy: '+pendientes.length+'\n'
-  contexto+='Sin asignar técnico: '+sinAsignar.length+'\n\n'
+  contexto+='Sin asignar tecnico: '+sinAsignar.length+'\n\n'
   
-  contexto+='TÉCNICOS DISPONIBLES:\n'
+  contexto+='TECNICOS DISPONIBLES (con carga del dia):\n'
   TECNICOS.forEach(function(t){
-    var carga=servicios.filter(function(s){return s.tecnico===t.nombre&&(s.created_at||'').startsWith(hoy)}).length
-    contexto+='- '+t.nombre+' (Especialidad: '+t.especialidad.join(', ')+') · Carga hoy: '+carga+' servicios\n'
+    var carga=DATOS.presupuestos.filter(function(s){return s.tecnico===t.nombre&&(s.created_at||'').startsWith(hoy)}).length
+    contexto+='- '+t.nombre+' ('+t.especialidad.join(', ')+') · '+carga+' servicios hoy · tel '+t.tel+'\n'
   })
   
-  if(sinAsignar.length>0){
-    contexto+='\nSERVICIOS SIN ASIGNAR (primeros 5):\n'
-    sinAsignar.slice(0,5).forEach(function(s){
-      contexto+='- ID '+s.id+': '+(s.cliente||'?')+' · '+(s.direccion||'sin dirección')+' · $'+(s.total||0).toLocaleString('es-CL')+' · "'+(s.obs||'').slice(0,80)+'"\n'
-    })
-  }
-  
   try{
-    var r=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'x-api-key':apiKey,
-        'anthropic-version':'2023-06-01',
-        'anthropic-dangerous-direct-browser-access':'true'
-      },
-      body:JSON.stringify({
-        model:'claude-haiku-4-5-20251001',
-        max_tokens:1024,
-        system:SYSTEM_PROMPT+'\n\n'+contexto,
-        messages:historial
-      })
-    })
+    var maxIter = 8
+    var iter = 0
+    var seguir = true
     
-    var data=await r.json()
-    if(data.error){
-      throw new Error(data.error.message||'Error desconocido')
+    while(seguir && iter < maxIter){
+      iter++
+      
+      var r=await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json',
+          'x-api-key':apiKey,
+          'anthropic-version':'2023-06-01',
+          'anthropic-dangerous-direct-browser-access':'true'
+        },
+        body:JSON.stringify({
+          model:'claude-haiku-4-5-20251001',
+          max_tokens:2048,
+          system:SYSTEM_PROMPT+'\n\n'+contexto,
+          tools: TOOLS,
+          messages:historial
+        })
+      })
+      
+      var data=await r.json()
+      if(data.error) throw new Error(data.error.message||'Error desconocido')
+      
+      // Agregar respuesta del asistente al historial (texto + tool_use)
+      historial.push({role:'assistant', content:data.content})
+      
+      // Procesar contenido
+      var textosRespuesta = []
+      var toolCalls = []
+      
+      data.content.forEach(function(block){
+        if(block.type==='text' && block.text.trim()){
+          textosRespuesta.push(block.text)
+        } else if(block.type==='tool_use'){
+          toolCalls.push(block)
+        }
+      })
+      
+      // Mostrar texto intermedio si lo hay
+      if(textosRespuesta.length>0){
+        ocultarTyping()
+        agregarMensaje('agent', textosRespuesta.join('\n\n'))
+        if(toolCalls.length>0) mostrarTyping()
+      }
+      
+      // Si hay tool calls, ejecutar y continuar
+      if(toolCalls.length>0){
+        var toolResults = []
+        for(var i=0; i<toolCalls.length; i++){
+          var tc = toolCalls[i]
+          // Mostrar mensaje visual de ejecución
+          mostrarToolEjecucion(tc.name, tc.input)
+          var resultado = await ejecutarTool(tc.name, tc.input)
+          toolResults.push({
+            type: 'tool_result',
+            tool_use_id: tc.id,
+            content: JSON.stringify(resultado)
+          })
+        }
+        historial.push({role:'user', content: toolResults})
+        // continuar loop
+      } else {
+        seguir = false
+      }
     }
     
-    var respuesta=data.content[0].text
     ocultarTyping()
-    agregarMensaje('agent',respuesta)
-    historial.push({role:'assistant',content:respuesta})
   }catch(e){
     ocultarTyping()
     var msg='⚠️ Error: '+e.message
     if(e.message.includes('401')||e.message.includes('authentication')){
-      msg='🔑 API Key inválida. Toca el botón ⚙️ arriba para reconfigurar.'
+      msg='🔑 API Key invalida. Toca ⚙️ arriba para reconfigurar.'
     }else if(e.message.includes('credit')||e.message.includes('balance')){
-      msg='💳 Sin créditos. Recarga en console.anthropic.com'
+      msg='💳 Sin creditos. Recarga en console.anthropic.com'
     }
     agregarMensaje('agent',msg)
   }
 }
 
+function mostrarToolEjecucion(nombre, input){
+  var iconos = {
+    consultar_datos: '🔍',
+    asignar_tecnico: '👷',
+    actualizar_servicio: '✏️',
+    registrar_gasto: '💸',
+    buscar_postulantes: '📋',
+    abrir_modulo: '🔗',
+    generar_whatsapp: '💬',
+    crear_evento_agenda: '📅',
+    generar_reporte: '📊',
+    notificar_tecnico: '📲',
+    notificar_cliente: '💌',
+    corroborar_estado_servicio: '🔎',
+    registrar_pago_cliente: '💰',
+    enviar_recordatorio_pago: '⏰',
+    pagar_comision_aliado: '🤝',
+    actualizar_postulante: '👤',
+    mensaje_masivo_tecnicos: '📢',
+    crear_lead: '🎯',
+    confirmar_agenda: '✅'
+  }
+  var ico = iconos[nombre]||'⚙️'
+  var detalle = ''
+  if(nombre==='consultar_datos') detalle = ' '+input.tabla
+  else if(nombre==='asignar_tecnico') detalle = ' #'+input.servicio_id+' → '+input.tecnico
+  else if(nombre==='actualizar_servicio') detalle = ' #'+input.servicio_id
+  else if(nombre==='abrir_modulo') detalle = ' '+input.modulo
+  else if(nombre==='generar_reporte') detalle = ' '+input.periodo
+  else if(nombre==='notificar_tecnico') detalle = ' '+input.tecnico+' ('+input.tipo+')'
+  else if(nombre==='notificar_cliente') detalle = ' #'+input.servicio_id+' ('+input.tipo+')'
+  else if(nombre==='registrar_pago_cliente') detalle = ' #'+input.servicio_id+' via '+input.metodo
+  else if(nombre==='actualizar_postulante') detalle = ' #'+input.postulante_id+' → '+input.nuevo_estado
+  else if(nombre==='mensaje_masivo_tecnicos') detalle = ' broadcast'
+  else if(nombre==='crear_lead') detalle = ' '+input.nombre
+  
+  var chat=document.getElementById('chat')
+  var div=document.createElement('div')
+  div.className='msg agent'
+  div.style.opacity='0.6'
+  div.innerHTML='<div class="bubble" style="background:rgba(96,165,250,0.1);border:1px solid rgba(96,165,250,0.3);font-size:11px;font-family:monospace;color:var(--azul)">'+ico+' Ejecutando: '+nombre+detalle+'...</div>'
+  chat.appendChild(div)
+  chat.scrollTop=chat.scrollHeight
+}
+
 function configurarAPIKey(){
   var actual=localStorage.getItem('anthropic_api_key')||''
   var masked=actual?actual.slice(0,12)+'...'+actual.slice(-4):'(sin configurar)'
-  var key=prompt('🔑 Configurar API Key de Anthropic\n\nActual: '+masked+'\n\nIngresa nueva API Key (sk-ant-...) o deja vacío para mantener la actual:')
-  if(key===null)return  // canceló
+  var key=prompt('🔑 Configurar API Key de Anthropic\n\nActual: '+masked+'\n\nIngresa nueva API Key (sk-ant-...) o deja vacio para mantener la actual:')
+  if(key===null)return
   if(key.trim()===''){alert('API Key sin cambios.');return}
   if(!key.startsWith('sk-ant-')){alert('⚠️ Formato incorrecto. Debe empezar con sk-ant-');return}
   localStorage.setItem('anthropic_api_key',key.trim())
-  alert('✅ API Key guardada.\n\nYa puedes chatear con el coordinador IA.')
+  alert('✅ API Key guardada.\n\nYa puedes chatear con acceso TOTAL al ecosistema.')
 }
 
 function agregarMensaje(rol,txt){

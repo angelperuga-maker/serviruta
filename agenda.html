@@ -106,7 +106,7 @@ input,select,textarea{font-family:inherit;font-size:14px}
 <header class="bar">
   <button class="back" onclick="history.back()">← Volver</button>
   <div class="sigil">S</div>
-  <div class="title">Agenda</div>
+  <div class="title" id="page-title">Agenda</div>
 </header>
 
 <div class="shell">
@@ -123,8 +123,8 @@ input,select,textarea{font-family:inherit;font-size:14px}
 
   <!-- Resumen + Botón nuevo -->
   <div class="dia-resumen">
-    <div class="cuenta"><b id="num-eventos">0</b> servicios agendados</div>
-    <button class="btn-nuevo" onclick="abrirNuevo()">+ Nuevo</button>
+    <div class="cuenta"><b id="num-eventos">0</b> servicios <span id="cuenta-sub">agendados</span></div>
+    <button class="btn-nuevo" id="btn-nuevo" onclick="abrirNuevo()">+ Nuevo</button>
   </div>
 
   <!-- Lista de eventos -->
@@ -204,7 +204,7 @@ input,select,textarea{font-family:inherit;font-size:14px}
 // CONFIG
 // ==========================================
 var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
-var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYyMzgyODEsImV4cCI6MjA3MTgxNDI4MX0.Mhxn5HEpQ8MMOhBeYQc1OvqdkZ4D2RC2OqWWnRYDqx0'
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
 
 var TECNICOS=[
   {nombre:'Reynaldo Aguas Bertel',tel:'+56935287199'},
@@ -216,7 +216,14 @@ var TECNICOS=[
 
 var fechaActual=new Date()
 fechaActual.setHours(0,0,0,0)
-var isCoord=true // siempre coordinador por simplicidad
+
+// Detectar tipo de usuario
+var coordAuth = sessionStorage.getItem('coord_auth')
+var tecnicoNombre = sessionStorage.getItem('tecnico_nombre')
+var isCoord = !!coordAuth
+var isTecnico = !!tecnicoNombre && !isCoord
+
+console.log('[AGENDA] Usuario:', isCoord ? 'Coordinador' : (isTecnico ? 'Técnico: '+tecnicoNombre : 'Sin sesión'))
 
 // ==========================================
 // HELPERS
@@ -335,7 +342,14 @@ async function cargarEventos(){
   cont.innerHTML='<div class="empty"><div class="empty-ico">⏳</div><div class="empty-titulo">Cargando...</div></div>'
   
   var fecha=fmtFecha(fechaActual)
-  var r=await sbSelect('agenda','fecha=eq.'+fecha+'&order=hora.asc')
+  
+  // Si es técnico, filtrar por su nombre. Si es coordinador, mostrar todos
+  var query='fecha=eq.'+fecha+'&order=hora.asc'
+  if(isTecnico){
+    query='fecha=eq.'+fecha+'&tecnico=ilike.*'+encodeURIComponent(tecnicoNombre)+'*&order=hora.asc'
+  }
+  
+  var r=await sbSelect('agenda',query)
   
   if(!r.ok){
     cont.innerHTML='<div class="empty"><div class="empty-ico">⚠️</div><div class="empty-titulo">Error cargando</div><div>'+(r.error||'')+'</div></div>'
@@ -346,15 +360,19 @@ async function cargarEventos(){
   document.getElementById('num-eventos').textContent=eventos.length
   
   if(eventos.length===0){
-    cont.innerHTML='<div class="empty"><div class="empty-ico">📅</div><div class="empty-titulo">Sin agendamientos</div><div>Toca <b>+ Nuevo</b> para agregar uno</div></div>'
+    var msgVacio = isTecnico 
+      ? '<div class="empty-titulo">Sin servicios asignados</div><div>No tienes citas para este día</div>'
+      : '<div class="empty-titulo">Sin agendamientos</div><div>Toca <b>+ Nuevo</b> para agregar uno</div>'
+    cont.innerHTML='<div class="empty"><div class="empty-ico">📅</div>'+msgVacio+'</div>'
     return
   }
   
   cont.innerHTML=eventos.map(function(e){
     var hora=(e.hora||'').slice(0,5)
     var iconos={'agendado':'📋','confirmado':'✅','en-ruta':'🚗','completado':'🏁','cancelado':'❌'}
+    var tecCorto = isTecnico ? '✓ ASIGNADO' : (e.tecnico||'').split(' ')[0].toUpperCase()
     return '<div class="evento" onclick="verDetalle(\''+e.id+'\')">'+
-      '<div class="hora">'+hora+'<div class="hora-est">'+(e.tecnico||'').split(' ')[0].toUpperCase()+'</div></div>'+
+      '<div class="hora">'+hora+'<div class="hora-est">'+tecCorto+'</div></div>'+
       '<div class="evento-body">'+
         '<div class="evento-cliente">'+(e.cliente||'Sin cliente')+'</div>'+
         '<div class="evento-meta"><span class="evento-tag tag-'+(e.estado||'agendado')+'">'+(e.estado||'agendado')+'</span>'+(e.servicio||'-')+(e.direccion?' · '+e.direccion:'')+'</div>'+
@@ -593,8 +611,21 @@ function waCliente(ev){
 }
 
 // ==========================================
-// INIT
+// INIT - personalizar UI según rol
 // ==========================================
+if(isTecnico){
+  // El técnico ve solo SU agenda
+  document.getElementById('page-title').textContent='Mi Agenda · '+tecnicoNombre.split(' ')[0]
+  document.getElementById('cuenta-sub').textContent='asignados a ti'
+  // Ocultar botones de crear
+  document.getElementById('btn-nuevo').style.display='none'
+  document.querySelector('.fab').style.display='none'
+} else if(!isCoord) {
+  // Sin sesión - mostrar advertencia
+  document.getElementById('page-title').textContent='Agenda (sin sesión)'
+  document.getElementById('cuenta-sub').textContent='(modo demo)'
+}
+
 pintarFecha()
 cargarEventos()
 </script>

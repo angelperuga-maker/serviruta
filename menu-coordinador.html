@@ -29,6 +29,21 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
 .arr{font-size:18px;color:var(--txt3);margin-left:auto;}
 .date{font-size:11px;color:var(--txt3);text-align:center;margin-top:24px;}
 </style>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '2047126482467549');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=2047126482467549&ev=PageView&noscript=1" /></noscript>
+<!-- End Meta Pixel Code -->
 </head>
 <body>
 <script>
@@ -47,6 +62,13 @@ if (!sessionStorage.getItem("coord_auth")) { location.href = "login-coordinador.
 <div class="body">
   <div class="greeting">Panel <em>Coordinador</em></div>
   <div class="sub" id="fecha">—</div>
+
+  <div class="sec">📅 Agenda del día</div>
+  <a class="card" href="agenda.html" style="background:linear-gradient(135deg,rgba(232,33,10,0.18),rgba(232,33,10,0.04));border:2px solid var(--rojo);box-shadow:0 4px 16px rgba(232,33,10,0.15)">
+    <div class="ci" style="background:var(--rojo);color:#fff;font-size:22px">📅</div>
+    <div><div class="cn" style="color:var(--rojo);font-size:16px">Agenda de servicios</div><div class="cd">Vista diaria con horas por técnico · Gestionar citas</div></div>
+    <span class="arr" style="color:var(--rojo)">›</span>
+  </a>
 
   <div class="sec">Marketing y ventas</div>
   <a class="card" href="servicios-publicos.html" style="background:linear-gradient(135deg,rgba(96,165,250,0.15),rgba(167,139,250,0.05));border-color:rgba(96,165,250,0.4)">
@@ -138,13 +160,6 @@ if (!sessionStorage.getItem("coord_auth")) { location.href = "login-coordinador.
   <a class="card" href="admin.html">
     <div class="ci" style="background:rgba(232,33,10,0.08)">📈</div>
     <div><div class="cn" style="color:var(--rojo)">Panel de administración</div><div class="cd">Ingresos totales y por técnico · servicios</div></div>
-    <span class="arr">›</span>
-  </a>
-
-  <div class="sec">Agenda</div>
-  <a class="card" href="agenda.html">
-    <div class="ci" style="background:rgba(96,165,250,0.1)">📅</div>
-    <div><div class="cn" style="color:var(--azul)">Agenda de servicios</div><div class="cd">Vista diaria con horas por técnico</div></div>
     <span class="arr">›</span>
   </a>
 

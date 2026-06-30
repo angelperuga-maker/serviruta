@@ -87,7 +87,24 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--c3);border:1px solid var(--borde);border-radius:8px;padding:10px 16px;font-size:12px;opacity:0;transition:all 0.25s;pointer-events:none;z-index:999;}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 .toast.ok{border-color:rgba(34,197,94,0.4);color:var(--verde);}
+.toast.err{border-color:rgba(232,33,10,0.5);color:#FF4D2E;background:rgba(232,33,10,0.1);}
+.toast.warn{border-color:rgba(245,197,24,0.5);color:#F5C518;background:rgba(245,197,24,0.1);}
 </style>
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '2047126482467549');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=2047126482467549&ev=PageView&noscript=1" /></noscript>
+<!-- End Meta Pixel Code -->
 </head>
 <body>
 
@@ -319,33 +336,101 @@ function openModalConTec(tec,hora){
 function closeModal(id){document.getElementById(id).classList.remove('open')}
 
 async function guardar(){
-  var cliente=document.getElementById('m-cliente').value.trim()
-  var hora=document.getElementById('m-hora').value
-  var tecChecks=Array.from(document.querySelectorAll('.tec-chk:checked')).map(function(c){return c.value})
-  var tec=tecChecks.join(', ')
-  if(!tec){toast('Selecciona al menos un técnico');return}
-  if(!cliente||!hora){toast('Ingresa cliente y hora');return}
-  if(!tec){toast('Selecciona al menos un técnico');return}
-  var r=await getDB().from('agenda').insert({
-    fecha:document.getElementById('m-fecha').value,hora:hora,tecnico:tec,
-    cliente:cliente,telefono:document.getElementById('m-tel').value.trim(),
-    servicio:document.getElementById('m-servicio').value.trim(),
-    direccion:document.getElementById('m-direccion').value.trim(),
-    vehiculo:document.getElementById('m-vehiculo').value.trim(),estado:'agendado'
-  })
-  if(r.error){toast('Error: '+r.error.message);return}
-  if(isCoord&&tecChecks.length){
-    tecChecks.forEach(function(nombre){
-      var tecObj=TECNICOS.find(function(t){return t.nombre===nombre})
-      if(tecObj&&tecObj.tel){
-        var msg='NUEVO SERVICIO\n\nHola '+nombre.split(' ')[0]+'\n\n'+hora+' · '+cliente+(document.getElementById('m-servicio').value?'\n'+document.getElementById('m-servicio').value:'')+(document.getElementById('m-direccion').value?'\n'+document.getElementById('m-direccion').value:'')+' \n\nServiruta +56 9 8505 8250'
-        window.open('https://wa.me/'+tecObj.tel.replace(/\D/g,'')+'?text='+encodeURIComponent(msg),'_blank')
+  var btn = document.querySelector('.btn-save')
+  var btnOriginalText = btn ? btn.textContent : 'Agendar servicio'
+  
+  try {
+    // Validaciones
+    var cliente=document.getElementById('m-cliente').value.trim()
+    var hora=document.getElementById('m-hora').value
+    var fecha=document.getElementById('m-fecha').value
+    var tecChecks=Array.from(document.querySelectorAll('.tec-chk:checked')).map(function(c){return c.value})
+    var tec=tecChecks.join(', ')
+    
+    if(!fecha){toast('Selecciona una fecha','err');return}
+    if(!tec){toast('Selecciona al menos un técnico','err');return}
+    if(!cliente){toast('Ingresa el nombre del cliente','err');return}
+    if(!hora){toast('Ingresa la hora','err');return}
+    
+    // Bloquear botón mientras guarda
+    if(btn){btn.disabled=true;btn.textContent='Guardando...';btn.style.opacity='0.6'}
+    
+    var datos = {
+      fecha: fecha,
+      hora: hora,
+      tecnico: tec,
+      cliente: cliente,
+      telefono: document.getElementById('m-tel').value.trim(),
+      servicio: document.getElementById('m-servicio').value.trim(),
+      direccion: document.getElementById('m-direccion').value.trim(),
+      vehiculo: document.getElementById('m-vehiculo').value.trim(),
+      estado: 'agendado'
+    }
+    
+    console.log('[AGENDA] Intentando guardar:', datos)
+    
+    // INSERT con .select() para confirmar que se grabó
+    var r = await getDB().from('agenda').insert(datos).select()
+    
+    console.log('[AGENDA] Respuesta Supabase:', r)
+    
+    // Verificar error
+    if(r.error){
+      console.error('[AGENDA] Error Supabase:', r.error)
+      toast('❌ Error guardando: ' + r.error.message,'err')
+      alert('No se pudo guardar la cita.\n\nError: ' + r.error.message + '\n\nNo se enviarán los WhatsApp. Por favor reintenta.')
+      if(btn){btn.disabled=false;btn.textContent=btnOriginalText;btn.style.opacity='1'}
+      return
+    }
+    
+    // Verificar que efectivamente se insertó
+    if(!r.data || r.data.length === 0){
+      console.error('[AGENDA] Insert sin error pero sin data devuelta')
+      toast('❌ No se confirmó el guardado','err')
+      alert('El sistema no confirmó el guardado. No se enviarán los WhatsApp. Reintenta por favor.')
+      if(btn){btn.disabled=false;btn.textContent=btnOriginalText;btn.style.opacity='1'}
+      return
+    }
+    
+    var idGuardado = r.data[0].id
+    console.log('[AGENDA] ✅ Guardado OK con id:', idGuardado)
+    
+    // YA QUEDÓ GUARDADO. Ahora SÍ enviar WhatsApp (solo coord)
+    if(isCoord && tecChecks.length){
+      var enviados = 0
+      tecChecks.forEach(function(nombre){
+        var tecObj=TECNICOS.find(function(t){return t.nombre===nombre})
+        if(tecObj && tecObj.tel){
+          var msg='NUEVO SERVICIO\n\nHola '+nombre.split(' ')[0]+'\n\n'+
+                  hora+' · '+cliente+
+                  (datos.servicio ? '\n'+datos.servicio : '')+
+                  (datos.direccion ? '\n'+datos.direccion : '')+
+                  '\n\nServiruta +56 9 8505 8250'
+          var url = 'https://wa.me/'+tecObj.tel.replace(/\D/g,'')+'?text='+encodeURIComponent(msg)
+          var w = window.open(url,'_blank')
+          if(w) enviados++
+          else console.warn('[AGENDA] Popup bloqueado para',nombre)
+        }
+      })
+      
+      if(enviados < tecChecks.length){
+        toast('✅ Guardado. ⚠️ '+(tecChecks.length-enviados)+' WhatsApp bloqueados por el navegador. Permite popups.','warn')
+      } else {
+        toast('✅ Guardado y '+enviados+' WhatsApp enviados','ok')
       }
-    })
+    } else {
+      toast('✅ Agendado correctamente','ok')
+    }
+    
+    closeModal('modal-nuevo')
+    load()
+    
+  } catch(e) {
+    console.error('[AGENDA] Excepción no controlada:', e)
+    toast('❌ Error inesperado: ' + (e.message||e),'err')
+    alert('Error inesperado guardando la cita:\n\n' + (e.message||e) + '\n\nLa cita NO se guardó. Reintenta.')
+    if(btn){btn.disabled=false;btn.textContent=btnOriginalText;btn.style.opacity='1'}
   }
-  toast('✅ Agendado','ok')
-  closeModal('modal-nuevo')
-  load()
 }
 
 function abrirDetalle(id){

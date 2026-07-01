@@ -63,6 +63,16 @@ if (!sessionStorage.getItem("coord_auth")) { location.href = "login-coordinador.
   <div class="greeting">Panel <em>Coordinador</em></div>
   <div class="sub" id="fecha">—</div>
 
+  <!-- Buenos días - resumen automático -->
+  <a class="card" href="buenos-dias.html" style="background:linear-gradient(135deg,rgba(37,211,102,0.12),rgba(212,175,55,0.03));border:1px solid rgba(37,211,102,0.4);margin-bottom:10px">
+    <div class="ci" style="background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;font-size:22px">☀️</div>
+    <div>
+      <div class="cn" style="color:#25D366">Buenos días <span style="font-size:9px;background:rgba(37,211,102,0.2);color:#25D366;padding:2px 6px;border-radius:4px;margin-left:4px;font-weight:800">09:00 automático</span></div>
+      <div class="cd">Resumen matutino diario a tu WhatsApp</div>
+    </div>
+    <span class="arr" style="color:#25D366">›</span>
+  </a>
+
   <!-- Widget de sugerencias del día -->
   <a class="card" href="sugerencias-diarias.html" id="widget-sug" style="background:linear-gradient(135deg,rgba(212,175,55,0.15),rgba(232,33,10,0.03));border:1px solid rgba(212,175,55,0.4);display:none;margin-bottom:10px">
     <div class="ci" style="background:linear-gradient(135deg,#D4AF37,#F5C518);color:#000;font-size:22px">💡</div>

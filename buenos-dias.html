@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Buenos Días · Serviruta</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0A0D;--s1:#111114;--s2:#16161B;--s3:#1C1C23;--line:#26262E;--line-2:#353541;--rojo:#E8210A;--rojo-l:#FF4D2E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;--dorado:#D4AF37;--t1:#F6F4EF;--t2:#C7C5BF;--t3:#8B8990;--t4:#56555C;--display:'Syne',sans-serif;--body:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--t2);font-family:var(--body);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100vh}
+button,input{cursor:pointer;border:none;background:none;color:inherit;font-family:inherit;font-size:14px}
+input[type="text"],input[type="url"]{cursor:text}
+
+.bar{position:sticky;top:0;z-index:50;background:rgba(10,10,13,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:14px 20px;display:flex;align-items:center;gap:12px}
+.back{font-family:var(--mono);font-size:11px;color:var(--t3);padding:6px 10px;border:1px solid var(--line);border-radius:6px}
+.sigil{width:34px;height:34px;background:var(--rojo);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:14px;color:#fff}
+.title{font-family:var(--display);font-weight:800;font-size:15px;color:var(--t1);flex:1;line-height:1.2}
+.title small{display:block;font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;margin-top:2px;font-weight:500}
+
+.shell{max-width:900px;margin:0 auto;padding:20px 16px 80px}
+
+.hero{background:linear-gradient(135deg,rgba(232,33,10,0.1),rgba(212,175,55,0.03));border:1px solid var(--line);border-radius:18px;padding:24px;margin-bottom:20px;text-align:center}
+.hero-fecha{font-family:var(--mono);font-size:11px;color:var(--t3);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:8px}
+.hero-titulo{font-family:var(--display);font-weight:900;font-size:clamp(26px,5vw,38px);color:var(--t1);line-height:1.1;letter-spacing:-1px;margin-bottom:8px}
+.hero-titulo em{color:var(--rojo-l);font-style:normal}
+.hero-desc{font-size:13px;color:var(--t2);max-width:520px;margin:0 auto}
+
+.estado{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:20px}
+.estado-box{background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;align-items:center;gap:12px}
+.estado-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+.estado-dot.ok{background:var(--verde);box-shadow:0 0 12px rgba(34,197,94,0.4)}
+.estado-dot.warn{background:var(--amarillo)}
+.estado-dot.err{background:var(--rojo-l);box-shadow:0 0 12px rgba(232,33,10,0.4)}
+.estado-info{min-width:0;flex:1}
+.estado-lbl{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:2px}
+.estado-val{font-family:var(--display);font-weight:700;font-size:13px;color:var(--t1);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+.sec{background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:14px}
+.sec-tit{font-family:var(--display);font-weight:800;font-size:14px;color:var(--t1);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.sec-tit::before{content:"";width:4px;height:18px;background:var(--rojo);border-radius:2px}
+
+.metricas{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-bottom:14px}
+.metrica{background:var(--s2);border-radius:10px;padding:12px}
+.metrica-lbl{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:4px}
+.metrica-num{font-family:var(--display);font-weight:800;font-size:18px;color:var(--t1);line-height:1;letter-spacing:-0.5px}
+.metrica.hot .metrica-num{color:var(--rojo-l)}
+.metrica.gold .metrica-num{color:var(--dorado);font-size:15px}
+.metrica.green .metrica-num{color:var(--verde)}
+
+.msg-preview{background:#DCF8C6;color:#1a1a1a;padding:16px;border-radius:12px 12px 12px 0;font-size:13px;line-height:1.55;white-space:pre-wrap;font-family:'DM Sans',sans-serif;max-width:100%;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+.msg-info{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-family:var(--mono);font-size:10px;color:var(--t3);flex-wrap:wrap;gap:10px}
+
+.btn{padding:12px 20px;border-radius:10px;font-family:var(--display);font-weight:700;font-size:13px;letter-spacing:0.05em;text-align:center;transition:all 150ms;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;border:none}
+.btn-wa{background:#25D366;color:#fff}
+.btn-wa:hover{background:#1EB855;transform:translateY(-1px)}
+.btn-primary{background:var(--rojo);color:#fff}
+.btn-primary:hover{background:var(--rojo-l)}
+
+.config-item{background:var(--s2);border-radius:8px;padding:12px;margin-bottom:8px}
+.config-lbl{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px}
+.config-row{display:flex;gap:8px;align-items:center}
+.config-input{flex:1;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:8px 10px;color:var(--t1);font-size:12px;font-family:var(--mono);min-width:0}
+.config-input:focus{outline:none;border-color:var(--rojo)}
+.config-btn{padding:8px 14px;background:var(--rojo);color:#fff;border-radius:6px;font-size:11px;font-family:var(--display);font-weight:700;letter-spacing:0.05em;border:none;cursor:pointer}
+
+.log-item{background:var(--s2);border-radius:8px;padding:12px;margin-bottom:6px;font-family:var(--mono);font-size:11px;display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center}
+.log-fecha{color:var(--t3)}
+.log-status{padding:2px 8px;border-radius:4px;font-size:9px;font-weight:700;letter-spacing:0.1em}
+.log-status.ok{background:rgba(34,197,94,0.15);color:var(--verde)}
+.log-status.err{background:rgba(232,33,10,0.15);color:var(--rojo-l)}
+.log-msg{color:var(--t2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+.setup{background:linear-gradient(135deg,rgba(96,165,250,0.06),var(--s1));border:1px solid rgba(96,165,250,0.3);border-radius:14px;padding:20px;margin-top:14px}
+.setup-tit{font-family:var(--display);font-weight:800;font-size:14px;color:var(--azul);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.paso{background:var(--s2);border-radius:8px;padding:12px 14px;margin-bottom:8px;display:grid;grid-template-columns:28px 1fr;gap:12px;align-items:flex-start}
+.paso-num{width:24px;height:24px;background:var(--azul);color:#000;border-radius:50%;font-family:var(--display);font-weight:800;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.paso-txt{font-size:12px;color:var(--t2);line-height:1.5}
+.paso-txt b{color:var(--t1)}
+.paso-txt code{background:var(--s3);color:var(--azul);font-family:var(--mono);font-size:10px;padding:2px 6px;border-radius:4px;word-break:break-all}
+
+.loading{text-align:center;padding:40px 20px;color:var(--t3)}
+
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:12px 20px;font-size:13px;font-weight:600;color:var(--t1);opacity:0;transition:all 300ms;pointer-events:none;z-index:200}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.ok{border-color:var(--verde);color:var(--verde)}
+.toast.err{border-color:var(--rojo);color:var(--rojo-l)}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <button class="back" onclick="location.href='menu-coordinador.html'">← Volver</button>
+  <div class="sigil">S</div>
+  <div class="title">Buenos días<small>Resumen diario automático · WhatsApp</small></div>
+</header>
+
+<div class="shell" id="cont">
+  <div class="loading">☕ Cargando panel de control...</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+
+var RESUMEN=null
+var CONFIG={}
+var LOGS=[]
+
+function toast(msg,tipo){
+  var t=document.getElementById('toast')
+  t.textContent=msg
+  t.className='toast '+(tipo||'')
+  t.classList.add('show')
+  setTimeout(function(){t.classList.remove('show')},2500)
+}
+
+function fmt(n){
+  if(!n) return '$0'
+  return '$'+parseInt(n).toLocaleString('es-CL')
+}
+
+function copiar(txt){
+  navigator.clipboard.writeText(txt).then(function(){toast('✅ Copiado','ok')})
+}
+
+function saludoHora(){
+  var h=new Date().getHours()
+  if(h<12) return 'Buenos días'
+  if(h<19) return 'Buenas tardes'
+  return 'Buenas noches'
+}
+
+async function sbGet(path){
+  var r=await fetch(SB_URL+'/rest/v1/'+path,{headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}})
+  return r.ok?await r.json():null
+}
+
+async function sbRpc(fn){
+  var r=await fetch(SB_URL+'/rest/v1/rpc/'+fn,{
+    method:'POST',
+    headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'},
+    body:'{}'
+  })
+  return r.ok?await r.json():null
+}
+
+async function cargar(){
+  var results = await Promise.all([
+    sbRpc('resumen_diario_json'),
+    sbGet('config_sistema?select=*'),
+    sbGet('log_envios_diarios?select=id,enviado_at,error,mensaje&order=enviado_at.desc&limit=5')
+  ])
+  
+  RESUMEN=results[0]
+  if(results[1]) results[1].forEach(function(c){CONFIG[c.clave]=c.valor})
+  LOGS=results[2]||[]
+  
+  render()
+}
+
+function construirMensaje(){
+  var r=RESUMEN
+  var msg=saludoHora()+' Angel! ☀️\n\n'
+  msg+='📊 *RESUMEN SERVIRUTA · '+r.fecha+'*\n'
+  msg+='━━━━━━━━━━━━━━━━━━━\n\n'
+  
+  msg+='📅 *AGENDA HOY: '+r.agenda_hoy_count+' servicio'+(r.agenda_hoy_count!==1?'s':'')+'*\n'
+  if(r.agenda_hoy && r.agenda_hoy.length){
+    r.agenda_hoy.forEach(function(e){
+      msg+='• '+e.hora+' · '+(e.tecnico||'Sin asignar').split(' ')[0]+' · '+(e.cliente||'?')+'\n'
+    })
+  } else {
+    msg+='• Sin servicios agendados\n'
+  }
+  msg+='\n'
+  
+  if(r.sugerencias_top && r.sugerencias_top.length){
+    msg+='🎯 *TOP CLIENTES A CONTACTAR HOY*\n'
+    r.sugerencias_top.forEach(function(s){
+      msg+='• '+s.nombre+' ('+fmt(s.ticket_estimado)+')\n'
+    })
+    msg+='\n'
+  }
+  
+  msg+='📈 *AYER*\n'
+  msg+='• '+r.ayer_servicios+' servicios nuevos\n'
+  msg+='• '+fmt(r.ayer_facturado)+' facturado\n\n'
+  
+  if(r.por_cobrar>0){
+    msg+='⚠️ *POR COBRAR*\n'
+    msg+='• '+r.por_cobrar_count+' servicio'+(r.por_cobrar_count!==1?'s':'')+' = '+fmt(r.por_cobrar)+'\n\n'
+  }
+  
+  msg+='💰 *OPORTUNIDAD TOTAL*\n'
+  msg+='• '+r.sugerencias_count_total+' clientes contactables\n'
+  msg+='• Potencial: '+fmt(r.sugerencias_valor_potencial)+'\n\n'
+  
+  msg+='━━━━━━━━━━━━━━━━━━━\n'
+  msg+='👉 https://angelperuga-maker.github.io/serviruta/menu-coordinador.html\n\n'
+  msg+='Que tengas un gran día! 💪'
+  
+  return msg
+}
+
+async function guardarConfig(clave){
+  var input=document.getElementById('config-'+clave)
+  var valor=input.value.trim()
+  if(!valor){toast('Ingresa un valor','err');return}
+  
+  var r=await fetch(SB_URL+'/rest/v1/config_sistema?clave=eq.'+clave,{
+    method:'PATCH',
+    headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'},
+    body:JSON.stringify({valor:valor,updated_at:new Date().toISOString()})
+  })
+  if(r.ok){
+    CONFIG[clave]=valor
+    toast('✅ Guardado','ok')
+  } else {
+    toast('Error al guardar','err')
+  }
+}
+
+async function probarEnvio(){
+  if(!confirm('¿Enviar un mensaje de prueba AHORA al webhook Make.com?')) return
+  toast('📤 Enviando...')
+  var r=await sbRpc('enviar_buenos_dias_whatsapp')
+  if(r && r > 0){
+    toast('✅ Enviado. Revisa el log de abajo','ok')
+    setTimeout(cargar, 1500)
+  } else {
+    toast('❌ Error, mira el log','err')
+    setTimeout(cargar, 1500)
+  }
+}
+
+function render(){
+  var r=RESUMEN
+  var msg=construirMensaje()
+  var telWA=CONFIG.whatsapp_angel||'56945210814'
+  var waUrl='https://wa.me/'+telWA+'?text='+encodeURIComponent(msg)
+  var webhookOk=CONFIG.webhook_buenos_dias && CONFIG.webhook_buenos_dias.indexOf('make.com')>=0
+  var envioActivo=CONFIG.envio_activo==='true'
+  
+  var html=''
+  
+  html+='<div class="hero">'
+  html+='<div class="hero-fecha">'+r.fecha+'</div>'
+  html+='<div class="hero-titulo">'+saludoHora()+' <em>Angel</em></div>'
+  html+='<div class="hero-desc">Panel de control del resumen matutino automático. Se envía todos los días a las 09:00 hora Chile.</div>'
+  html+='</div>'
+  
+  html+='<div class="estado">'
+  html+='<div class="estado-box"><div class="estado-dot '+(envioActivo?'ok':'warn')+'"></div><div class="estado-info"><div class="estado-lbl">Sistema</div><div class="estado-val">'+(envioActivo?'✅ Activo':'⏸️ Pausado')+'</div></div></div>'
+  html+='<div class="estado-box"><div class="estado-dot ok"></div><div class="estado-info"><div class="estado-lbl">Cron programado</div><div class="estado-val">09:00 Chile diario</div></div></div>'
+  html+='<div class="estado-box"><div class="estado-dot '+(webhookOk?'ok':'err')+'"></div><div class="estado-info"><div class="estado-lbl">Webhook Make</div><div class="estado-val">'+(webhookOk?'Configurado':'⚠️ Falta configurar')+'</div></div></div>'
+  html+='<div class="estado-box"><div class="estado-dot ok"></div><div class="estado-info"><div class="estado-lbl">Destino WhatsApp</div><div class="estado-val">+'+telWA+'</div></div></div>'
+  html+='</div>'
+  
+  html+='<div class="sec">'
+  html+='<div class="sec-tit">📊 Datos que se enviarán hoy</div>'
+  html+='<div class="metricas">'
+  html+='<div class="metrica hot"><div class="metrica-lbl">Hoy</div><div class="metrica-num">'+r.agenda_hoy_count+'</div></div>'
+  html+='<div class="metrica"><div class="metrica-lbl">Mañana</div><div class="metrica-num">'+r.agenda_manana_count+'</div></div>'
+  html+='<div class="metrica gold"><div class="metrica-lbl">Potencial</div><div class="metrica-num">'+fmt(r.sugerencias_valor_potencial)+'</div></div>'
+  html+='<div class="metrica"><div class="metrica-lbl">Oport.</div><div class="metrica-num">'+r.sugerencias_count_total+'</div></div>'
+  if(r.por_cobrar>0) html+='<div class="metrica hot"><div class="metrica-lbl">Cobrar</div><div class="metrica-num">'+fmt(r.por_cobrar)+'</div></div>'
+  html+='<div class="metrica green"><div class="metrica-lbl">CRM</div><div class="metrica-num">'+r.crm_total+'</div></div>'
+  html+='</div>'
+  html+='</div>'
+  
+  html+='<div class="sec">'
+  html+='<div class="sec-tit">💬 Vista previa del mensaje</div>'
+  html+='<div class="msg-preview">'+msg.replace(/\*(.*?)\*/g,'<b>$1</b>')+'</div>'
+  html+='<div class="msg-info">'
+  html+='<span>'+msg.length+' caracteres</span>'
+  html+='<div style="display:flex;gap:8px">'
+  html+='<button class="config-btn" style="background:var(--s3);color:var(--t2)" onclick="copiar(document.querySelector(\'.msg-preview\').innerText)">📋 Copiar</button>'
+  html+='<a class="btn btn-wa" href="'+waUrl+'" target="_blank" style="padding:8px 14px;font-size:12px">💬 Enviar manual</a>'
+  html+='</div>'
+  html+='</div>'
+  html+='</div>'
+  
+  html+='<div class="sec" style="border:2px solid rgba(37,211,102,0.4);background:linear-gradient(135deg,rgba(37,211,102,0.06),var(--s1))">'
+  html+='<div class="sec-tit" style="color:#25D366">🧪 Probar envío ahora</div>'
+  html+='<p style="font-size:12px;color:var(--t2);margin-bottom:14px">Envía un mensaje de prueba al webhook Make.com ahora mismo para verificar que todo funciona.</p>'
+  html+='<button class="btn btn-primary" onclick="probarEnvio()" style="background:#25D366">🚀 Enviar prueba ahora</button>'
+  html+='</div>'
+  
+  html+='<div class="sec">'
+  html+='<div class="sec-tit">⚙️ Configuración del sistema</div>'
+  
+  html+='<div class="config-item">'
+  html+='<div class="config-lbl">🔗 Webhook Make.com (destino del resumen)</div>'
+  html+='<div class="config-row">'
+  html+='<input type="url" id="config-webhook_buenos_dias" class="config-input" value="'+(CONFIG.webhook_buenos_dias||'')+'" placeholder="https://hook.make.com/...">'
+  html+='<button class="config-btn" onclick="guardarConfig(\'webhook_buenos_dias\')">Guardar</button>'
+  html+='</div>'
+  html+='</div>'
+  
+  html+='<div class="config-item">'
+  html+='<div class="config-lbl">📱 WhatsApp personal (destinatario)</div>'
+  html+='<div class="config-row">'
+  html+='<input type="text" id="config-whatsapp_angel" class="config-input" value="'+(CONFIG.whatsapp_angel||'')+'" placeholder="56945210814">'
+  html+='<button class="config-btn" onclick="guardarConfig(\'whatsapp_angel\')">Guardar</button>'
+  html+='</div>'
+  html+='</div>'
+  
+  html+='<div class="config-item">'
+  html+='<div class="config-lbl">⏸️ Activo (true/false)</div>'
+  html+='<div class="config-row">'
+  html+='<input type="text" id="config-envio_activo" class="config-input" value="'+(CONFIG.envio_activo||'true')+'" placeholder="true">'
+  html+='<button class="config-btn" onclick="guardarConfig(\'envio_activo\')">Guardar</button>'
+  html+='</div>'
+  html+='</div>'
+  html+='</div>'
+  
+  if(LOGS.length){
+    html+='<div class="sec">'
+    html+='<div class="sec-tit">📜 Últimos envíos</div>'
+    LOGS.forEach(function(l){
+      var fecha=new Date(l.enviado_at).toLocaleString('es-CL',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})
+      var status=l.error?'err':'ok'
+      var statusTxt=l.error?'ERROR':'OK'
+      var preview=(l.error||l.mensaje||'').substring(0,80)
+      html+='<div class="log-item">'
+      html+='<span class="log-fecha">'+fecha+'</span>'
+      html+='<span class="log-msg">'+preview+'</span>'
+      html+='<span class="log-status '+status+'">'+statusTxt+'</span>'
+      html+='</div>'
+    })
+    html+='</div>'
+  }
+  
+  html+='<div class="setup">'
+  html+='<div class="setup-tit">🤖 Cómo configurar el webhook Make.com</div>'
+  html+='<div class="paso"><div class="paso-num">1</div><div class="paso-txt">Entra a <b>Make.com</b> y crea un nuevo escenario.</div></div>'
+  html+='<div class="paso"><div class="paso-num">2</div><div class="paso-txt">Primer módulo: <b>Webhooks → Custom webhook</b>. Se generará una URL, copiala.</div></div>'
+  html+='<div class="paso"><div class="paso-num">3</div><div class="paso-txt">Pega esa URL arriba en <b>Webhook Make.com</b> y guarda.</div></div>'
+  html+='<div class="paso"><div class="paso-num">4</div><div class="paso-txt">En Make: <b>segundo módulo</b> → tu app de WhatsApp (WhatsApp Business Cloud, Twilio, Whapi, etc). Configura para enviar el mensaje a <code>{{destinatario}}</code> con contenido <code>{{mensaje}}</code>.</div></div>'
+  html+='<div class="paso"><div class="paso-num">5</div><div class="paso-txt">Activa el escenario en Make y toca <b>"Enviar prueba ahora"</b> arriba para verificar.</div></div>'
+  html+='<div class="paso"><div class="paso-num">6</div><div class="paso-txt"><b>Listo!</b> Todos los días a las 09:00 hora Chile llegará el resumen automático a tu WhatsApp.</div></div>'
+  html+='</div>'
+  
+  document.getElementById('cont').innerHTML=html
+}
+
+cargar()
+</script>
+
+</body>
+</html>

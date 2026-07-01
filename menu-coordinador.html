@@ -63,6 +63,9 @@ if (!sessionStorage.getItem("coord_auth")) { location.href = "login-coordinador.
   <div class="greeting">Panel <em>Coordinador</em></div>
   <div class="sub" id="fecha">—</div>
 
+  <!-- ============================ -->
+  <!-- 📅 AGENDA (SIEMPRE PRIMERO) -->
+  <!-- ============================ -->
   <div class="sec">📅 Agenda del día</div>
   <a class="card" href="agenda.html" style="background:linear-gradient(135deg,rgba(232,33,10,0.18),rgba(232,33,10,0.04));border:2px solid var(--rojo);box-shadow:0 4px 16px rgba(232,33,10,0.15)">
     <div class="ci" style="background:var(--rojo);color:#fff;font-size:22px">📅</div>
@@ -70,71 +73,38 @@ if (!sessionStorage.getItem("coord_auth")) { location.href = "login-coordinador.
     <span class="arr" style="color:var(--rojo)">›</span>
   </a>
 
-  <div class="sec">🔍 Revisión Pre-Compra <span style="font-size:10px;background:rgba(212,175,55,0.2);color:#D4AF37;padding:2px 6px;border-radius:4px;margin-left:6px;font-weight:700;letter-spacing:1px">NUEVO</span></div>
-  <a class="card" href="inspeccion-precompra-tecnico.html" style="background:linear-gradient(135deg,rgba(212,175,55,0.12),rgba(245,197,24,0.03));border:1px solid rgba(212,175,55,0.4)">
-    <div class="ci" style="background:linear-gradient(135deg,#D4AF37,#F5C518);color:#000;font-size:20px">🔧</div>
-    <div><div class="cn" style="color:#D4AF37">Iniciar inspección Pre-Compra</div><div class="cd">Camiones y maquinaria pesada · Checklist 200 puntos</div></div>
-    <span class="arr" style="color:#D4AF37">›</span>
+  <!-- ============================ -->
+  <!-- 🔥 OPERACIONES DIARIAS -->
+  <!-- ============================ -->
+  <div class="sec">🔥 Operaciones diarias</div>
+  <a class="card" href="presupuestos-coord.html">
+    <div class="ci" style="background:rgba(232,33,10,0.15);color:var(--rojo)">📋</div>
+    <div><div class="cn" style="color:var(--rojo)">Presupuestos recibidos <span style="font-size:9px;background:rgba(232,33,10,0.15);color:var(--rojo);padding:2px 6px;border-radius:4px;margin-left:4px;font-weight:700">109 activos</span></div><div class="cd">Valoriza trabajos y envía al cliente</div></div>
+    <span class="arr">›</span>
   </a>
-  <a class="card" href="revision-precompra-pesados.html" target="_blank" style="background:linear-gradient(135deg,rgba(96,165,250,0.08),rgba(167,139,250,0.02));border-color:rgba(96,165,250,0.3)">
-    <div class="ci" style="background:rgba(96,165,250,0.15);color:var(--azul);font-size:18px">🌐</div>
-    <div><div class="cn" style="color:var(--azul)">Landing Pre-Compra (pública)</div><div class="cd">Ver / compartir landing comercial con clientes</div></div>
+  <a class="card" href="servicios-coord.html">
+    <div class="ci" style="background:rgba(245,197,24,0.15);color:var(--amarillo)">⚡</div>
+    <div><div class="cn" style="color:var(--amarillo)">Gestión de servicios</div><div class="cd">Aprobar, ejecutar y completar servicios activos</div></div>
+    <span class="arr">›</span>
+  </a>
+  <a class="card" href="gastos-coord.html">
+    <div class="ci" style="background:rgba(232,33,10,0.08);color:var(--rojo)">💸</div>
+    <div><div class="cn" style="color:var(--rojo)">Control de gastos <span style="font-size:9px;background:rgba(232,33,10,0.15);color:var(--rojo);padding:2px 6px;border-radius:4px;margin-left:4px;font-weight:700">51 reg</span></div><div class="cd">Boletas, facturas, sueldos y costos fijos</div></div>
+    <span class="arr">›</span>
+  </a>
+  <a class="card" href="inspecciones-coord.html">
+    <div class="ci" style="background:rgba(34,197,94,0.1);color:var(--verde)">🔍</div>
+    <div><div class="cn" style="color:var(--verde)">Inspecciones <span style="font-size:9px;background:rgba(34,197,94,0.15);color:var(--verde);padding:2px 6px;border-radius:4px;margin-left:4px;font-weight:700">16 reg</span></div><div class="cd">Historial de inspecciones por técnico y cliente</div></div>
     <span class="arr">›</span>
   </a>
 
-  <div class="sec">Marketing y ventas</div>
-  <a class="card" href="servicios-publicos.html" style="background:linear-gradient(135deg,rgba(96,165,250,0.15),rgba(167,139,250,0.05));border-color:rgba(96,165,250,0.4)">
-    <div class="ci" style="background:linear-gradient(135deg,#60A5FA,#A78BFA);color:#000">🌐</div>
-    <div><div class="cn" style="color:#60A5FA">Servicios Públicos</div><div class="cd">Landings SEO para compartir con clientes</div></div>
-    <span class="arr">›</span>
-  </a>
-
-  <div class="sec">GPS y monitoreo</div>
-  <a class="card" href="mapa-tecnicos.html">
-    <div class="ci" style="background:rgba(34,197,94,0.1)">📍</div>
-    <div><div class="cn" style="color:var(--verde)">Mapa de técnicos</div><div class="cd">Ubicación en tiempo real · actualiza cada 30 seg</div></div>
-    <span class="arr">›</span>
-  </a>
-
-  <a class="card" href="diagnosticos-coord.html">
-    <div class="ci" style="background:rgba(251,146,60,0.1)">🔍</div>
-    <div><div class="cn" style="color:var(--naranja)">Diagnosticos</div><div class="cd">Revisa y gestiona diagnosticos de los tecnicos</div></div>
-    <span class="arr">›</span>
-  </a>
-
-  <div class="sec">Base de datos</div>
-  <a class="card" href="clientes.html">
-    <div class="ci" style="background:rgba(96,165,250,0.1)">👥</div>
-    <div><div class="cn" style="color:var(--azul)">Clientes y vehiculos</div><div class="cd">Historial y registro de clientes atendidos</div></div>
-    <span class="arr">›</span>
-  </a>
-  <a class="card" href="proveedores.html">
-    <div class="ci" style="background:rgba(34,197,94,0.1)">🏭</div>
-    <div><div class="cn" style="color:var(--verde)">Proveedores</div><div class="cd">Registro de proveedores y productos que compramos</div></div>
-    <span class="arr">›</span>
-  </a>
-
-  <div class="sec">Equipo</div>
-  <a class="card" href="simulador-tecnicos.html" style="background:linear-gradient(135deg,rgba(245,197,24,0.12),rgba(232,33,10,0.04));border-color:rgba(245,197,24,0.3)">
-    <div class="ci" style="background:linear-gradient(135deg,#F5C518,#FB923C);color:#000">🎯</div>
-    <div><div class="cn" style="color:#F5C518">Simulador Diagnóstico</div><div class="cd">Crea pruebas con fallas inducidas para evaluar conocimiento técnico</div></div>
-    <span class="arr">›</span>
-  </a>
-  <a class="card" href="ficha-tecnico.html">
-    <div class="ci" style="background:rgba(34,197,94,0.1)">🪛</div>
-    <div><div class="cn" style="color:var(--verde)">Ficha incorporacion tecnico</div><div class="cd">Formulario para postulacion de nuevos tecnicos</div></div>
-    <span class="arr">›</span>
-  </a>
-  <a class="card" href="postulaciones-coord.html">
-    <div class="ci" style="background:rgba(96,165,250,0.1)">📋</div>
-    <div><div class="cn" style="color:var(--azul)">Postulaciones recibidas</div><div class="cd">Revisar y gestionar fichas de tecnicos</div></div>
-    <span class="arr">›</span>
-  </a>
-
-  <div class="sec">Control</div>
-  <a class="card" href="panel-informes-pre-rt.html" style="background:linear-gradient(135deg,rgba(251,146,60,0.12),rgba(232,33,10,0.04));border-color:rgba(251,146,60,0.3)">
-    <div class="ci" style="background:linear-gradient(135deg,#FB923C,#E8210A);color:#fff">🚛</div>
-    <div><div class="cn" style="color:#FB923C">Informes Pre-RT Camión</div><div class="cd">Seguimiento de informes y conversión a venta</div></div>
+  <!-- ============================ -->
+  <!-- 🤖 AGENTES IA -->
+  <!-- ============================ -->
+  <div class="sec">🤖 Agentes IA</div>
+  <a class="card" href="agente-coordinador.html" style="background:linear-gradient(135deg,rgba(167,139,250,0.12),rgba(167,139,250,0.04));border-color:rgba(167,139,250,0.3)">
+    <div class="ci" style="background:linear-gradient(135deg,#A78BFA,#60A5FA);color:#000">🤖</div>
+    <div><div class="cn" style="color:#A78BFA">Agente Coordinador IA</div><div class="cd">Asignación inteligente, alertas y chat con IA · 19 tools</div></div>
     <span class="arr">›</span>
   </a>
   <a class="card" href="agente-captador.html" style="background:linear-gradient(135deg,rgba(34,197,94,0.12),rgba(96,165,250,0.04));border-color:rgba(34,197,94,0.3)">
@@ -142,31 +112,14 @@ if (!sessionStorage.getItem("coord_auth")) { location.href = "login-coordinador.
     <div><div class="cn" style="color:#22C55E">Agente Captador IA</div><div class="cd">Recibe leads Meta/Google, califica y agenda</div></div>
     <span class="arr">›</span>
   </a>
-  <a class="card" href="agente-coordinador.html" style="background:linear-gradient(135deg,rgba(167,139,250,0.12),rgba(167,139,250,0.04));border-color:rgba(167,139,250,0.3)">
-    <div class="ci" style="background:linear-gradient(135deg,#A78BFA,#60A5FA);color:#000">🤖</div>
-    <div><div class="cn" style="color:#A78BFA">Agente Coordinador IA</div><div class="cd">Asignación inteligente, alertas y chat con IA</div></div>
-    <span class="arr">›</span>
-  </a>
-  <a class="card" href="central-diagnostico.html" style="background:linear-gradient(135deg,rgba(232,33,10,0.12),rgba(232,33,10,0.04));border-color:rgba(232,33,10,0.3)">
-    <div class="ci" style="background:var(--rojo);color:#fff">🔧</div>
-    <div><div class="cn" style="color:var(--rojo)">Central de Diagnóstico <span style="font-size:9px;background:var(--c3);padding:2px 6px;border-radius:4px;color:var(--txt3);margin-left:4px;font-weight:600">Supervisión</span></div><div class="cd">Protocolos técnicos, fallas y diagnósticos del equipo</div></div>
-    <span class="arr">›</span>
-  </a>
-  <a class="card" href="monitor-operaciones.html">
-    <div class="ci" style="background:rgba(34,197,94,0.1)">📡</div>
-    <div><div class="cn" style="color:var(--verde)">Monitor de operaciones</div><div class="cd">Técnicos activos, alertas y tiempos en tiempo real</div></div>
-    <span class="arr">›</span>
-  </a>
+
+  <!-- ============================ -->
+  <!-- 📊 CONTROL Y ADMINISTRACIÓN -->
+  <!-- ============================ -->
+  <div class="sec">📊 Control y administración</div>
   <a class="card" href="resumen-diario.html">
     <div class="ci" style="background:rgba(96,165,250,0.1)">📊</div>
     <div><div class="cn" style="color:var(--azul)">Resumen diario</div><div class="cd">Ingresos, gastos, margen y resumen con IA</div></div>
-    <span class="arr">›</span>
-  </a>
-
-  <div class="sec">Administración</div>
-  <a class="card" href="gastos-coord.html">
-    <div class="ci" style="background:rgba(232,33,10,0.08)">💸</div>
-    <div><div class="cn" style="color:var(--rojo)">Control de gastos</div><div class="cd">Boletas, facturas, sueldos y costos fijos</div></div>
     <span class="arr">›</span>
   </a>
   <a class="card" href="admin.html">
@@ -174,42 +127,104 @@ if (!sessionStorage.getItem("coord_auth")) { location.href = "login-coordinador.
     <div><div class="cn" style="color:var(--rojo)">Panel de administración</div><div class="cd">Ingresos totales y por técnico · servicios</div></div>
     <span class="arr">›</span>
   </a>
+  <a class="card" href="monitor-operaciones.html">
+    <div class="ci" style="background:rgba(34,197,94,0.1)">📡</div>
+    <div><div class="cn" style="color:var(--verde)">Monitor de operaciones</div><div class="cd">Técnicos activos, alertas y tiempos en tiempo real</div></div>
+    <span class="arr">›</span>
+  </a>
+  <a class="card" href="mapa-tecnicos.html">
+    <div class="ci" style="background:rgba(34,197,94,0.1)">📍</div>
+    <div><div class="cn" style="color:var(--verde)">Mapa de técnicos</div><div class="cd">Ubicación en tiempo real · actualiza cada 30 seg</div></div>
+    <span class="arr">›</span>
+  </a>
 
-  <div class="sec">Leads</div>
+  <!-- ============================ -->
+  <!-- 🎯 VENTAS Y CAPTACIÓN -->
+  <!-- ============================ -->
+  <div class="sec">🎯 Ventas y captación</div>
   <a class="card" href="leads.html">
     <div class="ci" style="background:rgba(251,146,60,0.1)">📥</div>
     <div><div class="cn" style="color:var(--naranja)">Leads recibidos</div><div class="cd">Registra, asigna y convierte leads de aliados</div></div>
     <span class="arr">›</span>
   </a>
+  <a class="card" href="panel-informes-pre-rt.html" style="background:linear-gradient(135deg,rgba(251,146,60,0.12),rgba(232,33,10,0.04));border-color:rgba(251,146,60,0.3)">
+    <div class="ci" style="background:linear-gradient(135deg,#FB923C,#E8210A);color:#fff">🚛</div>
+    <div><div class="cn" style="color:#FB923C">Informes Pre-RT Camión</div><div class="cd">Seguimiento de informes y conversión a venta</div></div>
+    <span class="arr">›</span>
+  </a>
+  <a class="card" href="inspeccion-precompra-tecnico.html" style="background:linear-gradient(135deg,rgba(212,175,55,0.12),rgba(245,197,24,0.03));border:1px solid rgba(212,175,55,0.4)">
+    <div class="ci" style="background:linear-gradient(135deg,#D4AF37,#F5C518);color:#000;font-size:20px">🔧</div>
+    <div><div class="cn" style="color:#D4AF37">Iniciar Revisión Pre-Compra <span style="font-size:9px;background:rgba(212,175,55,0.2);color:#D4AF37;padding:2px 6px;border-radius:4px;margin-left:4px;font-weight:700">NUEVO</span></div><div class="cd">Camiones y maquinaria pesada · Checklist 200 puntos</div></div>
+    <span class="arr" style="color:#D4AF37">›</span>
+  </a>
+  <a class="card" href="servicios-publicos.html" style="background:linear-gradient(135deg,rgba(96,165,250,0.15),rgba(167,139,250,0.05));border-color:rgba(96,165,250,0.4)">
+    <div class="ci" style="background:linear-gradient(135deg,#60A5FA,#A78BFA);color:#000">🌐</div>
+    <div><div class="cn" style="color:#60A5FA">Servicios Públicos</div><div class="cd">Landings SEO para compartir con clientes</div></div>
+    <span class="arr">›</span>
+  </a>
+  <a class="card" href="revision-precompra-pesados.html" target="_blank" style="background:linear-gradient(135deg,rgba(96,165,250,0.08),rgba(167,139,250,0.02));border-color:rgba(96,165,250,0.3)">
+    <div class="ci" style="background:rgba(96,165,250,0.15);color:var(--azul);font-size:18px">🚚</div>
+    <div><div class="cn" style="color:var(--azul)">Landing Pre-Compra (pública)</div><div class="cd">Ver / compartir landing comercial con clientes</div></div>
+    <span class="arr">›</span>
+  </a>
+  <a class="card" href="remarketing.html">
+    <div class="ci" style="background:rgba(167,139,250,0.1)">🏷️</div>
+    <div><div class="cn" style="color:#A78BFA">Remarketing</div><div class="cd">Clientes por etiqueta — envío masivo WhatsApp</div></div>
+    <span class="arr">›</span>
+  </a>
 
-  <div class="sec">Presupuestos e Inspecciones</div>
-  <a class="card" href="inspecciones-coord.html">
-    <div class="ci" style="background:rgba(34,197,94,0.1)">🔍</div>
-    <div><div class="cn" style="color:var(--verde)">Inspecciones</div><div class="cd">Historial de inspecciones por técnico y cliente</div></div>
+  <!-- ============================ -->
+  <!-- 🔧 TÉCNICO Y DIAGNÓSTICO -->
+  <!-- ============================ -->
+  <div class="sec">🔧 Técnico y diagnóstico</div>
+  <a class="card" href="diagnosticos-coord.html">
+    <div class="ci" style="background:rgba(251,146,60,0.1)">🔎</div>
+    <div><div class="cn" style="color:var(--naranja)">Diagnósticos</div><div class="cd">Revisa y gestiona diagnósticos de los técnicos</div></div>
     <span class="arr">›</span>
   </a>
-  <a class="card" href="presupuestos-coord.html">
-    <div class="ci" style="background:rgba(232,33,10,0.08)">📋</div>
-    <div><div class="cn" style="color:var(--rojo)">Presupuestos recibidos</div><div class="cd">Valoriza trabajos y envía al cliente</div></div>
+  <a class="card" href="central-diagnostico.html" style="background:linear-gradient(135deg,rgba(232,33,10,0.12),rgba(232,33,10,0.04));border-color:rgba(232,33,10,0.3)">
+    <div class="ci" style="background:var(--rojo);color:#fff">🔧</div>
+    <div><div class="cn" style="color:var(--rojo)">Central de Diagnóstico</div><div class="cd">Protocolos técnicos, fallas y diagnósticos del equipo</div></div>
+    <span class="arr">›</span>
+  </a>
+  <a class="card" href="login-tecnico.html">
+    <div class="ci" style="background:rgba(96,165,250,0.1)">📱</div>
+    <div><div class="cn" style="color:var(--azul)">App técnico (probar)</div><div class="cd">Presupuestos, inspección y stock — vista del técnico</div></div>
     <span class="arr">›</span>
   </a>
 
-  <div class="sec">Servicios</div>
-  <a class="card" href="servicios-coord.html">
-    <div class="ci" style="background:rgba(245,197,24,0.08)">⚡</div>
-    <div><div class="cn" style="color:var(--amarillo)">Gestión de servicios</div><div class="cd">Aprobar, ejecutar y completar servicios</div></div>
+  <!-- ============================ -->
+  <!-- 👥 EQUIPO Y RRHH -->
+  <!-- ============================ -->
+  <div class="sec">👥 Equipo y RRHH</div>
+  <a class="card" href="desempeno-coord.html">
+    <div class="ci" style="background:rgba(167,139,250,0.1)">📊</div>
+    <div><div class="cn" style="color:#A78BFA">Desempeño del equipo</div><div class="cd">Ranking técnicos, evaluaciones y aliados</div></div>
+    <span class="arr">›</span>
+  </a>
+  <a class="card" href="postulaciones-coord.html">
+    <div class="ci" style="background:rgba(96,165,250,0.1)">📋</div>
+    <div><div class="cn" style="color:var(--azul)">Postulaciones recibidas</div><div class="cd">Revisar y gestionar fichas de técnicos</div></div>
+    <span class="arr">›</span>
+  </a>
+  <a class="card" href="simulador-tecnicos.html" style="background:linear-gradient(135deg,rgba(245,197,24,0.12),rgba(232,33,10,0.04));border-color:rgba(245,197,24,0.3)">
+    <div class="ci" style="background:linear-gradient(135deg,#F5C518,#FB923C);color:#000">🎯</div>
+    <div><div class="cn" style="color:#F5C518">Simulador Diagnóstico</div><div class="cd">Crea pruebas con fallas inducidas para evaluar</div></div>
+    <span class="arr">›</span>
+  </a>
+  <a class="card" href="ficha-tecnico.html">
+    <div class="ci" style="background:rgba(34,197,94,0.1)">🪛</div>
+    <div><div class="cn" style="color:var(--verde)">Ficha incorporación técnico</div><div class="cd">Formulario para postulación de nuevos técnicos</div></div>
     <span class="arr">›</span>
   </a>
 
-  <div class="sec">Aliados</div>
-  <a class="card" href="beneficios-aliados.html">
-    <div class="ci" style="background:rgba(167,139,250,0.1)">🏆</div>
-    <div><div class="cn" style="color:var(--morado,#A78BFA)">Programa de beneficios</div><div class="cd">Niveles, comisiones y premios por referidos</div></div>
-    <span class="arr">›</span>
-  </a>
+  <!-- ============================ -->
+  <!-- 🤝 ALIADOS -->
+  <!-- ============================ -->
+  <div class="sec">🤝 Aliados</div>
   <a class="card" href="aliados-admin.html">
     <div class="ci" style="background:rgba(34,197,94,0.1)">➕</div>
-    <div><div class="cn" style="color:var(--verde)">Gestionar aliados</div><div class="cd">Crear, editar y enviar credenciales</div></div>
+    <div><div class="cn" style="color:var(--verde)">Gestionar aliados <span style="font-size:9px;background:rgba(34,197,94,0.15);color:var(--verde);padding:2px 6px;border-radius:4px;margin-left:4px;font-weight:700">17 activos</span></div><div class="cd">Crear, editar y enviar credenciales</div></div>
     <span class="arr">›</span>
   </a>
   <a class="card" href="pagos-coord.html">
@@ -217,30 +232,29 @@ if (!sessionStorage.getItem("coord_auth")) { location.href = "login-coordinador.
     <div><div class="cn" style="color:var(--amarillo)">Pagos a aliados</div><div class="cd">Comisiones pendientes y procesamiento</div></div>
     <span class="arr">›</span>
   </a>
+  <a class="card" href="beneficios-aliados.html">
+    <div class="ci" style="background:rgba(167,139,250,0.1)">🏆</div>
+    <div><div class="cn" style="color:#A78BFA">Programa de beneficios</div><div class="cd">Niveles, comisiones y premios por referidos</div></div>
+    <span class="arr">›</span>
+  </a>
   <a class="card" href="aliados-v2.html">
     <div class="ci" style="background:rgba(34,197,94,0.1)">🤝</div>
-    <div><div class="cn" style="color:var(--verde)">Portal aliados</div><div class="cd">Ver comisiones y referidos</div></div>
+    <div><div class="cn" style="color:var(--verde)">Portal aliados (vista aliado)</div><div class="cd">Ver comisiones y referidos</div></div>
     <span class="arr">›</span>
   </a>
 
-  <div class="sec">Equipo</div>
-  <a class="card" href="desempeno-coord.html">
-    <div class="ci" style="background:rgba(167,139,250,0.1)">📊</div>
-    <div><div class="cn" style="color:#A78BFA">Desempeño del equipo</div><div class="cd">Ranking técnicos, evaluaciones y aliados</div></div>
+  <!-- ============================ -->
+  <!-- 📁 BASE DE DATOS -->
+  <!-- ============================ -->
+  <div class="sec">📁 Base de datos</div>
+  <a class="card" href="clientes.html">
+    <div class="ci" style="background:rgba(96,165,250,0.1)">👥</div>
+    <div><div class="cn" style="color:var(--azul)">Clientes y vehículos</div><div class="cd">Historial y registro de clientes atendidos</div></div>
     <span class="arr">›</span>
   </a>
-
-  <div class="sec">Marketing</div>
-  <a class="card" href="remarketing.html">
-    <div class="ci" style="background:rgba(167,139,250,0.1)">🏷️</div>
-    <div><div class="cn" style="color:#A78BFA">Remarketing</div><div class="cd">Clientes por etiqueta — envío masivo WhatsApp</div></div>
-    <span class="arr">›</span>
-  </a>
-
-  <div class="sec">Técnicos</div>
-  <a class="card" href="login-tecnico.html">
-    <div class="ci" style="background:rgba(96,165,250,0.1)">🔧</div>
-    <div><div class="cn" style="color:var(--azul)">App técnico</div><div class="cd">Presupuestos, inspección y stock</div></div>
+  <a class="card" href="proveedores.html">
+    <div class="ci" style="background:rgba(34,197,94,0.1)">🏭</div>
+    <div><div class="cn" style="color:var(--verde)">Proveedores</div><div class="cd">Registro de proveedores y productos</div></div>
     <span class="arr">›</span>
   </a>
 

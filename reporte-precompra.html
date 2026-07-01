@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reporte de Inspección Pre-Compra · Serviruta</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0A0D;--s1:#111114;--s2:#16161B;--s3:#1C1C23;--line:#26262E;--rojo:#E8210A;--rojo-l:#FF4D2E;--verde:#22C55E;--amarillo:#F5C518;--naranja:#FB923C;--azul:#60A5FA;--morado:#A78BFA;--dorado:#D4AF37;--t1:#F6F4EF;--t2:#C7C5BF;--t3:#8B8990;--t4:#56555C;--display:'Syne',sans-serif;--body:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--t2);font-family:var(--body);font-size:14px;line-height:1.6}
+.container{max-width:900px;margin:0 auto;padding:0 20px}
+a{color:var(--rojo-l);text-decoration:none}
+
+.bar{background:var(--s1);border-bottom:1px solid var(--line);padding:14px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:50;backdrop-filter:blur(16px)}
+.sigil{width:36px;height:36px;background:var(--rojo);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:16px;color:#fff}
+.logo{font-family:var(--display);font-weight:800;font-size:16px;color:var(--t1);flex:1}
+.print-btn{background:var(--s3);border:1px solid var(--line);color:var(--t2);padding:8px 14px;border-radius:8px;font-size:12px;cursor:pointer}
+
+.hero{padding:40px 0 30px;text-align:center;background:radial-gradient(circle at 50% 0%,rgba(232,33,10,0.08),transparent 50%)}
+.codigo{font-family:var(--mono);font-size:11px;color:var(--t3);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:10px}
+.hero h1{font-family:var(--display);font-weight:900;font-size:clamp(28px,5vw,44px);color:var(--t1);line-height:1.1;margin-bottom:8px;letter-spacing:-1px}
+.hero .sub{font-size:15px;color:var(--t2);max-width:600px;margin:0 auto}
+
+.card{background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:24px;margin-bottom:16px}
+.card-tit{font-family:var(--display);font-weight:800;font-size:16px;color:var(--t1);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.card-tit::before{content:"";width:4px;height:20px;background:var(--rojo);border-radius:2px}
+
+/* Score visual */
+.score-hero{background:linear-gradient(180deg,var(--s2),var(--s1));border:2px solid var(--line);border-radius:16px;padding:30px;text-align:center;margin-bottom:16px;position:relative;overflow:hidden}
+.score-hero.excelente{border-color:var(--verde);background:linear-gradient(180deg,rgba(34,197,94,0.1),var(--s1))}
+.score-hero.regular{border-color:var(--amarillo);background:linear-gradient(180deg,rgba(245,197,24,0.1),var(--s1))}
+.score-hero.malo{border-color:var(--rojo);background:linear-gradient(180deg,rgba(232,33,10,0.1),var(--s1))}
+.score-num{font-family:var(--display);font-weight:900;font-size:96px;line-height:1;letter-spacing:-3px}
+.score-hero.excelente .score-num{color:var(--verde)}
+.score-hero.regular .score-num{color:var(--amarillo)}
+.score-hero.malo .score-num{color:var(--rojo)}
+.score-lbl{font-family:var(--mono);font-size:11px;color:var(--t3);letter-spacing:0.15em;margin-top:5px;text-transform:uppercase}
+.score-hero .rec{font-family:var(--display);font-weight:800;font-size:20px;color:var(--t1);margin-top:16px}
+.score-hero .rec-desc{font-size:13px;color:var(--t2);margin-top:6px;max-width:500px;margin-left:auto;margin-right:auto}
+
+/* Datos */
+.datos-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.dato{padding:12px;background:var(--s2);border-radius:8px}
+.dato-lbl{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px}
+.dato-val{font-family:var(--display);font-weight:700;font-size:14px;color:var(--t1)}
+
+/* Resumen barras */
+.resumen-barra{display:grid;grid-template-columns:100px 1fr auto;gap:12px;align-items:center;padding:10px 0;border-bottom:1px dashed var(--line)}
+.resumen-barra:last-child{border:none}
+.resumen-lbl{font-family:var(--display);font-weight:700;font-size:13px}
+.resumen-lbl.ok{color:var(--verde)}
+.resumen-lbl.warn{color:var(--amarillo)}
+.resumen-lbl.err{color:var(--rojo-l)}
+.resumen-lbl.na{color:var(--t3)}
+.barra-viz{background:var(--s3);height:22px;border-radius:6px;overflow:hidden}
+.barra-viz-fill{height:100%;border-radius:6px;transition:width 500ms}
+.barra-viz-fill.ok{background:var(--verde)}
+.barra-viz-fill.warn{background:var(--amarillo)}
+.barra-viz-fill.err{background:var(--rojo)}
+.barra-viz-fill.na{background:var(--t4)}
+.resumen-num{font-family:var(--mono);font-weight:700;font-size:14px;color:var(--t1)}
+
+/* Valorización */
+.valor-box{background:linear-gradient(135deg,rgba(232,33,10,0.12),rgba(251,146,60,0.05));border:1px solid rgba(232,33,10,0.3);border-radius:14px;padding:22px;text-align:center;margin-top:12px}
+.valor-num{font-family:var(--display);font-weight:900;font-size:36px;color:var(--rojo-l);letter-spacing:-1px}
+.valor-desc{font-size:13px;color:var(--t2);margin-top:6px}
+
+/* Categorías */
+.cat-box{background:var(--s2);border-radius:12px;overflow:hidden;margin-bottom:10px;border:1px solid var(--line)}
+.cat-head{padding:14px 18px;display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none}
+.cat-head:hover{background:var(--s3)}
+.cat-num{width:28px;height:28px;background:var(--rojo);color:#fff;border-radius:6px;font-family:var(--display);font-weight:800;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.cat-nom{flex:1;font-family:var(--display);font-weight:700;font-size:14px;color:var(--t1)}
+.cat-est{display:flex;gap:6px;font-family:var(--mono);font-size:10px;font-weight:700}
+.cat-est span{padding:3px 8px;border-radius:999px;letter-spacing:0.05em}
+.cat-est .e-ok{background:rgba(34,197,94,0.15);color:var(--verde)}
+.cat-est .e-warn{background:rgba(245,197,24,0.15);color:var(--amarillo)}
+.cat-est .e-err{background:rgba(232,33,10,0.15);color:var(--rojo-l)}
+.cat-arrow{color:var(--t3);transition:transform 200ms}
+.cat-box.open .cat-arrow{transform:rotate(180deg)}
+.cat-body{max-height:0;overflow:hidden;transition:max-height 500ms;background:var(--s1)}
+.cat-box.open .cat-body{max-height:none;padding:12px 18px 18px}
+
+.pto{padding:10px 0;border-bottom:1px dashed var(--line);display:grid;grid-template-columns:24px 1fr auto;gap:10px;align-items:center}
+.pto:last-child{border:none}
+.pto-icono{font-size:16px;display:flex;align-items:center;justify-content:center}
+.pto-icono.ok{color:var(--verde)}
+.pto-icono.warn{color:var(--amarillo)}
+.pto-icono.err{color:var(--rojo-l)}
+.pto-icono.na{color:var(--t3)}
+.pto-nom{font-size:13px;color:var(--t1);line-height:1.3}
+.pto-nom small{display:block;color:var(--t3);font-size:11px;margin-top:2px}
+.pto-est{font-family:var(--mono);font-size:9px;padding:3px 8px;border-radius:999px;letter-spacing:0.05em;font-weight:700}
+.pto-est.ok{background:rgba(34,197,94,0.15);color:var(--verde)}
+.pto-est.warn{background:rgba(245,197,24,0.15);color:var(--amarillo)}
+.pto-est.err{background:rgba(232,33,10,0.15);color:var(--rojo-l)}
+.pto-est.na{background:var(--s3);color:var(--t3)}
+.pto-nota{grid-column:2/-1;background:var(--s2);border-radius:6px;padding:8px 10px;font-size:12px;color:var(--t2);margin-top:6px;font-style:italic;border-left:2px solid var(--morado)}
+.pto-fotos{grid-column:2/-1;display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.pto-foto{width:80px;height:80px;border-radius:6px;object-fit:cover;cursor:pointer;border:1px solid var(--line)}
+
+/* CTA final */
+.cta-final{background:linear-gradient(135deg,rgba(232,33,10,0.15),rgba(251,146,60,0.05));border:2px solid var(--rojo);border-radius:16px;padding:30px;text-align:center;margin:20px 0}
+.cta-final h3{font-family:var(--display);font-weight:800;font-size:20px;color:var(--t1);margin-bottom:8px}
+.cta-final p{color:var(--t2);margin-bottom:16px;max-width:500px;margin-left:auto;margin-right:auto}
+.btn-wa{background:#25D366;color:#fff;padding:14px 24px;border-radius:10px;font-family:var(--display);font-weight:800;font-size:14px;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+
+.foot{padding:30px 20px;text-align:center;font-size:11px;color:var(--t4);border-top:1px solid var(--line);margin-top:30px}
+.foot .brand{font-family:var(--display);font-weight:800;font-size:14px;color:var(--t2);margin-bottom:6px}
+.foot .brand span{color:var(--rojo)}
+
+.loading{text-align:center;padding:60px 20px;color:var(--t3)}
+.error{background:rgba(232,33,10,0.1);border:1px solid var(--rojo);border-radius:12px;padding:20px;color:var(--rojo-l);text-align:center}
+
+@media print{
+  body{background:#fff;color:#000}
+  .bar,.print-btn,.cta-final{display:none}
+  .card{background:#fff;border:1px solid #ccc;page-break-inside:avoid}
+  .cat-body{max-height:none;padding:12px 18px 18px}
+  .cat-box{page-break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="sigil">S</div>
+  <div class="logo">SERVIRUTA · Reporte de Inspección</div>
+  <button class="print-btn" onclick="window.print()">🖨️ Imprimir/PDF</button>
+</header>
+
+<div class="container" id="cont">
+  <div class="loading">Cargando reporte...</div>
+</div>
+
+<script>
+var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+
+var CATALOGO=[
+  {num:'01',nombre:'Motor y Combustión',icon:'🔧',puntos:[
+    {id:'m01',nombre:'Ruido de motor en ralentí'},{id:'m02',nombre:'Vibraciones anormales'},{id:'m03',nombre:'Humo del tubo escape'},{id:'m04',nombre:'Nivel de aceite motor'},{id:'m05',nombre:'Estado del aceite'},{id:'m06',nombre:'Fugas de aceite'},{id:'m07',nombre:'Fugas de refrigerante'},{id:'m08',nombre:'Temperatura operación'},{id:'m09',nombre:'Estado de correas'},{id:'m10',nombre:'Poleas y tensores'},{id:'m11',nombre:'Estado del turbo'},{id:'m12',nombre:'Intercooler y mangueras'},{id:'m13',nombre:'Compresión de cilindros'},{id:'m14',nombre:'Presión de aceite bajo carga'},{id:'m15',nombre:'Estado del EGR'},{id:'m16',nombre:'Estado del DPF'},{id:'m17',nombre:'Regeneración DPF funcional'},{id:'m18',nombre:'Análisis aceite laboratorio'},{id:'m19',nombre:'Prueba de blow-by'},{id:'m20',nombre:'Alineación cigüeñal'},{id:'m21',nombre:'Estado inyectores'},{id:'m22',nombre:'Escáner específico marca'}
+  ]},
+  {num:'02',nombre:'Combustible y Common Rail',icon:'⛽',puntos:[
+    {id:'c01',nombre:'Estanque sin corrosión'},{id:'c02',nombre:'Filtro de combustible'},{id:'c03',nombre:'Fugas líneas'},{id:'c04',nombre:'Bomba de alimentación'},{id:'c05',nombre:'Separador de agua'},{id:'c06',nombre:'Presión riel común'},{id:'c07',nombre:'Inyectores (goteo)'},{id:'c08',nombre:'Retorno inyectores'},{id:'c09',nombre:'Bomba de alta presión'},{id:'c10',nombre:'Sensor de flujo MAF/MAP'},{id:'c11',nombre:'Válvulas SCV/PCV'},{id:'c12',nombre:'Análisis combustible'},{id:'c13',nombre:'Sistema AdBlue/DEF'},{id:'c14',nombre:'Codificación inyectores'},{id:'c15',nombre:'Historial reprogramaciones'}
+  ]},
+  {num:'03',nombre:'Sistema de Refrigeración',icon:'🌡️',puntos:[
+    {id:'r01',nombre:'Nivel refrigerante'},{id:'r02',nombre:'Estado radiador'},{id:'r03',nombre:'Mangueras superiores'},{id:'r04',nombre:'Mangueras inferiores'},{id:'r05',nombre:'Tapa radiador'},{id:'r06',nombre:'Ventilador viscoso'},{id:'r07',nombre:'Bomba de agua'},{id:'r08',nombre:'Termostato funcional'},{id:'r09',nombre:'Refrigerante aceite motor'},{id:'r10',nombre:'Refrigerante aceite transmisión'},{id:'r11',nombre:'Análisis refrigerante'},{id:'r12',nombre:'Sobrepresión sistema'}
+  ]},
+  {num:'04',nombre:'Transmisión y Embrague',icon:'⚙️',puntos:[
+    {id:'t01',nombre:'Nivel aceite transmisión'},{id:'t02',nombre:'Fugas transmisión'},{id:'t03',nombre:'Cambios sin problema'},{id:'t04',nombre:'Sincronizadores'},{id:'t05',nombre:'Embrague punto agarre'},{id:'t06',nombre:'Pedal embrague'},{id:'t07',nombre:'Volante bimasa'},{id:'t08',nombre:'Kit embrague'},{id:'t09',nombre:'Cilindro maestro/esclavo'},{id:'t10',nombre:'Aceite transmisión (visual)'},{id:'t11',nombre:'Retenedores transmisión'},{id:'t12',nombre:'I-Shift/AMT'},{id:'t13',nombre:'Historial reparaciones'},{id:'t14',nombre:'Análisis aceite lab'},{id:'t15',nombre:'Codificación ECU'},{id:'t16',nombre:'Cardán y cruceta'},{id:'t17',nombre:'Estado yugo'},{id:'t18',nombre:'Rodamientos de salida'}
+  ]},
+  {num:'05',nombre:'Diferencial y Ejes',icon:'🔩',puntos:[
+    {id:'d01',nombre:'Nivel aceite diferencial'},{id:'d02',nombre:'Fugas diferencial'},{id:'d03',nombre:'Ruido en marcha'},{id:'d04',nombre:'Semiejes sin holgura'},{id:'d05',nombre:'Retenedores'},{id:'d06',nombre:'Bloqueo diferencial'},{id:'d07',nombre:'Reducción hub'},{id:'d08',nombre:'Aceite reductor'},{id:'d09',nombre:'Corona y piñón'},{id:'d10',nombre:'Cojinetes ejes'},{id:'d11',nombre:'Análisis aceite lab'},{id:'d12',nombre:'Espesores ejes'},{id:'d13',nombre:'Historial mantención'},{id:'d14',nombre:'Balanceo ejes'}
+  ]},
+  {num:'06',nombre:'Suspensión y Dirección',icon:'🎯',puntos:[
+    {id:'s01',nombre:'Amortiguadores delanteros'},{id:'s02',nombre:'Amortiguadores traseros'},{id:'s03',nombre:'Resortes/paquetes'},{id:'s04',nombre:'Fuelles neumáticos'},{id:'s05',nombre:'Fugas suspensión'},{id:'s06',nombre:'Terminales dirección'},{id:'s07',nombre:'Barra estabilizadora'},{id:'s08',nombre:'Caja dirección (holgura)'},{id:'s09',nombre:'Bomba dirección'},{id:'s10',nombre:'Nivel aceite dirección'},{id:'s11',nombre:'Rodamientos delanteros'},{id:'s12',nombre:'Rodamientos traseros'},{id:'s13',nombre:'Válvulas nivel suspensión'},{id:'s14',nombre:'Compresor suspensión'},{id:'s15',nombre:'Alineación dirección'},{id:'s16',nombre:'Convergencia ruedas'},{id:'s17',nombre:'Historial ajustes'},{id:'s18',nombre:'Ángulo cámber'},{id:'s19',nombre:'Pines maestros'},{id:'s20',nombre:'Dinamómetro dirección'}
+  ]},
+  {num:'07',nombre:'Frenos (ABS/EBS)',icon:'🛑',puntos:[
+    {id:'f01',nombre:'Pedal freno (recorrido)'},{id:'f02',nombre:'Freno estacionamiento'},{id:'f03',nombre:'Discos delanteros'},{id:'f04',nombre:'Pastillas delanteras'},{id:'f05',nombre:'Tambores/discos traseros'},{id:'f06',nombre:'Pastillas/zapatas traseras'},{id:'f07',nombre:'Nivel líquido frenos'},{id:'f08',nombre:'Estado líquido frenos'},{id:'f09',nombre:'Mangueras/cañerías'},{id:'f10',nombre:'Fugas en circuito'},{id:'f11',nombre:'Válvula reguladora'},{id:'f12',nombre:'Bomba principal'},{id:'f13',nombre:'Cilindros neumáticos'},{id:'f14',nombre:'Válvula de pie'},{id:'f15',nombre:'Válvula de mano'},{id:'f16',nombre:'Sensores ABS'},{id:'f17',nombre:'Módulo ABS scanner'},{id:'f18',nombre:'Módulo EBS scanner'},{id:'f19',nombre:'Prueba de frenada'},{id:'f20',nombre:'Freno motor / retardador'},{id:'f21',nombre:'Sistema anti-arrastre'},{id:'f22',nombre:'Estabilidad dinámica'},{id:'f23',nombre:'Fuerza frenado por rueda'},{id:'f24',nombre:'Registro DTC frenos'}
+  ]},
+  {num:'08',nombre:'Sistema Eléctrico',icon:'⚡',puntos:[
+    {id:'e01',nombre:'Baterías (voltaje)'},{id:'e02',nombre:'Bornes y cables'},{id:'e03',nombre:'Alternador (carga)'},{id:'e04',nombre:'Motor arranque'},{id:'e05',nombre:'Luces bajas y altas'},{id:'e06',nombre:'Luces freno/direccional'},{id:'e07',nombre:'Balizas y perimetrales'},{id:'e08',nombre:'Luces cabina/tablero'},{id:'e09',nombre:'Audio y radio'},{id:'e10',nombre:'Aire acondicionado'},{id:'e11',nombre:'Tacógrafo'},{id:'e12',nombre:'Cableado bajo cabina'},{id:'e13',nombre:'Cableado bastidor'},{id:'e14',nombre:'Conectores'},{id:'e15',nombre:'Prueba carga alternador'},{id:'e16',nombre:'Fuga corriente'},{id:'e17',nombre:'Estado ECU motor'},{id:'e18',nombre:'Verificación km'}
+  ]},
+  {num:'09',nombre:'Sistema Neumático',icon:'💨',puntos:[
+    {id:'n01',nombre:'Compresor de aire'},{id:'n02',nombre:'Tiempo carga a 8-10 bar'},{id:'n03',nombre:'Fugas de aire'},{id:'n04',nombre:'Tanques principales'},{id:'n05',nombre:'Válvulas drenaje'},{id:'n06',nombre:'Secador aire'},{id:'n07',nombre:'Filtro coalescente'},{id:'n08',nombre:'Válvula 4 circuitos'},{id:'n09',nombre:'Regulador presión'},{id:'n10',nombre:'Mangueras'},{id:'n11',nombre:'Válvula relé'},{id:'n12',nombre:'Válvula ratio'},{id:'n13',nombre:'Prueba decaimiento'},{id:'n14',nombre:'Análisis manómetro digital'}
+  ]},
+  {num:'10',nombre:'Estructura y Chasis',icon:'🏗️',puntos:[
+    {id:'ch01',nombre:'Estado bastidor'},{id:'ch02',nombre:'Óxido/corrosión'},{id:'ch03',nombre:'Grietas/soldaduras'},{id:'ch04',nombre:'Estado cabina'},{id:'ch05',nombre:'Puertas y ventanas'},{id:'ch06',nombre:'Parabrisas'},{id:'ch07',nombre:'Espejos'},{id:'ch08',nombre:'Tapizado y asientos'},{id:'ch09',nombre:'Bisagras puertas'},{id:'ch10',nombre:'Piso cabina'},{id:'ch11',nombre:'Quinta rueda'},{id:'ch12',nombre:'Placa quinta rueda'},{id:'ch13',nombre:'Perno rey'},{id:'ch14',nombre:'Suspensión cabina'},{id:'ch15',nombre:'Chasis con reparaciones'},{id:'ch16',nombre:'Espesores estructurales'},{id:'ch17',nombre:'Chasis vs RNVM'},{id:'ch18',nombre:'Auditoría documental'}
+  ]},
+  {num:'11',nombre:'Sistema Hidráulico',icon:'🛢️',puntos:[
+    {id:'h01',nombre:'Nivel aceite hidráulico'},{id:'h02',nombre:'Estado del aceite'},{id:'h03',nombre:'Fugas'},{id:'h04',nombre:'Filtro hidráulico'},{id:'h05',nombre:'Mangueras'},{id:'h06',nombre:'Bomba hidráulica'},{id:'h07',nombre:'Cilindros elevación'},{id:'h08',nombre:'Válvulas control'},{id:'h09',nombre:'PTO'},{id:'h10',nombre:'Presión trabajo'},{id:'h11',nombre:'Retenedores cilindros'},{id:'h12',nombre:'Análisis aceite lab'},{id:'h13',nombre:'Contaminación ISO 4406'},{id:'h14',nombre:'Presión pico'},{id:'h15',nombre:'Auditoría horas'}
+  ]},
+  {num:'12',nombre:'Neumáticos y Prueba Ruta',icon:'🛞',puntos:[
+    {id:'p01',nombre:'Neumáticos dirección'},{id:'p02',nombre:'Neumáticos tracción'},{id:'p03',nombre:'Neumáticos ejes'},{id:'p04',nombre:'Presión neumáticos'},{id:'p05',nombre:'Desgaste irregular'},{id:'p06',nombre:'Llantas sin daño'},{id:'p07',nombre:'Prueba ruta (5-15 km)'},{id:'p08',nombre:'Comportamiento curvas'},{id:'p09',nombre:'Vibraciones alta velocidad'},{id:'p10',nombre:'Prueba con carga'},{id:'p11',nombre:'Prueba en pendiente'},{id:'p12',nombre:'DTC durante prueba'}
+  ]}
+]
+
+// Buscar punto por id
+function buscarPunto(id){
+  for(var i=0;i<CATALOGO.length;i++){
+    var p = CATALOGO[i].puntos.find(function(x){return x.id===id})
+    if(p) return {punto:p, categoria:CATALOGO[i]}
+  }
+  return null
+}
+
+async function cargar(){
+  var params = new URLSearchParams(window.location.search)
+  var id = params.get('id')
+  if(!id){
+    document.getElementById('cont').innerHTML = '<div class="error">❌ ID de reporte no especificado en URL</div>'
+    return
+  }
+  
+  try{
+    var resp = await fetch(SB_URL+'/rest/v1/inspecciones_precompra?id=eq.'+id, {
+      headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}
+    })
+    if(!resp.ok) throw new Error('HTTP '+resp.status)
+    var arr = await resp.json()
+    if(!arr || !arr.length) throw new Error('Reporte no encontrado')
+    render(arr[0])
+  }catch(e){
+    document.getElementById('cont').innerHTML = '<div class="error">❌ Error: '+e.message+'</div>'
+  }
+}
+
+function render(insp){
+  var checklist = insp.checklist || {}
+  var fotos = insp.fotos || []
+  
+  // Agrupar fotos por punto
+  var fotosPorPunto = {}
+  fotos.forEach(function(f){
+    if(!fotosPorPunto[f.punto_id]) fotosPorPunto[f.punto_id] = []
+    fotosPorPunto[f.punto_id].push(f)
+  })
+  
+  // Contar totales
+  var ok=0, warn=0, err=0, na=0, total=0
+  Object.keys(checklist).forEach(function(pid){
+    total++
+    var e = checklist[pid].estado
+    if(e==='ok') ok++
+    else if(e==='warn') warn++
+    else if(e==='err') err++
+    else if(e==='na') na++
+  })
+  
+  var score = insp.score_general || 0
+  var scoreClass = score >= 85 ? 'excelente' : (score >= 65 ? 'regular' : 'malo')
+  var scoreLbl = score >= 85 ? 'EXCELENTE' : (score >= 65 ? 'PRECAUCIÓN' : 'ALTO RIESGO')
+  var recTxt = {
+    'comprar': {tit:'✅ Recomendación: COMPRAR', desc:'El vehículo se encuentra en excelente estado técnico. No se detectaron alertas críticas que impidan la compra.'},
+    'comprar_con_negociacion': {tit:'⚠️ Recomendación: NEGOCIAR', desc:'Hay observaciones que requieren atención. Recomendamos negociar el precio considerando las reparaciones estimadas antes de cerrar la compra.'},
+    'no_comprar': {tit:'❌ Recomendación: NO COMPRAR', desc:'Se detectaron fallas críticas que hacen esta compra de alto riesgo. La inversión en reparaciones sería significativa.'}
+  }
+  var rec = recTxt[insp.recomendacion] || {tit:'Sin recomendación', desc:''}
+  
+  var html = ''
+  
+  // HERO
+  html += '<div class="hero">'
+  html += '<div class="codigo">Reporte '+(insp.codigo||insp.id.slice(0,8))+' · Plan '+(insp.plan||'').toUpperCase()+'</div>'
+  html += '<h1>'+(insp.marca||'Vehículo')+' '+(insp.modelo||'')+'</h1>'
+  html += '<div class="sub">Inspección pre-compra realizada por Serviruta</div>'
+  html += '</div>'
+  
+  // SCORE
+  html += '<div class="score-hero '+scoreClass+'">'
+  html += '<div class="score-num">'+score+'</div>'
+  html += '<div class="score-lbl">SCORE 0-100 · '+scoreLbl+'</div>'
+  html += '<div class="rec">'+rec.tit+'</div>'
+  html += '<div class="rec-desc">'+rec.desc+'</div>'
+  html += '</div>'
+  
+  // DATOS VEHÍCULO
+  html += '<div class="card">'
+  html += '<div class="card-tit">📋 Datos del vehículo</div>'
+  html += '<div class="datos-grid">'
+  var datos = [
+    ['Tipo', insp.vehiculo_tipo],
+    ['Marca', insp.marca],
+    ['Modelo', insp.modelo],
+    ['Año', insp.ano],
+    ['Patente', insp.patente],
+    ['KM', insp.km ? insp.km.toLocaleString('es-CL') : null],
+    ['VIN', insp.vin],
+    ['Ubicación', insp.ubicacion_revision],
+    ['Fecha inspección', insp.fecha_completado ? new Date(insp.fecha_completado).toLocaleDateString('es-CL') : null],
+    ['Técnico', insp.tecnico_asignado]
+  ]
+  datos.forEach(function(d){
+    if(d[1]){
+      html += '<div class="dato"><div class="dato-lbl">'+d[0]+'</div><div class="dato-val">'+d[1]+'</div></div>'
+    }
+  })
+  html += '</div></div>'
+  
+  // RESUMEN
+  html += '<div class="card">'
+  html += '<div class="card-tit">📊 Resumen general</div>'
+  html += renderBarra('ok', 'OK', ok, total)
+  html += renderBarra('warn', 'Atención', warn, total)
+  html += renderBarra('err', 'Urgente', err, total)
+  if(na>0) html += renderBarra('na', 'N/A', na, total)
+  html += '<div style="text-align:center;padding:12px 0;font-family:var(--display);font-weight:800;font-size:14px;color:var(--t2)">Total: '+total+' puntos revisados</div>'
+  
+  // Valorización
+  if(insp.valorizacion_reparaciones && insp.valorizacion_reparaciones>0){
+    html += '<div class="valor-box">'
+    html += '<div style="font-family:var(--mono);font-size:11px;color:var(--t3);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:8px">Valorización de reparaciones detectadas</div>'
+    html += '<div class="valor-num">$'+insp.valorizacion_reparaciones.toLocaleString('es-CL')+'</div>'
+    html += '<div class="valor-desc">Monto estimado para dejar el vehículo en óptimo estado</div>'
+    html += '</div>'
+  }
+  html += '</div>'
+  
+  // Observaciones
+  if(insp.observaciones_generales){
+    html += '<div class="card">'
+    html += '<div class="card-tit">📝 Observaciones del técnico</div>'
+    html += '<p style="color:var(--t1);white-space:pre-wrap">'+insp.observaciones_generales+'</p>'
+    html += '</div>'
+  }
+  
+  // CATEGORÍAS DETALLADAS
+  html += '<div class="card">'
+  html += '<div class="card-tit">🔍 Detalle por categoría</div>'
+  
+  CATALOGO.forEach(function(cat){
+    // Contar por categoría
+    var cOk=0, cWarn=0, cErr=0, cRev=0
+    cat.puntos.forEach(function(p){
+      var c = checklist[p.id]
+      if(c && c.estado){
+        cRev++
+        if(c.estado==='ok') cOk++
+        else if(c.estado==='warn') cWarn++
+        else if(c.estado==='err') cErr++
+      }
+    })
+    
+    if(cRev === 0) return // No revisado en este plan
+    
+    var openClass = cErr > 0 ? 'open' : '' // Abrir automáticamente si hay urgentes
+    
+    html += '<div class="cat-box '+openClass+'" id="cat-'+cat.num+'">'
+    html += '<div class="cat-head" onclick="this.parentElement.classList.toggle(\'open\')">'
+    html += '<div class="cat-num">'+cat.num+'</div>'
+    html += '<div class="cat-nom">'+cat.icon+' '+cat.nombre+'</div>'
+    html += '<div class="cat-est">'
+    if(cOk>0) html += '<span class="e-ok">'+cOk+'</span>'
+    if(cWarn>0) html += '<span class="e-warn">'+cWarn+'</span>'
+    if(cErr>0) html += '<span class="e-err">'+cErr+'</span>'
+    html += '</div>'
+    html += '<span class="cat-arrow">▼</span>'
+    html += '</div>'
+    html += '<div class="cat-body">'
+    
+    cat.puntos.forEach(function(p){
+      var c = checklist[p.id]
+      if(!c || !c.estado) return
+      var iconos = {ok:'✓', warn:'⚠', err:'✕', na:'—'}
+      var labels = {ok:'OK', warn:'Atención', err:'Urgente', na:'N/A'}
+      html += '<div class="pto">'
+      html += '<span class="pto-icono '+c.estado+'">'+iconos[c.estado]+'</span>'
+      html += '<div class="pto-nom">'+p.nombre+'</div>'
+      html += '<span class="pto-est '+c.estado+'">'+labels[c.estado]+'</span>'
+      if(c.nota) html += '<div class="pto-nota">"'+c.nota+'"</div>'
+      var fp = fotosPorPunto[p.id] || []
+      if(fp.length){
+        html += '<div class="pto-fotos">'
+        fp.forEach(function(f){
+          html += '<img class="pto-foto" src="'+f.url+'" onclick="window.open(\''+f.url+'\',\'_blank\')">'
+        })
+        html += '</div>'
+      }
+      html += '</div>'
+    })
+    
+    html += '</div></div>'
+  })
+  html += '</div>'
+  
+  // CTA final
+  html += '<div class="cta-final">'
+  html += '<h3>¿Quieres consultar algo del reporte?</h3>'
+  html += '<p>Nuestro equipo técnico está disponible para explicarte cualquier detalle, ayudarte a negociar el precio o coordinar las reparaciones necesarias.</p>'
+  var tel = (insp.cliente_telefono||'').replace(/\D/g,'') || '56945210814'
+  html += '<a class="btn-wa" href="https://wa.me/56945210814?text=Hola%20Serviruta%2C%20tengo%20una%20consulta%20sobre%20el%20reporte%20'+encodeURIComponent(insp.codigo||insp.id)+'">💬 Hablar con Serviruta</a>'
+  html += '</div>'
+  
+  // Footer
+  html += '<div class="foot">'
+  html += '<div class="brand">SERVI<span>RUTA</span></div>'
+  html += '<div>Peritaje pre-compra profesional · Camiones y maquinaria pesada</div>'
+  html += '<div style="margin-top:8px">📱 +56 9 4521 0814 · 🌐 serviruta.cl</div>'
+  html += '<div style="margin-top:12px;color:var(--t4)">Reporte generado el '+(insp.fecha_completado?new Date(insp.fecha_completado).toLocaleString('es-CL'):new Date().toLocaleString('es-CL'))+'</div>'
+  html += '</div>'
+  
+  document.getElementById('cont').innerHTML = html
+}
+
+function renderBarra(clase, label, num, total){
+  var pct = total > 0 ? (num/total*100) : 0
+  return '<div class="resumen-barra">'+
+    '<div class="resumen-lbl '+clase+'">'+label+'</div>'+
+    '<div class="barra-viz"><div class="barra-viz-fill '+clase+'" style="width:'+pct+'%"></div></div>'+
+    '<div class="resumen-num">'+num+'</div>'+
+  '</div>'
+}
+
+cargar()
+</script>
+
+</body>
+</html>

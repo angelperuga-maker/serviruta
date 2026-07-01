@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>Inspección Pre-Compra · Serviruta</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0A0D;--s1:#111114;--s2:#16161B;--s3:#1C1C23;--line:#26262E;--line-2:#353541;--rojo:#E8210A;--rojo-l:#FF4D2E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;--dorado:#D4AF37;--t1:#F6F4EF;--t2:#C7C5BF;--t3:#8B8990;--t4:#56555C;--display:'Syne',sans-serif;--body:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--t2);font-family:var(--body);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100vh}
+button,input,select,textarea{font-family:inherit;font-size:14px}
+button{cursor:pointer;border:none;background:none;color:inherit}
+a{color:inherit;text-decoration:none}
+
+.bar{position:sticky;top:0;z-index:50;background:rgba(10,10,13,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;align-items:center;gap:12px}
+.back{font-family:var(--mono);font-size:11px;color:var(--t3);padding:6px 10px;border:1px solid var(--line);border-radius:6px;min-height:36px}
+.sigil{width:32px;height:32px;background:var(--rojo);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:14px;color:#fff}
+.title{font-family:var(--display);font-weight:800;font-size:14px;color:var(--t1);flex:1;line-height:1.2}
+.title small{display:block;font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;margin-top:2px;font-weight:500}
+.badge-plan{font-family:var(--mono);font-size:9px;padding:4px 8px;border-radius:999px;letter-spacing:0.1em;font-weight:700}
+.badge-plan.basico{background:rgba(96,165,250,0.15);color:var(--azul)}
+.badge-plan.premium{background:rgba(232,33,10,0.15);color:var(--rojo-l)}
+.badge-plan.elite{background:linear-gradient(135deg,rgba(212,175,55,0.15),rgba(245,197,24,0.15));color:var(--dorado)}
+
+.shell{max-width:900px;margin:0 auto;padding:20px 16px 120px}
+
+/* Setup */
+.setup-card{background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:20px}
+.setup-titulo{font-family:var(--display);font-weight:800;font-size:16px;color:var(--t1);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.field{margin-bottom:12px}
+.field label{display:block;font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-bottom:6px}
+.field input,.field select,.field textarea{width:100%;background:var(--s2);border:1px solid var(--line);border-radius:8px;padding:10px 12px;color:var(--t1)}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--rojo)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:600px){.row3{grid-template-columns:1fr 1fr}}
+
+/* Progress bar */
+.progreso-bar{background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:20px;position:sticky;top:57px;z-index:40}
+.progreso-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap;gap:8px}
+.progreso-tit{font-family:var(--display);font-weight:800;font-size:14px;color:var(--t1)}
+.progreso-nums{display:flex;gap:14px;font-family:var(--mono);font-size:11px}
+.progreso-nums span{display:flex;align-items:center;gap:4px}
+.progreso-nums .ok{color:var(--verde)}
+.progreso-nums .warn{color:var(--amarillo)}
+.progreso-nums .err{color:var(--rojo-l)}
+.progreso-nums .na{color:var(--t3)}
+.barra{background:var(--s3);border-radius:999px;height:8px;overflow:hidden;position:relative}
+.barra-fill{height:100%;background:linear-gradient(90deg,var(--rojo),var(--rojo-l));border-radius:999px;transition:width 300ms}
+
+/* Categorías */
+.categoria{background:var(--s1);border:1px solid var(--line);border-radius:14px;margin-bottom:14px;overflow:hidden}
+.cat-head{padding:16px 18px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;user-select:none;background:var(--s2);border-bottom:1px solid var(--line)}
+.cat-head:hover{background:var(--s3)}
+.cat-numero{width:32px;height:32px;background:var(--rojo);color:#fff;border-radius:8px;font-family:var(--display);font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center;margin-right:12px;flex-shrink:0}
+.cat-info{flex:1;min-width:0}
+.cat-titulo{font-family:var(--display);font-weight:800;font-size:14px;color:var(--t1);line-height:1.2}
+.cat-meta{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.05em;margin-top:3px}
+.cat-cuenta{font-family:var(--mono);font-size:10px;color:var(--t3);margin-right:8px}
+.cat-arrow{color:var(--t3);font-size:16px;transition:transform 200ms}
+.categoria.open .cat-arrow{transform:rotate(180deg)}
+.cat-body{max-height:0;overflow:hidden;transition:max-height 400ms}
+.categoria.open .cat-body{max-height:none;padding:14px 18px 18px}
+
+/* Puntos */
+.punto{padding:12px 0;border-bottom:1px dashed var(--line);display:grid;grid-template-columns:1fr auto;gap:10px;align-items:start}
+.punto:last-child{border:none}
+.punto-info{min-width:0}
+.punto-nombre{font-family:var(--display);font-weight:700;font-size:13px;color:var(--t1);margin-bottom:2px;line-height:1.3}
+.punto-desc{font-size:11px;color:var(--t3);line-height:1.4}
+.punto-acciones{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.est-btn{width:34px;height:34px;border-radius:8px;background:var(--s3);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:16px;transition:all 150ms;font-family:var(--display);font-weight:800}
+.est-btn:hover{transform:scale(1.05)}
+.est-btn.selected.ok{background:rgba(34,197,94,0.2);border-color:var(--verde);color:var(--verde)}
+.est-btn.selected.warn{background:rgba(245,197,24,0.2);border-color:var(--amarillo);color:var(--amarillo)}
+.est-btn.selected.err{background:rgba(232,33,10,0.2);border-color:var(--rojo);color:var(--rojo-l)}
+.est-btn.selected.na{background:var(--s3);border-color:var(--t3);color:var(--t3)}
+.foto-btn{width:34px;height:34px;border-radius:8px;background:var(--s3);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:16px;position:relative}
+.foto-btn.has-fotos{background:rgba(96,165,250,0.15);border-color:var(--azul);color:var(--azul)}
+.foto-count{position:absolute;top:-6px;right:-6px;background:var(--azul);color:#fff;font-family:var(--mono);font-size:9px;font-weight:700;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.nota-btn{width:34px;height:34px;border-radius:8px;background:var(--s3);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:14px}
+.nota-btn.has-nota{background:rgba(167,139,250,0.15);border-color:var(--morado);color:var(--morado)}
+.foto-input{display:none}
+.punto-nota{display:none;width:100%;background:var(--s2);border:1px solid var(--line);border-radius:6px;padding:8px 10px;color:var(--t1);font-size:12px;grid-column:1/-1;margin-top:6px;min-height:50px;resize:vertical}
+.punto.nota-abierta .punto-nota{display:block}
+.punto-fotos{display:flex;flex-wrap:wrap;gap:6px;grid-column:1/-1;margin-top:6px}
+.foto-thumb{width:60px;height:60px;border-radius:6px;background:var(--s3);object-fit:cover;border:1px solid var(--line);cursor:pointer;position:relative}
+.foto-thumb-wrap{position:relative}
+.foto-del{position:absolute;top:-6px;right:-6px;background:var(--rojo);color:#fff;font-size:11px;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;line-height:1;padding-bottom:1px}
+
+/* Resumen final */
+.resumen{background:linear-gradient(180deg,var(--s2),var(--s1));border:2px solid var(--line);border-radius:14px;padding:20px;margin-top:20px}
+.resumen-titulo{font-family:var(--display);font-weight:800;font-size:18px;color:var(--t1);margin-bottom:14px}
+.resumen-row{display:flex;justify-content:space-between;padding:8px 0;font-size:13px;border-bottom:1px dashed var(--line)}
+.resumen-row:last-child{border:none;font-weight:700;padding-top:14px;margin-top:4px;border-top:2px solid var(--line);color:var(--t1)}
+.field-inline{margin-top:14px}
+.field-inline label{font-family:var(--display);font-weight:700;font-size:12px;color:var(--t2);margin-bottom:6px;display:block}
+.score-input{background:var(--s2);border:1px solid var(--line);border-radius:8px;padding:10px 12px;color:var(--t1);width:100%}
+
+.actions{position:fixed;bottom:0;left:0;right:0;background:rgba(10,10,13,0.95);backdrop-filter:blur(16px);border-top:1px solid var(--line);padding:12px 16px;display:flex;gap:10px;z-index:60}
+.actions-inner{max-width:900px;margin:0 auto;display:flex;gap:10px;width:100%}
+.btn-save{flex:1;background:var(--rojo);color:#fff;padding:14px;border-radius:10px;font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:0.05em}
+.btn-save:hover{background:var(--rojo-l)}
+.btn-save:disabled{opacity:0.5;cursor:not-allowed}
+.btn-cerrar{background:transparent;border:1px solid var(--line);color:var(--t2);padding:14px 20px;border-radius:10px;font-size:12px}
+
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:12px 20px;font-size:13px;font-weight:600;color:var(--t1);opacity:0;transition:all 300ms;pointer-events:none;z-index:200;max-width:90%}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.ok{border-color:var(--verde);color:var(--verde);background:rgba(34,197,94,0.1)}
+.toast.err{border-color:var(--rojo);color:var(--rojo-l);background:rgba(232,33,10,0.1)}
+
+/* Loading overlay para subir fotos */
+.upload-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:none;align-items:center;justify-content:center;flex-direction:column;gap:14px;z-index:300}
+.upload-overlay.show{display:flex}
+.upload-overlay .spin{width:44px;height:44px;border:3px solid var(--line);border-top-color:var(--rojo);border-radius:50%;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <button class="back" onclick="history.back()">← Volver</button>
+  <div class="sigil">S</div>
+  <div class="title">Inspección Pre-Compra<small id="header-info">Nueva inspección</small></div>
+  <span class="badge-plan" id="badge-plan">Sin plan</span>
+</header>
+
+<div class="shell">
+
+  <!-- SETUP: datos iniciales -->
+  <div class="setup-card" id="setup">
+    <div class="setup-titulo">📋 Datos de la inspección</div>
+    
+    <div class="row">
+      <div class="field">
+        <label>Plan *</label>
+        <select id="s-plan" onchange="cambiarPlan()">
+          <option value="">Selecciona</option>
+          <option value="basico">Básico · 60 puntos</option>
+          <option value="premium">Premium · 120 puntos</option>
+          <option value="elite">Elite · 200+ puntos</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Tipo vehículo *</label>
+        <select id="s-tipo">
+          <option value="">Selecciona</option>
+          <option value="camion_3_4">Camión 3/4</option>
+          <option value="camion_grande">Camión grande</option>
+          <option value="tracto">Tractocamión</option>
+          <option value="maquinaria">Maquinaria pesada</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Cliente</label>
+      <input type="text" id="s-cliente" placeholder="Nombre del cliente que solicita">
+    </div>
+    <div class="row">
+      <div class="field"><label>Teléfono</label><input type="tel" id="s-tel"></div>
+      <div class="field"><label>Email</label><input type="email" id="s-email"></div>
+    </div>
+
+    <div class="row3">
+      <div class="field"><label>Marca</label><input type="text" id="s-marca" placeholder="Volvo, Mercedes..."></div>
+      <div class="field"><label>Modelo</label><input type="text" id="s-modelo" placeholder="FH, Actros..."></div>
+      <div class="field"><label>Año</label><input type="number" id="s-ano" min="1990" max="2026"></div>
+    </div>
+    <div class="row3">
+      <div class="field"><label>Patente</label><input type="text" id="s-patente" placeholder="AB-CD-12"></div>
+      <div class="field"><label>KM</label><input type="number" id="s-km"></div>
+      <div class="field"><label>VIN/Chasis</label><input type="text" id="s-vin"></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>Precio solicitado ($)</label><input type="number" id="s-precio"></div>
+      <div class="field"><label>Ubicación revisión</label><input type="text" id="s-ubicacion" placeholder="Comuna/dirección"></div>
+    </div>
+    
+    <button class="btn-save" onclick="iniciarInspeccion()" style="margin-top:10px">Iniciar inspección →</button>
+  </div>
+
+  <!-- INSPECCIÓN (oculto hasta iniciar) -->
+  <div id="inspeccion" style="display:none">
+    
+    <!-- Barra de progreso -->
+    <div class="progreso-bar">
+      <div class="progreso-head">
+        <div class="progreso-tit" id="p-titulo">0 / 0 puntos revisados</div>
+        <div class="progreso-nums">
+          <span class="ok">✓ <span id="c-ok">0</span></span>
+          <span class="warn">⚠ <span id="c-warn">0</span></span>
+          <span class="err">✕ <span id="c-err">0</span></span>
+          <span class="na">— <span id="c-na">0</span></span>
+        </div>
+      </div>
+      <div class="barra"><div class="barra-fill" id="barra-fill" style="width:0%"></div></div>
+    </div>
+
+    <!-- Categorías dinámicas -->
+    <div id="categorias-cont"></div>
+
+    <!-- Resumen final -->
+    <div class="resumen">
+      <div class="resumen-titulo">📊 Resumen y recomendación</div>
+      <div class="resumen-row"><span>✓ Puntos OK</span><span id="r-ok">0</span></div>
+      <div class="resumen-row"><span>⚠ Requiere atención</span><span id="r-warn">0</span></div>
+      <div class="resumen-row"><span>✕ Reparación urgente</span><span id="r-err">0</span></div>
+      <div class="resumen-row"><span>— No aplica / no revisado</span><span id="r-na">0</span></div>
+      <div class="resumen-row"><span>Total</span><span id="r-total">0</span></div>
+
+      <div class="field-inline">
+        <label>Score general (0-100) *</label>
+        <input type="number" id="f-score" min="0" max="100" class="score-input" placeholder="Ej: 78">
+      </div>
+      <div class="field-inline">
+        <label>Recomendación *</label>
+        <select id="f-recomendacion" class="score-input">
+          <option value="">Selecciona</option>
+          <option value="comprar">✅ Comprar (todo OK)</option>
+          <option value="comprar_con_negociacion">⚠️ Comprar con negociación</option>
+          <option value="no_comprar">❌ NO comprar</option>
+        </select>
+      </div>
+      <div class="field-inline">
+        <label>Valorización de reparaciones ($)</label>
+        <input type="number" id="f-valor" class="score-input" placeholder="Monto estimado de arreglos">
+      </div>
+      <div class="field-inline">
+        <label>Observaciones finales</label>
+        <textarea id="f-obs" class="score-input" rows="3" placeholder="Comentarios adicionales, alertas rojas, etc."></textarea>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="actions" id="actions" style="display:none">
+  <div class="actions-inner">
+    <button class="btn-cerrar" onclick="guardarBorrador()">💾 Borrador</button>
+    <button class="btn-save" onclick="finalizar()">✅ Finalizar y enviar reporte</button>
+  </div>
+</div>
+
+<div class="upload-overlay" id="upload"><div class="spin"></div><div id="upload-txt">Subiendo foto...</div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+// ==========================================
+// CONFIG
+// ==========================================
+var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+
+// ==========================================
+// CATÁLOGO DE CATEGORÍAS Y PUNTOS
+// Los planes controlan cuántos puntos aparecen:
+// - Básico: solo los marcados con "basico"
+// - Premium: basico + premium
+// - Elite: todos
+// ==========================================
+var CATALOGO=[
+  {
+    num:'01', nombre:'Motor y Combustión',
+    icon:'🔧',
+    puntos:[
+      {id:'m01', nombre:'Ruido de motor en ralentí', tier:'basico', desc:'Sin cascabeleo ni golpeteo'},
+      {id:'m02', nombre:'Vibraciones anormales', tier:'basico'},
+      {id:'m03', nombre:'Humo del tubo escape (color)', tier:'basico', desc:'Azul=aceite, blanco=agua, negro=combustible'},
+      {id:'m04', nombre:'Nivel de aceite motor', tier:'basico'},
+      {id:'m05', nombre:'Estado del aceite (color y textura)', tier:'basico'},
+      {id:'m06', nombre:'Fugas de aceite visibles', tier:'basico'},
+      {id:'m07', nombre:'Fugas de refrigerante', tier:'basico'},
+      {id:'m08', nombre:'Temperatura de operación', tier:'basico'},
+      {id:'m09', nombre:'Estado de correas', tier:'basico'},
+      {id:'m10', nombre:'Poleas y tensores', tier:'basico'},
+      {id:'m11', nombre:'Estado del turbo (ruido, aceite)', tier:'premium'},
+      {id:'m12', nombre:'Intercooler y mangueras', tier:'premium'},
+      {id:'m13', nombre:'Compresión de cilindros', tier:'premium', desc:'Prueba con manómetro'},
+      {id:'m14', nombre:'Presión de aceite bajo carga', tier:'premium'},
+      {id:'m15', nombre:'Estado del EGR', tier:'premium'},
+      {id:'m16', nombre:'Estado del DPF (contrapresión)', tier:'premium'},
+      {id:'m17', nombre:'Regeneración DPF funcional', tier:'premium'},
+      {id:'m18', nombre:'Análisis de aceite laboratorio', tier:'elite', desc:'Envío a laboratorio certificado'},
+      {id:'m19', nombre:'Prueba de blow-by', tier:'elite'},
+      {id:'m20', nombre:'Alineación del cigüeñal', tier:'elite'},
+      {id:'m21', nombre:'Estado inyectores por análisis', tier:'elite'},
+      {id:'m22', nombre:'Revisión con escáner específico marca', tier:'elite', desc:'Cummins Insite, Volvo VCADS, etc.'}
+    ]
+  },
+  {
+    num:'02', nombre:'Combustible y Common Rail',
+    icon:'⛽',
+    puntos:[
+      {id:'c01', nombre:'Estanque sin corrosión', tier:'basico'},
+      {id:'c02', nombre:'Estado filtro de combustible', tier:'basico'},
+      {id:'c03', nombre:'Fugas en líneas de combustible', tier:'basico'},
+      {id:'c04', nombre:'Bomba de alimentación', tier:'basico'},
+      {id:'c05', nombre:'Separador de agua', tier:'basico'},
+      {id:'c06', nombre:'Prueba de presión de riel común', tier:'premium'},
+      {id:'c07', nombre:'Estado inyectores (goteo)', tier:'premium'},
+      {id:'c08', nombre:'Cantidad de retorno inyectores', tier:'premium'},
+      {id:'c09', nombre:'Bomba de alta presión', tier:'premium'},
+      {id:'c10', nombre:'Sensor de flujo (MAF/MAP)', tier:'premium'},
+      {id:'c11', nombre:'Válvulas SCV/PCV', tier:'elite'},
+      {id:'c12', nombre:'Análisis espectrométrico combustible', tier:'elite'},
+      {id:'c13', nombre:'Estado del sistema AdBlue/DEF', tier:'elite'},
+      {id:'c14', nombre:'Codificación inyectores actual', tier:'elite'},
+      {id:'c15', nombre:'Historial de reprogramaciones', tier:'elite'}
+    ]
+  },
+  {
+    num:'03', nombre:'Sistema de Refrigeración',
+    icon:'🌡️',
+    puntos:[
+      {id:'r01', nombre:'Nivel de refrigerante', tier:'basico'},
+      {id:'r02', nombre:'Estado del radiador', tier:'basico'},
+      {id:'r03', nombre:'Mangueras superiores', tier:'basico'},
+      {id:'r04', nombre:'Mangueras inferiores', tier:'basico'},
+      {id:'r05', nombre:'Tapa de radiador (presión)', tier:'basico'},
+      {id:'r06', nombre:'Ventilador y viscoso', tier:'premium'},
+      {id:'r07', nombre:'Bomba de agua (ruido/fuga)', tier:'premium'},
+      {id:'r08', nombre:'Termostato funcional', tier:'premium'},
+      {id:'r09', nombre:'Refrigerante de aceite motor', tier:'premium'},
+      {id:'r10', nombre:'Refrigerante de aceite transmisión', tier:'premium'},
+      {id:'r11', nombre:'Análisis del refrigerante (pH, glicol)', tier:'elite'},
+      {id:'r12', nombre:'Prueba de sobrepresión sistema', tier:'elite'}
+    ]
+  },
+  {
+    num:'04', nombre:'Transmisión y Embrague',
+    icon:'⚙️',
+    puntos:[
+      {id:'t01', nombre:'Nivel aceite transmisión', tier:'basico'},
+      {id:'t02', nombre:'Fugas en transmisión', tier:'basico'},
+      {id:'t03', nombre:'Cambios entran sin problema', tier:'basico'},
+      {id:'t04', nombre:'Sincronizadores (ruido al cambiar)', tier:'basico'},
+      {id:'t05', nombre:'Embrague punto de agarre', tier:'basico'},
+      {id:'t06', nombre:'Pedal de embrague', tier:'basico'},
+      {id:'t07', nombre:'Volante bimasa (ruido)', tier:'premium'},
+      {id:'t08', nombre:'Estado del kit embrague', tier:'premium'},
+      {id:'t09', nombre:'Cilindro maestro y esclavo', tier:'premium'},
+      {id:'t10', nombre:'Aceite de transmisión (análisis visual)', tier:'premium'},
+      {id:'t11', nombre:'Retenedores de transmisión', tier:'premium'},
+      {id:'t12', nombre:'Función I-Shift/AMT (si aplica)', tier:'premium', desc:'Cambios automáticos correctos'},
+      {id:'t13', nombre:'Historial de reparaciones', tier:'elite'},
+      {id:'t14', nombre:'Análisis del aceite transmisión', tier:'elite'},
+      {id:'t15', nombre:'Codificación ECU transmisión', tier:'elite'},
+      {id:'t16', nombre:'Cardán y cruceta', tier:'basico'},
+      {id:'t17', nombre:'Estado del yugo', tier:'premium'},
+      {id:'t18', nombre:'Rodamientos de salida', tier:'elite'}
+    ]
+  },
+  {
+    num:'05', nombre:'Diferencial y Ejes',
+    icon:'🔩',
+    puntos:[
+      {id:'d01', nombre:'Nivel aceite diferencial', tier:'basico'},
+      {id:'d02', nombre:'Fugas en diferencial', tier:'basico'},
+      {id:'d03', nombre:'Ruido de diferencial en marcha', tier:'basico'},
+      {id:'d04', nombre:'Semiejes sin holgura', tier:'basico'},
+      {id:'d05', nombre:'Retenedores diferencial', tier:'basico'},
+      {id:'d06', nombre:'Bloqueo diferencial funciona', tier:'premium'},
+      {id:'d07', nombre:'Reducción hub (si aplica)', tier:'premium'},
+      {id:'d08', nombre:'Aceite reductor (color)', tier:'premium'},
+      {id:'d09', nombre:'Corona y piñón (contacto)', tier:'premium'},
+      {id:'d10', nombre:'Cojinetes de ejes', tier:'premium'},
+      {id:'d11', nombre:'Análisis aceite diferencial lab', tier:'elite'},
+      {id:'d12', nombre:'Espesores ejes (medición)', tier:'elite'},
+      {id:'d13', nombre:'Historial de mantención ejes', tier:'elite'},
+      {id:'d14', nombre:'Balanceo ejes', tier:'elite'}
+    ]
+  },
+  {
+    num:'06', nombre:'Suspensión y Dirección',
+    icon:'🎯',
+    puntos:[
+      {id:'s01', nombre:'Estado amortiguadores delanteros', tier:'basico'},
+      {id:'s02', nombre:'Estado amortiguadores traseros', tier:'basico'},
+      {id:'s03', nombre:'Resortes/paquetes de resortes', tier:'basico'},
+      {id:'s04', nombre:'Fuelles neumáticos (si aplica)', tier:'basico'},
+      {id:'s05', nombre:'Fugas de suspensión', tier:'basico'},
+      {id:'s06', nombre:'Terminales de dirección', tier:'basico'},
+      {id:'s07', nombre:'Barra estabilizadora y bujes', tier:'basico'},
+      {id:'s08', nombre:'Caja de dirección (holgura)', tier:'premium'},
+      {id:'s09', nombre:'Bomba dirección hidráulica', tier:'premium'},
+      {id:'s10', nombre:'Nivel aceite dirección', tier:'premium'},
+      {id:'s11', nombre:'Rodamientos de rueda delanteros', tier:'premium'},
+      {id:'s12', nombre:'Rodamientos de rueda traseros', tier:'premium'},
+      {id:'s13', nombre:'Válvulas de nivel de suspensión neumática', tier:'premium'},
+      {id:'s14', nombre:'Compresor de suspensión', tier:'premium'},
+      {id:'s15', nombre:'Alineación de dirección', tier:'premium'},
+      {id:'s16', nombre:'Convergencia ruedas', tier:'premium'},
+      {id:'s17', nombre:'Historial ajustes suspensión', tier:'elite'},
+      {id:'s18', nombre:'Medición ángulo de cámber', tier:'elite'},
+      {id:'s19', nombre:'Pines maestros (holgura)', tier:'elite'},
+      {id:'s20', nombre:'Prueba en dinamómetro dirección', tier:'elite'}
+    ]
+  },
+  {
+    num:'07', nombre:'Frenos (ABS/EBS)',
+    icon:'🛑',
+    puntos:[
+      {id:'f01', nombre:'Pedal de freno (recorrido)', tier:'basico'},
+      {id:'f02', nombre:'Freno de estacionamiento', tier:'basico'},
+      {id:'f03', nombre:'Discos delanteros (espesor)', tier:'basico'},
+      {id:'f04', nombre:'Pastillas delanteras', tier:'basico'},
+      {id:'f05', nombre:'Tambores/discos traseros', tier:'basico'},
+      {id:'f06', nombre:'Pastillas/zapatas traseras', tier:'basico'},
+      {id:'f07', nombre:'Nivel líquido de frenos', tier:'basico'},
+      {id:'f08', nombre:'Estado del líquido de frenos', tier:'basico'},
+      {id:'f09', nombre:'Mangueras/cañerías frenos', tier:'basico'},
+      {id:'f10', nombre:'Fugas en circuito', tier:'basico'},
+      {id:'f11', nombre:'Válvula reguladora de frenos', tier:'premium'},
+      {id:'f12', nombre:'Bomba principal', tier:'premium'},
+      {id:'f13', nombre:'Cilindros neumáticos frenos (spring brake)', tier:'premium'},
+      {id:'f14', nombre:'Válvula de pie', tier:'premium'},
+      {id:'f15', nombre:'Válvula de mano (freno tráiler)', tier:'premium'},
+      {id:'f16', nombre:'Sensores ABS (todas las ruedas)', tier:'premium'},
+      {id:'f17', nombre:'Módulo ABS (lectura scanner)', tier:'premium'},
+      {id:'f18', nombre:'Módulo EBS (lectura scanner)', tier:'premium'},
+      {id:'f19', nombre:'Prueba de frenada (con instrumento)', tier:'premium'},
+      {id:'f20', nombre:'Freno motor / retardador', tier:'premium'},
+      {id:'f21', nombre:'Sistema anti-arrastre', tier:'elite'},
+      {id:'f22', nombre:'Estabilidad dinámica (ESP/RSC)', tier:'elite'},
+      {id:'f23', nombre:'Medición fuerza frenado por rueda', tier:'elite'},
+      {id:'f24', nombre:'Registro histórico DTC frenos', tier:'elite'}
+    ]
+  },
+  {
+    num:'08', nombre:'Sistema Eléctrico',
+    icon:'⚡',
+    puntos:[
+      {id:'e01', nombre:'Estado de baterías (voltaje)', tier:'basico'},
+      {id:'e02', nombre:'Bornes y cables baterías', tier:'basico'},
+      {id:'e03', nombre:'Alternador (voltaje de carga)', tier:'basico'},
+      {id:'e04', nombre:'Motor de arranque', tier:'basico'},
+      {id:'e05', nombre:'Luces bajas y altas', tier:'basico'},
+      {id:'e06', nombre:'Luces de freno y direccional', tier:'basico'},
+      {id:'e07', nombre:'Luces balizas y perimetrales', tier:'basico'},
+      {id:'e08', nombre:'Luces cabina y tablero', tier:'basico'},
+      {id:'e09', nombre:'Sistema audio y radio', tier:'basico'},
+      {id:'e10', nombre:'Aire acondicionado (funciona)', tier:'basico'},
+      {id:'e11', nombre:'Tacógrafo funciona (si aplica)', tier:'premium'},
+      {id:'e12', nombre:'Cableado bajo cabina', tier:'premium'},
+      {id:'e13', nombre:'Cableado bastidor', tier:'premium'},
+      {id:'e14', nombre:'Conectores y protecciones', tier:'premium'},
+      {id:'e15', nombre:'Prueba de carga alternador', tier:'premium'},
+      {id:'e16', nombre:'Prueba de fuga corriente', tier:'elite'},
+      {id:'e17', nombre:'Estado ECU motor (memoria)', tier:'elite'},
+      {id:'e18', nombre:'Verificación no adulteración km', tier:'elite'}
+    ]
+  },
+  {
+    num:'09', nombre:'Sistema Neumático',
+    icon:'💨',
+    puntos:[
+      {id:'n01', nombre:'Compresor de aire', tier:'basico'},
+      {id:'n02', nombre:'Tiempo de carga a 8-10 bar', tier:'basico'},
+      {id:'n03', nombre:'Fugas de aire audibles', tier:'basico'},
+      {id:'n04', nombre:'Tanques principales', tier:'basico'},
+      {id:'n05', nombre:'Válvulas de drenaje tanques', tier:'basico'},
+      {id:'n06', nombre:'Secador de aire', tier:'premium'},
+      {id:'n07', nombre:'Filtro coalescente', tier:'premium'},
+      {id:'n08', nombre:'Válvula 4 circuitos', tier:'premium'},
+      {id:'n09', nombre:'Regulador de presión', tier:'premium'},
+      {id:'n10', nombre:'Mangueras y latiguillos', tier:'premium'},
+      {id:'n11', nombre:'Válvula relé', tier:'premium'},
+      {id:'n12', nombre:'Válvula ratio', tier:'elite'},
+      {id:'n13', nombre:'Prueba de decaimiento presión (leak test)', tier:'elite'},
+      {id:'n14', nombre:'Análisis con manómetro digital', tier:'elite'}
+    ]
+  },
+  {
+    num:'10', nombre:'Estructura y Chasis',
+    icon:'🏗️',
+    puntos:[
+      {id:'ch01', nombre:'Estado general del bastidor', tier:'basico'},
+      {id:'ch02', nombre:'Óxido/corrosión chasis', tier:'basico'},
+      {id:'ch03', nombre:'Grietas o soldaduras', tier:'basico'},
+      {id:'ch04', nombre:'Estado de la cabina', tier:'basico'},
+      {id:'ch05', nombre:'Cierre de puertas y ventanas', tier:'basico'},
+      {id:'ch06', nombre:'Parabrisas y vidrios', tier:'basico'},
+      {id:'ch07', nombre:'Espejos y ajuste', tier:'basico'},
+      {id:'ch08', nombre:'Tapizado y asientos', tier:'basico'},
+      {id:'ch09', nombre:'Puertas cabina (bisagras)', tier:'basico'},
+      {id:'ch10', nombre:'Estado del piso cabina', tier:'basico'},
+      {id:'ch11', nombre:'Quinta rueda (si aplica)', tier:'premium'},
+      {id:'ch12', nombre:'Placa de quinta rueda', tier:'premium'},
+      {id:'ch13', nombre:'Perno rey y bloqueo', tier:'premium'},
+      {id:'ch14', nombre:'Suspensión cabina', tier:'premium'},
+      {id:'ch15', nombre:'Chasis con reparaciones', tier:'elite', desc:'Detectar reparaciones estructurales'},
+      {id:'ch16', nombre:'Medición espesores estructurales', tier:'elite'},
+      {id:'ch17', nombre:'Verificación número chasis con RNVM', tier:'elite'},
+      {id:'ch18', nombre:'Auditoría documental completa', tier:'elite'}
+    ]
+  },
+  {
+    num:'11', nombre:'Sistema Hidráulico',
+    icon:'🛢️',
+    puntos:[
+      {id:'h01', nombre:'Nivel aceite hidráulico', tier:'basico'},
+      {id:'h02', nombre:'Estado del aceite (color)', tier:'basico'},
+      {id:'h03', nombre:'Fugas visibles', tier:'basico'},
+      {id:'h04', nombre:'Filtro hidráulico', tier:'basico'},
+      {id:'h05', nombre:'Estado de mangueras', tier:'basico'},
+      {id:'h06', nombre:'Bomba hidráulica (ruido)', tier:'premium'},
+      {id:'h07', nombre:'Cilindros de elevación (holgura)', tier:'premium'},
+      {id:'h08', nombre:'Válvulas de control', tier:'premium'},
+      {id:'h09', nombre:'PTO (toma de fuerza)', tier:'premium'},
+      {id:'h10', nombre:'Presión de trabajo hidráulico', tier:'premium'},
+      {id:'h11', nombre:'Retenedores de cilindros', tier:'premium'},
+      {id:'h12', nombre:'Análisis aceite hidráulico lab', tier:'elite'},
+      {id:'h13', nombre:'Prueba de contaminación (ISO 4406)', tier:'elite'},
+      {id:'h14', nombre:'Medición presión pico', tier:'elite'},
+      {id:'h15', nombre:'Auditoría de horas hidráulico', tier:'elite'}
+    ]
+  },
+  {
+    num:'12', nombre:'Neumáticos y Prueba de Ruta',
+    icon:'🛞',
+    puntos:[
+      {id:'p01', nombre:'Neumáticos dirección (banda)', tier:'basico'},
+      {id:'p02', nombre:'Neumáticos tracción (banda)', tier:'basico'},
+      {id:'p03', nombre:'Neumáticos ejes (banda)', tier:'basico'},
+      {id:'p04', nombre:'Presión de todos los neumáticos', tier:'basico'},
+      {id:'p05', nombre:'Desgaste irregular', tier:'basico'},
+      {id:'p06', nombre:'Llantas sin daño', tier:'basico'},
+      {id:'p07', nombre:'Prueba en ruta (5-15 km)', tier:'premium'},
+      {id:'p08', nombre:'Comportamiento en curvas', tier:'premium'},
+      {id:'p09', nombre:'Vibraciones a alta velocidad', tier:'premium'},
+      {id:'p10', nombre:'Prueba con carga (si posible)', tier:'elite'},
+      {id:'p11', nombre:'Prueba en pendiente', tier:'elite'},
+      {id:'p12', nombre:'Registro DTC durante prueba', tier:'elite'}
+    ]
+  }
+]
+
+// ==========================================
+// STATE
+// ==========================================
+var estado = {
+  id: null, // uuid Supabase cuando se crea
+  plan: '',
+  datos: {},
+  checklist: {}, // {puntoId: {estado, nota}}
+  fotos: {} // {puntoId: [{url, filename, timestamp}]}
+}
+
+// ==========================================
+// HELPERS
+// ==========================================
+function toast(msg, tipo){
+  var t = document.getElementById('toast')
+  t.textContent = msg
+  t.className = 'toast '+(tipo||'')
+  t.classList.add('show')
+  setTimeout(function(){t.classList.remove('show')}, 3000)
+}
+
+function fecha(){
+  var d = new Date()
+  return d.toISOString()
+}
+
+function generarCodigo(){
+  var ano = new Date().getFullYear()
+  var rand = Math.floor(Math.random()*9000+1000)
+  return 'PRE-'+ano+'-'+rand
+}
+
+// ==========================================
+// PLAN Y PUNTOS
+// ==========================================
+function cambiarPlan(){
+  var plan = document.getElementById('s-plan').value
+  estado.plan = plan
+  document.getElementById('badge-plan').textContent = plan ? plan.toUpperCase() : 'Sin plan'
+  document.getElementById('badge-plan').className = 'badge-plan '+plan
+}
+
+function puntosDelPlan(plan){
+  var tiers = ['basico']
+  if(plan === 'premium') tiers = ['basico', 'premium']
+  if(plan === 'elite') tiers = ['basico', 'premium', 'elite']
+  
+  var total = 0
+  CATALOGO.forEach(function(cat){
+    cat.puntosFiltrados = cat.puntos.filter(function(p){return tiers.indexOf(p.tier) >= 0})
+    total += cat.puntosFiltrados.length
+  })
+  return total
+}
+
+// ==========================================
+// INICIAR
+// ==========================================
+async function iniciarInspeccion(){
+  if(!estado.plan){toast('⚠️ Selecciona un plan', 'err'); return}
+  if(!document.getElementById('s-tipo').value){toast('⚠️ Selecciona tipo vehículo', 'err'); return}
+  
+  estado.datos = {
+    cliente_nombre: document.getElementById('s-cliente').value.trim(),
+    cliente_telefono: document.getElementById('s-tel').value.trim(),
+    cliente_email: document.getElementById('s-email').value.trim(),
+    marca: document.getElementById('s-marca').value.trim(),
+    modelo: document.getElementById('s-modelo').value.trim(),
+    ano: parseInt(document.getElementById('s-ano').value)||null,
+    patente: document.getElementById('s-patente').value.trim(),
+    km: parseInt(document.getElementById('s-km').value)||null,
+    vin: document.getElementById('s-vin').value.trim(),
+    vehiculo_tipo: document.getElementById('s-tipo').value,
+    precio_solicitado: parseFloat(document.getElementById('s-precio').value)||null,
+    ubicacion_revision: document.getElementById('s-ubicacion').value.trim()
+  }
+  
+  var precios = {basico:180000, premium:350000, elite:650000}
+  
+  var datos = Object.assign({}, estado.datos, {
+    codigo: generarCodigo(),
+    plan: estado.plan,
+    precio_servicio: precios[estado.plan],
+    tecnico_asignado: sessionStorage.getItem('tecnico_nombre') || 'Coordinador',
+    estado: 'en_curso',
+    checklist: {},
+    fotos: []
+  })
+  
+  // Crear en Supabase
+  try{
+    var resp = await fetch(SB_URL+'/rest/v1/inspecciones_precompra', {
+      method:'POST',
+      headers:{
+        'apikey':SB_KEY,
+        'Authorization':'Bearer '+SB_KEY,
+        'Content-Type':'application/json',
+        'Prefer':'return=representation'
+      },
+      body: JSON.stringify(datos)
+    })
+    if(!resp.ok){
+      var txt = await resp.text()
+      throw new Error('HTTP '+resp.status+': '+txt)
+    }
+    var d = await resp.json()
+    estado.id = d[0].id
+    console.log('[PRECOMPRA] Creada con id:', estado.id)
+  }catch(e){
+    console.error('[PRECOMPRA] Error crear:', e)
+    toast('❌ Error creando: '+e.message, 'err')
+    return
+  }
+  
+  puntosDelPlan(estado.plan)
+  document.getElementById('setup').style.display = 'none'
+  document.getElementById('inspeccion').style.display = 'block'
+  document.getElementById('actions').style.display = 'flex'
+  document.getElementById('header-info').textContent = estado.datos.marca+' '+estado.datos.modelo+' · '+estado.datos.patente
+  
+  renderCategorias()
+  toast('✅ Inspección iniciada', 'ok')
+}
+
+// ==========================================
+// RENDER CATEGORIAS
+// ==========================================
+function renderCategorias(){
+  var cont = document.getElementById('categorias-cont')
+  cont.innerHTML = CATALOGO.filter(function(c){return c.puntosFiltrados.length>0}).map(function(cat, idx){
+    var body = cat.puntosFiltrados.map(function(p){return renderPunto(p)}).join('')
+    return '<div class="categoria" id="cat-'+cat.num+'">'+
+      '<div class="cat-head" onclick="toggleCat(\''+cat.num+'\')">'+
+        '<div class="cat-numero">'+cat.num+'</div>'+
+        '<div class="cat-info">'+
+          '<div class="cat-titulo">'+cat.icon+' '+cat.nombre+'</div>'+
+          '<div class="cat-meta">'+cat.puntosFiltrados.length+' puntos</div>'+
+        '</div>'+
+        '<div class="cat-cuenta" id="cuenta-'+cat.num+'">0/'+cat.puntosFiltrados.length+'</div>'+
+        '<span class="cat-arrow">▼</span>'+
+      '</div>'+
+      '<div class="cat-body">'+body+'</div>'+
+    '</div>'
+  }).join('')
+  
+  actualizarProgreso()
+}
+
+function renderPunto(p){
+  return '<div class="punto" id="punto-'+p.id+'">'+
+    '<div class="punto-info">'+
+      '<div class="punto-nombre">'+p.nombre+'</div>'+
+      (p.desc?'<div class="punto-desc">'+p.desc+'</div>':'')+
+    '</div>'+
+    '<div class="punto-acciones">'+
+      '<button class="est-btn ok" title="OK" onclick="setEstado(\''+p.id+'\',\'ok\')">✓</button>'+
+      '<button class="est-btn warn" title="Atención" onclick="setEstado(\''+p.id+'\',\'warn\')">⚠</button>'+
+      '<button class="est-btn err" title="Urgente" onclick="setEstado(\''+p.id+'\',\'err\')">✕</button>'+
+      '<button class="est-btn na" title="No aplica" onclick="setEstado(\''+p.id+'\',\'na\')">—</button>'+
+      '<button class="foto-btn" id="foto-'+p.id+'" title="Foto" onclick="document.getElementById(\'file-'+p.id+'\').click()">📷</button>'+
+      '<input type="file" class="foto-input" id="file-'+p.id+'" accept="image/*" capture="environment" onchange="subirFoto(\''+p.id+'\',this)">'+
+      '<button class="nota-btn" id="nota-'+p.id+'" title="Nota" onclick="toggleNota(\''+p.id+'\')">📝</button>'+
+    '</div>'+
+    '<textarea class="punto-nota" id="ntxt-'+p.id+'" placeholder="Observación (opcional)" oninput="setNota(\''+p.id+'\',this.value)"></textarea>'+
+    '<div class="punto-fotos" id="fotos-'+p.id+'"></div>'+
+  '</div>'
+}
+
+function toggleCat(num){
+  document.getElementById('cat-'+num).classList.toggle('open')
+}
+
+function toggleNota(pid){
+  document.getElementById('punto-'+pid).classList.toggle('nota-abierta')
+}
+
+// ==========================================
+// SET ESTADO Y NOTA
+// ==========================================
+function setEstado(pid, valor){
+  if(!estado.checklist[pid]) estado.checklist[pid] = {}
+  estado.checklist[pid].estado = valor
+  
+  // UI
+  var punto = document.getElementById('punto-'+pid)
+  punto.querySelectorAll('.est-btn').forEach(function(b){b.classList.remove('selected')})
+  punto.querySelector('.est-btn.'+valor).classList.add('selected')
+  
+  actualizarProgreso()
+  guardarSilencioso()
+}
+
+function setNota(pid, valor){
+  if(!estado.checklist[pid]) estado.checklist[pid] = {}
+  estado.checklist[pid].nota = valor
+  
+  // UI: marcar botón de nota
+  var btn = document.getElementById('nota-'+pid)
+  if(valor && valor.trim()){
+    btn.classList.add('has-nota')
+  } else {
+    btn.classList.remove('has-nota')
+  }
+  
+  // Guardar cambios (debounced)
+  clearTimeout(window._notaTimer)
+  window._notaTimer = setTimeout(guardarSilencioso, 1500)
+}
+
+// ==========================================
+// SUBIR FOTO
+// ==========================================
+async function subirFoto(pid, input){
+  var file = input.files[0]
+  if(!file) return
+  
+  document.getElementById('upload-txt').textContent = 'Subiendo foto...'
+  document.getElementById('upload').classList.add('show')
+  
+  try {
+    // Convertir a base64 más pequeño
+    var b64 = await comprimirImagen(file, 1200, 0.8)
+    var timestamp = Date.now()
+    var filename = estado.id+'/'+pid+'-'+timestamp+'.jpg'
+    
+    // Upload a Supabase Storage
+    var resp = await fetch(SB_URL+'/storage/v1/object/inspecciones/'+filename, {
+      method:'POST',
+      headers:{
+        'apikey':SB_KEY,
+        'Authorization':'Bearer '+SB_KEY,
+        'Content-Type':'image/jpeg'
+      },
+      body: b64ToBlob(b64)
+    })
+    
+    if(!resp.ok){
+      var errTxt = await resp.text()
+      throw new Error('HTTP '+resp.status+': '+errTxt)
+    }
+    
+    var url = SB_URL+'/storage/v1/object/public/inspecciones/'+filename
+    
+    // Guardar en estado
+    if(!estado.fotos[pid]) estado.fotos[pid] = []
+    estado.fotos[pid].push({url:url, timestamp:timestamp, filename:filename})
+    
+    renderFotosPunto(pid)
+    document.getElementById('upload').classList.remove('show')
+    toast('✅ Foto subida', 'ok')
+    guardarSilencioso()
+    
+  } catch(e) {
+    console.error('[FOTO] Error:', e)
+    document.getElementById('upload').classList.remove('show')
+    toast('❌ Error subiendo foto: '+e.message, 'err')
+  }
+  
+  input.value = '' // reset
+}
+
+function b64ToBlob(b64){
+  var byteString = atob(b64.split(',')[1])
+  var ab = new ArrayBuffer(byteString.length)
+  var ia = new Uint8Array(ab)
+  for(var i=0;i<byteString.length;i++) ia[i] = byteString.charCodeAt(i)
+  return new Blob([ab], {type:'image/jpeg'})
+}
+
+function comprimirImagen(file, maxWidth, quality){
+  return new Promise(function(resolve, reject){
+    var reader = new FileReader()
+    reader.onload = function(e){
+      var img = new Image()
+      img.onload = function(){
+        var canvas = document.createElement('canvas')
+        var ratio = Math.min(maxWidth/img.width, maxWidth/img.height, 1)
+        canvas.width = img.width * ratio
+        canvas.height = img.height * ratio
+        var ctx = canvas.getContext('2d')
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+        resolve(canvas.toDataURL('image/jpeg', quality))
+      }
+      img.onerror = reject
+      img.src = e.target.result
+    }
+    reader.onerror = reject
+    reader.readAsDataURL(file)
+  })
+}
+
+function renderFotosPunto(pid){
+  var cont = document.getElementById('fotos-'+pid)
+  var fotos = estado.fotos[pid] || []
+  cont.innerHTML = fotos.map(function(f, i){
+    return '<div class="foto-thumb-wrap">'+
+      '<img class="foto-thumb" src="'+f.url+'" onclick="window.open(\''+f.url+'\',\'_blank\')">'+
+      '<span class="foto-del" onclick="eliminarFoto(\''+pid+'\','+i+')">×</span>'+
+    '</div>'
+  }).join('')
+  
+  var btn = document.getElementById('foto-'+pid)
+  if(fotos.length>0){
+    btn.classList.add('has-fotos')
+    btn.innerHTML = '📷<span class="foto-count">'+fotos.length+'</span>'
+  } else {
+    btn.classList.remove('has-fotos')
+    btn.innerHTML = '📷'
+  }
+}
+
+function eliminarFoto(pid, idx){
+  if(!confirm('¿Eliminar esta foto?')) return
+  estado.fotos[pid].splice(idx, 1)
+  renderFotosPunto(pid)
+  guardarSilencioso()
+}
+
+// ==========================================
+// PROGRESO
+// ==========================================
+function actualizarProgreso(){
+  var total = 0, ok = 0, warn = 0, err = 0, na = 0
+  
+  CATALOGO.forEach(function(cat){
+    if(!cat.puntosFiltrados) return
+    var cuenta = 0
+    cat.puntosFiltrados.forEach(function(p){
+      total++
+      var e = estado.checklist[p.id] && estado.checklist[p.id].estado
+      if(e){
+        cuenta++
+        if(e==='ok') ok++
+        else if(e==='warn') warn++
+        else if(e==='err') err++
+        else if(e==='na') na++
+      }
+    })
+    var cta = document.getElementById('cuenta-'+cat.num)
+    if(cta) cta.textContent = cuenta+'/'+cat.puntosFiltrados.length
+  })
+  
+  var completos = ok+warn+err+na
+  var pct = total>0 ? Math.round(completos/total*100) : 0
+  
+  document.getElementById('p-titulo').textContent = completos+' / '+total+' puntos revisados ('+pct+'%)'
+  document.getElementById('barra-fill').style.width = pct+'%'
+  document.getElementById('c-ok').textContent = ok
+  document.getElementById('c-warn').textContent = warn
+  document.getElementById('c-err').textContent = err
+  document.getElementById('c-na').textContent = na
+  
+  // Resumen
+  document.getElementById('r-ok').textContent = ok
+  document.getElementById('r-warn').textContent = warn
+  document.getElementById('r-err').textContent = err
+  document.getElementById('r-na').textContent = na
+  document.getElementById('r-total').textContent = completos+' de '+total
+  
+  // Sugerir score y recomendación
+  if(completos === total && !document.getElementById('f-score').value){
+    var score = Math.round((ok*100 + warn*60 + err*0 + na*70)/(total*100)*100)
+    document.getElementById('f-score').value = score
+    var rec = score>=85?'comprar':(score>=65?'comprar_con_negociacion':'no_comprar')
+    document.getElementById('f-recomendacion').value = rec
+  }
+}
+
+// ==========================================
+// GUARDAR
+// ==========================================
+async function guardarSilencioso(){
+  if(!estado.id) return
+  var fotosPlanas = []
+  Object.keys(estado.fotos).forEach(function(pid){
+    (estado.fotos[pid]||[]).forEach(function(f){
+      fotosPlanas.push({punto_id:pid, url:f.url, timestamp:f.timestamp})
+    })
+  })
+  
+  try {
+    await fetch(SB_URL+'/rest/v1/inspecciones_precompra?id=eq.'+estado.id, {
+      method:'PATCH',
+      headers:{
+        'apikey':SB_KEY,
+        'Authorization':'Bearer '+SB_KEY,
+        'Content-Type':'application/json'
+      },
+      body: JSON.stringify({
+        checklist: estado.checklist,
+        fotos: fotosPlanas,
+        updated_at: new Date().toISOString()
+      })
+    })
+  } catch(e) {
+    console.warn('[GUARDAR silencioso] Error:', e)
+  }
+}
+
+async function guardarBorrador(){
+  await guardarSilencioso()
+  toast('💾 Borrador guardado', 'ok')
+}
+
+async function finalizar(){
+  var score = document.getElementById('f-score').value
+  var rec = document.getElementById('f-recomendacion').value
+  if(!score || !rec){
+    toast('⚠️ Completa score y recomendación', 'err')
+    return
+  }
+  
+  if(!confirm('¿Finalizar inspección y enviar reporte al cliente?')) return
+  
+  var fotosPlanas = []
+  Object.keys(estado.fotos).forEach(function(pid){
+    (estado.fotos[pid]||[]).forEach(function(f){
+      fotosPlanas.push({punto_id:pid, url:f.url, timestamp:f.timestamp})
+    })
+  })
+  
+  var final = {
+    checklist: estado.checklist,
+    fotos: fotosPlanas,
+    score_general: parseInt(score),
+    recomendacion: rec,
+    valorizacion_reparaciones: parseFloat(document.getElementById('f-valor').value)||0,
+    observaciones_generales: document.getElementById('f-obs').value.trim(),
+    estado: 'completado',
+    reporte_generado: true,
+    reporte_url: 'reporte-precompra.html?id='+estado.id,
+    fecha_completado: new Date().toISOString()
+  }
+  
+  try {
+    var resp = await fetch(SB_URL+'/rest/v1/inspecciones_precompra?id=eq.'+estado.id, {
+      method:'PATCH',
+      headers:{
+        'apikey':SB_KEY,
+        'Authorization':'Bearer '+SB_KEY,
+        'Content-Type':'application/json',
+        'Prefer':'return=representation'
+      },
+      body: JSON.stringify(final)
+    })
+    if(!resp.ok) throw new Error('HTTP '+resp.status)
+    
+    toast('✅ Reporte generado', 'ok')
+    
+    setTimeout(function(){
+      var url = window.location.origin+window.location.pathname.replace(/[^\/]+$/,'')+'reporte-precompra.html?id='+estado.id
+      var msg = 'Hola '+(estado.datos.cliente_nombre||'').split(' ')[0]+'!\n\n'+
+                'Ya está listo el reporte de tu inspección pre-compra:\n\n'+
+                '📋 '+(estado.datos.marca||'')+' '+(estado.datos.modelo||'')+'\n'+
+                '📊 Score: '+score+'/100\n'+
+                '📎 Ver reporte completo:\n'+url+'\n\n'+
+                'Serviruta · +56 9 4521 0814'
+      
+      if(estado.datos.cliente_telefono){
+        var tel = estado.datos.cliente_telefono.replace(/\D/g,'')
+        if(confirm('¿Enviar reporte al cliente por WhatsApp?')){
+          window.open('https://wa.me/'+tel+'?text='+encodeURIComponent(msg), '_blank')
+        }
+      } else {
+        prompt('URL del reporte para copiar:', url)
+      }
+      
+      setTimeout(function(){location.href = 'menu-coordinador.html'}, 2000)
+    }, 500)
+    
+  } catch(e){
+    console.error(e)
+    toast('❌ Error finalizando: '+e.message, 'err')
+  }
+}
+</script>
+</body>
+</html>

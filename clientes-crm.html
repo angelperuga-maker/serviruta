@@ -37,6 +37,10 @@ button{cursor:pointer;border:none;background:none;color:inherit}
 .kpi.riesgo .kpi-num{color:var(--rojo-l)}
 .kpi.ltv{border-color:rgba(96,165,250,0.3);background:linear-gradient(135deg,rgba(96,165,250,0.05),var(--s1))}
 .kpi.ltv .kpi-num{color:var(--azul);font-size:20px}
+.kpi.pipe{border-color:rgba(251,146,60,0.3);background:linear-gradient(135deg,rgba(251,146,60,0.05),var(--s1))}
+.kpi.pipe .kpi-num{color:var(--naranja);font-size:20px}
+.kpi.total{border-color:rgba(212,175,55,0.4);background:linear-gradient(135deg,rgba(212,175,55,0.08),var(--s1))}
+.kpi.total .kpi-num{color:var(--dorado);font-size:20px}
 .kpi:hover{cursor:pointer;border-color:var(--line-2)}
 .kpi.active{border-width:2px;transform:translateY(-2px)}
 
@@ -161,9 +165,19 @@ button{cursor:pointer;border:none;background:none;color:inherit}
       <div class="kpi-sub">6+ meses sin ver</div>
     </div>
     <div class="kpi ltv">
-      <div class="kpi-lbl">💰 LTV Total</div>
+      <div class="kpi-lbl">💰 Facturado</div>
       <div class="kpi-num" id="k-ltv">—</div>
-      <div class="kpi-sub">facturado histórico</div>
+      <div class="kpi-sub">ingresos reales</div>
+    </div>
+    <div class="kpi pipe">
+      <div class="kpi-lbl">💼 Pipeline</div>
+      <div class="kpi-num" id="k-pipe">—</div>
+      <div class="kpi-sub">presupuestos pendientes</div>
+    </div>
+    <div class="kpi total">
+      <div class="kpi-lbl">📊 Total vendido</div>
+      <div class="kpi-num" id="k-total-ventas">—</div>
+      <div class="kpi-sub">facturado + pipeline</div>
     </div>
   </div>
 
@@ -174,7 +188,9 @@ button{cursor:pointer;border:none;background:none;color:inherit}
     </div>
     <select class="filtro-sel" id="orden" onchange="renderLista()">
       <option value="score_desc">🎯 Mayor score primero</option>
-      <option value="ltv_desc">💰 Mayor LTV primero</option>
+      <option value="ltv_desc">💰 Mayor facturado primero</option>
+      <option value="pipe_desc">💼 Mayor pipeline primero</option>
+      <option value="total_desc">📊 Mayor total ventas primero</option>
       <option value="reciente">📅 Más recientes primero</option>
       <option value="antiguos">📅 Más antiguos primero</option>
       <option value="dormidos">⏰ Dormidos primero</option>
@@ -261,7 +277,10 @@ async function cargar(){
   document.getElementById('k-dormido').textContent=CLIENTES.filter(function(c){return c.categoria==='dormido'}).length
   document.getElementById('k-riesgo').textContent=CLIENTES.filter(function(c){return c.categoria==='en_riesgo'}).length
   var ltvTotal=CLIENTES.reduce(function(a,c){return a+(parseFloat(c.ltv)||0)},0)
+  var pipeTotal=CLIENTES.reduce(function(a,c){return a+(parseFloat(c.ltv_pipeline)||0)},0)
   document.getElementById('k-ltv').textContent=fmtMoney(ltvTotal)
+  document.getElementById('k-pipe').textContent=fmtMoney(pipeTotal)
+  document.getElementById('k-total-ventas').textContent=fmtMoney(ltvTotal+pipeTotal)
   
   renderLista()
 }
@@ -290,6 +309,8 @@ function renderLista(){
   
   // Ordenar
   if(orden==='ltv_desc') lista.sort(function(a,b){return (parseFloat(b.ltv)||0)-(parseFloat(a.ltv)||0)})
+  else if(orden==='pipe_desc') lista.sort(function(a,b){return (parseFloat(b.ltv_pipeline)||0)-(parseFloat(a.ltv_pipeline)||0)})
+  else if(orden==='total_desc') lista.sort(function(a,b){return ((parseFloat(b.ltv)||0)+(parseFloat(b.ltv_pipeline)||0))-((parseFloat(a.ltv)||0)+(parseFloat(a.ltv_pipeline)||0))})
   else if(orden==='reciente') lista.sort(function(a,b){return new Date(b.ultimo_servicio_fecha||0)-new Date(a.ultimo_servicio_fecha||0)})
   else if(orden==='antiguos') lista.sort(function(a,b){return new Date(a.ultimo_servicio_fecha||9e9)-new Date(b.ultimo_servicio_fecha||9e9)})
   else if(orden==='dormidos') lista.sort(function(a,b){return new Date(a.ultimo_servicio_fecha||9e9)-new Date(b.ultimo_servicio_fecha||9e9)})
@@ -322,6 +343,7 @@ function renderLista(){
       '</div>'+
       '<div class="cliente-metrics">'+
         '<div class="ltv">'+fmtMoney(c.ltv)+'</div>'+
+        (c.ltv_pipeline>0?'<div style="font-size:11px;color:var(--naranja);font-family:var(--display);font-weight:700;margin-top:1px">+'+fmtMoney(c.ltv_pipeline)+' pipe</div>':'')+
         '<div class="servicios">'+c.servicios_totales+' servicio'+(c.servicios_totales!==1?'s':'')+'</div>'+
       '</div>'+
       '<span class="arrow">›</span>'+
@@ -409,12 +431,23 @@ async function abrirModal(id){
     
     // Métricas
     '<div class="section">'+
-      '<div class="section-tit">📊 Métricas del cliente</div>'+
+      '<div class="section-tit">💰 Ventas y facturación</div>'+
       '<div class="info-grid">'+
-        '<div class="info-cell"><div class="info-lbl">Servicios totales</div><div class="info-val" style="color:var(--t1)">'+c.servicios_totales+'</div></div>'+
-        '<div class="info-cell"><div class="info-lbl">LTV facturado</div><div class="info-val" style="color:var(--verde)">'+fmtMoney(c.ltv)+'</div></div>'+
+        '<div class="info-cell"><div class="info-lbl">Facturado real</div><div class="info-val" style="color:var(--verde);font-size:16px">'+fmtMoney(c.ltv)+'</div><div style="font-size:10px;color:var(--t3);margin-top:2px">'+(c.servicios_completados||0)+' servicio'+((c.servicios_completados||0)!==1?'s':'')+' completado'+((c.servicios_completados||0)!==1?'s':'')+'</div></div>'+
+        '<div class="info-cell"><div class="info-lbl">Pipeline pendiente</div><div class="info-val" style="color:var(--naranja);font-size:16px">'+fmtMoney(c.ltv_pipeline||0)+'</div><div style="font-size:10px;color:var(--t3);margin-top:2px">'+(c.servicios_pendientes||0)+' presupuesto'+((c.servicios_pendientes||0)!==1?'s':'')+' enviado'+((c.servicios_pendientes||0)!==1?'s':'')+'</div></div>'+
+        '<div class="info-cell"><div class="info-lbl">Total propuesto</div><div class="info-val" style="color:var(--dorado);font-size:16px">'+fmtMoney((parseFloat(c.ltv)||0)+(parseFloat(c.ltv_pipeline)||0))+'</div><div style="font-size:10px;color:var(--t3);margin-top:2px">'+c.servicios_totales+' servicio'+(c.servicios_totales!==1?'s':'')+' en total</div></div>'+
+        (c.ultimo_ticket>0?'<div class="info-cell"><div class="info-lbl">Último ticket</div><div class="info-val">'+fmtMoney(c.ultimo_ticket)+'</div></div>':'')+
+      '</div>'+
+    '</div>'+
+    
+    // Actividad
+    '<div class="section">'+
+      '<div class="section-tit">📊 Actividad</div>'+
+      '<div class="info-grid">'+
         '<div class="info-cell"><div class="info-lbl">Último servicio</div><div class="info-val">'+fmtDate(c.ultimo_servicio_fecha)+'</div></div>'+
+        '<div class="info-cell"><div class="info-lbl">Primer servicio</div><div class="info-val">'+fmtDate(c.primer_servicio_fecha)+'</div></div>'+
         '<div class="info-cell"><div class="info-lbl">Score de recompra</div><div class="info-val" style="color:'+(c.score>=70?'var(--verde)':c.score>=50?'var(--amarillo)':'var(--rojo-l)')+'">'+c.score+'/100</div></div>'+
+        '<div class="info-cell"><div class="info-lbl">Categoría</div><div class="info-val">'+cat+'</div></div>'+
       '</div>'+
     '</div>'+
     
@@ -423,14 +456,18 @@ async function abrirModal(id){
       '<div class="section-tit">📜 Historial de servicios ('+hist.length+')</div>'+
       '<div class="hist-list">'+
         hist.map(function(h){
+          var esCompletado=h.estado_servicio==='completado'
+          var esPendiente=h.estado_servicio==='nuevo' || h.estado_servicio==='enviado'
+          var colorMonto=esCompletado?'var(--verde)':(esPendiente?'var(--naranja)':'var(--t3)')
+          var badgeEstado=esCompletado?'<span style="background:rgba(34,197,94,0.15);color:var(--verde);padding:1px 6px;border-radius:4px;font-family:var(--mono);font-size:9px;font-weight:700">✓ FACTURADO</span>':(esPendiente?'<span style="background:rgba(251,146,60,0.15);color:var(--naranja);padding:1px 6px;border-radius:4px;font-family:var(--mono);font-size:9px;font-weight:700">⏳ '+(h.estado_servicio||'').toUpperCase()+'</span>':'<span style="background:var(--s3);color:var(--t3);padding:1px 6px;border-radius:4px;font-family:var(--mono);font-size:9px;font-weight:700">'+(h.estado_servicio||'').toUpperCase()+'</span>')
           return '<div class="hist-item">'+
             '<div class="hist-date">'+fmtDate(h.created_at)+'</div>'+
             '<div class="hist-desc">'+
-              (h.numero?'#'+h.numero+' · ':'')+
+              (h.numero?'<b style="color:var(--t1)">#'+h.numero+'</b> · ':'')+
               (h.auto||h.vehiculo||'—')+
-              '<div style="font-size:10px;color:var(--t3);margin-top:2px">Estado: '+(h.estado_servicio||h.estado||'—')+' · Técnico: '+(h.tecnico||'—')+'</div>'+
+              '<div style="font-size:10px;color:var(--t3);margin-top:4px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">'+badgeEstado+'<span>Técnico: '+(h.tecnico||'—')+'</span></div>'+
             '</div>'+
-            '<div class="hist-monto">'+(h.total?fmtMoney(h.total):'—')+'</div>'+
+            '<div class="hist-monto" style="color:'+colorMonto+'">'+(h.total?fmtMoney(h.total):'—')+'</div>'+
           '</div>'
         }).join('')+
       '</div>'+

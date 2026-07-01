@@ -250,7 +250,7 @@ async function sbUpd(path,data){
 }
 
 async function cargar(){
-  var r=await sbGet('clientes?order=score.desc,servicios_totales.desc')
+  var r=await sbGet('clientes?select=*&order=score.desc,servicios_totales.desc&limit=1000')
   if(!r.ok){toast('Error cargando clientes','err');return}
   CLIENTES=r.data
   
@@ -350,9 +350,15 @@ async function abrirModal(id){
   if(!c) return
   CLIENTE_ACTUAL=c
   
-  // Cargar historial de presupuestos
-  var histR=await sbGet('presupuestos?telefono=ilike.*'+c.telefono_normalizado.slice(-8)+'*&order=created_at.desc&limit=20')
-  var hist=histR.ok?histR.data:[]
+  // Cargar historial de presupuestos (por tel o por nombre si no hay tel)
+  var hist=[]
+  if(c.telefono_normalizado){
+    var histR=await sbGet('presupuestos?telefono=ilike.*'+c.telefono_normalizado.slice(-8)+'*&order=created_at.desc&limit=20')
+    hist=histR.ok?histR.data:[]
+  } else if(c.nombre){
+    var histR=await sbGet('presupuestos?cliente=ilike.*'+encodeURIComponent(c.nombre.split(' ')[0])+'*&order=created_at.desc&limit=20')
+    hist=histR.ok?histR.data:[]
+  }
   
   var cat=c.categoria||'activo'
   var tel=c.telefono_normalizado||''

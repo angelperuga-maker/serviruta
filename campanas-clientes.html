@@ -196,19 +196,46 @@ var PREVIEW_IDX=0
 
 // SEGMENTOS PREDEFINIDOS
 var SEGMENTOS=[
-  {id:'todos_wa', icon:'👥', nombre:'Todos con WhatsApp', desc:'Toda la base de clientes con teléfono válido', 
+  // 🎯 SEGMENTOS PRIORITARIOS (los que más importan)
+  {id:'empresa_pesado', icon:'🏢🚛', nombre:'Empresa · Pesado', desc:'ORO PURO — flotas de camiones y maquinaria',
+   filtro:function(c){return c.telefono_normalizado && c.tipo_cliente==='empresa' && c.clase_vehiculo==='pesado'}},
+  {id:'particular_pesado', icon:'👤🚛', nombre:'Particular · Pesado', desc:'Dueños de camión propio · tickets altos',
+   filtro:function(c){return c.telefono_normalizado && c.tipo_cliente==='particular' && c.clase_vehiculo==='pesado'}},
+  {id:'empresa_liviano', icon:'🏢🚗', nombre:'Empresa · Liviano', desc:'Flotas de autos y camionetas de servicio',
+   filtro:function(c){return c.telefono_normalizado && c.tipo_cliente==='empresa' && c.clase_vehiculo==='liviano'}},
+  {id:'particular_liviano', icon:'👤🚗', nombre:'Particular · Liviano', desc:'Dueños de auto personal · volumen',
+   filtro:function(c){return c.telefono_normalizado && c.tipo_cliente==='particular' && c.clase_vehiculo==='liviano'}},
+  
+  // 🎯 POR TIPO DE CLIENTE
+  {id:'todas_empresas', icon:'🏢', nombre:'Todas las Empresas', desc:'B2B · facturación · convenios',
+   filtro:function(c){return c.telefono_normalizado && c.tipo_cliente==='empresa'}},
+  {id:'todos_particulares', icon:'👤', nombre:'Todos los Particulares', desc:'B2C · dueños individuales',
+   filtro:function(c){return c.telefono_normalizado && c.tipo_cliente==='particular'}},
+  
+  // 🎯 POR CLASE DE VEHÍCULO
+  {id:'todo_pesado', icon:'🚛', nombre:'Todos los Pesados', desc:'Camiones · maquinaria · buses',
+   filtro:function(c){return c.telefono_normalizado && c.clase_vehiculo==='pesado'}},
+  {id:'todo_liviano', icon:'🚗', nombre:'Todos los Livianos', desc:'Autos · camionetas · SUV',
+   filtro:function(c){return c.telefono_normalizado && c.clase_vehiculo==='liviano'}},
+  
+  // 🎯 POR VALOR / COMPORTAMIENTO
+  {id:'todos_wa', icon:'👥', nombre:'Todos con WhatsApp', desc:'Toda la base contactable', 
    filtro:function(c){return c.telefono_normalizado}},
-  {id:'vip', icon:'👑', nombre:'Clientes VIP', desc:'3+ servicios contigo · máxima confianza',
+  {id:'vip', icon:'👑', nombre:'Clientes VIP', desc:'3+ servicios · máxima confianza',
    filtro:function(c){return c.categoria==='VIP' && c.telefono_normalizado}},
-  {id:'facturaron', icon:'💰', nombre:'Ya facturaron', desc:'Clientes que ya pagaron al menos una vez',
+  {id:'premium', icon:'💎', nombre:'Potencial Premium', desc:'LTV alto o alta frecuencia',
+   filtro:function(c){return c.potencial==='premium' && c.telefono_normalizado}},
+  {id:'facturaron', icon:'💰', nombre:'Ya facturaron', desc:'Al menos un pago histórico',
    filtro:function(c){return c.ltv>0 && c.telefono_normalizado}},
   {id:'alto_ltv', icon:'⭐', nombre:'Alto valor ($200k+)', desc:'LTV histórico sobre $200.000',
    filtro:function(c){return c.ltv>=200000 && c.telefono_normalizado}},
   {id:'dormidos', icon:'⏰', nombre:'Dormidos (60+ días)', desc:'Sin visitas hace más de 60 días',
    filtro:function(c){var d=diasSinVer(c);return d>60 && c.telefono_normalizado}},
-  {id:'nuevos', icon:'🆕', nombre:'Nuevos', desc:'Un solo servicio, potencial recompra',
+  {id:'nuevos', icon:'🆕', nombre:'Nuevos', desc:'Un solo servicio · potencial recompra',
    filtro:function(c){return c.servicios_totales<=1 && c.telefono_normalizado}},
-  {id:'peugeot', icon:'🇫🇷', nombre:'Peugeot / Citroën', desc:'HDI diesel · sugerir análisis inyectores',
+  
+  // 🎯 POR MARCA (útil para ofertas específicas)
+  {id:'peugeot', icon:'🇫🇷', nombre:'Peugeot / Citroën', desc:'HDI diesel · análisis inyectores',
    filtro:function(c){return c.telefono_normalizado && (/peugeot|citroen/i.test(c.marca||'')||/peugeot|citroen/i.test(c.vehiculo_principal||''))}},
   {id:'chevrolet', icon:'🚙', nombre:'Chevrolet', desc:'Autos Chevrolet',
    filtro:function(c){return c.telefono_normalizado && /chevrolet/i.test(c.marca||'')}},
@@ -216,10 +243,8 @@ var SEGMENTOS=[
    filtro:function(c){return c.telefono_normalizado && /hyundai/i.test(c.marca||'')}},
   {id:'suzuki', icon:'🚙', nombre:'Suzuki', desc:'Autos Suzuki',
    filtro:function(c){return c.telefono_normalizado && /suzuki/i.test(c.marca||'')}},
-  {id:'camionetas', icon:'🚚', nombre:'Camionetas', desc:'Todas las camionetas',
-   filtro:function(c){return c.telefono_normalizado && /camioneta/i.test(c.tipo_vehiculo||'')}},
-  {id:'camiones', icon:'🚛', nombre:'Camiones', desc:'Camiones y maquinaria pesada',
-   filtro:function(c){return c.telefono_normalizado && (/camion|maquin/i.test(c.tipo_vehiculo||'')||/mercedes|volvo|scania|iveco/i.test(c.marca||''))}}
+  {id:'transportistas', icon:'🚛', nombre:'Empresas de transporte', desc:'Foco B2B pesados',
+   filtro:function(c){return c.telefono_normalizado && /transport|carga|logistica|logística|carguio|carguío/i.test(c.nombre||'')}}
 ]
 
 // PLANTILLAS
@@ -235,7 +260,19 @@ var PLANTILLAS=[
   {id:'diesel', icon:'⚙️', nombre:'Diesel/Common Rail', preview:'Especial diesel - limpieza inyectores',
    texto:'Hola {nombre}! 👋\n\n⚙️ ESPECIAL VEHÍCULOS DIESEL\n\nSé que tienes {vehiculo}. Estamos ofreciendo:\n\n✅ Limpieza de inyectores por ultrasonido\n✅ Cambio filtro combustible\n✅ Análisis de retorno\n\nTodo en tu domicilio.\n\n¿Te interesa? Te paso el detalle.\n\nServiruta · +56 9 4521 0814'},
   {id:'volver', icon:'⏰', nombre:'Reactivación', preview:'Hace tiempo que no sabemos de ti...',
-   texto:'Hola {nombre}! 👋\n\n¡Cuánto tiempo! Te saluda Serviruta.\n\nHace un tiempo que no sabemos de ti. Quería saber cómo va tu {vehiculo}.\n\nSi hay algo pendiente, tenemos disponibilidad esta semana para ir a domicilio.\n\nCualquier consulta, aquí estoy.\n\nServiruta · +56 9 4521 0814'}
+   texto:'Hola {nombre}! 👋\n\n¡Cuánto tiempo! Te saluda Serviruta.\n\nHace un tiempo que no sabemos de ti. Quería saber cómo va tu {vehiculo}.\n\nSi hay algo pendiente, tenemos disponibilidad esta semana para ir a domicilio.\n\nCualquier consulta, aquí estoy.\n\nServiruta · +56 9 4521 0814'},
+  
+  // 🎯 PLANTILLAS PARA EMPRESAS
+  {id:'empresa_convenio', icon:'🏢', nombre:'B2B · Convenio empresarial', preview:'Propuesta de servicio para tu flota',
+   texto:'Hola {nombre}! 👋\n\nSoy del equipo Serviruta. Te contacto porque trabajamos con varias empresas ofreciendo:\n\n✅ Mantención programada de flotas\n✅ Facturación 30 días\n✅ Servicio a domicilio en tus instalaciones\n✅ Reporte mensual de estado de vehículos\n\n¿Te interesa que armemos una propuesta para tu flota? Te llamo cuando puedas.\n\nServiruta · +56 9 4521 0814'},
+  {id:'empresa_factura', icon:'📄', nombre:'B2B · Con factura', preview:'Servicio con factura, sin costo traslado',
+   texto:'Hola {nombre}! 👋\n\nTe saluda Serviruta.\n\nSabías que tenemos servicio con FACTURA para empresas? Ideal para tu flota:\n\n📄 Facturación tributaria\n🚐 Vamos a tu empresa\n💳 Formas de pago flexibles\n\n¿Necesitas cotizar algún servicio para tus vehículos?\n\nServiruta · +56 9 4521 0814'},
+  
+  // 🎯 PLANTILLAS PARA VEHÍCULO PESADO
+  {id:'pesado_dpf', icon:'🚛', nombre:'Pesados · DPF/EGR', preview:'Limpieza DPF/EGR para camiones',
+   texto:'Hola {nombre}! 👋\n\nTe saluda Serviruta 🔧\n\nEspecialistas en vehículos pesados. Sabemos que el DPF/EGR de tu {vehiculo} es crítico:\n\n✅ Limpieza DPF sin desmontar\n✅ Diagnóstico EGR completo\n✅ Regeneración forzada\n✅ En tu patio o taller\n\nEvitamos que tu camión pare producción. ¿Cuándo te acomoda?\n\nServiruta · +56 9 4521 0814'},
+  {id:'pesado_mantencion', icon:'🔧', nombre:'Pesados · Mantención programada', preview:'Mantención camión sin parar operación',
+   texto:'Hola {nombre}! 👋\n\nTe saluda Serviruta - Mecánica Móvil.\n\nPara tu {vehiculo} ofrecemos MANTENCIÓN sin parar operación:\n\n🔧 Vamos donde esté el camión\n🕒 Trabajos nocturnos o fin de semana\n📊 Registro completo por vehículo\n💰 Precio flota\n\n¿Coordinamos una visita técnica?\n\nServiruta · +56 9 4521 0814'}
 ]
 
 function toast(msg,tipo){
@@ -260,6 +297,17 @@ async function cargar(){
     CLIENTES=await r.json()
     renderSegmentos()
     renderPlantillas()
+    
+    // Auto-seleccionar desde URL params
+    var params=new URLSearchParams(window.location.search)
+    var segParam=params.get('seg')
+    var tplParam=params.get('tpl')
+    if(segParam && SEGMENTOS.find(function(s){return s.id===segParam})){
+      setTimeout(function(){elegirSeg(segParam)},100)
+    }
+    if(tplParam && PLANTILLAS.find(function(t){return t.id===tplParam})){
+      setTimeout(function(){elegirTemplate(tplParam)},200)
+    }
   }catch(e){
     toast('Error: '+e.message,'err')
   }

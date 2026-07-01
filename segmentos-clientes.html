@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Segmentos · Serviruta</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0A0D;--s1:#111114;--s2:#16161B;--s3:#1C1C23;--line:#26262E;--line-2:#353541;--rojo:#E8210A;--rojo-l:#FF4D2E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;--dorado:#D4AF37;--t1:#F6F4EF;--t2:#C7C5BF;--t3:#8B8990;--display:'Syne',sans-serif;--body:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--t2);font-family:var(--body);font-size:14px;line-height:1.5;min-height:100vh}
+button{cursor:pointer;border:none;background:none;color:inherit;font-family:inherit;font-size:14px}
+a{color:inherit;text-decoration:none}
+
+.bar{position:sticky;top:0;z-index:50;background:rgba(10,10,13,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:14px 20px;display:flex;align-items:center;gap:12px}
+.back{font-family:var(--mono);font-size:11px;color:var(--t3);padding:6px 10px;border:1px solid var(--line);border-radius:6px}
+.sigil{width:34px;height:34px;background:var(--rojo);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:14px;color:#fff}
+.title{font-family:var(--display);font-weight:800;font-size:15px;color:var(--t1);flex:1;line-height:1.2}
+.title small{display:block;font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;margin-top:2px;font-weight:500}
+
+.shell{max-width:1100px;margin:0 auto;padding:20px 16px 80px}
+
+.intro{text-align:center;margin-bottom:24px}
+.intro-tit{font-family:var(--display);font-weight:900;font-size:clamp(24px,4vw,32px);color:var(--t1);letter-spacing:-1px;margin-bottom:8px}
+.intro-tit em{color:var(--rojo-l);font-style:normal}
+.intro-desc{font-size:13px;color:var(--t3);max-width:600px;margin:0 auto}
+
+/* MATRIZ 2x2 */
+.matriz-wrap{background:var(--s1);border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:20px}
+.matriz-titulo{font-family:var(--display);font-weight:800;font-size:14px;color:var(--t1);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.matriz-titulo::before{content:"";width:4px;height:18px;background:var(--rojo);border-radius:2px}
+
+.matriz{display:grid;grid-template-columns:80px 1fr 1fr;grid-template-rows:auto auto auto;gap:8px}
+.mat-lbl{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.15em;text-transform:uppercase;font-weight:700;display:flex;align-items:center;justify-content:center;text-align:center}
+.mat-lbl.top{writing-mode:horizontal-tb;padding:8px 0}
+.mat-lbl.left{writing-mode:vertical-lr;transform:rotate(180deg);padding:0}
+.mat-cell{background:var(--s2);border:1px solid var(--line);border-radius:12px;padding:16px;cursor:pointer;transition:all 200ms;position:relative;overflow:hidden}
+.mat-cell:hover{border-color:var(--line-2);transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,0,0,0.2)}
+.mat-cell.oro{border:2px solid var(--dorado);background:linear-gradient(135deg,rgba(212,175,55,0.1),var(--s2))}
+.mat-cell.oro::before{content:"⭐ FOCO";position:absolute;top:8px;right:8px;font-family:var(--mono);font-size:9px;color:var(--dorado);letter-spacing:0.15em;font-weight:800}
+.mat-cell.volumen{border:2px solid var(--azul);background:linear-gradient(135deg,rgba(96,165,250,0.08),var(--s2))}
+.mat-cell.volumen::before{content:"📊 VOLUMEN";position:absolute;top:8px;right:8px;font-family:var(--mono);font-size:9px;color:var(--azul);letter-spacing:0.15em;font-weight:800}
+.mat-icon{font-size:28px;margin-bottom:8px}
+.mat-num{font-family:var(--display);font-weight:900;font-size:36px;color:var(--t1);line-height:1;letter-spacing:-2px;margin-bottom:4px}
+.mat-name{font-family:var(--display);font-weight:800;font-size:13px;color:var(--t2);margin-bottom:6px}
+.mat-stats{font-family:var(--mono);font-size:10px;color:var(--t3);display:flex;flex-direction:column;gap:2px}
+.mat-stats b{color:var(--t1);font-weight:700}
+.mat-cta{margin-top:10px;font-family:var(--mono);font-size:10px;color:var(--dorado);letter-spacing:0.1em;text-transform:uppercase;font-weight:700}
+.mat-cell.volumen .mat-cta{color:var(--azul)}
+.mat-cell:not(.oro):not(.volumen) .mat-cta{color:var(--t3)}
+
+/* ESTRATEGIAS */
+.estrategias{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin-bottom:20px}
+.estr{background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:18px}
+.estr-icon{font-size:24px;margin-bottom:8px}
+.estr-tit{font-family:var(--display);font-weight:800;font-size:14px;color:var(--t1);margin-bottom:4px}
+.estr-sub{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:10px}
+.estr-txt{font-size:12px;color:var(--t2);line-height:1.5;margin-bottom:12px}
+.estr-actions{display:flex;flex-direction:column;gap:6px}
+.estr-btn{padding:9px 12px;border-radius:8px;font-family:var(--display);font-weight:700;font-size:11px;letter-spacing:0.05em;text-align:center;transition:all 150ms;display:flex;align-items:center;justify-content:center;gap:6px}
+.estr-btn-1{background:var(--rojo);color:#fff}
+.estr-btn-1:hover{background:var(--rojo-l)}
+.estr-btn-2{background:var(--s3);color:var(--t1);border:1px solid var(--line)}
+.estr-btn-2:hover{background:var(--line)}
+.estr.oro{border-color:rgba(212,175,55,0.4);background:linear-gradient(135deg,rgba(212,175,55,0.05),var(--s1))}
+.estr.oro .estr-tit{color:var(--dorado)}
+
+/* Lista */
+.lista{background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:20px;display:none}
+.lista.show{display:block}
+.lista-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:10px}
+.lista-tit{font-family:var(--display);font-weight:800;font-size:15px;color:var(--t1)}
+.lista-actions{display:flex;gap:8px}
+.lista-btn{padding:8px 14px;border-radius:8px;font-family:var(--display);font-weight:700;font-size:11px;letter-spacing:0.05em;background:var(--rojo);color:#fff;display:inline-flex;align-items:center;gap:6px}
+.lista-btn:hover{background:var(--rojo-l)}
+.lista-btn.sec{background:var(--s3);color:var(--t1);border:1px solid var(--line)}
+
+.cli-row{background:var(--s2);border-radius:8px;padding:12px;margin-bottom:6px;display:grid;grid-template-columns:1fr auto auto;gap:12px;align-items:center}
+.cli-nombre{font-family:var(--display);font-weight:700;font-size:13px;color:var(--t1);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cli-meta{font-size:11px;color:var(--t3);margin-top:2px;font-family:var(--mono)}
+.cli-ltv{font-family:var(--display);font-weight:700;font-size:13px;color:var(--verde);letter-spacing:-0.3px}
+.cli-wa{width:36px;height:36px;background:#25D366;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;text-decoration:none;transition:all 150ms}
+.cli-wa:hover{background:#1EB855;transform:scale(1.05)}
+
+.loading{text-align:center;padding:60px 20px;color:var(--t3)}
+.empty{text-align:center;padding:40px 20px;color:var(--t3);font-size:13px}
+
+@media(max-width:640px){
+  .matriz{grid-template-columns:60px 1fr 1fr}
+  .mat-num{font-size:28px}
+  .mat-lbl{font-size:8px}
+}
+
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:12px 20px;font-size:13px;font-weight:600;color:var(--t1);opacity:0;transition:all 300ms;pointer-events:none;z-index:200}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.ok{border-color:var(--verde);color:var(--verde)}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <button class="back" onclick="location.href='menu-coordinador.html'">← Volver</button>
+  <div class="sigil">S</div>
+  <div class="title">Segmentos de clientes<small>Empresa / Particular · Liviano / Pesado</small></div>
+</header>
+
+<div class="shell" id="cont">
+  <div class="loading">📊 Cargando segmentación...</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+
+var CLIENTES=[]
+
+function toast(msg,tipo){
+  var t=document.getElementById('toast')
+  t.textContent=msg
+  t.className='toast '+(tipo||'')
+  t.classList.add('show')
+  setTimeout(function(){t.classList.remove('show')},2500)
+}
+
+function fmt(n){
+  if(!n) return '$0'
+  var v=parseInt(n)
+  if(v>=1000000) return '$'+(v/1000000).toFixed(1)+'M'
+  if(v>=1000) return '$'+Math.round(v/1000)+'k'
+  return '$'+v.toLocaleString('es-CL')
+}
+
+async function cargar(){
+  var r=await fetch(SB_URL+'/rest/v1/clientes?select=id,nombre,telefono_normalizado,tipo_cliente,clase_vehiculo,potencial,vehiculo_principal,marca,ltv,servicios_totales,ultimo_servicio_fecha,proximo_servicio_sugerido,rut&telefono_normalizado=not.is.null&order=ltv.desc',{
+    headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}
+  })
+  if(!r.ok){toast('Error cargando','err');return}
+  CLIENTES=await r.json()
+  render()
+}
+
+function render(){
+  // Calcular matriz
+  var celdas={
+    'empresa_pesado':{tipo:'empresa',clase:'pesado',icon:'🏢🚛',nombre:'Empresa · Pesado',oro:true,ctaTxt:'FLOTAS B2B'},
+    'empresa_liviano':{tipo:'empresa',clase:'liviano',icon:'🏢🚗',nombre:'Empresa · Liviano',oro:false,volumen:false,ctaTxt:'FLOTAS SERVICIO'},
+    'particular_pesado':{tipo:'particular',clase:'pesado',icon:'👤🚛',nombre:'Particular · Pesado',oro:true,ctaTxt:'DUEÑOS CAMIÓN'},
+    'particular_liviano':{tipo:'particular',clase:'liviano',icon:'👤🚗',nombre:'Particular · Liviano',oro:false,volumen:true,ctaTxt:'VOLUMEN B2C'}
+  }
+  
+  Object.keys(celdas).forEach(function(k){
+    var c=celdas[k]
+    var lista=CLIENTES.filter(function(x){return x.tipo_cliente===c.tipo && x.clase_vehiculo===c.clase})
+    c.count=lista.length
+    c.ltv=lista.reduce(function(a,x){return a+(parseFloat(x.ltv)||0)},0)
+    c.premium=lista.filter(function(x){return x.potencial==='premium' || x.potencial==='alto'}).length
+  })
+  
+  var html=''
+  
+  // Intro
+  html+='<div class="intro">'
+  html+='<div class="intro-tit">Tu base en <em>4 segmentos</em></div>'
+  html+='<div class="intro-desc">Cada segmento requiere un enfoque distinto. Los pesados son 4-6x más rentables por servicio, los livianos son volumen. Enfoca tu energía donde más ROI genera.</div>'
+  html+='</div>'
+  
+  // MATRIZ 2x2
+  html+='<div class="matriz-wrap">'
+  html+='<div class="matriz-titulo">📊 Matriz de segmentación</div>'
+  html+='<div class="matriz">'
+  html+='<div></div>'
+  html+='<div class="mat-lbl top">🚗 LIVIANO<br><span style="opacity:0.5;font-size:8px">autos · camionetas</span></div>'
+  html+='<div class="mat-lbl top">🚛 PESADO<br><span style="opacity:0.5;font-size:8px">camiones · maquinaria</span></div>'
+  
+  html+='<div class="mat-lbl left">🏢 EMPRESA</div>'
+  html+=celdaHTML('empresa_liviano',celdas.empresa_liviano)
+  html+=celdaHTML('empresa_pesado',celdas.empresa_pesado)
+  
+  html+='<div class="mat-lbl left">👤 PARTICULAR</div>'
+  html+=celdaHTML('particular_liviano',celdas.particular_liviano)
+  html+=celdaHTML('particular_pesado',celdas.particular_pesado)
+  html+='</div>'
+  html+='</div>'
+  
+  // ESTRATEGIAS
+  html+='<div style="font-family:var(--display);font-weight:800;font-size:14px;color:var(--t1);margin-bottom:12px;display:flex;align-items:center;gap:8px"><span style="width:4px;height:18px;background:var(--rojo);border-radius:2px"></span>🎯 Enfoque por segmento</div>'
+  html+='<div class="estrategias">'
+  
+  html+='<div class="estr oro">'
+  html+='<div class="estr-icon">🏢🚛</div>'
+  html+='<div class="estr-tit">Empresa · Pesado</div>'
+  html+='<div class="estr-sub">'+celdas.empresa_pesado.count+' clientes · '+fmt(celdas.empresa_pesado.ltv)+' LTV</div>'
+  html+='<div class="estr-txt"><b style="color:var(--dorado)">Máxima prioridad.</b> Ticket $500k-$2M por servicio. Estos clientes valoran velocidad, factura y no parar operación. Ofrece convenios de mantención programada.</div>'
+  html+='<div class="estr-actions">'
+  html+='<a class="estr-btn estr-btn-1" href="campanas-clientes.html?seg=empresa_pesado&tpl=pesado_mantencion">📣 Campaña mantención pesados</a>'
+  html+='<button class="estr-btn estr-btn-2" onclick="verLista(\'empresa_pesado\')">👁 Ver los '+celdas.empresa_pesado.count+' clientes</button>'
+  html+='</div>'
+  html+='</div>'
+  
+  html+='<div class="estr oro">'
+  html+='<div class="estr-icon">👤🚛</div>'
+  html+='<div class="estr-tit">Particular · Pesado</div>'
+  html+='<div class="estr-sub">'+celdas.particular_pesado.count+' clientes · '+fmt(celdas.particular_pesado.ltv)+' LTV</div>'
+  html+='<div class="estr-txt"><b style="color:var(--dorado)">Dueños de camión propio.</b> Tratan su camión como negocio. Foco en DPF/EGR, mantención mayor, cambio embrague. Ticket $300k-$1M promedio.</div>'
+  html+='<div class="estr-actions">'
+  html+='<a class="estr-btn estr-btn-1" href="campanas-clientes.html?seg=particular_pesado&tpl=pesado_dpf">📣 Campaña DPF/EGR</a>'
+  html+='<button class="estr-btn estr-btn-2" onclick="verLista(\'particular_pesado\')">👁 Ver los '+celdas.particular_pesado.count+' clientes</button>'
+  html+='</div>'
+  html+='</div>'
+  
+  html+='<div class="estr">'
+  html+='<div class="estr-icon">🏢🚗</div>'
+  html+='<div class="estr-tit">Empresa · Liviano</div>'
+  html+='<div class="estr-sub">'+celdas.empresa_liviano.count+' clientes · '+fmt(celdas.empresa_liviano.ltv)+' LTV</div>'
+  html+='<div class="estr-txt">Flotas de camionetas/autos de servicio. Rappi de repuestos, servicios pequeños, mantención con factura. Volumen alto, ticket medio ($80k-$200k).</div>'
+  html+='<div class="estr-actions">'
+  html+='<a class="estr-btn estr-btn-1" href="campanas-clientes.html?seg=empresa_liviano&tpl=empresa_convenio">📣 Campaña convenio B2B</a>'
+  html+='<button class="estr-btn estr-btn-2" onclick="verLista(\'empresa_liviano\')">👁 Ver los '+celdas.empresa_liviano.count+' clientes</button>'
+  html+='</div>'
+  html+='</div>'
+  
+  html+='<div class="estr">'
+  html+='<div class="estr-icon">👤🚗</div>'
+  html+='<div class="estr-tit">Particular · Liviano</div>'
+  html+='<div class="estr-sub">'+celdas.particular_liviano.count+' clientes · '+fmt(celdas.particular_liviano.ltv)+' LTV</div>'
+  html+='<div class="estr-txt"><b style="color:var(--azul)">Volumen puro.</b> Mantenciones básicas, cambio aceite, diagnósticos. Ticket $35k-$150k. Enfoque: automatización y recompra frecuente.</div>'
+  html+='<div class="estr-actions">'
+  html+='<a class="estr-btn estr-btn-1" href="campanas-clientes.html?seg=particular_liviano&tpl=oferta_aceite">📣 Campaña aceite masiva</a>'
+  html+='<button class="estr-btn estr-btn-2" onclick="verLista(\'particular_liviano\')">👁 Ver los '+celdas.particular_liviano.count+' clientes</button>'
+  html+='</div>'
+  html+='</div>'
+  
+  html+='</div>'
+  
+  // Contenedor de lista drill-down
+  html+='<div class="lista" id="lista"></div>'
+  
+  document.getElementById('cont').innerHTML=html
+}
+
+function celdaHTML(id,c){
+  var clase=c.oro?'oro':(c.volumen?'volumen':'')
+  return '<div class="mat-cell '+clase+'" onclick="verLista(\''+id+'\')">'+
+    '<div class="mat-icon">'+c.icon+'</div>'+
+    '<div class="mat-num">'+c.count+'</div>'+
+    '<div class="mat-name">'+c.nombre+'</div>'+
+    '<div class="mat-stats">'+
+      '<span>💰 LTV: <b>'+fmt(c.ltv)+'</b></span>'+
+      '<span>⭐ Premium/Alto: <b>'+c.premium+'</b></span>'+
+    '</div>'+
+    '<div class="mat-cta">'+c.ctaTxt+' →</div>'+
+  '</div>'
+}
+
+function verLista(segId){
+  var conf={
+    'empresa_pesado':{tipo:'empresa',clase:'pesado',nombre:'🏢🚛 Empresas · Pesado',tpl:'pesado_mantencion'},
+    'empresa_liviano':{tipo:'empresa',clase:'liviano',nombre:'🏢🚗 Empresas · Liviano',tpl:'empresa_convenio'},
+    'particular_pesado':{tipo:'particular',clase:'pesado',nombre:'👤🚛 Particulares · Pesado',tpl:'pesado_dpf'},
+    'particular_liviano':{tipo:'particular',clase:'liviano',nombre:'👤🚗 Particulares · Liviano',tpl:'oferta_aceite'}
+  }
+  var c=conf[segId]
+  if(!c) return
+  
+  var lista=CLIENTES.filter(function(x){return x.tipo_cliente===c.tipo && x.clase_vehiculo===c.clase})
+  lista.sort(function(a,b){return (parseFloat(b.ltv)||0)-(parseFloat(a.ltv)||0)})
+  
+  var cont=document.getElementById('lista')
+  cont.classList.add('show')
+  
+  var html='<div class="lista-head">'
+  html+='<div class="lista-tit">'+c.nombre+' <span style="font-family:var(--mono);font-size:11px;color:var(--t3);font-weight:400">· '+lista.length+' clientes</span></div>'
+  html+='<div class="lista-actions">'
+  html+='<a class="lista-btn" href="campanas-clientes.html?seg='+segId+'&tpl='+c.tpl+'">📣 Campaña masiva</a>'
+  html+='<button class="lista-btn sec" onclick="descargarCSV(\''+segId+'\')">📊 CSV</button>'
+  html+='</div>'
+  html+='</div>'
+  
+  if(!lista.length){
+    html+='<div class="empty">Sin clientes en este segmento</div>'
+  } else {
+    lista.slice(0,50).forEach(function(cli){
+      var tel=cli.telefono_normalizado
+      var telWA=tel.length===9?'56'+tel:tel
+      var msg=encodeURIComponent('Hola '+(cli.nombre||'').split(' ')[0]+'! 👋 Te saluda Serviruta. ¿Cómo va todo con tu '+(cli.vehiculo_principal||'vehículo')+'?')
+      html+='<div class="cli-row">'
+      html+='<div style="min-width:0">'
+      html+='<div class="cli-nombre">'+cli.nombre+'</div>'
+      html+='<div class="cli-meta">'+(cli.vehiculo_principal||cli.marca||'—')+(cli.rut?' · RUT '+cli.rut:'')+'</div>'
+      html+='</div>'
+      html+='<div style="text-align:right"><div class="cli-ltv">'+fmt(cli.ltv||0)+'</div><div style="font-family:var(--mono);font-size:9px;color:var(--t3)">'+cli.servicios_totales+' serv.</div></div>'
+      html+='<a class="cli-wa" href="https://wa.me/'+telWA+'?text='+msg+'" target="_blank">💬</a>'
+      html+='</div>'
+    })
+    if(lista.length>50) html+='<div style="text-align:center;font-family:var(--mono);font-size:10px;color:var(--t3);margin-top:12px">Mostrando 50 de '+lista.length+'. Para ver todos usa la lista completa del CRM.</div>'
+  }
+  
+  cont.innerHTML=html
+  setTimeout(function(){cont.scrollIntoView({behavior:'smooth',block:'start'})},100)
+}
+
+function descargarCSV(segId){
+  var conf={'empresa_pesado':{tipo:'empresa',clase:'pesado'},'empresa_liviano':{tipo:'empresa',clase:'liviano'},'particular_pesado':{tipo:'particular',clase:'pesado'},'particular_liviano':{tipo:'particular',clase:'liviano'}}
+  var c=conf[segId]
+  var lista=CLIENTES.filter(function(x){return x.tipo_cliente===c.tipo && x.clase_vehiculo===c.clase})
+  var rows=[['Nombre','Telefono','RUT','Vehiculo','Marca','LTV','Servicios','Ultimo servicio','WhatsApp']]
+  lista.forEach(function(cli){
+    var tel=cli.telefono_normalizado||''
+    var telWA=tel.length===9?'56'+tel:tel
+    rows.push([cli.nombre||'',tel,cli.rut||'',cli.vehiculo_principal||'',cli.marca||'',cli.ltv||0,cli.servicios_totales||0,cli.ultimo_servicio_fecha||'','https://wa.me/'+telWA])
+  })
+  var csv=rows.map(function(r){return r.map(function(x){return '"'+String(x||'').replace(/"/g,'""')+'"'}).join(',')}).join('\n')
+  var blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8;'})
+  var link=document.createElement('a')
+  link.href=URL.createObjectURL(blob)
+  link.download='segmento_'+segId+'_'+new Date().toISOString().slice(0,10)+'.csv'
+  link.click()
+  toast('✅ CSV descargado','ok')
+}
+
+cargar()
+</script>
+
+</body>
+</html>

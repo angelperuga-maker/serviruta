@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Histórico de Ventas · Serviruta</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0A0D;--s1:#111114;--s2:#16161B;--s3:#1C1C23;--line:#26262E;--line-2:#353541;--rojo:#E8210A;--rojo-l:#FF4D2E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;--dorado:#D4AF37;--t1:#F6F4EF;--t2:#C7C5BF;--t3:#8B8990;--display:'Syne',sans-serif;--body:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--t2);font-family:var(--body);font-size:14px;line-height:1.5;min-height:100vh}
+button{cursor:pointer;border:none;background:none;color:inherit;font-family:inherit;font-size:14px}
+a{color:inherit;text-decoration:none}
+
+.bar{position:sticky;top:0;z-index:50;background:rgba(10,10,13,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:14px 20px;display:flex;align-items:center;gap:12px}
+.back{font-family:var(--mono);font-size:11px;color:var(--t3);padding:6px 10px;border:1px solid var(--line);border-radius:6px}
+.sigil{width:34px;height:34px;background:var(--rojo);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:14px;color:#fff}
+.title{font-family:var(--display);font-weight:800;font-size:15px;color:var(--t1);flex:1;line-height:1.2}
+.title small{display:block;font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;margin-top:2px;font-weight:500}
+
+.shell{max-width:1100px;margin:0 auto;padding:20px 16px 80px}
+
+/* HERO TOTAL HISTORICO */
+.hero{background:linear-gradient(135deg,rgba(212,175,55,0.15),rgba(34,197,94,0.05));border:2px solid rgba(212,175,55,0.4);border-radius:20px;padding:32px 24px;margin-bottom:20px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;top:-50%;right:-20%;width:60%;height:200%;background:radial-gradient(ellipse at center,rgba(212,175,55,0.1),transparent);pointer-events:none}
+.hero-lbl{font-family:var(--mono);font-size:11px;color:var(--dorado);letter-spacing:0.3em;text-transform:uppercase;margin-bottom:14px;position:relative}
+.hero-num{font-family:var(--display);font-weight:900;font-size:clamp(48px,10vw,80px);color:var(--dorado);line-height:1;letter-spacing:-4px;margin-bottom:6px;position:relative;text-shadow:0 4px 20px rgba(212,175,55,0.3)}
+.hero-desc{font-size:14px;color:var(--t2);position:relative}
+.hero-desc b{color:var(--t1)}
+.hero-rango{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.15em;margin-top:12px;position:relative}
+
+/* METRICAS PRINCIPALES */
+.metricas{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:20px}
+.metrica{background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:18px;position:relative}
+.metrica-lbl{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:8px}
+.metrica-num{font-family:var(--display);font-weight:800;font-size:24px;color:var(--t1);line-height:1;letter-spacing:-1px;margin-bottom:4px}
+.metrica-sub{font-size:11px;color:var(--t3)}
+.metrica.verde{border-color:rgba(34,197,94,0.3);background:linear-gradient(135deg,rgba(34,197,94,0.06),var(--s1))}
+.metrica.verde .metrica-num{color:var(--verde)}
+.metrica.naranja{border-color:rgba(251,146,60,0.3);background:linear-gradient(135deg,rgba(251,146,60,0.06),var(--s1))}
+.metrica.naranja .metrica-num{color:var(--naranja)}
+.metrica.azul{border-color:rgba(96,165,250,0.3);background:linear-gradient(135deg,rgba(96,165,250,0.06),var(--s1))}
+.metrica.azul .metrica-num{color:var(--azul)}
+
+/* SECCIONES */
+.sec{background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:22px;margin-bottom:14px}
+.sec-tit{font-family:var(--display);font-weight:800;font-size:14px;color:var(--t1);margin-bottom:18px;display:flex;align-items:center;gap:8px}
+.sec-tit::before{content:"";width:4px;height:18px;background:var(--rojo);border-radius:2px}
+
+/* CHART MENSUAL */
+.mes-row{display:grid;grid-template-columns:100px 1fr auto;gap:16px;align-items:center;margin-bottom:12px}
+.mes-lbl{font-family:var(--display);font-weight:700;font-size:13px;color:var(--t1)}
+.mes-bar-cont{background:var(--s2);border-radius:6px;height:32px;position:relative;overflow:hidden}
+.mes-bar-fact{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,var(--verde),rgba(34,197,94,0.6));border-radius:6px 0 0 6px;transition:width 600ms ease-out}
+.mes-bar-pipe{position:absolute;top:0;bottom:0;background:linear-gradient(90deg,var(--naranja),rgba(251,146,60,0.6));border-radius:0 6px 6px 0;transition:width 600ms ease-out;transition-delay:200ms}
+.mes-monto{font-family:var(--display);font-weight:800;font-size:15px;color:var(--t1);text-align:right}
+.mes-monto small{display:block;font-family:var(--mono);font-size:9px;color:var(--t3);font-weight:400;margin-top:2px}
+.mes-leyenda{display:flex;gap:16px;justify-content:center;margin-top:14px;font-family:var(--mono);font-size:10px;color:var(--t3);flex-wrap:wrap}
+.mes-leyenda-item{display:flex;align-items:center;gap:6px}
+.mes-leyenda-dot{width:10px;height:10px;border-radius:50%}
+.mes-leyenda-dot.verde{background:var(--verde)}
+.mes-leyenda-dot.naranja{background:var(--naranja)}
+
+/* SEGMENTOS TABLE */
+.tabla{width:100%;border-collapse:separate;border-spacing:0}
+.tabla th{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.15em;text-transform:uppercase;padding:10px;text-align:left;border-bottom:1px solid var(--line);font-weight:700}
+.tabla td{padding:14px 10px;border-bottom:1px solid var(--line);font-size:13px}
+.tabla tr:last-child td{border-bottom:none}
+.tabla tr:hover td{background:var(--s2)}
+.tabla .num{font-family:var(--display);font-weight:700;text-align:right}
+.tabla .verde{color:var(--verde)}
+.tabla .naranja{color:var(--naranja)}
+.tabla .dorado{color:var(--dorado)}
+
+/* TOP CLIENTES */
+.top-cli{background:var(--s2);border-radius:10px;padding:14px;margin-bottom:8px;display:grid;grid-template-columns:32px 1fr auto;gap:12px;align-items:center}
+.top-cli-rank{width:28px;height:28px;background:var(--s3);color:var(--t3);border-radius:50%;font-family:var(--display);font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.top-cli-rank.oro{background:linear-gradient(135deg,var(--dorado),var(--amarillo));color:#000}
+.top-cli-rank.plata{background:linear-gradient(135deg,#C0C0C0,#909090);color:#000}
+.top-cli-rank.bronce{background:linear-gradient(135deg,#CD7F32,#8B4513);color:#fff}
+.top-cli-info{min-width:0}
+.top-cli-nombre{font-family:var(--display);font-weight:700;font-size:13px;color:var(--t1);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.top-cli-meta{font-size:11px;color:var(--t3);font-family:var(--mono)}
+.top-cli-monto{text-align:right}
+.top-cli-monto b{font-family:var(--display);font-weight:800;font-size:14px;color:var(--dorado);letter-spacing:-0.3px}
+.top-cli-monto span{display:block;font-family:var(--mono);font-size:9px;color:var(--t3);margin-top:1px}
+
+/* INSIGHTS */
+.insight{background:var(--s2);border-left:4px solid var(--dorado);border-radius:8px;padding:14px 16px;margin-bottom:10px;font-size:13px;color:var(--t2);line-height:1.6}
+.insight b{color:var(--t1)}
+.insight.verde{border-color:var(--verde)}
+.insight.naranja{border-color:var(--naranja)}
+.insight.azul{border-color:var(--azul)}
+
+.loading{text-align:center;padding:60px 20px;color:var(--t3)}
+
+@media(max-width:640px){
+  .mes-row{grid-template-columns:70px 1fr auto;gap:10px}
+  .mes-lbl{font-size:12px}
+  .mes-monto{font-size:13px}
+  .tabla th,.tabla td{padding:8px 6px;font-size:11px}
+}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <button class="back" onclick="location.href='menu-coordinador.html'">← Volver</button>
+  <div class="sigil">S</div>
+  <div class="title">Histórico de ventas<small>Dashboard financiero · desde el inicio</small></div>
+</header>
+
+<div class="shell" id="cont">
+  <div class="loading">💰 Cargando datos históricos...</div>
+</div>
+
+<script>
+var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+
+function fmt(n){
+  if(!n) return '$0'
+  var v=parseInt(n)
+  if(v>=1000000) return '$'+(v/1000000).toFixed(1)+'M'
+  if(v>=1000) return '$'+Math.round(v/1000)+'k'
+  return '$'+v.toLocaleString('es-CL')
+}
+
+function fmtFull(n){
+  return '$'+parseInt(n||0).toLocaleString('es-CL')
+}
+
+function fmtMes(m){
+  var meses={'01':'Enero','02':'Febrero','03':'Marzo','04':'Abril','05':'Mayo','06':'Junio','07':'Julio','08':'Agosto','09':'Septiembre','10':'Octubre','11':'Noviembre','12':'Diciembre'}
+  var partes=m.split('-')
+  return meses[partes[1]]+' '+partes[0]
+}
+
+async function sbGet(path){
+  var r=await fetch(SB_URL+'/rest/v1/'+path,{headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}})
+  return r.ok?await r.json():[]
+}
+
+async function cargar(){
+  var results = await Promise.all([
+    sbGet('presupuestos?select=*&order=created_at.desc&limit=1000'),
+    sbGet('clientes?select=id,nombre,tipo_cliente,clase_vehiculo,ltv,ltv_pipeline,servicios_totales,servicios_completados,servicios_pendientes&or=(ltv.gt.0,ltv_pipeline.gt.0)&order=ltv.desc&limit=100')
+  ])
+  render(results[0], results[1])
+}
+
+function render(ppto, clientes){
+  var totalHist=0, facturado=0, pipeline=0
+  var completados=0, pendientes=0, cancelados=0
+  var mesesMap={}
+  
+  ppto.forEach(function(p){
+    if(!p.total || p.total<=0) return
+    var monto=parseInt(p.total)
+    totalHist+=monto
+    
+    var mes=p.created_at.substring(0,7)
+    if(!mesesMap[mes]) mesesMap[mes]={mes:mes,total:0,fact:0,pipe:0,count:0}
+    mesesMap[mes].total+=monto
+    mesesMap[mes].count++
+    
+    if(p.estado_servicio==='completado'){
+      facturado+=monto
+      completados++
+      mesesMap[mes].fact+=monto
+    } else if(p.estado_servicio==='nuevo' || p.estado_servicio==='enviado'){
+      pipeline+=monto
+      pendientes++
+      mesesMap[mes].pipe+=monto
+    } else {
+      cancelados++
+    }
+  })
+  
+  var meses=Object.values(mesesMap).sort(function(a,b){return b.mes.localeCompare(a.mes)})
+  var conversion=ppto.length?((completados/(completados+pendientes+cancelados))*100).toFixed(1):0
+  var pctFacturado=totalHist?((facturado/totalHist)*100).toFixed(1):0
+  var ticketProm=completados?Math.round(facturado/completados):0
+  
+  // Segmentos (basado en clientes)
+  var segsMap={}
+  clientes.forEach(function(c){
+    var k=c.tipo_cliente+'|'+c.clase_vehiculo
+    if(!segsMap[k]) segsMap[k]={tipo:c.tipo_cliente,clase:c.clase_vehiculo,clientes:0,fact:0,pipe:0,servicios:0}
+    segsMap[k].clientes++
+    segsMap[k].fact+=parseFloat(c.ltv||0)
+    segsMap[k].pipe+=parseFloat(c.ltv_pipeline||0)
+    segsMap[k].servicios+=c.servicios_completados||0
+  })
+  var segs=Object.values(segsMap).sort(function(a,b){return (b.fact+b.pipe)-(a.fact+a.pipe)})
+  
+  // Top clientes
+  var topCli=clientes.slice().sort(function(a,b){
+    return (parseFloat(b.ltv||0)+parseFloat(b.ltv_pipeline||0)) - (parseFloat(a.ltv||0)+parseFloat(a.ltv_pipeline||0))
+  }).slice(0,10)
+  
+  // Rango fechas
+  var fechaMin=meses.length?meses[meses.length-1].mes:''
+  var fechaMax=meses.length?meses[0].mes:''
+  
+  var html=''
+  
+  // HERO
+  html+='<div class="hero">'
+  html+='<div class="hero-lbl">Total vendido histórico</div>'
+  html+='<div class="hero-num">'+fmt(totalHist)+'</div>'
+  html+='<div class="hero-desc"><b>'+ppto.length+' presupuestos</b> generados · <b>'+completados+' facturados</b> · <b>'+pendientes+' pendientes</b></div>'
+  html+='<div class="hero-rango">📅 '+(fechaMin?fmtMes(fechaMin):'—')+' → '+(fechaMax?fmtMes(fechaMax):'—')+'</div>'
+  html+='</div>'
+  
+  // METRICAS
+  html+='<div class="metricas">'
+  html+='<div class="metrica verde"><div class="metrica-lbl">💰 Facturado real</div><div class="metrica-num">'+fmt(facturado)+'</div><div class="metrica-sub">'+completados+' servicios cerrados</div></div>'
+  html+='<div class="metrica naranja"><div class="metrica-lbl">💼 Pipeline pendiente</div><div class="metrica-num">'+fmt(pipeline)+'</div><div class="metrica-sub">'+pendientes+' propuestas abiertas</div></div>'
+  html+='<div class="metrica azul"><div class="metrica-lbl">🎯 Conversión</div><div class="metrica-num">'+conversion+'%</div><div class="metrica-sub">propuestas → cerradas</div></div>'
+  html+='<div class="metrica"><div class="metrica-lbl">🎫 Ticket promedio</div><div class="metrica-num">'+fmt(ticketProm)+'</div><div class="metrica-sub">servicio facturado</div></div>'
+  html+='</div>'
+  
+  // CHART POR MES
+  if(meses.length){
+    var maxMes=Math.max.apply(null,meses.map(function(m){return m.total}))
+    html+='<div class="sec">'
+    html+='<div class="sec-tit">📊 Ventas por mes</div>'
+    meses.forEach(function(m){
+      var pctFact=(m.fact/maxMes)*100
+      var pctPipe=(m.pipe/maxMes)*100
+      var totalMes=m.fact+m.pipe
+      html+='<div class="mes-row">'
+      html+='<div class="mes-lbl">'+fmtMes(m.mes)+'</div>'
+      html+='<div class="mes-bar-cont">'
+      if(pctFact>0) html+='<div class="mes-bar-fact" style="width:'+pctFact+'%"></div>'
+      if(pctPipe>0) html+='<div class="mes-bar-pipe" style="left:'+pctFact+'%;width:'+pctPipe+'%"></div>'
+      html+='</div>'
+      html+='<div class="mes-monto">'+fmt(totalMes)+'<small>'+m.count+' servicios</small></div>'
+      html+='</div>'
+    })
+    html+='<div class="mes-leyenda">'
+    html+='<div class="mes-leyenda-item"><span class="mes-leyenda-dot verde"></span>Facturado ('+fmt(facturado)+')</div>'
+    html+='<div class="mes-leyenda-item"><span class="mes-leyenda-dot naranja"></span>Pipeline ('+fmt(pipeline)+')</div>'
+    html+='</div>'
+    html+='</div>'
+  }
+  
+  // SEGMENTOS
+  if(segs.length){
+    html+='<div class="sec">'
+    html+='<div class="sec-tit">🎯 Ventas por segmento</div>'
+    html+='<table class="tabla">'
+    html+='<thead><tr><th>Segmento</th><th style="text-align:right">Clientes</th><th style="text-align:right">Facturado</th><th style="text-align:right">Pipeline</th><th style="text-align:right">Total</th><th style="text-align:right">Ticket prom.</th></tr></thead>'
+    html+='<tbody>'
+    segs.forEach(function(s){
+      var icon=(s.tipo==='empresa'?'🏢':'👤')+(s.clase==='pesado'?'🚛':'🚗')
+      var ticketProm=s.servicios?Math.round(s.fact/s.servicios):0
+      html+='<tr>'
+      html+='<td>'+icon+' '+s.tipo.charAt(0).toUpperCase()+s.tipo.slice(1)+' · '+s.clase.charAt(0).toUpperCase()+s.clase.slice(1)+'</td>'
+      html+='<td class="num">'+s.clientes+'</td>'
+      html+='<td class="num verde">'+fmt(s.fact)+'</td>'
+      html+='<td class="num naranja">'+fmt(s.pipe)+'</td>'
+      html+='<td class="num dorado">'+fmt(s.fact+s.pipe)+'</td>'
+      html+='<td class="num">'+fmt(ticketProm)+'</td>'
+      html+='</tr>'
+    })
+    html+='</tbody></table>'
+    html+='</div>'
+  }
+  
+  // TOP CLIENTES
+  html+='<div class="sec">'
+  html+='<div class="sec-tit">🏆 Top 10 clientes por total vendido</div>'
+  topCli.forEach(function(c,i){
+    var total=parseFloat(c.ltv||0)+parseFloat(c.ltv_pipeline||0)
+    var rank=i+1
+    var rankClase=rank===1?'oro':(rank===2?'plata':(rank===3?'bronce':''))
+    var icon=(c.tipo_cliente==='empresa'?'🏢':'👤')+(c.clase_vehiculo==='pesado'?'🚛':'🚗')
+    html+='<div class="top-cli">'
+    html+='<div class="top-cli-rank '+rankClase+'">'+rank+'</div>'
+    html+='<div class="top-cli-info">'
+    html+='<div class="top-cli-nombre">'+icon+' '+c.nombre+'</div>'
+    html+='<div class="top-cli-meta">'+(c.servicios_completados||0)+' facturados · '+(c.servicios_pendientes||0)+' pendientes</div>'
+    html+='</div>'
+    html+='<div class="top-cli-monto">'
+    html+='<b>'+fmt(total)+'</b>'
+    if(c.ltv>0 && c.ltv_pipeline>0) html+='<span>'+fmt(c.ltv)+' + '+fmt(c.ltv_pipeline)+' pipe</span>'
+    else if(c.ltv_pipeline>0) html+='<span style="color:var(--naranja)">solo pipeline</span>'
+    else html+='<span style="color:var(--verde)">facturado</span>'
+    html+='</div>'
+    html+='</div>'
+  })
+  html+='</div>'
+  
+  // INSIGHTS
+  html+='<div class="sec">'
+  html+='<div class="sec-tit">💡 Insights</div>'
+  html+='<div class="insight verde"><b>💰 Facturado histórico:</b> '+fmtFull(facturado)+' con '+completados+' servicios cerrados. Ticket promedio de '+fmtFull(ticketProm)+' por servicio.</div>'
+  html+='<div class="insight naranja"><b>💼 Oportunidad inmediata:</b> Tienes '+pendientes+' presupuestos por '+fmtFull(pipeline)+' esperando cierre. Con tu ratio actual de '+conversion+'%, podrías cerrar aprox '+fmtFull(pipeline*(conversion/100))+' más.</div>'
+  
+  if(segs.length){
+    var top=segs[0]
+    var iconTop=(top.tipo==='empresa'?'🏢':'👤')+(top.clase==='pesado'?'🚛':'🚗')
+    var ticketTop=top.servicios?Math.round(top.fact/top.servicios):0
+    html+='<div class="insight dorado"><b>🎯 Tu segmento más rentable:</b> '+iconTop+' '+top.tipo+' · '+top.clase+' con '+top.clientes+' clientes generó '+fmtFull(top.fact+top.pipe)+' ('+Math.round((top.fact+top.pipe)/(facturado+pipeline)*100)+'% del total). Ticket promedio '+fmtFull(ticketTop)+'.</div>'
+  }
+  
+  if(pctFacturado<70){
+    html+='<div class="insight naranja"><b>⚠️ Alto nivel de pipeline sin cerrar:</b> Solo el '+pctFacturado+'% de lo propuesto se ha facturado. El '+(100-pctFacturado).toFixed(1)+'% ('+fmtFull(pipeline)+') está esperando decisión. Enfoca los próximos días en cerrar propuestas abiertas.</div>'
+  }
+  
+  html+='</div>'
+  
+  document.getElementById('cont').innerHTML=html
+}
+
+cargar()
+</script>
+
+</body>
+</html>

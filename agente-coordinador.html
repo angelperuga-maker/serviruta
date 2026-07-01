@@ -219,6 +219,11 @@ CRECIMIENTO:
 16. crear_evento_agenda - agrega evento al calendario
 17. confirmar_agenda - confirma cita a cliente y tecnico
 
+CRM Y RECOMPRA (NUEVO):
+20. sugerencias_del_dia - obtiene lista de clientes prioritarios a contactar hoy con mensajes sugeridos
+21. campana_masiva - genera mensajes personalizados para un segmento de clientes (marca, categoria, dormidos, etc)
+22. actualizar_cliente_crm - actualiza notas, ultimo contacto, categoria de un cliente en el CRM
+
 NAVEGACION Y REPORTES:
 18. abrir_modulo - sugiere abrir un modulo del hub (cualquiera de los 28+)
 19. generar_reporte - resumen ejecutivo (hoy, semana, mes)
@@ -694,6 +699,42 @@ var TOOLS = [
       },
       required: ["agenda_id"]
     }
+  },
+  {
+    name: "sugerencias_del_dia",
+    description: "Obtiene lista de clientes prioritarios para contactar hoy con sus datos, sugerencia de servicio, mensaje sugerido y link de WhatsApp listo. Usalo cuando el usuario pregunte 'a quien contacto hoy', 'sugerencias', 'clientes a llamar', 'oportunidades', 'seguimiento clientes'.",
+    input_schema: {
+      type: "object",
+      properties: {
+        nivel: { type: "string", enum: ["urgente","alta","media","baja","todos"], description: "Filtra por nivel de prioridad" },
+        limite: { type: "number", description: "Cuantos mostrar (default 5)" }
+      }
+    }
+  },
+  {
+    name: "campana_masiva",
+    description: "Prepara mensajes personalizados de WhatsApp para un segmento de clientes (por marca, categoria, dormidos, etc). Devuelve la cantidad de clientes y links de WhatsApp listos. NO envia automaticamente, solo genera. Usalo cuando el usuario quiera 'promocionar', 'ofertar', 'contactar todos los X', 'campaña'.",
+    input_schema: {
+      type: "object",
+      properties: {
+        segmento: { type: "string", enum: ["vip","dormidos","alto_ltv","peugeot","chevrolet","hyundai","suzuki","camionetas","camiones","facturaron","nuevos","todos_wa"], description: "Segmento a contactar" },
+        mensaje: { type: "string", description: "Mensaje a enviar. Usa {nombre}, {marca}, {vehiculo}, {sugerencia} como variables" }
+      },
+      required: ["segmento","mensaje"]
+    }
+  },
+  {
+    name: "actualizar_cliente_crm",
+    description: "Actualiza informacion de un cliente en el CRM: notas internas, marcar como contactado hoy, cambiar categoria. Usalo cuando el usuario diga 'anota que...', 'marca como contactado', 'ya llame a...'.",
+    input_schema: {
+      type: "object",
+      properties: {
+        nombre_cliente: { type: "string", description: "Nombre del cliente para buscarlo" },
+        accion: { type: "string", enum: ["agregar_nota","marcar_contactado","cambiar_categoria"], description: "Que hacer" },
+        valor: { type: "string", description: "Texto de la nota, o nueva categoria" }
+      },
+      required: ["nombre_cliente","accion"]
+    }
   }
 ]
 
@@ -1087,6 +1128,128 @@ async function ejecutarTool(nombre, input){
         await getDB().from('agenda').update({estado:'confirmado'}).eq('id', input.agenda_id)
         await loadAll()
         return resultado
+      }
+      
+      case "sugerencias_del_dia": {
+        var nivel = input.nivel || 'todos'
+        var limite = input.limite || 5
+        var url = SUPABASE_URL+'/rest/v1/vista_sugerencias_diarias?select=*&order=prioridad.asc,ltv.desc&limit='+limite
+        if(nivel !== 'todos') url += '&nivel_prioridad=eq.'+nivel
+        else url += '&nivel_prioridad=neq.ok'
+        
+        var resp = await fetch(url, {headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}})
+        if(!resp.ok) return {ok:false, error:'Error consultando sugerencias'}
+        var sugs = await resp.json()
+        
+        if(!sugs.length) return {ok:true, mensaje:'No hay clientes prioritarios para hoy 🎉', total:0}
+        
+        var totalValor = sugs.reduce(function(a,s){return a+(parseInt(s.ticket_estimado)||0)},0)
+        
+        return {
+          ok:true,
+          total: sugs.length,
+          valor_potencial: totalValor,
+          clientes: sugs.map(function(s){
+            var tel = s.telefono_normalizado || ''
+            var telWA = tel.length===9 ? '56'+tel : tel
+            var msg = 'Hola '+(s.nombre||'').split(' ')[0]+'! 👋\n\nTe saluda Serviruta. Ya sería buen momento para:\n\n💡 '+(s.proximo_servicio_sugerido||'una revisión')+'\n\n¿Te interesa? Vamos a domicilio.\n\nServiruta · +56 9 4521 0814'
+            return {
+              nombre: s.nombre,
+              vehiculo: s.vehiculo_principal,
+              nivel: s.nivel_prioridad,
+              dias_sin_ver: s.dias_sin_ver,
+              ltv: s.ltv,
+              ticket_estimado: s.ticket_estimado,
+              sugerencia: s.proximo_servicio_sugerido,
+              whatsapp_link: 'https://wa.me/'+telWA+'?text='+encodeURIComponent(msg),
+              mensaje_sugerido: msg
+            }
+          })
+        }
+      }
+      
+      case "campana_masiva": {
+        var seg = input.segmento
+        var msgBase = input.mensaje
+        var url = SUPABASE_URL+'/rest/v1/clientes?select=*&telefono_normalizado=not.is.null'
+        
+        // Aplicar filtros según segmento
+        if(seg==='vip') url += '&categoria=eq.VIP'
+        else if(seg==='dormidos') url += '&categoria=eq.dormido'
+        else if(seg==='alto_ltv') url += '&ltv=gte.200000'
+        else if(seg==='facturaron') url += '&ltv=gt.0'
+        else if(seg==='nuevos') url += '&servicios_totales=lte.1'
+        else if(seg==='peugeot') url += '&or=(marca.ilike.*peugeot*,marca.ilike.*citroen*)'
+        else if(seg==='chevrolet') url += '&marca=ilike.*chevrolet*'
+        else if(seg==='hyundai') url += '&marca=ilike.*hyundai*'
+        else if(seg==='suzuki') url += '&marca=ilike.*suzuki*'
+        else if(seg==='camionetas') url += '&tipo_vehiculo=ilike.*camioneta*'
+        else if(seg==='camiones') url += '&or=(tipo_vehiculo.ilike.*camion*,marca.ilike.*mercedes*,marca.ilike.*volvo*,marca.ilike.*scania*)'
+        
+        var resp = await fetch(url, {headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}})
+        if(!resp.ok) return {ok:false, error:'Error consultando segmento'}
+        var clientes = await resp.json()
+        
+        if(!clientes.length) return {ok:true, mensaje:'No hay clientes en este segmento', total:0}
+        
+        var links = clientes.slice(0,15).map(function(c){
+          var msgPers = msgBase
+            .replace(/\{nombre\}/g,(c.nombre||'').split(' ')[0]||'amigo')
+            .replace(/\{marca\}/g,c.marca||'auto')
+            .replace(/\{vehiculo\}/g,c.vehiculo_principal||c.marca||'auto')
+            .replace(/\{sugerencia\}/g,c.proximo_servicio_sugerido||'una revisión preventiva')
+          var tel = c.telefono_normalizado || ''
+          var telWA = tel.length===9 ? '56'+tel : tel
+          return {
+            nombre: c.nombre,
+            vehiculo: c.vehiculo_principal,
+            whatsapp_link: 'https://wa.me/'+telWA+'?text='+encodeURIComponent(msgPers)
+          }
+        })
+        
+        return {
+          ok:true,
+          segmento: seg,
+          total_clientes: clientes.length,
+          mostrados: links.length,
+          mensaje_ejemplo: msgBase,
+          clientes: links,
+          nota: clientes.length > 15 ? 'Se muestran los primeros 15. Para ver la lista completa y enviar, abre el módulo Campañas.' : null
+        }
+      }
+      
+      case "actualizar_cliente_crm": {
+        var busq = input.nombre_cliente.toLowerCase()
+        var resp = await fetch(SUPABASE_URL+'/rest/v1/clientes?nombre=ilike.*'+encodeURIComponent(input.nombre_cliente)+'*&limit=1', {
+          headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY}
+        })
+        if(!resp.ok) return {ok:false, error:'Error buscando cliente'}
+        var arr = await resp.json()
+        if(!arr.length) return {ok:false, error:'No encontré un cliente con ese nombre: '+input.nombre_cliente}
+        var c = arr[0]
+        
+        var body = {updated_at:new Date().toISOString()}
+        var mensaje = ''
+        
+        if(input.accion==='marcar_contactado'){
+          body.ultimo_contacto = new Date().toISOString().slice(0,10)
+          mensaje = 'Marcado como contactado hoy'
+        } else if(input.accion==='agregar_nota'){
+          body.notas_internas = (c.notas_internas ? c.notas_internas+'\n' : '') + '['+new Date().toISOString().slice(0,10)+'] '+(input.valor||'')
+          mensaje = 'Nota agregada'
+        } else if(input.accion==='cambiar_categoria'){
+          body.categoria = input.valor
+          mensaje = 'Categoría cambiada a '+input.valor
+        }
+        
+        var upd = await fetch(SUPABASE_URL+'/rest/v1/clientes?id=eq.'+c.id, {
+          method:'PATCH',
+          headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Content-Type':'application/json'},
+          body: JSON.stringify(body)
+        })
+        if(!upd.ok) return {ok:false, error:'Error actualizando'}
+        
+        return {ok:true, cliente:c.nombre, accion:mensaje}
       }
       
       default:

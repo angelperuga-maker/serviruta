@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Campañas · Serviruta</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0A0D;--s1:#111114;--s2:#16161B;--s3:#1C1C23;--line:#26262E;--line-2:#353541;--rojo:#E8210A;--rojo-l:#FF4D2E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;--dorado:#D4AF37;--t1:#F6F4EF;--t2:#C7C5BF;--t3:#8B8990;--t4:#56555C;--display:'Syne',sans-serif;--body:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--t2);font-family:var(--body);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100vh}
+button,input,select,textarea{font-family:inherit;font-size:14px}
+button{cursor:pointer;border:none;background:none;color:inherit}
+
+.bar{position:sticky;top:0;z-index:50;background:rgba(10,10,13,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:14px 20px;display:flex;align-items:center;gap:12px}
+.back{font-family:var(--mono);font-size:11px;color:var(--t3);padding:6px 10px;border:1px solid var(--line);border-radius:6px}
+.sigil{width:34px;height:34px;background:var(--rojo);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:14px;color:#fff}
+.title{font-family:var(--display);font-weight:800;font-size:15px;color:var(--t1);flex:1;line-height:1.2}
+.title small{display:block;font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;margin-top:2px;font-weight:500}
+
+.shell{max-width:1100px;margin:0 auto;padding:20px 16px 80px}
+
+/* Pasos */
+.pasos{display:flex;gap:10px;margin-bottom:20px;justify-content:center}
+.paso{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase}
+.paso-num{width:24px;height:24px;border-radius:50%;background:var(--s3);color:var(--t3);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;border:1px solid var(--line)}
+.paso.active .paso-num{background:var(--rojo);color:#fff;border-color:var(--rojo)}
+.paso.active{color:var(--t1)}
+.paso.done .paso-num{background:var(--verde);color:#000;border-color:var(--verde)}
+
+/* Sección */
+.seccion{background:var(--s1);border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:16px}
+.sec-tit{font-family:var(--display);font-weight:800;font-size:14px;color:var(--t1);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.sec-tit::before{content:"";width:4px;height:18px;background:var(--rojo);border-radius:2px}
+
+/* Segmentos */
+.segs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.seg{background:var(--s2);border:2px solid var(--line);border-radius:12px;padding:16px;cursor:pointer;transition:all 150ms;position:relative}
+.seg:hover{border-color:var(--line-2);background:var(--s3)}
+.seg.selected{border-color:var(--rojo);background:linear-gradient(135deg,rgba(232,33,10,0.08),var(--s2))}
+.seg-check{position:absolute;top:12px;right:12px;width:22px;height:22px;border-radius:50%;background:var(--s3);border:2px solid var(--line);display:flex;align-items:center;justify-content:center;transition:all 150ms}
+.seg.selected .seg-check{background:var(--rojo);border-color:var(--rojo);color:#fff}
+.seg-check::after{content:"✓";font-size:12px;font-weight:800;opacity:0}
+.seg.selected .seg-check::after{opacity:1}
+.seg-icon{font-size:24px;margin-bottom:8px}
+.seg-nombre{font-family:var(--display);font-weight:800;font-size:14px;color:var(--t1);margin-bottom:4px}
+.seg-desc{font-size:11px;color:var(--t3);margin-bottom:10px;line-height:1.4}
+.seg-stats{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;color:var(--t2);padding-top:8px;border-top:1px dashed var(--line)}
+.seg-stats b{color:var(--t1);font-weight:700}
+
+/* Templates */
+.templates{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:10px;margin-bottom:14px}
+.template{background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:14px;cursor:pointer;transition:all 150ms}
+.template:hover{border-color:var(--line-2)}
+.template.selected{border-color:var(--dorado);background:linear-gradient(135deg,rgba(212,175,55,0.08),var(--s2))}
+.template-tit{font-family:var(--display);font-weight:700;font-size:13px;color:var(--t1);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.template-preview{font-size:11px;color:var(--t3);line-height:1.4;font-style:italic}
+
+/* Editor mensaje */
+.msg-editor{background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:14px}
+.msg-tools{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.var-chip{background:var(--s3);border:1px solid var(--line);color:var(--azul);font-family:var(--mono);font-size:10px;padding:4px 8px;border-radius:6px;cursor:pointer}
+.var-chip:hover{background:var(--azul);color:#000}
+.msg-textarea{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:12px;color:var(--t1);font-size:13px;line-height:1.6;font-family:inherit;min-height:180px;resize:vertical}
+.msg-textarea:focus{outline:none;border-color:var(--rojo)}
+.msg-info{font-family:var(--mono);font-size:10px;color:var(--t3);margin-top:6px;display:flex;justify-content:space-between}
+
+/* Preview */
+.preview-box{background:var(--s2);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
+.preview-cliente{font-family:var(--display);font-weight:700;font-size:13px;color:var(--dorado);margin-bottom:8px}
+.preview-msg{background:#DCF8C6;color:#000;padding:12px;border-radius:8px 8px 8px 0;font-size:13px;line-height:1.5;white-space:pre-wrap;max-width:85%}
+.preview-nav{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-family:var(--mono);font-size:10px;color:var(--t3)}
+.preview-nav button{padding:5px 10px;background:var(--s3);border:1px solid var(--line);border-radius:6px;color:var(--t1);font-size:11px}
+.preview-nav button:hover{background:var(--rojo);border-color:var(--rojo);color:#fff}
+.preview-nav button:disabled{opacity:0.3;cursor:not-allowed}
+
+/* Envío */
+.envio{background:linear-gradient(135deg,rgba(232,33,10,0.1),var(--s1));border:2px solid rgba(232,33,10,0.3);border-radius:14px;padding:20px;text-align:center}
+.envio-total{font-family:var(--display);font-weight:900;font-size:36px;color:var(--rojo-l);line-height:1;margin-bottom:6px;letter-spacing:-1px}
+.envio-desc{font-size:12px;color:var(--t2);margin-bottom:16px}
+.envio-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.btn{padding:12px 20px;border-radius:10px;font-family:var(--display);font-weight:700;font-size:13px;letter-spacing:0.05em;text-align:center;transition:all 150ms;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.btn-wa{background:#25D366;color:#fff}
+.btn-wa:hover{background:#1EB855;transform:translateY(-1px)}
+.btn-secondary{background:var(--s3);color:var(--t1);border:1px solid var(--line)}
+
+/* Progress envío */
+.envio-progress{display:none;margin-top:16px;padding:14px;background:var(--s2);border-radius:10px}
+.envio-progress.show{display:block}
+.progress-bar{background:var(--s3);border-radius:10px;height:8px;overflow:hidden;margin:10px 0}
+.progress-fill{height:100%;background:var(--verde);transition:width 300ms}
+.progress-txt{font-family:var(--mono);font-size:11px;color:var(--t2);text-align:center}
+.progress-hint{font-size:11px;color:var(--amarillo);text-align:center;margin-top:8px;font-family:var(--mono)}
+
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:12px 20px;font-size:13px;font-weight:600;color:var(--t1);opacity:0;transition:all 300ms;pointer-events:none;z-index:200}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.ok{border-color:var(--verde);color:var(--verde)}
+.toast.err{border-color:var(--rojo);color:var(--rojo-l)}
+
+@media(max-width:640px){
+  .pasos{flex-wrap:wrap}
+}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <button class="back" onclick="location.href='menu-coordinador.html'">← Volver</button>
+  <div class="sigil">S</div>
+  <div class="title">Campañas WhatsApp<small>Marketing masivo · segmentado por marca y vehículo</small></div>
+</header>
+
+<div class="shell">
+
+  <!-- Pasos -->
+  <div class="pasos">
+    <div class="paso active" id="p1"><div class="paso-num">1</div>Segmento</div>
+    <div class="paso" id="p2"><div class="paso-num">2</div>Mensaje</div>
+    <div class="paso" id="p3"><div class="paso-num">3</div>Envío</div>
+  </div>
+
+  <!-- SECCIÓN 1: SELECCIONAR SEGMENTO -->
+  <div class="seccion">
+    <div class="sec-tit">🎯 Elige el segmento a contactar</div>
+    <div class="segs" id="segs"></div>
+  </div>
+
+  <!-- SECCIÓN 2: PLANTILLAS Y MENSAJE -->
+  <div class="seccion">
+    <div class="sec-tit">💬 Elige plantilla o escribe el mensaje</div>
+    
+    <div class="templates" id="templates"></div>
+    
+    <div class="msg-editor">
+      <div class="msg-tools">
+        <span style="font-family:var(--mono);font-size:10px;color:var(--t3);margin-right:4px;align-self:center">Variables:</span>
+        <button class="var-chip" onclick="insertar('{nombre}')">{nombre}</button>
+        <button class="var-chip" onclick="insertar('{marca}')">{marca}</button>
+        <button class="var-chip" onclick="insertar('{vehiculo}')">{vehiculo}</button>
+        <button class="var-chip" onclick="insertar('{sugerencia}')">{sugerencia}</button>
+      </div>
+      <textarea id="mensaje" class="msg-textarea" placeholder="Hola {nombre}! Te saluda Serviruta..." oninput="actualizarPreview()"></textarea>
+      <div class="msg-info">
+        <span id="chars">0 caracteres</span>
+        <span id="vars-usadas">Sin variables</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 3: PREVIEW -->
+  <div class="seccion" id="sec-preview" style="display:none">
+    <div class="sec-tit">👀 Vista previa (así se enviará)</div>
+    <div class="preview-box">
+      <div class="preview-cliente" id="preview-cliente">—</div>
+      <div class="preview-msg" id="preview-msg">—</div>
+      <div class="preview-nav">
+        <button onclick="preview(-1)">‹ Anterior</button>
+        <span id="preview-idx">—</span>
+        <button onclick="preview(1)">Siguiente ›</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 4: ENVÍO -->
+  <div class="seccion" id="sec-envio" style="display:none">
+    <div class="sec-tit">🚀 Listo para enviar</div>
+    <div class="envio">
+      <div class="envio-total" id="envio-num">0</div>
+      <div class="envio-desc">clientes recibirán tu mensaje</div>
+      
+      <div class="envio-actions">
+        <button class="btn btn-wa" onclick="iniciarEnvio()">💬 Enviar por WhatsApp (uno por uno)</button>
+        <button class="btn btn-secondary" onclick="descargarCSV()">📊 Descargar lista CSV</button>
+      </div>
+      
+      <div class="envio-progress" id="progress">
+        <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+        <div class="progress-txt" id="progress-txt">0/0 · Preparando...</div>
+        <div class="progress-hint">💡 Se abrirá una pestaña de WhatsApp por cada cliente. Envía y cierra para pasar al siguiente.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+
+var CLIENTES=[]
+var SEG_ELEGIDO=null
+var CLIENTES_ELEGIDOS=[]
+var PREVIEW_IDX=0
+
+// SEGMENTOS PREDEFINIDOS
+var SEGMENTOS=[
+  {id:'todos_wa', icon:'👥', nombre:'Todos con WhatsApp', desc:'Toda la base de clientes con teléfono válido', 
+   filtro:function(c){return c.telefono_normalizado}},
+  {id:'vip', icon:'👑', nombre:'Clientes VIP', desc:'3+ servicios contigo · máxima confianza',
+   filtro:function(c){return c.categoria==='VIP' && c.telefono_normalizado}},
+  {id:'facturaron', icon:'💰', nombre:'Ya facturaron', desc:'Clientes que ya pagaron al menos una vez',
+   filtro:function(c){return c.ltv>0 && c.telefono_normalizado}},
+  {id:'alto_ltv', icon:'⭐', nombre:'Alto valor ($200k+)', desc:'LTV histórico sobre $200.000',
+   filtro:function(c){return c.ltv>=200000 && c.telefono_normalizado}},
+  {id:'dormidos', icon:'⏰', nombre:'Dormidos (60+ días)', desc:'Sin visitas hace más de 60 días',
+   filtro:function(c){var d=diasSinVer(c);return d>60 && c.telefono_normalizado}},
+  {id:'nuevos', icon:'🆕', nombre:'Nuevos', desc:'Un solo servicio, potencial recompra',
+   filtro:function(c){return c.servicios_totales<=1 && c.telefono_normalizado}},
+  {id:'peugeot', icon:'🇫🇷', nombre:'Peugeot / Citroën', desc:'HDI diesel · sugerir análisis inyectores',
+   filtro:function(c){return c.telefono_normalizado && (/peugeot|citroen/i.test(c.marca||'')||/peugeot|citroen/i.test(c.vehiculo_principal||''))}},
+  {id:'chevrolet', icon:'🚙', nombre:'Chevrolet', desc:'Autos Chevrolet',
+   filtro:function(c){return c.telefono_normalizado && /chevrolet/i.test(c.marca||'')}},
+  {id:'hyundai', icon:'🚗', nombre:'Hyundai', desc:'Autos Hyundai',
+   filtro:function(c){return c.telefono_normalizado && /hyundai/i.test(c.marca||'')}},
+  {id:'suzuki', icon:'🚙', nombre:'Suzuki', desc:'Autos Suzuki',
+   filtro:function(c){return c.telefono_normalizado && /suzuki/i.test(c.marca||'')}},
+  {id:'camionetas', icon:'🚚', nombre:'Camionetas', desc:'Todas las camionetas',
+   filtro:function(c){return c.telefono_normalizado && /camioneta/i.test(c.tipo_vehiculo||'')}},
+  {id:'camiones', icon:'🚛', nombre:'Camiones', desc:'Camiones y maquinaria pesada',
+   filtro:function(c){return c.telefono_normalizado && (/camion|maquin/i.test(c.tipo_vehiculo||'')||/mercedes|volvo|scania|iveco/i.test(c.marca||''))}}
+]
+
+// PLANTILLAS
+var PLANTILLAS=[
+  {id:'saludo', icon:'👋', nombre:'Saludo casual', preview:'Hola {nombre}! ¿Cómo va todo con tu {vehiculo}?',
+   texto:'Hola {nombre}! 👋\n\nTe saluda Serviruta.\n\n¿Cómo has estado? Quería saber cómo va todo con tu {vehiculo}. Si necesitas alguna revisión o mantención, cuenta con nosotros.\n\nVamos a domicilio en toda la RM.\n\nSaludos,\nServiruta · +56 9 4521 0814'},
+  {id:'sugerencia', icon:'💡', nombre:'Sugerencia técnica', preview:'Basado en tu {marca}, te recomendamos...',
+   texto:'Hola {nombre}! 👋\n\nTe saluda Serviruta 🔧\n\nBasado en tu {vehiculo}, ya sería buen momento para:\n\n💡 {sugerencia}\n\n¿Te gustaría agendar? Podemos ir a domicilio esta semana.\n\nServiruta · +56 9 4521 0814'},
+  {id:'oferta_aceite', icon:'🛢️', nombre:'Oferta cambio aceite', preview:'Promo cambio aceite $35.000',
+   texto:'Hola {nombre}! 👋\n\n🎁 SEMANA DE MANTENCIÓN\n\nCambio de aceite completo + filtro a domicilio:\n💰 $35.000 todo incluido\n📍 Vamos donde estés\n⏱️ 45 minutos\n\n¿Coordinamos para tu {vehiculo}?\n\nServiruta · +56 9 4521 0814'},
+  {id:'oferta_frenos', icon:'🛑', nombre:'Oferta frenos', preview:'Revisión y cambio frenos con descuento',
+   texto:'Hola {nombre}! 👋\n\n🛑 SEMANA DE SEGURIDAD - FRENOS\n\nRevisión completa de frenos + presupuesto sin costo.\n\nSi son delanteros: 20% descuento en el trabajo.\n\n¿Cómo van los frenos de tu {vehiculo}?\n\nServiruta · +56 9 4521 0814'},
+  {id:'diesel', icon:'⚙️', nombre:'Diesel/Common Rail', preview:'Especial diesel - limpieza inyectores',
+   texto:'Hola {nombre}! 👋\n\n⚙️ ESPECIAL VEHÍCULOS DIESEL\n\nSé que tienes {vehiculo}. Estamos ofreciendo:\n\n✅ Limpieza de inyectores por ultrasonido\n✅ Cambio filtro combustible\n✅ Análisis de retorno\n\nTodo en tu domicilio.\n\n¿Te interesa? Te paso el detalle.\n\nServiruta · +56 9 4521 0814'},
+  {id:'volver', icon:'⏰', nombre:'Reactivación', preview:'Hace tiempo que no sabemos de ti...',
+   texto:'Hola {nombre}! 👋\n\n¡Cuánto tiempo! Te saluda Serviruta.\n\nHace un tiempo que no sabemos de ti. Quería saber cómo va tu {vehiculo}.\n\nSi hay algo pendiente, tenemos disponibilidad esta semana para ir a domicilio.\n\nCualquier consulta, aquí estoy.\n\nServiruta · +56 9 4521 0814'}
+]
+
+function toast(msg,tipo){
+  var t=document.getElementById('toast')
+  t.textContent=msg
+  t.className='toast '+(tipo||'')
+  t.classList.add('show')
+  setTimeout(function(){t.classList.remove('show')},2500)
+}
+
+function diasSinVer(c){
+  if(!c.ultimo_servicio_fecha) return 999
+  return Math.floor((Date.now()-new Date(c.ultimo_servicio_fecha).getTime())/(1000*60*60*24))
+}
+
+async function cargar(){
+  try{
+    var r=await fetch(SB_URL+'/rest/v1/clientes?select=*&order=score.desc',{
+      headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}
+    })
+    if(!r.ok) throw new Error('HTTP '+r.status)
+    CLIENTES=await r.json()
+    renderSegmentos()
+    renderPlantillas()
+  }catch(e){
+    toast('Error: '+e.message,'err')
+  }
+}
+
+function renderSegmentos(){
+  var cont=document.getElementById('segs')
+  cont.innerHTML=SEGMENTOS.map(function(s){
+    var clientes=CLIENTES.filter(s.filtro)
+    var ltv=clientes.reduce(function(a,c){return a+(parseFloat(c.ltv)||0)},0)
+    if(clientes.length===0) return ''
+    return '<div class="seg" data-id="'+s.id+'" onclick="elegirSeg(\''+s.id+'\')">'+
+      '<div class="seg-check"></div>'+
+      '<div class="seg-icon">'+s.icon+'</div>'+
+      '<div class="seg-nombre">'+s.nombre+'</div>'+
+      '<div class="seg-desc">'+s.desc+'</div>'+
+      '<div class="seg-stats">'+
+        '<span><b>'+clientes.length+'</b> clientes</span>'+
+        (ltv>0?'<span>LTV: <b>$'+parseInt(ltv/1000)+'k</b></span>':'<span>—</span>')+
+      '</div>'+
+    '</div>'
+  }).join('')
+}
+
+function elegirSeg(id){
+  SEG_ELEGIDO=SEGMENTOS.find(function(s){return s.id===id})
+  document.querySelectorAll('.seg').forEach(function(e){e.classList.remove('selected')})
+  document.querySelector('.seg[data-id="'+id+'"]').classList.add('selected')
+  CLIENTES_ELEGIDOS=CLIENTES.filter(SEG_ELEGIDO.filtro)
+  document.getElementById('p1').classList.remove('active')
+  document.getElementById('p1').classList.add('done')
+  document.getElementById('p2').classList.add('active')
+  document.getElementById('envio-num').textContent=CLIENTES_ELEGIDOS.length+' '
+  document.getElementById('sec-envio').style.display='block'
+  toast('✅ '+CLIENTES_ELEGIDOS.length+' clientes seleccionados','ok')
+  actualizarPreview()
+}
+
+function renderPlantillas(){
+  var cont=document.getElementById('templates')
+  cont.innerHTML=PLANTILLAS.map(function(t){
+    return '<div class="template" data-id="'+t.id+'" onclick="elegirTemplate(\''+t.id+'\')">'+
+      '<div class="template-tit">'+t.icon+' '+t.nombre+'</div>'+
+      '<div class="template-preview">'+t.preview+'</div>'+
+    '</div>'
+  }).join('')
+}
+
+function elegirTemplate(id){
+  var t=PLANTILLAS.find(function(x){return x.id===id})
+  if(!t) return
+  document.querySelectorAll('.template').forEach(function(e){e.classList.remove('selected')})
+  document.querySelector('.template[data-id="'+id+'"]').classList.add('selected')
+  document.getElementById('mensaje').value=t.texto
+  actualizarPreview()
+}
+
+function insertar(v){
+  var ta=document.getElementById('mensaje')
+  var pos=ta.selectionStart
+  ta.value=ta.value.slice(0,pos)+v+ta.value.slice(pos)
+  ta.focus()
+  ta.selectionStart=ta.selectionEnd=pos+v.length
+  actualizarPreview()
+}
+
+function personalizarMensaje(msg,cliente){
+  return msg
+    .replace(/\{nombre\}/g,(cliente.nombre||'').split(' ')[0]||'amigo')
+    .replace(/\{marca\}/g,cliente.marca||'auto')
+    .replace(/\{vehiculo\}/g,cliente.vehiculo_principal||cliente.marca||'auto')
+    .replace(/\{sugerencia\}/g,cliente.proximo_servicio_sugerido||'una revisión preventiva')
+}
+
+function actualizarPreview(){
+  var msg=document.getElementById('mensaje').value
+  var chars=msg.length
+  document.getElementById('chars').textContent=chars+' caracteres'
+  
+  var vars=[]
+  if(/\{nombre\}/.test(msg)) vars.push('{nombre}')
+  if(/\{marca\}/.test(msg)) vars.push('{marca}')
+  if(/\{vehiculo\}/.test(msg)) vars.push('{vehiculo}')
+  if(/\{sugerencia\}/.test(msg)) vars.push('{sugerencia}')
+  document.getElementById('vars-usadas').textContent=vars.length?'Variables: '+vars.join(', '):'Sin variables (todos ven el mismo texto)'
+  
+  if(msg.trim() && CLIENTES_ELEGIDOS.length){
+    document.getElementById('sec-preview').style.display='block'
+    document.getElementById('p2').classList.remove('active')
+    document.getElementById('p2').classList.add('done')
+    document.getElementById('p3').classList.add('active')
+    PREVIEW_IDX=0
+    preview(0)
+  } else {
+    document.getElementById('sec-preview').style.display='none'
+  }
+}
+
+function preview(delta){
+  if(!CLIENTES_ELEGIDOS.length) return
+  PREVIEW_IDX=Math.max(0,Math.min(CLIENTES_ELEGIDOS.length-1,PREVIEW_IDX+delta))
+  var c=CLIENTES_ELEGIDOS[PREVIEW_IDX]
+  var msg=personalizarMensaje(document.getElementById('mensaje').value,c)
+  document.getElementById('preview-cliente').textContent='👤 '+c.nombre+' · '+(c.vehiculo_principal||'—')
+  document.getElementById('preview-msg').textContent=msg
+  document.getElementById('preview-idx').textContent=(PREVIEW_IDX+1)+' / '+CLIENTES_ELEGIDOS.length
+}
+
+async function iniciarEnvio(){
+  if(!CLIENTES_ELEGIDOS.length){toast('No hay clientes seleccionados','err');return}
+  var msg=document.getElementById('mensaje').value.trim()
+  if(!msg){toast('Escribe un mensaje','err');return}
+  
+  if(!confirm('Se abrirán '+CLIENTES_ELEGIDOS.length+' pestañas de WhatsApp Web una por una.\n\nEn cada pestaña presiona ENVIAR y luego "Siguiente" aquí abajo.\n\n¿Empezar?')) return
+  
+  document.getElementById('progress').classList.add('show')
+  enviarSiguiente(0,msg)
+}
+
+function enviarSiguiente(idx,msg){
+  if(idx>=CLIENTES_ELEGIDOS.length){
+    document.getElementById('progress-txt').textContent='✅ Terminado. '+CLIENTES_ELEGIDOS.length+' mensajes enviados'
+    document.getElementById('progress-fill').style.width='100%'
+    toast('🎉 Campaña completada','ok')
+    return
+  }
+  
+  var c=CLIENTES_ELEGIDOS[idx]
+  var msgPers=personalizarMensaje(msg,c)
+  var tel=c.telefono_normalizado
+  var telWA=tel.length===9?'56'+tel:tel
+  var url='https://wa.me/'+telWA+'?text='+encodeURIComponent(msgPers)
+  
+  var pct=Math.round((idx/CLIENTES_ELEGIDOS.length)*100)
+  document.getElementById('progress-fill').style.width=pct+'%'
+  document.getElementById('progress-txt').innerHTML=
+    (idx+1)+'/'+CLIENTES_ELEGIDOS.length+' · Enviando a <b style="color:var(--t1)">'+c.nombre+'</b><br>'+
+    '<button style="margin-top:10px;padding:10px 20px;background:#25D366;border:none;border-radius:8px;color:#fff;font-weight:700;cursor:pointer" onclick="abrirYSeguir('+idx+',\''+encodeURIComponent(msg)+'\')">💬 Abrir WhatsApp de '+c.nombre.split(' ')[0]+' →</button>'
+}
+
+function abrirYSeguir(idx,msgEnc){
+  var msg=decodeURIComponent(msgEnc)
+  var c=CLIENTES_ELEGIDOS[idx]
+  var msgPers=personalizarMensaje(msg,c)
+  var tel=c.telefono_normalizado
+  var telWA=tel.length===9?'56'+tel:tel
+  var url='https://wa.me/'+telWA+'?text='+encodeURIComponent(msgPers)
+  
+  window.open(url,'_blank')
+  
+  // Marcar como contactado
+  fetch(SB_URL+'/rest/v1/clientes?id=eq.'+c.id,{
+    method:'PATCH',
+    headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'},
+    body:JSON.stringify({ultimo_contacto:new Date().toISOString().slice(0,10)})
+  }).catch(function(){})
+  
+  // Siguiente después de 500ms
+  setTimeout(function(){enviarSiguiente(idx+1,msg)},500)
+}
+
+function descargarCSV(){
+  if(!CLIENTES_ELEGIDOS.length){toast('Sin clientes','err');return}
+  var msg=document.getElementById('mensaje').value.trim()
+  var rows=[['Nombre','Telefono','WhatsApp Link','Mensaje Personalizado']]
+  CLIENTES_ELEGIDOS.forEach(function(c){
+    var msgPers=personalizarMensaje(msg,c)
+    var tel=c.telefono_normalizado
+    var telWA=tel.length===9?'56'+tel:tel
+    rows.push([
+      c.nombre,
+      c.telefono||tel,
+      'https://wa.me/'+telWA+'?text='+encodeURIComponent(msgPers),
+      msgPers.replace(/\n/g,' | ')
+    ])
+  })
+  var csv=rows.map(function(r){return r.map(function(x){return '"'+String(x||'').replace(/"/g,'""')+'"'}).join(',')}).join('\n')
+  var blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8;'})
+  var link=document.createElement('a')
+  link.href=URL.createObjectURL(blob)
+  link.download='campana_'+SEG_ELEGIDO.id+'_'+new Date().toISOString().slice(0,10)+'.csv'
+  link.click()
+  toast('✅ CSV descargado','ok')
+}
+
+cargar()
+</script>
+
+</body>
+</html>

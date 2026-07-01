@@ -63,6 +63,16 @@ if (!sessionStorage.getItem("coord_auth")) { location.href = "login-coordinador.
   <div class="greeting">Panel <em>Coordinador</em></div>
   <div class="sub" id="fecha">—</div>
 
+  <!-- Widget de sugerencias del día -->
+  <a class="card" href="sugerencias-diarias.html" id="widget-sug" style="background:linear-gradient(135deg,rgba(212,175,55,0.15),rgba(232,33,10,0.03));border:1px solid rgba(212,175,55,0.4);display:none;margin-bottom:10px">
+    <div class="ci" style="background:linear-gradient(135deg,#D4AF37,#F5C518);color:#000;font-size:22px">💡</div>
+    <div>
+      <div class="cn" style="color:#D4AF37;font-size:15px">Sugerencias del día <span id="badge-sug-count" style="font-size:10px;background:rgba(232,33,10,0.2);color:var(--rojo-l);padding:2px 7px;border-radius:10px;margin-left:6px;font-weight:800">0</span></div>
+      <div class="cd" id="widget-sug-desc">Cargando...</div>
+    </div>
+    <span class="arr" style="color:#D4AF37">›</span>
+  </a>
+
   <!-- ============================ -->
   <!-- 📅 AGENDA (SIEMPRE PRIMERO) -->
   <!-- ============================ -->
@@ -267,6 +277,33 @@ if (!sessionStorage.getItem("coord_auth")) { location.href = "login-coordinador.
 </div>
 <script>
 document.getElementById("fecha").textContent = new Date().toLocaleDateString("es-CL",{weekday:"long",day:"numeric",month:"long"});
+
+// Cargar widget de sugerencias
+(async function(){
+  try{
+    var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
+    var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+    var r=await fetch(SB_URL+'/rest/v1/vista_sugerencias_diarias?nivel_prioridad=neq.ok&select=id,nivel_prioridad,ticket_estimado',{
+      headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}
+    })
+    if(!r.ok) return
+    var sugs=await r.json()
+    if(!sugs.length) return
+    
+    var urg=sugs.filter(function(s){return s.nivel_prioridad==='urgente'}).length
+    var alta=sugs.filter(function(s){return s.nivel_prioridad==='alta'}).length
+    var totalValor=sugs.reduce(function(a,s){return a+(parseInt(s.ticket_estimado)||0)},0)
+    
+    document.getElementById('badge-sug-count').textContent=sugs.length
+    var desc='$'+parseInt(totalValor).toLocaleString('es-CL')+' potencial'
+    if(urg>0) desc=urg+' urgente'+(urg!==1?'s':'')+' · '+desc
+    else if(alta>0) desc=alta+' alta prioridad · '+desc
+    else desc=sugs.length+' clientes para contactar · '+desc
+    
+    document.getElementById('widget-sug-desc').textContent=desc
+    document.getElementById('widget-sug').style.display='flex'
+  }catch(e){console.warn('Widget sug:',e)}
+})();
 </script>
 </body>
 </html>

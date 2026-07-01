@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Sugerencias del día · Serviruta</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0A0D;--s1:#111114;--s2:#16161B;--s3:#1C1C23;--line:#26262E;--line-2:#353541;--rojo:#E8210A;--rojo-l:#FF4D2E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;--dorado:#D4AF37;--t1:#F6F4EF;--t2:#C7C5BF;--t3:#8B8990;--t4:#56555C;--display:'Syne',sans-serif;--body:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--t2);font-family:var(--body);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100vh}
+button{cursor:pointer;border:none;background:none;color:inherit;font-family:inherit}
+
+.bar{position:sticky;top:0;z-index:50;background:rgba(10,10,13,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:14px 20px;display:flex;align-items:center;gap:12px}
+.back{font-family:var(--mono);font-size:11px;color:var(--t3);padding:6px 10px;border:1px solid var(--line);border-radius:6px}
+.sigil{width:34px;height:34px;background:var(--rojo);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:14px;color:#fff}
+.title{font-family:var(--display);font-weight:800;font-size:15px;color:var(--t1);flex:1;line-height:1.2}
+.title small{display:block;font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;margin-top:2px;font-weight:500}
+
+.shell{max-width:900px;margin:0 auto;padding:20px 16px 80px}
+
+/* Hero */
+.hero{background:linear-gradient(135deg,rgba(232,33,10,0.08),var(--s1));border:1px solid var(--line);border-radius:16px;padding:24px;margin-bottom:20px;text-align:center}
+.hero-lbl{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:12px}
+.hero-num{font-family:var(--display);font-weight:900;font-size:48px;color:var(--rojo-l);line-height:1;margin-bottom:6px;letter-spacing:-2px}
+.hero-desc{font-size:14px;color:var(--t2)}
+.hero-metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:14px;margin-top:20px;padding-top:20px;border-top:1px solid var(--line)}
+.hero-m{text-align:center}
+.hero-m-num{font-family:var(--display);font-weight:800;font-size:22px;color:var(--t1);line-height:1}
+.hero-m-lbl{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.15em;text-transform:uppercase;margin-top:4px}
+
+/* Tabs */
+.tabs{display:flex;gap:6px;margin-bottom:16px;overflow-x:auto;padding-bottom:2px}
+.tab{padding:9px 14px;background:var(--s2);border:1px solid var(--line);border-radius:20px;font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;font-weight:700;white-space:nowrap;transition:all 150ms}
+.tab.active{background:var(--rojo);border-color:var(--rojo);color:#fff}
+.tab .count{background:rgba(255,255,255,0.15);padding:2px 6px;border-radius:10px;font-size:9px;margin-left:6px}
+.tab:not(.active) .count{background:var(--s3)}
+
+/* Sugerencia card */
+.sug-list{display:flex;flex-direction:column;gap:10px}
+.sug{background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:16px;transition:all 150ms}
+.sug:hover{border-color:var(--line-2)}
+.sug.urgente{border-left:4px solid var(--rojo);background:linear-gradient(90deg,rgba(232,33,10,0.05),var(--s1))}
+.sug.alta{border-left:4px solid var(--naranja);background:linear-gradient(90deg,rgba(251,146,60,0.05),var(--s1))}
+.sug.media{border-left:4px solid var(--amarillo);background:linear-gradient(90deg,rgba(245,197,24,0.03),var(--s1))}
+.sug.baja{border-left:4px solid var(--azul)}
+
+.sug-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:12px;flex-wrap:wrap}
+.sug-nombre{font-family:var(--display);font-weight:800;font-size:16px;color:var(--t1);display:flex;align-items:center;gap:8px}
+.sug-tag{font-family:var(--mono);font-size:9px;padding:3px 8px;border-radius:999px;letter-spacing:0.1em;font-weight:700;text-transform:uppercase}
+.sug-tag.urgente{background:rgba(232,33,10,0.15);color:var(--rojo-l)}
+.sug-tag.alta{background:rgba(251,146,60,0.15);color:var(--naranja)}
+.sug-tag.media{background:rgba(245,197,24,0.15);color:var(--amarillo)}
+.sug-tag.baja{background:rgba(96,165,250,0.15);color:var(--azul)}
+.sug-tag.vip{background:linear-gradient(135deg,var(--dorado),var(--amarillo));color:#000}
+.sug-ticket{text-align:right;font-family:var(--mono);font-size:11px;color:var(--t3)}
+.sug-ticket b{display:block;font-family:var(--display);font-weight:700;font-size:16px;color:var(--verde);letter-spacing:-0.5px}
+
+.sug-info{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:12px;font-size:12px}
+.sug-info-cell{background:var(--s2);border-radius:8px;padding:8px 10px}
+.sug-info-cell-lbl{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:2px}
+.sug-info-cell-val{color:var(--t1);font-weight:600}
+
+.sug-mensaje{background:rgba(212,175,55,0.06);border:1px dashed rgba(212,175,55,0.3);border-radius:8px;padding:12px;margin-bottom:12px;position:relative}
+.sug-mensaje-lbl{font-family:var(--display);font-weight:700;font-size:11px;color:var(--dorado);margin-bottom:4px;letter-spacing:0.05em;text-transform:uppercase}
+.sug-mensaje-txt{font-size:13px;color:var(--t1);line-height:1.5}
+
+.sug-actions{display:grid;grid-template-columns:1fr 1fr auto;gap:8px}
+.btn{padding:11px 14px;border-radius:8px;font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:0.05em;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px;transition:all 150ms;text-decoration:none}
+.btn-wa{background:#25D366;color:#fff}
+.btn-wa:hover{background:#1EB855;transform:translateY(-1px)}
+.btn-call{background:var(--s3);color:var(--t1);border:1px solid var(--line)}
+.btn-marcar{background:var(--s3);color:var(--t2);border:1px solid var(--line);padding:11px 12px}
+.btn-marcar:hover{background:var(--verde);border-color:var(--verde);color:#000}
+
+.empty{text-align:center;padding:60px 20px;color:var(--t3)}
+.empty-ico{font-size:64px;opacity:0.3;margin-bottom:14px}
+.empty-tit{font-family:var(--display);font-weight:800;font-size:18px;color:var(--t2);margin-bottom:6px}
+
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:12px 20px;font-size:13px;font-weight:600;color:var(--t1);opacity:0;transition:all 300ms;pointer-events:none;z-index:200}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.ok{border-color:var(--verde);color:var(--verde)}
+
+@media(max-width:640px){
+  .sug-actions{grid-template-columns:1fr 1fr}
+  .btn-marcar{grid-column:1/-1}
+}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <button class="back" onclick="location.href='menu-coordinador.html'">← Volver</button>
+  <div class="sigil">S</div>
+  <div class="title">Sugerencias del día<small id="fecha">—</small></div>
+</header>
+
+<div class="shell">
+
+  <!-- HERO con métricas -->
+  <div class="hero">
+    <div class="hero-lbl">Ingreso potencial de hoy</div>
+    <div class="hero-num" id="valor-total">—</div>
+    <div class="hero-desc" id="valor-desc">contactando los clientes sugeridos</div>
+    
+    <div class="hero-metrics">
+      <div class="hero-m">
+        <div class="hero-m-num" id="m-total">—</div>
+        <div class="hero-m-lbl">Sugerencias</div>
+      </div>
+      <div class="hero-m">
+        <div class="hero-m-num" style="color:var(--rojo-l)" id="m-urg">—</div>
+        <div class="hero-m-lbl">Urgentes</div>
+      </div>
+      <div class="hero-m">
+        <div class="hero-m-num" style="color:var(--naranja)" id="m-alta">—</div>
+        <div class="hero-m-lbl">Alta</div>
+      </div>
+      <div class="hero-m">
+        <div class="hero-m-num" style="color:var(--amarillo)" id="m-media">—</div>
+        <div class="hero-m-lbl">Media</div>
+      </div>
+      <div class="hero-m">
+        <div class="hero-m-num" style="color:var(--azul)" id="m-baja">—</div>
+        <div class="hero-m-lbl">Baja</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs de filtro -->
+  <div class="tabs" id="tabs">
+    <button class="tab active" data-nivel="todos">Todas <span class="count" id="t-todos">0</span></button>
+    <button class="tab" data-nivel="urgente">🚨 Urgentes <span class="count" id="t-urgente">0</span></button>
+    <button class="tab" data-nivel="alta">🔥 Alta <span class="count" id="t-alta">0</span></button>
+    <button class="tab" data-nivel="media">⚡ Media <span class="count" id="t-media">0</span></button>
+    <button class="tab" data-nivel="baja">💡 Baja <span class="count" id="t-baja">0</span></button>
+  </div>
+
+  <!-- Lista de sugerencias -->
+  <div class="sug-list" id="lista"></div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+
+var SUGERENCIAS=[]
+var FILTRO='todos'
+
+function toast(msg,tipo){
+  var t=document.getElementById('toast')
+  t.textContent=msg
+  t.className='toast '+(tipo||'')
+  t.classList.add('show')
+  setTimeout(function(){t.classList.remove('show')},2500)
+}
+
+function fmt(n){
+  if(!n) return '$0'
+  return '$'+parseInt(n).toLocaleString('es-CL')
+}
+
+function iniciales(n){
+  if(!n) return '?'
+  var p=n.trim().split(/\s+/)
+  return (p[0][0]+(p[1]?p[1][0]:'')).toUpperCase()
+}
+
+async function cargar(){
+  var hoy=new Date()
+  document.getElementById('fecha').textContent=hoy.toLocaleDateString('es-CL',{weekday:'long',day:'numeric',month:'long'})
+  
+  try{
+    var r=await fetch(SB_URL+'/rest/v1/vista_sugerencias_diarias?nivel_prioridad=neq.ok&order=prioridad.asc,ltv.desc',{
+      headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}
+    })
+    if(!r.ok) throw new Error('HTTP '+r.status)
+    SUGERENCIAS=await r.json()
+  }catch(e){
+    toast('Error cargando: '+e.message,'err')
+    return
+  }
+  
+  // Métricas
+  var urg=SUGERENCIAS.filter(function(s){return s.nivel_prioridad==='urgente'})
+  var alta=SUGERENCIAS.filter(function(s){return s.nivel_prioridad==='alta'})
+  var media=SUGERENCIAS.filter(function(s){return s.nivel_prioridad==='media'})
+  var baja=SUGERENCIAS.filter(function(s){return s.nivel_prioridad==='baja'})
+  
+  document.getElementById('m-total').textContent=SUGERENCIAS.length
+  document.getElementById('m-urg').textContent=urg.length
+  document.getElementById('m-alta').textContent=alta.length
+  document.getElementById('m-media').textContent=media.length
+  document.getElementById('m-baja').textContent=baja.length
+  
+  document.getElementById('t-todos').textContent=SUGERENCIAS.length
+  document.getElementById('t-urgente').textContent=urg.length
+  document.getElementById('t-alta').textContent=alta.length
+  document.getElementById('t-media').textContent=media.length
+  document.getElementById('t-baja').textContent=baja.length
+  
+  var totalValor=SUGERENCIAS.reduce(function(a,s){return a+(parseInt(s.ticket_estimado)||0)},0)
+  document.getElementById('valor-total').textContent=fmt(totalValor)
+  document.getElementById('valor-desc').textContent='si conviertes al menos el 20%, ganas '+fmt(totalValor*0.2)+' hoy'
+  
+  render()
+}
+
+function render(){
+  var lista=FILTRO==='todos'?SUGERENCIAS:SUGERENCIAS.filter(function(s){return s.nivel_prioridad===FILTRO})
+  var cont=document.getElementById('lista')
+  
+  if(lista.length===0){
+    cont.innerHTML='<div class="empty"><div class="empty-ico">🎉</div><div class="empty-tit">¡No hay sugerencias!</div><div>Todos tus clientes están al día</div></div>'
+    return
+  }
+  
+  cont.innerHTML=lista.map(function(s){
+    var msg=construirMensaje(s)
+    var telWA=(s.telefono_normalizado||'').length===9?'56'+s.telefono_normalizado:s.telefono_normalizado
+    var waUrl='https://wa.me/'+telWA+'?text='+encodeURIComponent(msg)
+    var telUrl='tel:+'+telWA
+    
+    return '<div class="sug '+s.nivel_prioridad+'">'+
+      '<div class="sug-head">'+
+        '<div>'+
+          '<div class="sug-nombre">'+
+            (s.nombre||'Sin nombre')+
+            '<span class="sug-tag '+s.nivel_prioridad+'">'+labelNivel(s.nivel_prioridad)+'</span>'+
+            (s.categoria==='VIP'?'<span class="sug-tag vip">VIP</span>':'')+
+          '</div>'+
+          '<div style="font-size:11px;color:var(--t3);margin-top:4px;font-family:var(--mono)">'+
+            (s.dias_sin_ver>500?'Sin visitas registradas':s.dias_sin_ver+' días sin verlo')+
+            ' · '+
+            (s.dias_sin_contacto>500?'Nunca contactado':s.dias_sin_contacto+' días sin contactarlo')+
+          '</div>'+
+        '</div>'+
+        '<div class="sug-ticket">'+
+          'Ticket estimado'+
+          '<b>'+fmt(s.ticket_estimado)+'</b>'+
+        '</div>'+
+      '</div>'+
+      
+      '<div class="sug-info">'+
+        (s.vehiculo_principal?'<div class="sug-info-cell"><div class="sug-info-cell-lbl">Vehículo</div><div class="sug-info-cell-val">🚗 '+s.vehiculo_principal+'</div></div>':'')+
+        (s.telefono?'<div class="sug-info-cell"><div class="sug-info-cell-lbl">Teléfono</div><div class="sug-info-cell-val">📱 '+s.telefono+'</div></div>':'')+
+        (s.ltv&&s.ltv>0?'<div class="sug-info-cell"><div class="sug-info-cell-lbl">LTV histórico</div><div class="sug-info-cell-val" style="color:var(--verde)">'+fmt(s.ltv)+'</div></div>':'')+
+        '<div class="sug-info-cell"><div class="sug-info-cell-lbl">Servicios</div><div class="sug-info-cell-val">'+s.servicios_totales+' realizados</div></div>'+
+      '</div>'+
+      
+      '<div class="sug-mensaje">'+
+        '<div class="sug-mensaje-lbl">💬 Mensaje sugerido (WhatsApp)</div>'+
+        '<div class="sug-mensaje-txt">'+msg.replace(/\n/g,'<br>')+'</div>'+
+      '</div>'+
+      
+      '<div class="sug-actions">'+
+        '<a class="btn btn-wa" href="'+waUrl+'" target="_blank" onclick="marcarContactado(\''+s.id+'\')">💬 Enviar WhatsApp</a>'+
+        '<a class="btn btn-call" href="'+telUrl+'">📞 Llamar</a>'+
+        '<button class="btn btn-marcar" onclick="marcarContactado(\''+s.id+'\')" title="Marcar como contactado">✓</button>'+
+      '</div>'+
+    '</div>'
+  }).join('')
+}
+
+function labelNivel(n){
+  return {urgente:'🚨 Urgente',alta:'🔥 Alta',media:'⚡ Media',baja:'💡 Baja'}[n]||n
+}
+
+function construirMensaje(s){
+  var primerNombre=(s.nombre||'').split(' ')[0]
+  var vehiculo=s.vehiculo_principal||'tu vehículo'
+  var sugerencia=s.proximo_servicio_sugerido||'una revisión preventiva'
+  
+  if(s.nivel_prioridad==='urgente' || s.categoria==='VIP'){
+    return 'Hola '+primerNombre+'! 👋\n\n'+
+           'Soy del equipo Serviruta. ¡Hace un tiempo que no sabemos de ti!\n\n'+
+           'Recordé tu '+vehiculo+' y me gustaría saber cómo va todo.\n\n'+
+           'Si necesitas cualquier revisión o mantención, cuenta con nosotros. '+
+           'Puedo agendarte una visita a domicilio esta semana.\n\n'+
+           'Saludos,\nServiruta · +56 9 4521 0814'
+  } else if(s.nivel_prioridad==='alta'){
+    return 'Hola '+primerNombre+'! 👋\n\n'+
+           'Te saluda Serviruta. Vi que tu '+vehiculo+' probablemente ya necesita:\n\n'+
+           '💡 '+sugerencia+'\n\n'+
+           '¿Cómo lo has visto? Si quieres podemos coordinar una visita a domicilio '+
+           'y darle una revisión antes que se transforme en algo mayor.\n\n'+
+           'Saludos,\nServiruta · +56 9 4521 0814'
+  } else {
+    return 'Hola '+primerNombre+'! 👋\n\n'+
+           'Solo un mensaje rápido de Serviruta.\n\n'+
+           'Basado en tu '+vehiculo+', ya sería buen momento para:\n'+
+           '💡 '+sugerencia+'\n\n'+
+           '¿Quieres agendar? Vamos a domicilio, sin costo de traslado en RM.\n\n'+
+           'Serviruta · +56 9 4521 0814'
+  }
+}
+
+async function marcarContactado(id){
+  try{
+    var r=await fetch(SB_URL+'/rest/v1/clientes?id=eq.'+id,{
+      method:'PATCH',
+      headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'},
+      body:JSON.stringify({ultimo_contacto:new Date().toISOString().slice(0,10),updated_at:new Date().toISOString()})
+    })
+    if(r.ok){
+      toast('✅ Marcado como contactado','ok')
+      // Remover de la lista visible
+      SUGERENCIAS=SUGERENCIAS.filter(function(s){return s.id!==id})
+      cargar()
+    }
+  }catch(e){
+    toast('Error: '+e.message,'err')
+  }
+}
+
+// Tabs
+document.getElementById('tabs').addEventListener('click',function(e){
+  var t=e.target.closest('.tab')
+  if(!t) return
+  document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('active')})
+  t.classList.add('active')
+  FILTRO=t.dataset.nivel
+  render()
+})
+
+cargar()
+</script>
+
+</body>
+</html>

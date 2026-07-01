@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>CRM Clientes · Serviruta</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0A0D;--s1:#111114;--s2:#16161B;--s3:#1C1C23;--line:#26262E;--line-2:#353541;--rojo:#E8210A;--rojo-l:#FF4D2E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;--dorado:#D4AF37;--t1:#F6F4EF;--t2:#C7C5BF;--t3:#8B8990;--t4:#56555C;--display:'Syne',sans-serif;--body:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--t2);font-family:var(--body);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100vh}
+button,input,select,textarea{font-family:inherit;font-size:14px}
+button{cursor:pointer;border:none;background:none;color:inherit}
+
+/* HEADER */
+.bar{position:sticky;top:0;z-index:50;background:rgba(10,10,13,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:14px 20px;display:flex;align-items:center;gap:12px}
+.back{font-family:var(--mono);font-size:11px;color:var(--t3);padding:6px 10px;border:1px solid var(--line);border-radius:6px}
+.sigil{width:34px;height:34px;background:var(--rojo);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:14px;color:#fff}
+.title{font-family:var(--display);font-weight:800;font-size:15px;color:var(--t1);flex:1;line-height:1.2}
+.title small{display:block;font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;margin-top:2px;font-weight:500}
+
+.shell{max-width:1200px;margin:0 auto;padding:20px 16px 80px}
+
+/* KPIs */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:20px}
+.kpi{background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:14px}
+.kpi-lbl{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.15em;text-transform:uppercase;margin-bottom:6px}
+.kpi-num{font-family:var(--display);font-weight:800;font-size:24px;color:var(--t1);line-height:1;letter-spacing:-1px}
+.kpi-sub{font-size:10px;color:var(--t3);margin-top:4px}
+.kpi.vip{border-color:rgba(212,175,55,0.3);background:linear-gradient(135deg,rgba(212,175,55,0.08),var(--s1))}
+.kpi.vip .kpi-num{color:var(--dorado)}
+.kpi.activo{border-color:rgba(34,197,94,0.3);background:linear-gradient(135deg,rgba(34,197,94,0.05),var(--s1))}
+.kpi.activo .kpi-num{color:var(--verde)}
+.kpi.dormido{border-color:rgba(245,197,24,0.3);background:linear-gradient(135deg,rgba(245,197,24,0.05),var(--s1))}
+.kpi.dormido .kpi-num{color:var(--amarillo)}
+.kpi.riesgo{border-color:rgba(232,33,10,0.3);background:linear-gradient(135deg,rgba(232,33,10,0.05),var(--s1))}
+.kpi.riesgo .kpi-num{color:var(--rojo-l)}
+.kpi.ltv{border-color:rgba(96,165,250,0.3);background:linear-gradient(135deg,rgba(96,165,250,0.05),var(--s1))}
+.kpi.ltv .kpi-num{color:var(--azul);font-size:20px}
+.kpi:hover{cursor:pointer;border-color:var(--line-2)}
+.kpi.active{border-width:2px;transform:translateY(-2px)}
+
+/* Toolbar */
+.toolbar{background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.search{flex:1;min-width:200px;position:relative}
+.search input{width:100%;background:var(--s2);border:1px solid var(--line);border-radius:8px;padding:10px 12px 10px 36px;color:var(--t1)}
+.search input:focus{outline:none;border-color:var(--rojo)}
+.search::before{content:'🔍';position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:14px;opacity:0.5}
+.filtro-sel{background:var(--s2);border:1px solid var(--line);border-radius:8px;padding:9px 12px;color:var(--t1);cursor:pointer}
+.btn-add{background:var(--rojo);color:#fff;padding:9px 16px;border-radius:8px;font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:0.05em}
+
+/* Tabla / lista clientes */
+.lista{display:flex;flex-direction:column;gap:8px}
+.cliente-row{background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;grid-template-columns:auto 1fr auto auto;gap:12px;align-items:center;cursor:pointer;transition:all 150ms}
+.cliente-row:hover{background:var(--s2);border-color:var(--line-2)}
+.avatar{width:44px;height:44px;border-radius:50%;background:var(--s3);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:14px;color:var(--t2);flex-shrink:0;border:2px solid var(--line)}
+.avatar.vip{background:linear-gradient(135deg,var(--dorado),var(--amarillo));color:#000;border-color:var(--dorado)}
+.avatar.activo{background:rgba(34,197,94,0.15);color:var(--verde);border-color:rgba(34,197,94,0.4)}
+.avatar.dormido{background:rgba(245,197,24,0.15);color:var(--amarillo);border-color:rgba(245,197,24,0.4)}
+.avatar.riesgo{background:rgba(232,33,10,0.15);color:var(--rojo-l);border-color:rgba(232,33,10,0.4)}
+.cliente-body{min-width:0}
+.cliente-nombre{font-family:var(--display);font-weight:700;font-size:15px;color:var(--t1);margin-bottom:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.cliente-meta{font-size:11px;color:var(--t3);display:flex;gap:10px;flex-wrap:wrap}
+.cliente-meta span{display:flex;align-items:center;gap:4px}
+.tag{font-family:var(--mono);font-size:9px;padding:3px 7px;border-radius:999px;letter-spacing:0.1em;font-weight:700;text-transform:uppercase}
+.tag.vip{background:linear-gradient(135deg,var(--dorado),var(--amarillo));color:#000}
+.tag.activo{background:rgba(34,197,94,0.15);color:var(--verde)}
+.tag.dormido{background:rgba(245,197,24,0.15);color:var(--amarillo)}
+.tag.riesgo{background:rgba(232,33,10,0.15);color:var(--rojo-l)}
+.tag.nuevo{background:rgba(96,165,250,0.15);color:var(--azul)}
+.cliente-metrics{text-align:right;font-family:var(--mono);font-size:11px;color:var(--t3);flex-shrink:0}
+.cliente-metrics .ltv{font-family:var(--display);font-weight:700;font-size:14px;color:var(--verde);letter-spacing:-0.5px}
+.cliente-metrics .servicios{margin-top:2px}
+.arrow{color:var(--t3);font-size:18px}
+
+/* Sugerencia inline */
+.sugerencia-inline{grid-column:2/-1;background:rgba(212,175,55,0.05);border:1px dashed rgba(212,175,55,0.3);border-radius:6px;padding:8px 10px;margin-top:8px;font-size:11px;color:var(--dorado);display:flex;align-items:center;gap:6px}
+
+/* Modal ficha */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.75);display:none;align-items:flex-start;justify-content:center;z-index:100;overflow-y:auto;padding:20px}
+.modal-bg.open{display:flex}
+.modal{background:var(--s1);border:1px solid var(--line);border-radius:16px;width:100%;max-width:800px;margin:20px auto;overflow:hidden}
+.modal-head{padding:20px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px}
+.modal-close{width:36px;height:36px;border-radius:50%;background:var(--s3);color:var(--t2);display:flex;align-items:center;justify-content:center;font-size:20px;margin-left:auto}
+.modal-close:hover{background:var(--rojo);color:#fff}
+.modal-body{padding:20px;max-height:75vh;overflow-y:auto}
+.section{margin-bottom:22px}
+.section-tit{font-family:var(--display);font-weight:800;font-size:12px;color:var(--t3);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.info-cell{background:var(--s2);border-radius:8px;padding:12px}
+.info-lbl{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px}
+.info-val{font-family:var(--display);font-weight:700;font-size:14px;color:var(--t1)}
+
+.sugerencia-box{background:linear-gradient(135deg,rgba(212,175,55,0.12),rgba(212,175,55,0.02));border:1px solid rgba(212,175,55,0.3);border-radius:12px;padding:18px;margin-bottom:16px}
+.sugerencia-tit{font-family:var(--display);font-weight:800;font-size:14px;color:var(--dorado);margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.sugerencia-desc{font-size:13px;color:var(--t1);margin-bottom:10px}
+.sugerencia-fecha{font-family:var(--mono);font-size:11px;color:var(--t3);letter-spacing:0.05em}
+
+.hist-list{display:flex;flex-direction:column;gap:8px}
+.hist-item{background:var(--s2);border-radius:8px;padding:12px;display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center}
+.hist-date{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.05em}
+.hist-desc{font-size:12px;color:var(--t1);min-width:0}
+.hist-monto{font-family:var(--display);font-weight:700;font-size:13px;color:var(--verde)}
+
+.acciones{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding-top:16px;border-top:1px solid var(--line)}
+.btn-accion{padding:12px;border-radius:10px;font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:0.05em;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px}
+.btn-wa{background:#25D366;color:#fff}
+.btn-wa:hover{background:#128C7E}
+.btn-call{background:var(--s3);color:var(--t1);border:1px solid var(--line)}
+.btn-nota{background:var(--s3);color:var(--t1);border:1px solid var(--line);grid-column:1/-1;padding:10px}
+
+.empty{text-align:center;padding:60px 20px;color:var(--t3)}
+.empty-ico{font-size:48px;opacity:0.3;margin-bottom:12px}
+
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:12px 20px;font-size:13px;font-weight:600;color:var(--t1);opacity:0;transition:all 300ms;pointer-events:none;z-index:200}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.ok{border-color:var(--verde);color:var(--verde)}
+
+@media(max-width:640px){
+  .cliente-row{grid-template-columns:auto 1fr auto;padding:12px}
+  .cliente-metrics{grid-column:2/-1;text-align:left;font-size:10px;margin-top:6px}
+  .arrow{display:none}
+}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <button class="back" onclick="location.href='menu-coordinador.html'">← Volver</button>
+  <div class="sigil">S</div>
+  <div class="title">CRM Clientes<small>Seguimiento · ventas · sugerencias</small></div>
+</header>
+
+<div class="shell">
+  
+  <!-- KPIs clickeables para filtrar -->
+  <div class="kpis" id="kpis">
+    <div class="kpi active" data-cat="todos">
+      <div class="kpi-lbl">Total</div>
+      <div class="kpi-num" id="k-total">—</div>
+      <div class="kpi-sub">clientes registrados</div>
+    </div>
+    <div class="kpi vip" data-cat="VIP">
+      <div class="kpi-lbl">👑 VIP</div>
+      <div class="kpi-num" id="k-vip">—</div>
+      <div class="kpi-sub">3+ servicios</div>
+    </div>
+    <div class="kpi activo" data-cat="activo">
+      <div class="kpi-lbl">Activos</div>
+      <div class="kpi-num" id="k-activo">—</div>
+      <div class="kpi-sub">últimos 30 días</div>
+    </div>
+    <div class="kpi dormido" data-cat="dormido">
+      <div class="kpi-lbl">⏰ Dormidos</div>
+      <div class="kpi-num" id="k-dormido">—</div>
+      <div class="kpi-sub">3-6 meses sin ver</div>
+    </div>
+    <div class="kpi riesgo" data-cat="en_riesgo">
+      <div class="kpi-lbl">🚨 En riesgo</div>
+      <div class="kpi-num" id="k-riesgo">—</div>
+      <div class="kpi-sub">6+ meses sin ver</div>
+    </div>
+    <div class="kpi ltv">
+      <div class="kpi-lbl">💰 LTV Total</div>
+      <div class="kpi-num" id="k-ltv">—</div>
+      <div class="kpi-sub">facturado histórico</div>
+    </div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <div class="search">
+      <input type="text" id="q" placeholder="Buscar por nombre, teléfono, patente o vehículo..." oninput="renderLista()">
+    </div>
+    <select class="filtro-sel" id="orden" onchange="renderLista()">
+      <option value="score_desc">🎯 Mayor score primero</option>
+      <option value="ltv_desc">💰 Mayor LTV primero</option>
+      <option value="reciente">📅 Más recientes primero</option>
+      <option value="antiguos">📅 Más antiguos primero</option>
+      <option value="dormidos">⏰ Dormidos primero</option>
+    </select>
+    <button class="btn-add" onclick="abrirModal(null)">+ Cliente</button>
+  </div>
+
+  <!-- Lista -->
+  <div class="lista" id="lista"></div>
+  
+</div>
+
+<!-- Modal ficha cliente -->
+<div class="modal-bg" id="modal" onclick="if(event.target===this)cerrarModal()">
+  <div class="modal">
+    <div class="modal-head" id="mh"></div>
+    <div class="modal-body" id="mb"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+
+var CLIENTES=[]
+var FILTRO_CAT='todos'
+var CLIENTE_ACTUAL=null
+
+function toast(msg,tipo){
+  var t=document.getElementById('toast')
+  t.textContent=msg
+  t.className='toast '+(tipo||'')
+  t.classList.add('show')
+  setTimeout(function(){t.classList.remove('show')},2500)
+}
+
+function fmtMoney(n){
+  if(!n) return '$0'
+  return '$'+parseInt(n).toLocaleString('es-CL')
+}
+
+function fmtDate(d){
+  if(!d) return '—'
+  return new Date(d).toLocaleDateString('es-CL',{day:'numeric',month:'short',year:'numeric'})
+}
+
+function iniciales(nombre){
+  if(!nombre) return '?'
+  var p=nombre.trim().split(/\s+/)
+  return (p[0][0]+(p[1]?p[1][0]:'')).toUpperCase()
+}
+
+async function sbGet(path){
+  try{
+    var r=await fetch(SB_URL+'/rest/v1/'+path,{headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}})
+    if(!r.ok) return {ok:false,error:await r.text()}
+    return {ok:true,data:await r.json()}
+  }catch(e){return {ok:false,error:e.message}}
+}
+
+async function sbUpd(path,data){
+  try{
+    var r=await fetch(SB_URL+'/rest/v1/'+path,{
+      method:'PATCH',
+      headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=representation'},
+      body:JSON.stringify(data)
+    })
+    if(!r.ok) return {ok:false,error:await r.text()}
+    return {ok:true,data:await r.json()}
+  }catch(e){return {ok:false,error:e.message}}
+}
+
+async function cargar(){
+  var r=await sbGet('clientes?order=score.desc,servicios_totales.desc')
+  if(!r.ok){toast('Error cargando clientes','err');return}
+  CLIENTES=r.data
+  
+  // KPIs
+  document.getElementById('k-total').textContent=CLIENTES.length
+  document.getElementById('k-vip').textContent=CLIENTES.filter(function(c){return c.categoria==='VIP'}).length
+  document.getElementById('k-activo').textContent=CLIENTES.filter(function(c){return c.categoria==='activo'}).length
+  document.getElementById('k-dormido').textContent=CLIENTES.filter(function(c){return c.categoria==='dormido'}).length
+  document.getElementById('k-riesgo').textContent=CLIENTES.filter(function(c){return c.categoria==='en_riesgo'}).length
+  var ltvTotal=CLIENTES.reduce(function(a,c){return a+(parseFloat(c.ltv)||0)},0)
+  document.getElementById('k-ltv').textContent=fmtMoney(ltvTotal)
+  
+  renderLista()
+}
+
+function renderLista(){
+  var q=document.getElementById('q').value.toLowerCase().trim()
+  var orden=document.getElementById('orden').value
+  
+  var lista=CLIENTES.slice()
+  
+  // Filtrar por categoría
+  if(FILTRO_CAT!=='todos'){
+    lista=lista.filter(function(c){return c.categoria===FILTRO_CAT})
+  }
+  
+  // Filtrar por búsqueda
+  if(q){
+    lista=lista.filter(function(c){
+      return (c.nombre||'').toLowerCase().indexOf(q)>=0 ||
+             (c.telefono||'').toLowerCase().indexOf(q)>=0 ||
+             (c.patente||'').toLowerCase().indexOf(q)>=0 ||
+             (c.vehiculo_principal||'').toLowerCase().indexOf(q)>=0 ||
+             (c.marca||'').toLowerCase().indexOf(q)>=0
+    })
+  }
+  
+  // Ordenar
+  if(orden==='ltv_desc') lista.sort(function(a,b){return (parseFloat(b.ltv)||0)-(parseFloat(a.ltv)||0)})
+  else if(orden==='reciente') lista.sort(function(a,b){return new Date(b.ultimo_servicio_fecha||0)-new Date(a.ultimo_servicio_fecha||0)})
+  else if(orden==='antiguos') lista.sort(function(a,b){return new Date(a.ultimo_servicio_fecha||9e9)-new Date(b.ultimo_servicio_fecha||9e9)})
+  else if(orden==='dormidos') lista.sort(function(a,b){return new Date(a.ultimo_servicio_fecha||9e9)-new Date(b.ultimo_servicio_fecha||9e9)})
+  else lista.sort(function(a,b){return (b.score||0)-(a.score||0)})
+  
+  var cont=document.getElementById('lista')
+  
+  if(lista.length===0){
+    cont.innerHTML='<div class="empty"><div class="empty-ico">👥</div><div>Sin clientes para mostrar</div></div>'
+    return
+  }
+  
+  cont.innerHTML=lista.map(function(c){
+    var cat=c.categoria||'activo'
+    var showSug=c.proximo_servicio_sugerido && cat!=='activo'
+    return '<div class="cliente-row" onclick="abrirModal(\''+c.id+'\')">'+
+      '<div class="avatar '+cat+'">'+iniciales(c.nombre)+'</div>'+
+      '<div class="cliente-body">'+
+        '<div class="cliente-nombre">'+(c.nombre||'Sin nombre')+
+        (cat==='VIP'?'<span class="tag vip">VIP</span>':'')+
+        (cat==='dormido'?'<span class="tag dormido">Dormido</span>':'')+
+        (cat==='en_riesgo'?'<span class="tag riesgo">Riesgo</span>':'')+
+        '</div>'+
+        '<div class="cliente-meta">'+
+          '<span>📱 '+(c.telefono||'—')+'</span>'+
+          (c.vehiculo_principal?'<span>🚗 '+c.vehiculo_principal+'</span>':'')+
+          (c.ultimo_servicio_fecha?'<span>📅 '+fmtDate(c.ultimo_servicio_fecha)+'</span>':'')+
+        '</div>'+
+        (showSug?'<div class="sugerencia-inline">💡 Sugerencia: '+c.proximo_servicio_sugerido+'</div>':'')+
+      '</div>'+
+      '<div class="cliente-metrics">'+
+        '<div class="ltv">'+fmtMoney(c.ltv)+'</div>'+
+        '<div class="servicios">'+c.servicios_totales+' servicio'+(c.servicios_totales!==1?'s':'')+'</div>'+
+      '</div>'+
+      '<span class="arrow">›</span>'+
+    '</div>'
+  }).join('')
+}
+
+// Filtrar por KPI
+document.getElementById('kpis').addEventListener('click',function(e){
+  var el=e.target.closest('.kpi[data-cat]')
+  if(!el) return
+  document.querySelectorAll('.kpi').forEach(function(k){k.classList.remove('active')})
+  el.classList.add('active')
+  FILTRO_CAT=el.dataset.cat
+  renderLista()
+})
+
+// Abrir ficha del cliente
+async function abrirModal(id){
+  if(!id){
+    toast('Crear nuevo cliente pendiente','err')
+    return
+  }
+  
+  var c=CLIENTES.find(function(x){return x.id===id})
+  if(!c) return
+  CLIENTE_ACTUAL=c
+  
+  // Cargar historial de presupuestos
+  var histR=await sbGet('presupuestos?telefono=ilike.*'+c.telefono_normalizado.slice(-8)+'*&order=created_at.desc&limit=20')
+  var hist=histR.ok?histR.data:[]
+  
+  var cat=c.categoria||'activo'
+  var tel=c.telefono_normalizado||''
+  var telWA=tel.length===9?'56'+tel:tel
+  
+  document.getElementById('mh').innerHTML=
+    '<div class="avatar '+cat+'" style="width:56px;height:56px;font-size:18px">'+iniciales(c.nombre)+'</div>'+
+    '<div style="flex:1">'+
+      '<div style="font-family:var(--display);font-weight:800;font-size:18px;color:var(--t1)">'+(c.nombre||'Sin nombre')+'</div>'+
+      '<div style="display:flex;gap:8px;margin-top:4px">'+
+        '<span class="tag '+cat+'">'+cat+'</span>'+
+        '<span style="font-family:var(--mono);font-size:11px;color:var(--t3)">Score: '+c.score+'/100</span>'+
+      '</div>'+
+    '</div>'+
+    '<button class="modal-close" onclick="cerrarModal()">×</button>'
+  
+  var sug=c.proximo_servicio_sugerido
+  
+  document.getElementById('mb').innerHTML=
+    // Sugerencia destacada
+    (sug?'<div class="sugerencia-box">'+
+      '<div class="sugerencia-tit">💡 Sugerencia de próximo servicio</div>'+
+      '<div class="sugerencia-desc">'+sug+'</div>'+
+      '<div class="sugerencia-fecha">Recordar cerca del '+fmtDate(c.proxima_mantencion_sugerida)+'</div>'+
+    '</div>':'')+
+    
+    // Info básica
+    '<div class="section">'+
+      '<div class="section-tit">📋 Información</div>'+
+      '<div class="info-grid">'+
+        '<div class="info-cell"><div class="info-lbl">Teléfono</div><div class="info-val">'+(c.telefono||'—')+'</div></div>'+
+        '<div class="info-cell"><div class="info-lbl">Email</div><div class="info-val">'+(c.email||'—')+'</div></div>'+
+        '<div class="info-cell"><div class="info-lbl">Comuna</div><div class="info-val">'+(c.comuna||'—')+'</div></div>'+
+        '<div class="info-cell"><div class="info-lbl">Cliente desde</div><div class="info-val">'+fmtDate(c.primer_servicio_fecha)+'</div></div>'+
+      '</div>'+
+    '</div>'+
+    
+    // Vehículo
+    '<div class="section">'+
+      '<div class="section-tit">🚗 Vehículo</div>'+
+      '<div class="info-grid">'+
+        '<div class="info-cell"><div class="info-lbl">Tipo</div><div class="info-val">'+(c.tipo_vehiculo||'—')+'</div></div>'+
+        '<div class="info-cell"><div class="info-lbl">Marca</div><div class="info-val">'+(c.marca||'—')+'</div></div>'+
+        '<div class="info-cell"><div class="info-lbl">Modelo</div><div class="info-val">'+(c.modelo||'—')+'</div></div>'+
+        '<div class="info-cell"><div class="info-lbl">Patente</div><div class="info-val">'+(c.patente||'—')+'</div></div>'+
+      '</div>'+
+    '</div>'+
+    
+    // Métricas
+    '<div class="section">'+
+      '<div class="section-tit">📊 Métricas del cliente</div>'+
+      '<div class="info-grid">'+
+        '<div class="info-cell"><div class="info-lbl">Servicios totales</div><div class="info-val" style="color:var(--t1)">'+c.servicios_totales+'</div></div>'+
+        '<div class="info-cell"><div class="info-lbl">LTV facturado</div><div class="info-val" style="color:var(--verde)">'+fmtMoney(c.ltv)+'</div></div>'+
+        '<div class="info-cell"><div class="info-lbl">Último servicio</div><div class="info-val">'+fmtDate(c.ultimo_servicio_fecha)+'</div></div>'+
+        '<div class="info-cell"><div class="info-lbl">Score de recompra</div><div class="info-val" style="color:'+(c.score>=70?'var(--verde)':c.score>=50?'var(--amarillo)':'var(--rojo-l)')+'">'+c.score+'/100</div></div>'+
+      '</div>'+
+    '</div>'+
+    
+    // Historial
+    (hist.length?'<div class="section">'+
+      '<div class="section-tit">📜 Historial de servicios ('+hist.length+')</div>'+
+      '<div class="hist-list">'+
+        hist.map(function(h){
+          return '<div class="hist-item">'+
+            '<div class="hist-date">'+fmtDate(h.created_at)+'</div>'+
+            '<div class="hist-desc">'+
+              (h.numero?'#'+h.numero+' · ':'')+
+              (h.auto||h.vehiculo||'—')+
+              '<div style="font-size:10px;color:var(--t3);margin-top:2px">Estado: '+(h.estado_servicio||h.estado||'—')+' · Técnico: '+(h.tecnico||'—')+'</div>'+
+            '</div>'+
+            '<div class="hist-monto">'+(h.total?fmtMoney(h.total):'—')+'</div>'+
+          '</div>'
+        }).join('')+
+      '</div>'+
+    '</div>':'')+
+    
+    // Notas internas
+    '<div class="section">'+
+      '<div class="section-tit">📝 Notas internas</div>'+
+      '<textarea id="notas" style="width:100%;background:var(--s2);border:1px solid var(--line);border-radius:8px;padding:12px;color:var(--t1);font-family:inherit;font-size:13px;min-height:70px;resize:vertical" placeholder="Notas privadas sobre este cliente...">'+(c.notas_internas||'')+'</textarea>'+
+      '<button onclick="guardarNotas()" style="margin-top:8px;background:var(--s3);border:1px solid var(--line);color:var(--t1);padding:8px 14px;border-radius:8px;font-size:12px">💾 Guardar notas</button>'+
+    '</div>'+
+    
+    // Acciones
+    '<div class="acciones">'+
+      '<a class="btn-accion btn-wa" href="'+construirWA(c,'saludo')+'" target="_blank">💬 WhatsApp saludo</a>'+
+      (sug?'<a class="btn-accion btn-wa" href="'+construirWA(c,'sugerencia')+'" target="_blank">🎯 WhatsApp sugerencia</a>':'<a class="btn-accion btn-call" href="tel:+'+telWA+'">📞 Llamar</a>')+
+      '<button class="btn-accion btn-nota" onclick="marcarContactado()">✓ Marcar como contactado hoy</button>'+
+    '</div>'
+  
+  document.getElementById('modal').classList.add('open')
+}
+
+function construirWA(c,tipo){
+  var tel=c.telefono_normalizado||''
+  var telWA=tel.length===9?'56'+tel:tel
+  var primerNombre=(c.nombre||'').split(' ')[0]
+  var msg=''
+  
+  if(tipo==='saludo'){
+    msg='Hola '+primerNombre+'! Te saluda Serviruta 🔧\n\n'+
+        '¿Cómo has estado? Quería saber cómo va tu '+(c.vehiculo_principal||'vehículo')+'.\n\n'+
+        'Si necesitas cualquier revisión o mantención, cuenta con nosotros.\n\n'+
+        'Saludos,\nServiruta · +56 9 4521 0814'
+  } else if(tipo==='sugerencia'){
+    msg='Hola '+primerNombre+'! Te saluda Serviruta 🔧\n\n'+
+        'Basado en tu última visita a tu '+(c.vehiculo_principal||'vehículo')+', '+
+        'te recomendamos:\n\n'+
+        '💡 '+c.proximo_servicio_sugerido+'\n\n'+
+        '¿Te gustaría agendar? Te podemos ir a atender a domicilio.\n\n'+
+        'Saludos,\nServiruta · +56 9 4521 0814'
+  }
+  
+  return 'https://wa.me/'+telWA+'?text='+encodeURIComponent(msg)
+}
+
+async function guardarNotas(){
+  if(!CLIENTE_ACTUAL) return
+  var notas=document.getElementById('notas').value.trim()
+  var r=await sbUpd('clientes?id=eq.'+CLIENTE_ACTUAL.id,{notas_internas:notas,updated_at:new Date().toISOString()})
+  if(r.ok){
+    toast('✅ Notas guardadas','ok')
+    CLIENTE_ACTUAL.notas_internas=notas
+  } else {
+    toast('Error: '+r.error,'err')
+  }
+}
+
+async function marcarContactado(){
+  if(!CLIENTE_ACTUAL) return
+  var hoy=new Date().toISOString().slice(0,10)
+  var r=await sbUpd('clientes?id=eq.'+CLIENTE_ACTUAL.id,{ultimo_contacto:hoy,updated_at:new Date().toISOString()})
+  if(r.ok){
+    toast('✅ Marcado como contactado hoy','ok')
+    CLIENTE_ACTUAL.ultimo_contacto=hoy
+  } else {
+    toast('Error: '+r.error,'err')
+  }
+}
+
+function cerrarModal(){
+  document.getElementById('modal').classList.remove('open')
+  CLIENTE_ACTUAL=null
+}
+
+cargar()
+</script>
+
+</body>
+</html>

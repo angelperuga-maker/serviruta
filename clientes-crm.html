@@ -382,6 +382,10 @@ async function abrirModal(id){
     hist=histR.ok?histR.data:[]
   }
   
+  // Cargar OTs históricas del cliente
+  var otsR=await sbGet('ordenes_trabajo?cliente_id=eq.'+c.id+'&order=fecha_creacion.desc&limit=50')
+  var ots=otsR.ok?otsR.data:[]
+  
   var cat=c.categoria||'activo'
   var tel=c.telefono_normalizado||''
   var telWA=tel.length===9?'56'+tel:tel
@@ -468,6 +472,32 @@ async function abrirModal(id){
               '<div style="font-size:10px;color:var(--t3);margin-top:4px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">'+badgeEstado+'<span>Técnico: '+(h.tecnico||'—')+'</span></div>'+
             '</div>'+
             '<div class="hist-monto" style="color:'+colorMonto+'">'+(h.total?fmtMoney(h.total):'—')+'</div>'+
+          '</div>'
+        }).join('')+
+      '</div>'+
+    '</div>':'')+
+    
+    // Historial de OTs (órdenes de trabajo antiguas)
+    (ots.length?'<div class="section">'+
+      '<div class="section-tit">🔧 Órdenes de trabajo históricas ('+ots.length+')</div>'+
+      '<div class="hist-list">'+
+        ots.map(function(ot){
+          var esFinalizada=ot.status==='Finalizado'
+          var esPendiente=/presupuesto|iniciado|proceso|espera|pago/i.test(ot.status||'')
+          var colorEst=esFinalizada?'var(--verde)':(esPendiente?'var(--naranja)':'var(--t3)')
+          var badgeEst='<span style="background:'+(esFinalizada?'rgba(34,197,94,0.15)':'rgba(251,146,60,0.15)')+';color:'+colorEst+';padding:1px 6px;border-radius:4px;font-family:var(--mono);font-size:9px;font-weight:700">'+(esFinalizada?'✓ ':'⏳ ')+(ot.status||'').toUpperCase()+'</span>'
+          return '<div class="hist-item">'+
+            '<div class="hist-date">'+fmtDate(ot.fecha_creacion)+'</div>'+
+            '<div class="hist-desc">'+
+              '<b style="color:var(--t1)">'+(ot.tipo_servicio||'Servicio')+'</b>'+
+              (ot.patente?' · <span style="color:var(--t2)">🚗 '+ot.patente+'</span>':'')+
+              '<div style="font-size:10px;color:var(--t3);margin-top:4px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">'+
+                badgeEst+
+                (ot.mecanico && ot.mecanico!=='nan'?'<span>Técnico: '+ot.mecanico+'</span>':'')+
+                (ot.fecha_finalizacion?'<span>Finalizada: '+fmtDate(ot.fecha_finalizacion)+'</span>':'')+
+              '</div>'+
+            '</div>'+
+            '<div class="hist-monto" style="color:'+colorEst+';font-size:11px;font-family:var(--mono)">#'+(ot.numero||ot.id_ot.substring(0,10))+'</div>'+
           '</div>'
         }).join('')+
       '</div>'+

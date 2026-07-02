@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
-<title>Inspección 12 Puntos · Serviruta</title>
+<title>Inspección Express 12 Puntos · Serviruta</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0A0A0D;--s1:#111114;--s2:#16161B;--s3:#1C1C23;--line:#26262E;--rojo:#E8210A;--rojo-l:#FF4D2E;--verde:#22C55E;--amarillo:#F5C518;--naranja:#FB923C;--azul:#60A5FA;--dorado:#D4AF37;--t1:#F6F4EF;--t2:#C7C5BF;--t3:#8B8990;--display:'Syne',sans-serif;--body:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace}
@@ -63,6 +63,13 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--rojo)}
 .punto-nota.show{display:block}
 .punto-nota input{background:var(--s2);font-size:12px;padding:8px 10px}
 
+/* OTRO ESPECIAL */
+.punto-otro{background:linear-gradient(135deg,rgba(212,175,55,0.06),var(--s1));border:1px solid rgba(212,175,55,0.3)}
+.punto-otro .punto-icon{background:rgba(212,175,55,0.15);color:var(--dorado)}
+.otro-campos{display:grid;grid-template-columns:1fr 120px;gap:8px;margin-top:10px}
+.otro-campos input{font-size:13px}
+.otro-campos input[type="number"]{text-align:right;font-family:var(--mono);font-weight:700}
+
 /* BOTTOM BAR */
 .bottom-bar{position:fixed;bottom:0;left:0;right:0;background:linear-gradient(180deg,transparent,var(--bg) 30%);padding:20px 14px 14px;z-index:40}
 .bottom-inner{background:var(--s2);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;gap:8px;align-items:center;box-shadow:0 -4px 24px rgba(0,0,0,0.3)}
@@ -75,17 +82,17 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--rojo)}
 .btn-save:disabled{opacity:0.5}
 .btn-save.ready{background:var(--verde)}
 
-/* SUCCESS SCREEN */
-.success{display:none;position:fixed;inset:0;background:var(--bg);z-index:100;padding:40px 20px;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+/* SUCCESS */
+.success{display:none;position:fixed;inset:0;background:var(--bg);z-index:100;padding:40px 20px;flex-direction:column;align-items:center;justify-content:center;text-align:center;overflow-y:auto}
 .success.show{display:flex}
-.success-icon{font-size:80px;margin-bottom:20px;animation:pop 400ms ease-out}
+.success-icon{font-size:72px;margin-bottom:16px;animation:pop 400ms ease-out}
 @keyframes pop{from{transform:scale(0.3);opacity:0}to{transform:scale(1);opacity:1}}
-.success-tit{font-family:var(--display);font-weight:900;font-size:28px;color:var(--verde);margin-bottom:8px;letter-spacing:-1px}
-.success-desc{font-size:14px;color:var(--t2);max-width:400px;margin-bottom:24px;line-height:1.6}
-.success-resumen{background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:20px;max-width:400px;width:100%;text-align:left}
-.success-resumen h3{font-family:var(--display);font-weight:800;font-size:13px;color:var(--t1);margin-bottom:10px}
-.success-lista{font-size:12px;line-height:1.7;color:var(--t2)}
-.success-btn{background:#25D366;color:#fff;padding:14px 24px;border-radius:12px;font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:0.05em;text-decoration:none;display:inline-block;margin-top:12px}
+.success-tit{font-family:var(--display);font-weight:900;font-size:24px;color:var(--verde);margin-bottom:8px;letter-spacing:-1px}
+.success-desc{font-size:13px;color:var(--t2);max-width:400px;margin-bottom:20px;line-height:1.5}
+.success-resumen{background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:16px;max-width:400px;width:100%;text-align:left}
+.success-resumen h3{font-family:var(--display);font-weight:800;font-size:12px;color:var(--t1);margin-bottom:8px}
+.success-lista{font-size:12px;line-height:1.6;color:var(--t2)}
+.success-btn{background:#25D366;color:#fff;padding:14px 24px;border-radius:12px;font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:0.05em;text-decoration:none;display:inline-block;margin-top:8px}
 .success-btn.sec{background:var(--s2);color:var(--t1);border:1px solid var(--line);margin-left:8px}
 
 .toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-20px);background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:10px 16px;font-size:12px;font-weight:600;color:var(--t1);opacity:0;transition:all 300ms;pointer-events:none;z-index:200}
@@ -98,12 +105,11 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--rojo)}
 <header class="bar">
   <button class="back" onclick="location.href='menu-coordinador.html'">← Volver</button>
   <div class="sigil">S</div>
-  <div class="title">Inspección 12 Puntos<small>2-3 min · info directo a Lucas para upsell</small></div>
+  <div class="title">Inspección Express 12 Puntos<small>2 min · puros recambios rápidos · info a Lucas</small></div>
 </header>
 
 <div class="shell">
   
-  <!-- CONTEXTO -->
   <div class="ctx">
     <div class="ctx-tit">👤 Datos del servicio</div>
     <div class="ctx-form">
@@ -133,31 +139,27 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--rojo)}
     </div>
   </div>
   
-  <!-- PROGRESO -->
   <div class="progreso">
     <div class="prog-item"><div class="prog-num total" id="p-total">0<small style="font-size:12px;color:var(--t3)">/12</small></div><div class="prog-lbl">Revisados</div></div>
     <div class="prog-item"><div class="prog-num ok" id="p-ok">0</div><div class="prog-lbl">OK ✅</div></div>
     <div class="prog-item"><div class="prog-num atn" id="p-atn">0</div><div class="prog-lbl">Atención 🟡</div></div>
-    <div class="prog-item"><div class="prog-num crt" id="p-crt">0</div><div class="prog-lbl">Crítico 🔴</div></div>
+    <div class="prog-item"><div class="prog-num crt" id="p-crt">0</div><div class="prog-lbl">Cambiar 🔴</div></div>
   </div>
   
-  <!-- 12 PUNTOS -->
   <div id="puntos"></div>
   
 </div>
 
-<!-- BOTTOM BAR -->
 <div class="bottom-bar">
   <div class="bottom-inner">
     <div class="total-est">
       <div class="total-lbl">💰 Venta potencial</div>
-      <div class="total-num" id="total-est">$0<small> · sin descuento</small></div>
+      <div class="total-num" id="total-est">$0<small> · a Lucas</small></div>
     </div>
     <button class="btn-save" id="btn-save" onclick="guardar()">💾 Guardar</button>
   </div>
 </div>
 
-<!-- SUCCESS -->
 <div class="success" id="success">
   <div class="success-icon">✅</div>
   <div class="success-tit">Inspección guardada</div>
@@ -175,23 +177,26 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--rojo)}
 var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
 var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
 
+// 12 RECAMBIOS RÁPIDOS (nada de diagnóstico complejo, todo cambiable al instante)
 var CATALOGO=[
   {id:'aceite_motor',icon:'🛢️',nombre:'Aceite + filtro (combo)',precio:[49000,75000]},
-  {id:'filtro_aire',icon:'💨',nombre:'Filtro de aire',precio:[12000,22000]},
+  {id:'filtro_aire',icon:'💨',nombre:'Filtro de aire motor',precio:[12000,22000]},
   {id:'filtro_habitaculo',icon:'🌬️',nombre:'Filtro habitáculo/polen',precio:[15000,28000]},
+  {id:'escobillas',icon:'🌧️',nombre:'Escobillas parabrisas',precio:[12000,25000]},
+  {id:'luces',icon:'💡',nombre:'Luces (foco/halógeno/LED)',precio:[8000,35000]},
+  {id:'bateria',icon:'🔋',nombre:'Batería (voltaje)',precio:[80000,220000]},
   {id:'filtro_combustible',icon:'⛽',nombre:'Filtro combustible',precio:[18000,35000]},
+  {id:'fluidos',icon:'💧',nombre:'Líquidos (frenos, refrig, dir.)',precio:[10000,30000]},
+  {id:'neumaticos',icon:'🛞',nombre:'Neumáticos (presión + estado)',precio:[60000,180000]},
   {id:'correa_alternador',icon:'⚙️',nombre:'Correa alternador',precio:[22000,45000]},
-  {id:'escobillas',icon:'🌧️',nombre:'Escobillas limpiaparabrisas',precio:[12000,25000]},
-  {id:'bateria',icon:'🔋',nombre:'Batería',precio:[80000,220000]},
-  {id:'bujias',icon:'⚡',nombre:'Bujías (juego)',precio:[35000,65000]},
-  {id:'neumaticos',icon:'🛞',nombre:'Neumáticos',precio:[60000,180000]},
-  {id:'frenos_delanteros',icon:'🛑',nombre:'Frenos delanteros',precio:[80000,180000]},
-  {id:'frenos_traseros',icon:'🛑',nombre:'Frenos traseros',precio:[70000,150000]},
-  {id:'fluidos',icon:'💧',nombre:'Fluidos (frenos, refrig, dirección)',precio:[10000,30000]}
+  {id:'bornes_bateria',icon:'🔌',nombre:'Bornes batería + cables',precio:[10000,25000]},
+  {id:'otro',icon:'✍️',nombre:'Otro (libre)',precio:[0,0],esOtro:true}
 ]
 
 var estado={}
 var notasPunto={}
+var otroDesc=''
+var otroPrecio=0
 var CLIENTE_ID=null
 var CLIENTES=[]
 
@@ -242,45 +247,62 @@ function renderPuntos(){
   var html=''
   CATALOGO.forEach(function(p){
     var st=estado[p.id]||''
-    html+='<div class="punto '+st+'" id="p-'+p.id+'">'
+    var claseEsp=p.esOtro?' punto-otro':''
+    html+='<div class="punto '+st+claseEsp+'" id="p-'+p.id+'">'
     html+='<div class="punto-head">'
     html+='<div class="punto-icon">'+p.icon+'</div>'
     html+='<div class="punto-info">'
     html+='<div class="punto-nombre">'+p.nombre+'</div>'
-    html+='<div class="punto-precio">Cambio: <b>'+fmt(p.precio[0])+' - '+fmt(p.precio[1])+'</b></div>'
+    if(!p.esOtro) html+='<div class="punto-precio">Cambio: <b>'+fmt(p.precio[0])+' - '+fmt(p.precio[1])+'</b></div>'
+    else html+='<div class="punto-precio" style="color:var(--dorado)">Cualquier hallazgo suelto</div>'
     html+='</div>'
     html+='</div>'
-    html+='<div class="punto-botones">'
-    html+='<button class="punto-btn ok'+(st==='ok'?' active':'')+'" onclick="marcar(\''+p.id+'\',\'ok\')">✅<br>OK</button>'
-    html+='<button class="punto-btn atencion'+(st==='atencion'?' active':'')+'" onclick="marcar(\''+p.id+'\',\'atencion\')">🟡<br>Atención</button>'
-    html+='<button class="punto-btn critico'+(st==='critico'?' active':'')+'" onclick="marcar(\''+p.id+'\',\'critico\')">🔴<br>Cambiar YA</button>'
-    html+='</div>'
-    html+='<div class="punto-nota '+(st==='atencion'||st==='critico'?'show':'')+'" id="nota-'+p.id+'">'
-    html+='<input type="text" placeholder="Nota rápida (opcional)" value="'+(notasPunto[p.id]||'')+'" onchange="setNota(\''+p.id+'\',this.value)">'
-    html+='</div>'
+    
+    if(p.esOtro){
+      // Campo especial para "otro"
+      html+='<div class="otro-campos">'
+      html+='<input type="text" id="otro-desc" placeholder="Ej: cambio de cable de bujía sucia" value="'+otroDesc.replace(/"/g,'&quot;')+'" oninput="setOtroDesc(this.value)">'
+      html+='<input type="number" id="otro-precio" placeholder="Precio $" value="'+(otroPrecio||'')+'" oninput="setOtroPrecio(this.value)">'
+      html+='</div>'
+      html+='<div class="punto-botones" style="margin-top:10px">'
+      html+='<button class="punto-btn ok'+(st==='ok'?' active':'')+'" onclick="marcar(\'otro\',\'ok\')">✅<br>OK</button>'
+      html+='<button class="punto-btn atencion'+(st==='atencion'?' active':'')+'" onclick="marcar(\'otro\',\'atencion\')">🟡<br>Atención</button>'
+      html+='<button class="punto-btn critico'+(st==='critico'?' active':'')+'" onclick="marcar(\'otro\',\'critico\')">🔴<br>Cambiar YA</button>'
+      html+='</div>'
+    } else {
+      html+='<div class="punto-botones">'
+      html+='<button class="punto-btn ok'+(st==='ok'?' active':'')+'" onclick="marcar(\''+p.id+'\',\'ok\')">✅<br>OK</button>'
+      html+='<button class="punto-btn atencion'+(st==='atencion'?' active':'')+'" onclick="marcar(\''+p.id+'\',\'atencion\')">🟡<br>Atención</button>'
+      html+='<button class="punto-btn critico'+(st==='critico'?' active':'')+'" onclick="marcar(\''+p.id+'\',\'critico\')">🔴<br>Cambiar YA</button>'
+      html+='</div>'
+      html+='<div class="punto-nota '+(st==='atencion'||st==='critico'?'show':'')+'" id="nota-'+p.id+'">'
+      html+='<input type="text" placeholder="Nota rápida (opcional)" value="'+(notasPunto[p.id]||'').replace(/"/g,'&quot;')+'" onchange="setNota(\''+p.id+'\',this.value)">'
+      html+='</div>'
+    }
     html+='</div>'
   })
   cont.innerHTML=html
 }
 
+function setOtroDesc(v){otroDesc=v}
+function setOtroPrecio(v){otroPrecio=parseInt(v)||0;actualizarTotales()}
+
 function marcar(id, st){
   estado[id]=st
   var punto=document.getElementById('p-'+id)
-  punto.className='punto '+st
+  punto.className='punto '+st+(id==='otro'?' punto-otro':'')
   punto.querySelectorAll('.punto-btn').forEach(function(b){b.classList.remove('active')})
   punto.querySelector('.punto-btn.'+st).classList.add('active')
   var nota=document.getElementById('nota-'+id)
-  if(st==='atencion' || st==='critico') nota.classList.add('show')
-  else nota.classList.remove('show')
+  if(nota){
+    if(st==='atencion'||st==='critico') nota.classList.add('show')
+    else nota.classList.remove('show')
+  }
   actualizarTotales()
-  
-  // Vibración táctil móvil
   if(navigator.vibrate) navigator.vibrate(30)
 }
 
-function setNota(id, val){
-  notasPunto[id]=val
-}
+function setNota(id, val){notasPunto[id]=val}
 
 function actualizarTotales(){
   var ok=0, atn=0, crt=0, montoEst=0
@@ -288,13 +310,13 @@ function actualizarTotales(){
     if(estado[k]==='ok') ok++
     else if(estado[k]==='atencion'){
       atn++
-      var item=CATALOGO.find(function(x){return x.id===k})
-      montoEst+=Math.round((item.precio[0]+item.precio[1])/2)
+      if(k==='otro'){montoEst+=otroPrecio}
+      else {var item=CATALOGO.find(function(x){return x.id===k});if(item) montoEst+=Math.round((item.precio[0]+item.precio[1])/2)}
     }
     else if(estado[k]==='critico'){
       crt++
-      var item=CATALOGO.find(function(x){return x.id===k})
-      montoEst+=Math.round((item.precio[0]+item.precio[1])/2)
+      if(k==='otro'){montoEst+=otroPrecio}
+      else {var item=CATALOGO.find(function(x){return x.id===k});if(item) montoEst+=Math.round((item.precio[0]+item.precio[1])/2)}
     }
   })
   var total=ok+atn+crt
@@ -302,10 +324,10 @@ function actualizarTotales(){
   document.getElementById('p-ok').textContent=ok
   document.getElementById('p-atn').textContent=atn
   document.getElementById('p-crt').textContent=crt
-  document.getElementById('total-est').innerHTML=fmt(montoEst)+'<small> · sin descuento</small>'
+  document.getElementById('total-est').innerHTML=fmt(montoEst)+'<small> · a Lucas</small>'
   
   var btn=document.getElementById('btn-save')
-  if(total>=8) btn.classList.add('ready')
+  if(total>=4) btn.classList.add('ready')
   else btn.classList.remove('ready')
 }
 
@@ -323,20 +345,23 @@ async function guardar(){
   }
   
   var total=Object.keys(estado).length
-  if(total<8){
+  if(total<3){
     if(!confirm('Solo has revisado '+total+' puntos. ¿Guardar de todas formas?')) return
   }
   
   var criticos=[], atencion=[], montoTotal=0
   Object.keys(estado).forEach(function(k){
-    var item=CATALOGO.find(function(x){return x.id===k})
-    var precio=Math.round((item.precio[0]+item.precio[1])/2)
-    if(estado[k]==='critico'){
-      criticos.push({item:item.nombre, precio:precio, nota:notasPunto[k]||''})
-      montoTotal+=precio
-    } else if(estado[k]==='atencion'){
-      atencion.push({item:item.nombre, precio:precio, nota:notasPunto[k]||''})
-      montoTotal+=precio
+    if(k==='otro'){
+      if(otroDesc && otroPrecio>0){
+        if(estado[k]==='critico'){criticos.push({item:otroDesc,precio:otroPrecio,nota:''});montoTotal+=otroPrecio}
+        else if(estado[k]==='atencion'){atencion.push({item:otroDesc,precio:otroPrecio,nota:''});montoTotal+=otroPrecio}
+      }
+    } else {
+      var item=CATALOGO.find(function(x){return x.id===k})
+      if(!item) return
+      var precio=Math.round((item.precio[0]+item.precio[1])/2)
+      if(estado[k]==='critico'){criticos.push({item:item.nombre,precio:precio,nota:notasPunto[k]||''});montoTotal+=precio}
+      else if(estado[k]==='atencion'){atencion.push({item:item.nombre,precio:precio,nota:notasPunto[k]||''});montoTotal+=precio}
     }
   })
   var descuento=Math.round(montoTotal*0.15)
@@ -357,11 +382,13 @@ async function guardar(){
     correa_alternador:estado.correa_alternador||null,
     escobillas:estado.escobillas||null,
     bateria:estado.bateria||null,
-    bujias:estado.bujias||null,
     neumaticos:estado.neumaticos||null,
-    frenos_delanteros:estado.frenos_delanteros||null,
-    frenos_traseros:estado.frenos_traseros||null,
     fluidos:estado.fluidos||null,
+    luces:estado.luces||null,
+    bornes_bateria:estado.bornes_bateria||null,
+    otro_estado:estado.otro||null,
+    otro_descripcion:otroDesc||null,
+    otro_precio:otroPrecio||null,
     notas:notasPunto,
     items_ok:Object.values(estado).filter(function(x){return x==='ok'}).length,
     items_atencion:atencion.length,
@@ -376,7 +403,7 @@ async function guardar(){
       headers:{"Content-Type":"application/json","Authorization":"Bearer "+SB_KEY,"apikey":SB_KEY,"Prefer":"return=representation"},
       body:JSON.stringify(data)
     })
-    if(!r.ok) throw new Error('HTTP '+r.status)
+    if(!r.ok){var err=await r.text();throw new Error('HTTP '+r.status+': '+err.substring(0,100))}
     var saved=await r.json()
     mostrarSuccess(criticos, atencion, montoTotal, conDesc, saved[0]?saved[0].id:null)
   } catch(e){
@@ -387,43 +414,34 @@ async function guardar(){
 function mostrarSuccess(criticos, atencion, monto, conDesc, insId){
   var html=''
   if(criticos.length){
-    html+='<h3 style="color:var(--rojo-l)">🔴 Crítico ('+criticos.length+')</h3>'
+    html+='<h3 style="color:var(--rojo-l)">🔴 Cambiar ya ('+criticos.length+')</h3>'
     html+='<div class="success-lista">'
-    criticos.forEach(function(c){
-      html+='• '+c.item+' — '+fmt(c.precio)+'<br>'
-    })
+    criticos.forEach(function(c){html+='• '+c.item+' — '+fmt(c.precio)+'<br>'})
     html+='</div>'
   }
   if(atencion.length){
-    html+='<h3 style="color:var(--amarillo);margin-top:14px">🟡 Atención ('+atencion.length+')</h3>'
+    html+='<h3 style="color:var(--amarillo);margin-top:14px">🟡 Próxima visita ('+atencion.length+')</h3>'
     html+='<div class="success-lista">'
-    atencion.forEach(function(a){
-      html+='• '+a.item+' — '+fmt(a.precio)+'<br>'
-    })
+    atencion.forEach(function(a){html+='• '+a.item+' — '+fmt(a.precio)+'<br>'})
     html+='</div>'
   }
   if(monto>0){
     html+='<div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--line)">'
     html+='<div style="font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;font-weight:700">Venta potencial</div>'
-    html+='<div style="font-family:var(--display);font-weight:800;font-size:24px;color:var(--dorado);margin-top:4px">'+fmt(conDesc)+'</div>'
-    html+='<div style="font-size:11px;color:var(--t3);margin-top:2px">Con 15% descuento por combo (te ahorras '+fmt(monto-conDesc)+')</div>'
+    html+='<div style="font-family:var(--display);font-weight:800;font-size:22px;color:var(--dorado);margin-top:4px">'+fmt(conDesc)+'</div>'
+    html+='<div style="font-size:11px;color:var(--t3);margin-top:2px">Con 15% descuento combo (ahorro '+fmt(monto-conDesc)+')</div>'
     html+='</div>'
   }
   document.getElementById('success-resumen').innerHTML=html
-  
-  // Link a Lucas
   var linkLucas='agente-vendedor.html?vendedor=lucas'
-  if(CLIENTE_ID) linkLucas+='&cliente='+CLIENTE_ID+'&inspeccion='+insId
+  if(CLIENTE_ID) linkLucas+='&cliente='+CLIENTE_ID
   document.getElementById('link-lucas').href=linkLucas
-  
   document.getElementById('success').classList.add('show')
   window.scrollTo(0,0)
 }
 
 function nuevaInspeccion(){
-  estado={}
-  notasPunto={}
-  CLIENTE_ID=null
+  estado={};notasPunto={};otroDesc='';otroPrecio=0;CLIENTE_ID=null
   document.querySelectorAll('input, select').forEach(function(el){el.value=''})
   renderPuntos()
   actualizarTotales()

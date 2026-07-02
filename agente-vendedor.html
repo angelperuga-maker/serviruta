@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Agente Vendedor · Serviruta</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0A0D;--s1:#111114;--s2:#16161B;--s3:#1C1C23;--line:#26262E;--line-2:#353541;--rojo:#E8210A;--rojo-l:#FF4D2E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;--dorado:#D4AF37;--t1:#F6F4EF;--t2:#C7C5BF;--t3:#8B8990;--t4:#56555C;--display:'Syne',sans-serif;--body:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--t2);font-family:var(--body);font-size:14px;line-height:1.5;min-height:100vh;-webkit-font-smoothing:antialiased}
+button,input,textarea,select{cursor:pointer;border:none;background:none;color:inherit;font-family:inherit;font-size:14px}
+input,textarea,select{cursor:auto}
+a{color:inherit;text-decoration:none}
+
+.bar{position:sticky;top:0;z-index:50;background:rgba(10,10,13,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:14px 20px;display:flex;align-items:center;gap:12px}
+.back{font-family:var(--mono);font-size:11px;color:var(--t3);padding:6px 10px;border:1px solid var(--line);border-radius:6px}
+.sigil{width:34px;height:34px;background:var(--rojo);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:14px;color:#fff}
+.title{font-family:var(--display);font-weight:800;font-size:15px;color:var(--t1);flex:1;line-height:1.2}
+.title small{display:block;font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;margin-top:2px;font-weight:500}
+
+.shell{max-width:1200px;margin:0 auto;padding:20px 16px 100px}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,rgba(232,33,10,0.08),rgba(212,175,55,0.05));border:1px solid var(--line);border-radius:18px;padding:24px;margin-bottom:20px;text-align:center}
+.hero-tit{font-family:var(--display);font-weight:900;font-size:clamp(22px,4vw,30px);color:var(--t1);letter-spacing:-1px;margin-bottom:6px}
+.hero-tit em{color:var(--rojo-l);font-style:normal}
+.hero-desc{font-size:13px;color:var(--t2);max-width:640px;margin:0 auto}
+
+/* AGENTES CARDS */
+.vendedores{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px;margin-bottom:24px}
+.vendedor{background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:18px;cursor:pointer;transition:all 200ms;position:relative;overflow:hidden}
+.vendedor:hover{transform:translateY(-2px);border-color:var(--line-2)}
+.vendedor.active{border-color:var(--rojo);background:linear-gradient(135deg,rgba(232,33,10,0.08),var(--s1))}
+.vendedor-color{position:absolute;top:0;left:0;right:0;height:3px;background:var(--rojo)}
+.vendedor-head{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.vendedor-avatar{width:44px;height:44px;border-radius:12px;background:var(--s3);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.vendedor-info{flex:1;min-width:0}
+.vendedor-nombre{font-family:var(--display);font-weight:800;font-size:15px;color:var(--t1)}
+.vendedor-rol{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;margin-top:2px;font-weight:700}
+.vendedor-desc{font-size:11px;color:var(--t2);line-height:1.4;min-height:32px}
+.vendedor-count{position:absolute;top:12px;right:12px;background:var(--s3);border:1px solid var(--line);color:var(--dorado);padding:3px 8px;border-radius:6px;font-family:var(--mono);font-size:10px;font-weight:700}
+
+/* FILTROS */
+.filtros{background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.filtro-lbl{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;font-weight:700}
+.filtro-btn{padding:8px 14px;background:var(--s2);border:1px solid var(--line);border-radius:8px;font-size:12px;color:var(--t2);cursor:pointer;transition:all 150ms;font-family:var(--display);font-weight:700}
+.filtro-btn.active{background:var(--rojo);color:#fff;border-color:var(--rojo)}
+.filtro-btn:hover:not(.active){border-color:var(--line-2);color:var(--t1)}
+
+/* LISTA CLIENTES */
+.lista-cont{background:var(--s1);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:14px}
+.lista-head{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}
+.lista-tit{font-family:var(--display);font-weight:800;font-size:14px;color:var(--t1)}
+.lista-badge{font-family:var(--mono);font-size:10px;background:var(--s3);color:var(--t2);padding:4px 10px;border-radius:6px;letter-spacing:0.1em;font-weight:700}
+
+.cliente{padding:14px 18px;border-bottom:1px solid var(--line);display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;cursor:pointer;transition:all 150ms}
+.cliente:last-child{border-bottom:none}
+.cliente:hover{background:var(--s2)}
+.cliente.gen{background:linear-gradient(90deg,rgba(232,33,10,0.05),transparent)}
+.cli-icon{width:42px;height:42px;border-radius:10px;background:var(--s3);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.cli-info{min-width:0}
+.cli-nombre{font-family:var(--display);font-weight:700;font-size:13px;color:var(--t1);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cli-meta{font-size:10px;color:var(--t3);margin-top:2px;font-family:var(--mono);display:flex;gap:10px;flex-wrap:wrap}
+.cli-meta b{color:var(--t2)}
+.cli-badges{display:flex;gap:4px;margin-top:4px;flex-wrap:wrap}
+.cli-badge{padding:1px 6px;background:var(--s3);color:var(--t3);border-radius:4px;font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:0.05em}
+.cli-badge.vip{background:rgba(212,175,55,0.15);color:var(--dorado)}
+.cli-badge.pipe{background:rgba(251,146,60,0.15);color:var(--naranja)}
+.cli-badge.dormido{background:rgba(96,165,250,0.15);color:var(--azul)}
+.cli-badge.riesgo{background:rgba(232,33,10,0.15);color:var(--rojo-l)}
+.cli-btn{padding:8px 14px;background:var(--rojo);color:#fff;border-radius:8px;font-family:var(--display);font-weight:700;font-size:11px;letter-spacing:0.03em;cursor:pointer;flex-shrink:0}
+.cli-btn:hover{background:var(--rojo-l)}
+.cli-btn.wa{background:#25D366}
+.cli-btn.wa:hover{background:#1EB855}
+
+/* MODAL MENSAJE */
+.modal{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,0.7);align-items:flex-end;justify-content:center;padding:0}
+.modal.open{display:flex}
+.modal-cont{background:var(--s1);border-radius:20px 20px 0 0;width:100%;max-width:600px;max-height:92vh;overflow-y:auto;padding:20px}
+.modal-head{display:flex;align-items:center;gap:12px;padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:16px}
+.modal-avatar{width:48px;height:48px;border-radius:12px;background:var(--s3);display:flex;align-items:center;justify-content:center;font-size:24px}
+.modal-info{flex:1;min-width:0}
+.modal-nombre{font-family:var(--display);font-weight:800;font-size:16px;color:var(--t1)}
+.modal-sub{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.1em;margin-top:2px}
+.modal-close{background:var(--s3);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-family:var(--mono);font-size:11px;color:var(--t2)}
+
+.ctx-box{background:var(--s2);border-radius:10px;padding:12px 14px;margin-bottom:14px;font-family:var(--mono);font-size:11px;color:var(--t2);line-height:1.6}
+.ctx-box b{color:var(--t1)}
+
+.msg-generado{background:#DCF8C6;color:#1a1a1a;border-radius:14px 14px 14px 4px;padding:16px;font-size:14px;line-height:1.55;white-space:pre-wrap;min-height:120px;font-family:var(--body)}
+.msg-generado.loading{color:#666;font-style:italic;display:flex;align-items:center;gap:8px}
+.msg-generado.editable{background:#DCF8C6;color:#1a1a1a;font-family:var(--body);width:100%;resize:vertical;border:none;outline:none;padding:16px}
+
+.msg-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.msg-btn{flex:1;padding:12px;border-radius:10px;font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:0.05em;cursor:pointer;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:6px;transition:all 150ms;min-width:120px}
+.btn-regen{background:var(--s3);color:var(--t1);border:1px solid var(--line)}
+.btn-regen:hover{background:var(--line)}
+.btn-edit{background:var(--dorado);color:#000}
+.btn-copy{background:var(--azul);color:#000}
+.btn-wa{background:#25D366;color:#fff}
+.btn-wa:hover{background:#1EB855}
+
+.loading-spinner{display:inline-block;width:16px;height:16px;border:2px solid var(--t3);border-top-color:var(--rojo);border-radius:50%;animation:spin 0.8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.empty{text-align:center;padding:60px 20px;color:var(--t3)}
+.empty-icon{font-size:48px;margin-bottom:12px;opacity:0.5}
+
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:12px 20px;font-size:13px;font-weight:600;color:var(--t1);opacity:0;transition:all 300ms;pointer-events:none;z-index:200}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.ok{border-color:var(--verde);color:var(--verde)}
+.toast.err{border-color:var(--rojo);color:var(--rojo-l)}
+
+@media(max-width:640px){
+  .cliente{grid-template-columns:auto 1fr}
+  .cli-btn{grid-column:1/-1;margin-top:8px}
+}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <button class="back" onclick="location.href='menu-coordinador.html'">← Volver</button>
+  <div class="sigil">S</div>
+  <div class="title">Agente Vendedor IA<small>Ventas outbound · reactivación · pipeline · convenios B2B</small></div>
+</header>
+
+<div class="shell" id="cont">
+  <div class="hero">
+    <div class="hero-tit">Vende con <em>IA a tu base completa</em></div>
+    <div class="hero-desc">4 vendedores especializados generan mensajes personalizados para cada cliente basado en su historial. Elige el vendedor, filtra el segmento, y envía por WhatsApp con un tap.</div>
+  </div>
+  
+  <div id="vendedores-grid" class="vendedores">
+    <div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--t3)">Cargando vendedores...</div>
+  </div>
+  
+  <div id="lista-cont" style="display:none">
+    <div class="filtros" id="filtros"></div>
+    <div class="lista-cont">
+      <div class="lista-head">
+        <div class="lista-tit" id="lista-tit">—</div>
+        <div class="lista-badge" id="lista-badge">—</div>
+      </div>
+      <div id="lista"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal generación mensaje -->
+<div class="modal" id="modal-msg">
+  <div class="modal-cont">
+    <div class="modal-head">
+      <div class="modal-avatar" id="m-avatar">💬</div>
+      <div class="modal-info">
+        <div class="modal-nombre" id="m-nombre">Cliente</div>
+        <div class="modal-sub" id="m-sub">—</div>
+      </div>
+      <button class="modal-close" onclick="cerrarModal()">✕</button>
+    </div>
+    
+    <div class="ctx-box" id="m-ctx">—</div>
+    
+    <div style="font-family:var(--mono);font-size:10px;color:var(--dorado);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px;font-weight:700">💬 Mensaje generado</div>
+    <div id="m-mensaje-view" class="msg-generado">—</div>
+    <textarea id="m-mensaje-edit" class="msg-generado editable" style="display:none;min-height:180px" rows="7"></textarea>
+    
+    <div class="msg-actions">
+      <button class="msg-btn btn-regen" onclick="regenerar()">🔄 Regenerar</button>
+      <button class="msg-btn btn-edit" id="btn-edit" onclick="toggleEditar()">✏️ Editar</button>
+      <button class="msg-btn btn-copy" onclick="copiarMsg()">📋 Copiar</button>
+      <a class="msg-btn btn-wa" id="btn-wa" href="#" target="_blank" onclick="marcarEnviado()">💬 Enviar por WhatsApp</a>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+
+var VENDEDOR_ACTUAL=null
+var CLIENTES=[]
+var CLIENTE_ACTUAL=null
+var MENSAJE_ACTUAL=''
+var FILTRO_ACTIVO='todos'
+var EDITANDO=false
+
+function toast(msg,tipo){
+  var t=document.getElementById('toast')
+  t.textContent=msg
+  t.className='toast '+(tipo||'')
+  t.classList.add('show')
+  setTimeout(function(){t.classList.remove('show')},2500)
+}
+
+function fmt(n){
+  if(!n) return '$0'
+  var v=parseInt(n)
+  if(v>=1000000) return '$'+(v/1000000).toFixed(1)+'M'
+  if(v>=1000) return '$'+Math.round(v/1000)+'k'
+  return '$'+v
+}
+
+function diasDesde(f){
+  if(!f) return null
+  return Math.floor((new Date()-new Date(f))/86400000)
+}
+
+async function sbGet(path){
+  var r=await fetch(SB_URL+'/rest/v1/'+path,{headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}})
+  return r.ok?await r.json():[]
+}
+
+async function cargar(){
+  var vendedores=await sbGet("agentes_config?select=*&id=in.(diego,ana,sofia,lucas)&order=nombre")
+  var clientes=await sbGet('clientes?select=*&telefono_normalizado=not.is.null&limit=1000')
+  CLIENTES=clientes||[]
+  renderVendedores(vendedores||[])
+}
+
+function renderVendedores(vendedores){
+  var counts={
+    'diego':CLIENTES.filter(function(c){return c.ltv_pipeline>0}).length,
+    'ana':CLIENTES.filter(function(c){var d=diasDesde(c.ultimo_servicio_fecha);return d && d>=60}).length,
+    'sofia':CLIENTES.filter(function(c){return c.tipo_cliente==='empresa'}).length,
+    'lucas':CLIENTES.filter(function(c){var d=diasDesde(c.ultimo_servicio_fecha);return d && d<90 && c.servicios_totales>=1}).length
+  }
+  
+  var html=''
+  vendedores.forEach(function(v){
+    var count=counts[v.id]||0
+    html+='<div class="vendedor" onclick="seleccionar(\''+v.id+'\')" data-id="'+v.id+'">'
+    html+='<div class="vendedor-color" style="background:'+v.color+'"></div>'
+    html+='<div class="vendedor-count">'+count+' clientes</div>'
+    html+='<div class="vendedor-head">'
+    html+='<div class="vendedor-avatar">'+v.emoji+'</div>'
+    html+='<div class="vendedor-info">'
+    html+='<div class="vendedor-nombre">'+v.nombre+'</div>'
+    html+='<div class="vendedor-rol">'+v.descripcion+'</div>'
+    html+='</div>'
+    html+='</div>'
+    html+='<div class="vendedor-desc">'+v.especialidad+'</div>'
+    html+='</div>'
+  })
+  document.getElementById('vendedores-grid').innerHTML=html
+  VENDEDORES=vendedores
+}
+
+var VENDEDORES=[]
+
+function seleccionar(id){
+  VENDEDOR_ACTUAL=VENDEDORES.find(function(v){return v.id===id})
+  document.querySelectorAll('.vendedor').forEach(function(el){el.classList.remove('active')})
+  document.querySelector('[data-id="'+id+'"]').classList.add('active')
+  document.getElementById('lista-cont').style.display='block'
+  document.getElementById('lista-tit').textContent=VENDEDOR_ACTUAL.emoji+' '+VENDEDOR_ACTUAL.nombre+' — '+VENDEDOR_ACTUAL.descripcion
+  renderFiltros()
+  renderLista()
+  setTimeout(function(){document.getElementById('lista-cont').scrollIntoView({behavior:'smooth',block:'start'})},100)
+}
+
+function renderFiltros(){
+  var filtrosPorVendedor={
+    'diego':[
+      {id:'todos',lbl:'Todos con pipeline'},
+      {id:'reciente',lbl:'Enviado 2-7 días'},
+      {id:'medio',lbl:'Enviado 8-30 días'},
+      {id:'antiguo',lbl:'Enviado 30+ días'}
+    ],
+    'ana':[
+      {id:'todos',lbl:'Todos dormidos'},
+      {id:'dormido',lbl:'60-180 días'},
+      {id:'riesgo',lbl:'180+ días'},
+      {id:'vip',lbl:'VIP dormidos'}
+    ],
+    'sofia':[
+      {id:'todos',lbl:'Todas empresas'},
+      {id:'pesado',lbl:'🏢🚛 Empresa · Pesado'},
+      {id:'liviano',lbl:'🏢🚗 Empresa · Liviano'},
+      {id:'nuevo',lbl:'Empresa nueva (1-2)'},
+      {id:'top',lbl:'Empresa top (3+)'}
+    ],
+    'lucas':[
+      {id:'todos',lbl:'Todos activos'},
+      {id:'nuevos',lbl:'Nuevos (1 servicio)'},
+      {id:'activos',lbl:'Activos (2+ servicios)'},
+      {id:'vip',lbl:'VIP'}
+    ]
+  }
+  var lista=filtrosPorVendedor[VENDEDOR_ACTUAL.id]||[]
+  var html='<span class="filtro-lbl">Filtrar:</span>'
+  lista.forEach(function(f){
+    html+='<button class="filtro-btn'+(f.id===FILTRO_ACTIVO?' active':'')+'" onclick="aplicarFiltro(\''+f.id+'\')">'+f.lbl+'</button>'
+  })
+  document.getElementById('filtros').innerHTML=html
+}
+
+function aplicarFiltro(id){
+  FILTRO_ACTIVO=id
+  renderFiltros()
+  renderLista()
+}
+
+function clientesFiltrados(){
+  var lista=CLIENTES.slice()
+  var vid=VENDEDOR_ACTUAL.id
+  
+  if(vid==='diego'){
+    lista=lista.filter(function(c){return c.ltv_pipeline>0})
+    // Nota: no tenemos fecha exacta de envío del presupuesto, aprox por ultimo_servicio_fecha
+    if(FILTRO_ACTIVO==='reciente') lista=lista.filter(function(c){var d=diasDesde(c.ultimo_servicio_fecha);return d && d>=2 && d<=7})
+    else if(FILTRO_ACTIVO==='medio') lista=lista.filter(function(c){var d=diasDesde(c.ultimo_servicio_fecha);return d && d>=8 && d<=30})
+    else if(FILTRO_ACTIVO==='antiguo') lista=lista.filter(function(c){var d=diasDesde(c.ultimo_servicio_fecha);return d && d>30})
+    lista.sort(function(a,b){return (b.ltv_pipeline||0)-(a.ltv_pipeline||0)})
+  } else if(vid==='ana'){
+    lista=lista.filter(function(c){var d=diasDesde(c.ultimo_servicio_fecha);return d && d>=60})
+    if(FILTRO_ACTIVO==='dormido') lista=lista.filter(function(c){var d=diasDesde(c.ultimo_servicio_fecha);return d>=60 && d<180})
+    else if(FILTRO_ACTIVO==='riesgo') lista=lista.filter(function(c){var d=diasDesde(c.ultimo_servicio_fecha);return d>=180})
+    else if(FILTRO_ACTIVO==='vip') lista=lista.filter(function(c){return c.categoria==='VIP'})
+    lista.sort(function(a,b){return (b.ltv||0)-(a.ltv||0)})
+  } else if(vid==='sofia'){
+    lista=lista.filter(function(c){return c.tipo_cliente==='empresa'})
+    if(FILTRO_ACTIVO==='pesado') lista=lista.filter(function(c){return c.clase_vehiculo==='pesado'})
+    else if(FILTRO_ACTIVO==='liviano') lista=lista.filter(function(c){return c.clase_vehiculo==='liviano'})
+    else if(FILTRO_ACTIVO==='nuevo') lista=lista.filter(function(c){return (c.servicios_totales||0)<=2})
+    else if(FILTRO_ACTIVO==='top') lista=lista.filter(function(c){return (c.servicios_totales||0)>=3})
+    lista.sort(function(a,b){return (b.ltv+b.ltv_pipeline||0)-(a.ltv+a.ltv_pipeline||0)})
+  } else if(vid==='lucas'){
+    lista=lista.filter(function(c){var d=diasDesde(c.ultimo_servicio_fecha);return d && d<90 && (c.servicios_totales||0)>=1})
+    if(FILTRO_ACTIVO==='nuevos') lista=lista.filter(function(c){return (c.servicios_totales||0)===1})
+    else if(FILTRO_ACTIVO==='activos') lista=lista.filter(function(c){return (c.servicios_totales||0)>=2})
+    else if(FILTRO_ACTIVO==='vip') lista=lista.filter(function(c){return c.categoria==='VIP'})
+    lista.sort(function(a,b){return (b.ltv||0)-(a.ltv||0)})
+  }
+  return lista
+}
+
+function renderLista(){
+  var lista=clientesFiltrados()
+  document.getElementById('lista-badge').textContent=lista.length+' CLIENTES'
+  var cont=document.getElementById('lista')
+  if(!lista.length){
+    cont.innerHTML='<div class="empty"><div class="empty-icon">🎯</div>No hay clientes en este filtro</div>'
+    return
+  }
+  var html=''
+  lista.slice(0,100).forEach(function(c){
+    var icon=(c.tipo_cliente==='empresa'?'🏢':'👤')+(c.clase_vehiculo==='pesado'?'🚛':'🚗')
+    var dias=diasDesde(c.ultimo_servicio_fecha)
+    var badges=''
+    if(c.categoria==='VIP') badges+='<span class="cli-badge vip">VIP</span>'
+    if(c.ltv_pipeline>0) badges+='<span class="cli-badge pipe">Pipe '+fmt(c.ltv_pipeline)+'</span>'
+    if(dias && dias>=180) badges+='<span class="cli-badge riesgo">'+dias+'d</span>'
+    else if(dias && dias>=60) badges+='<span class="cli-badge dormido">'+dias+'d</span>'
+    
+    html+='<div class="cliente">'
+    html+='<div class="cli-icon">'+icon+'</div>'
+    html+='<div class="cli-info">'
+    html+='<div class="cli-nombre">'+c.nombre+'</div>'
+    html+='<div class="cli-meta">'
+    html+='<span>🚗 <b>'+(c.vehiculo_principal||c.marca||'—')+'</b></span>'
+    html+='<span>💰 <b>'+fmt((c.ltv||0)+(c.ltv_pipeline||0))+'</b></span>'
+    html+='<span>📊 '+(c.servicios_totales||0)+' serv</span>'
+    html+='</div>'
+    html+='<div class="cli-badges">'+badges+'</div>'
+    html+='</div>'
+    html+='<button class="cli-btn" onclick=\'abrirMensaje("'+c.id+'")\'>✨ Generar mensaje</button>'
+    html+='</div>'
+  })
+  if(lista.length>100) html+='<div style="text-align:center;padding:14px;font-family:var(--mono);font-size:11px;color:var(--t3)">Mostrando 100 de '+lista.length+'</div>'
+  cont.innerHTML=html
+}
+
+async function abrirMensaje(clienteId){
+  CLIENTE_ACTUAL=CLIENTES.find(function(c){return c.id===clienteId})
+  if(!CLIENTE_ACTUAL) return
+  EDITANDO=false
+  document.getElementById('m-mensaje-view').style.display='block'
+  document.getElementById('m-mensaje-edit').style.display='none'
+  document.getElementById('btn-edit').textContent='✏️ Editar'
+  
+  var c=CLIENTE_ACTUAL
+  var icon=(c.tipo_cliente==='empresa'?'🏢':'👤')+(c.clase_vehiculo==='pesado'?'🚛':'🚗')
+  document.getElementById('m-avatar').textContent=icon
+  document.getElementById('m-nombre').textContent=c.nombre
+  
+  var tel=c.telefono_normalizado
+  var telWA=tel && tel.length===9?'56'+tel:tel
+  document.getElementById('m-sub').textContent='📱 +'+telWA+' · '+VENDEDOR_ACTUAL.nombre+' '+VENDEDOR_ACTUAL.emoji
+  
+  document.getElementById('modal-msg').classList.add('open')
+  document.getElementById('m-mensaje-view').className='msg-generado loading'
+  document.getElementById('m-mensaje-view').innerHTML='<div class="loading-spinner"></div> Generando mensaje personalizado con Claude...'
+  document.getElementById('m-ctx').innerHTML='Cargando contexto del cliente...'
+  
+  await generarMensaje()
+}
+
+async function generarMensaje(){
+  var c=CLIENTE_ACTUAL
+  var dias=diasDesde(c.ultimo_servicio_fecha)
+  
+  // Cargar historial de OTs y presupuestos
+  var ots=await sbGet('ordenes_trabajo?cliente_id=eq.'+c.id+'&order=fecha_creacion.desc&limit=10')
+  var ppto=[]
+  if(c.telefono_normalizado){
+    ppto=await sbGet('presupuestos?telefono=ilike.*'+c.telefono_normalizado.slice(-8)+'*&order=created_at.desc&limit=10')
+  }
+  
+  var contexto={
+    nombre: c.nombre,
+    tipo_cliente: c.tipo_cliente,
+    clase_vehiculo: c.clase_vehiculo,
+    vehiculo: c.vehiculo_principal||c.marca||'no registrado',
+    marca: c.marca||'',
+    patente: c.patente||'',
+    rut: c.rut||'',
+    categoria: c.categoria||'',
+    servicios_totales: c.servicios_totales||0,
+    servicios_completados: c.servicios_completados||0,
+    servicios_pendientes: c.servicios_pendientes||0,
+    facturado_historico: c.ltv||0,
+    pipeline_pendiente: c.ltv_pipeline||0,
+    ultimo_ticket: c.ultimo_ticket||0,
+    primer_servicio_fecha: c.primer_servicio_fecha,
+    ultimo_servicio_fecha: c.ultimo_servicio_fecha,
+    dias_sin_ver: dias,
+    ultimos_ots: ots.slice(0,5).map(function(o){return {fecha:o.fecha_creacion,tipo:o.tipo_servicio,status:o.status}}),
+    ultimos_presupuestos: ppto.slice(0,5).map(function(p){return {fecha:p.created_at,servicio:p.auto||p.vehiculo,monto:p.total,estado:p.estado_servicio}})
+  }
+  
+  // Mostrar contexto en el modal
+  var ctxHtml=''
+  ctxHtml+='<b>📊 Contexto del cliente:</b><br>'
+  ctxHtml+='• Tipo: '+(c.tipo_cliente||'—')+' · '+(c.clase_vehiculo||'—')+'<br>'
+  ctxHtml+='• Vehículo: '+(c.vehiculo_principal||c.marca||'—')+'<br>'
+  ctxHtml+='• Categoría: '+(c.categoria||'—')+'<br>'
+  ctxHtml+='• Servicios: '+(c.servicios_completados||0)+' facturados + '+(c.servicios_pendientes||0)+' pendientes<br>'
+  ctxHtml+='• Facturado: '+fmt(c.ltv)+' · Pipeline: '+fmt(c.ltv_pipeline)+'<br>'
+  if(dias) ctxHtml+='• Último servicio: hace <b>'+dias+' días</b><br>'
+  if(ots.length) ctxHtml+='• OTs históricas: '+ots.length+' (última: '+(ots[0].tipo_servicio||'—')+')<br>'
+  document.getElementById('m-ctx').innerHTML=ctxHtml
+  
+  // Llamar a Claude
+  try {
+    var r=await fetch(SB_URL+"/functions/v1/chat-agente",{
+      method:"POST",
+      headers:{"Content-Type":"application/json","Authorization":"Bearer "+SB_KEY,"apikey":SB_KEY},
+      body:JSON.stringify({
+        system_prompt: VENDEDOR_ACTUAL.system_prompt,
+        messages: [{role:"user",content:"CONTEXTO DEL CLIENTE:\n\n"+JSON.stringify(contexto, null, 2)+"\n\nGenera SOLO el mensaje WhatsApp personalizado para este cliente. Sin explicaciones ni preámbulos."}]
+      })
+    })
+    var data=await r.json()
+    if(!r.ok || data.error) throw new Error(data.error||'Error')
+    
+    MENSAJE_ACTUAL=data.respuesta
+    document.getElementById('m-mensaje-view').className='msg-generado'
+    document.getElementById('m-mensaje-view').textContent=MENSAJE_ACTUAL
+    document.getElementById('m-mensaje-edit').value=MENSAJE_ACTUAL
+    
+    // Preparar link WhatsApp
+    var tel=c.telefono_normalizado
+    var telWA=tel && tel.length===9?'56'+tel:tel
+    var wa='https://wa.me/'+telWA+'?text='+encodeURIComponent(MENSAJE_ACTUAL)
+    document.getElementById('btn-wa').href=wa
+    
+    // Registrar mensaje generado
+    await fetch(SB_URL+'/rest/v1/campanas_venta',{
+      method:'POST',
+      headers:{"Content-Type":"application/json","Authorization":"Bearer "+SB_KEY,"apikey":SB_KEY,"Prefer":"return=minimal"},
+      body:JSON.stringify({
+        cliente_id:c.id,
+        agente_vendedor:VENDEDOR_ACTUAL.id,
+        mensaje_generado:MENSAJE_ACTUAL,
+        contexto_cliente:contexto
+      })
+    })
+  } catch(e){
+    document.getElementById('m-mensaje-view').className='msg-generado'
+    document.getElementById('m-mensaje-view').textContent='❌ Error generando mensaje: '+e.message
+  }
+}
+
+async function regenerar(){
+  document.getElementById('m-mensaje-view').className='msg-generado loading'
+  document.getElementById('m-mensaje-view').innerHTML='<div class="loading-spinner"></div> Regenerando con variación...'
+  await generarMensaje()
+}
+
+function toggleEditar(){
+  EDITANDO=!EDITANDO
+  var view=document.getElementById('m-mensaje-view')
+  var edit=document.getElementById('m-mensaje-edit')
+  var btn=document.getElementById('btn-edit')
+  if(EDITANDO){
+    edit.value=view.textContent
+    view.style.display='none'
+    edit.style.display='block'
+    btn.textContent='✅ Aplicar'
+    edit.focus()
+  } else {
+    MENSAJE_ACTUAL=edit.value
+    view.textContent=MENSAJE_ACTUAL
+    view.style.display='block'
+    edit.style.display='none'
+    btn.textContent='✏️ Editar'
+    // Actualizar link WA con mensaje editado
+    var tel=CLIENTE_ACTUAL.telefono_normalizado
+    var telWA=tel && tel.length===9?'56'+tel:tel
+    document.getElementById('btn-wa').href='https://wa.me/'+telWA+'?text='+encodeURIComponent(MENSAJE_ACTUAL)
+  }
+}
+
+function copiarMsg(){
+  var msg=EDITANDO?document.getElementById('m-mensaje-edit').value:MENSAJE_ACTUAL
+  navigator.clipboard.writeText(msg).then(function(){toast('✅ Mensaje copiado','ok')})
+}
+
+async function marcarEnviado(){
+  if(!CLIENTE_ACTUAL) return
+  toast('💬 Abriendo WhatsApp...')
+  await fetch(SB_URL+'/rest/v1/campanas_venta?cliente_id=eq.'+CLIENTE_ACTUAL.id+'&agente_vendedor=eq.'+VENDEDOR_ACTUAL.id+'&enviado=eq.false',{
+    method:'PATCH',
+    headers:{"Content-Type":"application/json","Authorization":"Bearer "+SB_KEY,"apikey":SB_KEY,"Prefer":"return=minimal"},
+    body:JSON.stringify({enviado:true,fecha_enviado:new Date().toISOString(),mensaje_enviado:MENSAJE_ACTUAL})
+  })
+}
+
+function cerrarModal(){
+  document.getElementById('modal-msg').classList.remove('open')
+}
+
+document.getElementById('modal-msg').addEventListener('click',function(e){
+  if(e.target.id==='modal-msg') cerrarModal()
+})
+
+cargar()
+</script>
+
+</body>
+</html>

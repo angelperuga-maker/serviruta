@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Historial Inspecciones · Serviruta</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0A0D;--s1:#111114;--s2:#16161B;--s3:#1C1C23;--line:#26262E;--rojo:#E8210A;--rojo-l:#FF4D2E;--verde:#22C55E;--amarillo:#F5C518;--naranja:#FB923C;--azul:#60A5FA;--dorado:#D4AF37;--t1:#F6F4EF;--t2:#C7C5BF;--t3:#8B8990;--display:'Syne',sans-serif;--body:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--t2);font-family:var(--body);font-size:14px;line-height:1.5;min-height:100vh;-webkit-font-smoothing:antialiased}
+button,input,select{cursor:pointer;border:none;background:none;color:inherit;font-family:inherit;font-size:14px}
+a{color:inherit;text-decoration:none}
+
+.bar{position:sticky;top:0;z-index:50;background:rgba(10,10,13,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:14px 20px;display:flex;align-items:center;gap:12px}
+.back{font-family:var(--mono);font-size:11px;color:var(--t3);padding:6px 10px;border:1px solid var(--line);border-radius:6px}
+.sigil{width:34px;height:34px;background:var(--verde);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:14px;color:#000}
+.title{font-family:var(--display);font-weight:800;font-size:15px;color:var(--t1);flex:1;line-height:1.2}
+.title small{display:block;font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;margin-top:2px;font-weight:500}
+
+.shell{max-width:1000px;margin:0 auto;padding:20px 16px 80px}
+
+/* KPIs */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:20px}
+.kpi{background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.kpi-lbl{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;font-weight:700}
+.kpi-val{font-family:var(--display);font-weight:800;font-size:22px;color:var(--t1);margin-top:4px;letter-spacing:-0.5px;line-height:1.1}
+.kpi-val.verde{color:var(--verde)}
+.kpi-val.dorado{color:var(--dorado)}
+.kpi-val.rojo{color:var(--rojo-l)}
+.kpi-val.azul{color:var(--azul)}
+
+/* NUEVA INSPECCIÓN CTA */
+.cta-nueva{background:linear-gradient(135deg,rgba(34,197,94,0.15),rgba(212,175,55,0.05));border:2px solid var(--verde);border-radius:14px;padding:16px 20px;margin-bottom:18px;display:flex;align-items:center;gap:14px;text-decoration:none;transition:all 150ms;cursor:pointer}
+.cta-nueva:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(34,197,94,0.15)}
+.cta-icon{width:50px;height:50px;background:var(--verde);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:26px}
+.cta-body{flex:1;min-width:0}
+.cta-tit{font-family:var(--display);font-weight:800;font-size:15px;color:var(--verde)}
+.cta-desc{font-size:12px;color:var(--t2);margin-top:2px}
+.cta-arr{font-size:20px;color:var(--verde)}
+
+/* FILTROS */
+.filtros{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px;-ms-overflow-style:none;scrollbar-width:none}
+.filtros::-webkit-scrollbar{display:none}
+.f-btn{padding:8px 14px;background:var(--s1);border:1px solid var(--line);border-radius:8px;font-family:var(--display);font-weight:700;font-size:11px;color:var(--t2);white-space:nowrap;letter-spacing:0.03em;cursor:pointer;transition:all 150ms}
+.f-btn.active{background:var(--verde);color:#000;border-color:var(--verde)}
+.f-btn:hover:not(.active){border-color:var(--t3)}
+
+/* LISTA */
+.ins-lista{background:var(--s1);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.ins-item{padding:16px 18px;border-bottom:1px solid var(--line);cursor:pointer;transition:all 150ms}
+.ins-item:last-child{border-bottom:none}
+.ins-item:hover{background:var(--s2)}
+.ins-item-head{display:flex;align-items:center;gap:14px;margin-bottom:8px}
+.ins-icon{width:42px;height:42px;background:var(--s2);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.ins-info{flex:1;min-width:0}
+.ins-cliente{font-family:var(--display);font-weight:700;font-size:14px;color:var(--t1)}
+.ins-meta{font-size:11px;color:var(--t3);margin-top:2px;display:flex;gap:10px;flex-wrap:wrap}
+.ins-monto{font-family:var(--mono);font-weight:700;font-size:14px;color:var(--dorado);white-space:nowrap}
+.ins-badges{display:flex;gap:6px;flex-wrap:wrap}
+.ins-b{padding:2px 8px;border-radius:4px;font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase}
+.b-critico{background:rgba(232,33,10,0.15);color:var(--rojo-l)}
+.b-atencion{background:rgba(245,197,24,0.15);color:var(--amarillo)}
+.b-ok{background:rgba(34,197,94,0.15);color:var(--verde)}
+.b-ofertado{background:rgba(96,165,250,0.15);color:var(--azul)}
+.b-pendiente{background:rgba(212,175,55,0.15);color:var(--dorado)}
+.b-acepto{background:rgba(34,197,94,0.2);color:var(--verde)}
+
+.acciones{display:flex;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+.acc-btn{flex:1;padding:8px 12px;border-radius:8px;font-family:var(--display);font-weight:700;font-size:10px;letter-spacing:0.05em;cursor:pointer;text-align:center;transition:all 150ms;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:4px}
+.acc-lucas{background:var(--rojo);color:#fff}
+.acc-lucas:hover{background:var(--rojo-l)}
+.acc-verpuntos{background:var(--s3);color:var(--t2);border:1px solid var(--line)}
+.acc-marcaruta{background:var(--s3);color:var(--t2);border:1px solid var(--line)}
+
+.empty{text-align:center;padding:60px 20px;color:var(--t3)}
+.empty-icon{font-size:48px;margin-bottom:12px;opacity:0.5}
+
+/* MODAL DETALLE */
+.modal{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,0.7);align-items:flex-end;justify-content:center;padding:0}
+.modal.open{display:flex}
+.modal-cont{background:var(--s1);border-radius:20px 20px 0 0;width:100%;max-width:600px;max-height:92vh;overflow-y:auto;padding:20px}
+.modal-head{display:flex;align-items:center;gap:12px;padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:16px}
+.modal-tit{font-family:var(--display);font-weight:800;font-size:16px;color:var(--t1);flex:1}
+.modal-close{background:var(--s3);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-family:var(--mono);font-size:11px;color:var(--t2)}
+.det-item{padding:12px 14px;background:var(--s2);border-radius:10px;margin-bottom:8px;display:flex;align-items:center;gap:12px}
+.det-icon{font-size:18px}
+.det-nombre{flex:1;font-size:13px;color:var(--t1);font-weight:600}
+.det-nota{font-size:11px;color:var(--t3);margin-top:2px}
+.det-estado{padding:3px 10px;border-radius:6px;font-family:var(--mono);font-size:10px;font-weight:700;text-transform:uppercase}
+
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:12px 20px;font-size:13px;font-weight:600;color:var(--t1);opacity:0;transition:all 300ms;pointer-events:none;z-index:200}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <button class="back" onclick="location.href='menu-coordinador.html'">← Volver</button>
+  <div class="sigil">S</div>
+  <div class="title">Historial Inspecciones<small>Todas las revisiones + ofertas pendientes</small></div>
+</header>
+
+<div class="shell">
+  
+  <!-- KPIs -->
+  <div class="kpis">
+    <div class="kpi">
+      <div class="kpi-lbl">Total inspecciones</div>
+      <div class="kpi-val" id="kpi-total">0</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-lbl">Últimos 7 días</div>
+      <div class="kpi-val verde" id="kpi-7d">0</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-lbl">Venta potencial</div>
+      <div class="kpi-val dorado" id="kpi-monto">$0</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-lbl">Pendientes ofertar</div>
+      <div class="kpi-val rojo" id="kpi-pend">0</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-lbl">Convertidas</div>
+      <div class="kpi-val azul" id="kpi-conv">0</div>
+    </div>
+  </div>
+  
+  <!-- CTA NUEVA -->
+  <a class="cta-nueva" href="inspeccion-12puntos.html">
+    <div class="cta-icon">🔧</div>
+    <div class="cta-body">
+      <div class="cta-tit">Nueva Inspección Express 12 Puntos</div>
+      <div class="cta-desc">Para el técnico en terreno · 2 minutos</div>
+    </div>
+    <div class="cta-arr">›</div>
+  </a>
+  
+  <!-- FILTROS -->
+  <div class="filtros">
+    <button class="f-btn active" data-f="todos" onclick="filtrar('todos')">Todas</button>
+    <button class="f-btn" data-f="pendientes" onclick="filtrar('pendientes')">🔴 Pendientes ofertar</button>
+    <button class="f-btn" data-f="ofertadas" onclick="filtrar('ofertadas')">💬 Ofertadas</button>
+    <button class="f-btn" data-f="aceptadas" onclick="filtrar('aceptadas')">✅ Convertidas</button>
+    <button class="f-btn" data-f="hoy" onclick="filtrar('hoy')">📅 Hoy</button>
+    <button class="f-btn" data-f="semana" onclick="filtrar('semana')">📆 Esta semana</button>
+  </div>
+  
+  <!-- LISTA -->
+  <div class="ins-lista" id="lista">
+    <div class="empty">
+      <div class="empty-icon">🔧</div>
+      <div>Cargando inspecciones...</div>
+    </div>
+  </div>
+  
+</div>
+
+<!-- MODAL DETALLE -->
+<div class="modal" id="modal">
+  <div class="modal-cont">
+    <div class="modal-head">
+      <div class="modal-tit" id="m-tit">Detalle</div>
+      <button class="modal-close" onclick="cerrarModal()">✕</button>
+    </div>
+    <div id="m-body"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+
+var TODAS=[]
+var FILTRO='todos'
+
+var ITEMS_MAP={
+  'aceite_motor':{icon:'🛢️',nombre:'Aceite + filtro'},
+  'filtro_aire':{icon:'💨',nombre:'Filtro aire'},
+  'filtro_habitaculo':{icon:'🌬️',nombre:'Filtro habitáculo'},
+  'filtro_combustible':{icon:'⛽',nombre:'Filtro combustible'},
+  'correa_alternador':{icon:'⚙️',nombre:'Correa alternador'},
+  'escobillas':{icon:'🌧️',nombre:'Escobillas'},
+  'bateria':{icon:'🔋',nombre:'Batería'},
+  'neumaticos':{icon:'🛞',nombre:'Neumáticos'},
+  'fluidos':{icon:'💧',nombre:'Fluidos'},
+  'luces':{icon:'💡',nombre:'Luces'},
+  'bornes_bateria':{icon:'🔌',nombre:'Bornes batería'}
+}
+
+function fmt(n){
+  if(!n) return '$0'
+  var v=parseInt(n)
+  if(v>=1000000) return '$'+(v/1000000).toFixed(1)+'M'
+  if(v>=1000) return '$'+Math.round(v/1000)+'k'
+  return '$'+v
+}
+
+function toast(msg){
+  var t=document.getElementById('toast')
+  t.textContent=msg
+  t.classList.add('show')
+  setTimeout(function(){t.classList.remove('show')},2000)
+}
+
+function diasDesde(f){
+  if(!f) return null
+  return Math.floor((new Date()-new Date(f))/86400000)
+}
+
+async function sbGet(path){
+  var r=await fetch(SB_URL+'/rest/v1/'+path,{headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}})
+  return r.ok?await r.json():[]
+}
+
+async function sbUpd(path, data){
+  var r=await fetch(SB_URL+'/rest/v1/'+path,{
+    method:'PATCH',
+    headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+    body:JSON.stringify(data)
+  })
+  return r.ok
+}
+
+async function cargar(){
+  TODAS=await sbGet('inspecciones_12puntos?select=*&order=fecha.desc&limit=200')
+  renderKPIs()
+  renderLista()
+}
+
+function renderKPIs(){
+  var ahora=new Date()
+  var hace7=new Date(ahora.getTime()-7*86400000)
+  
+  var total=TODAS.length
+  var recientes=TODAS.filter(function(i){return new Date(i.fecha)>=hace7}).length
+  var totalMonto=TODAS.reduce(function(s,i){return s+(i.monto_con_descuento||0)},0)
+  var pendientes=TODAS.filter(function(i){return !i.oferta_enviada && (i.items_criticos>0 || i.items_atencion>0)}).length
+  var convertidas=TODAS.filter(function(i){return i.cliente_acepto===true}).length
+  
+  document.getElementById('kpi-total').textContent=total
+  document.getElementById('kpi-7d').textContent=recientes
+  document.getElementById('kpi-monto').textContent=fmt(totalMonto)
+  document.getElementById('kpi-pend').textContent=pendientes
+  document.getElementById('kpi-conv').textContent=convertidas
+}
+
+function filtrar(f){
+  FILTRO=f
+  document.querySelectorAll('.f-btn').forEach(function(b){b.classList.remove('active')})
+  document.querySelector('[data-f="'+f+'"]').classList.add('active')
+  renderLista()
+}
+
+function renderLista(){
+  var lista=TODAS.slice()
+  var ahora=new Date()
+  
+  if(FILTRO==='pendientes') lista=lista.filter(function(i){return !i.oferta_enviada && (i.items_criticos>0 || i.items_atencion>0)})
+  else if(FILTRO==='ofertadas') lista=lista.filter(function(i){return i.oferta_enviada && !i.cliente_acepto})
+  else if(FILTRO==='aceptadas') lista=lista.filter(function(i){return i.cliente_acepto===true})
+  else if(FILTRO==='hoy'){
+    var hoy=ahora.toISOString().substring(0,10)
+    lista=lista.filter(function(i){return (i.fecha||'').substring(0,10)===hoy})
+  }
+  else if(FILTRO==='semana'){
+    var hace7=new Date(ahora.getTime()-7*86400000)
+    lista=lista.filter(function(i){return new Date(i.fecha)>=hace7})
+  }
+  
+  var cont=document.getElementById('lista')
+  if(!lista.length){
+    cont.innerHTML='<div class="empty"><div class="empty-icon">🔧</div><div>No hay inspecciones en este filtro</div></div>'
+    return
+  }
+  
+  var html=''
+  lista.forEach(function(i){
+    var dias=diasDesde(i.fecha)
+    var fechaTxt=dias===0?'Hoy':dias===1?'Ayer':'hace '+dias+' días'
+    
+    var badges=''
+    if(i.items_criticos>0) badges+='<span class="ins-b b-critico">🔴 '+i.items_criticos+' crítico</span>'
+    if(i.items_atencion>0) badges+='<span class="ins-b b-atencion">🟡 '+i.items_atencion+' atn</span>'
+    if(i.cliente_acepto===true) badges+='<span class="ins-b b-acepto">✅ Convertida</span>'
+    else if(i.oferta_enviada) badges+='<span class="ins-b b-ofertado">💬 Ofertada</span>'
+    else if(i.items_criticos>0 || i.items_atencion>0) badges+='<span class="ins-b b-pendiente">⏳ Sin ofertar</span>'
+    else badges+='<span class="ins-b b-ok">✅ Todo OK</span>'
+    
+    var lucasBtn=''
+    if(!i.oferta_enviada && (i.items_criticos>0 || i.items_atencion>0) && i.cliente_id){
+      lucasBtn='<a class="acc-btn acc-lucas" href="agente-vendedor.html?vendedor=lucas&cliente='+i.cliente_id+'">🎯 Ofertar con Lucas</a>'
+    } else if(i.oferta_enviada && !i.cliente_acepto){
+      lucasBtn='<button class="acc-btn acc-marcaruta" onclick="event.stopPropagation();marcarConvertida(\''+i.id+'\')">✅ Cliente aceptó</button>'
+    }
+    
+    html+='<div class="ins-item" onclick="verDetalle(\''+i.id+'\')">'
+    html+='<div class="ins-item-head">'
+    html+='<div class="ins-icon">🔧</div>'
+    html+='<div class="ins-info">'
+    html+='<div class="ins-cliente">'+(i.cliente_nombre||'Sin nombre')+'</div>'
+    html+='<div class="ins-meta">'
+    html+='<span>🚗 '+(i.vehiculo||'—')+'</span>'
+    if(i.patente) html+='<span>📋 '+i.patente+'</span>'
+    html+='<span>👤 '+(i.tecnico||'—')+'</span>'
+    html+='<span>📅 '+fechaTxt+'</span>'
+    html+='</div>'
+    html+='<div class="ins-badges" style="margin-top:6px">'+badges+'</div>'
+    html+='</div>'
+    html+='<div class="ins-monto">'+fmt(i.monto_con_descuento||0)+'</div>'
+    html+='</div>'
+    if(lucasBtn){
+      html+='<div class="acciones">'+lucasBtn+'<button class="acc-btn acc-verpuntos" onclick="event.stopPropagation();verDetalle(\''+i.id+'\')">👁️ Ver puntos</button></div>'
+    }
+    html+='</div>'
+  })
+  cont.innerHTML=html
+}
+
+function verDetalle(id){
+  var ins=TODAS.find(function(x){return x.id===id})
+  if(!ins) return
+  
+  document.getElementById('m-tit').textContent=(ins.cliente_nombre||'Cliente')+' · '+(ins.vehiculo||'—')
+  
+  var html=''
+  html+='<div style="background:var(--s2);border-radius:10px;padding:12px 14px;margin-bottom:14px;font-family:var(--mono);font-size:11px;color:var(--t2);line-height:1.7">'
+  html+='<b style="color:var(--t1)">📋 Info servicio:</b><br>'
+  html+='• Patente: '+(ins.patente||'—')+'<br>'
+  html+='• Kilometraje: '+(ins.kilometraje?ins.kilometraje.toLocaleString('es-CL')+' km':'—')+'<br>'
+  html+='• Técnico: '+(ins.tecnico||'—')+'<br>'
+  html+='• Fecha: '+new Date(ins.fecha).toLocaleString('es-CL')+'<br>'
+  html+='• Teléfono: '+(ins.cliente_telefono||'—')+'<br>'
+  html+='</div>'
+  
+  // Items críticos
+  var criticos=[], atencion=[], oks=[]
+  Object.keys(ITEMS_MAP).forEach(function(k){
+    if(ins[k]==='critico') criticos.push({k:k, item:ITEMS_MAP[k], nota:(ins.notas||{})[k]})
+    else if(ins[k]==='atencion') atencion.push({k:k, item:ITEMS_MAP[k], nota:(ins.notas||{})[k]})
+    else if(ins[k]==='ok') oks.push({k:k, item:ITEMS_MAP[k]})
+  })
+  if(ins.otro_estado==='critico') criticos.push({k:'otro', item:{icon:'✍️',nombre:ins.otro_descripcion||'Otro'}, precio:ins.otro_precio})
+  else if(ins.otro_estado==='atencion') atencion.push({k:'otro', item:{icon:'✍️',nombre:ins.otro_descripcion||'Otro'}, precio:ins.otro_precio})
+  else if(ins.otro_estado==='ok') oks.push({k:'otro', item:{icon:'✍️',nombre:'Otro'}})
+  
+  if(criticos.length){
+    html+='<h3 style="font-family:var(--display);font-weight:800;font-size:12px;color:var(--rojo-l);margin-bottom:8px">🔴 Cambiar ya ('+criticos.length+')</h3>'
+    criticos.forEach(function(c){
+      html+='<div class="det-item">'
+      html+='<div class="det-icon">'+c.item.icon+'</div>'
+      html+='<div style="flex:1"><div class="det-nombre">'+c.item.nombre+'</div>'
+      if(c.nota) html+='<div class="det-nota">"'+c.nota+'"</div>'
+      html+='</div>'
+      html+='<div class="det-estado" style="background:rgba(232,33,10,0.15);color:var(--rojo-l)">CRÍTICO</div>'
+      html+='</div>'
+    })
+  }
+  if(atencion.length){
+    html+='<h3 style="font-family:var(--display);font-weight:800;font-size:12px;color:var(--amarillo);margin-top:14px;margin-bottom:8px">🟡 Próxima visita ('+atencion.length+')</h3>'
+    atencion.forEach(function(c){
+      html+='<div class="det-item">'
+      html+='<div class="det-icon">'+c.item.icon+'</div>'
+      html+='<div style="flex:1"><div class="det-nombre">'+c.item.nombre+'</div>'
+      if(c.nota) html+='<div class="det-nota">"'+c.nota+'"</div>'
+      html+='</div>'
+      html+='<div class="det-estado" style="background:rgba(245,197,24,0.15);color:var(--amarillo)">ATENCIÓN</div>'
+      html+='</div>'
+    })
+  }
+  if(oks.length){
+    html+='<h3 style="font-family:var(--display);font-weight:800;font-size:12px;color:var(--verde);margin-top:14px;margin-bottom:8px">✅ Todo bien ('+oks.length+')</h3>'
+    html+='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:6px">'
+    oks.forEach(function(c){
+      html+='<div style="background:var(--s2);border-radius:6px;padding:6px 8px;font-size:11px;color:var(--t2);text-align:center">'+c.item.icon+' '+c.item.nombre+'</div>'
+    })
+    html+='</div>'
+  }
+  
+  html+='<div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--line)">'
+  html+='<div style="font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;font-weight:700">💰 Venta potencial</div>'
+  html+='<div style="font-family:var(--display);font-weight:800;font-size:24px;color:var(--dorado);margin-top:4px">'+fmt(ins.monto_con_descuento||0)+'</div>'
+  html+='<div style="font-size:11px;color:var(--t3);margin-top:2px">Con 15% descuento combo (sin desc: '+fmt(ins.monto_estimado||0)+')</div>'
+  html+='</div>'
+  
+  if(!ins.oferta_enviada && (ins.items_criticos>0 || ins.items_atencion>0) && ins.cliente_id){
+    html+='<a href="agente-vendedor.html?vendedor=lucas&cliente='+ins.cliente_id+'" style="display:block;margin-top:16px;background:var(--rojo);color:#fff;padding:14px;border-radius:12px;font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:0.05em;text-align:center">🎯 Enviar oferta con Lucas</a>'
+  }
+  
+  document.getElementById('m-body').innerHTML=html
+  document.getElementById('modal').classList.add('open')
+}
+
+async function marcarConvertida(id){
+  if(!confirm('¿El cliente aceptó la oferta y se realizará el servicio?')) return
+  var ok=await sbUpd('inspecciones_12puntos?id=eq.'+id,{cliente_acepto:true})
+  if(ok){
+    toast('✅ Marcada como convertida')
+    var idx=TODAS.findIndex(function(x){return x.id===id})
+    if(idx>=0) TODAS[idx].cliente_acepto=true
+    renderKPIs()
+    renderLista()
+  }
+}
+
+function cerrarModal(){
+  document.getElementById('modal').classList.remove('open')
+}
+
+document.getElementById('modal').addEventListener('click',function(e){
+  if(e.target.id==='modal') cerrarModal()
+})
+
+cargar()
+</script>
+
+</body>
+</html>

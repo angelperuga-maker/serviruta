@@ -215,7 +215,7 @@ async function sbGet(path){
 }
 
 async function cargar(){
-  var vendedores=await sbGet("agentes_config?select=*&id=in.(diego,ana,sofia,lucas)&order=nombre")
+  var vendedores=await sbGet("agentes_config?select=*&id=in.(diego,ana,sofia,lucas,valentina)&order=nombre")
   var clientes=await sbGet('clientes?select=*&telefono_normalizado=not.is.null&limit=1000')
   CLIENTES=clientes||[]
   renderVendedores(vendedores||[])
@@ -272,7 +272,8 @@ function renderVendedores(vendedores){
     'diego':CLIENTES.filter(function(c){return c.ltv_pipeline>0}).length,
     'ana':CLIENTES.filter(function(c){var d=diasDesde(c.ultimo_servicio_fecha);return d && d>=60}).length,
     'sofia':CLIENTES.filter(function(c){return c.tipo_cliente==='empresa'}).length,
-    'lucas':CLIENTES.filter(function(c){var d=diasDesde(c.ultimo_servicio_fecha);return d && d<90 && c.servicios_totales>=1}).length
+    'lucas':CLIENTES.filter(function(c){var d=diasDesde(c.ultimo_servicio_fecha);return d && d<90 && c.servicios_totales>=1}).length,
+    'valentina':CLIENTES.filter(function(c){var d=diasDesde(c.ultimo_servicio_fecha);return d && d>=1 && d<=14 && c.servicios_completados>=1}).length
   }
   
   var html=''
@@ -334,6 +335,12 @@ function renderFiltros(){
       {id:'nuevos',lbl:'Nuevos (1 servicio)'},
       {id:'activos',lbl:'Activos (2+ servicios)'},
       {id:'vip',lbl:'VIP'}
+    ],
+    'valentina':[
+      {id:'todos',lbl:'Todos post-servicio (1-14 días)'},
+      {id:'reciente',lbl:'24-48h (check rápido)'},
+      {id:'reseña',lbl:'3-7 días (pedir reseña)'},
+      {id:'olvidados',lbl:'8-14 días (última llamada)'}
     ]
   }
   var lista=filtrosPorVendedor[VENDEDOR_ACTUAL.id]||[]
@@ -380,6 +387,13 @@ function clientesFiltrados(){
     else if(FILTRO_ACTIVO==='activos') lista=lista.filter(function(c){return (c.servicios_totales||0)>=2})
     else if(FILTRO_ACTIVO==='vip') lista=lista.filter(function(c){return c.categoria==='VIP'})
     lista.sort(function(a,b){return (b.ltv||0)-(a.ltv||0)})
+  } else if(vid==='valentina'){
+    lista=lista.filter(function(c){var d=diasDesde(c.ultimo_servicio_fecha);return d && d>=1 && d<=14 && (c.servicios_completados||0)>=1})
+    if(FILTRO_ACTIVO==='reciente') lista=lista.filter(function(c){var d=diasDesde(c.ultimo_servicio_fecha);return d>=1 && d<=2})
+    else if(FILTRO_ACTIVO==='reseña') lista=lista.filter(function(c){var d=diasDesde(c.ultimo_servicio_fecha);return d>=3 && d<=7})
+    else if(FILTRO_ACTIVO==='olvidados') lista=lista.filter(function(c){var d=diasDesde(c.ultimo_servicio_fecha);return d>=8 && d<=14})
+    // Ordenar por más reciente
+    lista.sort(function(a,b){return diasDesde(a.ultimo_servicio_fecha)-diasDesde(b.ultimo_servicio_fecha)})
   }
   return lista
 }

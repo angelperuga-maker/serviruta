@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+<title>Inspección 12 Puntos · Serviruta</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0A0D;--s1:#111114;--s2:#16161B;--s3:#1C1C23;--line:#26262E;--rojo:#E8210A;--rojo-l:#FF4D2E;--verde:#22C55E;--amarillo:#F5C518;--naranja:#FB923C;--azul:#60A5FA;--dorado:#D4AF37;--t1:#F6F4EF;--t2:#C7C5BF;--t3:#8B8990;--display:'Syne',sans-serif;--body:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--t2);font-family:var(--body);font-size:14px;line-height:1.4;min-height:100vh;-webkit-font-smoothing:antialiased;padding-bottom:120px}
+button,input,textarea,select{border:none;background:none;color:inherit;font-family:inherit;font-size:14px}
+input,textarea,select{background:var(--s2);border:1px solid var(--line);border-radius:8px;padding:10px 12px;color:var(--t1);width:100%}
+
+.bar{position:sticky;top:0;z-index:50;background:rgba(10,10,13,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;align-items:center;gap:10px}
+.back{font-family:var(--mono);font-size:10px;color:var(--t3);padding:6px 10px;border:1px solid var(--line);border-radius:6px}
+.sigil{width:32px;height:32px;background:var(--rojo);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:13px;color:#fff}
+.title{font-family:var(--display);font-weight:800;font-size:14px;color:var(--t1);flex:1;line-height:1.1}
+.title small{display:block;font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;margin-top:2px}
+
+.shell{padding:14px}
+
+/* CONTEXTO */
+.ctx{background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
+.ctx-tit{font-family:var(--display);font-weight:800;font-size:13px;color:var(--t1);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.ctx-tit::before{content:"";width:3px;height:14px;background:var(--rojo);border-radius:2px}
+.ctx-form{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ctx-form label{grid-column:1/-1;font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-top:6px}
+.ctx-form label:first-child{margin-top:0}
+.ctx-form .full{grid-column:1/-1}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--rojo)}
+
+/* PROGRESO */
+.progreso{background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:14px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;text-align:center}
+.prog-item{padding:8px 0}
+.prog-num{font-family:var(--display);font-weight:900;font-size:24px;line-height:1}
+.prog-lbl{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;margin-top:4px;font-weight:700}
+.prog-num.total{color:var(--t1)}
+.prog-num.ok{color:var(--verde)}
+.prog-num.atn{color:var(--amarillo)}
+.prog-num.crt{color:var(--rojo-l)}
+
+/* PUNTO */
+.punto{background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:10px;transition:all 200ms}
+.punto.ok{border-left:4px solid var(--verde)}
+.punto.atencion{border-left:4px solid var(--amarillo)}
+.punto.critico{border-left:4px solid var(--rojo);background:linear-gradient(90deg,rgba(232,33,10,0.05),var(--s1))}
+.punto-head{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.punto-icon{width:44px;height:44px;background:var(--s3);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.punto-info{flex:1;min-width:0}
+.punto-nombre{font-family:var(--display);font-weight:800;font-size:14px;color:var(--t1)}
+.punto-precio{font-family:var(--mono);font-size:10px;color:var(--t3);margin-top:2px;font-weight:600}
+.punto-precio b{color:var(--dorado)}
+
+.punto-botones{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px}
+.punto-btn{padding:12px 8px;border:2px solid var(--line);border-radius:10px;font-family:var(--display);font-weight:800;font-size:11px;letter-spacing:0.03em;color:var(--t2);background:var(--s2);cursor:pointer;transition:all 150ms;text-align:center;line-height:1.2}
+.punto-btn:active{transform:scale(0.96)}
+.punto-btn.ok.active{background:var(--verde);color:#000;border-color:var(--verde)}
+.punto-btn.atencion.active{background:var(--amarillo);color:#000;border-color:var(--amarillo)}
+.punto-btn.critico.active{background:var(--rojo);color:#fff;border-color:var(--rojo)}
+
+.punto-nota{margin-top:10px;display:none}
+.punto-nota.show{display:block}
+.punto-nota input{background:var(--s2);font-size:12px;padding:8px 10px}
+
+/* BOTTOM BAR */
+.bottom-bar{position:fixed;bottom:0;left:0;right:0;background:linear-gradient(180deg,transparent,var(--bg) 30%);padding:20px 14px 14px;z-index:40}
+.bottom-inner{background:var(--s2);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;gap:8px;align-items:center;box-shadow:0 -4px 24px rgba(0,0,0,0.3)}
+.total-est{flex:1;min-width:0}
+.total-lbl{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;font-weight:700}
+.total-num{font-family:var(--display);font-weight:800;font-size:18px;color:var(--dorado);line-height:1;margin-top:2px;letter-spacing:-0.5px}
+.total-num small{font-family:var(--body);font-size:11px;color:var(--t3);font-weight:500}
+.btn-save{background:var(--rojo);color:#fff;padding:14px 20px;border-radius:12px;font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:0.05em;cursor:pointer;white-space:nowrap;transition:all 150ms}
+.btn-save:active{transform:scale(0.98)}
+.btn-save:disabled{opacity:0.5}
+.btn-save.ready{background:var(--verde)}
+
+/* SUCCESS SCREEN */
+.success{display:none;position:fixed;inset:0;background:var(--bg);z-index:100;padding:40px 20px;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.success.show{display:flex}
+.success-icon{font-size:80px;margin-bottom:20px;animation:pop 400ms ease-out}
+@keyframes pop{from{transform:scale(0.3);opacity:0}to{transform:scale(1);opacity:1}}
+.success-tit{font-family:var(--display);font-weight:900;font-size:28px;color:var(--verde);margin-bottom:8px;letter-spacing:-1px}
+.success-desc{font-size:14px;color:var(--t2);max-width:400px;margin-bottom:24px;line-height:1.6}
+.success-resumen{background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:20px;max-width:400px;width:100%;text-align:left}
+.success-resumen h3{font-family:var(--display);font-weight:800;font-size:13px;color:var(--t1);margin-bottom:10px}
+.success-lista{font-size:12px;line-height:1.7;color:var(--t2)}
+.success-btn{background:#25D366;color:#fff;padding:14px 24px;border-radius:12px;font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:0.05em;text-decoration:none;display:inline-block;margin-top:12px}
+.success-btn.sec{background:var(--s2);color:var(--t1);border:1px solid var(--line);margin-left:8px}
+
+.toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-20px);background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:10px 16px;font-size:12px;font-weight:600;color:var(--t1);opacity:0;transition:all 300ms;pointer-events:none;z-index:200}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.ok{border-color:var(--verde);color:var(--verde)}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <button class="back" onclick="location.href='menu-coordinador.html'">← Volver</button>
+  <div class="sigil">S</div>
+  <div class="title">Inspección 12 Puntos<small>2-3 min · info directo a Lucas para upsell</small></div>
+</header>
+
+<div class="shell">
+  
+  <!-- CONTEXTO -->
+  <div class="ctx">
+    <div class="ctx-tit">👤 Datos del servicio</div>
+    <div class="ctx-form">
+      <label>Cliente</label>
+      <input class="full" type="text" id="ctx-cliente" placeholder="Nombre del cliente" list="clientes-list">
+      <datalist id="clientes-list"></datalist>
+      <label>Teléfono</label>
+      <input type="tel" id="ctx-tel" placeholder="+56 9 ...">
+      <label>Vehículo</label>
+      <input type="text" id="ctx-vehiculo" placeholder="Marca modelo">
+      <label>Patente</label>
+      <input type="text" id="ctx-patente" placeholder="ABCD-12" style="text-transform:uppercase">
+      <label>Kilometraje</label>
+      <input type="number" id="ctx-km" placeholder="180000">
+      <label>Técnico</label>
+      <select id="ctx-tecnico">
+        <option value="">Seleccionar...</option>
+        <option value="Isaias Robles">Isaias Robles</option>
+        <option value="Miguel Landaeta">Miguel Landaeta</option>
+        <option value="Javier Honores">Javier Honores</option>
+        <option value="Giovannino Perugini">Giovannino Perugini</option>
+        <option value="Reynaldo Aguas">Reynaldo Aguas</option>
+        <option value="Kiven Henz">Kiven Henz</option>
+        <option value="Humberto Morales">Humberto Morales</option>
+        <option value="Angel Peruga">Angel Peruga</option>
+      </select>
+    </div>
+  </div>
+  
+  <!-- PROGRESO -->
+  <div class="progreso">
+    <div class="prog-item"><div class="prog-num total" id="p-total">0<small style="font-size:12px;color:var(--t3)">/12</small></div><div class="prog-lbl">Revisados</div></div>
+    <div class="prog-item"><div class="prog-num ok" id="p-ok">0</div><div class="prog-lbl">OK ✅</div></div>
+    <div class="prog-item"><div class="prog-num atn" id="p-atn">0</div><div class="prog-lbl">Atención 🟡</div></div>
+    <div class="prog-item"><div class="prog-num crt" id="p-crt">0</div><div class="prog-lbl">Crítico 🔴</div></div>
+  </div>
+  
+  <!-- 12 PUNTOS -->
+  <div id="puntos"></div>
+  
+</div>
+
+<!-- BOTTOM BAR -->
+<div class="bottom-bar">
+  <div class="bottom-inner">
+    <div class="total-est">
+      <div class="total-lbl">💰 Venta potencial</div>
+      <div class="total-num" id="total-est">$0<small> · sin descuento</small></div>
+    </div>
+    <button class="btn-save" id="btn-save" onclick="guardar()">💾 Guardar</button>
+  </div>
+</div>
+
+<!-- SUCCESS -->
+<div class="success" id="success">
+  <div class="success-icon">✅</div>
+  <div class="success-tit">Inspección guardada</div>
+  <div class="success-desc">Lucas ya tiene la info del vehículo y puede enviar la oferta al cliente ahora mismo.</div>
+  <div class="success-resumen" id="success-resumen"></div>
+  <div>
+    <a class="success-btn" id="link-lucas" href="#">🎯 Ir a Lucas</a>
+    <button class="success-btn sec" onclick="nuevaInspeccion()">➕ Nueva</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+
+var CATALOGO=[
+  {id:'aceite_motor',icon:'🛢️',nombre:'Aceite + filtro (combo)',precio:[49000,75000]},
+  {id:'filtro_aire',icon:'💨',nombre:'Filtro de aire',precio:[12000,22000]},
+  {id:'filtro_habitaculo',icon:'🌬️',nombre:'Filtro habitáculo/polen',precio:[15000,28000]},
+  {id:'filtro_combustible',icon:'⛽',nombre:'Filtro combustible',precio:[18000,35000]},
+  {id:'correa_alternador',icon:'⚙️',nombre:'Correa alternador',precio:[22000,45000]},
+  {id:'escobillas',icon:'🌧️',nombre:'Escobillas limpiaparabrisas',precio:[12000,25000]},
+  {id:'bateria',icon:'🔋',nombre:'Batería',precio:[80000,220000]},
+  {id:'bujias',icon:'⚡',nombre:'Bujías (juego)',precio:[35000,65000]},
+  {id:'neumaticos',icon:'🛞',nombre:'Neumáticos',precio:[60000,180000]},
+  {id:'frenos_delanteros',icon:'🛑',nombre:'Frenos delanteros',precio:[80000,180000]},
+  {id:'frenos_traseros',icon:'🛑',nombre:'Frenos traseros',precio:[70000,150000]},
+  {id:'fluidos',icon:'💧',nombre:'Fluidos (frenos, refrig, dirección)',precio:[10000,30000]}
+]
+
+var estado={}
+var notasPunto={}
+var CLIENTE_ID=null
+var CLIENTES=[]
+
+function toast(msg,tipo){
+  var t=document.getElementById('toast')
+  t.textContent=msg
+  t.className='toast '+(tipo||'')
+  t.classList.add('show')
+  setTimeout(function(){t.classList.remove('show')},2000)
+}
+
+function fmt(n){
+  if(!n) return '$0'
+  return '$'+parseInt(n).toLocaleString('es-CL')
+}
+
+async function sbGet(path){
+  var r=await fetch(SB_URL+'/rest/v1/'+path,{headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}})
+  return r.ok?await r.json():[]
+}
+
+async function cargarClientes(){
+  CLIENTES=await sbGet('clientes?select=id,nombre,telefono_normalizado,vehiculo_principal,patente,rut&order=nombre.asc&limit=1000')
+  var dl=document.getElementById('clientes-list')
+  var html=''
+  CLIENTES.forEach(function(c){
+    html+='<option value="'+c.nombre.replace(/"/g,'&quot;')+'">'
+  })
+  dl.innerHTML=html
+  
+  document.getElementById('ctx-cliente').addEventListener('input',function(e){
+    var val=e.target.value.toLowerCase().trim()
+    var match=CLIENTES.find(function(c){return c.nombre.toLowerCase()===val})
+    if(match){
+      CLIENTE_ID=match.id
+      if(match.telefono_normalizado) document.getElementById('ctx-tel').value='+'+(match.telefono_normalizado.length===9?'56'+match.telefono_normalizado:match.telefono_normalizado)
+      if(match.vehiculo_principal) document.getElementById('ctx-vehiculo').value=match.vehiculo_principal
+      if(match.patente) document.getElementById('ctx-patente').value=match.patente
+      toast('✅ Cliente cargado','ok')
+    } else {
+      CLIENTE_ID=null
+    }
+  })
+}
+
+function renderPuntos(){
+  var cont=document.getElementById('puntos')
+  var html=''
+  CATALOGO.forEach(function(p){
+    var st=estado[p.id]||''
+    html+='<div class="punto '+st+'" id="p-'+p.id+'">'
+    html+='<div class="punto-head">'
+    html+='<div class="punto-icon">'+p.icon+'</div>'
+    html+='<div class="punto-info">'
+    html+='<div class="punto-nombre">'+p.nombre+'</div>'
+    html+='<div class="punto-precio">Cambio: <b>'+fmt(p.precio[0])+' - '+fmt(p.precio[1])+'</b></div>'
+    html+='</div>'
+    html+='</div>'
+    html+='<div class="punto-botones">'
+    html+='<button class="punto-btn ok'+(st==='ok'?' active':'')+'" onclick="marcar(\''+p.id+'\',\'ok\')">✅<br>OK</button>'
+    html+='<button class="punto-btn atencion'+(st==='atencion'?' active':'')+'" onclick="marcar(\''+p.id+'\',\'atencion\')">🟡<br>Atención</button>'
+    html+='<button class="punto-btn critico'+(st==='critico'?' active':'')+'" onclick="marcar(\''+p.id+'\',\'critico\')">🔴<br>Cambiar YA</button>'
+    html+='</div>'
+    html+='<div class="punto-nota '+(st==='atencion'||st==='critico'?'show':'')+'" id="nota-'+p.id+'">'
+    html+='<input type="text" placeholder="Nota rápida (opcional)" value="'+(notasPunto[p.id]||'')+'" onchange="setNota(\''+p.id+'\',this.value)">'
+    html+='</div>'
+    html+='</div>'
+  })
+  cont.innerHTML=html
+}
+
+function marcar(id, st){
+  estado[id]=st
+  var punto=document.getElementById('p-'+id)
+  punto.className='punto '+st
+  punto.querySelectorAll('.punto-btn').forEach(function(b){b.classList.remove('active')})
+  punto.querySelector('.punto-btn.'+st).classList.add('active')
+  var nota=document.getElementById('nota-'+id)
+  if(st==='atencion' || st==='critico') nota.classList.add('show')
+  else nota.classList.remove('show')
+  actualizarTotales()
+  
+  // Vibración táctil móvil
+  if(navigator.vibrate) navigator.vibrate(30)
+}
+
+function setNota(id, val){
+  notasPunto[id]=val
+}
+
+function actualizarTotales(){
+  var ok=0, atn=0, crt=0, montoEst=0
+  Object.keys(estado).forEach(function(k){
+    if(estado[k]==='ok') ok++
+    else if(estado[k]==='atencion'){
+      atn++
+      var item=CATALOGO.find(function(x){return x.id===k})
+      montoEst+=Math.round((item.precio[0]+item.precio[1])/2)
+    }
+    else if(estado[k]==='critico'){
+      crt++
+      var item=CATALOGO.find(function(x){return x.id===k})
+      montoEst+=Math.round((item.precio[0]+item.precio[1])/2)
+    }
+  })
+  var total=ok+atn+crt
+  document.getElementById('p-total').innerHTML=total+'<small style="font-size:12px;color:var(--t3)">/12</small>'
+  document.getElementById('p-ok').textContent=ok
+  document.getElementById('p-atn').textContent=atn
+  document.getElementById('p-crt').textContent=crt
+  document.getElementById('total-est').innerHTML=fmt(montoEst)+'<small> · sin descuento</small>'
+  
+  var btn=document.getElementById('btn-save')
+  if(total>=8) btn.classList.add('ready')
+  else btn.classList.remove('ready')
+}
+
+async function guardar(){
+  var cliente=document.getElementById('ctx-cliente').value.trim()
+  var tel=document.getElementById('ctx-tel').value.trim().replace(/[^0-9]/g,'')
+  var vehiculo=document.getElementById('ctx-vehiculo').value.trim()
+  var patente=document.getElementById('ctx-patente').value.trim().toUpperCase()
+  var km=parseInt(document.getElementById('ctx-km').value)||0
+  var tecnico=document.getElementById('ctx-tecnico').value
+  
+  if(!cliente || !tel || !tecnico){
+    toast('❌ Completa cliente, teléfono y técnico','err')
+    return
+  }
+  
+  var total=Object.keys(estado).length
+  if(total<8){
+    if(!confirm('Solo has revisado '+total+' puntos. ¿Guardar de todas formas?')) return
+  }
+  
+  var criticos=[], atencion=[], montoTotal=0
+  Object.keys(estado).forEach(function(k){
+    var item=CATALOGO.find(function(x){return x.id===k})
+    var precio=Math.round((item.precio[0]+item.precio[1])/2)
+    if(estado[k]==='critico'){
+      criticos.push({item:item.nombre, precio:precio, nota:notasPunto[k]||''})
+      montoTotal+=precio
+    } else if(estado[k]==='atencion'){
+      atencion.push({item:item.nombre, precio:precio, nota:notasPunto[k]||''})
+      montoTotal+=precio
+    }
+  })
+  var descuento=Math.round(montoTotal*0.15)
+  var conDesc=montoTotal-descuento
+  
+  var data={
+    cliente_id:CLIENTE_ID,
+    cliente_nombre:cliente,
+    cliente_telefono:tel,
+    vehiculo:vehiculo,
+    patente:patente,
+    kilometraje:km,
+    tecnico:tecnico,
+    aceite_motor:estado.aceite_motor||null,
+    filtro_aire:estado.filtro_aire||null,
+    filtro_habitaculo:estado.filtro_habitaculo||null,
+    filtro_combustible:estado.filtro_combustible||null,
+    correa_alternador:estado.correa_alternador||null,
+    escobillas:estado.escobillas||null,
+    bateria:estado.bateria||null,
+    bujias:estado.bujias||null,
+    neumaticos:estado.neumaticos||null,
+    frenos_delanteros:estado.frenos_delanteros||null,
+    frenos_traseros:estado.frenos_traseros||null,
+    fluidos:estado.fluidos||null,
+    notas:notasPunto,
+    items_ok:Object.values(estado).filter(function(x){return x==='ok'}).length,
+    items_atencion:atencion.length,
+    items_criticos:criticos.length,
+    monto_estimado:montoTotal,
+    monto_con_descuento:conDesc
+  }
+  
+  try {
+    var r=await fetch(SB_URL+'/rest/v1/inspecciones_12puntos',{
+      method:'POST',
+      headers:{"Content-Type":"application/json","Authorization":"Bearer "+SB_KEY,"apikey":SB_KEY,"Prefer":"return=representation"},
+      body:JSON.stringify(data)
+    })
+    if(!r.ok) throw new Error('HTTP '+r.status)
+    var saved=await r.json()
+    mostrarSuccess(criticos, atencion, montoTotal, conDesc, saved[0]?saved[0].id:null)
+  } catch(e){
+    toast('❌ Error: '+e.message,'err')
+  }
+}
+
+function mostrarSuccess(criticos, atencion, monto, conDesc, insId){
+  var html=''
+  if(criticos.length){
+    html+='<h3 style="color:var(--rojo-l)">🔴 Crítico ('+criticos.length+')</h3>'
+    html+='<div class="success-lista">'
+    criticos.forEach(function(c){
+      html+='• '+c.item+' — '+fmt(c.precio)+'<br>'
+    })
+    html+='</div>'
+  }
+  if(atencion.length){
+    html+='<h3 style="color:var(--amarillo);margin-top:14px">🟡 Atención ('+atencion.length+')</h3>'
+    html+='<div class="success-lista">'
+    atencion.forEach(function(a){
+      html+='• '+a.item+' — '+fmt(a.precio)+'<br>'
+    })
+    html+='</div>'
+  }
+  if(monto>0){
+    html+='<div style="margin-top:14px;padding-top:14px;border-top:1px solid var(--line)">'
+    html+='<div style="font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;font-weight:700">Venta potencial</div>'
+    html+='<div style="font-family:var(--display);font-weight:800;font-size:24px;color:var(--dorado);margin-top:4px">'+fmt(conDesc)+'</div>'
+    html+='<div style="font-size:11px;color:var(--t3);margin-top:2px">Con 15% descuento por combo (te ahorras '+fmt(monto-conDesc)+')</div>'
+    html+='</div>'
+  }
+  document.getElementById('success-resumen').innerHTML=html
+  
+  // Link a Lucas
+  var linkLucas='agente-vendedor.html?vendedor=lucas'
+  if(CLIENTE_ID) linkLucas+='&cliente='+CLIENTE_ID+'&inspeccion='+insId
+  document.getElementById('link-lucas').href=linkLucas
+  
+  document.getElementById('success').classList.add('show')
+  window.scrollTo(0,0)
+}
+
+function nuevaInspeccion(){
+  estado={}
+  notasPunto={}
+  CLIENTE_ID=null
+  document.querySelectorAll('input, select').forEach(function(el){el.value=''})
+  renderPuntos()
+  actualizarTotales()
+  document.getElementById('success').classList.remove('show')
+}
+
+cargarClientes()
+renderPuntos()
+actualizarTotales()
+</script>
+
+</body>
+</html>

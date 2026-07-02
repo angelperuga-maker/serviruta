@@ -219,6 +219,52 @@ async function cargar(){
   var clientes=await sbGet('clientes?select=*&telefono_normalizado=not.is.null&limit=1000')
   CLIENTES=clientes||[]
   renderVendedores(vendedores||[])
+  
+  // Cargar alertas de inspecciones frescas (últimas 48h con items criticos/atención)
+  var alertas=await sbGet('inspecciones_12puntos?select=*&order=fecha.desc&limit=20')
+  var recientes=(alertas||[]).filter(function(i){
+    var dias=Math.floor((new Date()-new Date(i.fecha))/86400000)
+    return dias<=2 && !i.oferta_enviada && (i.items_criticos>0 || i.items_atencion>0)
+  })
+  if(recientes.length){
+    renderAlertasInspeccion(recientes)
+  }
+  
+  // Auto-selección desde URL params
+  var params=new URLSearchParams(window.location.search)
+  var vendorParam=params.get('vendedor')
+  var clienteParam=params.get('cliente')
+  if(vendorParam){
+    setTimeout(function(){
+      seleccionar(vendorParam)
+      if(clienteParam){
+        setTimeout(function(){abrirMensaje(clienteParam)},400)
+      }
+    },200)
+  }
+}
+
+function renderAlertasInspeccion(alertas){
+  var html='<div style="background:linear-gradient(135deg,rgba(232,33,10,0.12),rgba(212,175,55,0.05));border:2px solid var(--rojo);border-radius:14px;padding:16px;margin-bottom:16px">'
+  html+='<div style="font-family:var(--display);font-weight:800;font-size:14px;color:var(--rojo-l);margin-bottom:10px;display:flex;align-items:center;gap:8px">🚨 Nuevas inspecciones para ofertar ('+alertas.length+')</div>'
+  html+='<div style="font-size:12px;color:var(--t2);margin-bottom:12px">Los técnicos detectaron cosas que hay que cambiar. Lucas puede enviar la oferta al cliente ahora:</div>'
+  alertas.slice(0,5).forEach(function(i){
+    var potencial=i.monto_con_descuento||0
+    html+='<div style="background:var(--s2);border-radius:8px;padding:10px 12px;margin-bottom:6px;display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center">'
+    html+='<div>'
+    html+='<div style="font-family:var(--display);font-weight:700;font-size:12px;color:var(--t1)">'+(i.cliente_nombre||'Cliente')+' · '+(i.vehiculo||'—')+'</div>'
+    html+='<div style="font-family:var(--mono);font-size:10px;color:var(--t3);margin-top:2px">'
+    if(i.items_criticos>0) html+='<span style="color:var(--rojo-l)">🔴 '+i.items_criticos+' críticos</span> '
+    if(i.items_atencion>0) html+='<span style="color:var(--amarillo)">🟡 '+i.items_atencion+' atn</span> '
+    html+='• 💰 '+fmt(potencial)
+    html+='</div>'
+    html+='</div>'
+    if(i.cliente_id) html+='<button style="padding:8px 12px;background:var(--rojo);color:#fff;border-radius:6px;font-family:var(--display);font-weight:700;font-size:10px" onclick="seleccionar(\'lucas\');setTimeout(function(){abrirMensaje(\''+i.cliente_id+'\')},300)">→ Lucas</button>'
+    html+='</div>'
+  })
+  html+='</div>'
+  var hero=document.querySelector('.hero')
+  hero.insertAdjacentHTML('afterend',html)
 }
 
 function renderVendedores(vendedores){
@@ -410,6 +456,13 @@ async function generarMensaje(){
     ppto=await sbGet('presupuestos?telefono=ilike.*'+c.telefono_normalizado.slice(-8)+'*&order=created_at.desc&limit=10')
   }
   
+  // Si es Lucas, cargar última inspección 12 puntos (si existe)
+  var inspeccion=null
+  if(VENDEDOR_ACTUAL.id==='lucas'){
+    var ins=await sbGet('inspecciones_12puntos?cliente_id=eq.'+c.id+'&order=fecha.desc&limit=1')
+    if(ins && ins.length) inspeccion=ins[0]
+  }
+  
   var contexto={
     nombre: c.nombre,
     tipo_cliente: c.tipo_cliente,
@@ -432,6 +485,45 @@ async function generarMensaje(){
     ultimos_presupuestos: ppto.slice(0,5).map(function(p){return {fecha:p.created_at,servicio:p.auto||p.vehiculo,monto:p.total,estado:p.estado_servicio}})
   }
   
+  // Agregar inspección al contexto si existe
+  if(inspeccion){
+    var criticos=[], atencion=[]
+    var items={
+      'aceite_motor':'Aceite + filtro (combo)',
+      'filtro_aire':'Filtro de aire',
+      'filtro_habitaculo':'Filtro habitáculo',
+      'filtro_combustible':'Filtro combustible',
+      'correa_alternador':'Correa alternador',
+      'escobillas':'Escobillas limpiaparabrisas',
+      'bateria':'Batería',
+      'bujias':'Bujías',
+      'neumaticos':'Neumáticos',
+      'frenos_delanteros':'Frenos delanteros',
+      'frenos_traseros':'Frenos traseros',
+      'fluidos':'Fluidos'
+    }
+    var precios={
+      'aceite_motor':62000,'filtro_aire':17000,'filtro_habitaculo':22000,'filtro_combustible':27000,
+      'correa_alternador':34000,'escobillas':19000,'bateria':150000,'bujias':50000,
+      'neumaticos':120000,'frenos_delanteros':130000,'frenos_traseros':110000,'fluidos':20000
+    }
+    Object.keys(items).forEach(function(k){
+      var nota=inspeccion.notas&&inspeccion.notas[k]?' ('+inspeccion.notas[k]+')':''
+      if(inspeccion[k]==='critico') criticos.push({item:items[k]+nota,precio:precios[k]})
+      else if(inspeccion[k]==='atencion') atencion.push({item:items[k]+nota,precio:precios[k]})
+    })
+    
+    contexto.inspeccion_12puntos={
+      fecha: inspeccion.fecha,
+      tecnico: inspeccion.tecnico,
+      kilometraje: inspeccion.kilometraje,
+      items_criticos: criticos,
+      items_atencion: atencion,
+      monto_estimado: inspeccion.monto_estimado,
+      monto_con_descuento: inspeccion.monto_con_descuento
+    }
+  }
+  
   // Mostrar contexto en el modal
   var ctxHtml=''
   ctxHtml+='<b>📊 Contexto del cliente:</b><br>'
@@ -442,6 +534,16 @@ async function generarMensaje(){
   ctxHtml+='• Facturado: '+fmt(c.ltv)+' · Pipeline: '+fmt(c.ltv_pipeline)+'<br>'
   if(dias) ctxHtml+='• Último servicio: hace <b>'+dias+' días</b><br>'
   if(ots.length) ctxHtml+='• OTs históricas: '+ots.length+' (última: '+(ots[0].tipo_servicio||'—')+')<br>'
+  
+  // Mostrar hallazgos de inspección si existe
+  if(inspeccion){
+    var diasIns=diasDesde(inspeccion.fecha)
+    ctxHtml+='<br><b style="color:var(--rojo-l)">🔧 INSPECCIÓN 12 PUNTOS (hace '+diasIns+' días):</b><br>'
+    ctxHtml+='• Técnico: '+(inspeccion.tecnico||'—')+'<br>'
+    if(inspeccion.items_criticos>0) ctxHtml+='• <span style="color:var(--rojo-l)">🔴 '+inspeccion.items_criticos+' críticos</span><br>'
+    if(inspeccion.items_atencion>0) ctxHtml+='• <span style="color:var(--amarillo)">🟡 '+inspeccion.items_atencion+' atención</span><br>'
+    if(inspeccion.monto_con_descuento) ctxHtml+='• <b style="color:var(--dorado)">💰 Venta potencial: '+fmt(inspeccion.monto_con_descuento)+' (con desc)</b><br>'
+  }
   document.getElementById('m-ctx').innerHTML=ctxHtml
   
   // Llamar a Claude

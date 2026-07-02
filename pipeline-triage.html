@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Triage Matinal · Serviruta</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0A0D;--s1:#111114;--s2:#16161B;--s3:#1C1C23;--line:#26262E;--rojo:#E8210A;--rojo-l:#FF4D2E;--verde:#22C55E;--amarillo:#F5C518;--naranja:#FB923C;--azul:#60A5FA;--dorado:#D4AF37;--t1:#F6F4EF;--t2:#C7C5BF;--t3:#8B8990;--display:'Syne',sans-serif;--body:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--t2);font-family:var(--body);font-size:14px;line-height:1.5;min-height:100vh;-webkit-font-smoothing:antialiased}
+button,input,textarea{cursor:pointer;border:none;background:none;color:inherit;font-family:inherit;font-size:14px}
+a{color:inherit;text-decoration:none}
+
+.bar{position:sticky;top:0;z-index:50;background:rgba(10,10,13,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:14px 20px;display:flex;align-items:center;gap:12px}
+.back{font-family:var(--mono);font-size:11px;color:var(--t3);padding:6px 10px;border:1px solid var(--line);border-radius:6px}
+.sigil{width:34px;height:34px;background:var(--rojo-l);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:14px;color:#fff}
+.title{font-family:var(--display);font-weight:800;font-size:15px;color:var(--t1);flex:1;line-height:1.2}
+.title small{display:block;font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;margin-top:2px;font-weight:500}
+
+.shell{max-width:900px;margin:0 auto;padding:20px 16px 100px}
+
+/* HEADER DIEGO */
+.diego-hero{background:linear-gradient(135deg,rgba(255,77,46,0.15),rgba(212,175,55,0.05));border:1px solid rgba(255,77,46,0.4);border-radius:18px;padding:20px 24px;margin-bottom:20px;display:flex;align-items:center;gap:16px}
+.diego-avatar{width:60px;height:60px;background:linear-gradient(135deg,var(--rojo),var(--rojo-l));border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:30px;flex-shrink:0}
+.diego-info{flex:1;min-width:0}
+.diego-tit{font-family:var(--display);font-weight:900;font-size:22px;color:var(--t1);letter-spacing:-0.5px;line-height:1.1}
+.diego-tit em{color:var(--rojo-l);font-style:normal}
+.diego-desc{font-size:12px;color:var(--t2);margin-top:4px;line-height:1.4}
+
+/* KPIs */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px}
+.kpi{background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.kpi-lbl{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.08em;text-transform:uppercase;font-weight:700}
+.kpi-val{font-family:var(--display);font-weight:800;font-size:20px;color:var(--t1);margin-top:2px;letter-spacing:-0.5px;line-height:1.1}
+.kpi-val.dorado{color:var(--dorado)}
+.kpi-val.amarillo{color:var(--amarillo)}
+.kpi-val.verde{color:var(--verde)}
+
+/* PROGRESO DE SESIÓN */
+.sesion{background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin-bottom:18px;display:flex;align-items:center;gap:14px}
+.sesion-bar{flex:1;height:8px;background:var(--s3);border-radius:4px;overflow:hidden}
+.sesion-fill{height:100%;background:linear-gradient(90deg,var(--verde),var(--dorado));border-radius:4px;transition:width 400ms ease}
+.sesion-txt{font-family:var(--mono);font-size:11px;color:var(--t2);font-weight:700;white-space:nowrap}
+
+/* PPTO CARD */
+.ppto{background:var(--s1);border:1px solid var(--line);border-radius:16px;padding:20px;margin-bottom:14px;transition:all 300ms}
+.ppto.antiguo{border-left:4px solid var(--rojo);background:linear-gradient(90deg,rgba(232,33,10,0.05),var(--s1))}
+.ppto.medio{border-left:4px solid var(--amarillo)}
+.ppto.reciente{border-left:4px solid var(--verde)}
+.ppto.done{opacity:0.3;transform:scale(0.98)}
+
+.ppto-head{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.ppto-num{font-family:var(--mono);font-size:11px;color:var(--dorado);letter-spacing:0.08em;font-weight:700;padding:4px 10px;background:rgba(212,175,55,0.1);border-radius:6px}
+.ppto-cliente{font-family:var(--display);font-weight:800;font-size:16px;color:var(--t1);flex:1;line-height:1.2}
+.ppto-dias{font-family:var(--mono);font-size:10px;font-weight:700;padding:4px 10px;border-radius:6px;text-transform:uppercase;letter-spacing:0.05em;white-space:nowrap}
+.dias-antiguo{background:rgba(232,33,10,0.15);color:var(--rojo-l)}
+.dias-medio{background:rgba(245,197,24,0.15);color:var(--amarillo)}
+.dias-reciente{background:rgba(34,197,94,0.15);color:var(--verde)}
+
+.ppto-datos{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px;padding:14px;background:var(--s2);border-radius:12px;margin-bottom:16px}
+.dato{display:flex;flex-direction:column;gap:2px}
+.dato-lbl{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.08em;text-transform:uppercase;font-weight:700}
+.dato-val{font-size:13px;color:var(--t1);font-weight:600}
+.dato-monto{color:var(--dorado);font-family:var(--display);font-weight:800;font-size:18px;letter-spacing:-0.3px}
+
+.ppto-items{padding:10px 14px;background:var(--s2);border-radius:10px;margin-bottom:14px;font-size:12px;color:var(--t2);line-height:1.6;max-height:100px;overflow-y:auto}
+.ppto-items b{color:var(--t1)}
+
+/* PREGUNTA DE DIEGO */
+.pregunta{padding:14px 16px;background:linear-gradient(135deg,rgba(255,77,46,0.08),transparent);border-left:3px solid var(--rojo-l);border-radius:8px;margin-bottom:14px}
+.pregunta-txt{font-family:var(--display);font-weight:700;font-size:14px;color:var(--t1);line-height:1.4}
+.pregunta-txt em{color:var(--rojo-l);font-style:normal}
+
+/* BOTONES DE ACCIÓN */
+.acciones{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(min-width:640px){.acciones{grid-template-columns:1fr 1fr 1fr 1fr}}
+.acc{padding:14px 12px;border-radius:12px;font-family:var(--display);font-weight:800;font-size:12px;letter-spacing:0.03em;cursor:pointer;transition:all 150ms;text-align:center;line-height:1.3;border:2px solid transparent;display:flex;flex-direction:column;align-items:center;gap:4px}
+.acc:active{transform:scale(0.96)}
+.acc-emoji{font-size:20px}
+.acc-lbl{font-size:11px}
+.acc-desc{font-size:9px;color:var(--t3);font-family:var(--mono);font-weight:500;letter-spacing:0.05em}
+.acc-enviado{background:rgba(96,165,250,0.1);border-color:rgba(96,165,250,0.3);color:var(--azul)}
+.acc-enviado:hover{background:var(--azul);color:#000;border-color:var(--azul)}
+.acc-aprobado{background:rgba(34,197,94,0.1);border-color:rgba(34,197,94,0.3);color:var(--verde)}
+.acc-aprobado:hover{background:var(--verde);color:#000;border-color:var(--verde)}
+.acc-rechazado{background:rgba(232,33,10,0.1);border-color:rgba(232,33,10,0.3);color:var(--rojo-l)}
+.acc-rechazado:hover{background:var(--rojo);color:#fff;border-color:var(--rojo)}
+.acc-manana{background:rgba(245,197,24,0.1);border-color:rgba(245,197,24,0.3);color:var(--amarillo)}
+.acc-manana:hover{background:var(--amarillo);color:#000;border-color:var(--amarillo)}
+
+/* EMPTY / DONE */
+.empty{text-align:center;padding:60px 20px;color:var(--t3)}
+.empty-icon{font-size:56px;margin-bottom:12px;opacity:0.5}
+.done-cont{text-align:center;padding:40px 20px}
+.done-icon{font-size:72px;margin-bottom:16px}
+.done-tit{font-family:var(--display);font-weight:900;font-size:28px;color:var(--verde);margin-bottom:8px;letter-spacing:-1px}
+.done-desc{font-size:14px;color:var(--t2);max-width:400px;margin:0 auto 20px}
+.done-btn{display:inline-block;padding:14px 24px;background:var(--rojo);color:#fff;border-radius:12px;font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:0.05em;text-decoration:none}
+
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:12px 20px;font-size:13px;font-weight:600;color:var(--t1);opacity:0;transition:all 300ms;pointer-events:none;z-index:200}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.ok{border-color:var(--verde);color:var(--verde)}
+.toast.err{border-color:var(--rojo);color:var(--rojo-l)}
+
+@media(max-width:640px){
+  .kpis{grid-template-columns:1fr 1fr}
+  .diego-hero{padding:16px}
+  .diego-avatar{width:52px;height:52px;font-size:24px}
+  .diego-tit{font-size:18px}
+}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <button class="back" onclick="location.href='menu-coordinador.html'">← Volver</button>
+  <div class="sigil">S</div>
+  <div class="title">Triage Matinal<small>Diego te pregunta qué hacer con cada ppto pendiente</small></div>
+</header>
+
+<div class="shell">
+  
+  <!-- HERO DIEGO -->
+  <div class="diego-hero">
+    <div class="diego-avatar">🎯</div>
+    <div class="diego-info">
+      <div class="diego-tit">Diego <em>necesita tu ayuda</em></div>
+      <div class="diego-desc" id="diego-msg">Cargando presupuestos pendientes de revisar...</div>
+    </div>
+  </div>
+  
+  <!-- KPIs -->
+  <div class="kpis">
+    <div class="kpi"><div class="kpi-lbl">Total triage</div><div class="kpi-val" id="kpi-total">0</div></div>
+    <div class="kpi"><div class="kpi-lbl">Monto pipeline</div><div class="kpi-val dorado" id="kpi-monto">$0</div></div>
+    <div class="kpi"><div class="kpi-lbl">Resueltos hoy</div><div class="kpi-val verde" id="kpi-resueltos">0</div></div>
+    <div class="kpi"><div class="kpi-lbl">Antiguos +15d</div><div class="kpi-val amarillo" id="kpi-antiguos">0</div></div>
+  </div>
+  
+  <!-- PROGRESO SESIÓN -->
+  <div class="sesion" id="sesion" style="display:none">
+    <div class="sesion-bar"><div class="sesion-fill" id="sesion-fill" style="width:0%"></div></div>
+    <div class="sesion-txt" id="sesion-txt">0 / 0</div>
+  </div>
+  
+  <!-- LISTA -->
+  <div id="lista">
+    <div class="empty"><div class="empty-icon">⏳</div><div>Cargando...</div></div>
+  </div>
+  
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+
+var PENDIENTES=[]
+var RESUELTOS_SESION=0
+var TOTAL_SESION=0
+
+function fmt(n){
+  if(!n) return '$0'
+  var v=parseInt(n)
+  if(v>=1000000) return '$'+(v/1000000).toFixed(1)+'M'
+  if(v>=1000) return '$'+Math.round(v/1000)+'k'
+  return '$'+v
+}
+
+function toast(msg,tipo){
+  var t=document.getElementById('toast')
+  t.textContent=msg
+  t.className='toast '+(tipo||'')
+  t.classList.add('show')
+  setTimeout(function(){t.classList.remove('show')},2500)
+}
+
+async function sbGet(path){
+  var r=await fetch(SB_URL+'/rest/v1/'+path,{headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}})
+  return r.ok?await r.json():[]
+}
+
+async function sbUpd(path,data){
+  var r=await fetch(SB_URL+'/rest/v1/'+path,{
+    method:'PATCH',
+    headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+    body:JSON.stringify(data)
+  })
+  return r.ok
+}
+
+function diasDesde(f){
+  if(!f) return 0
+  return Math.floor((new Date()-new Date(f))/86400000)
+}
+
+async function cargar(){
+  // Traer presupuestos que necesitan triage:
+  // - No están completados
+  // - No están pagados
+  // - Tienen 1+ día de creados
+  // - No están postergados para futuro
+  var hoy=new Date().toISOString().substring(0,10)
+  var pptos=await sbGet('presupuestos?select=*&estado_servicio=neq.completado&order=created_at.asc&limit=100')
+  
+  PENDIENTES=(pptos||[]).filter(function(p){
+    if(p.pago_cliente==='pagado') return false
+    var dias=diasDesde(p.created_at)
+    if(dias<1) return false
+    if(p.revisar_desde && p.revisar_desde>hoy) return false
+    return true
+  })
+  
+  TOTAL_SESION=PENDIENTES.length
+  renderKPIs()
+  renderLista()
+}
+
+function renderKPIs(){
+  var total=PENDIENTES.length
+  var monto=PENDIENTES.reduce(function(s,p){return s+(p.total||0)},0)
+  var antiguos=PENDIENTES.filter(function(p){return diasDesde(p.created_at)>15}).length
+  
+  document.getElementById('kpi-total').textContent=total
+  document.getElementById('kpi-monto').textContent=fmt(monto)
+  document.getElementById('kpi-resueltos').textContent=RESUELTOS_SESION
+  document.getElementById('kpi-antiguos').textContent=antiguos
+  
+  var msg=''
+  if(total===0){
+    msg='🎉 No hay nada pendiente por revisar! Pipeline al día.'
+  } else if(total===1){
+    msg='Hay 1 presupuesto por resolver ('+fmt(monto)+'). Toca una opción abajo.'
+  } else {
+    msg='Tienes '+total+' presupuestos pendientes ('+fmt(monto)+' total). Vamos uno por uno.'
+  }
+  document.getElementById('diego-msg').textContent=msg
+  
+  if(TOTAL_SESION>0){
+    document.getElementById('sesion').style.display='flex'
+    document.getElementById('sesion-fill').style.width=(RESUELTOS_SESION/TOTAL_SESION*100)+'%'
+    document.getElementById('sesion-txt').textContent=RESUELTOS_SESION+' / '+TOTAL_SESION
+  }
+}
+
+function renderLista(){
+  var cont=document.getElementById('lista')
+  
+  if(!PENDIENTES.length){
+    if(RESUELTOS_SESION>0){
+      cont.innerHTML='<div class="done-cont">'+
+        '<div class="done-icon">🎯</div>'+
+        '<div class="done-tit">Triage completo</div>'+
+        '<div class="done-desc">Resolviste '+RESUELTOS_SESION+' presupuesto'+(RESUELTOS_SESION!==1?'s':'')+'. Diego ya sabe qué hacer con cada uno.</div>'+
+        '<a class="done-btn" href="agente-vendedor.html?vendedor=diego">🎯 Ir a Diego para cerrar pipeline</a>'+
+      '</div>'
+    } else {
+      cont.innerHTML='<div class="empty">'+
+        '<div class="empty-icon">✨</div>'+
+        '<div style="font-size:16px;color:var(--verde);font-weight:700">Pipeline al día</div>'+
+        '<div style="font-size:12px;color:var(--t3);margin-top:8px">No hay presupuestos que necesiten triage</div>'+
+      '</div>'
+    }
+    return
+  }
+  
+  var html=''
+  PENDIENTES.forEach(function(p){
+    var dias=diasDesde(p.created_at)
+    var cls=dias>15?'antiguo':(dias>3?'medio':'reciente')
+    var diasLbl=dias===1?'HACE 1 DÍA':'HACE '+dias+' DÍAS'
+    var diasCls=cls==='antiguo'?'dias-antiguo':(cls==='medio'?'dias-medio':'dias-reciente')
+    
+    // Extraer items del jsonb
+    var itemsHtml=''
+    if(p.items && Array.isArray(p.items) && p.items.length){
+      itemsHtml='<b>🔧 Items:</b><br>'
+      p.items.slice(0,5).forEach(function(it){
+        itemsHtml+='• '+(it.nombre||it.descripcion||it.item||'—')+(it.total?' — $'+parseInt(it.total).toLocaleString('es-CL'):'')+'<br>'
+      })
+      if(p.items.length>5) itemsHtml+='<i style="color:var(--t3)">... y '+(p.items.length-5)+' más</i>'
+    } else if(p.notas || p.obs){
+      itemsHtml='<b>📝 Notas:</b> '+(p.notas||p.obs||'')
+    }
+    
+    var telWA=(p.telefono||'').replace(/[^0-9]/g,'')
+    if(telWA.length===9) telWA='56'+telWA
+    
+    var pregSugerida='¿Qué hacemos con este?'
+    if(dias<=3) pregSugerida='Recién creado. ¿Ya lo enviaste al cliente?'
+    else if(dias<=14) pregSugerida='Lleva '+dias+' días. ¿El cliente respondió?'
+    else pregSugerida='Lleva '+dias+' días sin resolver. ¿Sigue vivo o lo cerramos?'
+    
+    html+='<div class="ppto '+cls+'" id="ppto-'+p.id+'">'
+    html+='<div class="ppto-head">'
+    html+='<div class="ppto-num">#'+(p.numero||'—')+'</div>'
+    html+='<div class="ppto-cliente">'+(p.cliente||'Sin cliente')+'</div>'
+    html+='<div class="ppto-dias '+diasCls+'">'+diasLbl+'</div>'
+    html+='</div>'
+    
+    html+='<div class="ppto-datos">'
+    html+='<div class="dato"><div class="dato-lbl">💰 Monto</div><div class="dato-val dato-monto">'+fmt(p.total)+'</div></div>'
+    html+='<div class="dato"><div class="dato-lbl">🚗 Vehículo</div><div class="dato-val">'+(p.vehiculo||p.auto||'—')+'</div></div>'
+    if(p.tecnico) html+='<div class="dato"><div class="dato-lbl">👤 Técnico</div><div class="dato-val">'+p.tecnico+'</div></div>'
+    if(telWA) html+='<div class="dato"><div class="dato-lbl">📱 WhatsApp</div><div class="dato-val"><a href="https://wa.me/'+telWA+'" target="_blank" style="color:var(--verde);text-decoration:underline">'+p.telefono+'</a></div></div>'
+    html+='</div>'
+    
+    if(itemsHtml) html+='<div class="ppto-items">'+itemsHtml+'</div>'
+    
+    html+='<div class="pregunta"><div class="pregunta-txt">🎯 <em>'+pregSugerida+'</em></div></div>'
+    
+    html+='<div class="acciones">'
+    html+='<button class="acc acc-enviado" onclick="resolver(\''+p.id+'\',\'enviado\')">'
+    html+='<div class="acc-emoji">📩</div><div class="acc-lbl">Enviado</div><div class="acc-desc">Esperando respuesta</div></button>'
+    
+    html+='<button class="acc acc-aprobado" onclick="resolver(\''+p.id+'\',\'aprobado\')">'
+    html+='<div class="acc-emoji">✅</div><div class="acc-lbl">Aprobado</div><div class="acc-desc">Cliente dijo sí</div></button>'
+    
+    html+='<button class="acc acc-rechazado" onclick="resolver(\''+p.id+'\',\'rechazado\')">'
+    html+='<div class="acc-emoji">❌</div><div class="acc-lbl">Rechazado</div><div class="acc-desc">No le interesó</div></button>'
+    
+    html+='<button class="acc acc-manana" onclick="resolver(\''+p.id+'\',\'manana\')">'
+    html+='<div class="acc-emoji">⏰</div><div class="acc-lbl">Mañana</div><div class="acc-desc">Recordar en 24h</div></button>'
+    html+='</div>'
+    html+='</div>'
+  })
+  cont.innerHTML=html
+}
+
+async function resolver(id, accion){
+  var p=PENDIENTES.find(function(x){return x.id===id})
+  if(!p) return
+  
+  var mananana=new Date(Date.now()+86400000).toISOString().substring(0,10)
+  var hoy=new Date().toISOString().substring(0,10)
+  
+  var upd={
+    fecha_ultimo_triage: hoy
+  }
+  var msgToast=''
+  
+  if(accion==='enviado'){
+    upd.estado_servicio='enviado'
+    upd.triage_estado='enviado_esperando'
+    msgToast='📩 Marcado como enviado · Diego lo trabajará como pipeline abierto'
+  } else if(accion==='aprobado'){
+    upd.estado_servicio='aprobado'
+    upd.triage_estado='aprobado_pendiente_ejecutar'
+    msgToast='✅ Aprobado · Va a bandeja de agenda para coordinar ejecución'
+    // Crear solicitud de agenda automática
+    await crearSolicitudAgenda(p)
+  } else if(accion==='rechazado'){
+    upd.estado_servicio='rechazado'
+    upd.triage_estado='rechazado_cerrado'
+    msgToast='❌ Rechazado · Cerrado y fuera del pipeline'
+  } else if(accion==='manana'){
+    upd.triage_estado='postergado'
+    upd.revisar_desde=mananana
+    msgToast='⏰ Se te recordará mañana'
+  }
+  
+  var el=document.getElementById('ppto-'+id)
+  if(el) el.classList.add('done')
+  
+  var ok=await sbUpd('presupuestos?id=eq.'+id, upd)
+  if(!ok){
+    toast('❌ Error al guardar','err')
+    if(el) el.classList.remove('done')
+    return
+  }
+  
+  toast(msgToast,'ok')
+  RESUELTOS_SESION++
+  
+  setTimeout(function(){
+    PENDIENTES=PENDIENTES.filter(function(x){return x.id!==id})
+    renderKPIs()
+    renderLista()
+  },600)
+}
+
+async function crearSolicitudAgenda(ppto){
+  // Buscar cliente_id por teléfono
+  var clienteId=null
+  if(ppto.telefono){
+    var telNorm=(ppto.telefono||'').replace(/[^0-9]/g,'')
+    if(telNorm.length>=8){
+      var c=await sbGet('clientes?telefono_normalizado=like.*'+telNorm.slice(-8)+'&select=id&limit=1')
+      if(c && c[0]) clienteId=c[0].id
+    }
+  }
+  
+  var hoy=new Date()
+  var fecha3d=new Date(hoy.getTime()+3*86400000)
+  var servicio='Ejecución presupuesto #'+(ppto.numero||'—')
+  if(ppto.items && Array.isArray(ppto.items) && ppto.items[0]) servicio=ppto.items[0].nombre||servicio
+  
+  await fetch(SB_URL+'/rest/v1/agenda',{
+    method:'POST',
+    headers:{"Content-Type":"application/json","Authorization":"Bearer "+SB_KEY,"apikey":SB_KEY,"Prefer":"return=minimal"},
+    body:JSON.stringify({
+      cliente_id:clienteId,
+      cliente:ppto.cliente,
+      telefono:ppto.telefono,
+      vehiculo:ppto.vehiculo||ppto.auto,
+      servicio:servicio,
+      fecha:fecha3d.toISOString().substring(0,10),
+      hora:'10:00',
+      estado:'solicitada',
+      origen:'agente',
+      agente_solicitante:'diego',
+      urgencia:'normal',
+      monto_estimado:ppto.total,
+      notas:'Aprobado en triage matinal, coordinar ejecución'
+    })
+  })
+}
+
+cargar()
+</script>
+
+</body>
+</html>

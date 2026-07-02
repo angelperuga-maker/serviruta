@@ -131,6 +131,11 @@ if (!sessionStorage.getItem("coord_auth")) { location.href = "login-coordinador.
     <div><div class="cn" style="color:#F5C518">Bandeja de solicitudes IA <span id="badgeSolic" style="font-size:9px;background:rgba(245,197,24,0.2);color:#F5C518;padding:2px 6px;border-radius:4px;margin-left:4px;font-weight:700">—</span></div><div class="cd">Los agentes proponen horarios · tú confirmas</div></div>
     <span class="arr" style="color:#F5C518">›</span>
   </a>
+  <a class="card" href="pipeline-triage.html" style="background:linear-gradient(135deg,rgba(255,77,46,0.12),rgba(212,175,55,0.04));border-color:rgba(255,77,46,0.4);margin-top:8px">
+    <div class="ci" style="background:linear-gradient(135deg,#FF4D2E,#D4AF37);color:#fff">🎯</div>
+    <div><div class="cn" style="color:#FF4D2E">Diego · Triage matinal <span id="badgeTriage" style="font-size:9px;background:rgba(255,77,46,0.2);color:#FF4D2E;padding:2px 6px;border-radius:4px;margin-left:4px;font-weight:700">—</span></div><div class="cd">Resuelve el estado de cada presupuesto pendiente</div></div>
+    <span class="arr" style="color:#FF4D2E">›</span>
+  </a>
 
   <!-- ============================ -->
   <!-- 🔥 OPERACIONES DIARIAS -->
@@ -412,6 +417,32 @@ function toggleGrp(id){
       if(urg>0) b.innerHTML='🚨 '+urg+' urgentes'
       else if(sols.length>0) b.innerHTML='🟡 '+sols.length+' pendientes'
       else b.innerHTML='Todas al día'
+    }
+  }catch(e){}
+})();
+
+// Badge de triage matinal pendiente
+(async function(){
+  try{
+    var SB='https://bqlgfmqcefledqyodkii.supabase.co'
+    var K='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+    var hoy=new Date().toISOString().substring(0,10)
+    var r=await fetch(SB+'/rest/v1/presupuestos?select=id,created_at,total,pago_cliente,estado_servicio,revisar_desde&estado_servicio=neq.completado&order=created_at.asc&limit=200',{headers:{apikey:K,Authorization:'Bearer '+K}})
+    if(!r.ok) return
+    var pptos=await r.json()
+    var pendientes=pptos.filter(function(p){
+      if(p.pago_cliente==='pagado') return false
+      if(p.estado_servicio==='rechazado') return false
+      var dias=Math.floor((new Date()-new Date(p.created_at))/86400000)
+      if(dias<1) return false
+      if(p.revisar_desde && p.revisar_desde>hoy) return false
+      return true
+    })
+    var monto=pendientes.reduce(function(s,p){return s+(p.total||0)},0)
+    var b=document.getElementById('badgeTriage')
+    if(b){
+      if(pendientes.length===0) b.innerHTML='✅ Al día'
+      else b.innerHTML='🎯 '+pendientes.length+' por revisar · $'+(monto>=1000000?(monto/1000000).toFixed(1)+'M':Math.round(monto/1000)+'k')
     }
   }catch(e){}
 })();

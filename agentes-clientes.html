@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Agentes de Atención · Serviruta</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0A0D;--s1:#111114;--s2:#16161B;--s3:#1C1C23;--line:#26262E;--line-2:#353541;--rojo:#E8210A;--rojo-l:#FF4D2E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;--morado:#A78BFA;--dorado:#D4AF37;--t1:#F6F4EF;--t2:#C7C5BF;--t3:#8B8990;--display:'Syne',sans-serif;--body:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--t2);font-family:var(--body);font-size:14px;line-height:1.5;min-height:100vh;-webkit-font-smoothing:antialiased}
+button,input,textarea{cursor:pointer;border:none;background:none;color:inherit;font-family:inherit;font-size:14px}
+input,textarea{cursor:text}
+a{color:inherit;text-decoration:none}
+
+.bar{position:sticky;top:0;z-index:50;background:rgba(10,10,13,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:14px 20px;display:flex;align-items:center;gap:12px}
+.back{font-family:var(--mono);font-size:11px;color:var(--t3);padding:6px 10px;border:1px solid var(--line);border-radius:6px}
+.sigil{width:34px;height:34px;background:var(--rojo);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:14px;color:#fff}
+.title{font-family:var(--display);font-weight:800;font-size:15px;color:var(--t1);flex:1;line-height:1.2}
+.title small{display:block;font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;margin-top:2px;font-weight:500}
+
+.shell{max-width:1200px;margin:0 auto;padding:20px 16px 100px}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,rgba(232,33,10,0.08),rgba(96,165,250,0.05));border:1px solid var(--line);border-radius:18px;padding:24px;margin-bottom:20px;text-align:center}
+.hero-tit{font-family:var(--display);font-weight:900;font-size:clamp(24px,4vw,32px);color:var(--t1);letter-spacing:-1px;margin-bottom:6px}
+.hero-tit em{color:var(--rojo-l);font-style:normal}
+.hero-desc{font-size:13px;color:var(--t2);max-width:640px;margin:0 auto}
+
+/* TABS */
+.tabs{display:flex;gap:8px;margin-bottom:20px;overflow-x:auto;padding-bottom:4px;-ms-overflow-style:none;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:10px 16px;background:var(--s1);border:1px solid var(--line);border-radius:10px;font-family:var(--display);font-weight:700;font-size:12px;color:var(--t2);white-space:nowrap;letter-spacing:0.03em;cursor:pointer;transition:all 150ms}
+.tab.active{background:var(--rojo);color:#fff;border-color:var(--rojo)}
+.tab:hover:not(.active){border-color:var(--line-2);color:var(--t1)}
+
+/* AGENTES GRID */
+.agentes-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.agente{background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:20px;cursor:pointer;transition:all 200ms;position:relative;overflow:hidden}
+.agente:hover{transform:translateY(-2px);border-color:var(--line-2);box-shadow:0 8px 24px rgba(0,0,0,0.2)}
+.agente-color{position:absolute;top:0;left:0;right:0;height:3px;background:var(--rojo)}
+.agente-head{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+.agente-avatar{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:28px;background:linear-gradient(135deg,var(--s3),var(--s2));border:1px solid var(--line)}
+.agente-info{flex:1;min-width:0}
+.agente-nombre{font-family:var(--display);font-weight:800;font-size:18px;color:var(--t1);line-height:1.1}
+.agente-rol{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;margin-top:3px;font-weight:600}
+.agente-desc{font-size:12px;color:var(--t2);line-height:1.55;margin-bottom:14px;min-height:36px}
+.agente-cta{display:flex;gap:8px}
+.agente-btn{flex:1;padding:9px 12px;border-radius:8px;font-family:var(--display);font-weight:700;font-size:11px;letter-spacing:0.05em;text-align:center;transition:all 150ms;border:none;cursor:pointer}
+.agente-btn-chat{background:var(--rojo);color:#fff}
+.agente-btn-chat:hover{background:var(--rojo-l)}
+.agente-btn-prompt{background:var(--s3);color:var(--t2);border:1px solid var(--line)}
+.agente-btn-prompt:hover{background:var(--line);color:var(--t1)}
+
+/* CHAT VIEW */
+.chat-view{display:none}
+.chat-view.show{display:block}
+.chat-header{background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin-bottom:12px;display:flex;align-items:center;gap:14px}
+.chat-avatar{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;background:linear-gradient(135deg,var(--s3),var(--s2))}
+.chat-header-info{flex:1;min-width:0}
+.chat-header-nombre{font-family:var(--display);font-weight:800;font-size:16px;color:var(--t1)}
+.chat-header-rol{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;margin-top:2px}
+.chat-close{padding:8px 12px;background:var(--s3);border:1px solid var(--line);border-radius:8px;font-family:var(--mono);font-size:11px;color:var(--t2)}
+
+.chat-cont{background:var(--s1);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;height:600px}
+.chat-mensajes{flex:1;overflow-y:auto;padding:20px}
+.msg{margin-bottom:14px;display:flex;gap:10px;max-width:85%}
+.msg.user{margin-left:auto;flex-direction:row-reverse}
+.msg-bubble{padding:12px 16px;border-radius:16px;font-size:14px;line-height:1.55;white-space:pre-wrap}
+.msg.assistant .msg-bubble{background:var(--s2);color:var(--t1);border-radius:16px 16px 16px 4px}
+.msg.user .msg-bubble{background:#25D366;color:#fff;border-radius:16px 16px 4px 16px}
+.msg.system .msg-bubble{background:rgba(212,175,55,0.1);color:var(--dorado);border:1px solid rgba(212,175,55,0.3);border-radius:10px;font-size:12px;font-family:var(--mono);text-align:center;max-width:100%}
+.msg.system{max-width:100%}
+.msg-avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;background:var(--s3);flex-shrink:0}
+.msg.user .msg-avatar{background:#25D366;color:#fff}
+
+.typing{display:flex;gap:4px;padding:12px 16px;background:var(--s2);border-radius:16px 16px 16px 4px;width:fit-content;margin-bottom:14px}
+.typing span{width:8px;height:8px;background:var(--t3);border-radius:50%;animation:bounce 1.4s infinite}
+.typing span:nth-child(2){animation-delay:0.2s}
+.typing span:nth-child(3){animation-delay:0.4s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-8px)}}
+
+.chat-input-cont{border-top:1px solid var(--line);padding:14px;display:flex;gap:8px;background:var(--s2)}
+.chat-input{flex:1;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 16px;color:var(--t1);font-size:14px;resize:none;min-height:44px;max-height:120px;font-family:var(--body)}
+.chat-input:focus{outline:none;border-color:var(--rojo)}
+.chat-send{background:var(--rojo);color:#fff;padding:0 20px;border-radius:10px;font-family:var(--display);font-weight:700;font-size:13px;letter-spacing:0.05em;cursor:pointer;transition:all 150ms}
+.chat-send:hover{background:var(--rojo-l)}
+.chat-send:disabled{opacity:0.5;cursor:not-allowed}
+
+.chat-actions{display:flex;gap:8px;padding:12px 14px;background:var(--s2);border-top:1px solid var(--line);flex-wrap:wrap}
+.chat-quick{padding:6px 12px;background:var(--s3);border:1px solid var(--line);border-radius:20px;font-size:11px;color:var(--t2);cursor:pointer;transition:all 150ms;font-family:var(--mono)}
+.chat-quick:hover{background:var(--rojo);color:#fff;border-color:var(--rojo)}
+
+/* PANEL DERECHO EN DESKTOP */
+.chat-panel{display:none}
+
+/* PROMPT VIEW */
+.prompt-view{background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:14px}
+.prompt-view h3{font-family:var(--display);font-weight:800;font-size:16px;color:var(--t1);margin-bottom:12px}
+.prompt-view textarea{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:14px;color:var(--t1);font-family:var(--mono);font-size:11px;line-height:1.6;min-height:400px;resize:vertical}
+
+/* LEADS VIEW */
+.leads-view{display:none}
+.leads-view.show{display:block}
+.lead-item{background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:10px;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center}
+.lead-avatar{width:44px;height:44px;border-radius:12px;background:var(--s2);display:flex;align-items:center;justify-content:center;font-size:22px}
+.lead-info{min-width:0}
+.lead-nombre{font-family:var(--display);font-weight:700;font-size:14px;color:var(--t1)}
+.lead-meta{font-size:11px;color:var(--t3);margin-top:3px}
+.lead-badges{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.lead-badge{padding:2px 8px;background:var(--s2);color:var(--t2);border-radius:4px;font-family:var(--mono);font-size:9px;letter-spacing:0.1em;font-weight:700;text-transform:uppercase}
+.lead-badge.urgente{background:rgba(232,33,10,0.15);color:var(--rojo-l)}
+.lead-badge.humano{background:rgba(212,175,55,0.15);color:var(--dorado)}
+
+/* CONFIG DE API KEY */
+.config-key{background:var(--s1);border:2px dashed rgba(212,175,55,0.4);border-radius:14px;padding:20px;margin-bottom:20px;display:none}
+.config-key.show{display:block}
+.config-key label{display:block;font-family:var(--mono);font-size:11px;color:var(--dorado);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px}
+.config-key input{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 14px;color:var(--t1);font-family:var(--mono);font-size:12px}
+.config-key p{font-size:11px;color:var(--t3);margin-top:8px;line-height:1.5}
+
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:12px 20px;font-size:13px;font-weight:600;color:var(--t1);opacity:0;transition:all 300ms;pointer-events:none;z-index:200}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.ok{border-color:var(--verde);color:var(--verde)}
+.toast.err{border-color:var(--rojo);color:var(--rojo-l)}
+
+@media(max-width:640px){
+  .chat-cont{height:70vh}
+}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <button class="back" onclick="location.href='menu-coordinador.html'">← Volver</button>
+  <div class="sigil">S</div>
+  <div class="title">Agentes de Atención IA<small>6 especialistas · chat en vivo · captura de leads</small></div>
+</header>
+
+<div class="shell">
+  
+  <!-- VISTA AGENTES -->
+  <div id="vista-agentes">
+    <div class="hero">
+      <div class="hero-tit">Tu equipo de <em>atención al cliente</em></div>
+      <div class="hero-desc">6 agentes especializados atienden a tus clientes 24/7. Cada uno domina su área: recepción, vehículos livianos, pesados, empresas, emergencias y cotizaciones. Puedes integrarlos a WhatsApp Business, tu sitio web o Instagram.</div>
+    </div>
+    
+    <div class="tabs">
+      <button class="tab active" data-tab="agentes" onclick="cambiarTab('agentes')">🤖 Agentes</button>
+      <button class="tab" data-tab="leads" onclick="cambiarTab('leads')">📋 Conversaciones</button>
+      <button class="tab" data-tab="setup" onclick="cambiarTab('setup')">⚙️ Integración</button>
+    </div>
+    
+    <div id="tab-agentes">
+      <div class="agentes-grid" id="agentes-grid">
+        <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--t3)">Cargando agentes...</div>
+      </div>
+    </div>
+    
+    <div id="tab-leads" style="display:none">
+      <div id="leads-list">
+        <div style="text-align:center;padding:40px;color:var(--t3)">Cargando conversaciones...</div>
+      </div>
+    </div>
+    
+    <div id="tab-setup" style="display:none">
+      <div class="prompt-view">
+        <h3>🔌 Integración con WhatsApp Business</h3>
+        <div style="font-size:13px;color:var(--t2);line-height:1.7">
+          <p style="margin-bottom:14px"><b style="color:var(--t1)">Paso 1:</b> Conecta WhatsApp Business Cloud API (Meta) o Whapi.cloud</p>
+          <p style="margin-bottom:14px"><b style="color:var(--t1)">Paso 2:</b> Configura webhook en Make.com que reciba mensajes y llame al endpoint de agentes de Supabase.</p>
+          <p style="margin-bottom:14px"><b style="color:var(--t1)">Paso 3:</b> Make.com decide qué agente responde según primera clasificación con Rita.</p>
+          <p style="margin-bottom:14px"><b style="color:var(--t1)">Paso 4:</b> El agente responde con la API de Claude usando el prompt correspondiente.</p>
+          <p><b style="color:var(--t1)">Paso 5:</b> La respuesta se envía por WhatsApp de vuelta y la conversación se guarda en Supabase.</p>
+        </div>
+        
+        <div style="margin-top:20px;padding:16px;background:var(--s2);border-radius:10px">
+          <div style="font-family:var(--mono);font-size:11px;color:var(--dorado);margin-bottom:8px">💡 Flujo simplificado con Make.com:</div>
+          <pre style="font-family:var(--mono);font-size:11px;color:var(--t2);white-space:pre-wrap;line-height:1.6">
+1. [WhatsApp] → Cliente escribe
+2. [Webhook Make] → Recibe mensaje  
+3. [Supabase RPC] → Busca o crea conversación
+4. [Claude API] → Genera respuesta con prompt del agente
+5. [Supabase] → Guarda mensaje en conversaciones_agentes
+6. [WhatsApp] → Envía respuesta al cliente</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- VISTA CHAT -->
+  <div id="vista-chat" class="chat-view">
+    <div class="chat-header">
+      <div class="chat-avatar" id="chat-avatar">👋</div>
+      <div class="chat-header-info">
+        <div class="chat-header-nombre" id="chat-nombre">—</div>
+        <div class="chat-header-rol" id="chat-rol">—</div>
+      </div>
+      <button class="chat-close" onclick="cerrarChat()">← Volver</button>
+    </div>
+    
+    <div class="chat-cont">
+      <div class="chat-mensajes" id="mensajes"></div>
+      <div class="chat-actions" id="quick-actions"></div>
+      <div class="chat-input-cont">
+        <textarea class="chat-input" id="input" placeholder="Escribe como si fueras el cliente..." rows="1"></textarea>
+        <button class="chat-send" id="btn-send" onclick="enviarMsg()">Enviar</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- VISTA PROMPT -->
+  <div id="vista-prompt" class="chat-view">
+    <div class="chat-header">
+      <div class="chat-avatar" id="prompt-avatar">👋</div>
+      <div class="chat-header-info">
+        <div class="chat-header-nombre" id="prompt-nombre">—</div>
+        <div class="chat-header-rol">Editando system prompt</div>
+      </div>
+      <button class="chat-close" onclick="cerrarPrompt()">← Volver</button>
+    </div>
+    <div class="prompt-view">
+      <textarea id="prompt-text"></textarea>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button class="agente-btn agente-btn-chat" onclick="guardarPrompt()" style="flex:1">💾 Guardar cambios</button>
+        <button class="agente-btn agente-btn-prompt" onclick="cerrarPrompt()" style="flex:1">Cancelar</button>
+      </div>
+    </div>
+  </div>
+  
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+
+var AGENTES=[]
+var AGENTE_ACTUAL=null
+var CONVERSACION=[]
+var CONV_ID=null
+
+function toast(msg,tipo){
+  var t=document.getElementById('toast')
+  t.textContent=msg
+  t.className='toast '+(tipo||'')
+  t.classList.add('show')
+  setTimeout(function(){t.classList.remove('show')},2500)
+}
+
+async function sbGet(path){
+  var r=await fetch(SB_URL+'/rest/v1/'+path,{headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}})
+  return r.ok?await r.json():null
+}
+
+async function sbUpd(path,data){
+  var r=await fetch(SB_URL+'/rest/v1/'+path,{
+    method:'PATCH',
+    headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=representation'},
+    body:JSON.stringify(data)
+  })
+  return r.ok?await r.json():null
+}
+
+async function sbIns(path,data){
+  var r=await fetch(SB_URL+'/rest/v1/'+path,{
+    method:'POST',
+    headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=representation'},
+    body:JSON.stringify(data)
+  })
+  return r.ok?await r.json():null
+}
+
+async function cargar(){
+  AGENTES=await sbGet('agentes_config?select=*&activo=eq.true&order=nombre')
+  if(!AGENTES) return toast('Error cargando agentes','err')
+  renderAgentes()
+}
+
+function renderAgentes(){
+  var html=''
+  AGENTES.forEach(function(a){
+    html+='<div class="agente" style="border-top-color:'+a.color+'">'
+    html+='<div class="agente-color" style="background:'+a.color+'"></div>'
+    html+='<div class="agente-head">'
+    html+='<div class="agente-avatar" style="border-color:'+a.color+'40">'+a.emoji+'</div>'
+    html+='<div class="agente-info">'
+    html+='<div class="agente-nombre">'+a.nombre+'</div>'
+    html+='<div class="agente-rol">'+a.descripcion+'</div>'
+    html+='</div>'
+    html+='</div>'
+    html+='<div class="agente-desc">'+a.especialidad+'</div>'
+    html+='<div class="agente-cta">'
+    html+='<button class="agente-btn agente-btn-chat" onclick="abrirChat(\''+a.id+'\')">💬 Chatear</button>'
+    html+='<button class="agente-btn agente-btn-prompt" onclick="editarPrompt(\''+a.id+'\')">📝 Prompt</button>'
+    html+='</div>'
+    html+='</div>'
+  })
+  document.getElementById('agentes-grid').innerHTML=html
+}
+
+function cambiarTab(tab){
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active')})
+  document.querySelector('[data-tab="'+tab+'"]').classList.add('active')
+  document.getElementById('tab-agentes').style.display=tab==='agentes'?'block':'none'
+  document.getElementById('tab-leads').style.display=tab==='leads'?'block':'none'
+  document.getElementById('tab-setup').style.display=tab==='setup'?'block':'none'
+  if(tab==='leads') cargarLeads()
+}
+
+async function cargarLeads(){
+  var convs=await sbGet('conversaciones_agentes?select=*&order=fecha_ultimo_mensaje.desc&limit=30')
+  if(!convs || !convs.length){
+    document.getElementById('leads-list').innerHTML='<div style="text-align:center;padding:60px 20px;color:var(--t3)"><div style="font-size:48px;margin-bottom:12px">💬</div><div>Aún no hay conversaciones registradas</div><div style="font-size:11px;color:var(--t4);margin-top:8px">Chatea con un agente para probar el sistema</div></div>'
+    return
+  }
+  var html=''
+  convs.forEach(function(c){
+    var ag=AGENTES.find(function(a){return a.id===c.agente})||{emoji:'🤖',nombre:c.agente}
+    var msgs=c.mensajes||[]
+    html+='<div class="lead-item">'
+    html+='<div class="lead-avatar">'+ag.emoji+'</div>'
+    html+='<div class="lead-info">'
+    html+='<div class="lead-nombre">'+(c.cliente_nombre||'Cliente sin identificar')+'</div>'
+    html+='<div class="lead-meta">'+ag.nombre+' · '+msgs.length+' mensaje'+(msgs.length!==1?'s':'')+' · '+new Date(c.fecha_ultimo_mensaje).toLocaleString('es-CL',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})+'</div>'
+    html+='<div class="lead-badges">'
+    if(c.urgencia==='alta' || c.urgencia==='urgente') html+='<span class="lead-badge urgente">⚠️ Urgente</span>'
+    if(c.requiere_humano) html+='<span class="lead-badge humano">👤 Requiere humano</span>'
+    if(c.servicio_detectado) html+='<span class="lead-badge">'+c.servicio_detectado+'</span>'
+    if(c.vehiculo_detectado) html+='<span class="lead-badge">🚗 '+c.vehiculo_detectado+'</span>'
+    html+='</div>'
+    html+='</div>'
+    html+='<button class="agente-btn agente-btn-prompt" onclick="verConversacion(\''+c.id+'\')">Ver</button>'
+    html+='</div>'
+  })
+  document.getElementById('leads-list').innerHTML=html
+}
+
+function abrirChat(agId){
+  AGENTE_ACTUAL=AGENTES.find(function(a){return a.id===agId})
+  if(!AGENTE_ACTUAL) return
+  document.getElementById('vista-agentes').style.display='none'
+  document.getElementById('vista-chat').classList.add('show')
+  document.getElementById('chat-avatar').textContent=AGENTE_ACTUAL.emoji
+  document.getElementById('chat-nombre').textContent=AGENTE_ACTUAL.nombre+' '+AGENTE_ACTUAL.emoji
+  document.getElementById('chat-rol').textContent=AGENTE_ACTUAL.descripcion
+  CONVERSACION=[]
+  CONV_ID=null
+  document.getElementById('mensajes').innerHTML=''
+  agregarMsg('system','Simulación de conversación con '+AGENTE_ACTUAL.nombre+'. Escribe como si fueras el cliente. La conversación se guarda en Supabase.')
+  
+  // Quick replies según el agente
+  var quickReplies=quickPorAgente(agId)
+  var qhtml=''
+  quickReplies.forEach(function(q){
+    qhtml+='<button class="chat-quick" onclick="usarQuick(\''+q.replace(/'/g,"\\'")+'\')">💬 '+q+'</button>'
+  })
+  document.getElementById('quick-actions').innerHTML=qhtml
+  document.getElementById('input').focus()
+}
+
+function quickPorAgente(id){
+  var q={
+    'rita':['Hola, necesito servicio','Tengo un problema con mi auto','Se me quedó pegado el camión','Quiero cotizar mantención'],
+    'marco':['Necesito cambio de aceite para mi Suzuki','Mi Peugeot está haciendo un ruido raro','Cuánto cuesta el embrague de un Yaris','Necesito revisión antes de un viaje'],
+    'pedro':['Mi camión Mercedes prende luz DPF','Necesito cambio de embrague en un Fuso','Tengo una flota de 5 camiones','El Volvo no arranca'],
+    'elena':['Somos empresa de transporte con 12 camiones','Necesito facturación para mantenciones','Queremos un convenio mensual','Tenemos flota de camionetas Chevrolet'],
+    'emilio':['Se me murió la batería en Providencia','Mi camión se apagó en la ruta 5','No arranca, estoy en el trabajo','Necesito auxilio urgente'],
+    'coty':['Cuánto vale cambio de aceite Toyota Yaris','Cotización mantención Sprinter','Precio embrague Hilux 2018','Cuánto una limpieza DPF']
+  }
+  return q[id]||[]
+}
+
+function usarQuick(texto){
+  document.getElementById('input').value=texto
+  document.getElementById('input').focus()
+}
+
+function editarPrompt(agId){
+  var a=AGENTES.find(function(x){return x.id===agId})
+  if(!a) return
+  AGENTE_ACTUAL=a
+  document.getElementById('vista-agentes').style.display='none'
+  document.getElementById('vista-prompt').classList.add('show')
+  document.getElementById('prompt-avatar').textContent=a.emoji
+  document.getElementById('prompt-nombre').textContent=a.nombre+' '+a.emoji
+  document.getElementById('prompt-text').value=a.system_prompt||''
+}
+
+async function guardarPrompt(){
+  var nuevo=document.getElementById('prompt-text').value
+  var r=await sbUpd('agentes_config?id=eq.'+AGENTE_ACTUAL.id,{system_prompt:nuevo,updated_at:new Date().toISOString()})
+  if(r){
+    AGENTE_ACTUAL.system_prompt=nuevo
+    var idx=AGENTES.findIndex(function(x){return x.id===AGENTE_ACTUAL.id})
+    if(idx>=0) AGENTES[idx].system_prompt=nuevo
+    toast('✅ Prompt actualizado','ok')
+    setTimeout(cerrarPrompt,800)
+  } else toast('Error al guardar','err')
+}
+
+function cerrarPrompt(){
+  document.getElementById('vista-prompt').classList.remove('show')
+  document.getElementById('vista-agentes').style.display='block'
+}
+
+function cerrarChat(){
+  document.getElementById('vista-chat').classList.remove('show')
+  document.getElementById('vista-agentes').style.display='block'
+}
+
+function agregarMsg(rol, texto){
+  var cont=document.getElementById('mensajes')
+  var div=document.createElement('div')
+  div.className='msg '+rol
+  var avatar=rol==='user'?'👤':(rol==='system'?'ℹ️':(AGENTE_ACTUAL?AGENTE_ACTUAL.emoji:'🤖'))
+  if(rol==='system'){
+    div.innerHTML='<div class="msg-bubble">'+texto+'</div>'
+  } else {
+    div.innerHTML='<div class="msg-avatar">'+avatar+'</div><div class="msg-bubble">'+texto+'</div>'
+  }
+  cont.appendChild(div)
+  cont.scrollTop=cont.scrollHeight
+}
+
+function mostrarTyping(){
+  var cont=document.getElementById('mensajes')
+  var div=document.createElement('div')
+  div.className='typing'
+  div.id='typing-indicator'
+  div.innerHTML='<span></span><span></span><span></span>'
+  cont.appendChild(div)
+  cont.scrollTop=cont.scrollHeight
+}
+
+function quitarTyping(){
+  var t=document.getElementById('typing-indicator')
+  if(t) t.remove()
+}
+
+async function enviarMsg(){
+  var input=document.getElementById('input')
+  var texto=input.value.trim()
+  if(!texto) return
+  input.value=''
+  input.style.height='auto'
+  document.getElementById('btn-send').disabled=true
+  
+  agregarMsg('user',texto)
+  CONVERSACION.push({role:'user',content:texto})
+  mostrarTyping()
+  
+  try {
+    var respuesta=await llamarClaude()
+    quitarTyping()
+    agregarMsg('assistant',respuesta)
+    CONVERSACION.push({role:'assistant',content:respuesta})
+    guardarConversacion()
+  } catch(e){
+    quitarTyping()
+    agregarMsg('system','❌ Error: '+e.message)
+  }
+  document.getElementById('btn-send').disabled=false
+  input.focus()
+}
+
+async function llamarClaude(){
+  var response = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+      model: "claude-sonnet-4-6",
+      max_tokens: 1000,
+      system: AGENTE_ACTUAL.system_prompt,
+      messages: CONVERSACION
+    })
+  })
+  if(!response.ok){
+    var err=await response.text()
+    throw new Error('API '+response.status+': '+err.substring(0,100))
+  }
+  var data = await response.json()
+  var textos = data.content.filter(function(c){return c.type==='text'}).map(function(c){return c.text})
+  return textos.join('\n')
+}
+
+async function guardarConversacion(){
+  var ultimoUsr=CONVERSACION.filter(function(m){return m.role==='user'}).slice(-1)[0]
+  var ultimoAsist=CONVERSACION.filter(function(m){return m.role==='assistant'}).slice(-1)[0]
+  var textoTotal=CONVERSACION.map(function(m){return m.content}).join(' ').toLowerCase()
+  
+  var urgencia='normal'
+  if(/urgent|emergenc|se apag[oó]|no arranca|paso algo|se qued[oó]|batería muerta/i.test(textoTotal)) urgencia='alta'
+  
+  var vehiculo=null
+  var marcas=['toyota','hyundai','chevrolet','peugeot','kia','nissan','suzuki','ford','volkswagen','vw','renault','fiat','jeep','mitsubishi','mercedes','volvo','scania','iveco','hino','freightliner']
+  marcas.forEach(function(m){
+    if(new RegExp('\\b'+m+'\\b','i').test(textoTotal) && !vehiculo) vehiculo=m
+  })
+  
+  var servicio=null
+  var servs={
+    'mantención':/mantenc|mantención|aceite|filtro/i,
+    'DPF/EGR':/dpf|egr|filtro particul/i,
+    'embrague':/embrague|kit clutch/i,
+    'alternador':/alternador/i,
+    'frenos':/freno|past|disco/i,
+    'batería':/bater[íi]a/i,
+    'diagnóstico':/scanner|diagn[óo]stico/i,
+    'emergencia':/urgente|se qued[óo]|no arranca|emergenc/i
+  }
+  Object.keys(servs).forEach(function(k){
+    if(servs[k].test(textoTotal) && !servicio) servicio=k
+  })
+  
+  var requiereHumano=/derivo|coordinador te llamar|propuesta formal|un especialista/i.test(ultimoAsist?ultimoAsist.content:'')
+  
+  var data={
+    agente:AGENTE_ACTUAL.id,
+    canal:'web-preview',
+    mensajes:CONVERSACION,
+    urgencia:urgencia,
+    vehiculo_detectado:vehiculo,
+    servicio_detectado:servicio,
+    requiere_humano:requiereHumano,
+    fecha_ultimo_mensaje:new Date().toISOString()
+  }
+  
+  if(CONV_ID){
+    await sbUpd('conversaciones_agentes?id=eq.'+CONV_ID,data)
+  } else {
+    var r=await sbIns('conversaciones_agentes',data)
+    if(r && r[0]) CONV_ID=r[0].id
+  }
+}
+
+async function verConversacion(id){
+  var r=await sbGet('conversaciones_agentes?id=eq.'+id)
+  if(!r || !r[0]) return
+  var c=r[0]
+  var ag=AGENTES.find(function(a){return a.id===c.agente})
+  if(!ag) return
+  AGENTE_ACTUAL=ag
+  CONVERSACION=c.mensajes||[]
+  CONV_ID=c.id
+  document.getElementById('vista-agentes').style.display='none'
+  document.getElementById('vista-chat').classList.add('show')
+  document.getElementById('chat-avatar').textContent=ag.emoji
+  document.getElementById('chat-nombre').textContent=ag.nombre+' '+ag.emoji
+  document.getElementById('chat-rol').textContent=ag.descripcion
+  document.getElementById('mensajes').innerHTML=''
+  CONVERSACION.forEach(function(m){agregarMsg(m.role,m.content)})
+}
+
+document.getElementById('input').addEventListener('input',function(e){
+  e.target.style.height='auto'
+  e.target.style.height=Math.min(e.target.scrollHeight,120)+'px'
+})
+
+document.getElementById('input').addEventListener('keydown',function(e){
+  if(e.key==='Enter' && !e.shiftKey){
+    e.preventDefault()
+    enviarMsg()
+  }
+})
+
+cargar()
+</script>
+
+</body>
+</html>

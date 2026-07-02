@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Bandeja Agenda · Serviruta</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0A0D;--s1:#111114;--s2:#16161B;--s3:#1C1C23;--line:#26262E;--rojo:#E8210A;--rojo-l:#FF4D2E;--verde:#22C55E;--amarillo:#F5C518;--naranja:#FB923C;--azul:#60A5FA;--dorado:#D4AF37;--t1:#F6F4EF;--t2:#C7C5BF;--t3:#8B8990;--display:'Syne',sans-serif;--body:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--t2);font-family:var(--body);font-size:14px;line-height:1.5;min-height:100vh;-webkit-font-smoothing:antialiased}
+button,input,select{cursor:pointer;border:none;background:none;color:inherit;font-family:inherit;font-size:14px}
+a{color:inherit;text-decoration:none}
+
+.bar{position:sticky;top:0;z-index:50;background:rgba(10,10,13,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:14px 20px;display:flex;align-items:center;gap:12px}
+.back{font-family:var(--mono);font-size:11px;color:var(--t3);padding:6px 10px;border:1px solid var(--line);border-radius:6px}
+.sigil{width:34px;height:34px;background:var(--amarillo);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:14px;color:#000}
+.title{font-family:var(--display);font-weight:800;font-size:15px;color:var(--t1);flex:1;line-height:1.2}
+.title small{display:block;font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;margin-top:2px;font-weight:500}
+
+.shell{max-width:1000px;margin:0 auto;padding:20px 16px 80px}
+
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:20px}
+.kpi{background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.kpi-lbl{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;font-weight:700}
+.kpi-val{font-family:var(--display);font-weight:800;font-size:22px;color:var(--t1);margin-top:4px;letter-spacing:-0.5px;line-height:1.1}
+.kpi-val.amarillo{color:var(--amarillo)}
+.kpi-val.verde{color:var(--verde)}
+.kpi-val.rojo{color:var(--rojo-l)}
+.kpi-val.dorado{color:var(--dorado)}
+
+.filtros{display:flex;gap:8px;margin-bottom:16px;overflow-x:auto;padding-bottom:4px;-ms-overflow-style:none;scrollbar-width:none}
+.filtros::-webkit-scrollbar{display:none}
+.f-btn{padding:8px 14px;background:var(--s1);border:1px solid var(--line);border-radius:8px;font-family:var(--display);font-weight:700;font-size:11px;color:var(--t2);white-space:nowrap;letter-spacing:0.03em;cursor:pointer;transition:all 150ms}
+.f-btn.active{background:var(--amarillo);color:#000;border-color:var(--amarillo)}
+.f-btn:hover:not(.active){border-color:var(--t3)}
+
+.solic{background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin-bottom:10px;transition:all 150ms}
+.solic.pendiente{border-left:4px solid var(--amarillo);background:linear-gradient(90deg,rgba(245,197,24,0.03),var(--s1))}
+.solic.confirmada{border-left:4px solid var(--verde)}
+.solic.urgente{border-left:4px solid var(--rojo);background:linear-gradient(90deg,rgba(232,33,10,0.05),var(--s1))}
+.solic.rechazada{opacity:0.5;border-left:4px solid var(--t3)}
+
+.solic-head{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+.solic-avatar{width:48px;height:48px;background:var(--s2);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.solic-info{flex:1;min-width:0}
+.solic-cliente{font-family:var(--display);font-weight:800;font-size:15px;color:var(--t1)}
+.solic-agente{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.05em;margin-top:2px}
+.solic-badge{padding:4px 10px;border-radius:6px;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;white-space:nowrap}
+.badge-pend{background:rgba(245,197,24,0.15);color:var(--amarillo)}
+.badge-conf{background:rgba(34,197,94,0.15);color:var(--verde)}
+.badge-urg{background:rgba(232,33,10,0.15);color:var(--rojo-l)}
+.badge-rech{background:rgba(139,137,144,0.15);color:var(--t3)}
+
+.solic-datos{display:grid;grid-template-columns:1fr 1fr;gap:8px 14px;padding:10px 12px;background:var(--s2);border-radius:10px;margin-bottom:10px}
+.dato{display:flex;flex-direction:column;gap:2px}
+.dato-lbl{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;font-weight:700}
+.dato-val{font-size:13px;color:var(--t1);font-weight:600}
+
+.solic-acciones{display:flex;gap:8px;flex-wrap:wrap}
+.acc{padding:10px 14px;border-radius:8px;font-family:var(--display);font-weight:700;font-size:11px;letter-spacing:0.05em;cursor:pointer;transition:all 150ms;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:4px;border:none}
+.acc-conf{background:var(--verde);color:#000;flex:1}
+.acc-conf:hover{background:#1DAE4E}
+.acc-rech{background:var(--s3);color:var(--t2);border:1px solid var(--line)}
+.acc-rech:hover{background:var(--line)}
+.acc-wa{background:#25D366;color:#fff}
+.acc-wa:hover{background:#1EB855}
+.acc-editar{background:var(--s3);color:var(--dorado);border:1px solid var(--line)}
+.acc-cliente{background:var(--s3);color:var(--azul);border:1px solid var(--line)}
+
+.empty{text-align:center;padding:60px 20px;color:var(--t3)}
+.empty-icon{font-size:56px;margin-bottom:12px;opacity:0.5}
+
+/* MODAL EDICIÓN */
+.modal{display:none;position:fixed;inset:0;z-index:100;background:rgba(0,0,0,0.7);align-items:flex-end;justify-content:center;padding:0}
+.modal.open{display:flex}
+.modal-cont{background:var(--s1);border-radius:20px 20px 0 0;width:100%;max-width:600px;max-height:92vh;overflow-y:auto;padding:20px}
+.modal-head{display:flex;align-items:center;gap:12px;padding-bottom:16px;border-bottom:1px solid var(--line);margin-bottom:16px}
+.modal-tit{font-family:var(--display);font-weight:800;font-size:16px;color:var(--t1);flex:1}
+.modal-close{background:var(--s3);border:1px solid var(--line);border-radius:8px;padding:8px 10px;font-family:var(--mono);font-size:11px;color:var(--t2)}
+.campo{margin-bottom:14px}
+.campo label{display:block;font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-bottom:6px}
+.campo input, .campo select, .campo textarea{background:var(--s2);border:1px solid var(--line);border-radius:8px;padding:10px 14px;color:var(--t1);font-family:var(--body);font-size:13px;width:100%;cursor:text}
+.campo input:focus, .campo select:focus, .campo textarea:focus{outline:none;border-color:var(--amarillo)}
+.campos-fila{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:12px 20px;font-size:13px;font-weight:600;color:var(--t1);opacity:0;transition:all 300ms;pointer-events:none;z-index:200}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.ok{border-color:var(--verde);color:var(--verde)}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <button class="back" onclick="location.href='menu-coordinador.html'">← Volver</button>
+  <div class="sigil">S</div>
+  <div class="title">Bandeja de Agenda<small>Solicitudes de agentes IA · Confirmar · Rechazar</small></div>
+</header>
+
+<div class="shell">
+  
+  <div class="kpis">
+    <div class="kpi"><div class="kpi-lbl">Total solicitudes</div><div class="kpi-val" id="kpi-total">0</div></div>
+    <div class="kpi"><div class="kpi-lbl">Pendientes</div><div class="kpi-val amarillo" id="kpi-pend">0</div></div>
+    <div class="kpi"><div class="kpi-lbl">Urgentes</div><div class="kpi-val rojo" id="kpi-urg">0</div></div>
+    <div class="kpi"><div class="kpi-lbl">Confirmadas hoy</div><div class="kpi-val verde" id="kpi-conf">0</div></div>
+    <div class="kpi"><div class="kpi-lbl">Monto pipeline</div><div class="kpi-val dorado" id="kpi-monto">$0</div></div>
+  </div>
+  
+  <div class="filtros">
+    <button class="f-btn active" data-f="pendientes" onclick="filtrar('pendientes')">🟡 Pendientes</button>
+    <button class="f-btn" data-f="urgentes" onclick="filtrar('urgentes')">🚨 Urgentes</button>
+    <button class="f-btn" data-f="confirmadas" onclick="filtrar('confirmadas')">✅ Confirmadas</button>
+    <button class="f-btn" data-f="todas" onclick="filtrar('todas')">Todas</button>
+  </div>
+  
+  <div id="lista">
+    <div class="empty"><div class="empty-icon">📅</div><div>Cargando solicitudes...</div></div>
+  </div>
+  
+</div>
+
+<!-- MODAL EDICIÓN -->
+<div class="modal" id="modal">
+  <div class="modal-cont">
+    <div class="modal-head">
+      <div class="modal-tit" id="m-tit">Confirmar solicitud</div>
+      <button class="modal-close" onclick="cerrarModal()">✕</button>
+    </div>
+    <div id="m-body"></div>
+    <input type="hidden" id="m-id">
+    <div class="campos-fila">
+      <div class="campo">
+        <label>📅 Fecha</label>
+        <input type="date" id="m-fecha">
+      </div>
+      <div class="campo">
+        <label>🕐 Hora</label>
+        <input type="time" id="m-hora">
+      </div>
+    </div>
+    <div class="campo">
+      <label>👤 Técnico asignado</label>
+      <select id="m-tecnico">
+        <option value="">Seleccionar...</option>
+        <option value="Isaias Robles">Isaias Robles</option>
+        <option value="Miguel Landaeta">Miguel Landaeta</option>
+        <option value="Javier Honores">Javier Honores</option>
+        <option value="Giovanino Perugini">Giovanino Perugini</option>
+        <option value="Reynaldo Aguas">Reynaldo Aguas</option>
+        <option value="Kiven Henz">Kiven Henz</option>
+        <option value="Humberto Morales">Humberto Morales</option>
+        <option value="Angel Peruga">Angel Peruga</option>
+      </select>
+    </div>
+    <div class="campo">
+      <label>📍 Dirección</label>
+      <input type="text" id="m-direccion" placeholder="Dirección exacta del servicio">
+    </div>
+    <div class="campo">
+      <label>💬 Notas</label>
+      <textarea id="m-notas" rows="2" style="resize:vertical;background:var(--s2);border:1px solid var(--line);border-radius:8px;padding:10px 14px;color:var(--t1);font-family:var(--body);font-size:13px;width:100%"></textarea>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:16px">
+      <button class="acc acc-conf" onclick="confirmarSolic()" style="flex:1;padding:14px">✅ Confirmar y notificar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+
+var SOLICITUDES=[]
+var FILTRO='pendientes'
+var AGENTES_MAP={
+  'rita':{emoji:'👋',nombre:'Rita'},
+  'emilio':{emoji:'🚨',nombre:'Emilio'},
+  'marco':{emoji:'🚗',nombre:'Marco'},
+  'pedro':{emoji:'🚛',nombre:'Pedro'},
+  'lucas':{emoji:'🎁',nombre:'Lucas'},
+  'valentina':{emoji:'💚',nombre:'Valentina'}
+}
+
+function fmt(n){
+  if(!n) return '$0'
+  var v=parseInt(n)
+  if(v>=1000000) return '$'+(v/1000000).toFixed(1)+'M'
+  if(v>=1000) return '$'+Math.round(v/1000)+'k'
+  return '$'+v
+}
+
+function toast(msg,tipo){
+  var t=document.getElementById('toast')
+  t.textContent=msg
+  t.className='toast '+(tipo||'')
+  t.classList.add('show')
+  setTimeout(function(){t.classList.remove('show')},2500)
+}
+
+async function sbGet(path){
+  var r=await fetch(SB_URL+'/rest/v1/'+path,{headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}})
+  return r.ok?await r.json():[]
+}
+
+async function sbUpd(path,data){
+  var r=await fetch(SB_URL+'/rest/v1/'+path,{
+    method:'PATCH',
+    headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+    body:JSON.stringify(data)
+  })
+  return r.ok
+}
+
+async function cargar(){
+  SOLICITUDES=await sbGet('agenda?select=*&origen=eq.agente&order=created_at.desc&limit=100')
+  renderKPIs()
+  renderLista()
+}
+
+function renderKPIs(){
+  var pend=SOLICITUDES.filter(function(s){return s.estado==='solicitada'})
+  var urg=SOLICITUDES.filter(function(s){return s.urgencia==='urgente' && s.estado==='solicitada'})
+  var hoy=new Date().toISOString().substring(0,10)
+  var confHoy=SOLICITUDES.filter(function(s){return s.estado==='confirmada' && s.confirmado_at && s.confirmado_at.substring(0,10)===hoy})
+  var monto=SOLICITUDES.filter(function(s){return s.estado!=='rechazada'}).reduce(function(sum,s){return sum+(s.monto_estimado||0)},0)
+  
+  document.getElementById('kpi-total').textContent=SOLICITUDES.length
+  document.getElementById('kpi-pend').textContent=pend.length
+  document.getElementById('kpi-urg').textContent=urg.length
+  document.getElementById('kpi-conf').textContent=confHoy.length
+  document.getElementById('kpi-monto').textContent=fmt(monto)
+}
+
+function filtrar(f){
+  FILTRO=f
+  document.querySelectorAll('.f-btn').forEach(function(b){b.classList.remove('active')})
+  document.querySelector('[data-f="'+f+'"]').classList.add('active')
+  renderLista()
+}
+
+function renderLista(){
+  var lista=SOLICITUDES.slice()
+  if(FILTRO==='pendientes') lista=lista.filter(function(s){return s.estado==='solicitada'})
+  else if(FILTRO==='urgentes') lista=lista.filter(function(s){return s.urgencia==='urgente' && s.estado!=='rechazada'})
+  else if(FILTRO==='confirmadas') lista=lista.filter(function(s){return s.estado==='confirmada'})
+  
+  var cont=document.getElementById('lista')
+  if(!lista.length){
+    cont.innerHTML='<div class="empty"><div class="empty-icon">📅</div><div>No hay solicitudes en este filtro</div><div style="font-size:11px;color:var(--t4);margin-top:8px">Cuando un agente detecte que el cliente quiere agendar, aparecerá aquí</div></div>'
+    return
+  }
+  
+  var html=''
+  lista.forEach(function(s){
+    var ag=AGENTES_MAP[s.agente_solicitante]||{emoji:'🤖',nombre:s.agente_solicitante||'?'}
+    var cls=s.estado==='rechazada'?'rechazada':(s.estado==='confirmada'?'confirmada':(s.urgencia==='urgente'?'urgente':'pendiente'))
+    var badge=s.estado==='confirmada'?'<span class="solic-badge badge-conf">✅ Confirmada</span>':(s.estado==='rechazada'?'<span class="solic-badge badge-rech">Rechazada</span>':(s.urgencia==='urgente'?'<span class="solic-badge badge-urg">🚨 Urgente</span>':'<span class="solic-badge badge-pend">🟡 Pendiente</span>'))
+    var telWA=(s.telefono||'').replace(/[^0-9]/g,'')
+    if(telWA.length===9) telWA='56'+telWA
+    
+    html+='<div class="solic '+cls+'">'
+    html+='<div class="solic-head">'
+    html+='<div class="solic-avatar">'+ag.emoji+'</div>'
+    html+='<div class="solic-info">'
+    html+='<div class="solic-cliente">'+(s.cliente||'Sin nombre')+'</div>'
+    html+='<div class="solic-agente">Propuesta por '+ag.nombre+' · '+new Date(s.created_at).toLocaleString('es-CL',{day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit'})+'</div>'
+    html+='</div>'
+    html+=badge
+    html+='</div>'
+    
+    html+='<div class="solic-datos">'
+    html+='<div class="dato"><div class="dato-lbl">📅 Fecha propuesta</div><div class="dato-val">'+(s.fecha||'Por definir')+'</div></div>'
+    html+='<div class="dato"><div class="dato-lbl">🕐 Hora</div><div class="dato-val">'+(s.hora?s.hora.substring(0,5):'Por definir')+'</div></div>'
+    html+='<div class="dato"><div class="dato-lbl">🔧 Servicio</div><div class="dato-val">'+(s.servicio||'—')+'</div></div>'
+    html+='<div class="dato"><div class="dato-lbl">🚗 Vehículo</div><div class="dato-val">'+(s.vehiculo||'—')+'</div></div>'
+    if(s.telefono) html+='<div class="dato"><div class="dato-lbl">📱 Teléfono</div><div class="dato-val">'+s.telefono+'</div></div>'
+    if(s.monto_estimado) html+='<div class="dato"><div class="dato-lbl">💰 Monto estimado</div><div class="dato-val" style="color:var(--dorado)">'+fmt(s.monto_estimado)+'</div></div>'
+    html+='</div>'
+    
+    if(s.notas) html+='<div style="font-size:12px;color:var(--t2);padding:10px 12px;background:var(--s2);border-radius:8px;margin-bottom:10px;font-style:italic">💬 "'+s.notas+'"</div>'
+    
+    html+='<div class="solic-acciones">'
+    if(s.estado==='solicitada'){
+      html+='<button class="acc acc-conf" onclick=\'abrirConfirmar("'+s.id+'")\'>✅ Confirmar</button>'
+      html+='<button class="acc acc-rech" onclick=\'rechazar("'+s.id+'")\'>❌ Rechazar</button>'
+    }
+    if(telWA){
+      var msg=encodeURIComponent('Hola '+(s.cliente||'')+'! Angel de Serviruta 👋 Confirmamos tu servicio para el '+(s.fecha||'')+' a las '+((s.hora||'').substring(0,5))+'. ¿Todo bien con esa hora?')
+      html+='<a class="acc acc-wa" href="https://wa.me/'+telWA+'?text='+msg+'" target="_blank">💬 WhatsApp</a>'
+    }
+    if(s.cliente_id) html+='<a class="acc acc-cliente" href="clientes-crm.html?cliente='+s.cliente_id+'">👤 Ver cliente</a>'
+    html+='</div>'
+    html+='</div>'
+  })
+  cont.innerHTML=html
+}
+
+function abrirConfirmar(id){
+  var s=SOLICITUDES.find(function(x){return x.id===id})
+  if(!s) return
+  document.getElementById('m-id').value=id
+  document.getElementById('m-tit').textContent='Confirmar: '+(s.cliente||'')
+  document.getElementById('m-fecha').value=s.fecha||''
+  document.getElementById('m-hora').value=s.hora?s.hora.substring(0,5):''
+  document.getElementById('m-tecnico').value=s.tecnico||''
+  document.getElementById('m-direccion').value=s.direccion||''
+  document.getElementById('m-notas').value=s.notas||''
+  var body=''
+  body+='<div style="background:var(--s2);border-radius:10px;padding:12px 14px;margin-bottom:16px;font-family:var(--mono);font-size:11px;color:var(--t2);line-height:1.7">'
+  body+='<b style="color:var(--t1)">🎯 Solicitud original:</b><br>'
+  body+='• Cliente: '+(s.cliente||'—')+'<br>'
+  body+='• Vehículo: '+(s.vehiculo||'—')+'<br>'
+  body+='• Servicio: '+(s.servicio||'—')+'<br>'
+  body+='• Propuesta por: '+(AGENTES_MAP[s.agente_solicitante]?AGENTES_MAP[s.agente_solicitante].nombre:s.agente_solicitante)+' '+(AGENTES_MAP[s.agente_solicitante]?AGENTES_MAP[s.agente_solicitante].emoji:'')
+  body+='</div>'
+  document.getElementById('m-body').innerHTML=body
+  document.getElementById('modal').classList.add('open')
+}
+
+async function confirmarSolic(){
+  var id=document.getElementById('m-id').value
+  var data={
+    estado:'confirmada',
+    fecha:document.getElementById('m-fecha').value,
+    hora:document.getElementById('m-hora').value,
+    tecnico:document.getElementById('m-tecnico').value,
+    direccion:document.getElementById('m-direccion').value,
+    notas:document.getElementById('m-notas').value,
+    confirmado_at:new Date().toISOString(),
+    confirmado_por:'Angel'
+  }
+  if(!data.fecha || !data.hora || !data.tecnico){
+    toast('❌ Completa fecha, hora y técnico','err')
+    return
+  }
+  var ok=await sbUpd('agenda?id=eq.'+id,data)
+  if(ok){
+    toast('✅ Confirmada · notifica al cliente por WhatsApp','ok')
+    cerrarModal()
+    await cargar()
+  } else toast('❌ Error','err')
+}
+
+async function rechazar(id){
+  if(!confirm('¿Rechazar esta solicitud?')) return
+  var ok=await sbUpd('agenda?id=eq.'+id,{estado:'rechazada'})
+  if(ok){
+    toast('Solicitud rechazada')
+    await cargar()
+  }
+}
+
+function cerrarModal(){
+  document.getElementById('modal').classList.remove('open')
+}
+
+document.getElementById('modal').addEventListener('click',function(e){
+  if(e.target.id==='modal') cerrarModal()
+})
+
+cargar()
+</script>
+
+</body>
+</html>

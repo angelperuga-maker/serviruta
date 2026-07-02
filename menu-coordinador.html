@@ -126,6 +126,11 @@ if (!sessionStorage.getItem("coord_auth")) { location.href = "login-coordinador.
     <div><div class="cn" style="color:var(--rojo);font-size:16px">Agenda de servicios</div><div class="cd">Vista diaria con horas por técnico · Gestionar citas</div></div>
     <span class="arr" style="color:var(--rojo)">›</span>
   </a>
+  <a class="card" href="agenda-solicitudes.html" style="background:linear-gradient(135deg,rgba(245,197,24,0.1),rgba(232,33,10,0.03));border-color:rgba(245,197,24,0.4);margin-top:8px">
+    <div class="ci" style="background:linear-gradient(135deg,#F5C518,#E8210A);color:#000">🤖</div>
+    <div><div class="cn" style="color:#F5C518">Bandeja de solicitudes IA <span id="badgeSolic" style="font-size:9px;background:rgba(245,197,24,0.2);color:#F5C518;padding:2px 6px;border-radius:4px;margin-left:4px;font-weight:700">—</span></div><div class="cd">Los agentes proponen horarios · tú confirmas</div></div>
+    <span class="arr" style="color:#F5C518">›</span>
+  </a>
 
   <!-- ============================ -->
   <!-- 🔥 OPERACIONES DIARIAS -->
@@ -389,6 +394,24 @@ function toggleGrp(id){
     if(b){
       if(pendientes>0) b.innerHTML='🔴 '+pendientes+' pendientes'
       else b.innerHTML=ins.length+' totales'
+    }
+  }catch(e){}
+})();
+
+// Badge de solicitudes de agenda pendientes
+(async function(){
+  try{
+    var SB='https://bqlgfmqcefledqyodkii.supabase.co'
+    var K='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+    var r=await fetch(SB+'/rest/v1/agenda?select=id,urgencia&origen=eq.agente&estado=eq.solicitada',{headers:{apikey:K,Authorization:'Bearer '+K}})
+    if(!r.ok) return
+    var sols=await r.json()
+    var urg=sols.filter(function(s){return s.urgencia==='urgente'}).length
+    var b=document.getElementById('badgeSolic')
+    if(b){
+      if(urg>0) b.innerHTML='🚨 '+urg+' urgentes'
+      else if(sols.length>0) b.innerHTML='🟡 '+sols.length+' pendientes'
+      else b.innerHTML='Todas al día'
     }
   }catch(e){}
 })();

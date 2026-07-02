@@ -459,6 +459,129 @@ async function abrirMensaje(clienteId){
   await generarMensaje()
 }
 
+async function detectarYCrearSolicitudAgenda(cliente, mensaje, contexto){
+  // Solo agentes autorizados para agendar
+  var agentesAgendar=['rita','emilio','marco','pedro','lucas','valentina']
+  if(agentesAgendar.indexOf(VENDEDOR_ACTUAL.id)<0) return
+  
+  // Detectar bloque de solicitud de agenda
+  var reg=/SOLICITUD DE AGENDA[\s\S]{0,500}/i
+  var match=mensaje.match(reg)
+  if(!match) return
+  
+  var bloque=match[0]
+  
+  // Extraer campos con regex tolerante
+  function extraer(patron){
+    var m=bloque.match(patron)
+    return m?m[1].trim():null
+  }
+  
+  var fechaTxt=extraer(/Fecha propuesta:\s*([^\n]+)/i)
+  var horaTxt=extraer(/Hora sugerida:\s*([^\n]+)/i)
+  var servicio=extraer(/Servicio:\s*([^\n]+)/i)
+  var duracion=extraer(/Duración estimada:\s*([^\n]+)/i)
+  var urgencia=extraer(/Urgencia:\s*([^\n]+)/i)
+  
+  // Parsear fecha (día de la semana o "mañana")
+  var fechaISO=parseFechaTexto(fechaTxt)
+  var horaISO=parseHoraTexto(horaTxt)
+  
+  // Detectar urgencia
+  var urg='normal'
+  if(urgencia && /urgent/i.test(urgencia)) urg='urgente'
+  else if(urgencia && /alta/i.test(urgencia)) urg='alta'
+  
+  // Monto estimado desde contexto de inspección si existe
+  var monto=null
+  if(contexto.inspeccion_12puntos && contexto.inspeccion_12puntos.monto_con_descuento) monto=contexto.inspeccion_12puntos.monto_con_descuento
+  else if(contexto.pipeline_pendiente) monto=contexto.pipeline_pendiente
+  
+  var solicitud={
+    cliente_id: cliente.id,
+    cliente: cliente.nombre,
+    telefono: cliente.telefono_normalizado?'+'+(cliente.telefono_normalizado.length===9?'56'+cliente.telefono_normalizado:cliente.telefono_normalizado):null,
+    vehiculo: cliente.vehiculo_principal||cliente.marca||'—',
+    servicio: servicio||'Por definir',
+    fecha: fechaISO,
+    hora: horaISO,
+    estado: 'solicitada',
+    origen: 'agente',
+    agente_solicitante: VENDEDOR_ACTUAL.id,
+    urgencia: urg,
+    monto_estimado: monto,
+    notas: duracion?'Duración: '+duracion:null
+  }
+  
+  try {
+    var r=await fetch(SB_URL+'/rest/v1/agenda',{
+      method:'POST',
+      headers:{"Content-Type":"application/json","Authorization":"Bearer "+SB_KEY,"apikey":SB_KEY,"Prefer":"return=minimal"},
+      body:JSON.stringify(solicitud)
+    })
+    if(r.ok){
+      toast('📅 Solicitud de agenda creada','ok')
+    }
+  } catch(e){console.warn('Error solicitud:',e)}
+}
+
+function parseFechaTexto(txt){
+  if(!txt) return null
+  var hoy=new Date()
+  var diasSemana=['domingo','lunes','martes','miércoles','miercoles','jueves','viernes','sábado','sabado']
+  var t=txt.toLowerCase()
+  
+  if(/hoy/i.test(t)){
+    return hoy.toISOString().substring(0,10)
+  }
+  if(/mañana|manana/i.test(t)){
+    var m=new Date(hoy.getTime()+86400000)
+    return m.toISOString().substring(0,10)
+  }
+  
+  // Buscar día de la semana
+  var diaIdx=-1
+  for(var i=0;i<diasSemana.length;i++){
+    if(t.indexOf(diasSemana[i])>=0){
+      diaIdx=[0,1,2,3,3,4,5,6,6][i] // normalizar acentos
+      break
+    }
+  }
+  if(diaIdx>=0){
+    var hoyIdx=hoy.getDay()
+    var diff=diaIdx-hoyIdx
+    if(diff<=0) diff+=7
+    var target=new Date(hoy.getTime()+diff*86400000)
+    return target.toISOString().substring(0,10)
+  }
+  
+  // Buscar fecha DD/MM o DD-MM
+  var mFecha=t.match(/(\d{1,2})[\/\-](\d{1,2})/)
+  if(mFecha){
+    var dd=parseInt(mFecha[1])
+    var mm=parseInt(mFecha[2])-1
+    var yy=hoy.getFullYear()
+    var d=new Date(yy,mm,dd)
+    if(d<hoy) d.setFullYear(yy+1)
+    return d.toISOString().substring(0,10)
+  }
+  
+  // Default: 3 días desde hoy
+  var def=new Date(hoy.getTime()+3*86400000)
+  return def.toISOString().substring(0,10)
+}
+
+function parseHoraTexto(txt){
+  if(!txt) return '10:00'
+  var m=txt.match(/(\d{1,2})[:h]?(\d{0,2})/i)
+  if(m){
+    var h=parseInt(m[1])
+    var min=parseInt(m[2])||0
+    return String(h).padStart(2,'0')+':'+String(min).padStart(2,'0')
+  }
+  return '10:00'
+}
+
 async function generarMensaje(){
   var c=CLIENTE_ACTUAL
   var dias=diasDesde(c.ultimo_servicio_fecha)
@@ -583,6 +706,9 @@ async function generarMensaje(){
     var telWA=tel && tel.length===9?'56'+tel:tel
     var wa='https://wa.me/'+telWA+'?text='+encodeURIComponent(MENSAJE_ACTUAL)
     document.getElementById('btn-wa').href=wa
+    
+    // Detectar si el mensaje contiene solicitud de agenda
+    await detectarYCrearSolicitudAgenda(c, MENSAJE_ACTUAL, contexto)
     
     // Registrar mensaje generado
     await fetch(SB_URL+'/rest/v1/campanas_venta',{

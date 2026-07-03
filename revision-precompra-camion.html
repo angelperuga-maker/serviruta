@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+<title>Revisión Precompra Camión Premium · Serviruta</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{--bg:#0A0A0D;--s1:#111114;--s2:#16161B;--s3:#1C1C23;--line:#26262E;--line-2:#353541;--rojo:#E8210A;--rojo-l:#FF4D2E;--verde:#22C55E;--amarillo:#F5C518;--naranja:#FB923C;--azul:#60A5FA;--dorado:#D4AF37;--dorado-l:#F0D170;--t1:#F6F4EF;--t2:#C7C5BF;--t3:#8B8990;--display:'Syne',sans-serif;--body:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--t2);font-family:var(--body);font-size:14px;line-height:1.5;min-height:100vh;-webkit-font-smoothing:antialiased;padding-bottom:120px}
+button,input,textarea,select{border:none;background:none;color:inherit;font-family:inherit;font-size:14px}
+input,textarea,select{background:var(--s2);border:1px solid var(--line);border-radius:8px;padding:10px 12px;color:var(--t1);width:100%;cursor:text}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--dorado)}
+
+.bar{position:sticky;top:0;z-index:50;background:rgba(10,10,13,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;align-items:center;gap:10px}
+.back{font-family:var(--mono);font-size:10px;color:var(--t3);padding:6px 10px;border:1px solid var(--line);border-radius:6px}
+.sigil{width:34px;height:34px;background:linear-gradient(135deg,var(--dorado),var(--rojo));border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:14px;color:#000}
+.title{font-family:var(--display);font-weight:800;font-size:14px;color:var(--t1);flex:1;line-height:1.1}
+.title small{display:block;font-family:var(--mono);font-size:9px;color:var(--dorado);letter-spacing:0.15em;margin-top:2px;font-weight:700;text-transform:uppercase}
+
+.shell{max-width:900px;margin:0 auto;padding:16px}
+
+/* HERO PREMIUM */
+.hero-prem{background:linear-gradient(135deg,rgba(212,175,55,0.12),rgba(232,33,10,0.05));border:1px solid rgba(212,175,55,0.4);border-radius:18px;padding:22px 24px;margin-bottom:18px;position:relative;overflow:hidden}
+.hero-prem::before{content:"";position:absolute;top:0;right:0;width:200px;height:100%;background:radial-gradient(circle at right,rgba(212,175,55,0.15),transparent 70%);pointer-events:none}
+.hero-tit{font-family:var(--display);font-weight:900;font-size:22px;color:var(--t1);letter-spacing:-0.5px;line-height:1.15;position:relative}
+.hero-tit em{color:var(--dorado);font-style:normal;background:linear-gradient(135deg,var(--dorado),var(--dorado-l));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero-desc{font-size:12px;color:var(--t2);margin-top:6px;line-height:1.5;max-width:520px;position:relative}
+.hero-badges{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;position:relative}
+.hero-badge{padding:4px 10px;background:rgba(212,175,55,0.15);color:var(--dorado);border-radius:6px;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.05em}
+.hero-badge.precio{background:rgba(232,33,10,0.15);color:var(--rojo-l)}
+.hero-ficha{position:absolute;top:16px;right:20px;font-family:var(--mono);font-size:10px;color:var(--dorado);letter-spacing:0.1em;font-weight:700}
+
+/* SECCIONES */
+.form-sec{background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:12px}
+.form-tit{font-family:var(--display);font-weight:800;font-size:13px;color:var(--t1);margin-bottom:12px;display:flex;align-items:center;gap:8px;letter-spacing:-0.2px}
+.form-tit::before{content:"";width:3px;height:14px;background:var(--dorado);border-radius:2px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.form-full{grid-column:1/-1}
+.form-lbl{grid-column:1/-1;font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-top:6px;margin-bottom:-4px}
+.form-lbl:first-child{margin-top:0}
+
+/* PROGRESO */
+.progreso{background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center}
+.prog-item{padding:6px 0}
+.prog-num{font-family:var(--display);font-weight:900;font-size:22px;line-height:1}
+.prog-lbl{font-family:var(--mono);font-size:8px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;margin-top:3px;font-weight:700}
+.prog-num.total{color:var(--t1)}
+.prog-num.ok{color:var(--verde)}
+.prog-num.atn{color:var(--amarillo)}
+.prog-num.crt{color:var(--rojo-l)}
+
+/* SECCIÓN COLAPSABLE */
+.seccion{background:var(--s1);border:1px solid var(--line);border-radius:14px;margin-bottom:10px;overflow:hidden}
+.seccion.completa{border-color:rgba(34,197,94,0.4)}
+.seccion.criticos{border-left:4px solid var(--rojo);background:linear-gradient(90deg,rgba(232,33,10,0.03),var(--s1))}
+.seccion-head{padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none;transition:background 150ms}
+.seccion-head:hover{background:var(--s2)}
+.seccion-icon{width:38px;height:38px;background:var(--s3);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.seccion-info{flex:1;min-width:0}
+.seccion-tit{font-family:var(--display);font-weight:800;font-size:13px;color:var(--t1);letter-spacing:-0.2px}
+.seccion-meta{font-family:var(--mono);font-size:10px;color:var(--t3);margin-top:2px;letter-spacing:0.05em}
+.seccion-badges{display:flex;gap:4px}
+.seccion-b{padding:2px 6px;border-radius:4px;font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:0.05em}
+.seccion-b.ok{background:rgba(34,197,94,0.15);color:var(--verde)}
+.seccion-b.atn{background:rgba(245,197,24,0.15);color:var(--amarillo)}
+.seccion-b.crt{background:rgba(232,33,10,0.15);color:var(--rojo-l)}
+.seccion-arr{color:var(--t3);font-size:12px;transition:transform 200ms}
+.seccion.abierta .seccion-arr{transform:rotate(90deg)}
+.seccion-body{display:none;padding:0 16px 16px}
+.seccion.abierta .seccion-body{display:block}
+
+/* PUNTO */
+.punto{padding:12px;background:var(--s2);border:1px solid var(--line);border-radius:10px;margin-bottom:8px;transition:all 200ms}
+.punto.ok{border-color:rgba(34,197,94,0.4);background:linear-gradient(90deg,rgba(34,197,94,0.05),var(--s2))}
+.punto.atencion{border-color:rgba(245,197,24,0.4);background:linear-gradient(90deg,rgba(245,197,24,0.05),var(--s2))}
+.punto.critico{border-color:rgba(232,33,10,0.5);background:linear-gradient(90deg,rgba(232,33,10,0.08),var(--s2))}
+.punto-nombre{font-size:13px;color:var(--t1);font-weight:600;margin-bottom:10px;line-height:1.4}
+.punto-nombre small{display:block;color:var(--t3);font-size:10px;font-weight:400;margin-top:2px;font-family:var(--mono)}
+.punto-controles{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:6px}
+.p-btn{padding:9px 6px;border:2px solid var(--line);border-radius:8px;font-family:var(--display);font-weight:800;font-size:10px;letter-spacing:0.03em;color:var(--t2);background:var(--s3);cursor:pointer;transition:all 150ms;text-align:center;line-height:1.2}
+.p-btn:active{transform:scale(0.96)}
+.p-btn.ok.active{background:var(--verde);color:#000;border-color:var(--verde)}
+.p-btn.atencion.active{background:var(--amarillo);color:#000;border-color:var(--amarillo)}
+.p-btn.critico.active{background:var(--rojo);color:#fff;border-color:var(--rojo)}
+.p-foto{padding:9px 10px;background:var(--s3);border:2px solid var(--line);border-radius:8px;color:var(--t2);cursor:pointer;font-size:16px;position:relative}
+.p-foto.tieneFotos{background:var(--dorado);color:#000;border-color:var(--dorado)}
+.p-foto-count{position:absolute;top:-4px;right:-4px;background:var(--rojo);color:#fff;font-size:9px;font-family:var(--mono);font-weight:700;padding:1px 5px;border-radius:8px;min-width:14px;text-align:center}
+.punto-nota{margin-top:8px;display:none}
+.punto-nota.show{display:block}
+.punto-nota input{background:var(--s3);font-size:12px;padding:8px 10px;border:1px solid var(--line)}
+.punto-fotos-preview{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.foto-thumb{width:60px;height:60px;border-radius:6px;object-fit:cover;border:1px solid var(--line);cursor:pointer}
+.foto-x{position:relative}
+.foto-x button{position:absolute;top:-4px;right:-4px;background:var(--rojo);color:#fff;border:none;border-radius:50%;width:18px;height:18px;font-size:11px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
+
+/* VEREDICTO */
+.veredicto-sec{background:linear-gradient(135deg,rgba(212,175,55,0.08),var(--s1));border:1px solid rgba(212,175,55,0.4);border-radius:14px;padding:18px;margin-bottom:12px}
+.veredicto-opts{display:grid;grid-template-columns:1fr;gap:8px;margin-top:12px}
+.v-opt{padding:14px 16px;border:2px solid var(--line);border-radius:10px;background:var(--s2);cursor:pointer;text-align:left;transition:all 150ms}
+.v-opt:hover{border-color:var(--line-2)}
+.v-opt.selected{background:var(--s3)}
+.v-opt.selected[data-v="recomendar"]{border-color:var(--verde);background:rgba(34,197,94,0.1)}
+.v-opt.selected[data-v="negociar"]{border-color:var(--amarillo);background:rgba(245,197,24,0.1)}
+.v-opt.selected[data-v="rechazar"]{border-color:var(--rojo);background:rgba(232,33,10,0.1)}
+.v-opt-tit{font-family:var(--display);font-weight:800;font-size:13px;color:var(--t1);letter-spacing:-0.2px}
+.v-opt-desc{font-size:11px;color:var(--t3);margin-top:3px}
+
+/* FIRMAS */
+.firma-cont{background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:12px;margin-top:10px}
+.firma-lbl{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-bottom:8px}
+.firma-canvas{background:#fff;border-radius:8px;width:100%;height:120px;display:block;touch-action:none;cursor:crosshair}
+.firma-actions{display:flex;gap:8px;margin-top:8px}
+.firma-btn{padding:6px 12px;background:var(--s3);border:1px solid var(--line);border-radius:6px;font-family:var(--mono);font-size:10px;color:var(--t2);cursor:pointer;font-weight:700}
+.firma-btn.primary{background:var(--verde);color:#000;border-color:var(--verde);font-weight:800}
+
+/* BOTTOM BAR */
+.bottom-bar{position:fixed;bottom:0;left:0;right:0;background:linear-gradient(180deg,transparent,var(--bg) 30%);padding:20px 16px 14px;z-index:40}
+.bottom-inner{background:var(--s2);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;gap:8px;align-items:center;box-shadow:0 -4px 24px rgba(0,0,0,0.3);max-width:900px;margin:0 auto}
+.total-est{flex:1;min-width:0}
+.total-lbl{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;font-weight:700}
+.total-num{font-family:var(--display);font-weight:800;font-size:17px;color:var(--dorado);line-height:1;margin-top:2px;letter-spacing:-0.5px}
+.btn-pri{background:var(--rojo);color:#fff;padding:14px 20px;border-radius:12px;font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:0.05em;cursor:pointer;white-space:nowrap;transition:all 150ms}
+.btn-pri:active{transform:scale(0.98)}
+.btn-pri.pdf{background:var(--dorado);color:#000}
+.btn-pri.save{background:var(--verde);color:#000}
+
+/* SUCCESS */
+.success{display:none;position:fixed;inset:0;background:var(--bg);z-index:100;padding:30px 20px;overflow-y:auto}
+.success.show{display:block}
+.success-inner{max-width:600px;margin:0 auto;text-align:center}
+.success-icon{font-size:64px;margin-bottom:16px;animation:pop 400ms ease-out}
+@keyframes pop{from{transform:scale(0.3);opacity:0}to{transform:scale(1);opacity:1}}
+.success-tit{font-family:var(--display);font-weight:900;font-size:26px;color:var(--dorado);margin-bottom:8px;letter-spacing:-1px}
+.success-desc{font-size:13px;color:var(--t2);margin-bottom:20px;line-height:1.5}
+.success-num{font-family:var(--mono);font-size:14px;color:var(--dorado);letter-spacing:0.15em;background:var(--s1);border:1px solid var(--dorado);border-radius:10px;padding:12px 18px;display:inline-block;margin-bottom:20px;font-weight:700}
+.success-acciones{display:flex;flex-direction:column;gap:8px;align-items:center}
+.success-btn{padding:14px 24px;border-radius:12px;font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:0.05em;text-decoration:none;display:inline-block;min-width:250px;text-align:center;cursor:pointer;border:none}
+.success-btn.pdf{background:var(--dorado);color:#000}
+.success-btn.wa{background:#25D366;color:#fff}
+.success-btn.new{background:var(--s2);color:var(--t1);border:1px solid var(--line)}
+
+.toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-20px);background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:10px 16px;font-size:12px;font-weight:600;color:var(--t1);opacity:0;transition:all 300ms;pointer-events:none;z-index:200}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.ok{border-color:var(--verde);color:var(--verde)}
+.toast.err{border-color:var(--rojo);color:var(--rojo-l)}
+
+@media(max-width:640px){
+  .form-grid{grid-template-columns:1fr}
+  .progreso{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <button class="back" onclick="location.href='menu-coordinador.html'">← Volver</button>
+  <div class="sigil">S</div>
+  <div class="title">Revisión Precompra Premium<small>Camión / Pesado · 75 puntos</small></div>
+</header>
+
+<div class="shell">
+  
+  <!-- HERO -->
+  <div class="hero-prem">
+    <div class="hero-ficha" id="hero-ficha">REV-PC-•••</div>
+    <div class="hero-tit">Revisión Precompra <em>Premium</em></div>
+    <div class="hero-desc">Inspección técnica completa de 75 puntos antes de la compra. Media jornada. Recomendación de compra con negociación estimada.</div>
+    <div class="hero-badges">
+      <span class="hero-badge">🔧 75 puntos</span>
+      <span class="hero-badge">📷 Fotos ilimitadas</span>
+      <span class="hero-badge">✍️ Firmas digitales</span>
+      <span class="hero-badge">📄 Reporte PDF</span>
+      <span class="hero-badge precio">💰 Desde $300.000</span>
+    </div>
+  </div>
+  
+  <!-- DATOS -->
+  <div class="form-sec">
+    <div class="form-tit">👤 Datos del cliente comprador</div>
+    <div class="form-grid">
+      <div class="form-full">
+        <div class="form-lbl">Nombre completo</div>
+        <input type="text" id="cli-nombre" placeholder="Nombre del comprador" list="clientes-list">
+        <datalist id="clientes-list"></datalist>
+      </div>
+      <div><div class="form-lbl">RUT</div><input type="text" id="cli-rut" placeholder="12.345.678-9"></div>
+      <div><div class="form-lbl">Teléfono</div><input type="tel" id="cli-tel" placeholder="+56 9 ..."></div>
+      <div class="form-full"><div class="form-lbl">Email</div><input type="email" id="cli-email" placeholder="correo@ejemplo.cl"></div>
+    </div>
+  </div>
+  
+  <div class="form-sec">
+    <div class="form-tit">🚛 Datos del vehículo a inspeccionar</div>
+    <div class="form-grid">
+      <div><div class="form-lbl">Marca</div><input type="text" id="veh-marca" placeholder="Mercedes, Volvo, Scania..."></div>
+      <div><div class="form-lbl">Modelo</div><input type="text" id="veh-modelo" placeholder="Actros, FH, R500..."></div>
+      <div><div class="form-lbl">Año</div><input type="number" id="veh-anio" placeholder="2018"></div>
+      <div><div class="form-lbl">Patente</div><input type="text" id="veh-patente" placeholder="ABCD-12" style="text-transform:uppercase"></div>
+      <div class="form-full"><div class="form-lbl">VIN / N° chasis</div><input type="text" id="veh-vin" placeholder="17 caracteres"></div>
+      <div><div class="form-lbl">Kilometraje</div><input type="number" id="veh-km" placeholder="850000"></div>
+      <div><div class="form-lbl">Combustible</div>
+        <select id="veh-comb">
+          <option value="">—</option>
+          <option>Diésel</option>
+          <option>Gasolina</option>
+          <option>GNC</option>
+          <option>Eléctrico</option>
+        </select>
+      </div>
+      <div class="form-full"><div class="form-lbl">Color</div><input type="text" id="veh-color" placeholder="Blanco, rojo..."></div>
+    </div>
+  </div>
+  
+  <div class="form-sec">
+    <div class="form-tit">🏷️ Vendedor actual (dueño del camión)</div>
+    <div class="form-grid">
+      <div><div class="form-lbl">Nombre</div><input type="text" id="ven-nombre" placeholder="Nombre o razón social"></div>
+      <div><div class="form-lbl">Teléfono</div><input type="tel" id="ven-tel" placeholder="+56 9 ..."></div>
+    </div>
+  </div>
+  
+  <div class="form-sec">
+    <div class="form-tit">🔧 Técnico Serviruta a cargo</div>
+    <div class="form-grid">
+      <div>
+        <div class="form-lbl">Técnico</div>
+        <select id="tec-nombre">
+          <option value="">Seleccionar...</option>
+          <option>Isaias Robles</option>
+          <option>Miguel Landaeta</option>
+          <option>Javier Honores</option>
+          <option>Giovannino Perugini</option>
+          <option>Reynaldo Aguas</option>
+          <option>Kiven Henz</option>
+          <option>Angel Peruga</option>
+        </select>
+      </div>
+      <div><div class="form-lbl">RUT técnico</div><input type="text" id="tec-rut" placeholder="12.345.678-9"></div>
+      <div class="form-full"><div class="form-lbl">Ubicación de la revisión</div><input type="text" id="ubicacion" placeholder="Ej: Patio del vendedor, Ruta 5 km 42, Talagante"></div>
+    </div>
+  </div>
+  
+  <!-- PROGRESO -->
+  <div class="progreso">
+    <div class="prog-item"><div class="prog-num total" id="p-total">0<span style="font-size:12px;color:var(--t3)">/75</span></div><div class="prog-lbl">Revisados</div></div>
+    <div class="prog-item"><div class="prog-num ok" id="p-ok">0</div><div class="prog-lbl">OK ✅</div></div>
+    <div class="prog-item"><div class="prog-num atn" id="p-atn">0</div><div class="prog-lbl">Atención 🟡</div></div>
+    <div class="prog-item"><div class="prog-num crt" id="p-crt">0</div><div class="prog-lbl">Crítico 🔴</div></div>
+  </div>
+  
+  <!-- SECCIONES DE PUNTOS -->
+  <div id="secciones"></div>
+  
+  <!-- VEREDICTO -->
+  <div class="veredicto-sec">
+    <div class="form-tit">⚖️ Veredicto de la inspección</div>
+    <div style="font-size:12px;color:var(--t2);margin-top:8px">Basado en los hallazgos, ¿qué recomiendas al cliente comprador?</div>
+    <div class="veredicto-opts">
+      <div class="v-opt" data-v="recomendar" onclick="setVeredicto('recomendar')">
+        <div class="v-opt-tit">✅ Recomendar la compra</div>
+        <div class="v-opt-desc">Camión en buen estado, precio pedido justo. Sin observaciones críticas.</div>
+      </div>
+      <div class="v-opt" data-v="negociar" onclick="setVeredicto('negociar')">
+        <div class="v-opt-tit">🟡 Comprar con negociación</div>
+        <div class="v-opt-desc">Tiene detalles corregibles. Sugerir descuento por los arreglos identificados.</div>
+      </div>
+      <div class="v-opt" data-v="rechazar" onclick="setVeredicto('rechazar')">
+        <div class="v-opt-tit">❌ No recomendar la compra</div>
+        <div class="v-opt-desc">Problemas críticos, riesgo alto, mejor buscar otra unidad.</div>
+      </div>
+    </div>
+    <div id="veredicto-detalle" style="display:none;margin-top:12px">
+      <div class="form-lbl" style="font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-bottom:6px">💰 Descuento sugerido de negociación (CLP)</div>
+      <input type="number" id="monto-negociacion" placeholder="Ej: 1500000">
+    </div>
+    <div style="margin-top:12px">
+      <div class="form-lbl" style="font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-bottom:6px">📝 Observaciones finales del técnico</div>
+      <textarea id="observaciones" rows="4" placeholder="Resumen ejecutivo, recomendaciones específicas, plazos, prioridades..." style="background:var(--s2);border:1px solid var(--line);border-radius:8px;padding:10px 12px;color:var(--t1);font-family:var(--body);font-size:13px;width:100%;resize:vertical"></textarea>
+    </div>
+  </div>
+  
+  <!-- FIRMAS -->
+  <div class="form-sec">
+    <div class="form-tit">✍️ Firmas digitales</div>
+    <div class="firma-cont">
+      <div class="firma-lbl">🔧 Firma del técnico Serviruta</div>
+      <canvas class="firma-canvas" id="firma-tec"></canvas>
+      <div class="firma-actions">
+        <button class="firma-btn" onclick="limpiarFirma('tec')">🗑️ Limpiar</button>
+        <button class="firma-btn primary" onclick="confirmarFirma('tec')">✅ Confirmar firma</button>
+      </div>
+    </div>
+    <div class="firma-cont">
+      <div class="firma-lbl">👤 Firma del cliente comprador</div>
+      <canvas class="firma-canvas" id="firma-cli"></canvas>
+      <div class="firma-actions">
+        <button class="firma-btn" onclick="limpiarFirma('cli')">🗑️ Limpiar</button>
+        <button class="firma-btn primary" onclick="confirmarFirma('cli')">✅ Confirmar firma</button>
+      </div>
+    </div>
+  </div>
+  
+</div>
+
+<!-- BOTTOM BAR -->
+<div class="bottom-bar">
+  <div class="bottom-inner">
+    <div class="total-est">
+      <div class="total-lbl">💰 Descuento sugerido</div>
+      <div class="total-num" id="total-neg">$0</div>
+    </div>
+    <button class="btn-pri save" onclick="guardar()">💾 Guardar</button>
+  </div>
+</div>
+
+<!-- INPUT FOTO OCULTO -->
+<input type="file" id="foto-input" accept="image/*" capture="environment" style="display:none">
+
+<!-- SUCCESS -->
+<div class="success" id="success">
+  <div class="success-inner">
+    <div class="success-icon">✅</div>
+    <div class="success-tit">Revisión guardada</div>
+    <div class="success-num" id="success-num">REV-PC-0001</div>
+    <div class="success-desc" id="success-desc">La ficha está lista. Puedes descargar el PDF con firmas y compartirla con el cliente.</div>
+    <div class="success-acciones">
+      <button class="success-btn pdf" onclick="descargarPDF()">📄 Descargar PDF</button>
+      <a class="success-btn wa" id="success-wa" href="#" target="_blank">💬 Enviar por WhatsApp</a>
+      <button class="success-btn new" onclick="nuevaRevision()">➕ Nueva revisión</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+
+// LOS 75 PUNTOS ORGANIZADOS EN 11 SECCIONES
+var SECCIONES=[
+  {id:'ident',icon:'📄',nombre:'Identificación y documentación',puntos:[
+    {id:'vin_grabado',n:'VIN grabado en chasis',d:'Coincide con documentos'},
+    {id:'placa_legible',n:'Placa y patente legibles',d:'Sin adulteraciones'},
+    {id:'km_concordante',n:'Kilometraje concordante',d:'Con documentos y estado real'},
+    {id:'revision_tecnica',n:'Revisión técnica vigente',d:'Al día'},
+    {id:'permiso_circulacion',n:'Permiso de circulación',d:'Al día'}
+  ]},
+  {id:'motor',icon:'🔧',nombre:'Motor',puntos:[
+    {id:'motor_general',n:'Estado general al ojo',d:'Sin fugas, sin quemaduras'},
+    {id:'arranque_frio',n:'Arranque en frío',d:'Tiempo, humo, respuesta'},
+    {id:'ralenti',n:'Ralentí estable',d:'Sin vibraciones anormales'},
+    {id:'aceleracion_vacio',n:'Aceleración en vacío',d:'Respuesta y humo escape'},
+    {id:'turbo_sonido',n:'Sonido del turbo',d:'Sin silbidos raros'},
+    {id:'compresion',n:'Compresión de cilindros',d:'Test con manómetro'},
+    {id:'nivel_aceite',n:'Nivel y estado del aceite',d:'Color, viscosidad'},
+    {id:'refrigerante',n:'Estado del refrigerante',d:'Nivel, color, sedimentos'},
+    {id:'correas_mangueras',n:'Correas y mangueras',d:'Fisuras, tensión'},
+    {id:'soportes_motor',n:'Soportes de motor',d:'Sin ruptura de gomas'},
+    {id:'fugas_combustible',n:'Fugas de combustible',d:'Ductos, bomba, inyectores'},
+    {id:'codigos_ecm',n:'Códigos de falla ECM',d:'Scanner OBD/diagnóstico'}
+  ]},
+  {id:'trans',icon:'⚙️',nombre:'Transmisión y embrague',puntos:[
+    {id:'embrague_estado',n:'Estado del embrague',d:'Recorrido pedal, patinaje'},
+    {id:'cambios_todos',n:'Cambios en todas las marchas',d:'Manual o automática'},
+    {id:'cambios_carga',n:'Cambios en carga (ruta)',d:'Sin trepidaciones'},
+    {id:'ruidos_caja',n:'Ruidos anormales caja',d:'Marcha atrás, retención'},
+    {id:'aceite_caja',n:'Nivel aceite de caja',d:'Sin metalizados'},
+    {id:'cardan_crucetas',n:'Cardán y crucetas',d:'Sin juego, sin ruidos'}
+  ]},
+  {id:'emisiones',icon:'💨',nombre:'DPF / EGR / Emisiones',puntos:[
+    {id:'dpf_estado',n:'Estado del DPF',d:'Regeneraciones recientes'},
+    {id:'egr_valvula',n:'Válvula EGR',d:'Estado y funcionamiento'},
+    {id:'adblue',n:'AdBlue / SCR',d:'Presencia y estado sistema'},
+    {id:'sensores_escape',n:'Sensores de escape',d:'Lambda, temperatura, presión'},
+    {id:'codigos_emisiones',n:'Códigos de emisiones',d:'Scanner'}
+  ]},
+  {id:'frenos',icon:'🛑',nombre:'Frenos',puntos:[
+    {id:'frenos_servicio',n:'Frenos de servicio',d:'Aire, funcionamiento'},
+    {id:'freno_estac',n:'Freno de estacionamiento',d:'Efectividad'},
+    {id:'retardador',n:'Ralentizador / retardador',d:'Si aplica'},
+    {id:'pastillas_por_rueda',n:'Estado pastillas/tambores',d:'Por rueda, remanente'},
+    {id:'aire_compresor',n:'Sistema de aire',d:'Compresor, tanques, presión'},
+    {id:'abs_test',n:'ABS funcionamiento',d:'Sin luz de falla'},
+    {id:'valvulas_neumaticas',n:'Válvulas y mangueras',d:'Sin fugas, buen estado'}
+  ]},
+  {id:'direccion',icon:'🛞',nombre:'Dirección y suspensión',puntos:[
+    {id:'juego_volante',n:'Juego del volante',d:'Máximo aceptable'},
+    {id:'bomba_hidraulica',n:'Bomba hidráulica dirección',d:'Sin ruidos, sin fugas'},
+    {id:'terminales_rotulas',n:'Terminales y rótulas',d:'Sin juego'},
+    {id:'amortiguadores',n:'Amortiguadores',d:'Test rebote, fugas'},
+    {id:'ballestas_susp',n:'Ballestas / suspensión neumática',d:'Sin fisuras'},
+    {id:'bujes',n:'Bujes y bujecillos',d:'Sin desgaste excesivo'},
+    {id:'alineacion_visual',n:'Alineación visual',d:'Desgaste neumáticos'}
+  ]},
+  {id:'chasis',icon:'🏗️',nombre:'Chasis y carrocería',puntos:[
+    {id:'marco_chasis',n:'Marco de chasis',d:'Soldaduras, deformaciones'},
+    {id:'travesanos',n:'Travesaños',d:'Sin fisuras'},
+    {id:'oxido_estructural',n:'Óxido / corrosión estructural',d:'Zonas críticas'},
+    {id:'golpes_ocultos',n:'Golpes ocultos',d:'Mediciones y simetría'},
+    {id:'pintura_reparaciones',n:'Pintura / repintados',d:'Uniformidad'},
+    {id:'puertas_cerraduras',n:'Puertas y cerraduras',d:'Funcionamiento'},
+    {id:'estanqueidad_cabina',n:'Estanqueidad cabina',d:'Sin filtraciones'}
+  ]},
+  {id:'electrico',icon:'⚡',nombre:'Sistema eléctrico',puntos:[
+    {id:'bateria_voltaje',n:'Batería(s) — voltaje y estado',d:'Con scanner de batería'},
+    {id:'alternador_carga',n:'Alternador — carga',d:'13.5-14.5V con motor'},
+    {id:'motor_partida',n:'Motor de partida',d:'Arranque limpio'},
+    {id:'luces_exteriores',n:'Luces exteriores completas',d:'Delanteras, traseras, señalización'},
+    {id:'tablero_instrumentos',n:'Tablero e instrumentos',d:'Todos funcionan'},
+    {id:'testigos_encendidos',n:'Testigos encendidos',d:'Ninguno anormal'},
+    {id:'instalacion_cabina',n:'Instalación cabina',d:'Interruptores, radio, A/C'}
+  ]},
+  {id:'ruedas',icon:'🛞',nombre:'Neumáticos y ruedas',puntos:[
+    {id:'dibujo_por_rueda',n:'Dibujo remanente por posición',d:'En mm, cada neumático'},
+    {id:'antiguedad_dot',n:'Antigüedad (código DOT)',d:'Semana/año'},
+    {id:'desgaste_irregular',n:'Desgaste irregular',d:'Indicador de alineación'},
+    {id:'llantas_estado',n:'Llantas',d:'Grietas, golpes, óxido'},
+    {id:'pernos_esparragos',n:'Pernos y espárragos',d:'Torque, integridad'},
+    {id:'rueda_auxiliar',n:'Rueda auxiliar / repuesto',d:'Estado, sujeción'}
+  ]},
+  {id:'cabina',icon:'🚪',nombre:'Cabina y confort',puntos:[
+    {id:'asiento_conductor',n:'Asiento conductor',d:'Regulaciones, estado'},
+    {id:'cinturones_seg',n:'Cinturones de seguridad',d:'Funcionamiento retracción'},
+    {id:'aire_calef',n:'Aire acondicionado / calefacción',d:'Ambos funcionan'},
+    {id:'vidrios_fisuras',n:'Vidrios',d:'Sin fisuras, funcionamiento'},
+    {id:'espejos_ext',n:'Espejos exteriores',d:'Ajustes y estado'},
+    {id:'bocina_test',n:'Bocina',d:'Funciona correctamente'},
+    {id:'cuenta_km',n:'Cuenta kilómetros',d:'Concordante, sin manipulación'},
+    {id:'tacografo',n:'Tacógrafo (si aplica)',d:'Vigente y calibrado'}
+  ]},
+  {id:'ruta',icon:'🛣️',nombre:'Prueba de ruta',puntos:[
+    {id:'estabilidad_velocidad',n:'Estabilidad a velocidad',d:'Sin desviaciones ni vibraciones'},
+    {id:'ruidos_en_carga',n:'Ruidos anormales bajo carga',d:'Trepidaciones, golpes'},
+    {id:'comportamiento_pendiente',n:'Comportamiento en pendiente',d:'Fuerza motor, cambios'},
+    {id:'frenos_ruta',n:'Frenos en ruta',d:'Frenada firme, sin tirones'},
+    {id:'temperatura_sostenida',n:'Temperatura motor sostenida',d:'Sin recalentamiento'}
+  ]}
+]
+
+var estado={}
+var notas={}
+var fotos={} // {punto_id: [{data:base64, ts}]}
+var CLIENTES=[]
+var CLIENTE_ID=null
+var VEREDICTO=null
+var FIRMAS={tec:null, cli:null}
+var puntoActualFoto=null
+var NUMERO_FICHA=null
+var REVISION_ID=null
+
+function toast(msg,tipo){
+  var t=document.getElementById('toast')
+  t.textContent=msg
+  t.className='toast '+(tipo||'')
+  t.classList.add('show')
+  setTimeout(function(){t.classList.remove('show')},2000)
+}
+
+function fmt(n){
+  if(!n) return '$0'
+  return '$'+parseInt(n).toLocaleString('es-CL')
+}
+
+async function sbGet(path){
+  var r=await fetch(SB_URL+'/rest/v1/'+path,{headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}})
+  return r.ok?await r.json():[]
+}
+
+async function sbPost(path,data,repr){
+  var h={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'}
+  if(repr) h['Prefer']='return=representation'
+  else h['Prefer']='return=minimal'
+  var r=await fetch(SB_URL+'/rest/v1/'+path,{method:'POST',headers:h,body:JSON.stringify(data)})
+  if(!r.ok){var e=await r.text();throw new Error('HTTP '+r.status+': '+e.substring(0,200))}
+  return repr?await r.json():true
+}
+
+// AUTOCOMPLETE CLIENTE
+async function cargarClientes(){
+  CLIENTES=await sbGet('clientes?select=id,nombre,rut,telefono_normalizado&order=nombre.asc&limit=1000')
+  var dl=document.getElementById('clientes-list')
+  var html=''
+  CLIENTES.forEach(function(c){html+='<option value="'+(c.nombre||'').replace(/"/g,'&quot;')+'">'})
+  dl.innerHTML=html
+  
+  document.getElementById('cli-nombre').addEventListener('input',function(e){
+    var val=e.target.value.toLowerCase().trim()
+    var m=CLIENTES.find(function(c){return c.nombre.toLowerCase()===val})
+    if(m){
+      CLIENTE_ID=m.id
+      if(m.rut && !document.getElementById('cli-rut').value) document.getElementById('cli-rut').value=m.rut
+      if(m.telefono_normalizado && !document.getElementById('cli-tel').value) document.getElementById('cli-tel').value='+'+(m.telefono_normalizado.length===9?'56'+m.telefono_normalizado:m.telefono_normalizado)
+      toast('✅ Cliente cargado','ok')
+    } else CLIENTE_ID=null
+  })
+}
+
+// RENDERIZAR SECCIONES
+function renderSecciones(){
+  var cont=document.getElementById('secciones')
+  var html=''
+  SECCIONES.forEach(function(s,idx){
+    var stats=contarSeccion(s)
+    var completa=stats.rev===s.puntos.length
+    var tieneCriticos=stats.crt>0
+    var cls=completa?'completa':''
+    if(tieneCriticos) cls+=' criticos'
+    
+    html+='<div class="seccion '+cls+'" id="sec-'+s.id+'">'
+    html+='<div class="seccion-head" onclick="toggleSeccion(\''+s.id+'\')">'
+    html+='<div class="seccion-icon">'+s.icon+'</div>'
+    html+='<div class="seccion-info">'
+    html+='<div class="seccion-tit">'+s.nombre+'</div>'
+    html+='<div class="seccion-meta">'+stats.rev+' / '+s.puntos.length+' revisados</div>'
+    html+='</div>'
+    html+='<div class="seccion-badges">'
+    if(stats.ok>0) html+='<span class="seccion-b ok">'+stats.ok+' ok</span>'
+    if(stats.atn>0) html+='<span class="seccion-b atn">'+stats.atn+' 🟡</span>'
+    if(stats.crt>0) html+='<span class="seccion-b crt">'+stats.crt+' 🔴</span>'
+    html+='</div>'
+    html+='<div class="seccion-arr">›</div>'
+    html+='</div>'
+    
+    html+='<div class="seccion-body">'
+    s.puntos.forEach(function(p){
+      var st=estado[p.id]||''
+      var fs=fotos[p.id]||[]
+      html+='<div class="punto '+st+'" id="p-'+p.id+'">'
+      html+='<div class="punto-nombre">'+p.n+(p.d?'<small>'+p.d+'</small>':'')+'</div>'
+      html+='<div class="punto-controles">'
+      html+='<button class="p-btn ok'+(st==='ok'?' active':'')+'" onclick="marcar(\''+p.id+'\',\'ok\')">✅ OK</button>'
+      html+='<button class="p-btn atencion'+(st==='atencion'?' active':'')+'" onclick="marcar(\''+p.id+'\',\'atencion\')">🟡 Atn</button>'
+      html+='<button class="p-btn critico'+(st==='critico'?' active':'')+'" onclick="marcar(\''+p.id+'\',\'critico\')">🔴 Crit</button>'
+      html+='<button class="p-foto'+(fs.length?' tieneFotos':'')+'" onclick="tomarFoto(\''+p.id+'\')">📷'+(fs.length?'<span class="p-foto-count">'+fs.length+'</span>':'')+'</button>'
+      html+='</div>'
+      html+='<div class="punto-nota '+(st==='atencion'||st==='critico'?'show':'')+'" id="nota-'+p.id+'">'
+      html+='<input type="text" placeholder="Nota técnica (opcional)" value="'+(notas[p.id]||'').replace(/"/g,'&quot;')+'" onchange="setNota(\''+p.id+'\',this.value)">'
+      html+='</div>'
+      if(fs.length){
+        html+='<div class="punto-fotos-preview">'
+        fs.forEach(function(f,i){
+          html+='<div class="foto-x"><img src="'+f.data+'" class="foto-thumb" onclick="verFoto(\''+p.id+'\','+i+')"><button onclick="borrarFoto(\''+p.id+'\','+i+')">×</button></div>'
+        })
+        html+='</div>'
+      }
+      html+='</div>'
+    })
+    html+='</div>'
+    html+='</div>'
+  })
+  cont.innerHTML=html
+}
+
+function contarSeccion(sec){
+  var ok=0,atn=0,crt=0,rev=0
+  sec.puntos.forEach(function(p){
+    if(estado[p.id]==='ok'){ok++;rev++}
+    else if(estado[p.id]==='atencion'){atn++;rev++}
+    else if(estado[p.id]==='critico'){crt++;rev++}
+  })
+  return {ok:ok,atn:atn,crt:crt,rev:rev}
+}
+
+function toggleSeccion(id){
+  var el=document.getElementById('sec-'+id)
+  el.classList.toggle('abierta')
+}
+
+function marcar(id, st){
+  estado[id]=st
+  var punto=document.getElementById('p-'+id)
+  punto.className='punto '+st
+  punto.querySelectorAll('.p-btn').forEach(function(b){b.classList.remove('active')})
+  punto.querySelector('.p-btn.'+st).classList.add('active')
+  var nota=document.getElementById('nota-'+id)
+  if(st==='atencion'||st==='critico') nota.classList.add('show')
+  else nota.classList.remove('show')
+  actualizarTotales()
+  actualizarBadgesSeccion(id)
+  if(navigator.vibrate) navigator.vibrate(30)
+}
+
+function setNota(id,val){notas[id]=val}
+
+function actualizarBadgesSeccion(puntoId){
+  SECCIONES.forEach(function(s){
+    if(s.puntos.find(function(p){return p.id===puntoId})){
+      var stats=contarSeccion(s)
+      var el=document.getElementById('sec-'+s.id)
+      if(!el) return
+      var completa=stats.rev===s.puntos.length
+      var tieneCriticos=stats.crt>0
+      el.classList.toggle('completa',completa)
+      el.classList.toggle('criticos',tieneCriticos)
+      var meta=el.querySelector('.seccion-meta')
+      if(meta) meta.textContent=stats.rev+' / '+s.puntos.length+' revisados'
+      var badges=el.querySelector('.seccion-badges')
+      var html=''
+      if(stats.ok>0) html+='<span class="seccion-b ok">'+stats.ok+' ok</span>'
+      if(stats.atn>0) html+='<span class="seccion-b atn">'+stats.atn+' 🟡</span>'
+      if(stats.crt>0) html+='<span class="seccion-b crt">'+stats.crt+' 🔴</span>'
+      if(badges) badges.innerHTML=html
+    }
+  })
+}
+
+function actualizarTotales(){
+  var ok=0,atn=0,crt=0
+  Object.keys(estado).forEach(function(k){
+    if(estado[k]==='ok') ok++
+    else if(estado[k]==='atencion') atn++
+    else if(estado[k]==='critico') crt++
+  })
+  var total=ok+atn+crt
+  document.getElementById('p-total').innerHTML=total+'<span style="font-size:12px;color:var(--t3)">/75</span>'
+  document.getElementById('p-ok').textContent=ok
+  document.getElementById('p-atn').textContent=atn
+  document.getElementById('p-crt').textContent=crt
+  actualizarMontoNegociacion()
+}
+
+function actualizarMontoNegociacion(){
+  var monto=parseInt(document.getElementById('monto-negociacion').value)||0
+  document.getElementById('total-neg').textContent=fmt(monto)
+}
+
+// FOTOS
+function tomarFoto(puntoId){
+  puntoActualFoto=puntoId
+  document.getElementById('foto-input').click()
+}
+
+document.getElementById('foto-input').addEventListener('change',async function(e){
+  var file=e.target.files[0]
+  if(!file || !puntoActualFoto) return
+  
+  toast('📷 Procesando foto...')
+  try {
+    var comprimida=await comprimirImagen(file, 1200, 0.7)
+    if(!fotos[puntoActualFoto]) fotos[puntoActualFoto]=[]
+    fotos[puntoActualFoto].push({data:comprimida, ts:Date.now()})
+    renderSecciones()
+    // Re-abrir sección
+    var sec=SECCIONES.find(function(s){return s.puntos.find(function(p){return p.id===puntoActualFoto})})
+    if(sec){
+      var el=document.getElementById('sec-'+sec.id)
+      if(el) el.classList.add('abierta')
+    }
+    toast('✅ Foto agregada','ok')
+  } catch(err){
+    toast('❌ Error: '+err.message,'err')
+  }
+  e.target.value=''
+  puntoActualFoto=null
+})
+
+function comprimirImagen(file, maxW, calidad){
+  return new Promise(function(resolve,reject){
+    var reader=new FileReader()
+    reader.onload=function(e){
+      var img=new Image()
+      img.onload=function(){
+        var canvas=document.createElement('canvas')
+        var w=img.width, h=img.height
+        if(w>maxW){h=Math.round(h*maxW/w);w=maxW}
+        canvas.width=w
+        canvas.height=h
+        var ctx=canvas.getContext('2d')
+        ctx.drawImage(img,0,0,w,h)
+        resolve(canvas.toDataURL('image/jpeg',calidad))
+      }
+      img.onerror=reject
+      img.src=e.target.result
+    }
+    reader.onerror=reject
+    reader.readAsDataURL(file)
+  })
+}
+
+function borrarFoto(puntoId, idx){
+  if(!confirm('¿Eliminar esta foto?')) return
+  fotos[puntoId].splice(idx,1)
+  if(!fotos[puntoId].length) delete fotos[puntoId]
+  renderSecciones()
+  var sec=SECCIONES.find(function(s){return s.puntos.find(function(p){return p.id===puntoId})})
+  if(sec){
+    var el=document.getElementById('sec-'+sec.id)
+    if(el) el.classList.add('abierta')
+  }
+}
+
+function verFoto(puntoId, idx){
+  var f=fotos[puntoId][idx]
+  var w=window.open('','_blank')
+  w.document.write('<html><body style="margin:0;background:#000;display:flex;align-items:center;justify-content:center;min-height:100vh"><img src="'+f.data+'" style="max-width:100%;max-height:100vh"></body></html>')
+}
+
+// VEREDICTO
+function setVeredicto(v){
+  VEREDICTO=v
+  document.querySelectorAll('.v-opt').forEach(function(el){el.classList.remove('selected')})
+  document.querySelector('[data-v="'+v+'"]').classList.add('selected')
+  document.getElementById('veredicto-detalle').style.display=v==='negociar'?'block':'none'
+}
+
+// FIRMAS CANVAS
+function setupFirma(id){
+  var canvas=document.getElementById('firma-'+id)
+  canvas.width=canvas.offsetWidth
+  canvas.height=canvas.offsetHeight
+  var ctx=canvas.getContext('2d')
+  ctx.strokeStyle='#000'
+  ctx.lineWidth=2
+  ctx.lineCap='round'
+  ctx.lineJoin='round'
+  
+  var dibujando=false
+  function pos(e){
+    var r=canvas.getBoundingClientRect()
+    var x,y
+    if(e.touches){x=e.touches[0].clientX-r.left;y=e.touches[0].clientY-r.top}
+    else{x=e.clientX-r.left;y=e.clientY-r.top}
+    return {x:x,y:y}
+  }
+  function start(e){e.preventDefault();dibujando=true;var p=pos(e);ctx.beginPath();ctx.moveTo(p.x,p.y)}
+  function draw(e){if(!dibujando) return;e.preventDefault();var p=pos(e);ctx.lineTo(p.x,p.y);ctx.stroke()}
+  function stop(){dibujando=false}
+  
+  canvas.addEventListener('mousedown',start)
+  canvas.addEventListener('mousemove',draw)
+  canvas.addEventListener('mouseup',stop)
+  canvas.addEventListener('mouseleave',stop)
+  canvas.addEventListener('touchstart',start,{passive:false})
+  canvas.addEventListener('touchmove',draw,{passive:false})
+  canvas.addEventListener('touchend',stop)
+}
+
+function limpiarFirma(id){
+  var canvas=document.getElementById('firma-'+id)
+  canvas.getContext('2d').clearRect(0,0,canvas.width,canvas.height)
+  FIRMAS[id]=null
+}
+
+function confirmarFirma(id){
+  var canvas=document.getElementById('firma-'+id)
+  // Verificar si hay dibujo
+  var ctx=canvas.getContext('2d')
+  var pixels=ctx.getImageData(0,0,canvas.width,canvas.height).data
+  var haypx=false
+  for(var i=3;i<pixels.length;i+=4){if(pixels[i]>0){haypx=true;break}}
+  if(!haypx){toast('❌ Firma vacía','err');return}
+  FIRMAS[id]=canvas.toDataURL('image/png')
+  toast('✅ Firma '+(id==='tec'?'técnico':'cliente')+' confirmada','ok')
+}
+
+// LISTENER PARA EL MONTO
+setTimeout(function(){
+  var mn=document.getElementById('monto-negociacion')
+  if(mn) mn.addEventListener('input',actualizarMontoNegociacion)
+},100)
+
+// GUARDAR
+async function guardar(){
+  var cliente=document.getElementById('cli-nombre').value.trim()
+  var tecnico=document.getElementById('tec-nombre').value
+  var patente=document.getElementById('veh-patente').value.trim().toUpperCase()
+  var puntosRevisados=Object.keys(estado).length
+  
+  if(!cliente){toast('❌ Completa el nombre del cliente','err');return}
+  if(!tecnico){toast('❌ Selecciona técnico','err');return}
+  if(!patente){toast('❌ Ingresa la patente','err');return}
+  if(puntosRevisados<50){
+    if(!confirm('Solo has revisado '+puntosRevisados+' de 75 puntos. ¿Guardar de todas formas?')) return
+  }
+  if(!VEREDICTO){toast('❌ Selecciona veredicto','err');return}
+  if(!FIRMAS.tec){toast('❌ Falta firma del técnico','err');return}
+  if(!FIRMAS.cli){toast('❌ Falta firma del cliente','err');return}
+  
+  toast('💾 Guardando...')
+  
+  // Generar número de ficha
+  try {
+    var numR=await fetch(SB_URL+'/rest/v1/rpc/generar_numero_ficha_revision',{
+      method:'POST',
+      headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"},
+      body:'{}'
+    })
+    NUMERO_FICHA=numR.ok?await numR.json():'REV-PC-'+Date.now()
+  } catch(e){NUMERO_FICHA='REV-PC-'+Date.now()}
+  
+  // Consolidar puntos
+  var puntosData={}
+  Object.keys(estado).forEach(function(k){
+    puntosData[k]={estado:estado[k],nota:notas[k]||''}
+  })
+  
+  // Consolidar fotos
+  var fotosData=[]
+  Object.keys(fotos).forEach(function(k){
+    fotos[k].forEach(function(f){
+      fotosData.push({punto_id:k,data:f.data,ts:f.ts})
+    })
+  })
+  
+  var ok=Object.values(estado).filter(function(x){return x==='ok'}).length
+  var atn=Object.values(estado).filter(function(x){return x==='atencion'}).length
+  var crt=Object.values(estado).filter(function(x){return x==='critico'}).length
+  
+  var data={
+    numero_ficha:NUMERO_FICHA,
+    cliente_nombre:cliente,
+    cliente_rut:document.getElementById('cli-rut').value.trim()||null,
+    cliente_telefono:document.getElementById('cli-tel').value.trim()||null,
+    cliente_email:document.getElementById('cli-email').value.trim()||null,
+    cliente_id:CLIENTE_ID,
+    marca:document.getElementById('veh-marca').value.trim()||null,
+    modelo:document.getElementById('veh-modelo').value.trim()||null,
+    año:parseInt(document.getElementById('veh-anio').value)||null,
+    patente:patente,
+    vin:document.getElementById('veh-vin').value.trim().toUpperCase()||null,
+    kilometraje:parseInt(document.getElementById('veh-km').value)||null,
+    tipo_combustible:document.getElementById('veh-comb').value||null,
+    color:document.getElementById('veh-color').value.trim()||null,
+    vendedor_nombre:document.getElementById('ven-nombre').value.trim()||null,
+    vendedor_telefono:document.getElementById('ven-tel').value.trim()||null,
+    tecnico_nombre:tecnico,
+    tecnico_rut:document.getElementById('tec-rut').value.trim()||null,
+    ubicacion_revision:document.getElementById('ubicacion').value.trim()||null,
+    puntos:puntosData,
+    fotos:fotosData,
+    total_ok:ok,
+    total_atencion:atn,
+    total_criticos:crt,
+    puntos_revisados:puntosRevisados,
+    veredicto:VEREDICTO,
+    monto_negociacion_sugerido:parseInt(document.getElementById('monto-negociacion').value)||null,
+    observaciones_finales:document.getElementById('observaciones').value.trim()||null,
+    firma_tecnico:FIRMAS.tec,
+    firma_cliente:FIRMAS.cli,
+    firma_tecnico_fecha:new Date().toISOString(),
+    firma_cliente_fecha:new Date().toISOString(),
+    precio_servicio:300000
+  }
+  
+  try {
+    var saved=await sbPost('revisiones_precompra_camion',data,true)
+    REVISION_ID=saved[0].id
+    mostrarSuccess()
+  } catch(e){
+    toast('❌ Error: '+e.message,'err')
+  }
+}
+
+function mostrarSuccess(){
+  document.getElementById('success-num').textContent=NUMERO_FICHA
+  var desc='Ficha '+NUMERO_FICHA+' con firmas guardada. '
+  if(VEREDICTO==='recomendar') desc+='✅ Recomendaste la compra.'
+  else if(VEREDICTO==='negociar') desc+='🟡 Compra con negociación.'
+  else desc+='❌ No recomendaste la compra.'
+  document.getElementById('success-desc').textContent=desc
+  
+  // Link WhatsApp
+  var tel=document.getElementById('cli-tel').value.replace(/[^0-9]/g,'')
+  if(tel.length===9) tel='56'+tel
+  if(tel){
+    var msg='Hola! Aquí tienes el resumen de la Revisión Precompra Premium '+NUMERO_FICHA+':\n\n'
+    msg+='🚛 Vehículo: '+document.getElementById('veh-marca').value+' '+document.getElementById('veh-modelo').value+' '+(document.getElementById('veh-patente').value||'')+'\n'
+    var vLbl=VEREDICTO==='recomendar'?'✅ Recomendamos la compra':(VEREDICTO==='negociar'?'🟡 Comprar con negociación':'❌ No recomendamos la compra')
+    msg+='⚖️ Veredicto: '+vLbl+'\n'
+    if(VEREDICTO==='negociar'&&document.getElementById('monto-negociacion').value){
+      msg+='💰 Descuento sugerido: '+fmt(parseInt(document.getElementById('monto-negociacion').value))+'\n'
+    }
+    msg+='\nPuedes descargar el reporte completo en PDF con firmas.\n\n— Serviruta'
+    document.getElementById('success-wa').href='https://wa.me/'+tel+'?text='+encodeURIComponent(msg)
+  } else {
+    document.getElementById('success-wa').style.display='none'
+  }
+  
+  document.getElementById('success').classList.add('show')
+  window.scrollTo(0,0)
+}
+
+// PDF
+async function descargarPDF(){
+  toast('📄 Generando PDF...')
+  await new Promise(function(r){setTimeout(r,100)})
+  
+  try {
+    var jsPDF=window.jspdf.jsPDF
+    var doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'})
+    var pw=210, ph=297
+    var y=0
+    
+    // HEADER
+    doc.setFillColor(232,33,10)
+    doc.rect(0,0,pw,30,'F')
+    doc.setTextColor(255,255,255)
+    doc.setFont('helvetica','bold')
+    doc.setFontSize(20)
+    doc.text('SERVIRUTA',15,15)
+    doc.setFontSize(11)
+    doc.setFont('helvetica','normal')
+    doc.text('REVISIÓN PRECOMPRA PREMIUM',15,22)
+    doc.setFontSize(9)
+    doc.text('Camión / Vehículo pesado · 75 puntos técnicos',15,27)
+    
+    doc.setFontSize(10)
+    doc.setFont('helvetica','bold')
+    doc.text(NUMERO_FICHA||'',pw-15,15,{align:'right'})
+    doc.setFontSize(8)
+    doc.setFont('helvetica','normal')
+    doc.text(new Date().toLocaleDateString('es-CL'),pw-15,20,{align:'right'})
+    
+    y=38
+    doc.setTextColor(0,0,0)
+    
+    // DATOS
+    function addSec(titulo){
+      doc.setFillColor(240,240,240)
+      doc.rect(15,y-3,pw-30,6,'F')
+      doc.setFont('helvetica','bold')
+      doc.setFontSize(10)
+      doc.text(titulo,17,y+1)
+      y+=8
+      doc.setFont('helvetica','normal')
+      doc.setFontSize(9)
+    }
+    function addRow(lbl, val){
+      if(y>ph-30){doc.addPage();y=15}
+      doc.setFont('helvetica','bold')
+      doc.text(lbl+':',17,y)
+      doc.setFont('helvetica','normal')
+      doc.text(String(val||'—').substring(0,80),50,y)
+      y+=5
+    }
+    
+    addSec('CLIENTE COMPRADOR')
+    addRow('Nombre',document.getElementById('cli-nombre').value)
+    addRow('RUT',document.getElementById('cli-rut').value)
+    addRow('Teléfono',document.getElementById('cli-tel').value)
+    addRow('Email',document.getElementById('cli-email').value)
+    y+=2
+    
+    addSec('VEHÍCULO INSPECCIONADO')
+    addRow('Marca / Modelo',document.getElementById('veh-marca').value+' '+document.getElementById('veh-modelo').value)
+    addRow('Año',document.getElementById('veh-anio').value)
+    addRow('Patente',document.getElementById('veh-patente').value)
+    addRow('VIN',document.getElementById('veh-vin').value)
+    addRow('Kilometraje',(document.getElementById('veh-km').value||'').toLocaleString?parseInt(document.getElementById('veh-km').value).toLocaleString('es-CL')+' km':document.getElementById('veh-km').value)
+    addRow('Combustible',document.getElementById('veh-comb').value)
+    y+=2
+    
+    addSec('VENDEDOR ACTUAL')
+    addRow('Nombre',document.getElementById('ven-nombre').value)
+    addRow('Teléfono',document.getElementById('ven-tel').value)
+    y+=2
+    
+    addSec('TÉCNICO SERVIRUTA')
+    addRow('Nombre',document.getElementById('tec-nombre').value)
+    addRow('RUT',document.getElementById('tec-rut').value)
+    addRow('Ubicación',document.getElementById('ubicacion').value)
+    y+=4
+    
+    // RESUMEN
+    var ok=Object.values(estado).filter(function(x){return x==='ok'}).length
+    var atn=Object.values(estado).filter(function(x){return x==='atencion'}).length
+    var crt=Object.values(estado).filter(function(x){return x==='critico'}).length
+    var totalRev=ok+atn+crt
+    
+    if(y>ph-40){doc.addPage();y=15}
+    doc.setFillColor(212,175,55)
+    doc.rect(15,y-3,pw-30,10,'F')
+    doc.setTextColor(0,0,0)
+    doc.setFont('helvetica','bold')
+    doc.setFontSize(11)
+    doc.text('RESUMEN DE HALLAZGOS · '+totalRev+' / 75 puntos revisados',17,y+3)
+    y+=13
+    doc.setFontSize(10)
+    doc.text('✓ OK: '+ok,20,y)
+    doc.text('⚠ Atención: '+atn,60,y)
+    doc.text('✗ Críticos: '+crt,110,y)
+    y+=8
+    
+    // POR SECCIÓN
+    SECCIONES.forEach(function(s){
+      if(y>ph-50){doc.addPage();y=15}
+      var st=contarSeccion(s)
+      if(st.rev===0) return
+      
+      doc.setFillColor(245,245,245)
+      doc.rect(15,y-3,pw-30,6,'F')
+      doc.setFont('helvetica','bold')
+      doc.setFontSize(10)
+      doc.text(s.icon+' '+s.nombre.toUpperCase()+' ('+st.rev+' revisados)',17,y+1)
+      y+=8
+      doc.setFontSize(8)
+      s.puntos.forEach(function(p){
+        var estP=estado[p.id]
+        if(!estP) return
+        if(y>ph-15){doc.addPage();y=15}
+        var mark=estP==='ok'?'[✓]':(estP==='atencion'?'[!]':'[X]')
+        doc.setFont('helvetica','normal')
+        doc.text(mark+' '+p.n,20,y)
+        if(notas[p.id]){
+          y+=4
+          doc.setFont('helvetica','italic')
+          doc.setFontSize(8)
+          doc.setTextColor(100,100,100)
+          var noteLines=doc.splitTextToSize('    → '+notas[p.id], pw-40)
+          noteLines.forEach(function(l){doc.text(l,22,y);y+=4})
+          doc.setTextColor(0,0,0)
+          doc.setFontSize(8)
+        }
+        y+=5
+      })
+      y+=3
+    })
+    
+    // VEREDICTO
+    if(y>ph-60){doc.addPage();y=15}
+    var colorVer=VEREDICTO==='recomendar'?[34,197,94]:(VEREDICTO==='negociar'?[245,197,24]:[232,33,10])
+    doc.setFillColor(colorVer[0],colorVer[1],colorVer[2])
+    doc.rect(15,y-3,pw-30,10,'F')
+    doc.setTextColor(255,255,255)
+    doc.setFont('helvetica','bold')
+    doc.setFontSize(12)
+    var vLbl=VEREDICTO==='recomendar'?'RECOMENDAMOS LA COMPRA':(VEREDICTO==='negociar'?'COMPRAR CON NEGOCIACIÓN':'NO RECOMENDAMOS LA COMPRA')
+    doc.text('VEREDICTO: '+vLbl,17,y+3)
+    y+=15
+    doc.setTextColor(0,0,0)
+    doc.setFontSize(9)
+    
+    if(VEREDICTO==='negociar'&&document.getElementById('monto-negociacion').value){
+      doc.setFont('helvetica','bold')
+      doc.text('Descuento sugerido de negociación: '+fmt(parseInt(document.getElementById('monto-negociacion').value)),17,y)
+      y+=8
+    }
+    
+    if(document.getElementById('observaciones').value){
+      doc.setFont('helvetica','bold')
+      doc.text('Observaciones del técnico:',17,y);y+=5
+      doc.setFont('helvetica','normal')
+      var obsLines=doc.splitTextToSize(document.getElementById('observaciones').value, pw-34)
+      obsLines.forEach(function(l){
+        if(y>ph-15){doc.addPage();y=15}
+        doc.text(l,17,y);y+=5
+      })
+      y+=5
+    }
+    
+    // FIRMAS
+    if(y>ph-60){doc.addPage();y=15}
+    doc.setFont('helvetica','bold')
+    doc.setFontSize(10)
+    doc.text('FIRMAS',17,y);y+=6
+    doc.setFont('helvetica','normal')
+    doc.setFontSize(9)
+    doc.text('Técnico Serviruta',20,y)
+    doc.text('Cliente comprador',110,y);y+=3
+    if(FIRMAS.tec) doc.addImage(FIRMAS.tec,'PNG',20,y,70,25)
+    if(FIRMAS.cli) doc.addImage(FIRMAS.cli,'PNG',110,y,70,25)
+    y+=28
+    doc.line(20,y,90,y)
+    doc.line(110,y,180,y)
+    y+=4
+    doc.setFontSize(8)
+    doc.text(document.getElementById('tec-nombre').value||'—',20,y)
+    doc.text(document.getElementById('cli-nombre').value||'—',110,y)
+    y+=4
+    doc.setTextColor(100,100,100)
+    doc.text(new Date().toLocaleString('es-CL'),20,y)
+    doc.text(new Date().toLocaleString('es-CL'),110,y)
+    
+    // Footer
+    doc.setTextColor(150,150,150)
+    doc.setFontSize(7)
+    doc.text('Serviruta · Mecánica móvil · +56 9 4521 0814 · '+NUMERO_FICHA,pw/2,ph-10,{align:'center'})
+    
+    doc.save(NUMERO_FICHA+'_'+document.getElementById('veh-patente').value+'.pdf')
+    toast('✅ PDF descargado','ok')
+  } catch(e){
+    toast('❌ Error PDF: '+e.message,'err')
+  }
+}
+
+function nuevaRevision(){
+  if(!confirm('¿Empezar una nueva revisión? Se perderán los datos actuales.')) return
+  location.reload()
+}
+
+// INIT
+async function init(){
+  // Cargar número de ficha próximo
+  try {
+    var r=await fetch(SB_URL+'/rest/v1/rpc/generar_numero_ficha_revision',{
+      method:'POST',
+      headers:{"apikey":SB_KEY,"Authorization":"Bearer "+SB_KEY,"Content-Type":"application/json"},
+      body:'{}'
+    })
+    if(r.ok){
+      var num=await r.json()
+      document.getElementById('hero-ficha').textContent=num
+    }
+  } catch(e){}
+  
+  await cargarClientes()
+  renderSecciones()
+  actualizarTotales()
+  setupFirma('tec')
+  setupFirma('cli')
+  
+  // Auto-abrir primera sección
+  document.querySelector('.seccion').classList.add('abierta')
+}
+
+init()
+</script>
+
+</body>
+</html>

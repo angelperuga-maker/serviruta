@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
-<title>Revisión Precompra Camión Premium · Serviruta</title>
+<title>Revisión Premium 120 Puntos · Serviruta</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
@@ -23,17 +23,18 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--dorado)}
 .shell{max-width:900px;margin:0 auto;padding:16px}
 
 /* HERO PREMIUM */
-.hero-prem{background:linear-gradient(135deg,rgba(212,175,55,0.12),rgba(232,33,10,0.05));border:1px solid rgba(212,175,55,0.4);border-radius:18px;padding:22px 24px;margin-bottom:18px;position:relative;overflow:hidden}
-.hero-prem::before{content:"";position:absolute;top:0;right:0;width:200px;height:100%;background:radial-gradient(circle at right,rgba(212,175,55,0.15),transparent 70%);pointer-events:none}
-.hero-tit{font-family:var(--display);font-weight:900;font-size:22px;color:var(--t1);letter-spacing:-0.5px;line-height:1.15;position:relative}
+.hero{background:linear-gradient(135deg,rgba(212,175,55,0.15),rgba(232,33,10,0.08));border:2px solid rgba(212,175,55,0.5);border-radius:18px;padding:24px;margin-bottom:18px;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;top:0;right:0;width:250px;height:100%;background:radial-gradient(circle at right,rgba(212,175,55,0.2),transparent 70%);pointer-events:none}
+.hero-tit{font-family:var(--display);font-weight:900;font-size:24px;color:var(--t1);letter-spacing:-0.5px;line-height:1.15;position:relative}
 .hero-tit em{color:var(--dorado);font-style:normal;background:linear-gradient(135deg,var(--dorado),var(--dorado-l));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.hero-desc{font-size:12px;color:var(--t2);margin-top:6px;line-height:1.5;max-width:520px;position:relative}
-.hero-badges{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;position:relative}
+.hero-desc{font-size:13px;color:var(--t2);margin-top:8px;line-height:1.5;max-width:520px;position:relative}
+.hero-badges{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap;position:relative}
 .hero-badge{padding:4px 10px;background:rgba(212,175,55,0.15);color:var(--dorado);border-radius:6px;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.05em}
-.hero-badge.precio{background:rgba(232,33,10,0.15);color:var(--rojo-l)}
-.hero-ficha{position:absolute;top:16px;right:20px;font-family:var(--mono);font-size:10px;color:var(--dorado);letter-spacing:0.1em;font-weight:700}
+.hero-badge.precio{background:rgba(232,33,10,0.2);color:var(--rojo-l);font-size:11px}
+.hero-ficha{position:absolute;top:18px;right:22px;font-family:var(--mono);font-size:11px;color:var(--dorado);letter-spacing:0.1em;font-weight:700;text-align:right}
+.hero-ficha small{display:block;color:var(--t3);font-size:9px;margin-top:2px;letter-spacing:0.15em}
 
-/* SECCIONES */
+/* SECCIONES DATOS */
 .form-sec{background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:12px}
 .form-tit{font-family:var(--display);font-weight:800;font-size:13px;color:var(--t1);margin-bottom:12px;display:flex;align-items:center;gap:8px;letter-spacing:-0.2px}
 .form-tit::before{content:"";width:3px;height:14px;background:var(--dorado);border-radius:2px}
@@ -43,14 +44,16 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--dorado)}
 .form-lbl:first-child{margin-top:0}
 
 /* PROGRESO */
-.progreso{background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px;display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center}
+.progreso{background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px;display:grid;grid-template-columns:repeat(5,1fr);gap:8px;text-align:center}
 .prog-item{padding:6px 0}
-.prog-num{font-family:var(--display);font-weight:900;font-size:22px;line-height:1}
+.prog-num{font-family:var(--display);font-weight:900;font-size:20px;line-height:1}
 .prog-lbl{font-family:var(--mono);font-size:8px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;margin-top:3px;font-weight:700}
 .prog-num.total{color:var(--t1)}
 .prog-num.ok{color:var(--verde)}
 .prog-num.atn{color:var(--amarillo)}
 .prog-num.crt{color:var(--rojo-l)}
+.prog-num.fotos{color:var(--dorado)}
+.prog-num.fotos.low{color:var(--rojo-l)}
 
 /* SECCIÓN COLAPSABLE */
 .seccion{background:var(--s1);border:1px solid var(--line);border-radius:14px;margin-bottom:10px;overflow:hidden}
@@ -96,6 +99,11 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--dorado)}
 .foto-x{position:relative}
 .foto-x button{position:absolute;top:-4px;right:-4px;background:var(--rojo);color:#fff;border:none;border-radius:50%;width:18px;height:18px;font-size:11px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center}
 
+/* CAMPOS ESPECIALES */
+.campo-especial{background:linear-gradient(135deg,rgba(96,165,250,0.05),var(--s2));border:1px solid rgba(96,165,250,0.3);border-radius:10px;padding:14px;margin-bottom:10px}
+.campo-especial-lbl{font-family:var(--mono);font-size:10px;color:var(--azul);letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.campo-especial textarea{background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px;color:var(--t1);font-family:var(--mono);font-size:12px;width:100%;resize:vertical;min-height:80px}
+
 /* VEREDICTO */
 .veredicto-sec{background:linear-gradient(135deg,rgba(212,175,55,0.08),var(--s1));border:1px solid rgba(212,175,55,0.4);border-radius:14px;padding:18px;margin-bottom:12px}
 .veredicto-opts{display:grid;grid-template-columns:1fr;gap:8px;margin-top:12px}
@@ -122,10 +130,8 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--dorado)}
 .total-est{flex:1;min-width:0}
 .total-lbl{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;font-weight:700}
 .total-num{font-family:var(--display);font-weight:800;font-size:17px;color:var(--dorado);line-height:1;margin-top:2px;letter-spacing:-0.5px}
-.btn-pri{background:var(--rojo);color:#fff;padding:14px 20px;border-radius:12px;font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:0.05em;cursor:pointer;white-space:nowrap;transition:all 150ms}
+.btn-pri{background:var(--verde);color:#000;padding:14px 20px;border-radius:12px;font-family:var(--display);font-weight:800;font-size:13px;letter-spacing:0.05em;cursor:pointer;white-space:nowrap;transition:all 150ms}
 .btn-pri:active{transform:scale(0.98)}
-.btn-pri.pdf{background:var(--dorado);color:#000}
-.btn-pri.save{background:var(--verde);color:#000}
 
 /* SUCCESS */
 .success{display:none;position:fixed;inset:0;background:var(--bg);z-index:100;padding:30px 20px;overflow-y:auto}
@@ -147,9 +153,12 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--dorado)}
 .toast.ok{border-color:var(--verde);color:var(--verde)}
 .toast.err{border-color:var(--rojo);color:var(--rojo-l)}
 
+.alert-fotos{background:linear-gradient(90deg,rgba(232,33,10,0.15),transparent);border:1px solid rgba(232,33,10,0.4);border-radius:10px;padding:10px 14px;margin-bottom:10px;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--rojo-l)}
+.alert-fotos.ok{background:linear-gradient(90deg,rgba(34,197,94,0.1),transparent);border-color:rgba(34,197,94,0.4);color:var(--verde)}
+
 @media(max-width:640px){
   .form-grid{grid-template-columns:1fr}
-  .progreso{grid-template-columns:repeat(2,1fr)}
+  .progreso{grid-template-columns:repeat(3,1fr)}
 }
 </style>
 </head>
@@ -158,28 +167,30 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--dorado)}
 <header class="bar">
   <button class="back" onclick="location.href='menu-coordinador.html'">← Volver</button>
   <div class="sigil">S</div>
-  <div class="title">Revisión Precompra Premium<small>Camión / Pesado · 75 puntos</small></div>
+  <div class="title">Revisión Premium 120 Puntos<small>Precompra Camión · Certificación técnica</small></div>
 </header>
 
 <div class="shell">
   
   <!-- HERO -->
-  <div class="hero-prem">
-    <div class="hero-ficha" id="hero-ficha">REV-PC-•••</div>
-    <div class="hero-tit">Revisión Precompra <em>Premium</em></div>
-    <div class="hero-desc">Inspección técnica completa de 75 puntos antes de la compra. Media jornada. Recomendación de compra con negociación estimada.</div>
+  <div class="hero">
+    <div class="hero-ficha" id="hero-ficha">REV-PC-•••<small>N° CERTIFICACIÓN</small></div>
+    <div class="hero-tit">Revisión <em>Premium 120</em></div>
+    <div class="hero-desc">Inspección técnica profunda de 5-6 horas. Ideal para camiones sobre $30M. Con escáner OBD-II, análisis de fluidos, prueba en ruta 15km y certificación técnica firmada.</div>
     <div class="hero-badges">
-      <span class="hero-badge">🔧 75 puntos</span>
-      <span class="hero-badge">📷 Fotos ilimitadas</span>
-      <span class="hero-badge">✍️ Firmas digitales</span>
-      <span class="hero-badge">📄 Reporte PDF</span>
-      <span class="hero-badge precio">💰 Desde $300.000</span>
+      <span class="hero-badge">🔧 120 puntos</span>
+      <span class="hero-badge">📡 Escáner OBD-II</span>
+      <span class="hero-badge">🛢️ Análisis fluidos</span>
+      <span class="hero-badge">🛣️ Ruta 15km</span>
+      <span class="hero-badge">📷 Mín. 30 fotos</span>
+      <span class="hero-badge">✍️ Certificación</span>
+      <span class="hero-badge precio">💰 $350.000</span>
     </div>
   </div>
   
-  <!-- DATOS -->
+  <!-- DATOS CLIENTE -->
   <div class="form-sec">
-    <div class="form-tit">👤 Datos del cliente comprador</div>
+    <div class="form-tit">👤 Cliente comprador</div>
     <div class="form-grid">
       <div class="form-full">
         <div class="form-lbl">Nombre completo</div>
@@ -192,8 +203,9 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--dorado)}
     </div>
   </div>
   
+  <!-- DATOS VEHÍCULO -->
   <div class="form-sec">
-    <div class="form-tit">🚛 Datos del vehículo a inspeccionar</div>
+    <div class="form-tit">🚛 Vehículo a inspeccionar</div>
     <div class="form-grid">
       <div><div class="form-lbl">Marca</div><input type="text" id="veh-marca" placeholder="Mercedes, Volvo, Scania..."></div>
       <div><div class="form-lbl">Modelo</div><input type="text" id="veh-modelo" placeholder="Actros, FH, R500..."></div>
@@ -207,7 +219,6 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--dorado)}
           <option>Diésel</option>
           <option>Gasolina</option>
           <option>GNC</option>
-          <option>Eléctrico</option>
         </select>
       </div>
       <div class="form-full"><div class="form-lbl">Color</div><input type="text" id="veh-color" placeholder="Blanco, rojo..."></div>
@@ -215,7 +226,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--dorado)}
   </div>
   
   <div class="form-sec">
-    <div class="form-tit">🏷️ Vendedor actual (dueño del camión)</div>
+    <div class="form-tit">🏷️ Vendedor actual</div>
     <div class="form-grid">
       <div><div class="form-lbl">Nombre</div><input type="text" id="ven-nombre" placeholder="Nombre o razón social"></div>
       <div><div class="form-lbl">Teléfono</div><input type="tel" id="ven-tel" placeholder="+56 9 ..."></div>
@@ -223,7 +234,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--dorado)}
   </div>
   
   <div class="form-sec">
-    <div class="form-tit">🔧 Técnico Serviruta a cargo</div>
+    <div class="form-tit">🔧 Técnico Serviruta certificador</div>
     <div class="form-grid">
       <div>
         <div class="form-lbl">Técnico</div>
@@ -245,48 +256,128 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--dorado)}
   
   <!-- PROGRESO -->
   <div class="progreso">
-    <div class="prog-item"><div class="prog-num total" id="p-total">0<span style="font-size:12px;color:var(--t3)">/75</span></div><div class="prog-lbl">Revisados</div></div>
-    <div class="prog-item"><div class="prog-num ok" id="p-ok">0</div><div class="prog-lbl">OK ✅</div></div>
-    <div class="prog-item"><div class="prog-num atn" id="p-atn">0</div><div class="prog-lbl">Atención 🟡</div></div>
-    <div class="prog-item"><div class="prog-num crt" id="p-crt">0</div><div class="prog-lbl">Crítico 🔴</div></div>
+    <div class="prog-item"><div class="prog-num total" id="p-total">0<span style="font-size:12px;color:var(--t3)">/120</span></div><div class="prog-lbl">Puntos</div></div>
+    <div class="prog-item"><div class="prog-num ok" id="p-ok">0</div><div class="prog-lbl">OK</div></div>
+    <div class="prog-item"><div class="prog-num atn" id="p-atn">0</div><div class="prog-lbl">Atención</div></div>
+    <div class="prog-item"><div class="prog-num crt" id="p-crt">0</div><div class="prog-lbl">Crítico</div></div>
+    <div class="prog-item"><div class="prog-num fotos low" id="p-fotos">0<span style="font-size:12px;color:var(--t3)">/30</span></div><div class="prog-lbl">Fotos</div></div>
+  </div>
+  
+  <!-- ALERTA FOTOS -->
+  <div class="alert-fotos" id="alerta-fotos">
+    <span style="font-size:20px">📷</span>
+    <span>Faltan <b id="fotos-faltan">30</b> fotos para cumplir el mínimo de certificación (30 requeridas)</span>
   </div>
   
   <!-- SECCIONES DE PUNTOS -->
   <div id="secciones"></div>
   
+  <!-- ESCÁNER OBD - CAMPO ESPECIAL -->
+  <div class="form-sec">
+    <div class="form-tit">📡 Escáner OBD-II · Códigos DTC</div>
+    <div class="campo-especial">
+      <div class="campo-especial-lbl">📋 Códigos DTC encontrados (activos + históricos)</div>
+      <textarea id="codigos-dtc" placeholder="Ej:&#10;P0299 - Turbo bajo boost - ACTIVO&#10;P0401 - EGR insuficiente - HISTÓRICO&#10;C0035 - Sensor ABS RD - ACTIVO"></textarea>
+      <div style="font-size:11px;color:var(--t3);margin-top:6px;font-family:var(--mono)">Escríbe uno por línea con formato: CÓDIGO - descripción - estado</div>
+    </div>
+    <div class="campo-especial" style="border-color:rgba(34,197,94,0.3);background:linear-gradient(135deg,rgba(34,197,94,0.05),var(--s2))">
+      <div class="campo-especial-lbl" style="color:var(--verde)">🗑️ Códigos borrados durante la revisión</div>
+      <textarea id="codigos-borrados" placeholder="Códigos que borraste y verificaste que no reaparecieron..."></textarea>
+    </div>
+  </div>
+  
+  <!-- ANÁLISIS DE FLUIDOS - CAMPO ESPECIAL -->
+  <div class="form-sec">
+    <div class="form-tit">🛢️ Análisis visual de fluidos</div>
+    <div class="form-grid">
+      <div>
+        <div class="form-lbl">Aceite motor · color</div>
+        <select id="aceite-color">
+          <option value="">—</option>
+          <option>Ámbar claro (bueno)</option>
+          <option>Marrón oscuro (uso normal)</option>
+          <option>Negro denso (cambio urgente)</option>
+          <option>Lechoso (agua presente)</option>
+        </select>
+      </div>
+      <div>
+        <div class="form-lbl">Aceite motor · olor</div>
+        <select id="aceite-olor">
+          <option value="">—</option>
+          <option>Normal</option>
+          <option>Combustible (dilución)</option>
+          <option>Quemado</option>
+          <option>Ácido</option>
+        </select>
+      </div>
+      <div>
+        <div class="form-lbl">Refrigerante · color</div>
+        <select id="refri-color">
+          <option value="">—</option>
+          <option>Verde/rosa limpio</option>
+          <option>Marrón oxidado</option>
+          <option>Con aceite flotando</option>
+          <option>Turbio con sedimentos</option>
+        </select>
+      </div>
+      <div>
+        <div class="form-lbl">Refrigerante · pH (tira)</div>
+        <input type="text" id="refri-ph" placeholder="Ej: 7.5">
+      </div>
+      <div class="form-full">
+        <div class="form-lbl">📄 Informe laboratorio (opcional)</div>
+        <input type="text" id="informe-lab" placeholder="URL/link al informe PDF externo (si se envió muestra)">
+      </div>
+    </div>
+  </div>
+  
+  <!-- PRUEBA DE RUTA - CAMPO ESPECIAL -->
+  <div class="form-sec">
+    <div class="form-tit">🛣️ Prueba en ruta · 15 km</div>
+    <div class="form-grid">
+      <div><div class="form-lbl">Km inicial</div><input type="number" id="ruta-km-ini" placeholder="850000"></div>
+      <div><div class="form-lbl">Km final</div><input type="number" id="ruta-km-fin" placeholder="850015"></div>
+      <div><div class="form-lbl">Ruta recorrida</div><input type="text" id="ruta-descripcion" placeholder="Ruta 5 sur Km 20-35"></div>
+      <div><div class="form-lbl">Duración (min)</div><input type="number" id="ruta-duracion" placeholder="25"></div>
+      <div><div class="form-lbl">Vel. máx alcanzada (km/h)</div><input type="number" id="ruta-vel-max" placeholder="90"></div>
+      <div><div class="form-lbl">Temp. motor sostenida (°C)</div><input type="number" id="ruta-temp" placeholder="88"></div>
+      <div class="form-full"><div class="form-lbl">Observaciones durante ruta</div><textarea id="ruta-obs" rows="3" placeholder="Comportamiento en pendiente, ruidos, cambios..." style="background:var(--s2);border:1px solid var(--line);border-radius:8px;padding:10px;color:var(--t1);font-family:var(--body);font-size:13px;width:100%;resize:vertical"></textarea></div>
+    </div>
+  </div>
+  
   <!-- VEREDICTO -->
   <div class="veredicto-sec">
-    <div class="form-tit">⚖️ Veredicto de la inspección</div>
-    <div style="font-size:12px;color:var(--t2);margin-top:8px">Basado en los hallazgos, ¿qué recomiendas al cliente comprador?</div>
+    <div class="form-tit">⚖️ Veredicto certificado</div>
+    <div style="font-size:12px;color:var(--t2);margin-top:8px">Basado en los 120 puntos revisados, ¿qué certifica el técnico?</div>
     <div class="veredicto-opts">
       <div class="v-opt" data-v="recomendar" onclick="setVeredicto('recomendar')">
         <div class="v-opt-tit">✅ Recomendar la compra</div>
-        <div class="v-opt-desc">Camión en buen estado, precio pedido justo. Sin observaciones críticas.</div>
+        <div class="v-opt-desc">Camión certificado en buen estado. Sin hallazgos críticos.</div>
       </div>
       <div class="v-opt" data-v="negociar" onclick="setVeredicto('negociar')">
         <div class="v-opt-tit">🟡 Comprar con negociación</div>
-        <div class="v-opt-desc">Tiene detalles corregibles. Sugerir descuento por los arreglos identificados.</div>
+        <div class="v-opt-desc">Hallazgos corregibles. Sugerir ajuste al precio pedido.</div>
       </div>
       <div class="v-opt" data-v="rechazar" onclick="setVeredicto('rechazar')">
         <div class="v-opt-tit">❌ No recomendar la compra</div>
-        <div class="v-opt-desc">Problemas críticos, riesgo alto, mejor buscar otra unidad.</div>
+        <div class="v-opt-desc">Problemas críticos que representan riesgo técnico y financiero.</div>
       </div>
     </div>
     <div id="veredicto-detalle" style="display:none;margin-top:12px">
       <div class="form-lbl" style="font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-bottom:6px">💰 Descuento sugerido de negociación (CLP)</div>
-      <input type="number" id="monto-negociacion" placeholder="Ej: 1500000">
+      <input type="number" id="monto-negociacion" placeholder="Ej: 2000000">
     </div>
     <div style="margin-top:12px">
-      <div class="form-lbl" style="font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-bottom:6px">📝 Observaciones finales del técnico</div>
+      <div class="form-lbl" style="font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-bottom:6px">📝 Observaciones finales del técnico certificador</div>
       <textarea id="observaciones" rows="4" placeholder="Resumen ejecutivo, recomendaciones específicas, plazos, prioridades..." style="background:var(--s2);border:1px solid var(--line);border-radius:8px;padding:10px 12px;color:var(--t1);font-family:var(--body);font-size:13px;width:100%;resize:vertical"></textarea>
     </div>
   </div>
   
   <!-- FIRMAS -->
   <div class="form-sec">
-    <div class="form-tit">✍️ Firmas digitales</div>
+    <div class="form-tit">✍️ Certificación firmada</div>
     <div class="firma-cont">
-      <div class="firma-lbl">🔧 Firma del técnico Serviruta</div>
+      <div class="firma-lbl">🔧 Firma del técnico certificador Serviruta</div>
       <canvas class="firma-canvas" id="firma-tec"></canvas>
       <div class="firma-actions">
         <button class="firma-btn" onclick="limpiarFirma('tec')">🗑️ Limpiar</button>
@@ -312,24 +403,23 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--dorado)}
       <div class="total-lbl">💰 Descuento sugerido</div>
       <div class="total-num" id="total-neg">$0</div>
     </div>
-    <button class="btn-pri save" onclick="guardar()">💾 Guardar</button>
+    <button class="btn-pri" onclick="guardar()">💾 Certificar y guardar</button>
   </div>
 </div>
 
-<!-- INPUT FOTO OCULTO -->
 <input type="file" id="foto-input" accept="image/*" capture="environment" style="display:none">
 
 <!-- SUCCESS -->
 <div class="success" id="success">
   <div class="success-inner">
-    <div class="success-icon">✅</div>
-    <div class="success-tit">Revisión guardada</div>
+    <div class="success-icon">💎</div>
+    <div class="success-tit">Certificación emitida</div>
     <div class="success-num" id="success-num">REV-PC-0001</div>
-    <div class="success-desc" id="success-desc">La ficha está lista. Puedes descargar el PDF con firmas y compartirla con el cliente.</div>
+    <div class="success-desc" id="success-desc">La certificación premium de 120 puntos está lista con firmas. Descarga el reporte PDF profesional.</div>
     <div class="success-acciones">
-      <button class="success-btn pdf" onclick="descargarPDF()">📄 Descargar PDF</button>
-      <a class="success-btn wa" id="success-wa" href="#" target="_blank">💬 Enviar por WhatsApp</a>
-      <button class="success-btn new" onclick="nuevaRevision()">➕ Nueva revisión</button>
+      <button class="success-btn pdf" onclick="descargarPDF()">📄 Descargar Certificación PDF</button>
+      <a class="success-btn wa" id="success-wa" href="#" target="_blank">💬 Enviar al cliente por WhatsApp</a>
+      <button class="success-btn new" onclick="nuevaRevision()">➕ Nueva certificación</button>
     </div>
   </div>
 </div>
@@ -340,110 +430,161 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--dorado)}
 var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
 var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
 
-// LOS 75 PUNTOS ORGANIZADOS EN 11 SECCIONES
+// LOS 120 PUNTOS ORGANIZADOS EN 14 SECCIONES
 var SECCIONES=[
   {id:'ident',icon:'📄',nombre:'Identificación y documentación',puntos:[
     {id:'vin_grabado',n:'VIN grabado en chasis',d:'Coincide con documentos'},
     {id:'placa_legible',n:'Placa y patente legibles',d:'Sin adulteraciones'},
-    {id:'km_concordante',n:'Kilometraje concordante',d:'Con documentos y estado real'},
-    {id:'revision_tecnica',n:'Revisión técnica vigente',d:'Al día'},
-    {id:'permiso_circulacion',n:'Permiso de circulación',d:'Al día'}
+    {id:'km_concordante',n:'Kilometraje concordante',d:'Con documentos y estado'},
+    {id:'revision_tecnica',n:'Revisión técnica vigente',d:'Certificado al día'},
+    {id:'permiso_circulacion',n:'Permiso de circulación',d:'Al día'},
+    {id:'soap_vigente',n:'SOAP vigente',d:'Póliza al día'},
+    {id:'padron_tid',n:'Padrón / TID vigente',d:'Sin anotaciones críticas'}
   ]},
-  {id:'motor',icon:'🔧',nombre:'Motor',puntos:[
-    {id:'motor_general',n:'Estado general al ojo',d:'Sin fugas, sin quemaduras'},
+  {id:'motor_visual',icon:'🔧',nombre:'Motor · Visual y funcional',puntos:[
+    {id:'motor_general',n:'Estado general al ojo',d:'Sin fugas evidentes'},
     {id:'arranque_frio',n:'Arranque en frío',d:'Tiempo, humo, respuesta'},
-    {id:'ralenti',n:'Ralentí estable',d:'Sin vibraciones anormales'},
+    {id:'ralenti',n:'Ralentí estable',d:'Sin vibraciones'},
     {id:'aceleracion_vacio',n:'Aceleración en vacío',d:'Respuesta y humo escape'},
     {id:'turbo_sonido',n:'Sonido del turbo',d:'Sin silbidos raros'},
-    {id:'compresion',n:'Compresión de cilindros',d:'Test con manómetro'},
-    {id:'nivel_aceite',n:'Nivel y estado del aceite',d:'Color, viscosidad'},
-    {id:'refrigerante',n:'Estado del refrigerante',d:'Nivel, color, sedimentos'},
-    {id:'correas_mangueras',n:'Correas y mangueras',d:'Fisuras, tensión'},
-    {id:'soportes_motor',n:'Soportes de motor',d:'Sin ruptura de gomas'},
+    {id:'fugas_aceite_bloque',n:'Fugas de aceite en bloque',d:'Cárter, cabezote'},
     {id:'fugas_combustible',n:'Fugas de combustible',d:'Ductos, bomba, inyectores'},
-    {id:'codigos_ecm',n:'Códigos de falla ECM',d:'Scanner OBD/diagnóstico'}
+    {id:'tapa_balancines',n:'Estado tapa balancines',d:'Sin fugas de aceite'},
+    {id:'retenes_cigueñal',n:'Retenes cigüeñal',d:'Delantero y trasero'},
+    {id:'correas_visibles',n:'Correas visibles',d:'Sin fisuras, tensión correcta'},
+    {id:'poleas_accesorios',n:'Poleas de accesorios',d:'Rodamientos sin ruido'},
+    {id:'soportes_motor',n:'Soportes de motor',d:'Sin ruptura de gomas'},
+    {id:'ventilador_viscoso',n:'Ventilador y viscoso',d:'Enganche correcto'},
+    {id:'bomba_agua',n:'Bomba de agua',d:'Sin fugas, sin ruidos'}
+  ]},
+  {id:'fluidos',icon:'🛢️',nombre:'Análisis visual de fluidos',puntos:[
+    {id:'aceite_nivel',n:'Nivel de aceite motor',d:'Entre min y max'},
+    {id:'aceite_visual',n:'Aceite motor - inspección visual',d:'Ver campo especial abajo'},
+    {id:'refri_nivel',n:'Nivel de refrigerante',d:'Estanque expansión'},
+    {id:'refri_visual',n:'Refrigerante - inspección visual',d:'Ver campo especial abajo'},
+    {id:'liquido_frenos',n:'Líquido de frenos',d:'Nivel y color'}
+  ]},
+  {id:'obd',icon:'📡',nombre:'Escáner OBD-II · Diagnóstico ECU',puntos:[
+    {id:'ecu_motor',n:'Comunicación ECU motor',d:'Lectura correcta'},
+    {id:'tcm_trans',n:'Comunicación TCM transmisión',d:'Lectura correcta'},
+    {id:'abs_scanner',n:'Comunicación ABS',d:'Lectura correcta'},
+    {id:'bcm_chassis',n:'Comunicación chassis/BCM',d:'Lectura correcta'},
+    {id:'dtc_motor_activos',n:'Códigos DTC activos motor',d:'Registrar en campo especial'},
+    {id:'dtc_abs_activos',n:'Códigos DTC activos ABS',d:'Registrar en campo especial'},
+    {id:'dtc_borrados',n:'Códigos históricos borrados',d:'Verificar que no reaparezcan'},
+    {id:'datos_live',n:'Datos live (RPM, temp, presiones)',d:'Rangos normales'}
+  ]},
+  {id:'emisiones',icon:'💨',nombre:'Emisiones · DPF/EGR/SCR',puntos:[
+    {id:'dpf_contrapresion',n:'DPF: contrapresión',d:'Dentro de rango'},
+    {id:'dpf_regeneraciones',n:'DPF: N° regeneraciones recientes',d:'Frecuencia normal'},
+    {id:'dpf_forzada',n:'DPF: regeneración forzada',d:'Exitosa'},
+    {id:'egr_apertura',n:'EGR: apertura sin humo',d:'Válvula funcional'},
+    {id:'egr_sensores',n:'EGR: sensores calibrados',d:'Sin códigos'},
+    {id:'adblue_nivel',n:'AdBlue: nivel + inyección',d:'Sistema activo'},
+    {id:'sensor_nox',n:'Sensor NOx',d:'Funcional'},
+    {id:'lambda_precat',n:'Lambda pre-catalizador',d:'Rango 0.1-0.9V'},
+    {id:'presion_escape',n:'Presión escape a RPM',d:'Dentro de rango'}
   ]},
   {id:'trans',icon:'⚙️',nombre:'Transmisión y embrague',puntos:[
-    {id:'embrague_estado',n:'Estado del embrague',d:'Recorrido pedal, patinaje'},
-    {id:'cambios_todos',n:'Cambios en todas las marchas',d:'Manual o automática'},
-    {id:'cambios_carga',n:'Cambios en carga (ruta)',d:'Sin trepidaciones'},
-    {id:'ruidos_caja',n:'Ruidos anormales caja',d:'Marcha atrás, retención'},
-    {id:'aceite_caja',n:'Nivel aceite de caja',d:'Sin metalizados'},
+    {id:'embrague_pedal',n:'Embrague: recorrido pedal',d:'Firme, sin bajones'},
+    {id:'embrague_patinaje',n:'Embrague: patinaje en 3ra',d:'Sin patinaje'},
+    {id:'cambios_manual',n:'Cambios: todas las marchas',d:'Sin dificultades'},
+    {id:'cambios_retrocesos',n:'Cambios: retrocesos',d:'Enganche limpio'},
+    {id:'sincronizados',n:'Sincronizados: sin ruidos',d:'En cambios rápidos'},
+    {id:'aceite_caja_nivel',n:'Nivel aceite de caja',d:'Sin metalizados'},
     {id:'cardan_crucetas',n:'Cardán y crucetas',d:'Sin juego, sin ruidos'}
   ]},
-  {id:'emisiones',icon:'💨',nombre:'DPF / EGR / Emisiones',puntos:[
-    {id:'dpf_estado',n:'Estado del DPF',d:'Regeneraciones recientes'},
-    {id:'egr_valvula',n:'Válvula EGR',d:'Estado y funcionamiento'},
-    {id:'adblue',n:'AdBlue / SCR',d:'Presencia y estado sistema'},
-    {id:'sensores_escape',n:'Sensores de escape',d:'Lambda, temperatura, presión'},
-    {id:'codigos_emisiones',n:'Códigos de emisiones',d:'Scanner'}
+  {id:'neumaticos_sistema',icon:'💨',nombre:'Sistemas neumáticos',puntos:[
+    {id:'compresor_presion',n:'Compresor: presión de trabajo',d:'8-10 bar'},
+    {id:'compresor_llenado',n:'Compresor: tiempo llenado 0-8bar',d:'Menor a 3 min'},
+    {id:'tanques_humedad',n:'Tanques: humedad',d:'Sin agua acumulada'},
+    {id:'tanques_fugas',n:'Tanques: fugas',d:'Presión estable'},
+    {id:'valvula_4vias',n:'Válvula 4 vías',d:'Funcional'},
+    {id:'valvula_reguladora',n:'Válvula reguladora',d:'Cortes correctos'},
+    {id:'valvulas_descarga',n:'Válvulas de descarga',d:'Estanqueidad'},
+    {id:'valv_freno_estac',n:'Válvulas freno estacionamiento',d:'Funcional'},
+    {id:'ductos_neumaticos',n:'Ductos y mangueras neumáticas',d:'Sin fisuras'}
   ]},
   {id:'frenos',icon:'🛑',nombre:'Frenos',puntos:[
-    {id:'frenos_servicio',n:'Frenos de servicio',d:'Aire, funcionamiento'},
-    {id:'freno_estac',n:'Freno de estacionamiento',d:'Efectividad'},
-    {id:'retardador',n:'Ralentizador / retardador',d:'Si aplica'},
-    {id:'pastillas_por_rueda',n:'Estado pastillas/tambores',d:'Por rueda, remanente'},
-    {id:'aire_compresor',n:'Sistema de aire',d:'Compresor, tanques, presión'},
-    {id:'abs_test',n:'ABS funcionamiento',d:'Sin luz de falla'},
-    {id:'valvulas_neumaticas',n:'Válvulas y mangueras',d:'Sin fugas, buen estado'}
+    {id:'frenos_carrera',n:'Frenos servicio en carrera',d:'Efectividad'},
+    {id:'freno_estac',n:'Freno estacionamiento',d:'Efectividad'},
+    {id:'retardador',n:'Ralentizador/retardador',d:'Si aplica'},
+    {id:'pastillas_rueda',n:'Pastillas/tambores por rueda',d:'Remanente por eje'},
+    {id:'sensores_desgaste',n:'Sensores desgaste',d:'Sin luz activa'},
+    {id:'abs_sensor_rueda',n:'ABS: sensor por rueda',d:'Todos comunican'},
+    {id:'abs_modulador',n:'ABS: modulador',d:'Sin fallas'},
+    {id:'ebs_comunicacion',n:'EBS: comunicación',d:'Sin códigos'},
+    {id:'valvulas_remolque',n:'Válvulas frenos remolque',d:'Si aplica'},
+    {id:'discos_estado',n:'Discos: deformación',d:'Sin alabeo'}
   ]},
   {id:'direccion',icon:'🛞',nombre:'Dirección y suspensión',puntos:[
     {id:'juego_volante',n:'Juego del volante',d:'Máximo aceptable'},
     {id:'bomba_hidraulica',n:'Bomba hidráulica dirección',d:'Sin ruidos, sin fugas'},
-    {id:'terminales_rotulas',n:'Terminales y rótulas',d:'Sin juego'},
-    {id:'amortiguadores',n:'Amortiguadores',d:'Test rebote, fugas'},
-    {id:'ballestas_susp',n:'Ballestas / suspensión neumática',d:'Sin fisuras'},
-    {id:'bujes',n:'Bujes y bujecillos',d:'Sin desgaste excesivo'},
-    {id:'alineacion_visual',n:'Alineación visual',d:'Desgaste neumáticos'}
+    {id:'cilindro_hidraulico',n:'Cilindro hidráulico dirección',d:'Sin fugas'},
+    {id:'terminales_dir',n:'Terminales dirección',d:'Sin juego'},
+    {id:'rotulas',n:'Rótulas',d:'Sin juego'},
+    {id:'amortiguadores_eje',n:'Amortiguadores por eje',d:'Test rebote'},
+    {id:'ballestas_fisuras',n:'Ballestas: fisuras',d:'Ninguna quebrada'},
+    {id:'ballestas_hojas',n:'Ballestas: hojas quebradas',d:'Contar por eje'},
+    {id:'suspension_neumatica',n:'Suspensión neumática (fuelles)',d:'Sin fugas'},
+    {id:'bujes_bujecillos',n:'Bujes y bujecillos',d:'Sin desgaste excesivo'}
   ]},
   {id:'chasis',icon:'🏗️',nombre:'Chasis y carrocería',puntos:[
-    {id:'marco_chasis',n:'Marco de chasis',d:'Soldaduras, deformaciones'},
-    {id:'travesanos',n:'Travesaños',d:'Sin fisuras'},
-    {id:'oxido_estructural',n:'Óxido / corrosión estructural',d:'Zonas críticas'},
-    {id:'golpes_ocultos',n:'Golpes ocultos',d:'Mediciones y simetría'},
-    {id:'pintura_reparaciones',n:'Pintura / repintados',d:'Uniformidad'},
-    {id:'puertas_cerraduras',n:'Puertas y cerraduras',d:'Funcionamiento'},
-    {id:'estanqueidad_cabina',n:'Estanqueidad cabina',d:'Sin filtraciones'}
+    {id:'marco_soldaduras',n:'Marco chasis: soldaduras',d:'Originales'},
+    {id:'marco_deformaciones',n:'Marco chasis: deformaciones',d:'Ninguna'},
+    {id:'travesanos',n:'Travesaños: fisuras',d:'Sin fisuras'},
+    {id:'oxido_estructural',n:'Óxido estructural',d:'Zonas críticas'},
+    {id:'golpes_ocultos',n:'Golpes ocultos: mediciones',d:'Simetría'},
+    {id:'simetria_ejes',n:'Simetría de ejes',d:'Alineados'},
+    {id:'pintura_repintados',n:'Pintura: repintados',d:'Uniformidad'},
+    {id:'vidrios_fisuras',n:'Vidrios: fisuras',d:'Sin fisuras críticas'},
+    {id:'puertas_cerraduras',n:'Puertas: cerraduras',d:'Funcionamiento'},
+    {id:'estanqueidad_cabina',n:'Estanqueidad cabina',d:'Sin filtraciones'},
+    {id:'guardafangos',n:'Guardafangos',d:'Sin rupturas'}
   ]},
   {id:'electrico',icon:'⚡',nombre:'Sistema eléctrico',puntos:[
-    {id:'bateria_voltaje',n:'Batería(s) — voltaje y estado',d:'Con scanner de batería'},
-    {id:'alternador_carga',n:'Alternador — carga',d:'13.5-14.5V con motor'},
-    {id:'motor_partida',n:'Motor de partida',d:'Arranque limpio'},
-    {id:'luces_exteriores',n:'Luces exteriores completas',d:'Delanteras, traseras, señalización'},
-    {id:'tablero_instrumentos',n:'Tablero e instrumentos',d:'Todos funcionan'},
+    {id:'baterias_voltaje',n:'Baterías: voltaje',d:'12.4V+ en reposo'},
+    {id:'baterias_densidad',n:'Baterías: densidad/estado',d:'Con densímetro'},
+    {id:'alternador_carga',n:'Alternador: carga',d:'13.5-14.5V'},
+    {id:'motor_partida',n:'Motor partida: consumo',d:'Amperaje normal'},
+    {id:'luces_exteriores',n:'Luces exteriores completas',d:'Todas funcionan'},
+    {id:'luces_interiores',n:'Luces interiores',d:'Cabina, cargas'},
+    {id:'tablero_instrumentos',n:'Tablero e instrumentos',d:'Todos leen'},
     {id:'testigos_encendidos',n:'Testigos encendidos',d:'Ninguno anormal'},
-    {id:'instalacion_cabina',n:'Instalación cabina',d:'Interruptores, radio, A/C'}
+    {id:'fusibles_relays',n:'Fusibles y relays',d:'Sin quemados'}
   ]},
   {id:'ruedas',icon:'🛞',nombre:'Neumáticos y ruedas',puntos:[
-    {id:'dibujo_por_rueda',n:'Dibujo remanente por posición',d:'En mm, cada neumático'},
-    {id:'antiguedad_dot',n:'Antigüedad (código DOT)',d:'Semana/año'},
-    {id:'desgaste_irregular',n:'Desgaste irregular',d:'Indicador de alineación'},
-    {id:'llantas_estado',n:'Llantas',d:'Grietas, golpes, óxido'},
-    {id:'pernos_esparragos',n:'Pernos y espárragos',d:'Torque, integridad'},
-    {id:'rueda_auxiliar',n:'Rueda auxiliar / repuesto',d:'Estado, sujeción'}
+    {id:'dibujo_por_pos',n:'Dibujo remanente por posición',d:'En mm cada uno'},
+    {id:'antiguedad_dot',n:'Antigüedad DOT',d:'Semana/año'},
+    {id:'desgaste_irregular',n:'Desgaste irregular',d:'Indicador alineación'},
+    {id:'presiones_actuales',n:'Presiones actuales vs recom.',d:'Todas correctas'},
+    {id:'llantas_estado',n:'Llantas: grietas/golpes',d:'Sin daños'},
+    {id:'pernos_esparragos',n:'Pernos y espárragos',d:'Torque correcto'},
+    {id:'rueda_auxiliar',n:'Rueda auxiliar/repuesto',d:'Estado y sujeción'}
   ]},
   {id:'cabina',icon:'🚪',nombre:'Cabina y confort',puntos:[
     {id:'asiento_conductor',n:'Asiento conductor',d:'Regulaciones, estado'},
-    {id:'cinturones_seg',n:'Cinturones de seguridad',d:'Funcionamiento retracción'},
-    {id:'aire_calef',n:'Aire acondicionado / calefacción',d:'Ambos funcionan'},
-    {id:'vidrios_fisuras',n:'Vidrios',d:'Sin fisuras, funcionamiento'},
+    {id:'cinturones_seg',n:'Cinturones de seguridad',d:'Retracción'},
+    {id:'aire_calef',n:'Aire acond. + calefacción',d:'Ambos funcionan'},
     {id:'espejos_ext',n:'Espejos exteriores',d:'Ajustes y estado'},
-    {id:'bocina_test',n:'Bocina',d:'Funciona correctamente'},
-    {id:'cuenta_km',n:'Cuenta kilómetros',d:'Concordante, sin manipulación'},
+    {id:'bocina',n:'Bocina',d:'Funcional'},
+    {id:'cuenta_km_manip',n:'Cuenta km sin manipulación',d:'Concordante'},
     {id:'tacografo',n:'Tacógrafo (si aplica)',d:'Vigente y calibrado'}
   ]},
-  {id:'ruta',icon:'🛣️',nombre:'Prueba de ruta',puntos:[
-    {id:'estabilidad_velocidad',n:'Estabilidad a velocidad',d:'Sin desviaciones ni vibraciones'},
-    {id:'ruidos_en_carga',n:'Ruidos anormales bajo carga',d:'Trepidaciones, golpes'},
-    {id:'comportamiento_pendiente',n:'Comportamiento en pendiente',d:'Fuerza motor, cambios'},
-    {id:'frenos_ruta',n:'Frenos en ruta',d:'Frenada firme, sin tirones'},
-    {id:'temperatura_sostenida',n:'Temperatura motor sostenida',d:'Sin recalentamiento'}
+  {id:'ruta',icon:'🛣️',nombre:'Prueba de ruta 15 km',puntos:[
+    {id:'aceleracion_0_60',n:'Aceleración 0-60 km/h',d:'Tiempo esperado'},
+    {id:'estabilidad_crucero',n:'Estabilidad a velocidad crucero',d:'Sin desviaciones'},
+    {id:'comportamiento_curvas',n:'Comportamiento en curvas',d:'Sin ruidos'},
+    {id:'comportamiento_pendiente',n:'Comportamiento en pendiente',d:'Fuerza motor'},
+    {id:'frenado_emergencia',n:'Frenado en emergencia',d:'Metros de detención'},
+    {id:'temp_sostenida',n:'Temperatura motor sostenida',d:'Sin recalentamiento'},
+    {id:'cambios_en_carga',n:'Cambios en carga',d:'Sin trepidaciones'}
   ]}
 ]
 
 var estado={}
 var notas={}
-var fotos={} // {punto_id: [{data:base64, ts}]}
+var fotos={}
 var CLIENTES=[]
 var CLIENTE_ID=null
 var VEREDICTO=null
@@ -451,6 +592,7 @@ var FIRMAS={tec:null, cli:null}
 var puntoActualFoto=null
 var NUMERO_FICHA=null
 var REVISION_ID=null
+var MIN_FOTOS=30
 
 function toast(msg,tipo){
   var t=document.getElementById('toast')
@@ -479,7 +621,6 @@ async function sbPost(path,data,repr){
   return repr?await r.json():true
 }
 
-// AUTOCOMPLETE CLIENTE
 async function cargarClientes(){
   CLIENTES=await sbGet('clientes?select=id,nombre,rut,telefono_normalizado&order=nombre.asc&limit=1000')
   var dl=document.getElementById('clientes-list')
@@ -499,7 +640,6 @@ async function cargarClientes(){
   })
 }
 
-// RENDERIZAR SECCIONES
 function renderSecciones(){
   var cont=document.getElementById('secciones')
   var html=''
@@ -566,8 +706,7 @@ function contarSeccion(sec){
 }
 
 function toggleSeccion(id){
-  var el=document.getElementById('sec-'+id)
-  el.classList.toggle('abierta')
+  document.getElementById('sec-'+id).classList.toggle('abierta')
 }
 
 function marcar(id, st){
@@ -608,6 +747,12 @@ function actualizarBadgesSeccion(puntoId){
   })
 }
 
+function contarFotosTotales(){
+  var total=0
+  Object.keys(fotos).forEach(function(k){total+=fotos[k].length})
+  return total
+}
+
 function actualizarTotales(){
   var ok=0,atn=0,crt=0
   Object.keys(estado).forEach(function(k){
@@ -616,10 +761,28 @@ function actualizarTotales(){
     else if(estado[k]==='critico') crt++
   })
   var total=ok+atn+crt
-  document.getElementById('p-total').innerHTML=total+'<span style="font-size:12px;color:var(--t3)">/75</span>'
+  var totalFotos=contarFotosTotales()
+  
+  document.getElementById('p-total').innerHTML=total+'<span style="font-size:12px;color:var(--t3)">/120</span>'
   document.getElementById('p-ok').textContent=ok
   document.getElementById('p-atn').textContent=atn
   document.getElementById('p-crt').textContent=crt
+  document.getElementById('p-fotos').innerHTML=totalFotos+'<span style="font-size:12px;color:var(--t3)">/30</span>'
+  
+  var elFotosNum=document.getElementById('p-fotos')
+  if(totalFotos>=MIN_FOTOS) elFotosNum.classList.remove('low')
+  else elFotosNum.classList.add('low')
+  
+  // Alerta fotos
+  var alerta=document.getElementById('alerta-fotos')
+  if(totalFotos>=MIN_FOTOS){
+    alerta.classList.add('ok')
+    alerta.innerHTML='<span style="font-size:20px">✅</span><span><b>'+totalFotos+' fotos</b> · Cumple el mínimo de certificación</span>'
+  } else {
+    alerta.classList.remove('ok')
+    alerta.innerHTML='<span style="font-size:20px">📷</span><span>Faltan <b id="fotos-faltan">'+(MIN_FOTOS-totalFotos)+'</b> fotos para cumplir el mínimo de certificación ('+MIN_FOTOS+' requeridas)</span>'
+  }
+  
   actualizarMontoNegociacion()
 }
 
@@ -644,13 +807,13 @@ document.getElementById('foto-input').addEventListener('change',async function(e
     if(!fotos[puntoActualFoto]) fotos[puntoActualFoto]=[]
     fotos[puntoActualFoto].push({data:comprimida, ts:Date.now()})
     renderSecciones()
-    // Re-abrir sección
     var sec=SECCIONES.find(function(s){return s.puntos.find(function(p){return p.id===puntoActualFoto})})
     if(sec){
       var el=document.getElementById('sec-'+sec.id)
       if(el) el.classList.add('abierta')
     }
-    toast('✅ Foto agregada','ok')
+    actualizarTotales()
+    toast('✅ Foto agregada ('+contarFotosTotales()+'/30)','ok')
   } catch(err){
     toast('❌ Error: '+err.message,'err')
   }
@@ -691,6 +854,7 @@ function borrarFoto(puntoId, idx){
     var el=document.getElementById('sec-'+sec.id)
     if(el) el.classList.add('abierta')
   }
+  actualizarTotales()
 }
 
 function verFoto(puntoId, idx){
@@ -699,7 +863,6 @@ function verFoto(puntoId, idx){
   w.document.write('<html><body style="margin:0;background:#000;display:flex;align-items:center;justify-content:center;min-height:100vh"><img src="'+f.data+'" style="max-width:100%;max-height:100vh"></body></html>')
 }
 
-// VEREDICTO
 function setVeredicto(v){
   VEREDICTO=v
   document.querySelectorAll('.v-opt').forEach(function(el){el.classList.remove('selected')})
@@ -707,7 +870,7 @@ function setVeredicto(v){
   document.getElementById('veredicto-detalle').style.display=v==='negociar'?'block':'none'
 }
 
-// FIRMAS CANVAS
+// FIRMAS
 function setupFirma(id){
   var canvas=document.getElementById('firma-'+id)
   canvas.width=canvas.offsetWidth
@@ -747,7 +910,6 @@ function limpiarFirma(id){
 
 function confirmarFirma(id){
   var canvas=document.getElementById('firma-'+id)
-  // Verificar si hay dibujo
   var ctx=canvas.getContext('2d')
   var pixels=ctx.getImageData(0,0,canvas.width,canvas.height).data
   var haypx=false
@@ -757,7 +919,6 @@ function confirmarFirma(id){
   toast('✅ Firma '+(id==='tec'?'técnico':'cliente')+' confirmada','ok')
 }
 
-// LISTENER PARA EL MONTO
 setTimeout(function(){
   var mn=document.getElementById('monto-negociacion')
   if(mn) mn.addEventListener('input',actualizarMontoNegociacion)
@@ -769,20 +930,23 @@ async function guardar(){
   var tecnico=document.getElementById('tec-nombre').value
   var patente=document.getElementById('veh-patente').value.trim().toUpperCase()
   var puntosRevisados=Object.keys(estado).length
+  var totalFotos=contarFotosTotales()
   
   if(!cliente){toast('❌ Completa el nombre del cliente','err');return}
   if(!tecnico){toast('❌ Selecciona técnico','err');return}
   if(!patente){toast('❌ Ingresa la patente','err');return}
-  if(puntosRevisados<50){
-    if(!confirm('Solo has revisado '+puntosRevisados+' de 75 puntos. ¿Guardar de todas formas?')) return
+  if(puntosRevisados<80){
+    if(!confirm('Has revisado '+puntosRevisados+' de 120 puntos (mínimo recomendado 80). ¿Guardar de todas formas?')) return
+  }
+  if(totalFotos<MIN_FOTOS){
+    if(!confirm('Tienes '+totalFotos+' fotos (mínimo '+MIN_FOTOS+' para certificación). ¿Guardar sin certificar?')) return
   }
   if(!VEREDICTO){toast('❌ Selecciona veredicto','err');return}
   if(!FIRMAS.tec){toast('❌ Falta firma del técnico','err');return}
   if(!FIRMAS.cli){toast('❌ Falta firma del cliente','err');return}
   
-  toast('💾 Guardando...')
+  toast('💾 Guardando certificación...')
   
-  // Generar número de ficha
   try {
     var numR=await fetch(SB_URL+'/rest/v1/rpc/generar_numero_ficha_revision',{
       method:'POST',
@@ -792,13 +956,11 @@ async function guardar(){
     NUMERO_FICHA=numR.ok?await numR.json():'REV-PC-'+Date.now()
   } catch(e){NUMERO_FICHA='REV-PC-'+Date.now()}
   
-  // Consolidar puntos
   var puntosData={}
   Object.keys(estado).forEach(function(k){
     puntosData[k]={estado:estado[k],nota:notas[k]||''}
   })
   
-  // Consolidar fotos
   var fotosData=[]
   Object.keys(fotos).forEach(function(k){
     fotos[k].forEach(function(f){
@@ -810,8 +972,30 @@ async function guardar(){
   var atn=Object.values(estado).filter(function(x){return x==='atencion'}).length
   var crt=Object.values(estado).filter(function(x){return x==='critico'}).length
   
+  var codigosDtcArr=(document.getElementById('codigos-dtc').value||'').split('\n').filter(function(l){return l.trim()}).map(function(l){return {codigo:l.trim(),tipo:'encontrado'}})
+  var borrArr=(document.getElementById('codigos-borrados').value||'').split('\n').filter(function(l){return l.trim()}).map(function(l){return {codigo:l.trim(),tipo:'borrado'}})
+  var codigosDtc=codigosDtcArr.concat(borrArr)
+  
+  var analisisAceite={
+    aceite_color:document.getElementById('aceite-color').value,
+    aceite_olor:document.getElementById('aceite-olor').value,
+    refri_color:document.getElementById('refri-color').value,
+    refri_ph:document.getElementById('refri-ph').value
+  }
+  
+  var pruebaRuta={
+    km_inicial:parseInt(document.getElementById('ruta-km-ini').value)||null,
+    km_final:parseInt(document.getElementById('ruta-km-fin').value)||null,
+    descripcion:document.getElementById('ruta-descripcion').value,
+    duracion_min:parseInt(document.getElementById('ruta-duracion').value)||null,
+    velocidad_maxima:parseInt(document.getElementById('ruta-vel-max').value)||null,
+    temperatura_sostenida:parseInt(document.getElementById('ruta-temp').value)||null,
+    observaciones:document.getElementById('ruta-obs').value
+  }
+  
   var data={
     numero_ficha:NUMERO_FICHA,
+    certificacion_numero:NUMERO_FICHA,
     cliente_nombre:cliente,
     cliente_rut:document.getElementById('cli-rut').value.trim()||null,
     cliente_telefono:document.getElementById('cli-tel').value.trim()||null,
@@ -836,6 +1020,11 @@ async function guardar(){
     total_atencion:atn,
     total_criticos:crt,
     puntos_revisados:puntosRevisados,
+    foto_count:totalFotos,
+    codigos_dtc:codigosDtc,
+    analisis_aceite:analisisAceite,
+    informe_laboratorio_url:document.getElementById('informe-lab').value.trim()||null,
+    prueba_ruta:pruebaRuta,
     veredicto:VEREDICTO,
     monto_negociacion_sugerido:parseInt(document.getElementById('monto-negociacion').value)||null,
     observaciones_finales:document.getElementById('observaciones').value.trim()||null,
@@ -843,7 +1032,7 @@ async function guardar(){
     firma_cliente:FIRMAS.cli,
     firma_tecnico_fecha:new Date().toISOString(),
     firma_cliente_fecha:new Date().toISOString(),
-    precio_servicio:300000
+    precio_servicio:350000
   }
   
   try {
@@ -857,24 +1046,23 @@ async function guardar(){
 
 function mostrarSuccess(){
   document.getElementById('success-num').textContent=NUMERO_FICHA
-  var desc='Ficha '+NUMERO_FICHA+' con firmas guardada. '
+  var desc='Certificación '+NUMERO_FICHA+' emitida con '+contarFotosTotales()+' fotos y firmas digitales. '
   if(VEREDICTO==='recomendar') desc+='✅ Recomendaste la compra.'
   else if(VEREDICTO==='negociar') desc+='🟡 Compra con negociación.'
   else desc+='❌ No recomendaste la compra.'
   document.getElementById('success-desc').textContent=desc
   
-  // Link WhatsApp
   var tel=document.getElementById('cli-tel').value.replace(/[^0-9]/g,'')
   if(tel.length===9) tel='56'+tel
   if(tel){
-    var msg='Hola! Aquí tienes el resumen de la Revisión Precompra Premium '+NUMERO_FICHA+':\n\n'
+    var msg='Hola! Aquí tienes el resumen de tu Revisión Premium 120 puntos '+NUMERO_FICHA+':\n\n'
     msg+='🚛 Vehículo: '+document.getElementById('veh-marca').value+' '+document.getElementById('veh-modelo').value+' '+(document.getElementById('veh-patente').value||'')+'\n'
     var vLbl=VEREDICTO==='recomendar'?'✅ Recomendamos la compra':(VEREDICTO==='negociar'?'🟡 Comprar con negociación':'❌ No recomendamos la compra')
     msg+='⚖️ Veredicto: '+vLbl+'\n'
     if(VEREDICTO==='negociar'&&document.getElementById('monto-negociacion').value){
       msg+='💰 Descuento sugerido: '+fmt(parseInt(document.getElementById('monto-negociacion').value))+'\n'
     }
-    msg+='\nPuedes descargar el reporte completo en PDF con firmas.\n\n— Serviruta'
+    msg+='\n🔧 Ficha certificada con 120 puntos revisados y firmas.\n\n— Serviruta'
     document.getElementById('success-wa').href='https://wa.me/'+tel+'?text='+encodeURIComponent(msg)
   } else {
     document.getElementById('success-wa').style.display='none'
@@ -884,9 +1072,8 @@ function mostrarSuccess(){
   window.scrollTo(0,0)
 }
 
-// PDF
 async function descargarPDF(){
-  toast('📄 Generando PDF...')
+  toast('📄 Generando certificación PDF...')
   await new Promise(function(r){setTimeout(r,100)})
   
   try {
@@ -895,30 +1082,31 @@ async function descargarPDF(){
     var pw=210, ph=297
     var y=0
     
-    // HEADER
+    // HEADER PREMIUM
+    doc.setFillColor(212,175,55)
+    doc.rect(0,0,pw,32,'F')
     doc.setFillColor(232,33,10)
-    doc.rect(0,0,pw,30,'F')
-    doc.setTextColor(255,255,255)
+    doc.rect(0,32,pw,3,'F')
+    doc.setTextColor(0,0,0)
     doc.setFont('helvetica','bold')
-    doc.setFontSize(20)
+    doc.setFontSize(22)
     doc.text('SERVIRUTA',15,15)
     doc.setFontSize(11)
     doc.setFont('helvetica','normal')
-    doc.text('REVISIÓN PRECOMPRA PREMIUM',15,22)
+    doc.text('CERTIFICACIÓN PREMIUM 120 PUNTOS',15,22)
     doc.setFontSize(9)
-    doc.text('Camión / Vehículo pesado · 75 puntos técnicos',15,27)
-    
-    doc.setFontSize(10)
+    doc.text('Revisión Precompra Camión · Análisis técnico y ruta 15km',15,28)
+    doc.setFontSize(11)
     doc.setFont('helvetica','bold')
     doc.text(NUMERO_FICHA||'',pw-15,15,{align:'right'})
     doc.setFontSize(8)
     doc.setFont('helvetica','normal')
     doc.text(new Date().toLocaleDateString('es-CL'),pw-15,20,{align:'right'})
+    doc.text(contarFotosTotales()+' fotos · 120 pts',pw-15,25,{align:'right'})
     
-    y=38
+    y=42
     doc.setTextColor(0,0,0)
     
-    // DATOS
     function addSec(titulo){
       doc.setFillColor(240,240,240)
       doc.rect(15,y-3,pw-30,6,'F')
@@ -934,7 +1122,7 @@ async function descargarPDF(){
       doc.setFont('helvetica','bold')
       doc.text(lbl+':',17,y)
       doc.setFont('helvetica','normal')
-      doc.text(String(val||'—').substring(0,80),50,y)
+      doc.text(String(val||'—').substring(0,80),55,y)
       y+=5
     }
     
@@ -945,12 +1133,13 @@ async function descargarPDF(){
     addRow('Email',document.getElementById('cli-email').value)
     y+=2
     
-    addSec('VEHÍCULO INSPECCIONADO')
+    addSec('VEHÍCULO CERTIFICADO')
     addRow('Marca / Modelo',document.getElementById('veh-marca').value+' '+document.getElementById('veh-modelo').value)
     addRow('Año',document.getElementById('veh-anio').value)
     addRow('Patente',document.getElementById('veh-patente').value)
     addRow('VIN',document.getElementById('veh-vin').value)
-    addRow('Kilometraje',(document.getElementById('veh-km').value||'').toLocaleString?parseInt(document.getElementById('veh-km').value).toLocaleString('es-CL')+' km':document.getElementById('veh-km').value)
+    var km=document.getElementById('veh-km').value
+    addRow('Kilometraje',km?parseInt(km).toLocaleString('es-CL')+' km':'—')
     addRow('Combustible',document.getElementById('veh-comb').value)
     y+=2
     
@@ -959,7 +1148,7 @@ async function descargarPDF(){
     addRow('Teléfono',document.getElementById('ven-tel').value)
     y+=2
     
-    addSec('TÉCNICO SERVIRUTA')
+    addSec('TÉCNICO CERTIFICADOR SERVIRUTA')
     addRow('Nombre',document.getElementById('tec-nombre').value)
     addRow('RUT',document.getElementById('tec-rut').value)
     addRow('Ubicación',document.getElementById('ubicacion').value)
@@ -977,7 +1166,7 @@ async function descargarPDF(){
     doc.setTextColor(0,0,0)
     doc.setFont('helvetica','bold')
     doc.setFontSize(11)
-    doc.text('RESUMEN DE HALLAZGOS · '+totalRev+' / 75 puntos revisados',17,y+3)
+    doc.text('RESUMEN · '+totalRev+' / 120 puntos + '+contarFotosTotales()+' fotos',17,y+3)
     y+=13
     doc.setFontSize(10)
     doc.text('✓ OK: '+ok,20,y)
@@ -985,7 +1174,58 @@ async function descargarPDF(){
     doc.text('✗ Críticos: '+crt,110,y)
     y+=8
     
-    // POR SECCIÓN
+    // ESCANNER DTC
+    var dtcTxt=document.getElementById('codigos-dtc').value
+    if(dtcTxt){
+      if(y>ph-40){doc.addPage();y=15}
+      addSec('📡 ESCÁNER OBD-II · CÓDIGOS DTC')
+      var dtcLines=doc.splitTextToSize(dtcTxt, pw-34)
+      dtcLines.forEach(function(l){
+        if(y>ph-15){doc.addPage();y=15}
+        doc.text(l,17,y);y+=5
+      })
+      y+=3
+    }
+    
+    // ANÁLISIS FLUIDOS
+    var aColor=document.getElementById('aceite-color').value
+    if(aColor){
+      if(y>ph-40){doc.addPage();y=15}
+      addSec('🛢️ ANÁLISIS DE FLUIDOS')
+      addRow('Aceite motor - color',aColor)
+      addRow('Aceite motor - olor',document.getElementById('aceite-olor').value)
+      addRow('Refrigerante - color',document.getElementById('refri-color').value)
+      addRow('Refrigerante - pH',document.getElementById('refri-ph').value)
+      var inf=document.getElementById('informe-lab').value
+      if(inf) addRow('Informe laboratorio',inf)
+      y+=2
+    }
+    
+    // PRUEBA RUTA
+    var rutaKm=document.getElementById('ruta-km-ini').value
+    if(rutaKm){
+      if(y>ph-40){doc.addPage();y=15}
+      addSec('🛣️ PRUEBA DE RUTA · 15 KM')
+      addRow('Km inicial → final',rutaKm+' → '+document.getElementById('ruta-km-fin').value)
+      addRow('Ruta',document.getElementById('ruta-descripcion').value)
+      addRow('Duración',document.getElementById('ruta-duracion').value+' min')
+      addRow('Vel. máx alcanzada',document.getElementById('ruta-vel-max').value+' km/h')
+      addRow('Temp. sostenida',document.getElementById('ruta-temp').value+' °C')
+      var rObs=document.getElementById('ruta-obs').value
+      if(rObs){
+        doc.setFont('helvetica','bold')
+        doc.text('Observaciones ruta:',17,y);y+=5
+        doc.setFont('helvetica','normal')
+        var obsLines=doc.splitTextToSize(rObs, pw-34)
+        obsLines.forEach(function(l){
+          if(y>ph-15){doc.addPage();y=15}
+          doc.text(l,17,y);y+=5
+        })
+      }
+      y+=3
+    }
+    
+    // DETALLE POR SECCIÓN
     SECCIONES.forEach(function(s){
       if(y>ph-50){doc.addPage();y=15}
       var st=contarSeccion(s)
@@ -995,7 +1235,7 @@ async function descargarPDF(){
       doc.rect(15,y-3,pw-30,6,'F')
       doc.setFont('helvetica','bold')
       doc.setFontSize(10)
-      doc.text(s.icon+' '+s.nombre.toUpperCase()+' ('+st.rev+' revisados)',17,y+1)
+      doc.text(s.icon+' '+s.nombre.toUpperCase()+' ('+st.rev+'/'+s.puntos.length+')',17,y+1)
       y+=8
       doc.setFontSize(8)
       s.puntos.forEach(function(p){
@@ -1008,12 +1248,10 @@ async function descargarPDF(){
         if(notas[p.id]){
           y+=4
           doc.setFont('helvetica','italic')
-          doc.setFontSize(8)
           doc.setTextColor(100,100,100)
           var noteLines=doc.splitTextToSize('    → '+notas[p.id], pw-40)
           noteLines.forEach(function(l){doc.text(l,22,y);y+=4})
           doc.setTextColor(0,0,0)
-          doc.setFontSize(8)
         }
         y+=5
       })
@@ -1029,20 +1267,20 @@ async function descargarPDF(){
     doc.setFont('helvetica','bold')
     doc.setFontSize(12)
     var vLbl=VEREDICTO==='recomendar'?'RECOMENDAMOS LA COMPRA':(VEREDICTO==='negociar'?'COMPRAR CON NEGOCIACIÓN':'NO RECOMENDAMOS LA COMPRA')
-    doc.text('VEREDICTO: '+vLbl,17,y+3)
+    doc.text('VEREDICTO CERTIFICADO: '+vLbl,17,y+3)
     y+=15
     doc.setTextColor(0,0,0)
     doc.setFontSize(9)
     
     if(VEREDICTO==='negociar'&&document.getElementById('monto-negociacion').value){
       doc.setFont('helvetica','bold')
-      doc.text('Descuento sugerido de negociación: '+fmt(parseInt(document.getElementById('monto-negociacion').value)),17,y)
+      doc.text('Descuento sugerido: '+fmt(parseInt(document.getElementById('monto-negociacion').value)),17,y)
       y+=8
     }
     
     if(document.getElementById('observaciones').value){
       doc.setFont('helvetica','bold')
-      doc.text('Observaciones del técnico:',17,y);y+=5
+      doc.text('Observaciones del certificador:',17,y);y+=5
       doc.setFont('helvetica','normal')
       var obsLines=doc.splitTextToSize(document.getElementById('observaciones').value, pw-34)
       obsLines.forEach(function(l){
@@ -1056,10 +1294,10 @@ async function descargarPDF(){
     if(y>ph-60){doc.addPage();y=15}
     doc.setFont('helvetica','bold')
     doc.setFontSize(10)
-    doc.text('FIRMAS',17,y);y+=6
+    doc.text('CERTIFICACIÓN FIRMADA',17,y);y+=6
     doc.setFont('helvetica','normal')
     doc.setFontSize(9)
-    doc.text('Técnico Serviruta',20,y)
+    doc.text('Técnico certificador',20,y)
     doc.text('Cliente comprador',110,y);y+=3
     if(FIRMAS.tec) doc.addImage(FIRMAS.tec,'PNG',20,y,70,25)
     if(FIRMAS.cli) doc.addImage(FIRMAS.cli,'PNG',110,y,70,25)
@@ -1075,26 +1313,23 @@ async function descargarPDF(){
     doc.text(new Date().toLocaleString('es-CL'),20,y)
     doc.text(new Date().toLocaleString('es-CL'),110,y)
     
-    // Footer
     doc.setTextColor(150,150,150)
     doc.setFontSize(7)
-    doc.text('Serviruta · Mecánica móvil · +56 9 4521 0814 · '+NUMERO_FICHA,pw/2,ph-10,{align:'center'})
+    doc.text('Serviruta · +56 9 4521 0814 · Certificación '+NUMERO_FICHA,pw/2,ph-10,{align:'center'})
     
     doc.save(NUMERO_FICHA+'_'+document.getElementById('veh-patente').value+'.pdf')
-    toast('✅ PDF descargado','ok')
+    toast('✅ Certificación PDF descargada','ok')
   } catch(e){
     toast('❌ Error PDF: '+e.message,'err')
   }
 }
 
 function nuevaRevision(){
-  if(!confirm('¿Empezar una nueva revisión? Se perderán los datos actuales.')) return
+  if(!confirm('¿Empezar una nueva certificación? Se perderán los datos actuales.')) return
   location.reload()
 }
 
-// INIT
 async function init(){
-  // Cargar número de ficha próximo
   try {
     var r=await fetch(SB_URL+'/rest/v1/rpc/generar_numero_ficha_revision',{
       method:'POST',
@@ -1103,7 +1338,7 @@ async function init(){
     })
     if(r.ok){
       var num=await r.json()
-      document.getElementById('hero-ficha').textContent=num
+      document.getElementById('hero-ficha').innerHTML=num+'<small>N° CERTIFICACIÓN</small>'
     }
   } catch(e){}
   
@@ -1112,8 +1347,6 @@ async function init(){
   actualizarTotales()
   setupFirma('tec')
   setupFirma('cli')
-  
-  // Auto-abrir primera sección
   document.querySelector('.seccion').classList.add('abierta')
 }
 

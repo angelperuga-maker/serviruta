@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Cierre de Jornada · Serviruta</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0A0D;--s1:#111114;--s2:#16161B;--s3:#1C1C23;--line:#26262E;--rojo:#E8210A;--rojo-l:#FF4D2E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--dorado:#D4AF37;--t1:#F6F4EF;--t2:#C7C5BF;--t3:#8B8990;--display:'Syne',sans-serif;--body:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--t2);font-family:var(--body);font-size:14px;line-height:1.5;min-height:100vh;padding-bottom:80px}
+button,input,select{border:none;background:none;color:inherit;font-family:inherit;font-size:14px;cursor:pointer}
+input,select{background:var(--s2);border:1px solid var(--line);border-radius:8px;padding:10px 12px;color:var(--t1);cursor:text}
+select{cursor:pointer}
+
+.bar{position:sticky;top:0;z-index:50;background:rgba(10,10,13,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;align-items:center;gap:10px}
+.back{font-family:var(--mono);font-size:10px;color:var(--t3);padding:6px 10px;border:1px solid var(--line);border-radius:6px;cursor:pointer}
+.sigil{width:34px;height:34px;background:linear-gradient(135deg,var(--dorado),var(--rojo));border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:14px;color:#000}
+.title{font-family:var(--display);font-weight:800;font-size:14px;color:var(--t1);flex:1;line-height:1.1}
+.title small{display:block;font-family:var(--mono);font-size:9px;color:var(--dorado);letter-spacing:0.15em;margin-top:2px;font-weight:700}
+
+.shell{max-width:1200px;margin:0 auto;padding:16px}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,rgba(96,165,250,0.15),rgba(212,175,55,0.05));border:1px solid rgba(96,165,250,0.4);border-radius:16px;padding:20px;margin-bottom:16px}
+.hero-tit{font-family:var(--display);font-weight:900;font-size:22px;color:var(--t1);letter-spacing:-0.5px}
+.hero-tit em{color:var(--azul);font-style:normal}
+.hero-desc{font-size:13px;color:var(--t2);margin-top:6px;line-height:1.4}
+
+/* KPIs */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.kpi{background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:14px}
+.kpi-lbl{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-bottom:6px}
+.kpi-num{font-family:var(--display);font-weight:900;font-size:28px;line-height:1;letter-spacing:-1px}
+.kpi.urgente .kpi-num{color:var(--rojo-l)}
+.kpi.pendiente .kpi-num{color:var(--amarillo)}
+.kpi.asignado .kpi-num{color:var(--verde)}
+.kpi.total .kpi-num{color:var(--azul)}
+
+/* Filtros de fecha */
+.filtros{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.fbtn{padding:8px 14px;background:var(--s2);border:1px solid var(--line);border-radius:10px;font-family:var(--mono);font-size:11px;color:var(--t2);cursor:pointer;font-weight:700;letter-spacing:0.05em}
+.fbtn:hover{background:var(--s3)}
+.fbtn.active{background:var(--azul);color:#000;border-color:var(--azul)}
+
+/* Secciones */
+.seccion{background:var(--s1);border:1px solid var(--line);border-radius:14px;margin-bottom:14px;overflow:hidden}
+.seccion-head{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+.seccion-tit{font-family:var(--display);font-weight:800;font-size:15px;color:var(--t1);flex:1}
+.seccion-badge{padding:3px 8px;background:var(--s3);border-radius:6px;font-family:var(--mono);font-size:10px;color:var(--t2);font-weight:700}
+.seccion-badge.urgente{background:rgba(232,33,10,0.2);color:var(--rojo-l)}
+.seccion-body{padding:8px}
+
+/* Card de servicio */
+.serv{background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:8px;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;transition:all 200ms}
+.serv:hover{border-color:rgba(96,165,250,0.3)}
+.serv.urgente{border-left:4px solid var(--rojo);background:linear-gradient(90deg,rgba(232,33,10,0.05),var(--s2))}
+.serv.asignado{border-left:4px solid var(--verde);background:linear-gradient(90deg,rgba(34,197,94,0.05),var(--s2))}
+.serv-hora{font-family:var(--mono);font-size:14px;color:var(--t1);font-weight:700;text-align:center;padding:8px 10px;background:var(--s3);border-radius:8px;min-width:60px}
+.serv-hora small{display:block;font-size:8px;color:var(--t3);letter-spacing:0.1em;margin-top:2px}
+.serv-info{min-width:0}
+.serv-cliente{font-size:14px;color:var(--t1);font-weight:700;margin-bottom:2px}
+.serv-cliente .badge-agente{font-size:9px;background:rgba(96,165,250,0.2);color:var(--azul);padding:1px 5px;border-radius:4px;margin-left:6px;font-family:var(--mono);font-weight:700;letter-spacing:0.05em}
+.serv-cliente .badge-urg{font-size:9px;background:rgba(232,33,10,0.2);color:var(--rojo-l);padding:1px 5px;border-radius:4px;margin-left:6px;font-family:var(--mono);font-weight:700}
+.serv-servicio{font-size:12px;color:var(--t2);margin-bottom:3px;line-height:1.3}
+.serv-meta{font-family:var(--mono);font-size:10px;color:var(--t3);display:flex;gap:8px;flex-wrap:wrap}
+.serv-meta span{white-space:nowrap}
+.serv-tel{color:var(--dorado)}
+.serv-tecnico{min-width:220px}
+.serv-tecnico select{width:100%;font-size:12px;padding:8px 10px}
+.serv-tecnico select.sin-asignar{border-color:var(--amarillo);background:rgba(245,197,24,0.1)}
+
+/* Acciones batch */
+.batch{position:sticky;bottom:16px;background:var(--s1);border:1px solid var(--dorado);border-radius:14px;padding:14px;margin-top:14px;display:none;align-items:center;gap:10px;box-shadow:0 -4px 24px rgba(212,175,55,0.2)}
+.batch.show{display:flex}
+.batch-msg{flex:1;font-size:13px;color:var(--dorado);font-weight:600}
+.batch-btn{padding:10px 20px;background:var(--verde);color:#000;border-radius:10px;font-family:var(--display);font-weight:800;font-size:12px;letter-spacing:0.05em}
+
+/* Empty */
+.empty{padding:30px 16px;text-align:center;color:var(--t3);font-size:12px;font-style:italic}
+
+/* Toast */
+.toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-20px);background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:10px 16px;font-size:12px;font-weight:600;color:var(--t1);opacity:0;transition:all 300ms;pointer-events:none;z-index:200}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.ok{border-color:var(--verde);color:var(--verde)}
+.toast.err{border-color:var(--rojo);color:var(--rojo-l)}
+
+.loader{padding:40px 20px;text-align:center;color:var(--t3);font-family:var(--mono);font-size:11px}
+.loader::before{content:"◐";display:inline-block;animation:spin 1s linear infinite;margin-right:6px;font-size:16px}
+@keyframes spin{100%{transform:rotate(360deg)}}
+
+@media(max-width:768px){
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .serv{grid-template-columns:1fr;gap:8px}
+  .serv-hora{width:fit-content}
+  .serv-tecnico{min-width:0}
+}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <button class="back" onclick="location.href='menu-coordinador.html'">← Volver</button>
+  <div class="sigil">S</div>
+  <div class="title">Cierre de Jornada<small>Asignación de técnicos</small></div>
+</header>
+
+<div class="shell">
+  
+  <div class="hero">
+    <div class="hero-tit">Cierre de <em>Jornada</em></div>
+    <div class="hero-desc">Asigna técnicos a los servicios agendados. Los servicios sin asignar aparecen destacados. Prioriza urgentes primero.</div>
+  </div>
+  
+  <div class="kpis">
+    <div class="kpi urgente"><div class="kpi-lbl">🔥 Urgentes</div><div class="kpi-num" id="k-urg">0</div></div>
+    <div class="kpi pendiente"><div class="kpi-lbl">⚠ Sin asignar</div><div class="kpi-num" id="k-pen">0</div></div>
+    <div class="kpi asignado"><div class="kpi-lbl">✅ Asignados</div><div class="kpi-num" id="k-asig">0</div></div>
+    <div class="kpi total"><div class="kpi-lbl">📊 Total</div><div class="kpi-num" id="k-tot">0</div></div>
+  </div>
+  
+  <div class="filtros" id="filtros">
+    <button class="fbtn active" data-fecha="manana" onclick="filtrar('manana')">🌅 MAÑANA</button>
+    <button class="fbtn" data-fecha="hoy" onclick="filtrar('hoy')">📅 HOY</button>
+    <button class="fbtn" data-fecha="todos" onclick="filtrar('todos')">📋 TODOS PENDIENTES</button>
+  </div>
+  
+  <div id="contenido">
+    <div class="loader">Cargando servicios...</div>
+  </div>
+  
+</div>
+
+<div class="batch" id="batch">
+  <div class="batch-msg">📌 <span id="batch-count">0</span> servicios con cambios pendientes de guardar</div>
+  <button class="batch-btn" onclick="guardarTodo()">💾 Guardar cambios</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+
+var SERVICIOS=[]
+var TECNICOS=[]
+var FILTRO='manana'
+var CAMBIOS={}
+
+function toast(msg,tipo){
+  var t=document.getElementById('toast')
+  t.textContent=msg
+  t.className='toast '+(tipo||'')
+  t.classList.add('show')
+  setTimeout(function(){t.classList.remove('show')},2500)
+}
+
+async function sbGet(path){
+  var r=await fetch(SB_URL+'/rest/v1/'+path,{headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}})
+  return r.ok?await r.json():[]
+}
+
+async function sbUpd(path,data){
+  var r=await fetch(SB_URL+'/rest/v1/'+path,{
+    method:'PATCH',
+    headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+    body:JSON.stringify(data)
+  })
+  return r.ok
+}
+
+function isoDate(d){return d.toISOString().substring(0,10)}
+function hoyISO(){return isoDate(new Date())}
+function mananaISO(){return isoDate(new Date(Date.now()+86400000))}
+
+async function cargar(){
+  // Cargar técnicos activos
+  TECNICOS=await sbGet('tecnicos?activo=eq.true&select=nombre,telefono&order=nombre.asc')
+  
+  // Cargar servicios según filtro
+  var query='agenda?select=*&order=urgencia.desc,hora.asc'
+  if(FILTRO==='manana') query+='&fecha=eq.'+mananaISO()
+  else if(FILTRO==='hoy') query+='&fecha=eq.'+hoyISO()
+  else if(FILTRO==='todos') query+='&estado=in.(solicitada,agendado)&fecha=gte.'+hoyISO()
+  
+  SERVICIOS=await sbGet(query)
+  render()
+}
+
+function actualizarKPIs(){
+  var urg=SERVICIOS.filter(function(s){return s.urgencia==='urgente'}).length
+  var pen=SERVICIOS.filter(function(s){return !s.tecnico||s.tecnico==='POR ASIGNAR'}).length
+  var asig=SERVICIOS.filter(function(s){return s.tecnico&&s.tecnico!=='POR ASIGNAR'}).length
+  document.getElementById('k-urg').textContent=urg
+  document.getElementById('k-pen').textContent=pen
+  document.getElementById('k-asig').textContent=asig
+  document.getElementById('k-tot').textContent=SERVICIOS.length
+}
+
+function render(){
+  actualizarKPIs()
+  var cont=document.getElementById('contenido')
+  
+  if(SERVICIOS.length===0){
+    cont.innerHTML='<div class="seccion"><div class="empty">No hay servicios para este filtro</div></div>'
+    return
+  }
+  
+  // Agrupar por urgente/normal
+  var urg=SERVICIOS.filter(function(s){return s.urgencia==='urgente'})
+  var norm=SERVICIOS.filter(function(s){return s.urgencia!=='urgente'})
+  
+  var html=''
+  
+  if(urg.length){
+    html+='<div class="seccion">'
+    html+='<div class="seccion-head"><div class="seccion-tit">🔥 URGENTES</div><div class="seccion-badge urgente">'+urg.length+'</div></div>'
+    html+='<div class="seccion-body">'+renderServicios(urg)+'</div></div>'
+  }
+  
+  if(norm.length){
+    html+='<div class="seccion">'
+    html+='<div class="seccion-head"><div class="seccion-tit">📅 Normales</div><div class="seccion-badge">'+norm.length+'</div></div>'
+    html+='<div class="seccion-body">'+renderServicios(norm)+'</div></div>'
+  }
+  
+  cont.innerHTML=html
+}
+
+function renderServicios(arr){
+  var html=''
+  arr.forEach(function(s){
+    var tecActual=CAMBIOS[s.id]!==undefined?CAMBIOS[s.id]:(s.tecnico||'POR ASIGNAR')
+    var sinAsig=!tecActual||tecActual==='POR ASIGNAR'
+    var cls='serv'
+    if(s.urgencia==='urgente') cls+=' urgente'
+    else if(!sinAsig) cls+=' asignado'
+    
+    var hora=(s.hora||'').substring(0,5)
+    var fecha=s.fecha||''
+    
+    html+='<div class="'+cls+'">'
+    html+='<div class="serv-hora">'+hora+'<small>'+(fecha===hoyISO()?'HOY':fecha===mananaISO()?'MAÑANA':fecha)+'</small></div>'
+    html+='<div class="serv-info">'
+    html+='<div class="serv-cliente">'+(s.cliente||'Sin nombre')
+    if(s.agente_solicitante) html+='<span class="badge-agente">🤖 '+s.agente_solicitante.toUpperCase()+'</span>'
+    if(s.urgencia==='urgente') html+='<span class="badge-urg">URGENTE</span>'
+    html+='</div>'
+    html+='<div class="serv-servicio">'+(s.servicio||'Sin detalle')+'</div>'
+    html+='<div class="serv-meta">'
+    if(s.vehiculo) html+='<span>🚗 '+s.vehiculo+'</span>'
+    if(s.telefono) html+='<span class="serv-tel">📱 +'+s.telefono+'</span>'
+    if(s.origen==='agente') html+='<span>💬 Bot WA</span>'
+    html+='</div>'
+    html+='</div>'
+    html+='<div class="serv-tecnico">'
+    html+='<select onchange="cambiarTecnico(\''+s.id+'\',this.value)" class="'+(sinAsig?'sin-asignar':'')+'">'
+    html+='<option value="POR ASIGNAR"'+(sinAsig?' selected':'')+'>⚠️ Sin asignar</option>'
+    TECNICOS.forEach(function(t){
+      html+='<option value="'+t.nombre.replace(/"/g,'&quot;')+'"'+(tecActual===t.nombre?' selected':'')+'>🔧 '+t.nombre+'</option>'
+    })
+    html+='</select>'
+    html+='</div>'
+    html+='</div>'
+  })
+  return html
+}
+
+function filtrar(f){
+  FILTRO=f
+  document.querySelectorAll('.fbtn').forEach(function(b){b.classList.remove('active')})
+  document.querySelector('[data-fecha="'+f+'"]').classList.add('active')
+  document.getElementById('contenido').innerHTML='<div class="loader">Cargando...</div>'
+  cargar()
+}
+
+function cambiarTecnico(id, tecnico){
+  CAMBIOS[id]=tecnico
+  var count=Object.keys(CAMBIOS).length
+  document.getElementById('batch-count').textContent=count
+  document.getElementById('batch').classList.toggle('show', count>0)
+  // Actualizar visual del card
+  var serv=SERVICIOS.find(function(s){return s.id===id})
+  if(serv){
+    render()
+  }
+}
+
+async function guardarTodo(){
+  var ids=Object.keys(CAMBIOS)
+  if(!ids.length) return
+  toast('💾 Guardando '+ids.length+' asignaciones...')
+  
+  var exitosos=0
+  var fallidos=0
+  
+  for(var i=0;i<ids.length;i++){
+    var id=ids[i]
+    var tecnico=CAMBIOS[id]
+    var data={
+      tecnico:tecnico,
+      estado: tecnico==='POR ASIGNAR'?'solicitada':'agendado',
+      confirmado_at:tecnico!=='POR ASIGNAR'?new Date().toISOString():null,
+      confirmado_por: tecnico!=='POR ASIGNAR'?'coordinador':null
+    }
+    var ok=await sbUpd('agenda?id=eq.'+id,data)
+    if(ok) exitosos++
+    else fallidos++
+  }
+  
+  if(fallidos===0){
+    toast('✅ '+exitosos+' asignaciones guardadas','ok')
+    CAMBIOS={}
+    document.getElementById('batch').classList.remove('show')
+    setTimeout(cargar,500)
+  } else {
+    toast('⚠️ '+exitosos+' ok, '+fallidos+' errores','err')
+  }
+}
+
+cargar()
+</script>
+
+</body>
+</html>

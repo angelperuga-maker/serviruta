@@ -2,471 +2,306 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Serviruta - Coordinador</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Hub Coordinador · Serviruta</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
-:root{--rojo:#E8210A;--rojo-d:#B01A08;--negro:#080808;--c1:#0F0F12;--c2:#161619;--borde:#2C2C32;--txt:#F0EDE6;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;min-height:100vh;max-width:480px;margin:0 auto;}
-.top{background:var(--c1);border-bottom:1px solid var(--borde);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;}
-.top-left{display:flex;align-items:center;gap:10px;}
-.mark{width:32px;height:32px;background:var(--rojo);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:"Syne",sans-serif;font-weight:800;font-size:11px;color:#fff;}
-.name{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;}
-.role{font-size:11px;color:var(--txt3);margin-top:1px;}
-.logout{background:none;border:none;color:var(--txt3);font-size:12px;cursor:pointer;font-family:"DM Sans",sans-serif;}
-.body{padding:20px 18px 40px;}
-.greeting{font-family:"Syne",sans-serif;font-weight:800;font-size:26px;letter-spacing:-0.5px;margin-bottom:4px;}
-.greeting em{color:var(--rojo);font-style:normal;}
-.sub{font-size:13px;color:var(--txt3);margin-bottom:28px;}
-.sec{font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);margin:20px 0 10px;display:flex;align-items:center;gap:8px;}
-.sec::after{content:"";flex:1;height:1px;background:var(--borde);}
-.card{background:var(--c2);border:1px solid var(--borde);border-radius:12px;padding:18px 16px;display:flex;align-items:center;gap:16px;margin-bottom:10px;cursor:pointer;transition:all 0.2s;text-decoration:none;color:var(--txt);}
-.card:hover{border-color:#3A3A42;transform:translateX(4px);}
-.ci{width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
-.cn{font-family:"Syne",sans-serif;font-weight:700;font-size:14px;margin-bottom:3px;}
-.cd{font-size:12px;color:var(--txt3);}
-.arr{font-size:18px;color:var(--txt3);margin-left:auto;}
-.date{font-size:11px;color:var(--txt3);text-align:center;margin-top:24px;}
+:root{--bg:#0A0A0D;--s1:#111114;--s2:#16161B;--s3:#1C1C23;--line:#26262E;--rojo:#E8210A;--rojo-l:#FF4D2E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--violeta:#A78BFA;--dorado:#D4AF37;--t1:#F6F4EF;--t2:#C7C5BF;--t3:#8B8990;--display:'Syne',sans-serif;--body:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--t2);font-family:var(--body);font-size:14px;line-height:1.5;min-height:100vh;padding-bottom:60px}
+a{color:inherit;text-decoration:none}
+button{border:none;background:none;color:inherit;font-family:inherit;cursor:pointer}
+
+.bar{position:sticky;top:0;z-index:50;background:rgba(10,10,13,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;align-items:center;gap:12px}
+.sigil{width:38px;height:38px;background:linear-gradient(135deg,var(--dorado),var(--rojo));border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:900;font-size:16px;color:#000}
+.title{font-family:var(--display);font-weight:800;font-size:15px;color:var(--t1);flex:1;line-height:1.1}
+.title small{display:block;font-family:var(--mono);font-size:9px;color:var(--dorado);letter-spacing:0.15em;margin-top:2px;font-weight:700}
+.status{width:8px;height:8px;background:var(--verde);border-radius:50%;box-shadow:0 0 12px var(--verde)}
+
+.shell{max-width:1100px;margin:0 auto;padding:16px}
+
+.hero{background:linear-gradient(135deg,rgba(232,33,10,0.12),rgba(212,175,55,0.05));border:1px solid rgba(212,175,55,0.3);border-radius:16px;padding:20px;margin-bottom:20px}
+.hero-tit{font-family:var(--display);font-weight:900;font-size:24px;color:var(--t1);letter-spacing:-0.5px;line-height:1.1}
+.hero-tit em{color:var(--dorado);font-style:normal}
+.hero-desc{font-size:13px;color:var(--t2);margin-top:8px}
+
+.seccion{margin-bottom:24px}
+.seccion-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;padding:0 4px}
+.seccion-num{font-family:var(--mono);font-size:10px;color:var(--dorado);font-weight:700;letter-spacing:0.1em}
+.seccion-tit{font-family:var(--display);font-weight:800;font-size:16px;color:var(--t1);letter-spacing:-0.3px}
+.seccion-line{flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent)}
+.seccion-badge{padding:2px 8px;background:var(--s3);border-radius:6px;font-family:var(--mono);font-size:9px;color:var(--t3);font-weight:700;letter-spacing:0.05em}
+.sub-label{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.1em;font-weight:700;margin:16px 4px 8px}
+
+.grid{display:grid;gap:10px}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+
+.card{background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:16px;cursor:pointer;transition:all 200ms;display:flex;flex-direction:column;gap:6px;min-height:90px;position:relative;overflow:hidden}
+.card:hover{background:var(--s2);border-color:var(--t3);transform:translateY(-1px)}
+.card-icon{font-size:22px;margin-bottom:4px}
+.card-tit{font-family:var(--display);font-weight:700;font-size:14px;color:var(--t1);line-height:1.2}
+.card-desc{font-size:11px;color:var(--t3);line-height:1.3}
+.card-tag{position:absolute;top:8px;right:8px;font-family:var(--mono);font-size:8px;font-weight:700;padding:2px 6px;border-radius:4px;letter-spacing:0.05em}
+.card-tag.hot{background:rgba(232,33,10,0.2);color:var(--rojo-l)}
+.card-tag.new{background:rgba(34,197,94,0.2);color:var(--verde)}
+.card-tag.ext{background:rgba(96,165,250,0.15);color:var(--azul)}
+
+.card.premium{background:linear-gradient(135deg,rgba(212,175,55,0.15),rgba(232,33,10,0.05));border:2px solid var(--dorado);grid-column:1/-1}
+.card.premium .card-tit{color:var(--dorado);font-size:16px}
+.card.premium .card-icon{font-size:26px}
+
+.card.agente{background:var(--s1);border-left:3px solid var(--azul);min-height:80px;padding:12px 14px}
+.card.agente.rita{border-left-color:#FF6B9D}
+.card.agente.marco{border-left-color:var(--azul)}
+.card.agente.pedro{border-left-color:var(--amarillo)}
+.card.agente.emilio{border-left-color:var(--rojo)}
+.card.agente.elena{border-left-color:var(--violeta)}
+.card.agente.coty{border-left-color:var(--verde)}
+.card.agente.outbound{border-left-color:var(--dorado)}
+.card.agente .card-tit{font-size:13px}
+.card.agente .card-desc{font-size:10px}
+
+.card.admin{background:var(--s2);border-color:var(--s3)}
+.card.admin:hover{border-color:var(--azul)}
+
+.card.publico{background:linear-gradient(135deg,var(--s2),var(--s1));border-color:rgba(96,165,250,0.3)}
+.card.publico:hover{border-color:var(--azul)}
+
+@media(max-width:640px){
+  .grid-3{grid-template-columns:repeat(2,1fr)}
+  .grid-2{grid-template-columns:1fr}
+  .card{min-height:80px;padding:12px}
+  .card-tit{font-size:13px}
+  .hero-tit{font-size:20px}
+}
 </style>
-<!-- Meta Pixel Code -->
-<script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '2047126482467549');
-fbq('track', 'PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=2047126482467549&ev=PageView&noscript=1" /></noscript>
-<!-- End Meta Pixel Code -->
 </head>
 <body>
-<script>
-if (!sessionStorage.getItem("coord_auth")) { location.href = "login-coordinador.html"; }
-</script>
-<div class="top">
-  <div class="top-left">
-    <div class="mark">📊</div>
-    <div>
-      <div class="name">Coordinador</div>
-      <div class="role">Panel de operaciones</div>
-    </div>
+
+<header class="bar">
+  <div class="sigil">S</div>
+  <div class="title">Hub Coordinador<small>SERVIRUTA · v3</small></div>
+  <div class="status" title="Sistema activo"></div>
+</header>
+
+<div class="shell">
+
+  <div class="hero">
+    <div class="hero-tit">Bienvenido, <em>coordinador</em></div>
+    <div class="hero-desc">Control central de operaciones. Inspecciones, agentes, agenda y CRM.</div>
   </div>
-  <button class="logout" onclick="sessionStorage.removeItem('coord_auth');location.href='index.html'">Salir</button>
+
+  <!-- 1. INSPECCIONES Y REVISIONES -->
+  <section class="seccion">
+    <div class="seccion-head">
+      <span class="seccion-num">01</span>
+      <div class="seccion-tit">🔧 Inspecciones y Revisiones</div>
+      <div class="seccion-line"></div>
+      <div class="seccion-badge">5 fichas</div>
+    </div>
+    <div class="grid grid-3">
+
+      <div class="card premium" onclick="location.href='revision-precompra-camion.html'">
+        <span class="card-tag hot">$350K</span>
+        <div class="card-icon">💎</div>
+        <div class="card-tit">Iniciar Revisión Premium Camión</div>
+        <div class="card-desc">120 puntos · Análisis fluidos · Prueba ruta · Certificación</div>
+      </div>
+
+      <div class="card" onclick="location.href='revision-precompra-pesados.html'">
+        <div class="card-icon">🚛</div>
+        <div class="card-tit">Revisión Precompra Pesados</div>
+        <div class="card-desc">Camiones, buses, maquinaria</div>
+      </div>
+
+      <div class="card" onclick="location.href='inspeccion-12puntos.html'">
+        <div class="card-icon">🔧</div>
+        <div class="card-tit">Inspección Express 12 Puntos</div>
+        <div class="card-desc">Recambios rápidos + checklist</div>
+      </div>
+
+      <div class="card" onclick="location.href='pre-rt-camion.html'">
+        <div class="card-icon">📋</div>
+        <div class="card-tit">Pre-Revisión Técnica Camión</div>
+        <div class="card-desc">Informe PRT · $150-250k</div>
+      </div>
+
+      <div class="card" onclick="location.href='inspecciones-historial.html'">
+        <div class="card-icon">📊</div>
+        <div class="card-tit">Historial de Inspecciones</div>
+        <div class="card-desc">KPIs · Filtros · Todas las revisiones</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 2. AGENTES IA -->
+  <section class="seccion">
+    <div class="seccion-head">
+      <span class="seccion-num">02</span>
+      <div class="seccion-tit">🤖 Agentes IA</div>
+      <div class="seccion-line"></div>
+      <div class="seccion-badge">6 inbound · 5 outbound</div>
+    </div>
+
+    <div class="sub-label">INBOUND · CONVERSACIONES ENTRANTES</div>
+    <div class="grid grid-3">
+      <div class="card agente rita" onclick="location.href='agente-chat.html?id=rita'">
+        <div class="card-tit">👋 Rita</div>
+        <div class="card-desc">Triage rápido · 3 datos</div>
+      </div>
+      <div class="card agente marco" onclick="location.href='agente-chat.html?id=marco'">
+        <div class="card-tit">🚗 Marco</div>
+        <div class="card-desc">Livianos + diagnóstico</div>
+      </div>
+      <div class="card agente pedro" onclick="location.href='agente-chat.html?id=pedro'">
+        <div class="card-tit">🚛 Pedro</div>
+        <div class="card-desc">Pesados · Camiones</div>
+      </div>
+      <div class="card agente emilio" onclick="location.href='agente-chat.html?id=emilio'">
+        <span class="card-tag hot">24/7</span>
+        <div class="card-tit">🚨 Emilio</div>
+        <div class="card-desc">Emergencias · Cierra HOY</div>
+      </div>
+      <div class="card agente elena" onclick="location.href='agente-chat.html?id=elena'">
+        <div class="card-tit">🏢 Elena</div>
+        <div class="card-desc">B2B · Empresas</div>
+      </div>
+      <div class="card agente coty" onclick="location.href='agente-chat.html?id=coty'">
+        <div class="card-tit">💰 Coty</div>
+        <div class="card-desc">Cotizador · Catálogo</div>
+      </div>
+    </div>
+
+    <div class="sub-label">OUTBOUND · PROSPECCIÓN Y VENTAS</div>
+    <div class="grid grid-3">
+      <div class="card agente outbound" onclick="location.href='agente-vendedor.html?id=diego'">
+        <div class="card-tit">🎯 Diego</div>
+        <div class="card-desc">Triage matinal</div>
+      </div>
+      <div class="card agente outbound" onclick="location.href='agente-vendedor.html?id=ana'">
+        <div class="card-tit">📞 Ana</div>
+        <div class="card-desc">Reactivación clientes</div>
+      </div>
+      <div class="card agente outbound" onclick="location.href='agente-vendedor.html?id=sofia'">
+        <div class="card-tit">✨ Sofia</div>
+        <div class="card-desc">Cross-sell servicios</div>
+      </div>
+      <div class="card agente outbound" onclick="location.href='agente-vendedor.html?id=lucas'">
+        <div class="card-tit">🚀 Lucas</div>
+        <div class="card-desc">Empresas · B2B</div>
+      </div>
+      <div class="card agente outbound" onclick="location.href='agente-vendedor.html?id=valentina'">
+        <div class="card-tit">💎 Valentina</div>
+        <div class="card-desc">Aliados · Reclutamiento</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. PANEL DE ADMIN -->
+  <section class="seccion">
+    <div class="seccion-head">
+      <span class="seccion-num">03</span>
+      <div class="seccion-tit">👥 Panel de Admin</div>
+      <div class="seccion-line"></div>
+      <div class="seccion-badge">Operación diaria</div>
+    </div>
+    <div class="grid grid-3">
+
+      <div class="card admin" onclick="location.href='cierre-jornada.html'">
+        <span class="card-tag new">NUEVO</span>
+        <div class="card-icon">🌙</div>
+        <div class="card-tit">Cierre de Jornada</div>
+        <div class="card-desc">Asignar técnicos a servicios agendados</div>
+      </div>
+
+      <div class="card admin" onclick="location.href='agenda-solicitudes.html'">
+        <div class="card-icon">📅</div>
+        <div class="card-tit">Bandeja Solicitudes</div>
+        <div class="card-desc">Agendas pendientes del bot</div>
+      </div>
+
+      <div class="card admin" onclick="location.href='pipeline-triage.html'">
+        <div class="card-icon">🎯</div>
+        <div class="card-tit">Pipeline Triage</div>
+        <div class="card-desc">Diego · Presupuestos matinales</div>
+      </div>
+
+      <div class="card admin" onclick="location.href='gastos.html'">
+        <div class="card-icon">💸</div>
+        <div class="card-tit">Control de Gastos</div>
+        <div class="card-desc">Ingreso, categorías y reportes</div>
+      </div>
+
+      <div class="card admin" onclick="location.href='presupuestos.html'">
+        <div class="card-icon">📄</div>
+        <div class="card-tit">Presupuestos Recibidos</div>
+        <div class="card-desc">Cotizaciones enviadas y aprobadas</div>
+      </div>
+
+      <div class="card admin" onclick="location.href='clientes.html'">
+        <div class="card-icon">👤</div>
+        <div class="card-tit">Clientes / CRM</div>
+        <div class="card-desc">610 clientes · LTV · Historial</div>
+      </div>
+
+      <div class="card admin" onclick="location.href='tecnicos.html'">
+        <div class="card-icon">🔧</div>
+        <div class="card-tit">Técnicos</div>
+        <div class="card-desc">Reynaldo · Kiven · Giovanino</div>
+      </div>
+
+      <div class="card admin" onclick="location.href='aliados.html'">
+        <div class="card-icon">🤝</div>
+        <div class="card-tit">Aliados</div>
+        <div class="card-desc">Red de talleres asociados</div>
+      </div>
+
+      <div class="card admin" onclick="location.href='conversaciones-wa.html'">
+        <div class="card-icon">💬</div>
+        <div class="card-tit">Conversaciones WhatsApp</div>
+        <div class="card-desc">Log de todos los chats con bot</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 4. SERVICIOS PÚBLICOS -->
+  <section class="seccion">
+    <div class="seccion-head">
+      <span class="seccion-num">04</span>
+      <div class="seccion-tit">🌐 Servicios Públicos</div>
+      <div class="seccion-line"></div>
+      <div class="seccion-badge">Landings externas</div>
+    </div>
+    <div class="grid grid-3">
+
+      <div class="card publico" onclick="window.open('https://angelperuga-maker.github.io/serviruta/landing-precompra.html','_blank')">
+        <span class="card-tag ext">↗ EXTERNO</span>
+        <div class="card-icon">💎</div>
+        <div class="card-tit">Landing Precompra</div>
+        <div class="card-desc">Página pública · Captación de clientes</div>
+      </div>
+
+      <div class="card publico" onclick="window.open('https://angelperuga-maker.github.io/serviruta/','_blank')">
+        <span class="card-tag ext">↗ EXTERNO</span>
+        <div class="card-icon">🏠</div>
+        <div class="card-tit">Landing Serviruta</div>
+        <div class="card-desc">Home · Servicios · Cotizar</div>
+      </div>
+
+      <div class="card publico" onclick="window.open('https://angelperuga-maker.github.io/serviruta/landing-aliados.html','_blank')">
+        <span class="card-tag ext">↗ EXTERNO</span>
+        <div class="card-icon">🤝</div>
+        <div class="card-tit">Landing Aliados</div>
+        <div class="card-desc">Reclutamiento de talleres</div>
+      </div>
+
+    </div>
+  </section>
+
 </div>
-<div class="body">
-  <div class="greeting">Panel <em>Coordinador</em></div>
-  <div class="sub" id="fecha">—</div>
 
-  <!-- Buenos días - resumen automático -->
-  
-  <!-- REVISIÓN PREMIUM DESTACADA - Visible desde el hub principal -->
-  <a class="card" href="revision-precompra-camion.html" style="background:linear-gradient(135deg,rgba(212,175,55,0.18),rgba(232,33,10,0.08));border:2px solid var(--dorado,#D4AF37);box-shadow:0 4px 16px rgba(212,175,55,0.15);margin-bottom:10px">
-    <div class="ci" style="background:linear-gradient(135deg,#D4AF37,#E8210A);color:#fff;font-size:22px">💎</div>
-    <div>
-      <div class="cn" style="color:#D4AF37;font-size:16px">Revisión Premium Camión <span style="font-size:9px;background:rgba(232,33,10,0.2);color:#FF4D2E;padding:2px 6px;border-radius:4px;margin-left:4px;font-weight:700">$350K</span></div>
-      <div class="cd">120 puntos · escáner OBD · ruta 15km · certificación firmada</div>
-    </div>
-    <span class="arr" style="color:#D4AF37">›</span>
-  </a>
-  
-  <div class="card-group" id="grp-inspecciones" style="margin-bottom:10px">
-    <div class="card" onclick="toggleGrp('inspecciones')" style="background:linear-gradient(135deg,rgba(34,197,94,0.1),rgba(212,175,55,0.05));border-color:rgba(34,197,94,0.3);cursor:pointer;position:relative">
-      <div class="ci" style="background:linear-gradient(135deg,#22C55E,#F5C518);color:#000">🔧</div>
-      <div><div class="cn" style="color:#22C55E">Otras inspecciones <span style="font-size:9px;background:rgba(34,197,94,0.2);color:#22C55E;padding:2px 6px;border-radius:4px;margin-left:4px;font-weight:700" id="inspGrpBadge">—</span></div><div class="cd">Express 12 Puntos · Historial · Ofertas pendientes</div></div>
-      <span class="arr" style="color:#22C55E;transition:transform 200ms" id="inspGrpArr">▼</span>
-    </div>
-    <div id="inspecciones-items" style="display:none;margin-top:8px;padding-left:14px;border-left:2px solid rgba(34,197,94,0.3);margin-left:22px">
-      <a class="card" href="inspeccion-12puntos.html" style="background:var(--s2);border-color:rgba(34,197,94,0.2);margin-bottom:6px;padding:12px 14px">
-        <div class="ci" style="background:rgba(34,197,94,0.15);color:#22C55E;width:36px;height:36px;font-size:16px">🔧</div>
-        <div><div class="cn" style="font-size:13px">Nueva Inspección Express</div><div class="cd" style="font-size:10px">12 puntos rápidos · 2 minutos</div></div>
-        <span class="arr" style="font-size:14px">›</span>
-      </a>
-      <a class="card" href="revision-precompra-pesados.html" style="background:var(--s2);border-color:rgba(212,175,55,0.2);margin-bottom:6px;padding:12px 14px">
-        <div class="ci" style="background:rgba(212,175,55,0.15);color:#D4AF37;width:36px;height:36px;font-size:16px">🚛</div>
-        <div><div class="cn" style="font-size:13px">Revisión Precompra Pesados</div><div class="cd" style="font-size:10px">Inspección técnica antes de comprar camión/maquinaria</div></div>
-        <span class="arr" style="font-size:14px">›</span>
-      </a>
-      <a class="card" href="revision-precompra-camion.html" style="background:var(--s2);border-color:rgba(232,33,10,0.3);margin-bottom:6px;padding:12px 14px">
-        <div class="ci" style="background:linear-gradient(135deg,rgba(212,175,55,0.2),rgba(232,33,10,0.15));color:#D4AF37;width:36px;height:36px;font-size:16px">💎</div>
-        <div><div class="cn" style="font-size:13px">Revisión Premium Camión <span style="font-size:8px;background:rgba(232,33,10,0.2);color:#FF4D2E;padding:1px 5px;border-radius:3px;margin-left:2px;font-weight:700">$350k</span></div><div class="cd" style="font-size:10px">120 puntos · escáner OBD · ruta 15km · certificación</div></div>
-        <span class="arr" style="font-size:14px">›</span>
-      </a>
-      <a class="card" href="inspecciones-historial.html" style="background:var(--s2);border-color:rgba(96,165,250,0.2);margin-bottom:6px;padding:12px 14px">
-        <div class="ci" style="background:rgba(96,165,250,0.15);color:#60A5FA;width:36px;height:36px;font-size:16px">📋</div>
-        <div><div class="cn" style="font-size:13px">Historial de Inspecciones</div><div class="cd" style="font-size:10px">KPIs · pendientes · convertidas</div></div>
-        <span class="arr" style="font-size:14px">›</span>
-      </a>
-      <a class="card" href="agente-vendedor.html?vendedor=lucas" style="background:var(--s2);border-color:rgba(232,33,10,0.2);margin-bottom:6px;padding:12px 14px">
-        <div class="ci" style="background:rgba(232,33,10,0.15);color:#FF4D2E;width:36px;height:36px;font-size:16px">🎯</div>
-        <div><div class="cn" style="font-size:13px">Ofertar hallazgos con Lucas</div><div class="cd" style="font-size:10px">Va directo al vendedor con alertas frescas</div></div>
-        <span class="arr" style="font-size:14px">›</span>
-      </a>
-    </div>
-  </div>
-  <a class="card" href="agente-vendedor.html" style="background:linear-gradient(135deg,rgba(232,33,10,0.1),rgba(212,175,55,0.05));border-color:rgba(232,33,10,0.4)">
-    <div class="ci" style="background:linear-gradient(135deg,#E8210A,#D4AF37);color:#fff">🎯</div>
-    <div><div class="cn" style="color:#FF4D2E">Agente Vendedor IA <span style="font-size:9px;background:rgba(232,33,10,0.2);color:#FF4D2E;padding:2px 6px;border-radius:4px;margin-left:4px;font-weight:700">Ventas outbound</span></div><div class="cd">Diego, Ana, Sofía y Lucas · reactivan tu base completa</div></div>
-    <span class="arr" style="color:#FF4D2E">›</span>
-  </a>
-  <a class="card" href="agentes-clientes.html" style="background:linear-gradient(135deg,rgba(96,165,250,0.1),rgba(167,139,250,0.05));border-color:rgba(96,165,250,0.3)">
-    <div class="ci" style="background:linear-gradient(135deg,#60A5FA,#A78BFA);color:#fff">🤖</div>
-    <div><div class="cn" style="color:#60A5FA">Agentes de Atención IA <span style="font-size:9px;background:rgba(96,165,250,0.2);color:#60A5FA;padding:2px 6px;border-radius:4px;margin-left:4px;font-weight:700">6 especialistas</span></div><div class="cd">Rita, Marco, Pedro, Elena, Emilio y Coty · atención 24/7</div></div>
-    <span class="arr" style="color:#60A5FA">›</span>
-  </a>
-  <a class="card" href="buenos-dias.html" style="background:linear-gradient(135deg,rgba(37,211,102,0.12),rgba(212,175,55,0.03));border:1px solid rgba(37,211,102,0.4);margin-bottom:10px">
-    <div class="ci" style="background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;font-size:22px">☀️</div>
-    <div>
-      <div class="cn" style="color:#25D366">Buenos días <span style="font-size:9px;background:rgba(37,211,102,0.2);color:#25D366;padding:2px 6px;border-radius:4px;margin-left:4px;font-weight:800">09:00 automático</span></div>
-      <div class="cd">Resumen matutino diario a tu WhatsApp</div>
-    </div>
-    <span class="arr" style="color:#25D366">›</span>
-  </a>
-
-  <!-- Widget de sugerencias del día -->
-  <a class="card" href="sugerencias-diarias.html" id="widget-sug" style="background:linear-gradient(135deg,rgba(212,175,55,0.15),rgba(232,33,10,0.03));border:1px solid rgba(212,175,55,0.4);display:none;margin-bottom:10px">
-    <div class="ci" style="background:linear-gradient(135deg,#D4AF37,#F5C518);color:#000;font-size:22px">💡</div>
-    <div>
-      <div class="cn" style="color:#D4AF37;font-size:15px">Sugerencias del día <span id="badge-sug-count" style="font-size:10px;background:rgba(232,33,10,0.2);color:var(--rojo-l);padding:2px 7px;border-radius:10px;margin-left:6px;font-weight:800">0</span></div>
-      <div class="cd" id="widget-sug-desc">Cargando...</div>
-    </div>
-    <span class="arr" style="color:#D4AF37">›</span>
-  </a>
-
-  <!-- ============================ -->
-  <!-- 📅 AGENDA (SIEMPRE PRIMERO) -->
-  <!-- ============================ -->
-  <div class="sec">📅 Agenda del día</div>
-  <a class="card" href="agenda.html" style="background:linear-gradient(135deg,rgba(232,33,10,0.18),rgba(232,33,10,0.04));border:2px solid var(--rojo);box-shadow:0 4px 16px rgba(232,33,10,0.15)">
-    <div class="ci" style="background:var(--rojo);color:#fff;font-size:22px">📅</div>
-    <div><div class="cn" style="color:var(--rojo);font-size:16px">Agenda de servicios</div><div class="cd">Vista diaria con horas por técnico · Gestionar citas</div></div>
-    <span class="arr" style="color:var(--rojo)">›</span>
-  </a>
-  <a class="card" href="agenda-solicitudes.html" style="background:linear-gradient(135deg,rgba(245,197,24,0.1),rgba(232,33,10,0.03));border-color:rgba(245,197,24,0.4);margin-top:8px">
-    <div class="ci" style="background:linear-gradient(135deg,#F5C518,#E8210A);color:#000">🤖</div>
-    <div><div class="cn" style="color:#F5C518">Bandeja de solicitudes IA <span id="badgeSolic" style="font-size:9px;background:rgba(245,197,24,0.2);color:#F5C518;padding:2px 6px;border-radius:4px;margin-left:4px;font-weight:700">—</span></div><div class="cd">Los agentes proponen horarios · tú confirmas</div></div>
-    <span class="arr" style="color:#F5C518">›</span>
-  </a>
-  <a class="card" href="pipeline-triage.html" style="background:linear-gradient(135deg,rgba(255,77,46,0.12),rgba(212,175,55,0.04));border-color:rgba(255,77,46,0.4);margin-top:8px">
-    <div class="ci" style="background:linear-gradient(135deg,#FF4D2E,#D4AF37);color:#fff">🎯</div>
-    <div><div class="cn" style="color:#FF4D2E">Diego · Triage matinal <span id="badgeTriage" style="font-size:9px;background:rgba(255,77,46,0.2);color:#FF4D2E;padding:2px 6px;border-radius:4px;margin-left:4px;font-weight:700">—</span></div><div class="cd">Resuelve el estado de cada presupuesto pendiente</div></div>
-    <span class="arr" style="color:#FF4D2E">›</span>
-  </a>
-
-  <!-- ============================ -->
-  <!-- 🔥 OPERACIONES DIARIAS -->
-  <!-- ============================ -->
-  <div class="sec">🔥 Operaciones diarias</div>
-  <a class="card" href="presupuestos-coord.html">
-    <div class="ci" style="background:rgba(232,33,10,0.15);color:var(--rojo)">📋</div>
-    <div><div class="cn" style="color:var(--rojo)">Presupuestos recibidos <span style="font-size:9px;background:rgba(232,33,10,0.15);color:var(--rojo);padding:2px 6px;border-radius:4px;margin-left:4px;font-weight:700">109 activos</span></div><div class="cd">Valoriza trabajos y envía al cliente</div></div>
-    <span class="arr">›</span>
-  </a>
-  <a class="card" href="servicios-coord.html">
-    <div class="ci" style="background:rgba(245,197,24,0.15);color:var(--amarillo)">⚡</div>
-    <div><div class="cn" style="color:var(--amarillo)">Gestión de servicios</div><div class="cd">Aprobar, ejecutar y completar servicios activos</div></div>
-    <span class="arr">›</span>
-  </a>
-  <a class="card" href="gastos-coord.html">
-    <div class="ci" style="background:rgba(232,33,10,0.08);color:var(--rojo)">💸</div>
-    <div><div class="cn" style="color:var(--rojo)">Control de gastos <span style="font-size:9px;background:rgba(232,33,10,0.15);color:var(--rojo);padding:2px 6px;border-radius:4px;margin-left:4px;font-weight:700">51 reg</span></div><div class="cd">Boletas, facturas, sueldos y costos fijos</div></div>
-    <span class="arr">›</span>
-  </a>
-  <a class="card" href="inspecciones-coord.html">
-    <div class="ci" style="background:rgba(34,197,94,0.1);color:var(--verde)">🔍</div>
-    <div><div class="cn" style="color:var(--verde)">Inspecciones <span style="font-size:9px;background:rgba(34,197,94,0.15);color:var(--verde);padding:2px 6px;border-radius:4px;margin-left:4px;font-weight:700">16 reg</span></div><div class="cd">Historial de inspecciones por técnico y cliente</div></div>
-    <span class="arr">›</span>
-  </a>
-
-  <!-- ============================ -->
-  <!-- 🤖 AGENTES IA -->
-  <!-- ============================ -->
-  <div class="sec">🤖 Agentes IA</div>
-  <a class="card" href="agente-coordinador.html" style="background:linear-gradient(135deg,rgba(167,139,250,0.12),rgba(167,139,250,0.04));border-color:rgba(167,139,250,0.3)">
-    <div class="ci" style="background:linear-gradient(135deg,#A78BFA,#60A5FA);color:#000">🤖</div>
-    <div><div class="cn" style="color:#A78BFA">Agente Coordinador IA</div><div class="cd">Asignación inteligente, alertas y chat con IA · 19 tools</div></div>
-    <span class="arr">›</span>
-  </a>
-  <a class="card" href="agente-captador.html" style="background:linear-gradient(135deg,rgba(34,197,94,0.12),rgba(96,165,250,0.04));border-color:rgba(34,197,94,0.3)">
-    <div class="ci" style="background:linear-gradient(135deg,#22C55E,#60A5FA);color:#000">🎯</div>
-    <div><div class="cn" style="color:#22C55E">Agente Captador IA</div><div class="cd">Recibe leads Meta/Google, califica y agenda</div></div>
-    <span class="arr">›</span>
-  </a>
-
-  <!-- ============================ -->
-  <!-- 📊 CONTROL Y ADMINISTRACIÓN -->
-  <!-- ============================ -->
-  <div class="sec">📊 Control y administración</div>
-  <a class="card" href="historico-ventas.html" style="background:linear-gradient(135deg,rgba(212,175,55,0.1),rgba(34,197,94,0.03));border-color:rgba(212,175,55,0.3)">
-    <div class="ci" style="background:linear-gradient(135deg,#D4AF37,#22C55E);color:#000">💰</div>
-    <div><div class="cn" style="color:#D4AF37">Histórico de ventas <span style="font-size:9px;background:rgba(212,175,55,0.2);color:#D4AF37;padding:2px 6px;border-radius:4px;margin-left:4px;font-weight:700">$26.4M vendido</span></div><div class="cd">Dashboard financiero · desglose completo</div></div>
-    <span class="arr" style="color:#D4AF37">›</span>
-  </a>
-  <a class="card" href="resumen-diario.html">
-    <div class="ci" style="background:rgba(96,165,250,0.1)">📊</div>
-    <div><div class="cn" style="color:var(--azul)">Resumen diario</div><div class="cd">Ingresos, gastos, margen y resumen con IA</div></div>
-    <span class="arr">›</span>
-  </a>
-  <a class="card" href="admin.html">
-    <div class="ci" style="background:rgba(232,33,10,0.08)">📈</div>
-    <div><div class="cn" style="color:var(--rojo)">Panel de administración</div><div class="cd">Ingresos totales y por técnico · servicios</div></div>
-    <span class="arr">›</span>
-  </a>
-  <a class="card" href="monitor-operaciones.html">
-    <div class="ci" style="background:rgba(34,197,94,0.1)">📡</div>
-    <div><div class="cn" style="color:var(--verde)">Monitor de operaciones</div><div class="cd">Técnicos activos, alertas y tiempos en tiempo real</div></div>
-    <span class="arr">›</span>
-  </a>
-  <a class="card" href="mapa-tecnicos.html">
-    <div class="ci" style="background:rgba(34,197,94,0.1)">📍</div>
-    <div><div class="cn" style="color:var(--verde)">Mapa de técnicos</div><div class="cd">Ubicación en tiempo real · actualiza cada 30 seg</div></div>
-    <span class="arr">›</span>
-  </a>
-
-  <!-- ============================ -->
-  <!-- 🎯 VENTAS Y CAPTACIÓN -->
-  <!-- ============================ -->
-  <div class="sec">🎯 Ventas y captación</div>
-  <a class="card" href="leads.html">
-    <div class="ci" style="background:rgba(251,146,60,0.1)">📥</div>
-    <div><div class="cn" style="color:var(--naranja)">Leads recibidos</div><div class="cd">Registra, asigna y convierte leads de aliados</div></div>
-    <span class="arr">›</span>
-  </a>
-  <a class="card" href="panel-informes-pre-rt.html" style="background:linear-gradient(135deg,rgba(251,146,60,0.12),rgba(232,33,10,0.04));border-color:rgba(251,146,60,0.3)">
-    <div class="ci" style="background:linear-gradient(135deg,#FB923C,#E8210A);color:#fff">🚛</div>
-    <div><div class="cn" style="color:#FB923C">Informes Pre-RT Camión</div><div class="cd">Seguimiento de informes y conversión a venta</div></div>
-    <span class="arr">›</span>
-  </a>
-  <a class="card" href="inspeccion-precompra-tecnico.html" style="background:linear-gradient(135deg,rgba(212,175,55,0.12),rgba(245,197,24,0.03));border:1px solid rgba(212,175,55,0.4)">
-    <div class="ci" style="background:linear-gradient(135deg,#D4AF37,#F5C518);color:#000;font-size:20px">🔧</div>
-    <div><div class="cn" style="color:#D4AF37">Iniciar Revisión Pre-Compra <span style="font-size:9px;background:rgba(212,175,55,0.2);color:#D4AF37;padding:2px 6px;border-radius:4px;margin-left:4px;font-weight:700">NUEVO</span></div><div class="cd">Camiones y maquinaria pesada · Checklist 200 puntos</div></div>
-    <span class="arr" style="color:#D4AF37">›</span>
-  </a>
-  <a class="card" href="servicios-publicos.html" style="background:linear-gradient(135deg,rgba(96,165,250,0.15),rgba(167,139,250,0.05));border-color:rgba(96,165,250,0.4)">
-    <div class="ci" style="background:linear-gradient(135deg,#60A5FA,#A78BFA);color:#000">🌐</div>
-    <div><div class="cn" style="color:#60A5FA">Servicios Públicos</div><div class="cd">Landings SEO para compartir con clientes</div></div>
-    <span class="arr">›</span>
-  </a>
-  <a class="card" href="revision-precompra-pesados.html" target="_blank" style="background:linear-gradient(135deg,rgba(96,165,250,0.08),rgba(167,139,250,0.02));border-color:rgba(96,165,250,0.3)">
-    <div class="ci" style="background:rgba(96,165,250,0.15);color:var(--azul);font-size:18px">🚚</div>
-    <div><div class="cn" style="color:var(--azul)">Landing Pre-Compra (pública)</div><div class="cd">Ver / compartir landing comercial con clientes</div></div>
-    <span class="arr">›</span>
-  </a>
-  <a class="card" href="remarketing.html">
-    <div class="ci" style="background:rgba(167,139,250,0.1)">🏷️</div>
-    <div><div class="cn" style="color:#A78BFA">Remarketing</div><div class="cd">Clientes por etiqueta — envío masivo WhatsApp</div></div>
-    <span class="arr">›</span>
-  </a>
-  <a class="card" href="campanas-clientes.html" style="background:linear-gradient(135deg,rgba(37,211,102,0.12),rgba(212,175,55,0.03));border-color:rgba(37,211,102,0.3)">
-    <div class="ci" style="background:linear-gradient(135deg,#25D366,#128C7E);color:#fff">📣</div>
-    <div><div class="cn" style="color:#25D366">Campañas WhatsApp <span style="font-size:9px;background:rgba(37,211,102,0.2);color:#25D366;padding:2px 6px;border-radius:4px;margin-left:4px;font-weight:700">593 con WA</span></div><div class="cd">Segmentación por marca · mensajes personalizados</div></div>
-    <span class="arr" style="color:#25D366">›</span>
-  </a>
-
-  <!-- ============================ -->
-  <!-- 🔧 TÉCNICO Y DIAGNÓSTICO -->
-  <!-- ============================ -->
-  <div class="sec">🔧 Técnico y diagnóstico</div>
-  <a class="card" href="diagnosticos-coord.html">
-    <div class="ci" style="background:rgba(251,146,60,0.1)">🔎</div>
-    <div><div class="cn" style="color:var(--naranja)">Diagnósticos</div><div class="cd">Revisa y gestiona diagnósticos de los técnicos</div></div>
-    <span class="arr">›</span>
-  </a>
-  <a class="card" href="central-diagnostico.html" style="background:linear-gradient(135deg,rgba(232,33,10,0.12),rgba(232,33,10,0.04));border-color:rgba(232,33,10,0.3)">
-    <div class="ci" style="background:var(--rojo);color:#fff">🔧</div>
-    <div><div class="cn" style="color:var(--rojo)">Central de Diagnóstico</div><div class="cd">Protocolos técnicos, fallas y diagnósticos del equipo</div></div>
-    <span class="arr">›</span>
-  </a>
-  <a class="card" href="login-tecnico.html">
-    <div class="ci" style="background:rgba(96,165,250,0.1)">📱</div>
-    <div><div class="cn" style="color:var(--azul)">App técnico (probar)</div><div class="cd">Presupuestos, inspección y stock — vista del técnico</div></div>
-    <span class="arr">›</span>
-  </a>
-
-  <!-- ============================ -->
-  <!-- 👥 EQUIPO Y RRHH -->
-  <!-- ============================ -->
-  <div class="sec">👥 Equipo y RRHH</div>
-  <a class="card" href="desempeno-coord.html">
-    <div class="ci" style="background:rgba(167,139,250,0.1)">📊</div>
-    <div><div class="cn" style="color:#A78BFA">Desempeño del equipo</div><div class="cd">Ranking técnicos, evaluaciones y aliados</div></div>
-    <span class="arr">›</span>
-  </a>
-  <a class="card" href="postulaciones-coord.html">
-    <div class="ci" style="background:rgba(96,165,250,0.1)">📋</div>
-    <div><div class="cn" style="color:var(--azul)">Postulaciones recibidas</div><div class="cd">Revisar y gestionar fichas de técnicos</div></div>
-    <span class="arr">›</span>
-  </a>
-  <a class="card" href="simulador-tecnicos.html" style="background:linear-gradient(135deg,rgba(245,197,24,0.12),rgba(232,33,10,0.04));border-color:rgba(245,197,24,0.3)">
-    <div class="ci" style="background:linear-gradient(135deg,#F5C518,#FB923C);color:#000">🎯</div>
-    <div><div class="cn" style="color:#F5C518">Simulador Diagnóstico</div><div class="cd">Crea pruebas con fallas inducidas para evaluar</div></div>
-    <span class="arr">›</span>
-  </a>
-  <a class="card" href="ficha-tecnico.html">
-    <div class="ci" style="background:rgba(34,197,94,0.1)">🪛</div>
-    <div><div class="cn" style="color:var(--verde)">Ficha incorporación técnico</div><div class="cd">Formulario para postulación de nuevos técnicos</div></div>
-    <span class="arr">›</span>
-  </a>
-
-  <!-- ============================ -->
-  <!-- 🤝 ALIADOS -->
-  <!-- ============================ -->
-  <div class="sec">🤝 Aliados</div>
-  <a class="card" href="aliados-admin.html">
-    <div class="ci" style="background:rgba(34,197,94,0.1)">➕</div>
-    <div><div class="cn" style="color:var(--verde)">Gestionar aliados <span style="font-size:9px;background:rgba(34,197,94,0.15);color:var(--verde);padding:2px 6px;border-radius:4px;margin-left:4px;font-weight:700">17 activos</span></div><div class="cd">Crear, editar y enviar credenciales</div></div>
-    <span class="arr">›</span>
-  </a>
-  <a class="card" href="pagos-coord.html">
-    <div class="ci" style="background:rgba(245,197,24,0.08)">💰</div>
-    <div><div class="cn" style="color:var(--amarillo)">Pagos a aliados</div><div class="cd">Comisiones pendientes y procesamiento</div></div>
-    <span class="arr">›</span>
-  </a>
-  <a class="card" href="beneficios-aliados.html">
-    <div class="ci" style="background:rgba(167,139,250,0.1)">🏆</div>
-    <div><div class="cn" style="color:#A78BFA">Programa de beneficios</div><div class="cd">Niveles, comisiones y premios por referidos</div></div>
-    <span class="arr">›</span>
-  </a>
-  <a class="card" href="aliados-v2.html">
-    <div class="ci" style="background:rgba(34,197,94,0.1)">🤝</div>
-    <div><div class="cn" style="color:var(--verde)">Portal aliados (vista aliado)</div><div class="cd">Ver comisiones y referidos</div></div>
-    <span class="arr">›</span>
-  </a>
-
-  <!-- ============================ -->
-  <!-- 📁 BASE DE DATOS -->
-  <!-- ============================ -->
-  <div class="sec">📁 Base de datos</div>
-  <a class="card" href="clientes-crm.html" style="background:linear-gradient(135deg,rgba(212,175,55,0.12),rgba(96,165,250,0.03));border:1px solid rgba(212,175,55,0.4)">
-    <div class="ci" style="background:linear-gradient(135deg,#D4AF37,#F5C518);color:#000">📊</div>
-    <div><div class="cn" style="color:#D4AF37">CRM Clientes <span style="font-size:9px;background:rgba(212,175,55,0.2);color:#D4AF37;padding:2px 6px;border-radius:4px;margin-left:4px;font-weight:700">610 clientes</span></div><div class="cd">Seguimiento · sugerencias · WhatsApp automático</div></div>
-    <span class="arr" style="color:#D4AF37">›</span>
-  </a>
-  <a class="card" href="segmentos-clientes.html" style="background:linear-gradient(135deg,rgba(212,175,55,0.08),rgba(96,165,250,0.05));border:1px solid rgba(212,175,55,0.3)">
-    <div class="ci" style="background:linear-gradient(135deg,#D4AF37,#60A5FA);color:#000">🎯</div>
-    <div><div class="cn" style="color:#D4AF37">Segmentos <span style="font-size:9px;background:rgba(212,175,55,0.2);color:#D4AF37;padding:2px 6px;border-radius:4px;margin-left:4px;font-weight:700">Empresa · Particular · Liviano · Pesado</span></div><div class="cd">Matriz 2x2 · foco donde más ROI</div></div>
-    <span class="arr" style="color:#D4AF37">›</span>
-  </a>
-  <a class="card" href="clientes.html">
-    <div class="ci" style="background:rgba(96,165,250,0.1)">👥</div>
-    <div><div class="cn" style="color:var(--azul)">Clientes y vehículos</div><div class="cd">Historial y registro de clientes atendidos</div></div>
-    <span class="arr">›</span>
-  </a>
-  <a class="card" href="proveedores.html">
-    <div class="ci" style="background:rgba(34,197,94,0.1)">🏭</div>
-    <div><div class="cn" style="color:var(--verde)">Proveedores</div><div class="cd">Registro de proveedores y productos</div></div>
-    <span class="arr">›</span>
-  </a>
-
-  <div class="date" id="footer">Serviruta · Santiago RM · 24/7</div>
-</div>
-<script>
-document.getElementById("fecha").textContent = new Date().toLocaleDateString("es-CL",{weekday:"long",day:"numeric",month:"long"});
-
-// Cargar widget de sugerencias
-(async function(){
-  try{
-    var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
-    var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
-    var r=await fetch(SB_URL+'/rest/v1/vista_sugerencias_diarias?nivel_prioridad=neq.ok&select=id,nivel_prioridad,ticket_estimado',{
-      headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}
-    })
-    if(!r.ok) return
-    var sugs=await r.json()
-    if(!sugs.length) return
-    
-    var urg=sugs.filter(function(s){return s.nivel_prioridad==='urgente'}).length
-    var alta=sugs.filter(function(s){return s.nivel_prioridad==='alta'}).length
-    var totalValor=sugs.reduce(function(a,s){return a+(parseInt(s.ticket_estimado)||0)},0)
-    
-    document.getElementById('badge-sug-count').textContent=sugs.length
-    var desc='$'+parseInt(totalValor).toLocaleString('es-CL')+' potencial'
-    if(urg>0) desc=urg+' urgente'+(urg!==1?'s':'')+' · '+desc
-    else if(alta>0) desc=alta+' alta prioridad · '+desc
-    else desc=sugs.length+' clientes para contactar · '+desc
-    
-    document.getElementById('widget-sug-desc').textContent=desc
-    document.getElementById('widget-sug').style.display='flex'
-  }catch(e){console.warn('Widget sug:',e)}
-})();
-
-// Toggle grupo inspecciones + carga badge
-function toggleGrp(id){
-  var items=document.getElementById(id+'-items')
-  var arr=document.getElementById(id==='inspecciones'?'inspGrpArr':id+'GrpArr')
-  if(items.style.display==='none'){
-    items.style.display='block'
-    if(arr) arr.style.transform='rotate(0deg)'
-  } else {
-    items.style.display='none'
-    if(arr) arr.style.transform='rotate(-90deg)'
-  }
-}
-
-(async function(){
-  try{
-    var SB='https://bqlgfmqcefledqyodkii.supabase.co'
-    var K='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
-    var r=await fetch(SB+'/rest/v1/inspecciones_12puntos?select=items_criticos,items_atencion,oferta_enviada,fecha&order=fecha.desc&limit=100',{headers:{apikey:K,Authorization:'Bearer '+K}})
-    if(!r.ok) return
-    var ins=await r.json()
-    var pendientes=ins.filter(function(i){return !i.oferta_enviada && (i.items_criticos>0||i.items_atencion>0)}).length
-    var b=document.getElementById('inspGrpBadge')
-    if(b){
-      if(pendientes>0) b.innerHTML='🔴 '+pendientes+' pendientes'
-      else b.innerHTML=ins.length+' totales'
-    }
-  }catch(e){}
-})();
-
-// Badge de solicitudes de agenda pendientes
-(async function(){
-  try{
-    var SB='https://bqlgfmqcefledqyodkii.supabase.co'
-    var K='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
-    var r=await fetch(SB+'/rest/v1/agenda?select=id,urgencia&origen=eq.agente&estado=eq.solicitada',{headers:{apikey:K,Authorization:'Bearer '+K}})
-    if(!r.ok) return
-    var sols=await r.json()
-    var urg=sols.filter(function(s){return s.urgencia==='urgente'}).length
-    var b=document.getElementById('badgeSolic')
-    if(b){
-      if(urg>0) b.innerHTML='🚨 '+urg+' urgentes'
-      else if(sols.length>0) b.innerHTML='🟡 '+sols.length+' pendientes'
-      else b.innerHTML='Todas al día'
-    }
-  }catch(e){}
-})();
-
-// Badge de triage matinal pendiente
-(async function(){
-  try{
-    var SB='https://bqlgfmqcefledqyodkii.supabase.co'
-    var K='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
-    var hoy=new Date().toISOString().substring(0,10)
-    var r=await fetch(SB+'/rest/v1/presupuestos?select=id,created_at,total,pago_cliente,estado_servicio,revisar_desde&estado_servicio=neq.completado&order=created_at.asc&limit=200',{headers:{apikey:K,Authorization:'Bearer '+K}})
-    if(!r.ok) return
-    var pptos=await r.json()
-    var pendientes=pptos.filter(function(p){
-      if(p.pago_cliente==='pagado') return false
-      if(p.estado_servicio==='rechazado') return false
-      var dias=Math.floor((new Date()-new Date(p.created_at))/86400000)
-      if(dias<1) return false
-      if(p.revisar_desde && p.revisar_desde>hoy) return false
-      return true
-    })
-    var monto=pendientes.reduce(function(s,p){return s+(p.total||0)},0)
-    var b=document.getElementById('badgeTriage')
-    if(b){
-      if(pendientes.length===0) b.innerHTML='✅ Al día'
-      else b.innerHTML='🎯 '+pendientes.length+' por revisar · $'+(monto>=1000000?(monto/1000000).toFixed(1)+'M':Math.round(monto/1000)+'k')
-    }
-  }catch(e){}
-})();
-</script>
 </body>
 </html>

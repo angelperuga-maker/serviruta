@@ -37,6 +37,34 @@ input:focus{outline:none;border-color:var(--dorado)}
 .lista-wrap{background:var(--s1);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;min-height:0}
 .lista-head{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
 .lista-tit{font-family:var(--display);font-weight:800;font-size:14px;color:var(--t1)}
+.filtros-row{display:flex;flex-direction:column;gap:8px}
+.filtros-fila{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
+.filtros-fila::-webkit-scrollbar{display:none}
+.filtro-lbl{font-family:var(--mono);font-size:8px;color:var(--t3);letter-spacing:0.1em;font-weight:700}
+.chip{padding:5px 10px;background:var(--s2);border:1px solid var(--line);border-radius:8px;font-family:var(--mono);font-size:10px;color:var(--t3);cursor:pointer;font-weight:700;white-space:nowrap;transition:all 150ms;flex-shrink:0}
+.chip:hover{color:var(--t1)}
+.chip.active{background:var(--dorado);color:#000;border-color:var(--dorado)}
+.chip.cat-emergencia.active{background:var(--rojo);border-color:var(--rojo);color:#fff}
+.chip.cat-embrague.active{background:#F97316;border-color:#F97316;color:#fff}
+.chip.cat-dpf.active{background:#8B5CF6;border-color:#8B5CF6;color:#fff}
+.chip.cat-precompra.active{background:var(--dorado);color:#000}
+.chip.cat-cotizacion.active{background:var(--verde);color:#000}
+.badge-cat{font-family:var(--mono);font-size:7px;padding:2px 5px;border-radius:4px;font-weight:700;letter-spacing:0.05em;margin-left:4px}
+.badge-cat.emergencia{background:rgba(232,33,10,0.2);color:var(--rojo-l)}
+.badge-cat.embrague{background:rgba(249,115,22,0.15);color:#F97316}
+.badge-cat.dpf{background:rgba(139,92,246,0.15);color:#8B5CF6}
+.badge-cat.precompra{background:rgba(212,175,55,0.15);color:var(--dorado)}
+.badge-cat.pre_rt{background:rgba(96,165,250,0.15);color:var(--azul)}
+.badge-cat.cotizacion{background:rgba(34,197,94,0.15);color:var(--verde)}
+.badge-cat.mantencion{background:rgba(245,197,24,0.15);color:var(--amarillo)}
+.badge-cat.reagendar{background:rgba(200,139,159,0.15);color:#C88B9F}
+.badge-cat.b2b{background:rgba(167,139,250,0.15);color:var(--violeta)}
+.badge-cat.consulta{background:rgba(139,137,144,0.15);color:var(--t3)}
+.badge-canal{font-family:var(--mono);font-size:7px;padding:2px 5px;border-radius:4px;font-weight:700;letter-spacing:0.05em;margin-left:4px}
+.badge-canal.whatsapp{background:rgba(34,197,94,0.15);color:var(--verde)}
+.badge-canal.web{background:rgba(96,165,250,0.15);color:var(--azul)}
+.badge-canal.referido{background:rgba(212,175,55,0.15);color:var(--dorado)}
+.badge-canal.outbound{background:rgba(167,139,250,0.15);color:var(--violeta)}
 .lista{flex:1;overflow-y:auto;padding:6px 0}
 .conv{padding:12px 14px;cursor:pointer;border-bottom:1px solid var(--s3);display:flex;flex-direction:column;gap:4px;transition:all 150ms}
 .conv:hover{background:var(--s2)}
@@ -118,6 +146,12 @@ input:focus{outline:none;border-color:var(--dorado)}
     <div class="lista-head">
       <div class="lista-tit">Conversaciones</div>
       <input type="text" id="buscar" placeholder="Buscar por nombre o teléfono..." oninput="filtrar()">
+      <div class="filtros-row">
+        <div class="filtro-lbl">CATEGORÍA</div>
+        <div class="filtros-fila" id="chips-cat"></div>
+        <div class="filtro-lbl">CANAL</div>
+        <div class="filtros-fila" id="chips-canal"></div>
+      </div>
     </div>
     <div class="lista" id="lista">
       <div class="loader">Cargando...</div>
@@ -142,6 +176,29 @@ var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI
 var TODAS = []
 var SELECTED_ID = null
 var FILTRO = ''
+var FILTRO_CAT = 'todas'
+var FILTRO_CANAL = 'todos'
+
+var CATEGORIAS = [
+  {id:'todas', lbl:'📋 Todas', emoji:'📋'},
+  {id:'emergencia', lbl:'🚨 Emergencia', emoji:'🚨'},
+  {id:'embrague', lbl:'⚙️ Embrague', emoji:'⚙️'},
+  {id:'dpf', lbl:'💨 DPF/FAP', emoji:'💨'},
+  {id:'cotizacion', lbl:'💰 Cotización', emoji:'💰'},
+  {id:'mantencion', lbl:'🔧 Mantención', emoji:'🔧'},
+  {id:'precompra', lbl:'🚛 Precompra', emoji:'🚛'},
+  {id:'pre_rt', lbl:'📄 Pre-RT', emoji:'📄'},
+  {id:'b2b', lbl:'🏢 B2B', emoji:'🏢'},
+  {id:'reagendar', lbl:'📅 Reagendar', emoji:'📅'},
+  {id:'consulta', lbl:'❓ Consulta', emoji:'❓'}
+]
+var CANALES = [
+  {id:'todos', lbl:'📡 Todos'},
+  {id:'whatsapp', lbl:'💬 WhatsApp'},
+  {id:'web', lbl:'🌐 Web'},
+  {id:'referido', lbl:'👥 Referido'},
+  {id:'outbound', lbl:'📞 Outbound'}
+]
 
 function toast(msg, tipo){
   var t = document.getElementById('toast')
@@ -207,15 +264,38 @@ async function cargar(){
   renderLista()
 }
 
+function renderChips(){
+  var contCat = document.getElementById('chips-cat')
+  var contCanal = document.getElementById('chips-canal')
+  var htmlC=''
+  CATEGORIAS.forEach(function(c){
+    htmlC += '<button class="chip cat-'+c.id+(FILTRO_CAT===c.id?' active':'')+'" onclick="setCat(\''+c.id+'\')">'+c.lbl+'</button>'
+  })
+  contCat.innerHTML = htmlC
+  var htmlN=''
+  CANALES.forEach(function(c){
+    htmlN += '<button class="chip"'+(FILTRO_CANAL===c.id?' style="background:var(--dorado);color:#000;border-color:var(--dorado)"':'')+' onclick="setCanal(\''+c.id+'\')">'+c.lbl+'</button>'
+  })
+  contCanal.innerHTML = htmlN
+}
+function setCat(c){FILTRO_CAT=c; renderChips(); renderLista()}
+function setCanal(c){FILTRO_CANAL=c; renderChips(); renderLista()}
+
 function renderLista(){
   var lista = document.getElementById('lista')
   var filtradas = TODAS
   if(FILTRO){
     var f = FILTRO.toLowerCase()
-    filtradas = TODAS.filter(function(c){
+    filtradas = filtradas.filter(function(c){
       return (c.nombre||'').toLowerCase().indexOf(f) !== -1 || 
              (c.telefono||'').indexOf(f) !== -1
     })
+  }
+  if(FILTRO_CAT !== 'todas'){
+    filtradas = filtradas.filter(function(c){return (c.categoria||'consulta') === FILTRO_CAT})
+  }
+  if(FILTRO_CANAL !== 'todos'){
+    filtradas = filtradas.filter(function(c){return (c.canal||'whatsapp') === FILTRO_CANAL})
   }
   
   if(filtradas.length === 0){
@@ -238,8 +318,13 @@ function renderLista(){
     html += '</div>'
     html += '<div class="conv-preview">' + preview + '</div>'
     html += '<div class="conv-tel">+' + (c.telefono || '') + '</div>'
+    var cat = c.categoria || 'consulta'
+    var canal = c.canal || 'whatsapp'
+    var catEmoji = (CATEGORIAS.find(function(x){return x.id===cat})||{emoji:'❓'}).emoji
     html += '<div class="conv-tags">'
     html += '<span class="badge ' + agente + '">' + agente.toUpperCase() + '</span>'
+    html += '<span class="badge-cat ' + cat + '">' + catEmoji + ' ' + cat.toUpperCase() + '</span>'
+    html += '<span class="badge-canal ' + canal + '">' + canal.toUpperCase() + '</span>'
     if(isCliente) html += '<span class="badge crm">CRM</span>'
     html += '</div>'
     html += '</div>'
@@ -349,6 +434,7 @@ function abrirWA(tel){
   window.open('https://wa.me/' + tel, '_blank')
 }
 
+renderChips()
 cargar()
 // Auto-refresh cada 30 segundos
 setInterval(cargar, 30000)

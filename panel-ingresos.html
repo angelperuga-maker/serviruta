@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Panel de Ingresos · Serviruta</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0A0D;--s1:#111114;--s2:#16161B;--s3:#1C1C23;--line:#26262E;--rojo:#E8210A;--rojo-l:#FF4D2E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--violeta:#A78BFA;--dorado:#D4AF37;--t1:#F6F4EF;--t2:#C7C5BF;--t3:#8B8990;--display:'Syne',sans-serif;--body:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--t2);font-family:var(--body);font-size:14px;line-height:1.5;min-height:100vh;padding-bottom:40px}
+button{border:none;background:none;color:inherit;font-family:inherit;cursor:pointer}
+
+.bar{position:sticky;top:0;z-index:50;background:rgba(10,10,13,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;align-items:center;gap:10px}
+.back{font-family:var(--mono);font-size:10px;color:var(--t3);padding:6px 10px;border:1px solid var(--line);border-radius:6px;cursor:pointer}
+.sigil{width:34px;height:34px;background:linear-gradient(135deg,var(--verde),var(--dorado));border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:14px;color:#000}
+.title{font-family:var(--display);font-weight:800;font-size:14px;color:var(--t1);flex:1;line-height:1.1}
+.title small{display:block;font-family:var(--mono);font-size:9px;color:var(--verde);letter-spacing:0.15em;margin-top:2px;font-weight:700}
+.refresh{padding:6px 12px;background:var(--s2);border:1px solid var(--line);border-radius:8px;font-family:var(--mono);font-size:10px;color:var(--t2);cursor:pointer}
+
+.shell{max-width:1200px;margin:0 auto;padding:20px 16px}
+
+/* Hero */
+.hero{background:linear-gradient(135deg,rgba(34,197,94,0.10),rgba(212,175,55,0.05));border:1px solid rgba(34,197,94,0.3);border-radius:16px;padding:22px;margin-bottom:20px}
+.hero-tit{font-family:var(--display);font-weight:900;font-size:24px;color:var(--t1);letter-spacing:-0.5px}
+.hero-tit em{color:var(--verde);font-style:normal}
+.hero-desc{font-size:13px;color:var(--t2);margin-top:6px}
+
+/* Periodos principales - 3 columnas grandes */
+.periodos{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px}
+.periodo{background:var(--s1);border:1px solid var(--line);border-radius:16px;padding:22px;position:relative;overflow:hidden}
+.periodo::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--verde)}
+.periodo.semana::before{background:var(--azul)}
+.periodo.mes::before{background:var(--dorado)}
+.periodo-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.periodo-lbl{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.15em;text-transform:uppercase;font-weight:700}
+.periodo-ico{font-size:22px}
+.periodo-monto{font-family:var(--display);font-weight:900;font-size:32px;color:var(--t1);letter-spacing:-1.5px;line-height:1;margin-bottom:6px}
+.periodo.dia .periodo-monto{color:var(--verde)}
+.periodo.semana .periodo-monto{color:var(--azul)}
+.periodo.mes .periodo-monto{color:var(--dorado)}
+.periodo-sub{font-size:11px;color:var(--t3);font-family:var(--mono);letter-spacing:0.05em}
+.periodo-sub strong{color:var(--t2);font-weight:600}
+.periodo-fecha{font-family:var(--mono);font-size:9px;color:var(--t3);margin-top:10px;letter-spacing:0.05em}
+
+/* KPIs secundarios */
+.kpis-sec{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+.kpi{background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:14px}
+.kpi-lbl{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-bottom:6px}
+.kpi-num{font-family:var(--display);font-weight:900;font-size:20px;line-height:1;letter-spacing:-0.5px;color:var(--t1)}
+.kpi.warn .kpi-num{color:var(--amarillo)}
+.kpi.hist .kpi-num{color:var(--violeta)}
+.kpi.ticket .kpi-num{color:var(--rojo-l)}
+.kpi.pendientes .kpi-num{color:var(--azul)}
+.kpi-sub{font-size:10px;color:var(--t3);margin-top:4px}
+
+/* Sección grafico + últimos */
+.seccion{margin-bottom:20px}
+.seccion-tit{font-family:var(--display);font-weight:800;font-size:16px;color:var(--t1);margin-bottom:12px;padding-left:4px;letter-spacing:-0.3px}
+
+/* Grafico simple últimos 7 días */
+.grafico-wrap{background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:16px}
+.grafico{display:flex;align-items:flex-end;gap:8px;height:180px;padding:10px 0}
+.barra-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer}
+.barra-monto{font-family:var(--mono);font-size:9px;color:var(--t3);font-weight:700;transition:color 200ms;white-space:nowrap}
+.barra{width:100%;background:linear-gradient(180deg,var(--verde),#15803d);border-radius:6px 6px 0 0;min-height:4px;transition:all 300ms}
+.barra:hover{background:linear-gradient(180deg,#4ADE80,var(--verde))}
+.barra-wrap:hover .barra-monto{color:var(--verde)}
+.barra-lbl{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.05em;text-transform:uppercase}
+
+/* Tabla últimos servicios */
+.tabla-wrap{background:var(--s1);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.tabla{width:100%;border-collapse:collapse}
+.tabla th{background:var(--s2);padding:12px 14px;text-align:left;font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.05em;font-weight:700;border-bottom:1px solid var(--line)}
+.tabla td{padding:12px 14px;border-bottom:1px solid var(--s3);font-size:13px}
+.tabla tr:last-child td{border-bottom:none}
+.tabla .cliente{color:var(--t1);font-weight:600}
+.tabla .monto{color:var(--verde);font-family:var(--mono);font-weight:700;text-align:right}
+.tabla .fecha{color:var(--t3);font-family:var(--mono);font-size:10px}
+.tabla .servicio{color:var(--t2);font-size:12px}
+
+.loader{padding:40px 20px;text-align:center;color:var(--t3);font-family:var(--mono);font-size:11px}
+.loader::before{content:"◐";display:inline-block;animation:spin 1s linear infinite;margin-right:6px;font-size:16px}
+@keyframes spin{100%{transform:rotate(360deg)}}
+
+@media(max-width:768px){
+  .periodos{grid-template-columns:1fr;gap:10px}
+  .kpis-sec{grid-template-columns:repeat(2,1fr)}
+  .periodo-monto{font-size:28px}
+  .grafico{height:140px}
+  .barra-monto{font-size:8px}
+}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <button class="back" onclick="location.href='menu-coordinador.html'">← Volver</button>
+  <div class="sigil">$</div>
+  <div class="title">Panel de Ingresos<small>ACTUALIZADO EN VIVO</small></div>
+  <button class="refresh" onclick="cargar()">↻ Recargar</button>
+</header>
+
+<div class="shell">
+
+  <div class="hero">
+    <div class="hero-tit">Panel de <em>ingresos</em></div>
+    <div class="hero-desc">Métricas diarias, semanales y mensuales · Datos de presupuestos aprobados y servicios completados</div>
+  </div>
+
+  <div id="contenido">
+    <div class="loader">Cargando datos...</div>
+  </div>
+
+</div>
+
+<script>
+var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+
+function fmtCLP(n){
+  n = parseInt(n) || 0
+  return '$' + n.toLocaleString('es-CL')
+}
+
+function fmtFecha(iso){
+  if(!iso) return ''
+  var d = new Date(iso)
+  return d.toLocaleDateString('es-CL', {day:'2-digit', month:'2-digit'})
+}
+
+async function sbGet(path){
+  var r = await fetch(SB_URL + '/rest/v1/' + path, {
+    headers: {'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY}
+  })
+  return r.ok ? await r.json() : []
+}
+
+async function cargar(){
+  var cont = document.getElementById('contenido')
+  cont.innerHTML = '<div class="loader">Cargando datos...</div>'
+  
+  // 1. Obtener TODOS los presupuestos cobrados y valorizados
+  var todos = await sbGet('presupuestos?total=gt.0&select=id,cliente,vehiculo,total,estado,estado_servicio,created_at,fecha_pago,items&order=created_at.desc')
+  
+  var hoy = new Date()
+  hoy.setHours(0,0,0,0)
+  var inicioSemana = new Date(hoy)
+  inicioSemana.setDate(hoy.getDate() - hoy.getDay() + (hoy.getDay() === 0 ? -6 : 1)) // Lunes
+  var inicioMes = new Date(hoy.getFullYear(), hoy.getMonth(), 1)
+  
+  // Filtrar cobrados = completado + aprobada
+  var cobrados = todos.filter(function(p){return p.estado_servicio==='completado' && p.estado==='aprobada'})
+  var porCobrar = todos.filter(function(p){return p.estado==='valorizada'})
+  
+  // Métricas por período
+  function calcPeriodo(desde){
+    var subset = cobrados.filter(function(p){return new Date(p.created_at) >= desde})
+    return {
+      count: subset.length,
+      total: subset.reduce(function(s,p){return s + (p.total||0)}, 0)
+    }
+  }
+  
+  var dia = calcPeriodo(hoy)
+  var semana = calcPeriodo(inicioSemana)
+  var mes = calcPeriodo(inicioMes)
+  var historico = {count: cobrados.length, total: cobrados.reduce(function(s,p){return s + (p.total||0)}, 0)}
+  var pendiente = {count: porCobrar.length, total: porCobrar.reduce(function(s,p){return s + (p.total||0)}, 0)}
+  var ticket = cobrados.length > 0 ? Math.round(historico.total / cobrados.length) : 0
+  
+  // Ingresos últimos 7 días para gráfico
+  var dias7 = []
+  for(var i=6; i>=0; i--){
+    var d = new Date(hoy)
+    d.setDate(hoy.getDate() - i)
+    var dNext = new Date(d)
+    dNext.setDate(d.getDate() + 1)
+    var subset = cobrados.filter(function(p){
+      var pd = new Date(p.created_at)
+      return pd >= d && pd < dNext
+    })
+    dias7.push({
+      fecha: d,
+      total: subset.reduce(function(s,p){return s + (p.total||0)}, 0),
+      count: subset.length
+    })
+  }
+  var maxDia = Math.max.apply(null, dias7.map(function(d){return d.total}))
+  if(maxDia === 0) maxDia = 1
+  
+  // Últimos 8 servicios cobrados
+  var ultimos = cobrados.slice(0, 8)
+  
+  // Render
+  var html = ''
+  
+  // 3 períodos
+  html += '<div class="periodos">'
+  html += '<div class="periodo dia">'
+  html += '<div class="periodo-hdr"><div class="periodo-lbl">📅 Diario</div><div class="periodo-ico">🌅</div></div>'
+  html += '<div class="periodo-monto">' + fmtCLP(dia.total) + '</div>'
+  html += '<div class="periodo-sub"><strong>' + dia.count + '</strong> servicio' + (dia.count!==1?'s':'') + ' cobrado' + (dia.count!==1?'s':'') + '</div>'
+  html += '<div class="periodo-fecha">HOY · ' + fmtFecha(hoy) + '</div>'
+  html += '</div>'
+  
+  html += '<div class="periodo semana">'
+  html += '<div class="periodo-hdr"><div class="periodo-lbl">📊 Semanal</div><div class="periodo-ico">📈</div></div>'
+  html += '<div class="periodo-monto">' + fmtCLP(semana.total) + '</div>'
+  html += '<div class="periodo-sub"><strong>' + semana.count + '</strong> servicios cobrados</div>'
+  html += '<div class="periodo-fecha">DESDE ' + fmtFecha(inicioSemana) + ' (LUNES)</div>'
+  html += '</div>'
+  
+  html += '<div class="periodo mes">'
+  html += '<div class="periodo-hdr"><div class="periodo-lbl">💎 Mensual</div><div class="periodo-ico">💰</div></div>'
+  html += '<div class="periodo-monto">' + fmtCLP(mes.total) + '</div>'
+  html += '<div class="periodo-sub"><strong>' + mes.count + '</strong> servicios cobrados</div>'
+  html += '<div class="periodo-fecha">DESDE ' + fmtFecha(inicioMes) + '</div>'
+  html += '</div>'
+  html += '</div>'
+  
+  // KPIs secundarios
+  html += '<div class="kpis-sec">'
+  html += '<div class="kpi pendientes"><div class="kpi-lbl">⏳ Por Cobrar</div><div class="kpi-num">' + fmtCLP(pendiente.total) + '</div><div class="kpi-sub">' + pendiente.count + ' presupuestos</div></div>'
+  html += '<div class="kpi ticket"><div class="kpi-lbl">💵 Ticket Promedio</div><div class="kpi-num">' + fmtCLP(ticket) + '</div><div class="kpi-sub">por servicio</div></div>'
+  html += '<div class="kpi hist"><div class="kpi-lbl">📚 Histórico Total</div><div class="kpi-num">' + fmtCLP(historico.total) + '</div><div class="kpi-sub">' + historico.count + ' servicios</div></div>'
+  html += '<div class="kpi warn"><div class="kpi-lbl">🎯 Meta Mes</div><div class="kpi-num">' + Math.round((mes.total / 5000000) * 100) + '%</div><div class="kpi-sub">de $5M objetivo</div></div>'
+  html += '</div>'
+  
+  // Gráfico últimos 7 días
+  html += '<div class="seccion">'
+  html += '<div class="seccion-tit">📈 Últimos 7 días</div>'
+  html += '<div class="grafico-wrap">'
+  html += '<div class="grafico">'
+  dias7.forEach(function(d){
+    var altura = Math.round((d.total / maxDia) * 140)
+    if(altura < 4) altura = 4
+    var dia = d.fecha.toLocaleDateString('es-CL', {weekday:'short'}).substring(0,3).toUpperCase()
+    var esHoy = d.fecha.toDateString() === new Date().toDateString()
+    html += '<div class="barra-wrap" title="' + d.count + ' servicios">'
+    html += '<div class="barra-monto">' + (d.total > 0 ? '$' + Math.round(d.total/1000) + 'k' : '-') + '</div>'
+    html += '<div class="barra" style="height:' + altura + 'px' + (esHoy?';background:linear-gradient(180deg,var(--dorado),#B8933A)':'') + '"></div>'
+    html += '<div class="barra-lbl">' + dia + '</div>'
+    html += '</div>'
+  })
+  html += '</div>'
+  html += '</div>'
+  html += '</div>'
+  
+  // Últimos servicios
+  html += '<div class="seccion">'
+  html += '<div class="seccion-tit">🕐 Últimos cobros</div>'
+  html += '<div class="tabla-wrap"><table class="tabla">'
+  html += '<thead><tr><th>Fecha</th><th>Cliente</th><th>Vehículo</th><th style="text-align:right">Monto</th></tr></thead>'
+  html += '<tbody>'
+  if(ultimos.length === 0){
+    html += '<tr><td colspan="4" style="text-align:center;color:var(--t3);padding:20px;font-style:italic">Sin cobros recientes</td></tr>'
+  } else {
+    ultimos.forEach(function(p){
+      html += '<tr>'
+      html += '<td class="fecha">' + fmtFecha(p.created_at) + '</td>'
+      html += '<td class="cliente">' + (p.cliente || 'Sin nombre').substring(0, 30) + '</td>'
+      html += '<td class="servicio">' + (p.vehiculo || '—').substring(0, 20) + '</td>'
+      html += '<td class="monto">' + fmtCLP(p.total) + '</td>'
+      html += '</tr>'
+    })
+  }
+  html += '</tbody></table></div>'
+  html += '</div>'
+  
+  cont.innerHTML = html
+}
+
+cargar()
+setInterval(cargar, 60000) // Auto-refresh cada minuto
+</script>
+
+</body>
+</html>

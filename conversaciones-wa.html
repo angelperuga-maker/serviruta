@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Conversaciones WhatsApp · Serviruta</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0A0D;--s1:#111114;--s2:#16161B;--s3:#1C1C23;--line:#26262E;--rojo:#E8210A;--rojo-l:#FF4D2E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--violeta:#A78BFA;--dorado:#D4AF37;--rosa:#FF6B9D;--t1:#F6F4EF;--t2:#C7C5BF;--t3:#8B8990;--display:'Syne',sans-serif;--body:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--t2);font-family:var(--body);font-size:14px;line-height:1.5;min-height:100vh}
+button{border:none;background:none;color:inherit;font-family:inherit;cursor:pointer}
+input{background:var(--s2);border:1px solid var(--line);border-radius:8px;padding:10px 12px;color:var(--t1);font-family:inherit;font-size:14px;width:100%}
+input:focus{outline:none;border-color:var(--dorado)}
+
+.bar{position:sticky;top:0;z-index:50;background:rgba(10,10,13,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;align-items:center;gap:10px}
+.back{font-family:var(--mono);font-size:10px;color:var(--t3);padding:6px 10px;border:1px solid var(--line);border-radius:6px;cursor:pointer}
+.sigil{width:34px;height:34px;background:linear-gradient(135deg,var(--verde),var(--dorado));border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:14px;color:#000}
+.title{font-family:var(--display);font-weight:800;font-size:14px;color:var(--t1);flex:1;line-height:1.1}
+.title small{display:block;font-family:var(--mono);font-size:9px;color:var(--verde);letter-spacing:0.15em;margin-top:2px;font-weight:700}
+.refresh{padding:6px 12px;background:var(--s2);border:1px solid var(--line);border-radius:8px;font-family:var(--mono);font-size:10px;color:var(--t2);cursor:pointer}
+.refresh:hover{color:var(--dorado)}
+
+.shell{max-width:1400px;margin:0 auto;padding:16px;display:grid;grid-template-columns:380px 1fr;gap:16px;height:calc(100vh - 62px)}
+
+/* KPIs */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;grid-column:1/-1;margin-bottom:8px}
+.kpi{background:var(--s1);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.kpi-lbl{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-bottom:4px}
+.kpi-num{font-family:var(--display);font-weight:900;font-size:22px;line-height:1;letter-spacing:-1px}
+.kpi.total .kpi-num{color:var(--azul)}
+.kpi.activas .kpi-num{color:var(--verde)}
+.kpi.handoff .kpi-num{color:var(--amarillo)}
+.kpi.hoy .kpi-num{color:var(--rojo-l)}
+
+/* Lista de conversaciones */
+.lista-wrap{background:var(--s1);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;min-height:0}
+.lista-head{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
+.lista-tit{font-family:var(--display);font-weight:800;font-size:14px;color:var(--t1)}
+.lista{flex:1;overflow-y:auto;padding:6px 0}
+.conv{padding:12px 14px;cursor:pointer;border-bottom:1px solid var(--s3);display:flex;flex-direction:column;gap:4px;transition:all 150ms}
+.conv:hover{background:var(--s2)}
+.conv.selected{background:var(--s3);border-left:3px solid var(--dorado)}
+.conv-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.conv-nombre{font-weight:700;color:var(--t1);font-size:13px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.conv-hora{font-family:var(--mono);font-size:9px;color:var(--t3);white-space:nowrap}
+.conv-preview{font-size:11px;color:var(--t3);line-height:1.3;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical}
+.conv-tel{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.05em}
+.conv-tags{display:flex;gap:4px;margin-top:2px;flex-wrap:wrap}
+.badge{font-family:var(--mono);font-size:8px;padding:2px 6px;border-radius:4px;font-weight:700;letter-spacing:0.05em}
+.badge.rita{background:rgba(255,107,157,0.15);color:var(--rosa)}
+.badge.marco{background:rgba(96,165,250,0.15);color:var(--azul)}
+.badge.pedro{background:rgba(245,197,24,0.15);color:var(--amarillo)}
+.badge.emilio{background:rgba(232,33,10,0.15);color:var(--rojo-l)}
+.badge.elena{background:rgba(167,139,250,0.15);color:var(--violeta)}
+.badge.coty{background:rgba(34,197,94,0.15);color:var(--verde)}
+.badge.humano{background:rgba(245,197,24,0.15);color:var(--amarillo)}
+.badge.crm{background:rgba(212,175,55,0.15);color:var(--dorado)}
+
+/* Panel de detalle */
+.detalle-wrap{background:var(--s1);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;min-height:0}
+.detalle-head{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.detalle-info{flex:1;min-width:0}
+.detalle-nombre{font-family:var(--display);font-weight:800;font-size:15px;color:var(--t1)}
+.detalle-tel{font-family:var(--mono);font-size:10px;color:var(--t3);margin-top:2px}
+.acciones{display:flex;gap:6px;flex-wrap:wrap}
+.btn-acc{padding:6px 12px;background:var(--s2);border:1px solid var(--line);border-radius:8px;font-family:var(--mono);font-size:10px;color:var(--t2);cursor:pointer;font-weight:700;letter-spacing:0.05em}
+.btn-acc:hover{color:var(--dorado);border-color:var(--dorado)}
+.btn-acc.rojo{color:var(--rojo-l);border-color:rgba(232,33,10,0.3)}
+.btn-acc.rojo:hover{background:rgba(232,33,10,0.1)}
+.btn-acc.verde{color:var(--verde);border-color:rgba(34,197,94,0.3)}
+.btn-acc.verde:hover{background:rgba(34,197,94,0.1)}
+
+.mensajes{flex:1;overflow-y:auto;padding:16px;background:linear-gradient(180deg,var(--bg),var(--s1))}
+.msg{max-width:75%;margin-bottom:10px;padding:10px 14px;border-radius:14px;font-size:13px;line-height:1.4;position:relative;word-break:break-word}
+.msg.user{background:var(--s3);color:var(--t1);border-bottom-left-radius:4px}
+.msg.assistant{background:linear-gradient(135deg,#0F3B2A,#0A2E20);color:var(--t1);border-bottom-right-radius:4px;margin-left:auto}
+.msg-time{font-family:var(--mono);font-size:9px;color:var(--t3);margin-top:4px;letter-spacing:0.05em}
+.msg-agente{font-family:var(--mono);font-size:9px;color:var(--verde);font-weight:700;letter-spacing:0.05em;margin-bottom:2px}
+
+.empty-detalle{flex:1;display:flex;align-items:center;justify-content:center;color:var(--t3);font-size:13px;font-style:italic;padding:40px}
+
+.loader{padding:40px 20px;text-align:center;color:var(--t3);font-family:var(--mono);font-size:11px}
+.loader::before{content:"◐";display:inline-block;animation:spin 1s linear infinite;margin-right:6px;font-size:16px}
+@keyframes spin{100%{transform:rotate(360deg)}}
+
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:10px 16px;font-size:12px;color:var(--t1);opacity:0;transition:all 300ms;pointer-events:none;z-index:200}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.ok{border-color:var(--verde);color:var(--verde)}
+
+@media(max-width:900px){
+  .shell{grid-template-columns:1fr;height:auto}
+  .detalle-wrap{min-height:60vh}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <button class="back" onclick="location.href='menu-coordinador.html'">← Volver</button>
+  <div class="sigil">C</div>
+  <div class="title">Conversaciones WhatsApp<small>MONITOR EN VIVO</small></div>
+  <button class="refresh" onclick="cargar()" title="Recargar">↻ Recargar</button>
+</header>
+
+<div class="shell">
+  
+  <div class="kpis">
+    <div class="kpi total"><div class="kpi-lbl">💬 Total</div><div class="kpi-num" id="k-total">0</div></div>
+    <div class="kpi activas"><div class="kpi-lbl">🟢 Bot activo</div><div class="kpi-num" id="k-activas">0</div></div>
+    <div class="kpi handoff"><div class="kpi-lbl">🙋 Handoff humano</div><div class="kpi-num" id="k-handoff">0</div></div>
+    <div class="kpi hoy"><div class="kpi-lbl">📅 Últimas 24h</div><div class="kpi-num" id="k-hoy">0</div></div>
+  </div>
+  
+  <!-- LISTA -->
+  <div class="lista-wrap">
+    <div class="lista-head">
+      <div class="lista-tit">Conversaciones</div>
+      <input type="text" id="buscar" placeholder="Buscar por nombre o teléfono..." oninput="filtrar()">
+    </div>
+    <div class="lista" id="lista">
+      <div class="loader">Cargando...</div>
+    </div>
+  </div>
+  
+  <!-- DETALLE -->
+  <div class="detalle-wrap" id="detalle-wrap">
+    <div class="empty-detalle">
+      ← Selecciona una conversación para ver el detalle
+    </div>
+  </div>
+  
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+
+var TODAS = []
+var SELECTED_ID = null
+var FILTRO = ''
+
+function toast(msg, tipo){
+  var t = document.getElementById('toast')
+  t.textContent = msg
+  t.className = 'toast ' + (tipo || '')
+  t.classList.add('show')
+  setTimeout(function(){t.classList.remove('show')}, 2500)
+}
+
+async function sbGet(path){
+  var r = await fetch(SB_URL + '/rest/v1/' + path, {
+    headers: {'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY}
+  })
+  return r.ok ? await r.json() : []
+}
+
+async function sbUpd(path, data){
+  var r = await fetch(SB_URL + '/rest/v1/' + path, {
+    method: 'PATCH',
+    headers: {'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal'},
+    body: JSON.stringify(data)
+  })
+  return r.ok
+}
+
+function fmtHora(iso){
+  if(!iso) return ''
+  var d = new Date(iso)
+  var ahora = new Date()
+  var dif = (ahora - d) / 1000
+  if(dif < 60) return 'ahora'
+  if(dif < 3600) return Math.floor(dif/60) + 'm'
+  if(dif < 86400) return Math.floor(dif/3600) + 'h'
+  if(dif < 86400*7) return Math.floor(dif/86400) + 'd'
+  return d.toISOString().substring(5,10)
+}
+
+function fmtHoraCompleta(iso){
+  if(!iso) return ''
+  var d = new Date(iso)
+  return d.toLocaleString('es-CL', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'})
+}
+
+async function cargar(){
+  var lista = document.getElementById('lista')
+  lista.innerHTML = '<div class="loader">Cargando...</div>'
+  
+  TODAS = await sbGet('conversaciones_wa?select=*&order=ultima_actividad.desc')
+  
+  var activas = TODAS.filter(function(c){return !c.handoff_humano}).length
+  var handoff = TODAS.filter(function(c){return c.handoff_humano}).length
+  var hace24h = Date.now() - 24*3600*1000
+  var hoy = TODAS.filter(function(c){
+    var ts = new Date(c.ultima_actividad).getTime()
+    return ts > hace24h
+  }).length
+  
+  document.getElementById('k-total').textContent = TODAS.length
+  document.getElementById('k-activas').textContent = activas
+  document.getElementById('k-handoff').textContent = handoff
+  document.getElementById('k-hoy').textContent = hoy
+  
+  renderLista()
+}
+
+function renderLista(){
+  var lista = document.getElementById('lista')
+  var filtradas = TODAS
+  if(FILTRO){
+    var f = FILTRO.toLowerCase()
+    filtradas = TODAS.filter(function(c){
+      return (c.nombre||'').toLowerCase().indexOf(f) !== -1 || 
+             (c.telefono||'').indexOf(f) !== -1
+    })
+  }
+  
+  if(filtradas.length === 0){
+    lista.innerHTML = '<div class="loader" style="animation:none">Sin resultados</div>'
+    return
+  }
+  
+  var html = ''
+  filtradas.forEach(function(c){
+    var msgs = c.mensajes || []
+    var ultimoMsg = msgs.length > 0 ? msgs[msgs.length-1] : null
+    var preview = ultimoMsg ? (ultimoMsg.content || '').substring(0, 60) : 'Sin mensajes'
+    var agente = c.handoff_humano ? 'humano' : (c.agente_actual || 'rita')
+    var isCliente = c.cliente_id ? true : false
+    
+    html += '<div class="conv ' + (c.id === SELECTED_ID ? 'selected' : '') + '" onclick="seleccionar(\'' + c.id + '\')">'
+    html += '<div class="conv-head">'
+    html += '<div class="conv-nombre">' + (c.nombre || 'Sin nombre') + '</div>'
+    html += '<div class="conv-hora">' + fmtHora(c.ultima_actividad) + '</div>'
+    html += '</div>'
+    html += '<div class="conv-preview">' + preview + '</div>'
+    html += '<div class="conv-tel">+' + (c.telefono || '') + '</div>'
+    html += '<div class="conv-tags">'
+    html += '<span class="badge ' + agente + '">' + agente.toUpperCase() + '</span>'
+    if(isCliente) html += '<span class="badge crm">CRM</span>'
+    html += '</div>'
+    html += '</div>'
+  })
+  
+  lista.innerHTML = html
+}
+
+function filtrar(){
+  FILTRO = document.getElementById('buscar').value
+  renderLista()
+}
+
+function seleccionar(id){
+  SELECTED_ID = id
+  var conv = TODAS.find(function(c){return c.id === id})
+  if(!conv) return
+  renderLista()
+  renderDetalle(conv)
+}
+
+function renderDetalle(conv){
+  var wrap = document.getElementById('detalle-wrap')
+  var msgs = conv.mensajes || []
+  var agente = conv.handoff_humano ? 'humano' : (conv.agente_actual || 'rita')
+  
+  var html = ''
+  html += '<div class="detalle-head">'
+  html += '<div class="detalle-info">'
+  html += '<div class="detalle-nombre">' + (conv.nombre || 'Sin nombre') + ' <span class="badge ' + agente + '" style="margin-left:8px">' + agente.toUpperCase() + '</span></div>'
+  html += '<div class="detalle-tel">+' + conv.telefono + ' · ' + msgs.length + ' mensajes · Última actividad ' + fmtHoraCompleta(conv.ultima_actividad) + '</div>'
+  html += '</div>'
+  html += '<div class="acciones">'
+  if(conv.handoff_humano){
+    html += '<button class="btn-acc verde" onclick="reactivarBot(\'' + conv.id + '\')">🤖 Reactivar bot</button>'
+  } else {
+    html += '<button class="btn-acc rojo" onclick="forzarHandoff(\'' + conv.id + '\')">🙋 Forzar humano</button>'
+  }
+  html += '<button class="btn-acc" onclick="resetChat(\'' + conv.id + '\')">🔄 Reset chat</button>'
+  html += '<button class="btn-acc" onclick="abrirWA(\'' + conv.telefono + '\')">📱 Abrir WA</button>'
+  html += '</div>'
+  html += '</div>'
+  
+  html += '<div class="mensajes" id="mensajes">'
+  if(msgs.length === 0){
+    html += '<div style="text-align:center;color:var(--t3);font-style:italic;padding:40px">Sin mensajes en el historial</div>'
+  } else {
+    msgs.forEach(function(m){
+      var role = m.role || 'assistant'
+      var content = (m.content || '').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>')
+      var timeStr = m.ts ? new Date(m.ts).toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'}) : ''
+      var agenteStr = m.agente ? '<div class="msg-agente">🤖 ' + m.agente.toUpperCase() + '</div>' : ''
+      
+      html += '<div class="msg ' + role + '">'
+      if(role === 'assistant') html += agenteStr
+      html += content
+      if(timeStr) html += '<div class="msg-time">' + timeStr + '</div>'
+      html += '</div>'
+    })
+  }
+  html += '</div>'
+  
+  wrap.innerHTML = html
+  
+  // Scroll al final
+  setTimeout(function(){
+    var m = document.getElementById('mensajes')
+    if(m) m.scrollTop = m.scrollHeight
+  }, 50)
+}
+
+async function reactivarBot(id){
+  var ok = await sbUpd('conversaciones_wa?id=eq.' + id, {handoff_humano: false, agente_actual: 'rita', ultima_actividad: new Date().toISOString()})
+  if(ok){
+    toast('🤖 Bot reactivado', 'ok')
+    setTimeout(cargar, 300)
+  } else {
+    toast('❌ Error', '')
+  }
+}
+
+async function forzarHandoff(id){
+  var ok = await sbUpd('conversaciones_wa?id=eq.' + id, {handoff_humano: true, agente_actual: 'humano', ultima_actividad: new Date().toISOString()})
+  if(ok){
+    toast('🙋 Bot desactivado, atenderá humano', 'ok')
+    setTimeout(cargar, 300)
+  } else {
+    toast('❌ Error', '')
+  }
+}
+
+async function resetChat(id){
+  if(!confirm('¿Borrar historial de mensajes y reiniciar con Rita?')) return
+  var ok = await sbUpd('conversaciones_wa?id=eq.' + id, {
+    handoff_humano: false, agente_actual: 'rita', 
+    mensajes: [], ultima_actividad: new Date().toISOString()
+  })
+  if(ok){
+    toast('🔄 Chat reseteado', 'ok')
+    setTimeout(cargar, 300)
+  } else {
+    toast('❌ Error', '')
+  }
+}
+
+function abrirWA(tel){
+  window.open('https://wa.me/' + tel, '_blank')
+}
+
+cargar()
+// Auto-refresh cada 30 segundos
+setInterval(cargar, 30000)
+</script>
+
+</body>
+</html>

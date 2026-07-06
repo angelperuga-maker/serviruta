@@ -209,10 +209,25 @@ var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI
 var TECNICOS=[
   {nombre:'Reynaldo Aguas Bertel',tel:'+56935287199'},
   {nombre:'Kiven Henz',tel:'+56964880196'},
-  {nombre:'Humberto Morales',tel:'+56994946414'},
-  {nombre:'Giovanino Perugini',tel:'+56933592097'},
-  {nombre:'Javier Honores',tel:'+56929161693'}
+  {nombre:'Giovanino Perugini',tel:'+56933592097'}
 ]
+
+// Cargar técnicos activos desde BD al inicio
+async function cargarTecnicosDB(){
+  try{
+    var url = 'https://bqlgfmqcefledqyodkii.supabase.co/rest/v1/tecnicos?activo=eq.true&select=nombre,telefono&order=nombre.asc'
+    var key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+    var r = await fetch(url, {headers:{'apikey':key,'Authorization':'Bearer '+key}})
+    if(r.ok){
+      var data = await r.json()
+      if(data && data.length){
+        TECNICOS = data.map(function(t){return {nombre:t.nombre, tel:t.telefono||''}})
+        console.log('[AGENDA] Técnicos activos cargados:', TECNICOS.length)
+      }
+    }
+  }catch(e){console.error('Err cargar técnicos:',e)}
+}
+cargarTecnicosDB()
 
 var fechaActual=new Date()
 fechaActual.setHours(0,0,0,0)
@@ -404,8 +419,8 @@ function abrirNuevo(){
   // Pintar técnicos
   var grid=document.getElementById('tec-grid')
   grid.innerHTML=TECNICOS.map(function(t,i){
-    return '<label class="tec-chip" onclick="this.classList.toggle(\'selected\')">'+
-      '<input type="checkbox" class="t-chk" value="'+t.nombre+'">'+
+    return '<label class="tec-chip" onclick="toggleTecnico(event, this)">'+
+      '<input type="checkbox" class="t-chk" value="'+t.nombre.replace(/"/g,'&quot;')+'" style="pointer-events:none">'+
       '<div class="tec-chip-dot"></div>'+
       '<div class="tec-chip-nombre">'+t.nombre.split(' ')[0]+'</div>'+
     '</label>'
@@ -416,6 +431,20 @@ function abrirNuevo(){
 
 function cerrarModal(){
   document.getElementById('modal').classList.remove('open')
+}
+
+// Toggle sincronizado del chip técnico (checkbox + clase visual)
+function toggleTecnico(ev, label){
+  ev.preventDefault()
+  var chk = label.querySelector('.t-chk')
+  var estaba = label.classList.contains('selected')
+  if(estaba){
+    label.classList.remove('selected')
+    chk.checked = false
+  } else {
+    label.classList.add('selected')
+    chk.checked = true
+  }
 }
 
 // ==========================================

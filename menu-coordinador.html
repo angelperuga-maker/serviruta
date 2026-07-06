@@ -6,96 +6,66 @@
 <title>Hub Coordinador · Serviruta</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
-:root{
-  /* Paleta clara elegante */
-  --bg:#FAF7F0;
-  --s1:#FFFFFF;
-  --s2:#F5F1E8;
-  --s3:#EEE8DA;
-  --line:#E4DDC9;
-  --line-soft:#EFEADB;
-  
-  /* Acentos suaves */
-  --rojo:#C24A2E;
-  --rojo-l:#D96B4A;
-  --verde:#7A9968;
-  --verde-l:#94B383;
-  --amarillo:#D4A548;
-  --azul:#7391B0;
-  --azul-l:#94AEC9;
-  --violeta:#9384A8;
-  --dorado:#B89355;
-  --dorado-l:#D4B47A;
-  --rosa:#C88B9F;
-  
-  /* Textos suaves */
-  --t1:#2B2620;
-  --t2:#5E574A;
-  --t3:#8F877A;
-  --t4:#B8B0A0;
-  
-  /* Shadow suave */
-  --shadow-sm:0 1px 2px rgba(43,38,32,0.04);
-  --shadow-md:0 2px 8px rgba(43,38,32,0.06);
-  --shadow-lg:0 8px 24px rgba(43,38,32,0.08);
-  
-  --display:'Syne',sans-serif;
-  --body:'DM Sans',sans-serif;
-  --mono:'JetBrains Mono',monospace;
-}
+:root{--bg:#0A0A0D;--s1:#111114;--s2:#16161B;--s3:#1C1C23;--line:#26262E;--rojo:#E8210A;--rojo-l:#FF4D2E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--violeta:#A78BFA;--dorado:#D4AF37;--rosa:#FF6B9D;--t1:#F6F4EF;--t2:#C7C5BF;--t3:#8B8990;--display:'Syne',sans-serif;--body:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--t2);font-family:var(--body);font-size:14px;line-height:1.5;min-height:100vh;padding-bottom:60px;-webkit-font-smoothing:antialiased}
+body{background:var(--bg);color:var(--t2);font-family:var(--body);font-size:14px;line-height:1.5;min-height:100vh;padding-bottom:60px}
 a{color:inherit;text-decoration:none}
 button{border:none;background:none;color:inherit;font-family:inherit;cursor:pointer}
 
-.bar{position:sticky;top:0;z-index:50;background:rgba(250,247,240,0.9);backdrop-filter:blur(20px);border-bottom:1px solid var(--line-soft);padding:14px 20px;display:flex;align-items:center;gap:12px}
-.sigil{width:40px;height:40px;background:linear-gradient(135deg,var(--dorado),var(--rojo));border-radius:11px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:900;font-size:16px;color:#fff;box-shadow:var(--shadow-md)}
-.title{font-family:var(--display);font-weight:800;font-size:16px;color:var(--t1);flex:1;line-height:1.1;letter-spacing:-0.3px}
-.title small{display:block;font-family:var(--mono);font-size:9px;color:var(--dorado);letter-spacing:0.15em;margin-top:3px;font-weight:700}
-.status{width:8px;height:8px;background:var(--verde);border-radius:50%;box-shadow:0 0 0 3px rgba(122,153,104,0.15)}
+.bar{position:sticky;top:0;z-index:60;background:rgba(10,10,13,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;align-items:center;gap:12px}
+.sigil{width:38px;height:38px;background:linear-gradient(135deg,var(--dorado),var(--rojo));border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:900;font-size:16px;color:#000}
+.title{font-family:var(--display);font-weight:800;font-size:15px;color:var(--t1);flex:1;line-height:1.1}
+.title small{display:block;font-family:var(--mono);font-size:9px;color:var(--dorado);letter-spacing:0.15em;margin-top:2px;font-weight:700}
+.status{width:8px;height:8px;background:var(--verde);border-radius:50%;box-shadow:0 0 12px var(--verde)}
 
-.shell{max-width:1100px;margin:0 auto;padding:20px}
+.shell{max-width:1100px;margin:0 auto;padding:16px}
 
-/* Hero */
-.hero{background:linear-gradient(135deg,#FFF8ED,#FDF3E1);border:1px solid var(--line-soft);border-radius:20px;padding:26px;margin-bottom:28px;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;top:-40%;right:-10%;width:300px;height:300px;background:radial-gradient(circle,rgba(184,147,85,0.12),transparent 70%);pointer-events:none}
-.hero-tit{font-family:var(--display);font-weight:900;font-size:28px;color:var(--t1);letter-spacing:-0.8px;line-height:1.1;position:relative}
+.hero{background:linear-gradient(135deg,rgba(232,33,10,0.12),rgba(212,175,55,0.05));border:1px solid rgba(212,175,55,0.3);border-radius:16px;padding:18px 20px;margin-bottom:14px}
+.hero-tit{font-family:var(--display);font-weight:900;font-size:22px;color:var(--t1);letter-spacing:-0.5px;line-height:1.1}
 .hero-tit em{color:var(--dorado);font-style:normal}
-.hero-desc{font-size:14px;color:var(--t2);margin-top:10px;max-width:540px;position:relative}
+.hero-desc{font-size:12px;color:var(--t2);margin-top:6px}
 
-/* Secciones */
-.seccion{margin-bottom:32px}
-.seccion-head{display:flex;align-items:center;gap:12px;margin-bottom:16px;padding:0 4px}
-.seccion-num{font-family:var(--mono);font-size:10px;color:var(--dorado);font-weight:700;letter-spacing:0.15em;padding:4px 8px;background:rgba(184,147,85,0.1);border-radius:6px}
-.seccion-tit{font-family:var(--display);font-weight:800;font-size:18px;color:var(--t1);letter-spacing:-0.4px}
-.seccion-line{flex:1;height:1px;background:linear-gradient(90deg,var(--line),transparent)}
-.seccion-badge{padding:3px 10px;background:var(--s2);border:1px solid var(--line-soft);border-radius:8px;font-family:var(--mono);font-size:9px;color:var(--t3);font-weight:700;letter-spacing:0.05em}
-.sub-label{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.12em;font-weight:700;margin:20px 4px 10px;text-transform:uppercase}
+.tabs-nav{position:sticky;top:63px;z-index:55;background:var(--bg);padding:10px 0 6px;margin:0 -16px 20px;padding-left:16px;padding-right:16px;overflow-x:auto;scrollbar-width:none}
+.tabs-nav::-webkit-scrollbar{display:none}
+.tabs-wrap{display:flex;gap:8px;min-width:min-content}
+.tab-btn{padding:12px 16px;background:var(--s1);border:1px solid var(--line);border-radius:12px;font-family:var(--display);font-weight:700;font-size:13px;color:var(--t3);cursor:pointer;transition:all 180ms;white-space:nowrap;display:flex;align-items:center;gap:8px;flex-shrink:0}
+.tab-btn:hover{background:var(--s2);color:var(--t1)}
+.tab-btn.active{background:linear-gradient(135deg,var(--dorado),#B8933A);color:#000;border-color:var(--dorado);box-shadow:0 4px 12px rgba(212,175,55,0.25)}
+.tab-btn .tab-num{font-family:var(--mono);font-size:9px;font-weight:700;opacity:0.6;letter-spacing:0.1em}
+.tab-btn.active .tab-num{opacity:0.7;color:#000}
+.tab-btn .tab-count{font-family:var(--mono);font-size:9px;padding:2px 6px;background:rgba(0,0,0,0.2);border-radius:5px;color:var(--t3);font-weight:700}
+.tab-btn.active .tab-count{background:rgba(0,0,0,0.15);color:#000}
 
-.grid{display:grid;gap:12px}
+.tab-panel{display:none;animation:fadeIn 300ms ease-out}
+.tab-panel.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+.panel-head{margin-bottom:14px;padding:0 4px}
+.panel-tit{font-family:var(--display);font-weight:800;font-size:18px;color:var(--t1);letter-spacing:-0.3px}
+.panel-desc{font-size:12px;color:var(--t3);margin-top:4px}
+.sub-label{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.1em;font-weight:700;margin:18px 4px 8px;display:flex;align-items:center;gap:8px}
+.sub-label::after{content:'';flex:1;height:1px;background:var(--line)}
+
+.grid{display:grid;gap:10px}
 .grid-2{grid-template-columns:repeat(2,1fr)}
 .grid-3{grid-template-columns:repeat(3,1fr)}
 
-/* Card base */
-.card{background:var(--s1);border:1px solid var(--line-soft);border-radius:14px;padding:18px;cursor:pointer;transition:all 250ms cubic-bezier(0.4,0,0.2,1);display:flex;flex-direction:column;gap:6px;min-height:100px;position:relative;overflow:hidden;box-shadow:var(--shadow-sm)}
-.card:hover{border-color:var(--line);transform:translateY(-2px);box-shadow:var(--shadow-md)}
-.card-icon{font-size:24px;margin-bottom:4px;filter:saturate(0.9)}
-.card-tit{font-family:var(--display);font-weight:700;font-size:14px;color:var(--t1);line-height:1.2;letter-spacing:-0.2px}
-.card-desc{font-size:12px;color:var(--t3);line-height:1.35}
-.card-tag{position:absolute;top:10px;right:10px;font-family:var(--mono);font-size:9px;font-weight:700;padding:3px 7px;border-radius:5px;letter-spacing:0.05em}
-.card-tag.hot{background:rgba(194,74,46,0.1);color:var(--rojo)}
-.card-tag.new{background:rgba(122,153,104,0.12);color:var(--verde)}
-.card-tag.ext{background:rgba(115,145,176,0.1);color:var(--azul)}
+.card{background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:14px;cursor:pointer;transition:all 200ms;display:flex;flex-direction:column;gap:5px;min-height:80px;position:relative;overflow:hidden}
+.card:hover{background:var(--s2);border-color:var(--t3);transform:translateY(-1px)}
+.card-icon{font-size:20px;margin-bottom:2px}
+.card-tit{font-family:var(--display);font-weight:700;font-size:13px;color:var(--t1);line-height:1.2}
+.card-desc{font-size:10px;color:var(--t3);line-height:1.3}
+.card-tag{position:absolute;top:8px;right:8px;font-family:var(--mono);font-size:8px;font-weight:700;padding:2px 6px;border-radius:4px;letter-spacing:0.05em}
+.card-tag.hot{background:rgba(232,33,10,0.2);color:var(--rojo-l)}
+.card-tag.new{background:rgba(34,197,94,0.2);color:var(--verde)}
+.card-tag.wa{background:rgba(34,197,94,0.2);color:var(--verde)}
 
-/* Card premium destacada */
-.card.premium{background:linear-gradient(135deg,#FFF7E5,#FDEED0);border:2px solid var(--dorado-l);grid-column:1/-1;padding:22px;min-height:120px}
-.card.premium:hover{border-color:var(--dorado);transform:translateY(-3px);box-shadow:var(--shadow-lg)}
-.card.premium .card-tit{color:var(--dorado);font-size:17px}
-.card.premium .card-icon{font-size:28px}
-.card.premium .card-desc{color:var(--t2);font-size:13px}
+.card.premium{background:linear-gradient(135deg,rgba(212,175,55,0.15),rgba(232,33,10,0.05));border:2px solid var(--dorado);grid-column:1/-1;padding:18px}
+.card.premium .card-tit{color:var(--dorado);font-size:16px}
+.card.premium .card-icon{font-size:26px}
+.card.premium .card-desc{font-size:12px;color:var(--t2)}
 
-/* Cards agentes */
-.card.agente{background:var(--s1);border-left:4px solid var(--azul);min-height:82px;padding:14px 16px;box-shadow:var(--shadow-sm)}
+.card.agente{background:var(--s1);border-left:3px solid var(--azul);min-height:72px;padding:12px 14px}
 .card.agente.rita{border-left-color:var(--rosa)}
 .card.agente.marco{border-left-color:var(--azul)}
 .card.agente.pedro{border-left-color:var(--amarillo)}
@@ -103,26 +73,30 @@ button{border:none;background:none;color:inherit;font-family:inherit;cursor:poin
 .card.agente.elena{border-left-color:var(--violeta)}
 .card.agente.coty{border-left-color:var(--verde)}
 .card.agente.outbound{border-left-color:var(--dorado)}
-.card.agente .card-tit{font-size:14px}
-.card.agente .card-desc{font-size:11px}
+.card.agente.otro{border-left-color:var(--t3)}
+.card.agente .card-tit{font-size:12px}
+.card.agente .card-desc{font-size:9px}
 
-/* Cards admin */
-.card.admin{background:var(--s2);border-color:var(--line-soft)}
-.card.admin:hover{background:#F8F4EA;border-color:var(--line)}
+.card.admin{background:var(--s2);border-color:var(--s3)}
+.card.admin:hover{border-color:var(--azul)}
 
-/* Cards público */
-.card.publico{background:linear-gradient(135deg,#F5F8FB,#EFF3F8);border-color:rgba(115,145,176,0.25)}
-.card.publico:hover{border-color:var(--azul-l)}
+.card.aliado{background:var(--s1);border-left:3px solid var(--dorado)}
+.card.aliado:hover{border-color:var(--dorado)}
+
+.card.publico{background:linear-gradient(135deg,var(--s2),var(--s1));border-color:rgba(96,165,250,0.3)}
+.card.publico:hover{border-color:var(--azul)}
+
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--s2);border:1px solid var(--line);border-radius:12px;padding:12px 18px;font-size:12px;color:var(--t1);opacity:0;transition:all 300ms;pointer-events:none;z-index:200;box-shadow:0 10px 30px rgba(0,0,0,0.5);max-width:90vw}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast strong{color:var(--verde);font-weight:700}
 
 @media(max-width:640px){
-  .shell{padding:16px}
   .grid-3{grid-template-columns:repeat(2,1fr)}
   .grid-2{grid-template-columns:1fr}
-  .card{min-height:88px;padding:14px}
-  .card-tit{font-size:13px}
-  .hero-tit{font-size:22px}
-  .hero{padding:20px}
-  .seccion-tit{font-size:16px}
+  .card{min-height:76px;padding:11px}
+  .card-tit{font-size:12px}
+  .hero-tit{font-size:20px}
+  .tab-btn{padding:10px 14px;font-size:12px}
 }
 </style>
 </head>
@@ -138,92 +112,191 @@ button{border:none;background:none;color:inherit;font-family:inherit;cursor:poin
 
   <div class="hero">
     <div class="hero-tit">Bienvenido, <em>coordinador</em></div>
-    <div class="hero-desc">Control central de operaciones. Inspecciones, agentes IA, agenda y CRM en un solo lugar.</div>
+    <div class="hero-desc">Control central. Todos los módulos organizados por pestañas.</div>
   </div>
 
-  <!-- 1. INSPECCIONES Y REVISIONES -->
-  <section class="seccion">
-    <div class="seccion-head">
-      <span class="seccion-num">01</span>
-      <div class="seccion-tit">🔧 Inspecciones y Revisiones</div>
-      <div class="seccion-line"></div>
-      <div class="seccion-badge">5 fichas</div>
+  <nav class="tabs-nav">
+    <div class="tabs-wrap">
+      <button class="tab-btn active" data-tab="inspecciones">
+        <span class="tab-num">01</span>
+        <span>🔧 Inspecciones</span>
+        <span class="tab-count">15</span>
+      </button>
+      <button class="tab-btn" data-tab="agentes">
+        <span class="tab-num">02</span>
+        <span>🤖 Agentes</span>
+        <span class="tab-count">15</span>
+      </button>
+      <button class="tab-btn" data-tab="admin">
+        <span class="tab-num">03</span>
+        <span>👥 Admin</span>
+        <span class="tab-count">26</span>
+      </button>
+      <button class="tab-btn" data-tab="aliados">
+        <span class="tab-num">04</span>
+        <span>🤝 Aliados</span>
+        <span class="tab-count">9</span>
+      </button>
+      <button class="tab-btn" data-tab="publico">
+        <span class="tab-num">05</span>
+        <span>🌐 Públicos</span>
+        <span class="tab-count">7</span>
+      </button>
     </div>
-    <div class="grid grid-3">
+  </nav>
 
+  <!-- ===== PANEL 1: INSPECCIONES ===== -->
+  <div class="tab-panel active" id="panel-inspecciones">
+    <div class="panel-head">
+      <div class="panel-tit">🔧 Inspecciones y Revisiones</div>
+      <div class="panel-desc">Todas las fichas y protocolos técnicos</div>
+    </div>
+
+    <div class="sub-label">🌟 REVISIONES PREMIUM</div>
+    <div class="grid grid-3">
       <div class="card premium" onclick="location.href='revision-precompra-camion.html'">
         <span class="card-tag hot">$350K</span>
         <div class="card-icon">💎</div>
         <div class="card-tit">Iniciar Revisión Premium Camión</div>
-        <div class="card-desc">120 puntos · Análisis fluidos · Prueba ruta · Certificación completa</div>
+        <div class="card-desc">120 puntos · Análisis fluidos · Prueba ruta · Certificación</div>
       </div>
-
       <div class="card" onclick="location.href='revision-precompra-pesados.html'">
         <div class="card-icon">🚛</div>
-        <div class="card-tit">Revisión Precompra Pesados</div>
+        <div class="card-tit">Precompra Pesados</div>
         <div class="card-desc">Camiones, buses, maquinaria</div>
       </div>
+      <div class="card" onclick="location.href='inspeccion-precompra-tecnico.html'">
+        <div class="card-icon">🔍</div>
+        <div class="card-tit">Precompra Técnico</div>
+        <div class="card-desc">Vista técnico ejecutor</div>
+      </div>
+      <div class="card" onclick="location.href='reporte-precompra.html'">
+        <div class="card-icon">📑</div>
+        <div class="card-tit">Reporte Precompra</div>
+        <div class="card-desc">Informe final entregable</div>
+      </div>
+    </div>
 
+    <div class="sub-label">🔧 INSPECCIONES</div>
+    <div class="grid grid-3">
       <div class="card" onclick="location.href='inspeccion-12puntos.html'">
         <div class="card-icon">🔧</div>
-        <div class="card-tit">Inspección Express 12 Puntos</div>
+        <div class="card-tit">Express 12 Puntos</div>
         <div class="card-desc">Recambios rápidos + checklist</div>
       </div>
-
-      <div class="card" onclick="location.href='pre-rt-camion.html'">
-        <div class="card-icon">📋</div>
-        <div class="card-tit">Pre-Revisión Técnica Camión</div>
-        <div class="card-desc">Informe PRT · $150-250k</div>
+      <div class="card" onclick="location.href='inspeccion-camion.html'">
+        <div class="card-icon">🚚</div>
+        <div class="card-tit">Inspección Camión</div>
+        <div class="card-desc">Ficha general camiones</div>
       </div>
+      <div class="card" onclick="location.href='inspeccion-tecnico.html'">
+        <div class="card-icon">👨‍🔧</div>
+        <div class="card-tit">Inspección Técnico</div>
+        <div class="card-desc">Vista ejecución técnico</div>
+      </div>
+      <div class="card" onclick="location.href='inspecciones-diagnosticos.html'">
+        <div class="card-icon">🩺</div>
+        <div class="card-tit">Inspecciones y Diagnósticos</div>
+        <div class="card-desc">DPF · Eléctrico · Frenos · DTC</div>
+      </div>
+    </div>
 
+    <div class="sub-label">📋 PRE-REVISIÓN TÉCNICA (PRT)</div>
+    <div class="grid grid-3">
+      <div class="card" onclick="location.href='pre-revision-tecnica-camion.html'">
+        <div class="card-icon">📋</div>
+        <div class="card-tit">Pre-RT Camión</div>
+        <div class="card-desc">Ficha de pre-revisión técnica</div>
+      </div>
+      <div class="card" onclick="location.href='inspeccion-pre-rt-camion.html'">
+        <div class="card-icon">✅</div>
+        <div class="card-tit">Inspección Pre-RT</div>
+        <div class="card-desc">Chequeo pre-RT ejecutar</div>
+      </div>
+      <div class="card" onclick="location.href='panel-informes-pre-rt.html'">
+        <div class="card-icon">📊</div>
+        <div class="card-tit">Panel Informes Pre-RT</div>
+        <div class="card-desc">Todos los informes emitidos</div>
+      </div>
+      <div class="card" onclick="location.href='protocolos-pre-rt-camion.html'">
+        <div class="card-icon">📖</div>
+        <div class="card-tit">Protocolos Pre-RT</div>
+        <div class="card-desc">Guías y checklist internos</div>
+      </div>
+      <div class="card" onclick="location.href='informe-pre-rt.html'">
+        <div class="card-icon">📄</div>
+        <div class="card-tit">Informe Pre-RT</div>
+        <div class="card-desc">Documento entregable</div>
+      </div>
+    </div>
+
+    <div class="sub-label">🩺 DIAGNÓSTICOS</div>
+    <div class="grid grid-3">
+      <div class="card" onclick="location.href='central-diagnostico.html'">
+        <div class="card-icon">🎯</div>
+        <div class="card-tit">Central Diagnóstico</div>
+        <div class="card-desc">Hub central de diagnósticos</div>
+      </div>
+      <div class="card" onclick="location.href='diagnosticos-coord.html'">
+        <div class="card-icon">🧠</div>
+        <div class="card-tit">Diagnósticos Coord</div>
+        <div class="card-desc">Vista coordinador</div>
+      </div>
+      <div class="card" onclick="location.href='inspecciones-coord.html'">
+        <div class="card-icon">📌</div>
+        <div class="card-tit">Inspecciones Coord</div>
+        <div class="card-desc">Vista coordinador inspecciones</div>
+      </div>
       <div class="card" onclick="location.href='inspecciones-historial.html'">
         <div class="card-icon">📊</div>
-        <div class="card-tit">Historial de Inspecciones</div>
-        <div class="card-desc">KPIs · Filtros · Todas las revisiones</div>
+        <div class="card-tit">Historial Inspecciones</div>
+        <div class="card-desc">KPIs · Filtros · Todas</div>
       </div>
-
     </div>
-  </section>
+  </div>
 
-  <!-- 2. AGENTES IA -->
-  <section class="seccion">
-    <div class="seccion-head">
-      <span class="seccion-num">02</span>
-      <div class="seccion-tit">🤖 Agentes IA</div>
-      <div class="seccion-line"></div>
-      <div class="seccion-badge">6 inbound · 5 outbound</div>
+  <!-- ===== PANEL 2: AGENTES ===== -->
+  <div class="tab-panel" id="panel-agentes">
+    <div class="panel-head">
+      <div class="panel-tit">🤖 Agentes IA</div>
+      <div class="panel-desc">Todos los agentes: WhatsApp, ventas y sistema</div>
     </div>
 
-    <div class="sub-label">Inbound · Conversaciones entrantes</div>
+    <div class="sub-label">📱 INBOUND · BOT WHATSAPP +56 9 8507 9392</div>
     <div class="grid grid-3">
-      <div class="card agente rita" onclick="location.href='agente-chat.html?id=rita'">
+      <div class="card agente rita" onclick="infoAgente('Rita','👋','Triage rápido inbound')">
+        <span class="card-tag wa">WA</span>
         <div class="card-tit">👋 Rita</div>
         <div class="card-desc">Triage rápido · 3 datos</div>
       </div>
-      <div class="card agente marco" onclick="location.href='agente-chat.html?id=marco'">
+      <div class="card agente marco" onclick="infoAgente('Marco','🚗','Especialista livianos')">
+        <span class="card-tag wa">WA</span>
         <div class="card-tit">🚗 Marco</div>
         <div class="card-desc">Livianos + diagnóstico</div>
       </div>
-      <div class="card agente pedro" onclick="location.href='agente-chat.html?id=pedro'">
+      <div class="card agente pedro" onclick="infoAgente('Pedro','🚛','Especialista pesados')">
+        <span class="card-tag wa">WA</span>
         <div class="card-tit">🚛 Pedro</div>
         <div class="card-desc">Pesados · Camiones</div>
       </div>
-      <div class="card agente emilio" onclick="location.href='agente-chat.html?id=emilio'">
+      <div class="card agente emilio" onclick="infoAgente('Emilio','🚨','Emergencias 24/7')">
         <span class="card-tag hot">24/7</span>
         <div class="card-tit">🚨 Emilio</div>
         <div class="card-desc">Emergencias · Cierra HOY</div>
       </div>
-      <div class="card agente elena" onclick="location.href='agente-chat.html?id=elena'">
+      <div class="card agente elena" onclick="infoAgente('Elena','🏢','B2B empresas')">
+        <span class="card-tag wa">WA</span>
         <div class="card-tit">🏢 Elena</div>
         <div class="card-desc">B2B · Empresas</div>
       </div>
-      <div class="card agente coty" onclick="location.href='agente-chat.html?id=coty'">
+      <div class="card agente coty" onclick="infoAgente('Coty','💰','Cotizador con catálogo')">
+        <span class="card-tag wa">WA</span>
         <div class="card-tit">💰 Coty</div>
         <div class="card-desc">Cotizador · Catálogo</div>
       </div>
     </div>
 
-    <div class="sub-label">Outbound · Prospección y ventas</div>
+    <div class="sub-label">🎯 OUTBOUND · PROSPECCIÓN Y VENTAS</div>
     <div class="grid grid-3">
       <div class="card agente outbound" onclick="location.href='agente-vendedor.html?id=diego'">
         <div class="card-tit">🎯 Diego</div>
@@ -246,111 +319,366 @@ button{border:none;background:none;color:inherit;font-family:inherit;cursor:poin
         <div class="card-desc">Aliados · Reclutamiento</div>
       </div>
     </div>
-  </section>
 
-  <!-- 3. PANEL DE ADMIN -->
-  <section class="seccion">
-    <div class="seccion-head">
-      <span class="seccion-num">03</span>
-      <div class="seccion-tit">👥 Panel de Admin</div>
-      <div class="seccion-line"></div>
-      <div class="seccion-badge">Operación diaria</div>
-    </div>
+    <div class="sub-label">⚙️ AGENTES DE SISTEMA</div>
     <div class="grid grid-3">
+      <div class="card agente otro" onclick="location.href='agente-coordinador.html'">
+        <div class="card-tit">🎛️ Agente Coordinador</div>
+        <div class="card-desc">Asistente para coordinar</div>
+      </div>
+      <div class="card agente otro" onclick="location.href='agente-tecnico.html'">
+        <div class="card-tit">🔧 Agente Técnico</div>
+        <div class="card-desc">Asistente para técnicos</div>
+      </div>
+      <div class="card agente otro" onclick="location.href='agente-captador.html'">
+        <div class="card-tit">🎣 Agente Captador</div>
+        <div class="card-desc">Captación leads</div>
+      </div>
+      <div class="card agente otro" onclick="location.href='agentes-clientes.html'">
+        <div class="card-tit">👥 Agentes Clientes</div>
+        <div class="card-desc">Vista de agentes por cliente</div>
+      </div>
+    </div>
+  </div>
 
+  <!-- ===== PANEL 3: ADMIN ===== -->
+  <div class="tab-panel" id="panel-admin">
+    <div class="panel-head">
+      <div class="panel-tit">👥 Panel de Admin</div>
+      <div class="panel-desc">Operación diaria · CRM · Finanzas · Métricas</div>
+    </div>
+
+    <div class="sub-label">📅 OPERACIÓN DIARIA</div>
+    <div class="grid grid-3">
       <div class="card admin" onclick="location.href='cierre-jornada.html'">
         <span class="card-tag new">NUEVO</span>
         <div class="card-icon">🌙</div>
         <div class="card-tit">Cierre de Jornada</div>
-        <div class="card-desc">Asignar técnicos a servicios agendados</div>
+        <div class="card-desc">Asignar técnicos</div>
       </div>
-
-      <div class="card admin" onclick="location.href='agenda-solicitudes.html'">
+      <div class="card admin" onclick="location.href='agenda.html'">
         <div class="card-icon">📅</div>
-        <div class="card-tit">Bandeja Solicitudes</div>
-        <div class="card-desc">Agendas pendientes del bot</div>
+        <div class="card-tit">Agenda</div>
+        <div class="card-desc">Todos los servicios</div>
       </div>
-
+      <div class="card admin" onclick="location.href='agenda-solicitudes.html'">
+        <div class="card-icon">📥</div>
+        <div class="card-tit">Bandeja Solicitudes</div>
+        <div class="card-desc">Agendas pendientes bot</div>
+      </div>
       <div class="card admin" onclick="location.href='pipeline-triage.html'">
         <div class="card-icon">🎯</div>
         <div class="card-tit">Pipeline Triage</div>
-        <div class="card-desc">Diego · Presupuestos matinales</div>
+        <div class="card-desc">Diego · Matinal</div>
       </div>
-
-      <div class="card admin" onclick="location.href='gastos.html'">
-        <div class="card-icon">💸</div>
-        <div class="card-tit">Control de Gastos</div>
-        <div class="card-desc">Ingreso, categorías y reportes</div>
+      <div class="card admin" onclick="location.href='monitor-operaciones.html'">
+        <div class="card-icon">📡</div>
+        <div class="card-tit">Monitor Operaciones</div>
+        <div class="card-desc">En tiempo real</div>
       </div>
+      <div class="card admin" onclick="location.href='buenos-dias.html'">
+        <div class="card-icon">☀️</div>
+        <div class="card-tit">Buenos Días</div>
+        <div class="card-desc">Resumen matinal</div>
+      </div>
+    </div>
 
-      <div class="card admin" onclick="location.href='presupuestos.html'">
+    <div class="sub-label">💰 FINANZAS</div>
+    <div class="grid grid-3">
+      <div class="card admin" onclick="location.href='presupuestos-coord.html'">
         <div class="card-icon">📄</div>
-        <div class="card-tit">Presupuestos Recibidos</div>
-        <div class="card-desc">Cotizaciones enviadas y aprobadas</div>
+        <div class="card-tit">Presupuestos</div>
+        <div class="card-desc">Recibidos y aprobados</div>
       </div>
+      <div class="card admin" onclick="location.href='ppto-coordinador.html'">
+        <div class="card-icon">📝</div>
+        <div class="card-tit">Nuevo Presupuesto</div>
+        <div class="card-desc">Crear cotización</div>
+      </div>
+      <div class="card admin" onclick="location.href='gastos-coord.html'">
+        <div class="card-icon">💸</div>
+        <div class="card-tit">Gastos Coord</div>
+        <div class="card-desc">Vista coordinador</div>
+      </div>
+      <div class="card admin" onclick="location.href='pagos-coord.html'">
+        <div class="card-icon">💵</div>
+        <div class="card-tit">Pagos</div>
+        <div class="card-desc">Ingresos y cobros</div>
+      </div>
+      <div class="card admin" onclick="location.href='historico-ventas.html'">
+        <div class="card-icon">📈</div>
+        <div class="card-tit">Histórico Ventas</div>
+        <div class="card-desc">Reportes mensuales</div>
+      </div>
+    </div>
 
+    <div class="sub-label">👤 CRM & CLIENTES</div>
+    <div class="grid grid-3">
       <div class="card admin" onclick="location.href='clientes.html'">
         <div class="card-icon">👤</div>
         <div class="card-tit">Clientes / CRM</div>
-        <div class="card-desc">610 clientes · LTV · Historial</div>
+        <div class="card-desc">610 clientes · LTV</div>
       </div>
-
-      <div class="card admin" onclick="location.href='tecnicos.html'">
-        <div class="card-icon">🔧</div>
-        <div class="card-tit">Técnicos</div>
-        <div class="card-desc">Reynaldo · Kiven · Giovanino</div>
+      <div class="card admin" onclick="location.href='clientes-crm.html'">
+        <div class="card-icon">📇</div>
+        <div class="card-tit">CRM Detallado</div>
+        <div class="card-desc">Vista completa</div>
       </div>
-
-      <div class="card admin" onclick="location.href='aliados.html'">
-        <div class="card-icon">🤝</div>
-        <div class="card-tit">Aliados</div>
-        <div class="card-desc">Red de talleres asociados</div>
+      <div class="card admin" onclick="location.href='leads.html'">
+        <div class="card-icon">🎯</div>
+        <div class="card-tit">Leads</div>
+        <div class="card-desc">Prospectos</div>
       </div>
-
-      <div class="card admin" onclick="location.href='conversaciones-wa.html'">
-        <div class="card-icon">💬</div>
-        <div class="card-tit">Conversaciones WhatsApp</div>
-        <div class="card-desc">Log de todos los chats con bot</div>
+      <div class="card admin" onclick="location.href='campanas-clientes.html'">
+        <div class="card-icon">📢</div>
+        <div class="card-tit">Campañas</div>
+        <div class="card-desc">Marketing outbound</div>
       </div>
-
+      <div class="card admin" onclick="location.href='segmentos-clientes.html'">
+        <div class="card-icon">🎨</div>
+        <div class="card-tit">Segmentos</div>
+        <div class="card-desc">Categorización</div>
+      </div>
+      <div class="card admin" onclick="location.href='remarketing.html'">
+        <div class="card-icon">🔄</div>
+        <div class="card-tit">Remarketing</div>
+        <div class="card-desc">Recuperación</div>
+      </div>
+      <div class="card admin" onclick="location.href='encuesta.html'">
+        <div class="card-icon">📝</div>
+        <div class="card-tit">Encuestas</div>
+        <div class="card-desc">NPS · Feedback</div>
+      </div>
     </div>
-  </section>
 
-  <!-- 4. SERVICIOS PÚBLICOS -->
-  <section class="seccion">
-    <div class="seccion-head">
-      <span class="seccion-num">04</span>
-      <div class="seccion-tit">🌐 Servicios Públicos</div>
-      <div class="seccion-line"></div>
-      <div class="seccion-badge">Landings externas</div>
-    </div>
+    <div class="sub-label">🔧 TÉCNICOS Y OPERACIÓN</div>
     <div class="grid grid-3">
-
-      <div class="card publico" onclick="window.open('https://angelperuga-maker.github.io/serviruta/landing-precompra.html','_blank')">
-        <span class="card-tag ext">↗ EXT</span>
-        <div class="card-icon">💎</div>
-        <div class="card-tit">Landing Precompra</div>
-        <div class="card-desc">Página pública · Captación de clientes</div>
+      <div class="card admin" onclick="location.href='mapa-tecnicos.html'">
+        <div class="card-icon">🗺️</div>
+        <div class="card-tit">Mapa Técnicos</div>
+        <div class="card-desc">Ubicación en vivo</div>
       </div>
+      <div class="card admin" onclick="location.href='ficha-tecnico.html'">
+        <div class="card-icon">🪪</div>
+        <div class="card-tit">Ficha Técnico</div>
+        <div class="card-desc">Perfil detallado</div>
+      </div>
+      <div class="card admin" onclick="location.href='postulaciones-coord.html'">
+        <div class="card-icon">📋</div>
+        <div class="card-tit">Postulaciones</div>
+        <div class="card-desc">Nuevos técnicos</div>
+      </div>
+      <div class="card admin" onclick="location.href='stock-tecnico.html'">
+        <div class="card-icon">📦</div>
+        <div class="card-tit">Stock</div>
+        <div class="card-desc">Inventario repuestos</div>
+      </div>
+      <div class="card admin" onclick="location.href='proveedores.html'">
+        <div class="card-icon">🏭</div>
+        <div class="card-tit">Proveedores</div>
+        <div class="card-desc">Red de suministros</div>
+      </div>
+      <div class="card admin" onclick="location.href='tecnico-menu.html'">
+        <div class="card-icon">🔧</div>
+        <div class="card-tit">Hub Técnico</div>
+        <div class="card-desc">Vista del técnico</div>
+      </div>
+      <div class="card admin" onclick="location.href='mis-servicios.html'">
+        <div class="card-icon">🛠️</div>
+        <div class="card-tit">Servicios</div>
+        <div class="card-desc">Todos ejecutados</div>
+      </div>
+      <div class="card admin" onclick="location.href='servicios-coord.html'">
+        <div class="card-icon">📌</div>
+        <div class="card-tit">Servicios Coord</div>
+        <div class="card-desc">Vista coordinador</div>
+      </div>
+    </div>
 
-      <div class="card publico" onclick="window.open('https://angelperuga-maker.github.io/serviruta/','_blank')">
-        <span class="card-tag ext">↗ EXT</span>
+    <div class="sub-label">📊 MÉTRICAS Y REPORTES</div>
+    <div class="grid grid-3">
+      <div class="card admin" onclick="location.href='desempeno-coord.html'">
+        <div class="card-icon">🏆</div>
+        <div class="card-tit">Desempeño Coord</div>
+        <div class="card-desc">KPIs equipo</div>
+      </div>
+      <div class="card admin" onclick="location.href='resumen-diario.html'">
+        <div class="card-icon">📋</div>
+        <div class="card-tit">Resumen Diario</div>
+        <div class="card-desc">Cierre del día</div>
+      </div>
+      <div class="card admin" onclick="location.href='sugerencias-diarias.html'">
+        <div class="card-icon">💡</div>
+        <div class="card-tit">Sugerencias IA</div>
+        <div class="card-desc">Recomendaciones</div>
+      </div>
+      <div class="card admin" onclick="location.href='simulador-tecnicos.html'">
+        <div class="card-icon">🎮</div>
+        <div class="card-tit">Simulador</div>
+        <div class="card-desc">Planificación técnicos</div>
+      </div>
+      <div class="card admin" onclick="location.href='login-coordinador.html'">
+        <div class="card-icon">🔐</div>
+        <div class="card-tit">Login Coord</div>
+        <div class="card-desc">Acceso administradores</div>
+      </div>
+      <div class="card admin" onclick="location.href='admin.html'">
+        <div class="card-icon">⚙️</div>
+        <div class="card-tit">Admin</div>
+        <div class="card-desc">Panel de control</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PANEL 4: ALIADOS ===== -->
+  <div class="tab-panel" id="panel-aliados">
+    <div class="panel-head">
+      <div class="panel-tit">🤝 Programa de Aliados</div>
+      <div class="panel-desc">Red comercial · Talleres asociados · Materiales</div>
+    </div>
+
+    <div class="sub-label">👥 GESTIÓN DE ALIADOS</div>
+    <div class="grid grid-3">
+      <div class="card aliado" onclick="location.href='aliados-admin.html'">
+        <div class="card-icon">🎛️</div>
+        <div class="card-tit">Aliados Admin</div>
+        <div class="card-desc">Panel principal aliados</div>
+      </div>
+      <div class="card aliado" onclick="location.href='aliados-v2.html'">
+        <div class="card-icon">👥</div>
+        <div class="card-tit">Aliados V2</div>
+        <div class="card-desc">Vista alternativa</div>
+      </div>
+    </div>
+
+    <div class="sub-label">📄 MATERIALES Y MARKETING</div>
+    <div class="grid grid-3">
+      <div class="card aliado" onclick="location.href='beneficios-aliados.html'">
+        <div class="card-icon">✨</div>
+        <div class="card-tit">Beneficios</div>
+        <div class="card-desc">Ventajas del programa</div>
+      </div>
+      <div class="card aliado" onclick="location.href='flyer-aliados.html'">
+        <div class="card-icon">📢</div>
+        <div class="card-tit">Flyer Aliados</div>
+        <div class="card-desc">Material promocional</div>
+      </div>
+      <div class="card aliado" onclick="location.href='instructivo-aliados.html'">
+        <div class="card-icon">📖</div>
+        <div class="card-tit">Instructivo</div>
+        <div class="card-desc">Guía de onboarding</div>
+      </div>
+      <div class="card aliado" onclick="location.href='qr-aliados.html'">
+        <div class="card-icon">📱</div>
+        <div class="card-tit">QR Aliados</div>
+        <div class="card-desc">Código de registro</div>
+      </div>
+      <div class="card aliado" onclick="location.href='prompt-video-aliados.html'">
+        <div class="card-icon">🎬</div>
+        <div class="card-tit">Video Aliados</div>
+        <div class="card-desc">Prompt para video</div>
+      </div>
+    </div>
+
+    <div class="sub-label">🎯 RED COMERCIAL</div>
+    <div class="grid grid-3">
+      <div class="card aliado" onclick="location.href='perfil-cargo-ejecutivo-red.html'">
+        <div class="card-icon">💼</div>
+        <div class="card-tit">Ejecutivo Red</div>
+        <div class="card-desc">Perfil de cargo</div>
+      </div>
+      <div class="card aliado" onclick="location.href='plan-accion-jefe-red.html'">
+        <div class="card-icon">🎯</div>
+        <div class="card-tit">Plan Acción Jefe Red</div>
+        <div class="card-desc">Estrategia comercial</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== PANEL 5: PÚBLICOS ===== -->
+  <div class="tab-panel" id="panel-publico">
+    <div class="panel-head">
+      <div class="panel-tit">🌐 Servicios Públicos</div>
+      <div class="panel-desc">Landings y materiales externos</div>
+    </div>
+
+    <div class="sub-label">🏠 LANDINGS</div>
+    <div class="grid grid-3">
+      <div class="card publico" onclick="location.href='index.html'">
         <div class="card-icon">🏠</div>
         <div class="card-tit">Landing Serviruta</div>
-        <div class="card-desc">Home · Servicios · Cotizar</div>
+        <div class="card-desc">Home principal</div>
       </div>
-
-      <div class="card publico" onclick="window.open('https://angelperuga-maker.github.io/serviruta/landing-aliados.html','_blank')">
-        <span class="card-tag ext">↗ EXT</span>
-        <div class="card-icon">🤝</div>
-        <div class="card-tit">Landing Aliados</div>
-        <div class="card-desc">Reclutamiento de talleres</div>
+      <div class="card publico" onclick="location.href='servicios-publicos.html'">
+        <div class="card-icon">🌐</div>
+        <div class="card-tit">Servicios Públicos</div>
+        <div class="card-desc">Catálogo externo</div>
       </div>
-
+      <div class="card publico" onclick="location.href='hub-cliente.html'">
+        <div class="card-icon">👤</div>
+        <div class="card-tit">Hub Cliente</div>
+        <div class="card-desc">Vista del cliente final</div>
+      </div>
     </div>
-  </section>
+
+    <div class="sub-label">📄 DOCUMENTOS Y MATERIALES</div>
+    <div class="grid grid-3">
+      <div class="card publico" onclick="location.href='serviruta-pitch.html'">
+        <div class="card-icon">🎯</div>
+        <div class="card-tit">Serviruta Pitch</div>
+        <div class="card-desc">Presentación oficial</div>
+      </div>
+      <div class="card publico" onclick="location.href='certificado-garantia.html'">
+        <div class="card-icon">🛡️</div>
+        <div class="card-tit">Certificado Garantía</div>
+        <div class="card-desc">Documento entregable</div>
+      </div>
+      <div class="card publico" onclick="location.href='estrategia-expansion-serviruta.html'">
+        <div class="card-icon">🚀</div>
+        <div class="card-tit">Estrategia Expansión</div>
+        <div class="card-desc">Plan de crecimiento</div>
+      </div>
+      <div class="card publico" onclick="location.href='modelo-franquicia-serviruta.html'">
+        <div class="card-icon">🏢</div>
+        <div class="card-tit">Modelo Franquicia</div>
+        <div class="card-desc">Documento estratégico</div>
+      </div>
+    </div>
+  </div>
 
 </div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+function infoAgente(nombre, emoji, rol){
+  var t=document.getElementById('toast');
+  t.innerHTML=emoji+' <strong>'+nombre+'</strong> · '+rol+'<br><span style="font-size:10px;color:#8B8990">Bot WhatsApp +56 9 8507 9392</span>';
+  t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show')},3000);
+}
+
+document.querySelectorAll('.tab-btn').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var target=btn.dataset.tab;
+    document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active')});
+    document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active')});
+    btn.classList.add('active');
+    document.getElementById('panel-'+target).classList.add('active');
+    history.replaceState(null,'','?tab='+target);
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+var urlParams=new URLSearchParams(window.location.search);
+var tab=urlParams.get('tab');
+if(tab && document.querySelector('[data-tab="'+tab+'"]')){
+  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active')});
+  document.querySelectorAll('.tab-panel').forEach(function(p){p.classList.remove('active')});
+  document.querySelector('[data-tab="'+tab+'"]').classList.add('active');
+  document.getElementById('panel-'+tab).classList.add('active');
+}
+</script>
 
 </body>
 </html>

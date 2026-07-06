@@ -371,11 +371,16 @@ async function cargarEventos(){
     var hora=(e.hora||'').slice(0,5)
     var iconos={'agendado':'📋','confirmado':'✅','en-ruta':'🚗','completado':'🏁','cancelado':'❌'}
     var tecCorto = isTecnico ? '✓ ASIGNADO' : (e.tecnico||'').split(' ')[0].toUpperCase()
+    var botonBot = ''
+    if(e.origen==='agente' && e.telefono){
+      botonBot = '<button onclick="event.stopPropagation();window.open(\'conversaciones-wa.html?tel='+encodeURIComponent(e.telefono)+'\',\'_blank\')" style="margin-top:8px;padding:5px 10px;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.35);border-radius:6px;font-family:JetBrains Mono,monospace;font-size:10px;color:#22C55E;cursor:pointer;font-weight:700;letter-spacing:0.05em">💬 Ver chat del bot' + (e.agente_solicitante?' · '+e.agente_solicitante.toUpperCase():'') + '</button>'
+    }
     return '<div class="evento" onclick="verDetalle(\''+e.id+'\')">'+
       '<div class="hora">'+hora+'<div class="hora-est">'+tecCorto+'</div></div>'+
       '<div class="evento-body">'+
         '<div class="evento-cliente">'+(e.cliente||'Sin cliente')+'</div>'+
         '<div class="evento-meta"><span class="evento-tag tag-'+(e.estado||'agendado')+'">'+(e.estado||'agendado')+'</span>'+(e.servicio||'-')+(e.direccion?' · '+e.direccion:'')+'</div>'+
+        botonBot +
       '</div>'+
       '<div class="estado-icon">'+(iconos[e.estado]||'📋')+'</div>'+
     '</div>'

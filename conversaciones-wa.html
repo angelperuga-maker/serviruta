@@ -352,6 +352,31 @@ function abrirWA(tel){
 cargar()
 // Auto-refresh cada 30 segundos
 setInterval(cargar, 30000)
+
+// Auto-abrir conversación si hay parámetro ?tel=
+async function autoAbrirTel(){
+  var url = new URLSearchParams(window.location.search)
+  var telParam = url.get('tel')
+  if(!telParam) return
+  // Esperar a que carguen las conversaciones
+  await new Promise(r => setTimeout(r, 800))
+  var conv = TODAS.find(function(c){
+    var t1 = (c.telefono||'').replace(/[^0-9]/g,'')
+    var t2 = telParam.replace(/[^0-9]/g,'')
+    return t1 === t2 || t1.slice(-9) === t2.slice(-9)
+  })
+  if(conv){
+    seleccionar(conv.id)
+    // Scroll a la conversación seleccionada
+    setTimeout(function(){
+      var el = document.querySelector('.conv.selected')
+      if(el) el.scrollIntoView({behavior:'smooth', block:'center'})
+    }, 200)
+  } else {
+    toast('No se encontró conversación para +'+telParam, '')
+  }
+}
+autoAbrirTel()
 </script>
 
 </body>

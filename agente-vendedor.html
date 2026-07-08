@@ -171,6 +171,7 @@ a{color:inherit;text-decoration:none}
       <button class="msg-btn btn-edit" id="btn-edit" onclick="toggleEditar()">✏️ Editar</button>
       <button class="msg-btn btn-copy" onclick="copiarMsg()">📋 Copiar</button>
       <a class="msg-btn btn-wa" id="btn-wa" href="#" target="_blank" onclick="marcarEnviado()">💬 Enviar por WhatsApp</a>
+      <button class="msg-btn" id="btn-bot" onclick="enviarPorBot()" style="background:linear-gradient(135deg,#D4AF37,#B8933A);color:#000;font-weight:800">🤖 Enviar desde Bot Serviruta</button>
     </div>
   </div>
 </div>
@@ -770,6 +771,67 @@ async function marcarEnviado(){
     headers:{"Content-Type":"application/json","Authorization":"Bearer "+SB_KEY,"apikey":SB_KEY,"Prefer":"return=minimal"},
     body:JSON.stringify({enviado:true,fecha_enviado:new Date().toISOString(),mensaje_enviado:MENSAJE_ACTUAL})
   })
+}
+
+async function enviarPorBot(){
+  if(!CLIENTE_ACTUAL || !MENSAJE_ACTUAL || !VENDEDOR_ACTUAL){
+    toast('⚠️ Faltan datos','err')
+    return
+  }
+  var btn = document.getElementById('btn-bot')
+  var textoOriginal = btn.innerHTML
+  btn.innerHTML = '⏳ Enviando...'
+  btn.disabled = true
+  
+  var telWA = (CLIENTE_ACTUAL.telefono || CLIENTE_ACTUAL.telefono_normalizado || '').replace(/[^0-9]/g, '')
+  if(!telWA){
+    toast('⚠️ Cliente sin teléfono','err')
+    btn.innerHTML = textoOriginal
+    btn.disabled = false
+    return
+  }
+  
+  try {
+    var r = await fetch(SB_URL + '/functions/v1/send-outbound', {
+      method: 'POST',
+      headers: {
+        'apikey': SB_KEY,
+        'Authorization': 'Bearer ' + SB_KEY,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        telefono: telWA,
+        mensaje: MENSAJE_ACTUAL,
+        agente_id: VENDEDOR_ACTUAL.id,
+        cliente_id: CLIENTE_ACTUAL.id,
+        cliente_nombre: CLIENTE_ACTUAL.nombre
+      })
+    })
+    var data = await r.json()
+    if(data.ok){
+      toast('🤖✅ Enviado desde bot Serviruta','ok')
+      // Marcar como enviado
+      await fetch(SB_URL+'/rest/v1/campanas_venta?cliente_id=eq.'+CLIENTE_ACTUAL.id+'&agente_vendedor=eq.'+VENDEDOR_ACTUAL.id+'&enviado=eq.false',{
+        method:'PATCH',
+        headers:{"Content-Type":"application/json","Authorization":"Bearer "+SB_KEY,"apikey":SB_KEY,"Prefer":"return=minimal"},
+        body:JSON.stringify({enviado:true,fecha_enviado:new Date().toISOString(),mensaje_enviado:MENSAJE_ACTUAL})
+      })
+      btn.innerHTML = '✅ Enviado desde bot'
+      setTimeout(function(){
+        btn.innerHTML = textoOriginal
+        btn.disabled = false
+      }, 2500)
+    } else {
+      toast('❌ Error: '+(data.error||'desconocido'), 'err')
+      btn.innerHTML = textoOriginal
+      btn.disabled = false
+    }
+  } catch(e) {
+    console.error(e)
+    toast('❌ Error al enviar', 'err')
+    btn.innerHTML = textoOriginal
+    btn.disabled = false
+  }
 }
 
 function cerrarModal(){

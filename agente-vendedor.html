@@ -691,7 +691,18 @@ async function generarMensaje(){
       headers:{"Content-Type":"application/json","Authorization":"Bearer "+SB_KEY,"apikey":SB_KEY},
       body:JSON.stringify({
         system_prompt: VENDEDOR_ACTUAL.system_prompt,
-        messages: [{role:"user",content:"CONTEXTO DEL CLIENTE:\n\n"+JSON.stringify(contexto, null, 2)+"\n\nGenera SOLO el mensaje WhatsApp personalizado para este cliente. Sin explicaciones ni preámbulos."}]
+        messages: [{role:"user",content:(VENDEDOR_ACTUAL.id==='valentina'?
+          "🚨 REGLA ABSOLUTA: este mensaje NO puede contener NINGÚN precio, cifra en pesos, valor comercial, ni oferta de servicios específicos. Solo verificación de satisfacción + disponibilidad.\n\nCONTEXTO DEL CLIENTE (SOLO tu referencia, no revelar al cliente):\n"+JSON.stringify({
+            nombre: contexto.nombre,
+            vehiculo: contexto.vehiculo,
+            marca: contexto.marca,
+            ultimo_servicio_fecha: contexto.ultimo_servicio_fecha,
+            dias_sin_ver: contexto.dias_sin_ver,
+            ultimo_servicio_tipo: (contexto.ultimos_ots&&contexto.ultimos_ots[0]?contexto.ultimos_ots[0].tipo:(contexto.ultimos_presupuestos&&contexto.ultimos_presupuestos[0]?contexto.ultimos_presupuestos[0].servicio:'servicio general'))
+          }, null, 2)+"\n\nGenera SOLO un mensaje de postventa SIN precios ni ofertas. Máximo 3 líneas. Solo saludo cordial + pregunta cómo quedó + cierre de disponibilidad."
+          :
+          "CONTEXTO DEL CLIENTE:\n\n"+JSON.stringify(contexto, null, 2)+"\n\nGenera SOLO el mensaje WhatsApp personalizado para este cliente. Sin explicaciones ni preámbulos."
+        )}]
       })
     })
     var data=await r.json()

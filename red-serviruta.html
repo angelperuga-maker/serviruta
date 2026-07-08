@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Red Serviruta Nacional</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0A0D;--s1:#111114;--s2:#16161B;--s3:#1C1C23;--line:#26262E;--rojo:#E8210A;--rojo-l:#FF4D2E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--violeta:#A78BFA;--dorado:#D4AF37;--naranja:#F97316;--t1:#F6F4EF;--t2:#C7C5BF;--t3:#8B8990;--display:'Syne',sans-serif;--body:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--t2);font-family:var(--body);font-size:14px;line-height:1.5;min-height:100vh;padding-bottom:80px}
+button,input,select,textarea{border:none;background:none;color:inherit;font-family:inherit;font-size:14px}
+input,select,textarea{background:var(--s2);border:1px solid var(--line);border-radius:8px;padding:10px 12px;color:var(--t1);width:100%}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--dorado)}
+
+.bar{position:sticky;top:0;z-index:50;background:rgba(10,10,13,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;align-items:center;gap:10px}
+.back{font-family:var(--mono);font-size:10px;color:var(--t3);padding:6px 10px;border:1px solid var(--line);border-radius:6px;cursor:pointer}
+.sigil{width:34px;height:34px;background:linear-gradient(135deg,var(--dorado),var(--rojo));border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:14px;color:#000}
+.title{font-family:var(--display);font-weight:800;font-size:14px;color:var(--t1);flex:1;line-height:1.1}
+.title small{display:block;font-family:var(--mono);font-size:9px;color:var(--dorado);letter-spacing:0.15em;margin-top:2px;font-weight:700}
+.btn-add{padding:8px 14px;background:var(--dorado);color:#000;border-radius:8px;font-family:var(--display);font-weight:800;font-size:11px;cursor:pointer;letter-spacing:0.05em}
+
+.shell{max-width:1200px;margin:0 auto;padding:16px}
+
+.hero{background:linear-gradient(135deg,rgba(212,175,55,0.1),rgba(232,33,10,0.05));border:1px solid rgba(212,175,55,0.3);border-radius:16px;padding:20px;margin-bottom:16px}
+.hero-tit{font-family:var(--display);font-weight:900;font-size:22px;color:var(--t1);letter-spacing:-0.5px;line-height:1.1}
+.hero-tit em{color:var(--dorado);font-style:normal}
+.hero-desc{font-size:12px;color:var(--t2);margin-top:6px}
+
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.kpi{background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:14px}
+.kpi-lbl{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-bottom:6px}
+.kpi-num{font-family:var(--display);font-weight:900;font-size:26px;line-height:1;letter-spacing:-1px}
+.kpi.total .kpi-num{color:var(--azul)}
+.kpi.completos .kpi-num{color:var(--verde)}
+.kpi.sin-herr .kpi-num{color:var(--amarillo)}
+.kpi.gruas .kpi-num{color:var(--naranja)}
+
+.filtros{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.filtros::-webkit-scrollbar{display:none}
+.chip{padding:8px 14px;background:var(--s2);border:1px solid var(--line);border-radius:10px;font-family:var(--mono);font-size:11px;color:var(--t2);cursor:pointer;font-weight:700;letter-spacing:0.05em;white-space:nowrap}
+.chip:hover{color:var(--t1)}
+.chip.active{background:var(--dorado);color:#000;border-color:var(--dorado)}
+
+.seccion{background:var(--s1);border:1px solid var(--line);border-radius:14px;margin-bottom:14px;overflow:hidden}
+.sec-hdr{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}
+.sec-tit{font-family:var(--display);font-weight:800;font-size:15px;color:var(--t1);flex:1}
+.sec-badge{padding:3px 8px;background:var(--s3);border-radius:6px;font-family:var(--mono);font-size:10px;color:var(--t2);font-weight:700}
+.sec-body{padding:8px}
+
+.aliado{background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:8px;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;transition:all 200ms;cursor:pointer}
+.aliado:hover{border-color:var(--dorado)}
+.aliado.completo{border-left:4px solid var(--verde)}
+.aliado.sin-herr{border-left:4px solid var(--amarillo)}
+.aliado.grua{border-left:4px solid var(--naranja)}
+.aliado.sin-def{border-left:4px solid var(--t3);opacity:0.7}
+
+.al-avatar{width:44px;height:44px;background:linear-gradient(135deg,var(--dorado),var(--rojo));border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:900;font-size:16px;color:#000}
+.al-info{min-width:0}
+.al-nombre{color:var(--t1);font-weight:700;font-size:14px;margin-bottom:2px}
+.al-meta{font-family:var(--mono);font-size:10px;color:var(--t3);display:flex;gap:8px;flex-wrap:wrap}
+.al-meta span{white-space:nowrap}
+.al-tags{margin-top:4px;display:flex;gap:4px;flex-wrap:wrap}
+.tag{font-family:var(--mono);font-size:8px;padding:2px 6px;border-radius:4px;font-weight:700;letter-spacing:0.05em}
+.tag.herr{background:rgba(34,197,94,0.15);color:var(--verde)}
+.tag.veh{background:rgba(96,165,250,0.15);color:var(--azul)}
+.tag.esp{background:rgba(139,92,246,0.15);color:var(--violeta)}
+.tag.zona{background:rgba(212,175,55,0.15);color:var(--dorado)}
+.al-estado{padding:4px 8px;border-radius:6px;font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:0.05em;white-space:nowrap}
+.al-estado.contactado{background:rgba(139,137,144,0.2);color:var(--t3)}
+.al-estado.entrevistado{background:rgba(96,165,250,0.2);color:var(--azul)}
+.al-estado.aprobado{background:rgba(212,175,55,0.2);color:var(--dorado)}
+.al-estado.activo{background:rgba(34,197,94,0.2);color:var(--verde)}
+
+/* Modal */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:none;align-items:center;justify-content:center;padding:16px;z-index:200;backdrop-filter:blur(6px)}
+.modal-bg.open{display:flex}
+.modal{background:var(--s1);border:1px solid var(--line);border-radius:16px;max-width:640px;width:100%;max-height:90vh;overflow-y:auto;padding:24px}
+.modal-tit{font-family:var(--display);font-weight:900;font-size:18px;color:var(--t1);margin-bottom:16px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.form-full{grid-column:1/-1}
+.form-lbl{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.1em;font-weight:700;margin-bottom:4px;display:block;text-transform:uppercase}
+.form-modal-actions{display:flex;gap:8px;margin-top:16px;justify-content:flex-end}
+.btn-cancel{padding:10px 18px;background:var(--s2);border:1px solid var(--line);border-radius:8px;font-family:var(--mono);font-size:11px;cursor:pointer;color:var(--t2);font-weight:700}
+.btn-save{padding:10px 20px;background:var(--dorado);color:#000;border-radius:8px;font-family:var(--display);font-weight:800;font-size:12px;cursor:pointer;letter-spacing:0.05em}
+
+.toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-20px);background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:10px 16px;font-size:12px;color:var(--t1);opacity:0;transition:all 300ms;pointer-events:none;z-index:300}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.ok{border-color:var(--verde);color:var(--verde)}
+.toast.err{border-color:var(--rojo);color:var(--rojo-l)}
+
+.empty{padding:30px 16px;text-align:center;color:var(--t3);font-size:12px;font-style:italic}
+.loader{padding:40px 20px;text-align:center;color:var(--t3);font-family:var(--mono);font-size:11px}
+.loader::before{content:"◐";display:inline-block;animation:spin 1s linear infinite;margin-right:6px;font-size:16px}
+@keyframes spin{100%{transform:rotate(360deg)}}
+
+@media(max-width:640px){
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .aliado{grid-template-columns:auto 1fr;gap:10px}
+  .al-estado{grid-column:1/-1;text-align:center;margin-top:4px}
+  .form-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <button class="back" onclick="location.href='menu-coordinador.html'">← Volver</button>
+  <div class="sigil">R</div>
+  <div class="title">Red Serviruta Nacional<small>SANTIAGO + REGIONES</small></div>
+  <button class="btn-add" onclick="abrirNuevo()">+ Agregar</button>
+</header>
+
+<div class="shell">
+
+  <div class="hero">
+    <div class="hero-tit">Red <em>Nacional</em></div>
+    <div class="hero-desc">Consolidando la red de mecánicos, técnicos y proveedores de servicios a nivel nacional.</div>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi total"><div class="kpi-lbl">📊 Total Red</div><div class="kpi-num" id="k-tot">0</div></div>
+    <div class="kpi completos"><div class="kpi-lbl">✅ Mecánicos Listos</div><div class="kpi-num" id="k-comp">0</div></div>
+    <div class="kpi sin-herr"><div class="kpi-lbl">⚙️ Sin Herramientas</div><div class="kpi-num" id="k-sh">0</div></div>
+    <div class="kpi gruas"><div class="kpi-lbl">🚛 Grúas</div><div class="kpi-num" id="k-gr">0</div></div>
+  </div>
+
+  <div class="filtros">
+    <button class="chip active" onclick="filtrar('all')">📋 Todos</button>
+    <button class="chip" onclick="filtrar('mecanico_completo')">✅ Mecánicos Listos</button>
+    <button class="chip" onclick="filtrar('mecanico_sin_herramientas')">⚙️ Sin Herramientas</button>
+    <button class="chip" onclick="filtrar('grua')">🚛 Grúas</button>
+    <button class="chip" onclick="filtrar('sin_definir')">❓ Sin Clasificar</button>
+    <button class="chip" onclick="filtrar('rm')">📍 RM</button>
+    <button class="chip" onclick="filtrar('regiones')">🌎 Regiones</button>
+  </div>
+
+  <div id="contenido">
+    <div class="loader">Cargando red...</div>
+  </div>
+
+</div>
+
+<!-- Modal -->
+<div class="modal-bg" id="modal-bg" onclick="if(event.target.id==='modal-bg')cerrarModal()">
+  <div class="modal">
+    <div class="modal-tit" id="modal-tit">Agregar a la Red</div>
+    <div class="form-grid">
+      <div class="form-full"><label class="form-lbl">Nombre completo *</label><input id="f-nombre" placeholder="Juan Pérez"></div>
+      <div><label class="form-lbl">Teléfono *</label><input id="f-tel" placeholder="+56 9 XXXX XXXX"></div>
+      <div><label class="form-lbl">Email</label><input id="f-email" placeholder="opcional"></div>
+      <div><label class="form-lbl">Categoría *</label>
+        <select id="f-cat">
+          <option value="mecanico_completo">✅ Mecánico Completo</option>
+          <option value="mecanico_sin_herramientas">⚙️ Sin Herramientas</option>
+          <option value="grua">🚛 Grúa</option>
+          <option value="sin_definir">❓ Sin Definir</option>
+        </select>
+      </div>
+      <div><label class="form-lbl">Estado</label>
+        <select id="f-estado">
+          <option value="contactado">Contactado</option>
+          <option value="entrevistado">Entrevistado</option>
+          <option value="aprobado">Aprobado</option>
+          <option value="activo">Activo</option>
+          <option value="pausa">En pausa</option>
+          <option value="rechazado">Rechazado</option>
+        </select>
+      </div>
+      <div><label class="form-lbl">Región</label>
+        <select id="f-region">
+          <option value="RM">RM · Santiago</option>
+          <option value="V">V · Valparaíso</option>
+          <option value="VIII">VIII · Biobío</option>
+          <option value="X">X · Los Lagos</option>
+          <option value="IV">IV · Coquimbo</option>
+          <option value="IX">IX · Araucanía</option>
+          <option value="XIV">XIV · Los Ríos</option>
+          <option value="XV">XV · Arica</option>
+          <option value="II">II · Antofagasta</option>
+          <option value="III">III · Atacama</option>
+          <option value="VI">VI · O'Higgins</option>
+          <option value="VII">VII · Maule</option>
+          <option value="XI">XI · Aysén</option>
+          <option value="XII">XII · Magallanes</option>
+          <option value="I">I · Tarapacá</option>
+          <option value="XVI">XVI · Ñuble</option>
+        </select>
+      </div>
+      <div><label class="form-lbl">Comuna/Ciudad</label><input id="f-comuna" placeholder="Providencia"></div>
+      <div><label class="form-lbl">Tiene herramientas</label>
+        <select id="f-herr"><option value="false">No</option><option value="true">Sí</option></select>
+      </div>
+      <div><label class="form-lbl">Tiene vehículo</label>
+        <select id="f-veh"><option value="false">No</option><option value="true">Sí</option></select>
+      </div>
+      <div><label class="form-lbl">Tipo vehículo</label>
+        <select id="f-tipoveh">
+          <option value="">--</option>
+          <option value="moto">Moto</option>
+          <option value="auto">Auto</option>
+          <option value="camioneta">Camioneta</option>
+          <option value="camion">Camión</option>
+          <option value="grua">Grúa</option>
+        </select>
+      </div>
+      <div><label class="form-lbl">Livianos/Pesados</label>
+        <select id="f-tipo">
+          <option value="livianos">Livianos</option>
+          <option value="pesados">Pesados</option>
+          <option value="ambos">Ambos</option>
+        </select>
+      </div>
+      <div><label class="form-lbl">Años experiencia</label><input type="number" id="f-exp" placeholder="5"></div>
+      <div class="form-full"><label class="form-lbl">Especialidades (separadas por coma)</label><input id="f-esp" placeholder="dpf, embrague, diesel, frenos"></div>
+      <div class="form-full"><label class="form-lbl">Notas</label><textarea id="f-notas" rows="3" placeholder="Referido de X, trabajó en Y..."></textarea></div>
+    </div>
+    <div class="form-modal-actions">
+      <button class="btn-cancel" onclick="cerrarModal()">Cancelar</button>
+      <button class="btn-cancel" style="color:var(--rojo-l);border-color:rgba(232,33,10,0.3)" id="btn-del" onclick="eliminar()" style="display:none">🗑 Eliminar</button>
+      <button class="btn-save" onclick="guardar()">💾 Guardar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+
+var TODOS = []
+var FILTRO = 'all'
+var EDITANDO = null
+
+function toast(msg, tipo){
+  var t = document.getElementById('toast')
+  t.textContent = msg
+  t.className = 'toast ' + (tipo||'')
+  t.classList.add('show')
+  setTimeout(function(){t.classList.remove('show')}, 2500)
+}
+
+async function sbReq(method, path, data){
+  var opts = {
+    method,
+    headers: {
+      'apikey': SB_KEY,
+      'Authorization': 'Bearer ' + SB_KEY,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=representation'
+    }
+  }
+  if(data) opts.body = JSON.stringify(data)
+  var r = await fetch(SB_URL + '/rest/v1/' + path, opts)
+  return r
+}
+
+async function cargar(){
+  var cont = document.getElementById('contenido')
+  cont.innerHTML = '<div class="loader">Cargando...</div>'
+  var r = await sbReq('GET', 'red_serviruta?select=*&order=created_at.desc')
+  TODOS = r.ok ? await r.json() : []
+  actualizarKPIs()
+  render()
+}
+
+function actualizarKPIs(){
+  document.getElementById('k-tot').textContent = TODOS.length
+  document.getElementById('k-comp').textContent = TODOS.filter(function(a){return a.categoria==='mecanico_completo'}).length
+  document.getElementById('k-sh').textContent = TODOS.filter(function(a){return a.categoria==='mecanico_sin_herramientas'}).length
+  document.getElementById('k-gr').textContent = TODOS.filter(function(a){return a.categoria==='grua'}).length
+}
+
+function render(){
+  var cont = document.getElementById('contenido')
+  var filtrados = TODOS
+  if(FILTRO === 'rm') filtrados = TODOS.filter(function(a){return a.region==='RM'})
+  else if(FILTRO === 'regiones') filtrados = TODOS.filter(function(a){return a.region && a.region !== 'RM'})
+  else if(FILTRO !== 'all') filtrados = TODOS.filter(function(a){return a.categoria===FILTRO})
+  
+  if(filtrados.length === 0){
+    cont.innerHTML = '<div class="seccion"><div class="empty">Sin registros. Toca "+ Agregar" o deja que Valentina reclute por WhatsApp.</div></div>'
+    return
+  }
+  
+  var grupos = {
+    'mecanico_completo':{tit:'✅ Mecánicos Listos (con herramientas + vehículo)', cls:'completo', items:[]},
+    'mecanico_sin_herramientas':{tit:'⚙️ Mecánicos Sin Herramientas', cls:'sin-herr', items:[]},
+    'grua':{tit:'🚛 Servicios de Grúa', cls:'grua', items:[]},
+    'sin_definir':{tit:'❓ Sin Clasificar', cls:'sin-def', items:[]}
+  }
+  filtrados.forEach(function(a){
+    var g = grupos[a.categoria] || grupos['sin_definir']
+    g.items.push(a)
+  })
+  
+  var html = ''
+  Object.keys(grupos).forEach(function(k){
+    var g = grupos[k]
+    if(g.items.length === 0) return
+    html += '<div class="seccion">'
+    html += '<div class="sec-hdr"><div class="sec-tit">'+g.tit+'</div><div class="sec-badge">'+g.items.length+'</div></div>'
+    html += '<div class="sec-body">'
+    g.items.forEach(function(a){
+      var iniciales = (a.nombre||'?').split(' ').slice(0,2).map(function(s){return s[0]||''}).join('').toUpperCase()
+      html += '<div class="aliado '+g.cls+'" onclick="editar(\''+a.id+'\')">'
+      html += '<div class="al-avatar">'+iniciales+'</div>'
+      html += '<div class="al-info">'
+      html += '<div class="al-nombre">'+(a.nombre||'Sin nombre')+'</div>'
+      html += '<div class="al-meta">'
+      html += '<span>📱 +'+a.telefono+'</span>'
+      if(a.region) html += '<span>📍 '+a.region+(a.comuna?' · '+a.comuna:'')+'</span>'
+      if(a.anios_experiencia) html += '<span>⏱ '+a.anios_experiencia+' años</span>'
+      html += '</div>'
+      html += '<div class="al-tags">'
+      if(a.tiene_herramientas) html += '<span class="tag herr">🔧 HERR</span>'
+      if(a.tiene_vehiculo) html += '<span class="tag veh">🚗 '+(a.tipo_vehiculo||'VEH').toUpperCase()+'</span>'
+      if(a.atiende_pesados) html += '<span class="tag esp">PESADOS</span>'
+      if(a.especialidades && a.especialidades.length) a.especialidades.slice(0,3).forEach(function(e){html += '<span class="tag esp">'+e.toUpperCase()+'</span>'})
+      html += '</div>'
+      html += '</div>'
+      html += '<div class="al-estado '+a.estado+'">'+a.estado.toUpperCase()+'</div>'
+      html += '</div>'
+    })
+    html += '</div></div>'
+  })
+  cont.innerHTML = html
+}
+
+function filtrar(f){
+  FILTRO = f
+  document.querySelectorAll('.chip').forEach(function(c){c.classList.remove('active')})
+  event.target.classList.add('active')
+  render()
+}
+
+function abrirNuevo(){
+  EDITANDO = null
+  document.getElementById('modal-tit').textContent = '➕ Agregar a la Red'
+  document.getElementById('f-nombre').value = ''
+  document.getElementById('f-tel').value = ''
+  document.getElementById('f-email').value = ''
+  document.getElementById('f-cat').value = 'mecanico_completo'
+  document.getElementById('f-estado').value = 'contactado'
+  document.getElementById('f-region').value = 'RM'
+  document.getElementById('f-comuna').value = ''
+  document.getElementById('f-herr').value = 'false'
+  document.getElementById('f-veh').value = 'false'
+  document.getElementById('f-tipoveh').value = ''
+  document.getElementById('f-tipo').value = 'livianos'
+  document.getElementById('f-exp').value = ''
+  document.getElementById('f-esp').value = ''
+  document.getElementById('f-notas').value = ''
+  document.getElementById('modal-bg').classList.add('open')
+}
+
+function editar(id){
+  var a = TODOS.find(function(x){return x.id===id})
+  if(!a) return
+  EDITANDO = id
+  document.getElementById('modal-tit').textContent = '✏️ Editar: '+a.nombre
+  document.getElementById('f-nombre').value = a.nombre||''
+  document.getElementById('f-tel').value = a.telefono||''
+  document.getElementById('f-email').value = a.email||''
+  document.getElementById('f-cat').value = a.categoria||'sin_definir'
+  document.getElementById('f-estado').value = a.estado||'contactado'
+  document.getElementById('f-region').value = a.region||'RM'
+  document.getElementById('f-comuna').value = a.comuna||''
+  document.getElementById('f-herr').value = a.tiene_herramientas ? 'true' : 'false'
+  document.getElementById('f-veh').value = a.tiene_vehiculo ? 'true' : 'false'
+  document.getElementById('f-tipoveh').value = a.tipo_vehiculo||''
+  document.getElementById('f-tipo').value = a.atiende_pesados && a.atiende_livianos ? 'ambos' : (a.atiende_pesados ? 'pesados' : 'livianos')
+  document.getElementById('f-exp').value = a.anios_experiencia||''
+  document.getElementById('f-esp').value = (a.especialidades||[]).join(', ')
+  document.getElementById('f-notas').value = a.notas||''
+  document.getElementById('modal-bg').classList.add('open')
+}
+
+function cerrarModal(){
+  document.getElementById('modal-bg').classList.remove('open')
+}
+
+async function guardar(){
+  var nombre = document.getElementById('f-nombre').value.trim()
+  var tel = document.getElementById('f-tel').value.trim()
+  if(!nombre || !tel){ toast('Nombre y teléfono son obligatorios','err'); return }
+  
+  var tipo = document.getElementById('f-tipo').value
+  var especialidades = document.getElementById('f-esp').value.split(',').map(function(s){return s.trim()}).filter(Boolean)
+  
+  var data = {
+    nombre,
+    telefono: tel,
+    email: document.getElementById('f-email').value.trim() || null,
+    categoria: document.getElementById('f-cat').value,
+    estado: document.getElementById('f-estado').value,
+    region: document.getElementById('f-region').value,
+    comuna: document.getElementById('f-comuna').value.trim() || null,
+    tiene_herramientas: document.getElementById('f-herr').value === 'true',
+    tiene_vehiculo: document.getElementById('f-veh').value === 'true',
+    tipo_vehiculo: document.getElementById('f-tipoveh').value || null,
+    atiende_livianos: tipo === 'livianos' || tipo === 'ambos',
+    atiende_pesados: tipo === 'pesados' || tipo === 'ambos',
+    anios_experiencia: parseInt(document.getElementById('f-exp').value) || null,
+    especialidades,
+    notas: document.getElementById('f-notas').value.trim() || null,
+    origen: EDITANDO ? undefined : 'manual'
+  }
+  
+  var r
+  if(EDITANDO){
+    r = await sbReq('PATCH', 'red_serviruta?id=eq.'+EDITANDO, data)
+  } else {
+    r = await sbReq('POST', 'red_serviruta', data)
+  }
+  if(r.ok){
+    toast('✅ Guardado','ok')
+    cerrarModal()
+    setTimeout(cargar, 300)
+  } else {
+    var t = await r.text()
+    toast('❌ Error: '+t.substring(0,60),'err')
+  }
+}
+
+async function eliminar(){
+  if(!EDITANDO) return
+  if(!confirm('¿Eliminar definitivamente?')) return
+  var r = await sbReq('DELETE', 'red_serviruta?id=eq.'+EDITANDO)
+  if(r.ok){
+    toast('🗑 Eliminado','ok')
+    cerrarModal()
+    setTimeout(cargar, 300)
+  } else {
+    toast('❌ Error','err')
+  }
+}
+
+cargar()
+// Auto-refresh cada minuto
+setInterval(cargar, 60000)
+</script>
+
+</body>
+</html>

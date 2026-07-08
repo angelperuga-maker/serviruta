@@ -108,6 +108,22 @@ input:focus{outline:none;border-color:var(--dorado)}
 
 .empty-detalle{flex:1;display:flex;align-items:center;justify-content:center;color:var(--t3);font-size:13px;font-style:italic;padding:40px}
 
+/* Panel de intervención humana */
+.intervencion{background:var(--s2);border-top:1px solid var(--line);padding:12px 14px}
+.int-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px}
+.int-lbl{font-family:var(--mono);font-size:10px;color:var(--dorado);letter-spacing:0.15em;font-weight:700}
+.int-toggle{font-family:var(--mono);font-size:9px;color:var(--t3);cursor:pointer;display:flex;align-items:center;gap:4px}
+.int-toggle input{width:12px;height:12px;cursor:pointer}
+.int-body{display:flex;gap:8px;align-items:flex-end}
+.int-body textarea{flex:1;background:var(--s3);border:1px solid var(--line);border-radius:8px;padding:9px 12px;color:var(--t1);font-family:var(--body);font-size:13px;resize:vertical;min-height:44px;max-height:120px}
+.int-body textarea:focus{outline:none;border-color:var(--dorado)}
+.btn-enviar{padding:10px 16px;background:linear-gradient(135deg,var(--dorado),#B8933A);color:#000;border:none;border-radius:8px;font-family:var(--display);font-weight:800;font-size:12px;cursor:pointer;letter-spacing:0.05em;white-space:nowrap;transition:all 200ms;flex-shrink:0}
+.btn-enviar:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(212,175,55,0.25)}
+.btn-enviar:disabled{opacity:0.5;cursor:not-allowed}
+
+.msg.humano{background:linear-gradient(135deg,rgba(212,175,55,0.15),rgba(212,175,55,0.05))!important;border:1px solid rgba(212,175,55,0.3)!important}
+.msg-agente{font-family:var(--mono);font-size:8px;color:var(--dorado);letter-spacing:0.1em;margin-bottom:3px;font-weight:700}
+
 .loader{padding:40px 20px;text-align:center;color:var(--t3);font-family:var(--mono);font-size:11px}
 .loader::before{content:"◐";display:inline-block;animation:spin 1s linear infinite;margin-right:6px;font-size:16px}
 @keyframes spin{100%{transform:rotate(360deg)}}
@@ -376,15 +392,27 @@ function renderDetalle(conv){
       var role = m.role || 'assistant'
       var content = (m.content || '').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>')
       var timeStr = m.ts ? new Date(m.ts).toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'}) : ''
-      var agenteStr = m.agente ? '<div class="msg-agente">🤖 ' + m.agente.toUpperCase() + '</div>' : ''
+      var agenteStr = m.agente ? '<div class="msg-agente">' + (m.humano ? '🙋 ' : '🤖 ') + m.agente.toUpperCase() + '</div>' : ''
       
-      html += '<div class="msg ' + role + '">'
+      html += '<div class="msg ' + role + (m.humano ? ' humano' : '') + '">'
       if(role === 'assistant') html += agenteStr
       html += content
       if(timeStr) html += '<div class="msg-time">' + timeStr + '</div>'
       html += '</div>'
     })
   }
+  html += '</div>'
+  
+  // Input de intervención humana
+  html += '<div class="intervencion">'
+  html += '<div class="int-hdr">'
+  html += '<span class="int-lbl">🙋 INTERVENIR CONVERSACIÓN</span>'
+  html += '<label class="int-toggle"><input type="checkbox" id="pausar-bot-' + conv.id + '" ' + (conv.handoff_humano ? 'checked' : '') + '> Pausar bot después de enviar</label>'
+  html += '</div>'
+  html += '<div class="int-body">'
+  html += '<textarea id="msg-humano-' + conv.id + '" placeholder="Escribe tu mensaje aquí... (se enviará desde el bot Serviruta)" rows="2"></textarea>'
+  html += '<button class="btn-enviar" onclick="enviarComoHumano(\'' + conv.id + '\',\'' + conv.telefono + '\',\'' + (conv.nombre || '').replace(/'/g,"\\'") + '\')">📤 Enviar</button>'
+  html += '</div>'
   html += '</div>'
   
   wrap.innerHTML = html
@@ -403,6 +431,65 @@ async function reactivarBot(id){
     setTimeout(cargar, 300)
   } else {
     toast('❌ Error', '')
+  }
+}
+
+async function enviarComoHumano(convId, telefono, nombre){
+  var textarea = document.getElementById('msg-humano-' + convId)
+  var pausar = document.getElementById('pausar-bot-' + convId).checked
+  var mensaje = textarea.value.trim()
+  if(!mensaje){
+    toast('⚠️ Escribe un mensaje primero','')
+    return
+  }
+  
+  var btn = textarea.parentElement.querySelector('.btn-enviar')
+  var textoOrig = btn.innerHTML
+  btn.innerHTML = '⏳ Enviando...'
+  btn.disabled = true
+  
+  try {
+    // Llamar al Edge Function send-outbound
+    var r = await fetch(SB_URL + '/functions/v1/send-outbound', {
+      method: 'POST',
+      headers: {
+        'apikey': SB_KEY,
+        'Authorization': 'Bearer ' + SB_KEY,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        telefono: telefono,
+        mensaje: mensaje,
+        agente_id: 'humano',
+        cliente_nombre: nombre
+      })
+    })
+    var data = await r.json()
+    
+    if(data.ok){
+      toast('✅ Enviado desde bot Serviruta', 'ok')
+      textarea.value = ''
+      
+      // Si marcó pausar, forzar handoff después de enviar
+      if(pausar){
+        await sbUpd('conversaciones_wa?id=eq.' + convId, {
+          handoff_humano: true,
+          agente_actual: 'humano',
+          ultima_actividad: new Date().toISOString()
+        })
+      }
+      
+      // Recargar para ver el mensaje enviado
+      setTimeout(cargar, 500)
+    } else {
+      toast('❌ Error: ' + (data.error || 'desconocido'), '')
+    }
+  } catch(e) {
+    console.error(e)
+    toast('❌ Error al enviar', '')
+  } finally {
+    btn.innerHTML = textoOrig
+    btn.disabled = false
   }
 }
 

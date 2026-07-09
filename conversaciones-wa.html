@@ -249,13 +249,18 @@ function fmtHora(iso){
   if(dif < 3600) return Math.floor(dif/60) + 'm'
   if(dif < 86400) return Math.floor(dif/3600) + 'h'
   if(dif < 86400*7) return Math.floor(dif/86400) + 'd'
-  return d.toISOString().substring(5,10)
+  return d.toLocaleDateString('es-CL', {timeZone:'America/Santiago', day:'2-digit', month:'2-digit'})
 }
 
 function fmtHoraCompleta(iso){
   if(!iso) return ''
   var d = new Date(iso)
-  return d.toLocaleString('es-CL', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'})
+  return d.toLocaleString('es-CL', {
+    timeZone: 'America/Santiago',
+    day:'2-digit', month:'2-digit',
+    hour:'2-digit', minute:'2-digit',
+    hour12: false
+  })
 }
 
 async function cargar(){
@@ -391,7 +396,7 @@ function renderDetalle(conv){
     msgs.forEach(function(m){
       var role = m.role || 'assistant'
       var content = (m.content || '').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>')
-      var timeStr = m.ts ? new Date(m.ts).toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit'}) : ''
+      var timeStr = m.ts ? new Date(m.ts).toLocaleTimeString('es-CL',{timeZone:'America/Santiago',hour:'2-digit',minute:'2-digit',hour12:false}) : ''
       var agenteStr = m.agente ? '<div class="msg-agente">' + (m.humano ? '🙋 ' : '🤖 ') + m.agente.toUpperCase() + '</div>' : ''
       
       html += '<div class="msg ' + role + (m.humano ? ' humano' : '') + '">'

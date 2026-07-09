@@ -4,6 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Hub Junior · Serviruta</title>
+<script>
+// GUARD DE ACCESO: si no hay sesión, redirigir al login
+(function(){
+  try {
+    var rol = localStorage.getItem('sv_user_rol');
+    if(!rol){
+      window.location.replace('login.html');
+    }
+  } catch(e){}
+})();
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Instrument+Serif&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -77,14 +88,53 @@ button{border:none;background:none;color:inherit;font-family:inherit;cursor:poin
     <div class="reloj-hora">12:35</div>
     <div class="reloj-info">MIÉ 09 JUL · ABIERTO</div>
   </div>
-  <button class="user-btn"><div class="avatar">L</div> Lily · JUNIOR</button>
+  <button class="user-btn" onclick="cerrarSesion()"><div class="avatar" id="user-avatar">L</div> <span id="user-nom">Lily</span> · <span id="user-rol-txt">JUNIOR</span></button>
 </header>
+
+<script>
+// Cargar datos del usuario en la barra
+(function(){
+  try {
+    var nombre = localStorage.getItem('sv_user_nombre') || 'Usuario';
+    var rol = localStorage.getItem('sv_user_rol') || 'coord_junior';
+    var primerNom = nombre.split(' ')[0];
+    var av = document.getElementById('user-avatar');
+    if(av) av.textContent = (nombre[0] || '?').toUpperCase();
+    var nomEl = document.getElementById('user-nom');
+    if(nomEl) nomEl.textContent = primerNom;
+    var heroNom = document.getElementById('hero-nom');
+    if(heroNom) heroNom.textContent = primerNom;
+    var rolEl = document.getElementById('user-rol-txt');
+    if(rolEl){
+      if(rol === 'owner') rolEl.textContent = 'OWNER';
+      else if(rol === 'coord_senior') rolEl.textContent = 'SENIOR';
+      else rolEl.textContent = 'JUNIOR';
+    }
+  } catch(e){}
+})();
+
+function cerrarSesion(){
+  if(!confirm('¿Cerrar sesión?')) return;
+  try {
+    localStorage.removeItem('sv_user_nombre');
+    localStorage.removeItem('sv_user_rol');
+    localStorage.removeItem('sv_user_username');
+    localStorage.removeItem('sv_user_id');
+    // También limpiar la sesión de Supabase
+    var keys = Object.keys(localStorage);
+    keys.forEach(function(k){
+      if(k.indexOf('sb-') === 0 || k.indexOf('supabase') >= 0) localStorage.removeItem(k);
+    });
+  } catch(e){}
+  window.location.replace('login.html');
+}
+</script>
 
 <div class="shell">
 
   <div class="hero">
     <div class="hero-kicker">👋 BIENVENIDA A SERVIRUTA</div>
-    <div class="hero-tit">Hola <em>Lily</em>. Aquí están tus herramientas.</div>
+    <div class="hero-tit" id="hero-tit">Hola <em id="hero-nom">Lily</em>. Aquí están tus herramientas.</div>
     <div class="hero-desc">Tienes acceso a los módulos operativos para coordinar servicios. Los datos financieros históricos y sensibles están fuera de tu perímetro.</div>
   </div>
 
@@ -132,24 +182,24 @@ button{border:none;background:none;color:inherit;font-family:inherit;cursor:poin
   <div class="section-lbl">💰 COMERCIAL (LIMITADO)</div>
   <div class="grid">
     
-    <a class="card" href="presupuestos-jr.html">
-      <span class="card-badge limited">MES ACTUAL · MÍOS</span>
+    <a class="card" href="presupuestos-coord.html">
+      <span class="card-badge limited">SOLO SUYOS · MES ACTUAL</span>
       <div class="card-icon">📄</div>
       <div class="card-tit">Mis Presupuestos</div>
-      <div class="card-desc">Solo los presupuestos que yo he creado este mes</div>
+      <div class="card-desc">Presupuestos creados por mí este mes</div>
     </a>
     
-    <a class="card" href="ppto-coordinador.html">
+    <a class="card" href="generador-presupuestos-serviruta.html">
       <div class="card-icon">📝</div>
       <div class="card-tit">Nuevo Presupuesto</div>
       <div class="card-desc">Crear cotización para un cliente</div>
     </a>
     
-    <a class="card" href="clientes-jr.html">
+    <a class="card" href="clientes-crm.html">
       <span class="card-badge limited">DATOS BÁSICOS</span>
       <div class="card-icon">👥</div>
       <div class="card-tit">Clientes</div>
-      <div class="card-desc">Datos de contacto (sin LTV ni histórico de ingresos)</div>
+      <div class="card-desc">Contacto y vehículo (sin datos financieros)</div>
     </a>
     
   </div>

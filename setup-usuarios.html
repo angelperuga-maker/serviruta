@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Setup Usuarios · Serviruta</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0A0D;--s1:#111114;--s2:#16161B;--s3:#1C1C23;--line:#26262E;--rojo:#E8210A;--rojo-l:#FF4D2E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--violeta:#A78BFA;--dorado:#D4AF37;--naranja:#F97316;--t1:#F6F4EF;--t2:#C7C5BF;--t3:#8B8990;--display:'Syne',sans-serif;--body:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--t2);font-family:var(--body);font-size:14px;line-height:1.5;min-height:100vh;padding:24px}
+button,input{border:none;background:none;color:inherit;font-family:inherit;font-size:14px}
+input{background:var(--s2);border:1px solid var(--line);border-radius:8px;padding:10px 12px;color:var(--t1);width:100%}
+input:focus{outline:none;border-color:var(--dorado)}
+
+.shell{max-width:720px;margin:0 auto}
+.title{font-family:var(--display);font-weight:900;font-size:28px;color:var(--t1);letter-spacing:-1px;margin-bottom:8px}
+.title small{display:block;font-family:var(--mono);font-size:10px;color:var(--dorado);letter-spacing:0.2em;font-weight:700;margin-top:4px}
+.subtitle{color:var(--t3);margin-bottom:24px;font-size:14px}
+
+.warning{background:linear-gradient(135deg,rgba(232,33,10,0.1),rgba(232,33,10,0.03));border:1px solid rgba(232,33,10,0.3);border-radius:12px;padding:16px 18px;margin-bottom:20px;display:flex;gap:12px}
+.warning-icon{font-size:24px;flex-shrink:0}
+.warning-txt{color:var(--t2);font-size:13px;line-height:1.5}
+.warning-txt strong{color:var(--rojo-l)}
+
+.step{background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:14px}
+.step-num{font-family:var(--mono);font-size:9px;color:var(--dorado);letter-spacing:0.2em;font-weight:700;margin-bottom:6px}
+.step-tit{font-family:var(--display);font-weight:800;font-size:17px;color:var(--t1);margin-bottom:10px}
+.step-desc{color:var(--t2);font-size:13px;margin-bottom:14px;line-height:1.5}
+.step.done{border-color:var(--verde);background:linear-gradient(135deg,rgba(34,197,94,0.06),rgba(34,197,94,0.02))}
+.step.done .step-num{color:var(--verde)}
+
+.user-card{background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:8px;display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center}
+.user-card.owner{border-left:3px solid var(--dorado)}
+.user-card.senior{border-left:3px solid var(--azul)}
+.user-card.junior{border-left:3px solid var(--verde)}
+.user-avatar{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:900;font-size:14px}
+.user-card.owner .user-avatar{background:linear-gradient(135deg,var(--rojo),var(--dorado));color:#000}
+.user-card.senior .user-avatar{background:linear-gradient(135deg,var(--azul),var(--violeta));color:#fff}
+.user-card.junior .user-avatar{background:linear-gradient(135deg,var(--verde),var(--amarillo));color:#000}
+.user-info-nom{font-family:var(--display);font-weight:800;font-size:14px;color:var(--t1);line-height:1.2}
+.user-info-mail{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.05em;margin-top:2px}
+.user-status{font-family:var(--mono);font-size:9px;padding:3px 6px;border-radius:4px;font-weight:700;letter-spacing:0.05em}
+.user-status.pending{background:rgba(245,197,24,0.15);color:var(--amarillo)}
+.user-status.ok{background:rgba(34,197,94,0.15);color:var(--verde)}
+.user-status.err{background:rgba(232,33,10,0.15);color:var(--rojo-l)}
+
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.form-full{grid-column:1/-1}
+.form-lbl{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.15em;font-weight:700;text-transform:uppercase;margin-bottom:5px;display:block}
+
+.btn{padding:11px 18px;border-radius:8px;font-family:var(--display);font-weight:800;font-size:12px;cursor:pointer;letter-spacing:0.05em;transition:all 200ms}
+.btn:hover{transform:translateY(-1px)}
+.btn.primary{background:linear-gradient(135deg,var(--dorado),#B8933A);color:#000;width:100%;padding:14px}
+.btn.secondary{background:var(--s2);border:1px solid var(--line);color:var(--t2);font-family:var(--mono);font-weight:700;font-size:10px}
+.btn:disabled{opacity:0.5;cursor:not-allowed}
+
+.log{background:var(--s3);border:1px solid var(--line);border-radius:10px;padding:14px;margin-top:14px;font-family:var(--mono);font-size:11px;max-height:250px;overflow-y:auto}
+.log-line{margin-bottom:4px;line-height:1.5}
+.log-line.ok{color:var(--verde)}
+.log-line.err{color:var(--rojo-l)}
+.log-line.info{color:var(--t3)}
+
+.mockup-badge{position:fixed;bottom:20px;right:20px;background:var(--s2);border:1px solid var(--dorado);color:var(--dorado);padding:8px 14px;border-radius:10px;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.1em}
+
+.pwds-box{background:linear-gradient(135deg,rgba(212,175,55,0.08),rgba(212,175,55,0.02));border:1px solid rgba(212,175,55,0.4);border-radius:12px;padding:16px;margin-top:14px}
+.pwds-tit{font-family:var(--mono);font-size:10px;color:var(--dorado);letter-spacing:0.15em;font-weight:700;margin-bottom:10px}
+.pwd-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:12px}
+.pwd-row:last-child{border-bottom:none}
+.pwd-row .user{color:var(--t2);font-weight:700}
+.pwd-row .pwd{color:var(--dorado);font-weight:700;letter-spacing:0.05em}
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+<div class="title">Setup Inicial<small>SERVIRUTA · CREACIÓN DE USUARIOS</small></div>
+<div class="subtitle">Crea los 3 usuarios iniciales del sistema autenticado. Solo se ejecuta UNA VEZ.</div>
+
+<div class="warning">
+  <div class="warning-icon">⚠️</div>
+  <div class="warning-txt">
+    Este panel es para <strong>configuración inicial únicamente</strong>. Después de crear los usuarios, borra o mueve este archivo. Cualquier persona con acceso a esta URL puede crear usuarios.
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-num">PASO 1 · CREDENCIALES</div>
+  <div class="step-tit">Define las contraseñas iniciales</div>
+  <div class="step-desc">Cada usuario podrá cambiar la suya después. Mínimo 6 caracteres. Sugerencia: usa una palabra + año (ej: Serviruta2026).</div>
+  
+  <div class="form-grid">
+    <div class="form-full">
+      <label class="form-lbl">Contraseña para TODOS (por simplicidad)</label>
+      <input type="text" id="pwd-common" value="Serviruta2026" placeholder="Serviruta2026">
+    </div>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-num">PASO 2 · USUARIOS A CREAR</div>
+  <div class="step-tit">Los 3 usuarios del sistema</div>
+  <div class="step-desc">Los emails son solo internos (@serviruta.local). Los usuarios verán únicamente el username.</div>
+  
+  <div class="user-card owner">
+    <div class="user-avatar">A</div>
+    <div>
+      <div class="user-info-nom">Angel Peruga</div>
+      <div class="user-info-mail">angel@serviruta.local · owner</div>
+    </div>
+    <div class="user-status pending" id="s-angel">PENDIENTE</div>
+  </div>
+  
+  <div class="user-card senior">
+    <div class="user-avatar">N</div>
+    <div>
+      <div class="user-info-nom">Nicolás Orellana</div>
+      <div class="user-info-mail">nicolas@serviruta.local · coord_senior</div>
+    </div>
+    <div class="user-status pending" id="s-nicolas">PENDIENTE</div>
+  </div>
+  
+  <div class="user-card junior">
+    <div class="user-avatar">L</div>
+    <div>
+      <div class="user-info-nom">Lily</div>
+      <div class="user-info-mail">lily@serviruta.local · coord_junior</div>
+    </div>
+    <div class="user-status pending" id="s-lily">PENDIENTE</div>
+  </div>
+</div>
+
+<div class="step">
+  <div class="step-num">PASO 3 · EJECUTAR</div>
+  <div class="step-tit">Crear todos los usuarios</div>
+  <div class="step-desc">Click en el botón para crear los 3 usuarios en Supabase Auth + sus perfiles en la BD.</div>
+  
+  <button class="btn primary" id="btn-run" onclick="crearTodos()">🚀 Crear los 3 usuarios</button>
+  
+  <div id="pwds-box" style="display:none" class="pwds-box">
+    <div class="pwds-tit">🔑 CREDENCIALES · GUARDA ESTA INFORMACIÓN</div>
+    <div id="pwds-list"></div>
+  </div>
+  
+  <div class="log" id="log" style="display:none">
+    <div class="log-line info">Listo para ejecutar...</div>
+  </div>
+</div>
+
+</div>
+
+<div class="mockup-badge">⚙ CONFIGURACIÓN INICIAL</div>
+
+<script>
+var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+
+var supabase = window.supabase.createClient(SB_URL, SB_KEY)
+
+var USERS = [
+  {username:'angel', email:'angel@serviruta.local', nombre:'Angel Peruga', rol:'owner', statusId:'s-angel'},
+  {username:'nicolas', email:'nicolas@serviruta.local', nombre:'Nicolás Orellana', rol:'coord_senior', statusId:'s-nicolas'},
+  {username:'lily', email:'lily@serviruta.local', nombre:'Lily', rol:'coord_junior', statusId:'s-lily'}
+]
+
+function log(msg, tipo){
+  var l = document.getElementById('log')
+  l.style.display = 'block'
+  var line = document.createElement('div')
+  line.className = 'log-line ' + (tipo||'info')
+  var time = new Date().toLocaleTimeString('es-CL',{hour:'2-digit',minute:'2-digit',second:'2-digit'})
+  line.textContent = '[' + time + '] ' + msg
+  l.appendChild(line)
+  l.scrollTop = l.scrollHeight
+}
+
+function updateStatus(id, tipo, txt){
+  var el = document.getElementById(id)
+  el.className = 'user-status ' + tipo
+  el.textContent = txt
+}
+
+async function crearUsuario(user, pwd){
+  updateStatus(user.statusId, 'pending', 'CREANDO...')
+  log('Creando ' + user.username + '...', 'info')
+  
+  try {
+    // 1. Crear en auth.users con signUp
+    var {data, error} = await supabase.auth.signUp({
+      email: user.email,
+      password: pwd,
+      options: {
+        data: {
+          username: user.username,
+          nombre: user.nombre,
+          rol: user.rol
+        }
+      }
+    })
+    
+    if(error){
+      if(error.message && error.message.indexOf('already registered') >= 0){
+        log('  → ' + user.username + ' ya existía en auth.users, buscando su user_id...', 'info')
+        // Intentar login para obtener user_id
+        var {data:loginData, error:loginErr} = await supabase.auth.signInWithPassword({
+          email: user.email,
+          password: pwd
+        })
+        if(loginErr){
+          log('  ✗ Error obteniendo user_id: ' + loginErr.message, 'err')
+          updateStatus(user.statusId, 'err', 'YA EXISTE (pwd?)')
+          return false
+        }
+        data = loginData
+        await supabase.auth.signOut()
+      } else {
+        log('  ✗ Error signUp: ' + error.message, 'err')
+        updateStatus(user.statusId, 'err', 'ERROR')
+        return false
+      }
+    }
+    
+    var userId = data.user ? data.user.id : (data.session ? data.session.user.id : null)
+    if(!userId){
+      log('  ✗ No se obtuvo user_id', 'err')
+      updateStatus(user.statusId, 'err', 'SIN ID')
+      return false
+    }
+    
+    log('  ✓ Auth OK, user_id: ' + userId.substring(0,8) + '...', 'ok')
+    
+    // 2. Crear/actualizar el perfil en user_profiles
+    var profileR = await fetch(SB_URL + '/rest/v1/user_profiles', {
+      method: 'POST',
+      headers: {
+        'apikey': SB_KEY,
+        'Authorization': 'Bearer ' + SB_KEY,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=representation,resolution=merge-duplicates'
+      },
+      body: JSON.stringify({
+        user_id: userId,
+        username: user.username,
+        nombre: user.nombre,
+        rol: user.rol,
+        activo: true
+      })
+    })
+    
+    if(!profileR.ok){
+      var errTxt = await profileR.text()
+      // Ver si es porque ya existe
+      if(errTxt.indexOf('duplicate') >= 0 || errTxt.indexOf('unique') >= 0){
+        // Update en vez de insert
+        var updR = await fetch(SB_URL + '/rest/v1/user_profiles?user_id=eq.' + userId, {
+          method: 'PATCH',
+          headers: {
+            'apikey': SB_KEY,
+            'Authorization': 'Bearer ' + SB_KEY,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({username: user.username, nombre: user.nombre, rol: user.rol, activo: true})
+        })
+        if(updR.ok){
+          log('  ✓ Perfil actualizado', 'ok')
+        } else {
+          log('  ✗ Error update: ' + await updR.text(), 'err')
+          updateStatus(user.statusId, 'err', 'ERROR PERFIL')
+          return false
+        }
+      } else {
+        log('  ✗ Error perfil: ' + errTxt.substring(0,100), 'err')
+        updateStatus(user.statusId, 'err', 'ERROR')
+        return false
+      }
+    } else {
+      log('  ✓ Perfil creado', 'ok')
+    }
+    
+    updateStatus(user.statusId, 'ok', '✓ CREADO')
+    return true
+    
+  } catch(e){
+    log('  ✗ Excepción: ' + String(e), 'err')
+    updateStatus(user.statusId, 'err', 'ERROR')
+    return false
+  }
+}
+
+async function crearTodos(){
+  var pwd = document.getElementById('pwd-common').value.trim()
+  if(pwd.length < 6){
+    alert('La contraseña debe tener al menos 6 caracteres')
+    return
+  }
+  
+  var btn = document.getElementById('btn-run')
+  btn.disabled = true
+  btn.textContent = '⏳ Creando usuarios...'
+  
+  document.getElementById('log').innerHTML = ''
+  log('═══ INICIO DE SETUP ═══', 'info')
+  log('Contraseña común: ' + pwd, 'info')
+  
+  var todosOk = true
+  for(var i = 0; i < USERS.length; i++){
+    var ok = await crearUsuario(USERS[i], pwd)
+    if(!ok) todosOk = false
+    // Espera entre creaciones para evitar rate limit
+    await new Promise(function(r){setTimeout(r, 800)})
+  }
+  
+  log('═══ FIN DE SETUP ═══', todosOk ? 'ok' : 'err')
+  
+  if(todosOk){
+    log('🎉 TODOS LOS USUARIOS CREADOS EXITOSAMENTE', 'ok')
+    log('Contraseña para los 3: ' + pwd, 'info')
+    log('Guarda estas credenciales y BORRA este archivo (setup-usuarios.html)', 'info')
+    
+    // Mostrar credenciales
+    var pwdsBox = document.getElementById('pwds-box')
+    var pwdsList = document.getElementById('pwds-list')
+    var html = ''
+    USERS.forEach(function(u){
+      html += '<div class="pwd-row"><span class="user">'+u.username+' ('+u.rol+')</span><span class="pwd">'+pwd+'</span></div>'
+    })
+    pwdsList.innerHTML = html
+    pwdsBox.style.display = 'block'
+    
+    btn.textContent = '✅ Setup completado'
+    btn.style.background = 'var(--verde)'
+  } else {
+    btn.disabled = false
+    btn.textContent = '🔄 Reintentar'
+  }
+}
+</script>
+
+</body>
+</html>

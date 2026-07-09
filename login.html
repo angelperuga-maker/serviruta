@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Login · Serviruta</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Instrument+Serif&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0A0A0D;--s1:#111114;--s2:#16161B;--s3:#1C1C23;--line:#26262E;
+  --rojo:#E8210A;--rojo-l:#FF4D2E;--verde:#22C55E;--amarillo:#F5C518;
+  --azul:#60A5FA;--violeta:#A78BFA;--dorado:#D4AF37;--naranja:#F97316;
+  --t1:#F6F4EF;--t2:#C7C5BF;--t3:#8B8990;
+  --display:'Syne',sans-serif;--body:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace;--serif:'Instrument Serif',serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--t2);font-family:var(--body);font-size:14px;line-height:1.5;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;overflow:hidden}
+
+/* Decorative bg glow */
+body::before{content:'';position:absolute;top:-200px;right:-200px;width:600px;height:600px;background:radial-gradient(circle,var(--dorado),transparent 70%);opacity:0.06;filter:blur(60px);pointer-events:none}
+body::after{content:'';position:absolute;bottom:-200px;left:-200px;width:600px;height:600px;background:radial-gradient(circle,var(--rojo),transparent 70%);opacity:0.05;filter:blur(60px);pointer-events:none}
+
+button,input{border:none;background:none;color:inherit;font-family:inherit;font-size:14px;cursor:pointer}
+input{background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:14px 16px;color:var(--t1);width:100%;transition:border-color 200ms}
+input:focus{outline:none;border-color:var(--dorado)}
+
+.container{width:100%;max-width:420px;position:relative;z-index:2}
+
+.brand{text-align:center;margin-bottom:32px}
+.logo{width:64px;height:64px;background:linear-gradient(135deg,var(--rojo),var(--dorado));border-radius:16px;display:inline-flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:900;font-size:28px;color:#000;margin-bottom:14px;box-shadow:0 10px 40px rgba(212,175,55,0.25)}
+.brand-name{font-family:var(--display);font-weight:900;font-size:26px;color:var(--t1);letter-spacing:-1px}
+.brand-sub{font-family:var(--mono);font-size:10px;color:var(--dorado);letter-spacing:0.25em;font-weight:700;margin-top:4px}
+
+.card{background:var(--s1);border:1px solid var(--line);border-radius:20px;padding:32px 28px}
+.card-header{margin-bottom:24px}
+.card-tit{font-family:var(--display);font-weight:800;font-size:22px;color:var(--t1);letter-spacing:-0.5px}
+.card-tit em{font-family:var(--serif);font-style:italic;color:var(--dorado);font-weight:400}
+.card-desc{color:var(--t3);font-size:13px;margin-top:4px}
+
+.form-group{margin-bottom:14px}
+.form-lbl{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.15em;font-weight:700;text-transform:uppercase;margin-bottom:6px;display:block}
+
+.username-wrap{position:relative}
+.username-input{padding-right:120px}
+.username-suffix{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:11px;color:var(--t3);letter-spacing:0.05em;pointer-events:none;font-weight:700}
+
+.btn-login{width:100%;padding:14px;background:linear-gradient(135deg,var(--dorado),#B8933A);color:#000;border-radius:10px;font-family:var(--display);font-weight:900;font-size:14px;cursor:pointer;letter-spacing:0.05em;margin-top:8px;transition:all 200ms}
+.btn-login:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(212,175,55,0.3)}
+
+.divider{display:flex;align-items:center;gap:12px;margin:24px 0}
+.divider hr{flex:1;border:none;border-top:1px solid var(--line)}
+.divider span{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.2em;font-weight:700}
+
+.demo-section{padding-top:18px;border-top:1px solid var(--line);margin-top:18px}
+.demo-title{font-family:var(--mono);font-size:9px;color:var(--dorado);letter-spacing:0.2em;font-weight:700;margin-bottom:12px;text-align:center}
+
+.demo-users{display:flex;flex-direction:column;gap:8px}
+.demo-user{background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all 200ms;text-align:left;width:100%;text-decoration:none}
+.demo-user:hover{border-color:var(--dorado);transform:translateX(2px)}
+.demo-avatar{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:900;font-size:14px;flex-shrink:0}
+.demo-avatar.owner{background:linear-gradient(135deg,var(--rojo),var(--dorado));color:#000}
+.demo-avatar.senior{background:linear-gradient(135deg,var(--azul),var(--violeta));color:#fff}
+.demo-avatar.junior{background:linear-gradient(135deg,var(--verde),var(--amarillo));color:#000}
+.demo-info{flex:1;min-width:0}
+.demo-nom{font-family:var(--display);font-weight:800;font-size:14px;color:var(--t1);line-height:1.2}
+.demo-rol{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;font-weight:700;margin-top:2px;text-transform:uppercase}
+.demo-badge{font-family:var(--mono);font-size:8px;padding:3px 6px;border-radius:4px;font-weight:700;letter-spacing:0.05em}
+.demo-badge.o{background:rgba(212,175,55,0.15);color:var(--dorado)}
+.demo-badge.s{background:rgba(96,165,250,0.15);color:var(--azul)}
+.demo-badge.j{background:rgba(34,197,94,0.15);color:var(--verde)}
+
+.footer{text-align:center;margin-top:24px;font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.15em;font-weight:700}
+.footer .warn{color:var(--amarillo);margin-top:8px;display:block}
+</style>
+</head>
+<body>
+
+<div class="container">
+  
+  <div class="brand">
+    <div class="logo">S</div>
+    <div class="brand-name">Serviruta</div>
+    <div class="brand-sub">SISTEMA INTERNO</div>
+  </div>
+  
+  <div class="card">
+    
+    <div class="card-header">
+      <div class="card-tit">Bienvenido/a de <em>vuelta</em></div>
+      <div class="card-desc">Ingresa con tu usuario y contraseña</div>
+    </div>
+    
+    <div class="form-group">
+      <label class="form-lbl">Usuario</label>
+      <div class="username-wrap">
+        <input type="text" id="username" class="username-input" placeholder="lily" autocomplete="off">
+        <span class="username-suffix">@serviruta.local</span>
+      </div>
+    </div>
+    
+    <div class="form-group">
+      <label class="form-lbl">Contraseña</label>
+      <input type="password" id="password" placeholder="••••••••">
+    </div>
+    
+    <button class="btn-login" onclick="alert('🎭 MOCKUP · Aquí se conecta a Supabase Auth cuando construyas el backend real')">Ingresar</button>
+    
+    <div class="demo-section">
+      <div class="demo-title">🎭 SIMULAR LOGIN (MOCKUP)</div>
+      <div class="demo-users">
+        
+        <a href="menu-coordinador.html" class="demo-user">
+          <div class="demo-avatar owner">A</div>
+          <div class="demo-info">
+            <div class="demo-nom">Angel Peruga</div>
+            <div class="demo-rol">FUNDADOR · VE TODO</div>
+          </div>
+          <span class="demo-badge o">OWNER</span>
+        </a>
+        
+        <a href="menu-coordinador.html" class="demo-user">
+          <div class="demo-avatar senior">N</div>
+          <div class="demo-info">
+            <div class="demo-nom">Nicolás Orellana</div>
+            <div class="demo-rol">COORD. SENIOR</div>
+          </div>
+          <span class="demo-badge s">SENIOR</span>
+        </a>
+        
+        <a href="menu-coord-jr.html" class="demo-user">
+          <div class="demo-avatar junior">L</div>
+          <div class="demo-info">
+            <div class="demo-nom">Lily</div>
+            <div class="demo-rol">COORD. JUNIOR · ACCESO LIMITADO</div>
+          </div>
+          <span class="demo-badge j">JUNIOR</span>
+        </a>
+        
+      </div>
+    </div>
+    
+  </div>
+  
+  <div class="footer">
+    SERVIRUTA · v1 · MOCKUP DE DISEÑO
+    <span class="warn">⚠ Los datos NO se guardan aún · Este es solo el diseño visual</span>
+  </div>
+  
+</div>
+
+</body>
+</html>

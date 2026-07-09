@@ -250,6 +250,42 @@ var FILTRO_TEC = 'todos'
 var EDITANDO = null
 var COLORES = ['#22C55E','#60A5FA','#A78BFA','#F97316','#F5C518','#EC4899','#14B8A6','#EF4444']
 
+// Detectar rol del usuario
+var TECNICO_NOMBRE = sessionStorage.getItem('tecnico_nombre') || ''
+var COORD_AUTH = sessionStorage.getItem('coord_auth')
+var IS_TECNICO = !!TECNICO_NOMBRE && !COORD_AUTH
+var IS_COORD = !IS_TECNICO
+
+// Si es técnico, aplicar modo simplificado
+if(IS_TECNICO){
+  document.addEventListener('DOMContentLoaded', function(){
+    // Ocultar tabs de vistas (solo día)
+    var tabsEl = document.querySelector('.vista-tabs')
+    if(tabsEl) tabsEl.style.display = 'none'
+    // Ocultar botón +Nuevo
+    var addBtn = document.querySelector('.btn-add')
+    if(addBtn) addBtn.style.display = 'none'
+    // Ocultar filtro de técnicos
+    var tecFilter = document.getElementById('tec-filter')
+    if(tecFilter) tecFilter.style.display = 'none'
+    // Ocultar navegación de semana
+    var semanaBtns = document.querySelectorAll('.rango-btns')
+    if(semanaBtns.length >= 2) semanaBtns[1].style.display = 'none'
+    // Cambiar título
+    var title = document.querySelector('.title')
+    if(title){
+      var primerNombre = TECNICO_NOMBRE.split(' ')[0]
+      title.innerHTML = 'Mi agenda<small>' + primerNombre.toUpperCase() + ' · SERVIRUTA</small>'
+    }
+    // Ocultar KPIs de admin
+    var kpis = document.querySelector('.kpis')
+    if(kpis) kpis.style.display = 'none'
+    // Forzar filtro al propio técnico
+    FILTRO_TEC = TECNICO_NOMBRE
+    VISTA = 'dia'
+  })
+}
+
 function toast(msg, tipo){
   var t = document.getElementById('toast')
   t.textContent = msg
@@ -378,15 +414,17 @@ function eventoHTML(e){
   if(e.direccion) html += '<span>📍 '+e.direccion.substring(0,30)+'</span>'
   html += '</div></div>'
   html += '<div class="ev-actions" onclick="event.stopPropagation()">'
-  // Dropdown de asignación rápida
-  var sinTecAssign = !e.tecnico || e.tecnico === 'POR ASIGNAR'
-  html += '<select class="ev-assign' + (sinTecAssign?' sin-tec':'') + '" onchange="asignarRapido(\''+e.id+'\',this.value)">'
-  html += '<option value="POR ASIGNAR"' + (sinTecAssign?' selected':'') + '>⚠️ Sin asignar</option>'
-  TECNICOS.forEach(function(t){
-    var sel = e.tecnico && e.tecnico.indexOf(t.nombre) >= 0 ? ' selected' : ''
-    html += '<option value="'+t.nombre.replace(/"/g,'&quot;')+'"'+sel+'>🔧 '+t.nombre.split(' ')[0]+'</option>'
-  })
-  html += '</select>'
+  // Dropdown de asignación rápida (solo coordinador)
+  if(IS_COORD){
+    var sinTecAssign = !e.tecnico || e.tecnico === 'POR ASIGNAR'
+    html += '<select class="ev-assign' + (sinTecAssign?' sin-tec':'') + '" onchange="asignarRapido(\''+e.id+'\',this.value)">'
+    html += '<option value="POR ASIGNAR"' + (sinTecAssign?' selected':'') + '>⚠️ Sin asignar</option>'
+    TECNICOS.forEach(function(t){
+      var sel = e.tecnico && e.tecnico.indexOf(t.nombre) >= 0 ? ' selected' : ''
+      html += '<option value="'+t.nombre.replace(/"/g,'&quot;')+'"'+sel+'>🔧 '+t.nombre.split(' ')[0]+'</option>'
+    })
+    html += '</select>'
+  }
   // Estado rápido
   html += '<div class="ev-estado-quick">'
   var estados = [
@@ -402,7 +440,8 @@ function eventoHTML(e){
   // Botones de comunicación
   html += '<div style="display:flex;gap:4px;margin-top:2px">'
   if(e.telefono) html += '<button class="ev-btn" onclick="window.open(\'https://wa.me/'+e.telefono.replace(/[^0-9]/g,'')+'\',\'_blank\')">💬 WA</button>'
-  if(e.telefono) html += '<button class="ev-btn chat" onclick="window.open(\'conversaciones-wa.html?tel='+e.telefono+'\',\'_blank\')">💬 CHAT</button>'
+  // Chat del bot solo para coordinador
+  if(e.telefono && IS_COORD) html += '<button class="ev-btn chat" onclick="window.open(\'conversaciones-wa.html?tel='+e.telefono+'\',\'_blank\')">💬 CHAT</button>'
   html += '</div>'
   html += '</div></div>'
   return html
@@ -432,53 +471,76 @@ async function asignarRapido(id, tecnico){
     
     if(tecnico === 'POR ASIGNAR'){
       toast('⚠️ Sin asignar', 'ok')
-    } else {
-      toast('✅ Asignado a ' + tecnico.split(' ')[0], 'ok')
-      
-      // Notificar al técnico via bot
-      var t = TECNICOS.find(function(x){return x.nombre === tecnico})
-      if(t && t.telefono){
-        var hora = (e.hora||'').substring(0,5)
-        var fechaObj = e.fecha ? new Date(e.fecha+'T00:00:00') : new Date()
-        var fechaFmt = fechaObj.toLocaleDateString('es-CL',{weekday:'long', day:'numeric', month:'long'})
-        var urgIcon = e.urgencia==='urgente' ? '🔥 *URGENTE*\n\n' : ''
-        var msgTec = urgIcon + '🔧 *Nuevo servicio asignado*\n\n'
-        msgTec += '👤 *Cliente:* ' + (e.cliente || 'Sin nombre') + '\n'
-        if(e.telefono) msgTec += '📱 *Tel:* +' + e.telefono + '\n'
-        if(e.vehiculo) msgTec += '🚗 *Vehículo:* ' + e.vehiculo + '\n'
-        msgTec += '🛠️ *Servicio:* ' + (e.servicio || 'Sin detalle') + '\n'
-        msgTec += '📅 *Fecha:* ' + fechaFmt + '\n'
-        msgTec += '⏰ *Hora:* ' + hora + '\n'
-        if(e.direccion) msgTec += '📍 *Dirección:* ' + e.direccion + '\n'
-        if(e.notas) msgTec += '📝 *Notas:* ' + e.notas + '\n'
-        msgTec += '\nSi tienes alguna consulta, escríbele al cliente directo o consulta con coordinación.'
-        
-        try {
-          var telNorm = t.telefono.replace(/[^0-9]/g,'')
-          var envTec = await fetch(SB_URL + '/functions/v1/send-outbound', {
-            method: 'POST',
-            headers: {'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json'},
-            body: JSON.stringify({
-              telefono: telNorm,
-              mensaje: msgTec,
-              agente_id: 'humano',
-              cliente_nombre: t.nombre
-            })
-          })
-          var envData = await envTec.json()
-          if(envData.ok){
-            toast('📤 Notificación enviada al técnico', 'ok')
-          } else {
-            console.error('Error notif técnico:', envData)
-            toast('⚠️ Guardado pero no se pudo notificar', 'err')
-          }
-        } catch(er){
-          console.error('Error enviando notif:', er)
-          toast('⚠️ Guardado pero fallo notif', 'err')
-        }
-      } else {
-        toast('⚠️ Técnico sin teléfono registrado', 'err')
+      actualizarKPIs()
+      render()
+      return
+    }
+    
+    toast('✅ Asignado a ' + tecnico.split(' ')[0], 'ok')
+    
+    // Buscar técnico en cache local
+    var t = TECNICOS.find(function(x){return x.nombre === tecnico})
+    
+    // Si no está o no tiene teléfono, fetch fresco a la BD
+    if(!t || !t.telefono){
+      console.log('[NOTIF] Técnico no en cache local, buscando en BD:', tecnico)
+      var rTec = await sbReq('GET', 'tecnicos?nombre=eq.' + encodeURIComponent(tecnico) + '&select=nombre,telefono')
+      if(rTec.ok){
+        var arr = await rTec.json()
+        if(arr && arr[0]) t = arr[0]
       }
+    }
+    
+    if(!t || !t.telefono){
+      toast('⚠️ Técnico sin teléfono en BD (' + tecnico + ')', 'err')
+      console.error('[NOTIF] No se encontró teléfono para:', tecnico, t)
+      actualizarKPIs()
+      render()
+      return
+    }
+    
+    // Armar mensaje
+    var hora = (e.hora||'').substring(0,5)
+    var fechaObj = e.fecha ? new Date(e.fecha+'T00:00:00') : new Date()
+    var fechaFmt = fechaObj.toLocaleDateString('es-CL',{weekday:'long', day:'numeric', month:'long'})
+    var urgIcon = e.urgencia==='urgente' ? '🔥 *URGENTE*\n\n' : ''
+    var msgTec = urgIcon + '🔧 *Nuevo servicio asignado*\n\n'
+    msgTec += '👤 *Cliente:* ' + (e.cliente || 'Sin nombre') + '\n'
+    if(e.telefono) msgTec += '📱 *Tel:* +' + e.telefono + '\n'
+    if(e.vehiculo) msgTec += '🚗 *Vehículo:* ' + e.vehiculo + '\n'
+    msgTec += '🛠️ *Servicio:* ' + (e.servicio || 'Sin detalle') + '\n'
+    msgTec += '📅 *Fecha:* ' + fechaFmt + '\n'
+    msgTec += '⏰ *Hora:* ' + hora + '\n'
+    if(e.direccion) msgTec += '📍 *Dirección:* ' + e.direccion + '\n'
+    if(e.notas) msgTec += '📝 *Notas:* ' + e.notas + '\n'
+    msgTec += '\nSi tienes alguna consulta, escríbele al cliente directo o consulta con coordinación.'
+    
+    var telNorm = t.telefono.replace(/[^0-9]/g,'')
+    console.log('[NOTIF] Enviando a:', telNorm, 'msg length:', msgTec.length)
+    
+    try {
+      var envTec = await fetch(SB_URL + '/functions/v1/send-outbound', {
+        method: 'POST',
+        headers: {'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          telefono: telNorm,
+          mensaje: msgTec,
+          agente_id: 'humano',
+          cliente_nombre: t.nombre
+        })
+      })
+      var envData = await envTec.json()
+      console.log('[NOTIF] Respuesta:', envData)
+      
+      if(envData.ok){
+        toast('📤 Notificación enviada a ' + t.nombre.split(' ')[0], 'ok')
+      } else {
+        console.error('[NOTIF] Error:', envData)
+        toast('⚠️ Guardado pero no notificado: ' + (envData.error||'?'), 'err')
+      }
+    } catch(er){
+      console.error('[NOTIF] Excepción:', er)
+      toast('⚠️ Guardado pero fallo notif: ' + String(er).substring(0,30), 'err')
     }
     
     actualizarKPIs()
@@ -544,7 +606,46 @@ function renderVistaDia(){
       porTec[nombre].push(e)
     }
   })
-  var html = '<div class="carriles">'
+  var html = ''
+  
+  // Modo técnico: solo mostrar SUS servicios
+  if(IS_TECNICO){
+    var misServicios = porTec[TECNICO_NOMBRE] || []
+    var col = colorTec(TECNICO_NOMBRE) || '#D4AF37'
+    
+    // Resumen personal en lugar de KPIs de admin
+    var completados = misServicios.filter(function(e){return e.estado === 'completado'}).length
+    var pendientes = misServicios.filter(function(e){return e.estado !== 'completado' && e.estado !== 'cancelado'}).length
+    var urgentes = misServicios.filter(function(e){return e.urgencia==='urgente' && e.estado !== 'completado'}).length
+    
+    html += '<div style="background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin-bottom:14px">'
+    html += '<div style="font-family:var(--mono);font-size:10px;color:var(--dorado);letter-spacing:0.2em;font-weight:700;margin-bottom:12px">📋 TU DÍA</div>'
+    html += '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">'
+    html += '<div><div style="font-family:var(--display);font-weight:900;font-size:28px;color:'+col+';line-height:1">'+pendientes+'</div><div style="font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;font-weight:700;margin-top:2px">PENDIENTES</div></div>'
+    html += '<div><div style="font-family:var(--display);font-weight:900;font-size:28px;color:var(--rojo-l);line-height:1">'+urgentes+'</div><div style="font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;font-weight:700;margin-top:2px">URGENTES</div></div>'
+    html += '<div><div style="font-family:var(--display);font-weight:900;font-size:28px;color:var(--verde);line-height:1">'+completados+'</div><div style="font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;font-weight:700;margin-top:2px">COMPLETADOS</div></div>'
+    html += '</div>'
+    html += '</div>'
+    
+    html += '<div class="carriles">'
+    html += '<div class="carril" style="border-left:4px solid '+col+'">'
+    html += '<div class="carril-hdr">'
+    html += '<div class="carril-avatar" style="background:linear-gradient(135deg,'+col+', #000)">' + iniciales(TECNICO_NOMBRE) + '</div>'
+    html += '<div class="carril-nom">'+TECNICO_NOMBRE+'</div>'
+    html += '<div class="carril-count">'+misServicios.length+' servicio'+(misServicios.length!==1?'s':'')+' hoy</div>'
+    html += '</div>'
+    html += '<div class="carril-body' + (misServicios.length===0?' vacio':'') + '">'
+    if(misServicios.length === 0) html += 'No tienes servicios agendados para hoy 🎉'
+    else misServicios.sort(function(a,b){return (a.hora||'').localeCompare(b.hora||'')}).forEach(function(e){html += eventoHTML(e)})
+    html += '</div></div>'
+    html += '</div>'
+    
+    document.getElementById('contenido').innerHTML = html
+    return
+  }
+  
+  // Modo coordinador: vista completa
+  html += '<div class="carriles">'
   if(FILTRO_TEC === 'todos' || FILTRO_TEC === 'POR ASIGNAR'){
     html += '<div class="carril" style="border-color:'+(sinAsignar.length>0?'var(--amarillo)':'var(--line)')+'">'
     html += '<div class="carril-hdr">'
@@ -658,6 +759,11 @@ function abrirNuevo(){
 }
 
 function editar(id){
+  // Los técnicos no pueden editar campos completos, solo cambiar estado
+  if(IS_TECNICO){
+    toast('ℹ️ Usa los botones RUTA / ✓ OK para actualizar estado', 'ok')
+    return
+  }
   var e = EVENTOS.find(function(x){return x.id === id})
   if(!e) return
   EDITANDO = id

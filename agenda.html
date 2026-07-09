@@ -409,40 +409,111 @@ function eventoHTML(e){
 }
 
 async function asignarRapido(id, tecnico){
-  var r = await sbReq('PATCH', 'agenda?id=eq.'+id, {tecnico: tecnico, estado: tecnico==='POR ASIGNAR'?'solicitada':'agendado'})
-  if(r.ok){
-    // Actualizar localmente sin recargar todo
-    var e = EVENTOS.find(function(x){return x.id === id})
-    if(e){
-      e.tecnico = tecnico
-      if(tecnico !== 'POR ASIGNAR' && e.estado === 'solicitada') e.estado = 'agendado'
+  var e = EVENTOS.find(function(x){return x.id === id})
+  if(!e){ toast('❌ Evento no encontrado', 'err'); return }
+  
+  var payload = {
+    tecnico: tecnico,
+    estado: tecnico==='POR ASIGNAR' ? 'solicitada' : (e.estado === 'solicitada' ? 'agendado' : e.estado)
+  }
+  
+  try {
+    var r = await sbReq('PATCH', 'agenda?id=eq.'+id, payload)
+    if(!r.ok){
+      var errTxt = await r.text()
+      console.error('PATCH error:', errTxt)
+      toast('❌ Error DB: ' + errTxt.substring(0, 40), 'err')
+      return
     }
-    toast(tecnico === 'POR ASIGNAR' ? '⚠ Sin asignar' : '✅ Asignado a ' + tecnico.split(' ')[0], 'ok')
-    // Notificar al técnico si se asignó
-    if(tecnico !== 'POR ASIGNAR' && e){
-      var t = TECNICOS.find(function(t){return t.nombre === tecnico})
+    
+    // Actualizar localmente
+    e.tecnico = tecnico
+    e.estado = payload.estado
+    
+    if(tecnico === 'POR ASIGNAR'){
+      toast('⚠️ Sin asignar', 'ok')
+    } else {
+      toast('✅ Asignado a ' + tecnico.split(' ')[0], 'ok')
+      
+      // Notificar al técnico via bot
+      var t = TECNICOS.find(function(x){return x.nombre === tecnico})
       if(t && t.telefono){
         var hora = (e.hora||'').substring(0,5)
-        var msg = 'Nueva asignación: ' + e.cliente + ' - ' + (e.servicio||'') + ' - ' + e.fecha + ' ' + hora
-        console.log('[notif]', t.telefono, msg)
+        var fechaObj = e.fecha ? new Date(e.fecha+'T00:00:00') : new Date()
+        var fechaFmt = fechaObj.toLocaleDateString('es-CL',{weekday:'long', day:'numeric', month:'long'})
+        var urgIcon = e.urgencia==='urgente' ? '🔥 *URGENTE*\n\n' : ''
+        var msgTec = urgIcon + '🔧 *Nuevo servicio asignado*\n\n'
+        msgTec += '👤 *Cliente:* ' + (e.cliente || 'Sin nombre') + '\n'
+        if(e.telefono) msgTec += '📱 *Tel:* +' + e.telefono + '\n'
+        if(e.vehiculo) msgTec += '🚗 *Vehículo:* ' + e.vehiculo + '\n'
+        msgTec += '🛠️ *Servicio:* ' + (e.servicio || 'Sin detalle') + '\n'
+        msgTec += '📅 *Fecha:* ' + fechaFmt + '\n'
+        msgTec += '⏰ *Hora:* ' + hora + '\n'
+        if(e.direccion) msgTec += '📍 *Dirección:* ' + e.direccion + '\n'
+        if(e.notas) msgTec += '📝 *Notas:* ' + e.notas + '\n'
+        msgTec += '\nSi tienes alguna consulta, escríbele al cliente directo o consulta con coordinación.'
+        
+        try {
+          var telNorm = t.telefono.replace(/[^0-9]/g,'')
+          var envTec = await fetch(SB_URL + '/functions/v1/send-outbound', {
+            method: 'POST',
+            headers: {'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json'},
+            body: JSON.stringify({
+              telefono: telNorm,
+              mensaje: msgTec,
+              agente_id: 'humano',
+              cliente_nombre: t.nombre
+            })
+          })
+          var envData = await envTec.json()
+          if(envData.ok){
+            toast('📤 Notificación enviada al técnico', 'ok')
+          } else {
+            console.error('Error notif técnico:', envData)
+            toast('⚠️ Guardado pero no se pudo notificar', 'err')
+          }
+        } catch(er){
+          console.error('Error enviando notif:', er)
+          toast('⚠️ Guardado pero fallo notif', 'err')
+        }
+      } else {
+        toast('⚠️ Técnico sin teléfono registrado', 'err')
       }
     }
+    
     actualizarKPIs()
     render()
-  } else {
-    toast('❌ Error al asignar', 'err')
+    
+  } catch(err) {
+    console.error('Error en asignarRapido:', err)
+    toast('❌ Error: ' + String(err).substring(0, 40), 'err')
   }
 }
 
 async function cambiarEstadoRapido(id, estado){
-  var r = await sbReq('PATCH', 'agenda?id=eq.'+id, {estado: estado})
-  if(r.ok){
-    var e = EVENTOS.find(function(x){return x.id === id})
-    if(e) e.estado = estado
-    toast('✅ Estado: ' + estado, 'ok')
+  var e = EVENTOS.find(function(x){return x.id === id})
+  if(!e) return
+  try {
+    var r = await sbReq('PATCH', 'agenda?id=eq.'+id, {estado: estado})
+    if(!r.ok){
+      var errTxt = await r.text()
+      console.error('PATCH estado error:', errTxt)
+      toast('❌ Error: ' + errTxt.substring(0, 40), 'err')
+      return
+    }
+    e.estado = estado
+    var msgEstado = estado === 'completado' ? '✅ Completado (dispara encuesta)' : '✅ Estado: ' + estado
+    toast(msgEstado, 'ok')
+    
+    // Si pasa a completado y hay teléfono del cliente, avisar coordinación
+    if(estado === 'completado' && e.telefono){
+      console.log('Servicio completado:', e.cliente)
+    }
+    
     actualizarKPIs()
     render()
-  } else {
+  } catch(err){
+    console.error(err)
     toast('❌ Error', 'err')
   }
 }

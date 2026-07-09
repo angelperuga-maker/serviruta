@@ -48,7 +48,20 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--dorado)}
 .sec-badge{padding:3px 8px;background:var(--s3);border-radius:6px;font-family:var(--mono);font-size:10px;color:var(--t2);font-weight:700}
 .sec-body{padding:8px}
 
-.aliado{background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:8px;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;transition:all 200ms;cursor:pointer}
+.aliado{background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:8px;display:grid;grid-template-columns:auto 1fr auto auto;gap:14px;align-items:center;transition:all 200ms;cursor:pointer}
+.al-acciones{display:flex;flex-direction:column;gap:5px;align-items:stretch;min-width:76px}
+.al-btn{padding:5px 8px;background:var(--s3);border:1px solid var(--line);border-radius:6px;font-family:var(--mono);font-size:9px;color:var(--t2);font-weight:700;letter-spacing:0.05em;text-align:center;text-decoration:none;white-space:nowrap;transition:all 150ms}
+.al-btn:hover{transform:translateY(-1px)}
+.al-btn.chat{background:rgba(34,197,94,0.1);border-color:rgba(34,197,94,0.35);color:var(--verde)}
+.al-btn.chat:hover{background:rgba(34,197,94,0.2)}
+.al-btn.wa{background:rgba(96,165,250,0.1);border-color:rgba(96,165,250,0.35);color:var(--azul)}
+.al-btn.wa:hover{background:rgba(96,165,250,0.2)}
+
+@media(max-width:640px){
+  .aliado{grid-template-columns:auto 1fr;grid-template-rows:auto auto}
+  .al-acciones{grid-column:1/-1;flex-direction:row;justify-content:flex-end;min-width:0}
+  .al-estado{grid-column:1/-1;justify-self:end}
+}
 .aliado:hover{border-color:var(--dorado)}
 .aliado.completo{border-left:4px solid var(--verde)}
 .aliado.sin-herr{border-left:4px solid var(--amarillo)}
@@ -304,6 +317,7 @@ function render(){
     html += '<div class="sec-body">'
     g.items.forEach(function(a){
       var iniciales = (a.nombre||'?').split(' ').slice(0,2).map(function(s){return s[0]||''}).join('').toUpperCase()
+      var telClean = (a.telefono||'').replace(/[^0-9]/g,'')
       html += '<div class="aliado '+g.cls+'" onclick="editar(\''+a.id+'\')">'
       html += '<div class="al-avatar">'+iniciales+'</div>'
       html += '<div class="al-info">'
@@ -319,6 +333,13 @@ function render(){
       if(a.atiende_pesados) html += '<span class="tag esp">PESADOS</span>'
       if(a.especialidades && a.especialidades.length) a.especialidades.slice(0,3).forEach(function(e){html += '<span class="tag esp">'+e.toUpperCase()+'</span>'})
       html += '</div>'
+      html += '</div>'
+      // Botones de acción (paran la propagación para no abrir el modal)
+      html += '<div class="al-acciones" onclick="event.stopPropagation()">'
+      if(telClean){
+        html += '<a class="al-btn chat" href="conversaciones-wa.html?tel='+telClean+'" target="_blank" title="Ver conversación con el bot">💬 CHAT</a>'
+        html += '<a class="al-btn wa" href="https://wa.me/'+telClean+'" target="_blank" title="Abrir WhatsApp con este postulante">📱 WA</a>'
+      }
       html += '</div>'
       html += '<div class="al-estado '+a.estado+'">'+a.estado.toUpperCase()+'</div>'
       html += '</div>'

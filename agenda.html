@@ -99,6 +99,19 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--dorado)}
 .ev-est-btn.ev-del{background:rgba(232,33,10,0.08);border-color:rgba(232,33,10,0.35);color:var(--rojo-l)}
 .ev-est-btn.ev-del:hover{background:rgba(232,33,10,0.2)}
 
+/* Sugerencia inteligente inline */
+.ev-sugerencia{background:linear-gradient(135deg,rgba(212,175,55,0.12),rgba(212,175,55,0.04));border:1px solid rgba(212,175,55,0.4);border-radius:8px;padding:6px 8px;margin-top:4px;cursor:pointer;transition:all 200ms}
+.ev-sugerencia:hover{background:linear-gradient(135deg,rgba(212,175,55,0.25),rgba(212,175,55,0.1));border-color:var(--dorado);transform:translateY(-1px);box-shadow:0 2px 8px rgba(212,175,55,0.15)}
+.sug-lbl{font-family:var(--mono);font-size:8px;color:var(--dorado);letter-spacing:0.15em;font-weight:700;margin-bottom:3px}
+.sug-content{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--t1);font-weight:700;margin-bottom:3px}
+.sug-tec-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.sug-nombre{color:var(--t1)}
+.sug-dist{color:var(--verde);font-family:var(--mono);font-size:9px;font-weight:700;margin-left:auto}
+.sug-cta{font-family:var(--mono);font-size:9px;color:var(--verde);font-weight:700;letter-spacing:0.05em;text-align:center}
+
+.ev-sug-geo{background:rgba(96,165,250,0.08);border:1px dashed rgba(96,165,250,0.35);border-radius:8px;padding:6px 8px;margin-top:4px;cursor:pointer;font-family:var(--mono);font-size:9px;color:var(--azul);text-align:center;font-weight:700;letter-spacing:0.05em;transition:all 200ms}
+.ev-sug-geo:hover{background:rgba(96,165,250,0.15);border-color:var(--azul)}
+
 .semana{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
 .dia{background:var(--s1);border:1px solid var(--line);border-radius:12px;overflow:hidden;min-height:200px}
 .dia.hoy{border-color:var(--dorado);box-shadow:0 0 0 1px var(--dorado)}
@@ -311,6 +324,66 @@ function inicioSemana(d){
   var r = new Date(d); r.setDate(d.getDate() + diff); r.setHours(0,0,0,0)
   return r
 }
+
+// Haversine para distancia geográfica en km
+function haversine(lat1, lng1, lat2, lng2){
+  var R = 6371
+  var dLat = (lat2-lat1) * Math.PI / 180
+  var dLng = (lng2-lng1) * Math.PI / 180
+  var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) *
+    Math.sin(dLng/2) * Math.sin(dLng/2)
+  return 2 * R * Math.asin(Math.sqrt(a))
+}
+
+// Sugerir técnico más cercano para un servicio dado
+function sugerirTecnicoPara(servicio){
+  if(!servicio.lat || !servicio.lng) return null
+  if(TECNICOS.length === 0) return null
+  
+  // Considerar solo servicios del mismo día
+  var mismoDia = EVENTOS.filter(function(e){
+    return e.fecha === servicio.fecha && 
+           e.id !== servicio.id &&
+           e.tecnico && e.tecnico !== 'POR ASIGNAR' &&
+           e.lat && e.lng &&
+           e.estado !== 'completado' && e.estado !== 'cancelado'
+  })
+  
+  var mejor = null
+  var mejorDist = Infinity
+  
+  TECNICOS.forEach(function(t){
+    // Servicios ya asignados a este técnico
+    var suyos = mismoDia.filter(function(e){return e.tecnico === t.nombre})
+    var referencia = null
+    
+    if(suyos.length > 0){
+      // Centroide de sus servicios
+      var sumLat = 0, sumLng = 0
+      suyos.forEach(function(s){sumLat += s.lat; sumLng += s.lng})
+      referencia = {lat: sumLat/suyos.length, lng: sumLng/suyos.length}
+    } else if(t.lat_base && t.lng_base){
+      referencia = {lat: parseFloat(t.lat_base), lng: parseFloat(t.lng_base)}
+    } else {
+      // Sin referencia = Santiago Centro
+      referencia = {lat: -33.4489, lng: -70.6693}
+    }
+    
+    var dist = haversine(referencia.lat, referencia.lng, servicio.lat, servicio.lng)
+    // Penalización por sobrecarga
+    var distEfectiva = dist
+    if(suyos.length >= 5) distEfectiva *= 1.4
+    else if(suyos.length >= 3) distEfectiva *= 1.15
+    
+    if(distEfectiva < mejorDist){
+      mejorDist = distEfectiva
+      mejor = {tecnico: t, distancia: dist, carga: suyos.length}
+    }
+  })
+  
+  return mejor
+}
 function esHoy(d){var hoy = new Date(); hoy.setHours(0,0,0,0); return d.getTime() === hoy.getTime()}
 function iniciales(nombre){return (nombre||'?').split(' ').slice(0,2).map(function(s){return (s[0]||'').toUpperCase()}).join('')}
 function colorTec(nombre){
@@ -439,6 +512,25 @@ function eventoHTML(e){
       html += '<option value="'+t.nombre.replace(/"/g,'&quot;')+'"'+sel+'>🔧 '+t.nombre.split(' ')[0]+'</option>'
     })
     html += '</select>'
+    
+    // NUEVO: Sugerencia inteligente para servicios sin asignar con coordenadas
+    if(sinTecAssign){
+      if(e.lat && e.lng){
+        var sug = sugerirTecnicoPara(e)
+        if(sug){
+          var colSug = colorTec(sug.tecnico.nombre)
+          html += '<div class="ev-sugerencia" onclick="aceptarSugerencia(\''+e.id+'\',\''+sug.tecnico.nombre.replace(/'/g,"\\'")+'\')" title="Click para aceptar sugerencia">'
+          html += '<div class="sug-lbl">🎯 SUGERIDO</div>'
+          html += '<div class="sug-content"><span class="sug-tec-dot" style="background:'+colSug+'"></span>'
+          html += '<span class="sug-nombre">'+sug.tecnico.nombre.split(' ')[0]+'</span>'
+          html += '<span class="sug-dist">'+sug.distancia.toFixed(1)+'km</span></div>'
+          html += '<div class="sug-cta">✓ Aceptar</div>'
+          html += '</div>'
+        }
+      } else if(e.direccion){
+        html += '<div class="ev-sug-geo" onclick="geocodificarUno(\''+e.id+'\')" title="Click para geocodificar y ver sugerencia">📍 Geocodificar para sugerir</div>'
+      }
+    }
   }
   // Estado rápido
   html += '<div class="ev-estado-quick">'
@@ -724,6 +816,45 @@ async function eliminarServicio(id){
   } catch(err){
     console.error(err)
     toast('❌ Error', 'err')
+  }
+}
+
+// NUEVO: Aceptar sugerencia inline (asigna al técnico sugerido)
+async function aceptarSugerencia(id, nombreTec){
+  var e = EVENTOS.find(function(x){return x.id === id})
+  if(!e) return
+  toast('🎯 Aceptando sugerencia...', 'ok')
+  await asignarRapido(id, nombreTec)
+}
+
+// NUEVO: Geocodificar dirección de UN servicio (con Nominatim)
+async function geocodificarUno(id){
+  var e = EVENTOS.find(function(x){return x.id === id})
+  if(!e || !e.direccion) return
+  
+  toast('📍 Geocodificando dirección...', 'ok')
+  var q = encodeURIComponent(e.direccion + ', Santiago, Chile')
+  try {
+    var r = await fetch('https://nominatim.openstreetmap.org/search?q='+q+'&format=json&limit=1&countrycodes=cl')
+    var data = await r.json()
+    if(data && data[0]){
+      var lat = parseFloat(data[0].lat)
+      var lng = parseFloat(data[0].lon)
+      await sbReq('PATCH', 'agenda?id=eq.'+id, {
+        lat: lat,
+        lng: lng,
+        direccion_geocoded_at: new Date().toISOString()
+      })
+      e.lat = lat
+      e.lng = lng
+      toast('✅ Ubicación encontrada', 'ok')
+      render()
+    } else {
+      toast('❌ No se encontró la dirección', 'err')
+    }
+  } catch(err){
+    console.error(err)
+    toast('❌ Error al geocodificar', 'err')
   }
 }
 

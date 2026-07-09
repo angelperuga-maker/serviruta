@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Manual del Coordinador · Serviruta</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Instrument+Serif&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0A0A0D;--s1:#111114;--s2:#16161B;--s3:#1C1C23;--line:#26262E;
+  --rojo:#E8210A;--rojo-l:#FF4D2E;--verde:#22C55E;--amarillo:#F5C518;
+  --azul:#60A5FA;--violeta:#A78BFA;--dorado:#D4AF37;--naranja:#F97316;
+  --t1:#F6F4EF;--t2:#C7C5BF;--t3:#8B8990;
+  --display:'Syne',sans-serif;--body:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace;--serif:'Instrument Serif',serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;scroll-behavior:smooth}
+html{scroll-padding-top:80px}
+body{background:var(--bg);color:var(--t2);font-family:var(--body);font-size:15px;line-height:1.6;padding-bottom:80px;overflow-x:hidden}
+button,input{border:none;background:none;color:inherit;font-family:inherit;cursor:pointer}
+
+/* Top bar */
+.topbar{position:sticky;top:0;z-index:100;background:rgba(10,10,13,0.9);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:12px 20px;display:flex;align-items:center;gap:14px}
+.brand{display:flex;align-items:center;gap:10px}
+.logo{width:36px;height:36px;background:linear-gradient(135deg,var(--rojo),var(--dorado));border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:900;font-size:14px;color:#000}
+.brand-txt{font-family:var(--display);font-weight:800;font-size:14px;color:var(--t1);line-height:1.1}
+.brand-txt small{display:block;font-family:var(--mono);font-size:9px;color:var(--dorado);letter-spacing:0.15em;margin-top:1px;font-weight:700}
+.top-actions{margin-left:auto;display:flex;gap:8px;align-items:center}
+.btn-print{padding:7px 14px;background:var(--s2);border:1px solid var(--line);border-radius:8px;font-family:var(--mono);font-size:10px;color:var(--t2);font-weight:700;letter-spacing:0.05em}
+.btn-print:hover{color:var(--dorado);border-color:var(--dorado)}
+.btn-hub{padding:7px 14px;background:var(--dorado);color:#000;border-radius:8px;font-family:var(--display);font-weight:800;font-size:11px;letter-spacing:0.05em}
+
+.layout{display:grid;grid-template-columns:260px 1fr;gap:0;max-width:1400px;margin:0 auto}
+
+/* Sidebar */
+.sidebar{position:sticky;top:64px;height:calc(100vh - 64px);overflow-y:auto;padding:24px 20px;border-right:1px solid var(--line);background:var(--bg)}
+.side-lbl{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.15em;font-weight:700;margin-bottom:14px}
+.nav-item{display:block;padding:8px 12px;border-radius:8px;font-size:13px;color:var(--t2);text-decoration:none;margin-bottom:2px;border-left:2px solid transparent;transition:all 150ms}
+.nav-item:hover{background:var(--s1);color:var(--t1)}
+.nav-item.active{background:var(--s1);color:var(--dorado);border-left-color:var(--dorado)}
+.nav-num{font-family:var(--mono);font-size:10px;color:var(--t3);margin-right:8px}
+
+/* Content */
+.content{padding:40px 48px;max-width:900px}
+
+.section{margin-bottom:80px;scroll-margin-top:80px}
+.sec-num{font-family:var(--mono);font-size:11px;color:var(--dorado);letter-spacing:0.25em;font-weight:700;margin-bottom:8px}
+.sec-tit{font-family:var(--display);font-weight:900;font-size:36px;color:var(--t1);letter-spacing:-1.2px;line-height:1.05;margin-bottom:14px}
+.sec-tit em{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--dorado)}
+.sec-lead{font-size:16px;color:var(--t2);margin-bottom:32px;max-width:640px}
+
+/* Hero */
+.hero{background:linear-gradient(135deg,rgba(232,33,10,0.08),rgba(212,175,55,0.05));border:1px solid var(--line);border-radius:20px;padding:48px 40px;margin-bottom:60px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-100px;right:-100px;width:300px;height:300px;background:radial-gradient(circle,var(--dorado),transparent 70%);opacity:0.08;filter:blur(40px)}
+.hero-kicker{font-family:var(--mono);font-size:10px;color:var(--dorado);letter-spacing:0.3em;font-weight:700;margin-bottom:12px}
+.hero-tit{font-family:var(--display);font-weight:900;font-size:56px;color:var(--t1);letter-spacing:-2px;line-height:1.05;margin-bottom:16px}
+.hero-tit em{font-family:var(--serif);font-style:italic;font-weight:400}
+.hero-desc{font-size:17px;color:var(--t2);max-width:600px}
+.hero-meta{margin-top:32px;display:flex;gap:24px;font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.1em;font-weight:700}
+
+/* Body */
+p{margin-bottom:16px}
+.content h3{font-family:var(--display);font-weight:800;font-size:22px;color:var(--t1);margin:32px 0 12px;letter-spacing:-0.5px}
+.content h4{font-family:var(--display);font-weight:800;font-size:16px;color:var(--dorado);margin:24px 0 8px;letter-spacing:-0.3px}
+.content ul{margin:12px 0 24px 20px}
+.content li{margin-bottom:6px}
+.content strong{color:var(--t1);font-weight:600}
+.content em{color:var(--dorado);font-style:normal}
+
+/* Card */
+.card{background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:24px;margin:16px 0}
+.card-tit{font-family:var(--display);font-weight:800;font-size:17px;color:var(--t1);margin-bottom:8px;letter-spacing:-0.3px;display:flex;align-items:center;gap:10px}
+.card-tit .ico{font-size:24px}
+
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+
+/* Person cards */
+.persona{background:var(--s2);border:1px solid var(--line);border-radius:12px;padding:18px;text-align:center}
+.persona-avatar{width:50px;height:50px;border-radius:50%;background:linear-gradient(135deg,var(--dorado),var(--rojo));margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:900;color:#000;font-size:16px}
+.persona-nombre{font-family:var(--display);font-weight:800;font-size:14px;color:var(--t1);margin-bottom:3px}
+.persona-rol{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px}
+.persona-desc{font-size:11px;color:var(--t2);line-height:1.4}
+
+/* Agente cards */
+.agentes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin:20px 0}
+.agente-card{background:var(--s2);border:1px solid var(--line);border-radius:12px;padding:16px;border-left:3px solid var(--verde)}
+.agente-card.inbound{border-left-color:var(--verde)}
+.agente-card.outbound{border-left-color:var(--azul)}
+.agente-card.postventa{border-left-color:var(--dorado)}
+.agente-card.recluta{border-left-color:var(--violeta)}
+.agente-nombre{font-family:var(--display);font-weight:800;font-size:15px;color:var(--t1);display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.agente-tag{font-family:var(--mono);font-size:8px;letter-spacing:0.1em;color:var(--t3);text-transform:uppercase;font-weight:700;margin-bottom:8px}
+.agente-desc{font-size:12px;color:var(--t2);line-height:1.4}
+
+/* Timeline */
+.timeline{position:relative;padding-left:28px;margin:24px 0}
+.timeline::before{content:'';position:absolute;left:9px;top:8px;bottom:8px;width:2px;background:linear-gradient(180deg,var(--dorado),var(--rojo))}
+.tl-item{position:relative;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--line)}
+.tl-item:last-child{border-bottom:none}
+.tl-item::before{content:'';position:absolute;left:-24px;top:6px;width:12px;height:12px;background:var(--dorado);border-radius:50%;border:3px solid var(--bg)}
+.tl-hora{font-family:var(--mono);font-size:10px;color:var(--dorado);letter-spacing:0.1em;font-weight:700;margin-bottom:4px}
+.tl-tit{font-family:var(--display);font-weight:800;font-size:16px;color:var(--t1);margin-bottom:6px}
+.tl-desc{font-size:13px;color:var(--t2)}
+.tl-actions{margin-top:8px;font-family:var(--mono);font-size:10px;color:var(--t3)}
+.tl-actions a{color:var(--dorado);text-decoration:none;border-bottom:1px dashed var(--dorado)}
+
+/* Flow diagram */
+.flow{background:var(--s2);border:1px solid var(--line);border-radius:14px;padding:20px;margin:20px 0;overflow-x:auto}
+.flow-step{display:flex;align-items:center;gap:12px;padding:10px 0;position:relative}
+.flow-num{width:28px;height:28px;background:var(--dorado);color:#000;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:900;font-size:13px;flex-shrink:0}
+.flow-txt{flex:1;font-size:13px;color:var(--t2)}
+.flow-txt strong{color:var(--t1)}
+.flow-arrow{padding-left:14px;font-size:16px;color:var(--dorado);margin:-4px 0}
+
+/* KPI cards */
+.kpi-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin:16px 0}
+.kpi-card{background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:14px}
+.kpi-lbl{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-bottom:6px}
+.kpi-desc{font-size:11px;color:var(--t2);line-height:1.4}
+
+/* Checklist */
+.checklist{background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:24px;margin:20px 0}
+.check-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--line);align-items:flex-start;cursor:pointer;transition:opacity 200ms}
+.check-item:last-child{border-bottom:none}
+.check-item input{width:20px;height:20px;margin-top:2px;accent-color:var(--dorado);cursor:pointer}
+.check-item label{flex:1;font-size:14px;color:var(--t2);cursor:pointer;line-height:1.5}
+.check-item input:checked ~ label{color:var(--t3);text-decoration:line-through}
+.check-progress{margin-top:16px;font-family:var(--mono);font-size:11px;color:var(--dorado);letter-spacing:0.1em;font-weight:700;text-align:center}
+
+/* Callout */
+.callout{background:linear-gradient(135deg,rgba(212,175,55,0.08),rgba(212,175,55,0.02));border:1px solid rgba(212,175,55,0.3);border-radius:12px;padding:18px;margin:20px 0}
+.callout-hdr{font-family:var(--mono);font-size:10px;color:var(--dorado);letter-spacing:0.2em;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.callout.warn{background:linear-gradient(135deg,rgba(232,33,10,0.08),rgba(232,33,10,0.02));border-color:rgba(232,33,10,0.3)}
+.callout.warn .callout-hdr{color:var(--rojo-l)}
+.callout.info{background:linear-gradient(135deg,rgba(96,165,250,0.08),rgba(96,165,250,0.02));border-color:rgba(96,165,250,0.3)}
+.callout.info .callout-hdr{color:var(--azul)}
+.callout p{margin-bottom:0;font-size:14px}
+
+/* Multimedia */
+.multimedia{background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:20px;margin:20px 0}
+.video-placeholder{background:linear-gradient(135deg,var(--s3),var(--s2));border:2px dashed var(--line);border-radius:12px;aspect-ratio:16/9;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--t3);text-align:center;padding:20px}
+.video-icon{font-size:44px}
+.video-placeholder small{font-family:var(--mono);font-size:10px;letter-spacing:0.1em;color:var(--t3)}
+
+.audio-embed{background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;align-items:center;gap:14px;margin:14px 0}
+.audio-icon{width:44px;height:44px;background:linear-gradient(135deg,var(--dorado),var(--rojo));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;color:#000;flex-shrink:0}
+.audio-info{flex:1;min-width:0}
+.audio-tit{font-family:var(--display);font-weight:800;font-size:14px;color:var(--t1);margin-bottom:2px}
+.audio-desc{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.05em}
+
+/* Contact card */
+.contact-card{background:linear-gradient(135deg,var(--s1),var(--s2));border:1px solid var(--dorado);border-radius:14px;padding:20px;display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;margin:10px 0}
+.contact-avatar{width:48px;height:48px;background:linear-gradient(135deg,var(--dorado),var(--rojo));border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:900;color:#000}
+.contact-info-nom{font-family:var(--display);font-weight:800;font-size:15px;color:var(--t1)}
+.contact-info-rol{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.05em}
+.contact-tel{padding:8px 14px;background:var(--verde);color:#000;border-radius:8px;font-family:var(--mono);font-size:11px;font-weight:700;text-decoration:none}
+
+/* Print styles */
+@media print{
+  .topbar,.sidebar,.multimedia .video-placeholder{display:none}
+  body{background:white;color:black}
+  .content{max-width:100%;padding:0}
+  .card,.hero,.callout{border:1px solid #ccc;background:white}
+  .sec-tit,.hero-tit,.card-tit,.persona-nombre,.tl-tit{color:black}
+  a{color:black;text-decoration:underline}
+}
+
+@media(max-width:960px){
+  .layout{grid-template-columns:1fr}
+  .sidebar{position:fixed;left:-260px;top:64px;width:260px;transition:left 300ms;z-index:99;box-shadow:2px 0 20px rgba(0,0,0,0.5)}
+  .sidebar.open{left:0}
+  .content{padding:24px 20px}
+  .hero-tit{font-size:36px}
+  .sec-tit{font-size:26px}
+  .grid-2,.grid-3{grid-template-columns:1fr}
+  .agentes-grid{grid-template-columns:1fr}
+  .contact-card{grid-template-columns:1fr;text-align:center}
+  .menu-toggle{display:flex!important}
+}
+.menu-toggle{display:none;padding:6px 10px;background:var(--s2);border:1px solid var(--line);border-radius:6px;font-family:var(--mono);font-size:11px;color:var(--t2);align-items:center;gap:6px}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <button class="menu-toggle" onclick="document.querySelector('.sidebar').classList.toggle('open')">☰ Menú</button>
+  <div class="brand">
+    <div class="logo">S</div>
+    <div class="brand-txt">Serviruta<small>MANUAL DEL COORDINADOR</small></div>
+  </div>
+  <div class="top-actions">
+    <button class="btn-print" onclick="window.print()">🖨 Imprimir</button>
+    <a class="btn-hub" href="menu-coordinador.html">Ir al Hub →</a>
+  </div>
+</header>
+
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="side-lbl">CONTENIDO</div>
+    <a href="#bienvenida" class="nav-item"><span class="nav-num">00</span>Bienvenida</a>
+    <a href="#serviruta" class="nav-item"><span class="nav-num">01</span>Qué es Serviruta</a>
+    <a href="#familia" class="nav-item"><span class="nav-num">02</span>La familia</a>
+    <a href="#agentes" class="nav-item"><span class="nav-num">03</span>Los 11 agentes</a>
+    <a href="#hub" class="nav-item"><span class="nav-num">04</span>Tu kit: el hub</a>
+    <a href="#rutina" class="nav-item"><span class="nav-num">05</span>Rutina diaria</a>
+    <a href="#flujos" class="nav-item"><span class="nav-num">06</span>Flujos por caso</a>
+    <a href="#intervenir" class="nav-item"><span class="nav-num">07</span>Intervenir el bot</a>
+    <a href="#escalar" class="nav-item"><span class="nav-num">08</span>Escalamiento</a>
+    <a href="#kpis" class="nav-item"><span class="nav-num">09</span>KPIs a mirar</a>
+    <a href="#multimedia" class="nav-item"><span class="nav-num">10</span>Videos y podcast</a>
+    <a href="#primerdia" class="nav-item"><span class="nav-num">11</span>Checklist primer día</a>
+    <a href="#contactos" class="nav-item"><span class="nav-num">12</span>Contactos clave</a>
+  </aside>
+
+  <main class="content">
+
+    <!-- Hero -->
+    <div class="hero" id="bienvenida">
+      <div class="hero-kicker">MANUAL DEL COORDINADOR · V1.0</div>
+      <h1 class="hero-tit">Bienvenido/a a la <em>familia Serviruta</em></h1>
+      <p class="hero-desc">Este manual es tu compañero para los primeros 30 días. Vas a coordinar el corazón operacional de Serviruta: donde el bot, los técnicos y los clientes se encuentran. Léelo con calma, vuelve cada vez que necesites, y usa el checklist del final para asegurar que tienes todo bajo control.</p>
+      <div class="hero-meta">
+        <span>📅 ~45 min de lectura</span>
+        <span>🎯 12 secciones</span>
+        <span>✅ 1 checklist</span>
+      </div>
+    </div>
+
+    <!-- 1. Qué es Serviruta -->
+    <section class="section" id="serviruta">
+      <div class="sec-num">01 · CONTEXTO</div>
+      <h2 class="sec-tit">Qué es <em>Serviruta</em></h2>
+      <p class="sec-lead">Somos servicio mecánico móvil en Santiago. Vamos donde el vehículo del cliente esté. Más de 10 años operando, más de 7.000 servicios completados.</p>
+
+      <h3>Lo que hacemos</h3>
+      <p>Atendemos vehículos livianos, camiones y maquinaria pesada in-situ. El cliente no tiene que trasladar el vehículo a un taller: nuestros técnicos van con herramientas, scanner OBD-II y experiencia.</p>
+
+      <div class="grid-3">
+        <div class="card"><div class="card-tit"><span class="ico">🚗</span>Livianos</div><p style="font-size:12px">Autos, SUV, camionetas. Toyota, Kia, Chevrolet, Suzuki, etc.</p></div>
+        <div class="card"><div class="card-tit"><span class="ico">🚛</span>Pesados</div><p style="font-size:12px">Camiones, buses, tractocamiones, maquinaria retro.</p></div>
+        <div class="card"><div class="card-tit"><span class="ico">⚙️</span>Especialidades</div><p style="font-size:12px">DPF/FAP, embrague, diesel, sistema eléctrico.</p></div>
+      </div>
+
+      <h3>Nuestros diferenciales</h3>
+      <ul>
+        <li><strong>Movilidad</strong> — vamos donde el cliente esté</li>
+        <li><strong>Transparencia</strong> — la visita técnica ($35.000) incluye diagnóstico y se descuenta del servicio</li>
+        <li><strong>Escala</strong> — bot WhatsApp + agentes AI + red de técnicos + coordinación centralizada</li>
+        <li><strong>Especialidad</strong> — DPF/FAP a domicilio, servicio raro en el mercado</li>
+      </ul>
+
+      <div class="callout">
+        <div class="callout-hdr">💎 EL VALOR MÍNIMO</div>
+        <p>El servicio parte en <strong>$35.000</strong>. Este monto es la visita técnica + diagnóstico completo con scanner. Se descuenta del valor de la reparación si el cliente acepta continuar. <em>Es información CLAVE que todos los agentes AI comunican de forma transparente.</em></p>
+      </div>
+    </section>
+
+    <!-- 2. Familia -->
+    <section class="section" id="familia">
+      <div class="sec-num">02 · EL EQUIPO</div>
+      <h2 class="sec-tit">La familia <em>Serviruta</em></h2>
+      <p class="sec-lead">Vas a trabajar con este equipo. Cada uno tiene un rol claro. Los agentes AI te ayudan con volumen, los humanos con criterio.</p>
+
+      <h3>El equipo humano</h3>
+      <div class="grid-3">
+        <div class="persona">
+          <div class="persona-avatar">A</div>
+          <div class="persona-nombre">Angel Peruga</div>
+          <div class="persona-rol">FUNDADOR · CEO</div>
+          <div class="persona-desc">Toma decisiones estratégicas. Contacto para casos urgentes o clientes VIP.</div>
+        </div>
+        <div class="persona">
+          <div class="persona-avatar">N</div>
+          <div class="persona-nombre">Nicolás Orellana</div>
+          <div class="persona-rol">COORD. SENIOR</div>
+          <div class="persona-desc">Tu par. Coordinamos juntos, cubre en tus ausencias, valida asignaciones difíciles.</div>
+        </div>
+        <div class="persona">
+          <div class="persona-avatar">TU</div>
+          <div class="persona-nombre">Tú</div>
+          <div class="persona-rol">COORDINADOR/A</div>
+          <div class="persona-desc">Operas el hub. Ves conversaciones. Asignas técnicos. Cierras jornada. Escalas cuando es necesario.</div>
+        </div>
+      </div>
+
+      <h3>Los técnicos activos (tu día a día)</h3>
+      <div class="grid-3">
+        <div class="persona"><div class="persona-avatar">R</div><div class="persona-nombre">Reynaldo Aguas</div><div class="persona-rol">MECÁNICO SR</div><div class="persona-desc">Livianos + pesados. PIN 1324.</div></div>
+        <div class="persona"><div class="persona-avatar">K</div><div class="persona-nombre">Kiven Henz</div><div class="persona-rol">MECÁNICO</div><div class="persona-desc">Livianos + electrónica. PIN 1313.</div></div>
+        <div class="persona"><div class="persona-avatar">G</div><div class="persona-nombre">Giovanino Perugini</div><div class="persona-rol">MECÁNICO SR</div><div class="persona-desc">Pesados + diesel. PIN 1515.</div></div>
+      </div>
+    </section>
+
+    <!-- 3. Agentes -->
+    <section class="section" id="agentes">
+      <div class="sec-num">03 · INTELIGENCIA ARTIFICIAL</div>
+      <h2 class="sec-tit">Los 11 agentes <em>AI</em> que trabajan contigo</h2>
+      <p class="sec-lead">Un bot de WhatsApp con 11 agentes especializados. Cada uno atiende un tipo de conversación. Tu rol es supervisar, intervenir cuando sea necesario y asignar los técnicos que ellos agendan.</p>
+
+      <h3>6 Agentes inbound (atienden mensajes entrantes)</h3>
+      <div class="agentes-grid">
+        <div class="agente-card inbound"><div class="agente-nombre">🎯 Rita</div><div class="agente-tag">TRIAGE INICIAL</div><div class="agente-desc">Recibe primer mensaje, clasifica y deriva. Es la puerta de entrada del bot.</div></div>
+        <div class="agente-card inbound"><div class="agente-nombre">🚗 Marco</div><div class="agente-tag">LIVIANOS</div><div class="agente-desc">Autos, SUV, camionetas. Marca autos comunes: Toyota, Kia, Chevrolet, Nissan.</div></div>
+        <div class="agente-card inbound"><div class="agente-nombre">🚛 Pedro</div><div class="agente-tag">PESADOS</div><div class="agente-desc">Camiones, buses, tractocamiones. Marcas: Mercedes, Volvo, Scania, Kenworth.</div></div>
+        <div class="agente-card inbound"><div class="agente-nombre">🚨 Emilio</div><div class="agente-tag">EMERGENCIAS</div><div class="agente-desc">Auto varado, no arranca, panne. Máxima prioridad. Coordina despacho ~1h.</div></div>
+        <div class="agente-card inbound"><div class="agente-nombre">🏢 Elena</div><div class="agente-tag">B2B EMPRESAS</div><div class="agente-desc">Flotas, empresas, licitaciones, convenios. Tono más formal.</div></div>
+        <div class="agente-card inbound"><div class="agente-nombre">💰 Coty</div><div class="agente-tag">COTIZACIÓN</div><div class="agente-desc">Cliente que solo quiere precio. Cotiza y trata de convertir en agenda.</div></div>
+      </div>
+
+      <h3>4 Agentes outbound (mandan mensajes salientes)</h3>
+      <div class="agentes-grid">
+        <div class="agente-card outbound"><div class="agente-nombre">☀️ Diego</div><div class="agente-tag">TRIAGE MATINAL 09:00</div><div class="agente-desc">Envía buenos días a servicios del día para confirmar.</div></div>
+        <div class="agente-card outbound"><div class="agente-nombre">🔄 Ana</div><div class="agente-tag">REACTIVACIÓN &gt;60 DÍAS</div><div class="agente-desc">Trae de vuelta clientes que no vuelven hace mucho.</div></div>
+        <div class="agente-card outbound"><div class="agente-nombre">🎁 Sofía</div><div class="agente-tag">CROSS-SELL</div><div class="agente-desc">Ofrece servicios complementarios sobre lo hecho antes.</div></div>
+        <div class="agente-card outbound"><div class="agente-nombre">🏢 Lucas</div><div class="agente-tag">B2B EMPRESAS</div><div class="agente-desc">Outbound a clientes empresas con oportunidades de flotas.</div></div>
+      </div>
+
+      <h3>2 Agentes especializados</h3>
+      <div class="agentes-grid">
+        <div class="agente-card postventa"><div class="agente-nombre">💛 Valentina</div><div class="agente-tag">POSTVENTA 1-14 DÍAS</div><div class="agente-desc">Contacta clientes recientes SIN precios. Solo verifica satisfacción y queda disponible.</div></div>
+        <div class="agente-card recluta"><div class="agente-nombre">🧰 Bruno</div><div class="agente-tag">RECLUTAMIENTO</div><div class="agente-desc">Recibe postulaciones de mecánicos/técnicos/grueros. Los clasifica y guarda en Red Nacional.</div></div>
+      </div>
+    </section>
+
+    <!-- 4. Hub -->
+    <section class="section" id="hub">
+      <div class="sec-num">04 · TU HERRAMIENTA</div>
+      <h2 class="sec-tit">Tu kit: el <em>Hub Coordinador</em></h2>
+      <p class="sec-lead">Es tu página principal. Todo lo que necesitas está a un tap de distancia. Se organiza en 5 pestañas.</p>
+
+      <div class="card">
+        <div class="card-tit"><span class="ico">🔧</span>Pestaña 01 · Inspecciones</div>
+        <p style="font-size:13px">Todo lo relacionado con inspecciones vehiculares: precompra, 12 puntos, pre-RT, inspección camión, revisión de fluidos, etc.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-tit"><span class="ico">🤖</span>Pestaña 02 · Agentes</div>
+        <p style="font-size:13px">Vista y configuración de los 11 agentes AI, el chat en vivo con cada uno, y los outbound de Diego/Ana/Sofía/Lucas/Valentina.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-tit"><span class="ico">👥</span>Pestaña 03 · Admin</div>
+        <p style="font-size:13px">Corazón operacional: agenda, cierre de jornada, panel de ingresos, presupuestos, gastos, monitor de conversaciones WhatsApp, pagos, clientes.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-tit"><span class="ico">🤝</span>Pestaña 04 · Aliados</div>
+        <p style="font-size:13px">Red Nacional (nueva), aliados admin, aliados V2, beneficios, flyer, QR e instructivo del programa de aliados.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-tit"><span class="ico">🌍</span>Pestaña 05 · Públicos</div>
+        <p style="font-size:13px">Páginas de cara al cliente: landing, servicios, hub-cliente, pitch, certificado de garantía, estrategia de expansión.</p>
+      </div>
+
+      <div class="callout info">
+        <div class="callout-hdr">💡 CONSEJO</div>
+        <p>Fíjate en las cards marcadas <strong>🟢 NUEVO</strong>. Son los módulos más recientes: Panel Ingresos, Conversaciones WhatsApp, Red Nacional. Son las que más usarás.</p>
+      </div>
+    </section>
+
+    <!-- 5. Rutina -->
+    <section class="section" id="rutina">
+      <div class="sec-num">05 · TU DÍA</div>
+      <h2 class="sec-tit">Rutina <em>diaria</em></h2>
+      <p class="sec-lead">Un día típico de coordinación. Adaptable según cargas, pero cubre todos los momentos clave.</p>
+
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-hora">🌅 07:30 · APERTURA</div>
+          <div class="tl-tit">Revisar la noche</div>
+          <div class="tl-desc">Ver conversaciones nocturnas del bot en <strong>conversaciones-wa.html</strong>. Detectar solicitudes urgentes o postulaciones pendientes.</div>
+          <div class="tl-actions">📱 <a href="conversaciones-wa.html">Abrir monitor conversaciones</a></div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-hora">☕ 08:00 · SOLICITUDES</div>
+          <div class="tl-tit">Bandeja de solicitudes</div>
+          <div class="tl-desc">Confirmar o rechazar las agendas que dejó el bot. Cada solicitud aparece con contexto (cliente, vehículo, servicio, urgencia).</div>
+          <div class="tl-actions">📱 <a href="agenda-solicitudes.html">Abrir bandeja de solicitudes</a></div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-hora">🔧 08:30 · ASIGNACIÓN</div>
+          <div class="tl-tit">Cierre de jornada (asignar técnicos)</div>
+          <div class="tl-desc">En <strong>cierre-jornada.html</strong> asignas cada servicio a un técnico. Urgentes primero. Filtra por fecha y ubicación.</div>
+          <div class="tl-actions">📱 <a href="cierre-jornada.html">Abrir cierre de jornada</a></div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-hora">📡 10:30 · MONITOREO</div>
+          <div class="tl-tit">Chat en vivo con el bot</div>
+          <div class="tl-desc">Monitor de <strong>conversaciones-wa.html</strong> abierto en pestaña. Interviene si ves un caso que el bot no maneja bien. Puedes escribir desde el número del bot.</div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-hora">📊 13:00 · FINANZAS</div>
+          <div class="tl-tit">Panel de ingresos</div>
+          <div class="tl-desc">Revisa cómo va el día. Diario / Semanal / Mensual. Si hay meta atrasada, prioriza cotizaciones abiertas.</div>
+          <div class="tl-actions">📱 <a href="panel-ingresos.html">Abrir panel ingresos</a></div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-hora">📞 14:30 · SEGUIMIENTO</div>
+          <div class="tl-tit">Presupuestos abiertos + Valentina</div>
+          <div class="tl-desc">En <strong>presupuestos-coord.html</strong> ves cotizaciones sin cerrar. En <strong>agente-vendedor.html</strong> mandas mensajes de Valentina (postventa) o Sofía (cross-sell).</div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-hora">🌆 17:00 · CIERRE</div>
+          <div class="tl-tit">Cerrar servicios completados</div>
+          <div class="tl-desc">Confirma con técnicos qué servicios terminaron. Marca "completado" para que se disparen triggers (encuestas, contadores del cliente, postventa).</div>
+        </div>
+
+        <div class="tl-item">
+          <div class="tl-hora">📅 18:00 · MAÑANA</div>
+          <div class="tl-tit">Preparar el día siguiente</div>
+          <div class="tl-desc">Revisa agenda de mañana. Confirma técnicos disponibles. Envía recordatorios (los automáticos salen 15:00 pero puedes reforzar).</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. Flujos -->
+    <section class="section" id="flujos">
+      <div class="sec-num">06 · CASOS TÍPICOS</div>
+      <h2 class="sec-tit">Flujos <em>de trabajo</em></h2>
+      <p class="sec-lead">Los 5 casos que verás todos los días. Cada uno tiene un camino óptimo.</p>
+
+      <div class="card">
+        <div class="card-tit"><span class="ico">🚨</span>Caso 1 · Emergencia</div>
+        <div class="flow">
+          <div class="flow-step"><div class="flow-num">1</div><div class="flow-txt">Cliente escribe "estoy varado" → Bot detecta y activa <strong>Emilio</strong></div></div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step"><div class="flow-num">2</div><div class="flow-txt">Emilio pregunta ubicación + vehículo. Menciona <strong>$35.000 mínimo</strong></div></div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step"><div class="flow-num">3</div><div class="flow-txt">Si cliente confirma → agenda con urgencia="urgente" → llega a tu bandeja</div></div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step"><div class="flow-num">4</div><div class="flow-txt">Tú asignas técnico más cercano en <strong>cierre-jornada.html</strong></div></div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step"><div class="flow-num">5</div><div class="flow-txt">Notificas al técnico por WhatsApp. Tiempo objetivo: llegar en ~1h</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-tit"><span class="ico">💰</span>Caso 2 · Cotización sin cerrar</div>
+        <div class="flow">
+          <div class="flow-step"><div class="flow-num">1</div><div class="flow-txt">Cliente pregunta precio → Bot activa <strong>Coty</strong></div></div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step"><div class="flow-num">2</div><div class="flow-txt">Coty da rango + valor + propone visita técnica $35.000</div></div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step"><div class="flow-num">3</div><div class="flow-txt">Si cliente dice "lo pienso" → queda en presupuestos-coord.html</div></div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step"><div class="flow-num">4</div><div class="flow-txt">A los 2-3 días → puedes activar <strong>Sofía</strong> (cross-sell) o intervenir tú</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-tit"><span class="ico">📅</span>Caso 3 · Servicio normal</div>
+        <div class="flow">
+          <div class="flow-step"><div class="flow-num">1</div><div class="flow-txt">Cliente escribe → Rita/Marco/Pedro toma. Explora problema + agenda</div></div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step"><div class="flow-num">2</div><div class="flow-txt">Bot dispara "📅 SOLICITUD DE AGENDA" → aparece en bandeja</div></div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step"><div class="flow-num">3</div><div class="flow-txt">Confirmas → asignas técnico → recordatorio automático 24h antes</div></div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step"><div class="flow-num">4</div><div class="flow-txt">Cliente confirma con SI/NO → si NO, se reagenda</div></div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step"><div class="flow-num">5</div><div class="flow-txt">Técnico ejecuta → estado=completado → encuesta post-servicio automática</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-tit"><span class="ico">🧰</span>Caso 4 · Postulación laboral</div>
+        <div class="flow">
+          <div class="flow-step"><div class="flow-num">1</div><div class="flow-txt">Persona escribe "quiero postular" → Bot deriva a <strong>Bruno</strong></div></div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step"><div class="flow-num">2</div><div class="flow-txt">Bruno hace 10 preguntas de screening (herramientas, vehículo, especialidades)</div></div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step"><div class="flow-num">3</div><div class="flow-txt">Al cierre, emite bloque "📋 REGISTRO RED SERVIRUTA" → se guarda en tabla</div></div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step"><div class="flow-num">4</div><div class="flow-txt">Ves el nuevo postulante en <strong>red-serviruta.html</strong> con estado=entrevistado</div></div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step"><div class="flow-num">5</div><div class="flow-txt">Angel o tú evalúan → cambian estado a aprobado/rechazado</div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-tit"><span class="ico">😔</span>Caso 5 · Reclamo o cliente molesto</div>
+        <div class="flow">
+          <div class="flow-step"><div class="flow-num">1</div><div class="flow-txt">Cliente responde encuesta con <strong>rating 1-2</strong> → Angel recibe alerta automática</div></div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step"><div class="flow-num">2</div><div class="flow-txt">Intervienes desde <strong>conversaciones-wa.html</strong> ("🙋 Intervenir conversación")</div></div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step"><div class="flow-num">3</div><div class="flow-txt">Marcas "Pausar bot" para que no interrumpa</div></div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step"><div class="flow-num">4</div><div class="flow-txt">Escuchas, resuelves, ofreces solución (revisión gratis, descuento, revisita)</div></div>
+          <div class="flow-arrow">↓</div>
+          <div class="flow-step"><div class="flow-num">5</div><div class="flow-txt">Documenta el caso en notas del cliente</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7. Intervenir -->
+    <section class="section" id="intervenir">
+      <div class="sec-num">07 · CONTROL HUMANO</div>
+      <h2 class="sec-tit">Cómo intervenir al <em>bot</em></h2>
+      <p class="sec-lead">A veces necesitas tomar el control de una conversación. Se hace desde <strong>conversaciones-wa.html</strong>. El bot puede quedar pausado o compartido contigo.</p>
+
+      <h3>Cuándo intervenir</h3>
+      <ul>
+        <li>Cliente molesto o con reclamo</li>
+        <li>Bot está dando respuestas incorrectas</li>
+        <li>Cliente pide algo fuera del guion (ej. pagos, quejas, cambios de plan)</li>
+        <li>Cliente VIP o cuenta empresa importante</li>
+        <li>Emergencia especial (accidente con lesiones, robo, etc)</li>
+      </ul>
+
+      <h3>Cuándo dejar al bot</h3>
+      <ul>
+        <li>Conversación fluye bien</li>
+        <li>Cliente pregunta algo estándar (precio, servicio, horario)</li>
+        <li>Postulación de mecánico (Bruno lo hace bien)</li>
+        <li>Postventa suave (Valentina)</li>
+      </ul>
+
+      <div class="callout info">
+        <div class="callout-hdr">🎛 EL INTERRUPTOR</div>
+        <p>El check <strong>"Pausar bot después de enviar"</strong> es tu interruptor. Marcado = el bot no responde más hasta que reactives. Sin marcar = tu mensaje entra pero el bot puede seguir respondiendo. Para casos delicados, siempre marca pausar.</p>
+      </div>
+    </section>
+
+    <!-- 8. Escalamiento -->
+    <section class="section" id="escalar">
+      <div class="sec-num">08 · CUÁNDO PEDIR AYUDA</div>
+      <h2 class="sec-tit">Escalamiento</h2>
+      <p class="sec-lead">No todo lo resuelves tú. Sabemos que hay casos que requieren decisión más alta. Estos son los momentos para escalar.</p>
+
+      <h3>Llamar a Angel (fundador)</h3>
+      <ul>
+        <li>Reclamo grave que puede escalar a redes sociales</li>
+        <li>Cliente pide reembolso &gt; $200.000</li>
+        <li>Problema legal o contractual</li>
+        <li>Presupuesto B2B &gt; $2.000.000</li>
+        <li>Situación no cubierta en este manual</li>
+      </ul>
+
+      <h3>Consultar a Nicolás (coord. senior)</h3>
+      <ul>
+        <li>Asignación de técnico difícil</li>
+        <li>Doble booking accidental</li>
+        <li>Cliente cambia servicio mid-camino</li>
+        <li>Duda operacional del día</li>
+      </ul>
+
+      <div class="callout warn">
+        <div class="callout-hdr">⚠️ NUNCA HAGAS ESTO SIN ANGEL</div>
+        <p>Aprobar descuentos mayores al 15% del servicio · Prometer reembolsos totales · Comprometer horarios fuera del rango 8:00-19:00 · Firmar acuerdos B2B · Publicar en redes sociales de la marca.</p>
+      </div>
+    </section>
+
+    <!-- 9. KPIs -->
+    <section class="section" id="kpis">
+      <div class="sec-num">09 · MÉTRICAS</div>
+      <h2 class="sec-tit">KPIs que debes <em>mirar</em></h2>
+      <p class="sec-lead">Estos son tus indicadores diarios. Los revisas por la mañana y por la tarde. Si alguno se sale de rango, actúas.</p>
+
+      <div class="kpi-list">
+        <div class="kpi-card">
+          <div class="kpi-lbl">💰 Ingresos día</div>
+          <div class="kpi-desc">Meta: $200.000+. Si &lt; a 12:00, escala.</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-lbl">📅 Agenda día</div>
+          <div class="kpi-desc">Ideal: 4-6 servicios. Menos = revisar bot.</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-lbl">✅ Completados</div>
+          <div class="kpi-desc">80%+ del agendado. Menor = problema.</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-lbl">⭐ Rating semana</div>
+          <div class="kpi-desc">Objetivo: &gt;4.5 promedio. &lt;4 revisar.</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-lbl">🤖 Conv. activas</div>
+          <div class="kpi-desc">Cuántos chats el bot atiende ahora.</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-lbl">🙋 Handoff humano</div>
+          <div class="kpi-desc">Cuántos requieren tu intervención.</div>
+        </div>
+      </div>
+
+      <p>Todos estos KPIs los ves en <strong>panel-ingresos.html</strong>, <strong>conversaciones-wa.html</strong> y <strong>cierre-jornada.html</strong>.</p>
+    </section>
+
+    <!-- 10. Multimedia -->
+    <section class="section" id="multimedia">
+      <div class="sec-num">10 · APRENDIZAJE</div>
+      <h2 class="sec-tit">Videos y <em>podcast</em></h2>
+      <p class="sec-lead">Además de este manual, tienes contenido audiovisual para profundizar. Vas a la parte visual cuando te queden dudas y al podcast cuando quieras cargar contexto de fondo mientras haces otras cosas.</p>
+
+      <div class="multimedia">
+        <h4>📹 Video 1 · Tour del Hub Coordinador (15 min)</h4>
+        <div class="video-placeholder">
+          <div class="video-icon">▶️</div>
+          <div style="font-family:var(--display);font-weight:800;color:var(--t2)">Tour del Hub</div>
+          <small>Angel te muestra cada pestaña con casos reales</small>
+          <small style="color:var(--dorado);margin-top:8px">Pendiente de grabar · Reemplazar con embed YouTube</small>
+        </div>
+      </div>
+
+      <div class="multimedia">
+        <h4>📹 Video 2 · Cierre de jornada paso a paso (8 min)</h4>
+        <div class="video-placeholder">
+          <div class="video-icon">▶️</div>
+          <div style="font-family:var(--display);font-weight:800;color:var(--t2)">Cierre de jornada</div>
+          <small>Cómo asignar técnicos y no dejar servicios sueltos</small>
+          <small style="color:var(--dorado);margin-top:8px">Pendiente de grabar</small>
+        </div>
+      </div>
+
+      <div class="multimedia">
+        <h4>📹 Video 3 · Intervenir bot con panel humano (5 min)</h4>
+        <div class="video-placeholder">
+          <div class="video-icon">▶️</div>
+          <div style="font-family:var(--display);font-weight:800;color:var(--t2)">Intervención humana</div>
+          <small>Cuándo y cómo tomar el control de una conversación</small>
+          <small style="color:var(--dorado);margin-top:8px">Pendiente de grabar</small>
+        </div>
+      </div>
+
+      <h4 style="margin-top:32px">🎙️ Podcast "Camión Parado" (recomendado)</h4>
+      <p style="font-size:13px">Serie de 6 episodios sobre operación de flotas. Ideal para entender qué le duele al cliente. Escúchalo en fondo mientras trabajas.</p>
+
+      <div class="audio-embed">
+        <div class="audio-icon">🎙️</div>
+        <div class="audio-info">
+          <div class="audio-tit">Ep 1 · El costo real del camión parado</div>
+          <div class="audio-desc">18 MIN · PENDIENTE DE PUBLICAR</div>
+        </div>
+      </div>
+      <div class="audio-embed">
+        <div class="audio-icon">🎙️</div>
+        <div class="audio-info">
+          <div class="audio-tit">Ep 2 · DPF sin desmontar (o casi)</div>
+          <div class="audio-desc">22 MIN · PENDIENTE DE PUBLICAR</div>
+        </div>
+      </div>
+      <div class="audio-embed">
+        <div class="audio-icon">🎙️</div>
+        <div class="audio-info">
+          <div class="audio-tit">Ep 3 · Fallas eléctricas que parecen otra cosa</div>
+          <div class="audio-desc">20 MIN · PENDIENTE DE PUBLICAR</div>
+        </div>
+      </div>
+      <div class="audio-embed">
+        <div class="audio-icon">🎙️</div>
+        <div class="audio-info">
+          <div class="audio-tit">Ep 4 · Neumático: el negocio invisible</div>
+          <div class="audio-desc">19 MIN · PENDIENTE DE PUBLICAR</div>
+        </div>
+      </div>
+      <div class="audio-embed">
+        <div class="audio-icon">🎙️</div>
+        <div class="audio-info">
+          <div class="audio-tit">Ep 5 · El diesel, ese señor caro</div>
+          <div class="audio-desc">17 MIN · PENDIENTE DE PUBLICAR</div>
+        </div>
+      </div>
+      <div class="audio-embed">
+        <div class="audio-icon">🎙️</div>
+        <div class="audio-info">
+          <div class="audio-tit">Ep 6 · Electromovilidad: qué viene</div>
+          <div class="audio-desc">25 MIN · PENDIENTE DE PUBLICAR</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 11. Checklist primer día -->
+    <section class="section" id="primerdia">
+      <div class="sec-num">11 · TU PRIMER DÍA</div>
+      <h2 class="sec-tit">Checklist del <em>primer día</em></h2>
+      <p class="sec-lead">Antes de terminar el día 1, cumple estos 12 puntos. Se guardan en tu navegador para retomar cuando quieras.</p>
+
+      <div class="checklist">
+        <div class="check-item"><input type="checkbox" id="c1"><label for="c1"><strong>Accesos:</strong> tengo login y contraseña del hub coordinador</label></div>
+        <div class="check-item"><input type="checkbox" id="c2"><label for="c2"><strong>Números:</strong> tengo el número del bot (+56 9 8507 9392), Angel (+56 9 4521 0814) y Nicolás (+56 9 8505 8250) guardados en mi WhatsApp</label></div>
+        <div class="check-item"><input type="checkbox" id="c3"><label for="c3"><strong>Hub:</strong> abrí <a href="menu-coordinador.html">menu-coordinador.html</a> y navegué las 5 pestañas</label></div>
+        <div class="check-item"><input type="checkbox" id="c4"><label for="c4"><strong>Bandeja:</strong> revisé <a href="agenda-solicitudes.html">agenda-solicitudes.html</a> y entiendo cómo confirmar/rechazar</label></div>
+        <div class="check-item"><input type="checkbox" id="c5"><label for="c5"><strong>Cierre:</strong> abrí <a href="cierre-jornada.html">cierre-jornada.html</a> y asigné un técnico de prueba</label></div>
+        <div class="check-item"><input type="checkbox" id="c6"><label for="c6"><strong>Chats:</strong> entré a <a href="conversaciones-wa.html">conversaciones-wa.html</a>, vi conversaciones activas y probé el input de intervención</label></div>
+        <div class="check-item"><input type="checkbox" id="c7"><label for="c7"><strong>Ingresos:</strong> revisé <a href="panel-ingresos.html">panel-ingresos.html</a> y entiendo qué me dice cada KPI</label></div>
+        <div class="check-item"><input type="checkbox" id="c8"><label for="c8"><strong>Técnicos:</strong> conozco a los 3 técnicos activos y sus especialidades</label></div>
+        <div class="check-item"><input type="checkbox" id="c9"><label for="c9"><strong>Agentes:</strong> puedo nombrar los 11 agentes AI y para qué sirve cada uno</label></div>
+        <div class="check-item"><input type="checkbox" id="c10"><label for="c10"><strong>Red Nacional:</strong> abrí <a href="red-serviruta.html">red-serviruta.html</a> y entiendo las 3 categorías (mecánico completo / sin herramientas / grúa)</label></div>
+        <div class="check-item"><input type="checkbox" id="c11"><label for="c11"><strong>Escalamiento:</strong> tengo claro cuándo llamar a Angel vs a Nicolás</label></div>
+        <div class="check-item"><input type="checkbox" id="c12"><label for="c12"><strong>Rutina:</strong> configuré mi día siguiendo la rutina propuesta</label></div>
+        <div class="check-progress" id="progress">0 de 12 completados</div>
+      </div>
+    </section>
+
+    <!-- 12. Contactos -->
+    <section class="section" id="contactos">
+      <div class="sec-num">12 · CONTACTOS</div>
+      <h2 class="sec-tit">Contactos <em>clave</em></h2>
+      <p class="sec-lead">Guarda estos números en tu WhatsApp. Los vas a necesitar.</p>
+
+      <div class="contact-card">
+        <div class="contact-avatar">A</div>
+        <div>
+          <div class="contact-info-nom">Angel Peruga</div>
+          <div class="contact-info-rol">FUNDADOR · Escalamientos, decisiones estratégicas</div>
+        </div>
+        <a href="https://wa.me/56945210814" target="_blank" class="contact-tel">+56 9 4521 0814</a>
+      </div>
+
+      <div class="contact-card">
+        <div class="contact-avatar">N</div>
+        <div>
+          <div class="contact-info-nom">Nicolás Orellana</div>
+          <div class="contact-info-rol">COORD. SENIOR · Dudas operacionales</div>
+        </div>
+        <a href="https://wa.me/56985058250" target="_blank" class="contact-tel">+56 9 8505 8250</a>
+      </div>
+
+      <div class="contact-card">
+        <div class="contact-avatar">🤖</div>
+        <div>
+          <div class="contact-info-nom">Bot Serviruta</div>
+          <div class="contact-info-rol">CANAL PRINCIPAL · Todos los clientes escriben acá</div>
+        </div>
+        <a href="https://wa.me/56985079392" target="_blank" class="contact-tel">+56 9 8507 9392</a>
+      </div>
+
+      <div class="contact-card">
+        <div class="contact-avatar">R</div>
+        <div>
+          <div class="contact-info-nom">Reynaldo Aguas · Técnico</div>
+          <div class="contact-info-rol">MECÁNICO SR · Livianos + pesados</div>
+        </div>
+        <a href="https://wa.me/56935287199" target="_blank" class="contact-tel">+56 9 3528 7199</a>
+      </div>
+
+      <div class="contact-card">
+        <div class="contact-avatar">K</div>
+        <div>
+          <div class="contact-info-nom">Kiven Henz · Técnico</div>
+          <div class="contact-info-rol">MECÁNICO · Livianos + electrónica</div>
+        </div>
+        <a href="https://wa.me/56964880196" target="_blank" class="contact-tel">+56 9 6488 0196</a>
+      </div>
+
+      <div class="contact-card">
+        <div class="contact-avatar">G</div>
+        <div>
+          <div class="contact-info-nom">Giovanino Perugini · Técnico</div>
+          <div class="contact-info-rol">MECÁNICO SR · Pesados + diesel</div>
+        </div>
+        <a href="https://wa.me/56933592097" target="_blank" class="contact-tel">+56 9 3359 2097</a>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <div style="text-align:center;padding:60px 20px;color:var(--t3);font-size:12px;border-top:1px solid var(--line);margin-top:60px">
+      <div style="font-family:var(--display);font-weight:900;color:var(--dorado);font-size:20px;letter-spacing:-0.5px">Bienvenido/a a Serviruta 🙌</div>
+      <p style="margin-top:10px;font-family:var(--mono);letter-spacing:0.1em">MANUAL DEL COORDINADOR · V1.0 · 2026</p>
+    </div>
+
+  </main>
+</div>
+
+<script>
+// Active nav item on scroll
+var sections = document.querySelectorAll('.section, #bienvenida')
+var navItems = document.querySelectorAll('.nav-item')
+
+function onScroll(){
+  var scrollY = window.scrollY + 100
+  var current = 'bienvenida'
+  sections.forEach(function(s){
+    if(s.offsetTop <= scrollY) current = s.id
+  })
+  navItems.forEach(function(item){
+    item.classList.toggle('active', item.getAttribute('href') === '#' + current)
+  })
+}
+window.addEventListener('scroll', onScroll, {passive: true})
+onScroll()
+
+// Checklist persistence (localStorage disabled in artifacts, use in-memory)
+var checklistState = {}
+document.querySelectorAll('.checklist input[type="checkbox"]').forEach(function(cb){
+  cb.addEventListener('change', function(){
+    checklistState[cb.id] = cb.checked
+    var total = document.querySelectorAll('.checklist input[type="checkbox"]').length
+    var done = document.querySelectorAll('.checklist input[type="checkbox"]:checked').length
+    document.getElementById('progress').textContent = done + ' de ' + total + ' completados'
+    if(done === total) document.getElementById('progress').innerHTML = '🎉 ¡FELICIDADES! COMPLETASTE EL PRIMER DÍA'
+  })
+})
+
+// Close sidebar on nav click (mobile)
+document.querySelectorAll('.nav-item').forEach(function(item){
+  item.addEventListener('click', function(){
+    if(window.innerWidth < 960) document.querySelector('.sidebar').classList.remove('open')
+  })
+})
+</script>
+
+</body>
+</html>

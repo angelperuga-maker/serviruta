@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Rutas Óptimas · Serviruta</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0A0D;--s1:#111114;--s2:#16161B;--s3:#1C1C23;--line:#26262E;--rojo:#E8210A;--rojo-l:#FF4D2E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--violeta:#A78BFA;--dorado:#D4AF37;--naranja:#F97316;--t1:#F6F4EF;--t2:#C7C5BF;--t3:#8B8990;--display:'Syne',sans-serif;--body:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--t2);font-family:var(--body);font-size:14px;line-height:1.5;height:100vh;overflow:hidden}
+button,input,select{border:none;background:none;color:inherit;font-family:inherit;font-size:14px;cursor:pointer}
+input,select{background:var(--s2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;color:var(--t1)}
+
+.bar{background:rgba(10,10,13,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);padding:10px 14px;display:flex;align-items:center;gap:10px;z-index:100;position:relative}
+.back{font-family:var(--mono);font-size:10px;color:var(--t3);padding:6px 10px;border:1px solid var(--line);border-radius:6px}
+.sigil{width:32px;height:32px;background:linear-gradient(135deg,var(--rojo),var(--dorado));border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:14px;color:#000}
+.title{font-family:var(--display);font-weight:800;font-size:14px;color:var(--t1);flex:1;line-height:1.1}
+.title small{display:block;font-family:var(--mono);font-size:9px;color:var(--dorado);letter-spacing:0.15em;margin-top:2px}
+.btn-primary{padding:8px 14px;background:var(--dorado);color:#000;border-radius:8px;font-family:var(--display);font-weight:800;font-size:11px;letter-spacing:0.05em}
+.btn-primary:hover{filter:brightness(1.1)}
+.btn-secondary{padding:8px 12px;background:var(--s2);border:1px solid var(--line);border-radius:8px;font-family:var(--mono);font-size:11px;color:var(--t2)}
+
+.controls{background:var(--s1);border-bottom:1px solid var(--line);padding:10px 14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;z-index:99;position:relative}
+.control-lbl{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;font-weight:700}
+.tec-chips{display:flex;gap:6px;overflow-x:auto;flex:1}
+.chip{padding:6px 10px;background:var(--s2);border:1px solid var(--line);border-radius:8px;font-family:var(--mono);font-size:10px;color:var(--t2);font-weight:700;letter-spacing:0.05em;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.chip:hover{color:var(--t1)}
+.chip.active{background:var(--dorado);color:#000;border-color:var(--dorado)}
+.chip .dot{width:8px;height:8px;border-radius:50%}
+
+.stats{display:flex;gap:14px;padding:8px 14px;background:var(--s1);border-bottom:1px solid var(--line);font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.05em}
+.stats span strong{color:var(--dorado);font-weight:700}
+
+.layout{display:grid;grid-template-columns:1fr 380px;height:calc(100vh - 140px)}
+#mapa{background:var(--s2);height:100%}
+.leaflet-container{background:var(--s2)!important;font-family:var(--body)}
+.leaflet-popup-content-wrapper{background:var(--s1);color:var(--t1);border-radius:10px;border:1px solid var(--line)}
+.leaflet-popup-tip{background:var(--s1)}
+.leaflet-popup-content{margin:12px 14px;font-size:12px;line-height:1.5}
+.leaflet-popup-content strong{color:var(--dorado);font-family:var(--display)}
+.leaflet-popup-close-button{color:var(--t3)!important}
+
+.side{background:var(--s1);border-left:1px solid var(--line);overflow-y:auto;padding:12px}
+.side-title{font-family:var(--mono);font-size:10px;color:var(--dorado);letter-spacing:0.2em;font-weight:700;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.side-title small{color:var(--t3)}
+
+.ruta-item{background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px;position:relative;padding-left:36px;cursor:pointer;transition:all 150ms}
+.ruta-item:hover{border-color:var(--dorado);transform:translateX(2px)}
+.ruta-item .orden{position:absolute;left:8px;top:10px;width:22px;height:22px;background:var(--dorado);color:#000;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:900;font-size:11px}
+.ruta-item .hora{font-family:var(--mono);font-size:10px;color:var(--dorado);font-weight:700;letter-spacing:0.05em}
+.ruta-item .hora .distancia{color:var(--verde);margin-left:8px}
+.ruta-item .cli{color:var(--t1);font-weight:700;margin-top:2px;font-size:13px}
+.ruta-item .dir{color:var(--t2);font-size:11px;margin-top:2px;line-height:1.3}
+.ruta-item .estado{font-family:var(--mono);font-size:8px;padding:2px 5px;background:var(--s3);border-radius:3px;letter-spacing:0.05em;font-weight:700;margin-top:4px;display:inline-block}
+.ruta-item.urgente{border-left:3px solid var(--rojo)}
+.ruta-item.sin-geo{opacity:0.5;border-left:3px solid var(--amarillo)}
+
+.empty{padding:30px 20px;text-align:center;color:var(--t3);font-size:12px;font-style:italic}
+
+.tec-header{padding:12px;background:var(--s2);border-radius:10px;margin-bottom:12px;border-left:4px solid var(--dorado)}
+.tec-header-nom{font-family:var(--display);font-weight:800;font-size:14px;color:var(--t1)}
+.tec-header-stats{font-family:var(--mono);font-size:9px;color:var(--t3);margin-top:4px;letter-spacing:0.05em}
+
+.progress{background:var(--s2);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-bottom:10px;font-family:var(--mono);font-size:11px;color:var(--dorado)}
+.progress::before{content:"⚙";display:inline-block;animation:spin 1s linear infinite;margin-right:6px;font-size:14px}
+@keyframes spin{100%{transform:rotate(360deg)}}
+
+.marker-tec{background:var(--dorado);color:#000;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:900;font-size:13px;border:3px solid #000;box-shadow:0 2px 8px rgba(0,0,0,0.5)}
+
+.toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-20px);background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:10px 16px;font-size:12px;color:var(--t1);opacity:0;transition:all 300ms;pointer-events:none;z-index:300}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.ok{border-color:var(--verde);color:var(--verde)}
+.toast.err{border-color:var(--rojo);color:var(--rojo-l)}
+
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr;grid-template-rows:60vh 40vh}
+  #mapa{height:100%}
+}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <button class="back" onclick="location.href='menu-coordinador.html'">← Volver</button>
+  <div class="sigil">🗺</div>
+  <div class="title">Rutas Óptimas<small>SERVIRUTA · RUTEO INTELIGENTE</small></div>
+  <button class="btn-secondary" onclick="geocodificarPendientes()" id="btn-geo">📍 Geocodificar direcciones</button>
+  <button class="btn-primary" onclick="optimizarRuta()">✨ Optimizar ruta</button>
+</header>
+
+<div class="controls">
+  <span class="control-lbl">FECHA</span>
+  <input type="date" id="fecha" onchange="cargar()">
+  <span class="control-lbl">TÉCNICO</span>
+  <div class="tec-chips" id="tec-chips"></div>
+</div>
+
+<div class="stats" id="stats">
+  <span>Servicios: <strong id="s-total">0</strong></span>
+  <span>Geocodificados: <strong id="s-geo">0</strong></span>
+  <span>Distancia ruta: <strong id="s-dist">— km</strong></span>
+  <span>Tiempo estimado: <strong id="s-tiempo">— min</strong></span>
+</div>
+
+<div class="layout">
+  <div id="mapa"></div>
+  <aside class="side">
+    <div class="side-title">RUTA SUGERIDA <small id="side-count"></small></div>
+    <div id="ruta-lista"><div class="empty">Selecciona un técnico y una fecha</div></div>
+  </aside>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+
+var TECNICOS = []
+var SERVICIOS = []
+var FILTRO_TEC = 'todos'
+var mapa
+var marcadores = []
+var polyline = null
+var COLORES = ['#22C55E','#60A5FA','#A78BFA','#F97316','#F5C518','#EC4899','#14B8A6','#EF4444']
+// Centro Santiago
+var CENTRO_SANTIAGO = [-33.4489, -70.6693]
+
+function toast(msg, tipo){
+  var t = document.getElementById('toast')
+  t.textContent = msg
+  t.className = 'toast ' + (tipo||'')
+  t.classList.add('show')
+  setTimeout(function(){t.classList.remove('show')}, 3000)
+}
+
+function fmtISO(d){var y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),dd=String(d.getDate()).padStart(2,'0');return y+'-'+m+'-'+dd}
+
+async function sbReq(method, path, data){
+  var opts={method,headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=representation'}}
+  if(data)opts.body=JSON.stringify(data)
+  return await fetch(SB_URL+'/rest/v1/'+path,opts)
+}
+
+function inicializarMapa(){
+  mapa = L.map('mapa', {zoomControl: true}).setView(CENTRO_SANTIAGO, 11)
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '© OpenStreetMap'
+  }).addTo(mapa)
+}
+
+function colorTec(nombre){
+  if(!nombre || nombre==='POR ASIGNAR')return '#8B8990'
+  var i = TECNICOS.findIndex(function(t){return t.nombre === nombre})
+  return COLORES[i % COLORES.length] || '#8B8990'
+}
+
+function iniciales(nombre){return (nombre||'?').split(' ').slice(0,2).map(function(s){return (s[0]||'').toUpperCase()}).join('')}
+
+async function cargarTecnicos(){
+  var r = await sbReq('GET', 'tecnicos?activo=eq.true&select=nombre,telefono,lat_base,lng_base&order=nombre.asc')
+  TECNICOS = r.ok ? await r.json() : []
+  
+  var chips = document.getElementById('tec-chips')
+  var html = '<button class="chip active" data-tec="todos" onclick="filtrarTec(\'todos\')">👥 Todos</button>'
+  TECNICOS.forEach(function(t){
+    html += '<button class="chip" data-tec="'+t.nombre.replace(/"/g,'&quot;')+'" onclick="filtrarTec(\''+t.nombre.replace(/'/g,"\\'")+'\')">'
+    html += '<span class="dot" style="background:'+colorTec(t.nombre)+'"></span>'
+    html += t.nombre.split(' ')[0]
+    html += '</button>'
+  })
+  chips.innerHTML = html
+}
+
+async function cargarServicios(){
+  var fecha = document.getElementById('fecha').value
+  if(!fecha){
+    fecha = fmtISO(new Date())
+    document.getElementById('fecha').value = fecha
+  }
+  var r = await sbReq('GET', 'agenda?fecha=eq.'+fecha+'&estado=in.(solicitada,agendado,confirmado,en-ruta,completado)&select=*&order=hora.asc')
+  SERVICIOS = r.ok ? await r.json() : []
+}
+
+function serviciosFiltrados(){
+  if(FILTRO_TEC === 'todos') return SERVICIOS
+  return SERVICIOS.filter(function(s){return s.tecnico && s.tecnico.indexOf(FILTRO_TEC) >= 0})
+}
+
+// Distancia Haversine en km
+function haversine(lat1, lng1, lat2, lng2){
+  var R = 6371
+  var dLat = (lat2-lat1) * Math.PI / 180
+  var dLng = (lng2-lng1) * Math.PI / 180
+  var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(lat1*Math.PI/180) * Math.cos(lat2*Math.PI/180) *
+    Math.sin(dLng/2) * Math.sin(dLng/2)
+  return 2 * R * Math.asin(Math.sqrt(a))
+}
+
+// Algoritmo Nearest Neighbor: dado un punto inicial, encuentra el orden óptimo aproximado
+function nearestNeighbor(inicio, puntos){
+  var orden = []
+  var restantes = puntos.slice()
+  var actual = inicio
+  
+  while(restantes.length > 0){
+    var idxMasCercano = 0
+    var distMin = haversine(actual.lat, actual.lng, restantes[0].lat, restantes[0].lng)
+    for(var i = 1; i < restantes.length; i++){
+      var d = haversine(actual.lat, actual.lng, restantes[i].lat, restantes[i].lng)
+      if(d < distMin){distMin = d; idxMasCercano = i}
+    }
+    var siguiente = restantes[idxMasCercano]
+    siguiente._distDesdeAnterior = distMin
+    orden.push(siguiente)
+    actual = siguiente
+    restantes.splice(idxMasCercano, 1)
+  }
+  return orden
+}
+
+// Geocodificar con Nominatim (gratis, OpenStreetMap)
+async function geocodificarDireccion(direccion){
+  if(!direccion) return null
+  var q = encodeURIComponent(direccion + ', Santiago, Chile')
+  try {
+    var r = await fetch('https://nominatim.openstreetmap.org/search?q='+q+'&format=json&limit=1&countrycodes=cl')
+    var data = await r.json()
+    if(data && data[0]){
+      return {lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon)}
+    }
+    return null
+  } catch(e){
+    console.error('Error geocoding:', e)
+    return null
+  }
+}
+
+async function geocodificarPendientes(){
+  var pendientes = SERVICIOS.filter(function(s){return s.direccion && (!s.lat || !s.lng)})
+  if(pendientes.length === 0){
+    toast('Todo geocodificado ✅', 'ok')
+    return
+  }
+  
+  var btn = document.getElementById('btn-geo')
+  var textoOrig = btn.innerHTML
+  var geocodificados = 0
+  
+  for(var i = 0; i < pendientes.length; i++){
+    var s = pendientes[i]
+    btn.innerHTML = '⚙ Geocodificando ' + (i+1) + '/' + pendientes.length + '...'
+    
+    var coords = await geocodificarDireccion(s.direccion)
+    if(coords){
+      // Guardar en BD
+      await sbReq('PATCH', 'agenda?id=eq.'+s.id, {
+        lat: coords.lat,
+        lng: coords.lng,
+        direccion_geocoded_at: new Date().toISOString()
+      })
+      s.lat = coords.lat
+      s.lng = coords.lng
+      geocodificados++
+    }
+    
+    // Nominatim requiere 1 req/segundo mínimo
+    await new Promise(function(r){setTimeout(r, 1100)})
+  }
+  
+  btn.innerHTML = textoOrig
+  toast('✅ Geocodificados '+geocodificados+'/'+pendientes.length, 'ok')
+  renderTodo()
+}
+
+function actualizarStats(){
+  var arr = serviciosFiltrados()
+  var geo = arr.filter(function(s){return s.lat && s.lng}).length
+  document.getElementById('s-total').textContent = arr.length
+  document.getElementById('s-geo').textContent = geo
+  
+  var conCoords = arr.filter(function(s){return s.lat && s.lng})
+  if(conCoords.length > 1 && FILTRO_TEC !== 'todos'){
+    var ordenados = conCoords.sort(function(a,b){return (a.hora||'').localeCompare(b.hora||'')})
+    var distTotal = 0
+    for(var i = 1; i < ordenados.length; i++){
+      distTotal += haversine(ordenados[i-1].lat, ordenados[i-1].lng, ordenados[i].lat, ordenados[i].lng)
+    }
+    document.getElementById('s-dist').textContent = distTotal.toFixed(1) + ' km'
+    var minEst = Math.round(distTotal * 3) // ~3 min/km promedio Santiago
+    document.getElementById('s-tiempo').textContent = minEst + ' min'
+  } else {
+    document.getElementById('s-dist').textContent = '— km'
+    document.getElementById('s-tiempo').textContent = '— min'
+  }
+}
+
+function renderMapa(){
+  // Limpiar marcadores anteriores
+  marcadores.forEach(function(m){mapa.removeLayer(m)})
+  marcadores = []
+  if(polyline){mapa.removeLayer(polyline); polyline = null}
+  
+  var arr = serviciosFiltrados()
+  var conCoords = arr.filter(function(s){return s.lat && s.lng})
+  
+  if(conCoords.length === 0) return
+  
+  // Agrupar por técnico y renderizar
+  var porTec = {}
+  conCoords.forEach(function(s){
+    var t = s.tecnico || 'POR ASIGNAR'
+    if(!porTec[t]) porTec[t] = []
+    porTec[t].push(s)
+  })
+  
+  Object.keys(porTec).forEach(function(tecNombre){
+    var col = colorTec(tecNombre)
+    var servs = porTec[tecNombre].sort(function(a,b){return (a.hora||'').localeCompare(b.hora||'')})
+    
+    servs.forEach(function(s, idx){
+      var icon = L.divIcon({
+        html: '<div style="background:'+col+';color:#000;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-family:'+"'Syne',sans-serif"+';font-weight:900;font-size:12px;border:3px solid #000;box-shadow:0 2px 6px rgba(0,0,0,0.5)">'+(idx+1)+'</div>',
+        iconSize: [34, 34],
+        iconAnchor: [17, 17],
+        className: 'marker-custom'
+      })
+      var m = L.marker([s.lat, s.lng], {icon: icon}).addTo(mapa)
+      var hora = (s.hora||'').substring(0,5)
+      var popup = '<strong>'+(s.cliente||'?')+'</strong><br>'+
+        '<span style="color:#D4AF37">'+hora+'</span> · '+(tecNombre.split(' ')[0])+'<br>'+
+        (s.servicio||'').substring(0,80)+'<br>'+
+        '<small style="color:#8B8990">'+(s.direccion||'')+'</small>'
+      m.bindPopup(popup)
+      marcadores.push(m)
+    })
+    
+    // Trazar línea si hay filtro por técnico
+    if(FILTRO_TEC === tecNombre && servs.length > 1){
+      var latlngs = servs.map(function(s){return [s.lat, s.lng]})
+      polyline = L.polyline(latlngs, {
+        color: col,
+        weight: 4,
+        opacity: 0.7,
+        dashArray: '8, 6'
+      }).addTo(mapa)
+    }
+  })
+  
+  // Ajustar zoom al conjunto de puntos
+  if(marcadores.length > 0){
+    var group = new L.featureGroup(marcadores)
+    mapa.fitBounds(group.getBounds().pad(0.1))
+  }
+}
+
+function renderLista(){
+  var arr = serviciosFiltrados()
+  var cont = document.getElementById('ruta-lista')
+  var countEl = document.getElementById('side-count')
+  
+  if(arr.length === 0){
+    cont.innerHTML = '<div class="empty">Sin servicios para esta fecha y filtro</div>'
+    countEl.textContent = ''
+    return
+  }
+  
+  var html = ''
+  
+  // Si es un técnico específico, mostrar su ruta ordenada
+  if(FILTRO_TEC !== 'todos'){
+    var t = TECNICOS.find(function(x){return x.nombre === FILTRO_TEC})
+    var col = colorTec(FILTRO_TEC)
+    
+    html += '<div class="tec-header" style="border-left-color:'+col+'">'
+    html += '<div class="tec-header-nom">'+FILTRO_TEC+'</div>'
+    var conGeo = arr.filter(function(s){return s.lat && s.lng}).length
+    html += '<div class="tec-header-stats">'+arr.length+' servicios · '+conGeo+' geocodificados</div>'
+    html += '</div>'
+    
+    // Ordenar por hora por default
+    var ordenados = arr.slice().sort(function(a,b){return (a.hora||'').localeCompare(b.hora||'')})
+    ordenados.forEach(function(s, idx){
+      html += renderServicioItem(s, idx+1, col)
+    })
+  } else {
+    // Vista de todos: agrupados por técnico
+    var porTec = {}
+    var sinTec = []
+    arr.forEach(function(s){
+      if(!s.tecnico || s.tecnico === 'POR ASIGNAR') sinTec.push(s)
+      else {
+        if(!porTec[s.tecnico]) porTec[s.tecnico] = []
+        porTec[s.tecnico].push(s)
+      }
+    })
+    
+    TECNICOS.forEach(function(t){
+      var evs = porTec[t.nombre] || []
+      if(evs.length === 0) return
+      var col = colorTec(t.nombre)
+      html += '<div class="tec-header" style="border-left-color:'+col+';margin-top:14px">'
+      html += '<div class="tec-header-nom">'+t.nombre+'</div>'
+      html += '<div class="tec-header-stats">'+evs.length+' servicios</div>'
+      html += '</div>'
+      evs.sort(function(a,b){return (a.hora||'').localeCompare(b.hora||'')}).forEach(function(s, idx){
+        html += renderServicioItem(s, idx+1, col)
+      })
+    })
+    
+    if(sinTec.length > 0){
+      html += '<div class="tec-header" style="border-left-color:var(--amarillo);margin-top:14px">'
+      html += '<div class="tec-header-nom">⚠ Sin asignar</div>'
+      html += '<div class="tec-header-stats">'+sinTec.length+' servicios</div>'
+      html += '</div>'
+      sinTec.forEach(function(s, idx){
+        html += renderServicioItem(s, idx+1, '#F5C518')
+      })
+    }
+  }
+  
+  cont.innerHTML = html
+  countEl.textContent = '('+arr.length+')'
+}
+
+function renderServicioItem(s, orden, col){
+  var hora = (s.hora||'').substring(0,5)
+  var cls = 'ruta-item'
+  if(s.urgencia === 'urgente') cls += ' urgente'
+  if(!s.lat || !s.lng) cls += ' sin-geo'
+  var distTxt = s._distDesdeAnterior ? '<span class="distancia">↔ '+s._distDesdeAnterior.toFixed(1)+' km</span>' : ''
+  var html = '<div class="'+cls+'" style="--col:'+col+'" onclick="verServicio(\''+s.id+'\')">'
+  html += '<div class="orden" style="background:'+col+'">'+orden+'</div>'
+  html += '<div class="hora">'+hora+distTxt+'</div>'
+  html += '<div class="cli">'+(s.cliente || 'Sin cliente')+'</div>'
+  html += '<div class="dir">'+(s.direccion || '<em style="color:#8B8990">Sin dirección</em>')+'</div>'
+  html += '<div class="estado">'+((s.estado||'agendado').toUpperCase())+'</div>'
+  if(!s.lat || !s.lng) html += '<div class="estado" style="color:var(--amarillo)">⚠ SIN GEO</div>'
+  html += '</div>'
+  return html
+}
+
+function verServicio(id){
+  var s = SERVICIOS.find(function(x){return x.id === id})
+  if(!s || !s.lat || !s.lng){
+    toast('⚠️ Este servicio no tiene coordenadas', 'err')
+    return
+  }
+  mapa.setView([s.lat, s.lng], 15)
+  var mkr = marcadores.find(function(m){
+    var ll = m.getLatLng()
+    return Math.abs(ll.lat - s.lat) < 0.0001 && Math.abs(ll.lng - s.lng) < 0.0001
+  })
+  if(mkr) mkr.openPopup()
+}
+
+async function optimizarRuta(){
+  if(FILTRO_TEC === 'todos'){
+    toast('⚠️ Selecciona un técnico primero', 'err')
+    return
+  }
+  
+  var arr = serviciosFiltrados().filter(function(s){return s.lat && s.lng && s.estado !== 'completado' && s.estado !== 'cancelado'})
+  if(arr.length < 2){
+    toast('⚠️ Necesitas al menos 2 servicios con coordenadas', 'err')
+    return
+  }
+  
+  // Punto de partida: si el técnico tiene lat_base, usarlo; sino, usar el primer servicio por hora
+  var t = TECNICOS.find(function(x){return x.nombre === FILTRO_TEC})
+  var inicio
+  if(t && t.lat_base && t.lng_base){
+    inicio = {lat: parseFloat(t.lat_base), lng: parseFloat(t.lng_base)}
+  } else {
+    var primero = arr.slice().sort(function(a,b){return (a.hora||'').localeCompare(b.hora||'')})[0]
+    inicio = {lat: primero.lat, lng: primero.lng}
+  }
+  
+  var ordenados = nearestNeighbor(inicio, arr.slice())
+  
+  // Calcular distancia total
+  var distTotal = 0
+  var actual = inicio
+  ordenados.forEach(function(s){
+    distTotal += haversine(actual.lat, actual.lng, s.lat, s.lng)
+    actual = s
+  })
+  
+  var minEst = Math.round(distTotal * 3)
+  
+  // Confirmar aplicación
+  if(!confirm('Ruta optimizada:\n\n' + ordenados.length + ' servicios en orden geográfico\n' + distTotal.toFixed(1) + ' km · ~' + minEst + ' min\n\n¿Reordenar los HORARIOS según esta ruta?\n(Se mantendrán espacios de 45 min entre servicios)')) return
+  
+  // Aplicar nuevos horarios: primer servicio a las 09:00, cada uno +45 min
+  var horaInicio = 9 * 60 // 9:00 en minutos
+  var espacioMinutos = 45
+  
+  for(var i = 0; i < ordenados.length; i++){
+    var minTotal = horaInicio + (i * espacioMinutos)
+    var h = Math.floor(minTotal / 60)
+    var m = minTotal % 60
+    var horaStr = String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':00'
+    await sbReq('PATCH', 'agenda?id=eq.' + ordenados[i].id, {
+      hora: horaStr,
+      orden_ruta: i + 1
+    })
+    ordenados[i].hora = horaStr
+    ordenados[i].orden_ruta = i + 1
+  }
+  
+  // Actualizar SERVICIOS local
+  ordenados.forEach(function(s){
+    var idx = SERVICIOS.findIndex(function(x){return x.id === s.id})
+    if(idx >= 0){SERVICIOS[idx].hora = s.hora; SERVICIOS[idx].orden_ruta = s.orden_ruta}
+  })
+  
+  toast('✨ Ruta optimizada · ' + distTotal.toFixed(1) + ' km', 'ok')
+  renderTodo()
+}
+
+function filtrarTec(tec){
+  FILTRO_TEC = tec
+  document.querySelectorAll('.chip').forEach(function(c){c.classList.toggle('active', c.dataset.tec === tec)})
+  renderTodo()
+}
+
+function renderTodo(){
+  actualizarStats()
+  renderMapa()
+  renderLista()
+}
+
+async function cargar(){
+  await cargarTecnicos()
+  await cargarServicios()
+  renderTodo()
+}
+
+// Inicializar
+document.getElementById('fecha').value = fmtISO(new Date())
+inicializarMapa()
+cargar()
+</script>
+
+</body>
+</html>

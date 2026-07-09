@@ -533,7 +533,25 @@ async function asignarRapido(id, tecnico){
     msgTec += '📅 *Fecha:* ' + fechaFmt + '\n'
     msgTec += '⏰ *Hora:* ' + hora + '\n'
     if(e.direccion) msgTec += '📍 *Dirección:* ' + e.direccion + '\n'
-    if(e.notas) msgTec += '📝 *Notas:* ' + e.notas + '\n'
+    // Filtrar metadatos internos de las notas antes de mostrar al técnico
+    if(e.notas){
+      var notasLimpias = e.notas
+        .split('\n')
+        .filter(function(l){
+          var t = l.trim()
+          if(!t) return false
+          // Excluir líneas que empiezan con [CANCELADO, [Nombre WA, [Reynaldo, etc (metadatos)
+          if(/^\[.*\]/.test(t)) return false
+          // Excluir "Agendado por bot..." (info interna)
+          if(/^Agendado por bot/i.test(t)) return false
+          // Excluir "Nombre indicado por cliente..." (ya se pasa como cliente)
+          if(/^Nombre indicado por cliente/i.test(t)) return false
+          return true
+        })
+        .join('\n')
+        .trim()
+      if(notasLimpias) msgTec += '📝 *Notas:* ' + notasLimpias + '\n'
+    }
     msgTec += '\n━━━━━━━━━━━━━━━━━━━\n'
     msgTec += '⚠️ *Responde para confirmar:*\n\n'
     msgTec += '✅ *CONFIRMO* → aceptas el servicio\n'
@@ -613,7 +631,9 @@ async function cancelarServicio(id){
   var razon = prompt('Motivo de cancelación (opcional):\n\nEj: "Cliente reagenda", "Cliente cambió de opinión", "Vehículo ya reparado"')
   if(razon === null) return  // Cancel del prompt
   
-  var notasFinal = e.notas ? (e.notas + '\n\n[CANCELADO ' + new Date().toISOString().substring(0,10) + '] ' + (razon || 'Sin motivo')) : ('[CANCELADO ' + new Date().toISOString().substring(0,10) + '] ' + (razon || 'Sin motivo'))
+  var fechaCancel = new Date().toISOString().substring(0,10)
+  var lineaCancel = '[CANCELADO ' + fechaCancel + ']' + (razon ? ' ' + razon : '')
+  var notasFinal = e.notas ? (e.notas + '\n' + lineaCancel) : lineaCancel
   
   try {
     var r = await sbReq('PATCH', 'agenda?id=eq.'+id, {

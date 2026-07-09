@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Login · Serviruta</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Instrument+Serif&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -16,13 +17,14 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--t2);font-family:var(--body);font-size:14px;line-height:1.5;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;position:relative;overflow:hidden}
 
-/* Decorative bg glow */
 body::before{content:'';position:absolute;top:-200px;right:-200px;width:600px;height:600px;background:radial-gradient(circle,var(--dorado),transparent 70%);opacity:0.06;filter:blur(60px);pointer-events:none}
 body::after{content:'';position:absolute;bottom:-200px;left:-200px;width:600px;height:600px;background:radial-gradient(circle,var(--rojo),transparent 70%);opacity:0.05;filter:blur(60px);pointer-events:none}
 
 button,input{border:none;background:none;color:inherit;font-family:inherit;font-size:14px;cursor:pointer}
 input{background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:14px 16px;color:var(--t1);width:100%;transition:border-color 200ms}
 input:focus{outline:none;border-color:var(--dorado)}
+input.error{border-color:var(--rojo)}
+input:disabled{opacity:0.5;cursor:not-allowed}
 
 .container{width:100%;max-width:420px;position:relative;z-index:2}
 
@@ -44,33 +46,33 @@ input:focus{outline:none;border-color:var(--dorado)}
 .username-input{padding-right:120px}
 .username-suffix{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:11px;color:var(--t3);letter-spacing:0.05em;pointer-events:none;font-weight:700}
 
-.btn-login{width:100%;padding:14px;background:linear-gradient(135deg,var(--dorado),#B8933A);color:#000;border-radius:10px;font-family:var(--display);font-weight:900;font-size:14px;cursor:pointer;letter-spacing:0.05em;margin-top:8px;transition:all 200ms}
-.btn-login:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(212,175,55,0.3)}
+.btn-login{width:100%;padding:14px;background:linear-gradient(135deg,var(--dorado),#B8933A);color:#000;border-radius:10px;font-family:var(--display);font-weight:900;font-size:14px;cursor:pointer;letter-spacing:0.05em;margin-top:8px;transition:all 200ms;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-login:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 8px 24px rgba(212,175,55,0.3)}
+.btn-login:disabled{opacity:0.6;cursor:not-allowed}
+.btn-login .spinner{display:inline-block;width:14px;height:14px;border:2px solid rgba(0,0,0,0.2);border-top-color:#000;border-radius:50%;animation:spin 800ms linear infinite}
+@keyframes spin{100%{transform:rotate(360deg)}}
 
-.divider{display:flex;align-items:center;gap:12px;margin:24px 0}
-.divider hr{flex:1;border:none;border-top:1px solid var(--line)}
-.divider span{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.2em;font-weight:700}
+.error-msg{background:rgba(232,33,10,0.1);border:1px solid rgba(232,33,10,0.3);border-radius:8px;padding:10px 12px;color:var(--rojo-l);font-size:12px;margin-top:12px;display:flex;align-items:flex-start;gap:8px}
+.error-msg.hidden{display:none}
+.error-icon{font-size:16px;flex-shrink:0}
 
-.demo-section{padding-top:18px;border-top:1px solid var(--line);margin-top:18px}
-.demo-title{font-family:var(--mono);font-size:9px;color:var(--dorado);letter-spacing:0.2em;font-weight:700;margin-bottom:12px;text-align:center}
+.success-msg{background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);border-radius:8px;padding:10px 12px;color:var(--verde);font-size:12px;margin-top:12px;display:flex;align-items:flex-start;gap:8px}
+.success-msg.hidden{display:none}
 
-.demo-users{display:flex;flex-direction:column;gap:8px}
-.demo-user{background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:all 200ms;text-align:left;width:100%;text-decoration:none}
-.demo-user:hover{border-color:var(--dorado);transform:translateX(2px)}
-.demo-avatar{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:900;font-size:14px;flex-shrink:0}
-.demo-avatar.owner{background:linear-gradient(135deg,var(--rojo),var(--dorado));color:#000}
-.demo-avatar.senior{background:linear-gradient(135deg,var(--azul),var(--violeta));color:#fff}
-.demo-avatar.junior{background:linear-gradient(135deg,var(--verde),var(--amarillo));color:#000}
-.demo-info{flex:1;min-width:0}
-.demo-nom{font-family:var(--display);font-weight:800;font-size:14px;color:var(--t1);line-height:1.2}
-.demo-rol{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;font-weight:700;margin-top:2px;text-transform:uppercase}
-.demo-badge{font-family:var(--mono);font-size:8px;padding:3px 6px;border-radius:4px;font-weight:700;letter-spacing:0.05em}
-.demo-badge.o{background:rgba(212,175,55,0.15);color:var(--dorado)}
-.demo-badge.s{background:rgba(96,165,250,0.15);color:var(--azul)}
-.demo-badge.j{background:rgba(34,197,94,0.15);color:var(--verde)}
+.tip{margin-top:14px;padding:10px 14px;background:var(--s2);border:1px solid var(--line);border-radius:8px;font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.05em;line-height:1.5}
+.tip strong{color:var(--dorado);font-weight:700}
+
+.user-active{background:var(--s2);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:16px;display:flex;align-items:center;gap:12px}
+.user-avatar{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,var(--rojo),var(--dorado));display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:900;font-size:20px;color:#000;flex-shrink:0}
+.user-avatar.junior{background:linear-gradient(135deg,var(--verde),var(--amarillo));color:#000}
+.user-avatar.senior{background:linear-gradient(135deg,var(--azul),var(--violeta));color:#fff}
+.user-nom{font-family:var(--display);font-weight:800;font-size:16px;color:var(--t1);line-height:1.2}
+.user-rol{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.15em;font-weight:700;margin-top:3px;text-transform:uppercase}
+
+.btn-alt{width:100%;padding:12px;background:var(--s2);border:1px solid var(--line);color:var(--t2);border-radius:10px;font-family:var(--mono);font-weight:700;font-size:11px;cursor:pointer;letter-spacing:0.05em;margin-top:10px;transition:all 200ms}
+.btn-alt:hover{border-color:var(--rojo-l);color:var(--rojo-l)}
 
 .footer{text-align:center;margin-top:24px;font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.15em;font-weight:700}
-.footer .warn{color:var(--amarillo);margin-top:8px;display:block}
 </style>
 </head>
 <body>
@@ -83,7 +85,34 @@ input:focus{outline:none;border-color:var(--dorado)}
     <div class="brand-sub">SISTEMA INTERNO</div>
   </div>
   
-  <div class="card">
+  <!-- Card de sesión activa (se muestra si ya está logueado) -->
+  <div class="card" id="card-sesion" style="display:none">
+    
+    <div class="card-header">
+      <div class="card-tit">Ya estás <em>dentro</em></div>
+      <div class="card-desc">Detectamos una sesión activa</div>
+    </div>
+    
+    <div class="user-active">
+      <div class="user-avatar" id="active-avatar">?</div>
+      <div>
+        <div class="user-nom" id="active-nom">-</div>
+        <div class="user-rol" id="active-rol">-</div>
+      </div>
+    </div>
+    
+    <button class="btn-login" onclick="continuarSesion()">
+      <span>Continuar al panel</span>
+    </button>
+    
+    <button class="btn-alt" onclick="cerrarSesionYCambiar()">
+      🔄 Cerrar sesión y entrar con otro usuario
+    </button>
+    
+  </div>
+  
+  <!-- Card de login (se muestra por defecto) -->
+  <div class="card" id="card-login">
     
     <div class="card-header">
       <div class="card-tit">Bienvenido/a de <em>vuelta</em></div>
@@ -93,60 +122,270 @@ input:focus{outline:none;border-color:var(--dorado)}
     <div class="form-group">
       <label class="form-lbl">Usuario</label>
       <div class="username-wrap">
-        <input type="text" id="username" class="username-input" placeholder="lily" autocomplete="off">
+        <input type="text" id="username" class="username-input" placeholder="angel · nicolas · lily" autocomplete="username" autofocus>
         <span class="username-suffix">@serviruta.local</span>
       </div>
     </div>
     
     <div class="form-group">
       <label class="form-lbl">Contraseña</label>
-      <input type="password" id="password" placeholder="••••••••">
+      <input type="password" id="password" placeholder="••••••••" autocomplete="current-password">
     </div>
     
-    <button class="btn-login" onclick="alert('🎭 MOCKUP · Aquí se conecta a Supabase Auth cuando construyas el backend real')">Ingresar</button>
+    <button class="btn-login" id="btn-login" onclick="login()">
+      <span id="btn-text">Ingresar</span>
+    </button>
     
-    <div class="demo-section">
-      <div class="demo-title">🎭 SIMULAR LOGIN (MOCKUP)</div>
-      <div class="demo-users">
-        
-        <a href="menu-coordinador.html" class="demo-user">
-          <div class="demo-avatar owner">A</div>
-          <div class="demo-info">
-            <div class="demo-nom">Angel Peruga</div>
-            <div class="demo-rol">FUNDADOR · VE TODO</div>
-          </div>
-          <span class="demo-badge o">OWNER</span>
-        </a>
-        
-        <a href="menu-coordinador.html" class="demo-user">
-          <div class="demo-avatar senior">N</div>
-          <div class="demo-info">
-            <div class="demo-nom">Nicolás Orellana</div>
-            <div class="demo-rol">COORD. SENIOR</div>
-          </div>
-          <span class="demo-badge s">SENIOR</span>
-        </a>
-        
-        <a href="menu-coord-jr.html" class="demo-user">
-          <div class="demo-avatar junior">L</div>
-          <div class="demo-info">
-            <div class="demo-nom">Lily</div>
-            <div class="demo-rol">COORD. JUNIOR · ACCESO LIMITADO</div>
-          </div>
-          <span class="demo-badge j">JUNIOR</span>
-        </a>
-        
-      </div>
+    <div class="error-msg hidden" id="error-msg">
+      <span class="error-icon">⚠️</span>
+      <span id="error-txt">Credenciales incorrectas</span>
+    </div>
+    
+    <div class="success-msg hidden" id="success-msg">
+      <span class="error-icon">✅</span>
+      <span id="success-txt">Ingresando...</span>
+    </div>
+    
+    <div class="tip">
+      💡 Tip: escribe solo tu usuario (ej: <strong>lily</strong>). El sufijo <strong>@serviruta.local</strong> se agrega automáticamente.
     </div>
     
   </div>
   
-  <div class="footer">
-    SERVIRUTA · v1 · MOCKUP DE DISEÑO
-    <span class="warn">⚠ Los datos NO se guardan aún · Este es solo el diseño visual</span>
-  </div>
+  <div class="footer">SERVIRUTA · v1</div>
   
 </div>
+
+<script>
+var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+
+var supabase = window.supabase.createClient(SB_URL, SB_KEY, {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+    detectSessionInUrl: false
+  }
+})
+
+// Al cargar, checar si ya hay sesión activa
+async function checarSesion(){
+  var {data:{session}} = await supabase.auth.getSession()
+  if(session && session.user){
+    // Mostrar card de sesión activa en vez de auto-redirigir
+    var nombre = localStorage.getItem('sv_user_nombre') || 'Usuario'
+    var rol = localStorage.getItem('sv_user_rol') || 'coord_junior'
+    var username = localStorage.getItem('sv_user_username') || 'usuario'
+    
+    var rolTxt = 'JUNIOR'
+    var rolCls = 'junior'
+    if(rol === 'owner'){rolTxt = 'OWNER · FUNDADOR'; rolCls = ''}
+    else if(rol === 'coord_senior'){rolTxt = 'COORDINADOR SENIOR'; rolCls = 'senior'}
+    else if(rol === 'coord_junior'){rolTxt = 'COORDINADOR JUNIOR'; rolCls = 'junior'}
+    
+    document.getElementById('active-nom').textContent = nombre
+    document.getElementById('active-rol').textContent = username + ' · ' + rolTxt
+    var av = document.getElementById('active-avatar')
+    av.textContent = (nombre[0] || '?').toUpperCase()
+    av.className = 'user-avatar ' + rolCls
+    
+    document.getElementById('card-sesion').style.display = 'block'
+    document.getElementById('card-login').style.display = 'none'
+  }
+}
+
+async function continuarSesion(){
+  var {data:{session}} = await supabase.auth.getSession()
+  if(session && session.user){
+    await redirigirPorRol(session.user.id)
+  }
+}
+
+async function cerrarSesionYCambiar(){
+  await supabase.auth.signOut()
+  localStorage.removeItem('sv_user_nombre')
+  localStorage.removeItem('sv_user_rol')
+  localStorage.removeItem('sv_user_username')
+  localStorage.removeItem('sv_user_id')
+  document.getElementById('card-sesion').style.display = 'none'
+  document.getElementById('card-login').style.display = 'block'
+  document.getElementById('username').value = ''
+  document.getElementById('password').value = ''
+  document.getElementById('username').focus()
+}
+
+function mostrarError(msg){
+  var box = document.getElementById('error-msg')
+  document.getElementById('error-txt').textContent = msg
+  box.classList.remove('hidden')
+  document.getElementById('success-msg').classList.add('hidden')
+  document.getElementById('username').classList.add('error')
+  document.getElementById('password').classList.add('error')
+}
+
+function limpiarError(){
+  document.getElementById('error-msg').classList.add('hidden')
+  document.getElementById('username').classList.remove('error')
+  document.getElementById('password').classList.remove('error')
+}
+
+function mostrarExito(msg){
+  var box = document.getElementById('success-msg')
+  document.getElementById('success-txt').textContent = msg
+  box.classList.remove('hidden')
+  document.getElementById('error-msg').classList.add('hidden')
+}
+
+function setLoading(loading){
+  var btn = document.getElementById('btn-login')
+  var txt = document.getElementById('btn-text')
+  btn.disabled = loading
+  document.getElementById('username').disabled = loading
+  document.getElementById('password').disabled = loading
+  if(loading){
+    txt.innerHTML = '<span class="spinner"></span> Verificando...'
+  } else {
+    txt.textContent = 'Ingresar'
+  }
+}
+
+async function redirigirPorRol(userId){
+  try {
+    var {data:{session}} = await supabase.auth.getSession()
+    if(!session){
+      mostrarError('Sesión expirada')
+      setLoading(false)
+      return
+    }
+    
+    // Buscar el perfil del usuario para saber su rol
+    var r = await fetch(SB_URL + '/rest/v1/user_profiles?user_id=eq.' + userId + '&select=nombre,rol,username,activo', {
+      headers: {
+        'apikey': SB_KEY,
+        'Authorization': 'Bearer ' + session.access_token
+      }
+    })
+    
+    if(!r.ok){
+      var errTxt = await r.text()
+      console.error('Error perfil:', errTxt)
+      mostrarError('Error obteniendo perfil. Contacta a Angel.')
+      setLoading(false)
+      await supabase.auth.signOut()
+      return
+    }
+    
+    var perfiles = await r.json()
+    if(!perfiles || perfiles.length === 0){
+      mostrarError('Tu cuenta no tiene perfil configurado. Contacta a Angel.')
+      setLoading(false)
+      await supabase.auth.signOut()
+      return
+    }
+    
+    var perfil = perfiles[0]
+    
+    if(!perfil.activo){
+      mostrarError('Tu cuenta está desactivada.')
+      setLoading(false)
+      await supabase.auth.signOut()
+      return
+    }
+    
+    // Guardar info en localStorage para acceso rápido en otros módulos
+    localStorage.setItem('sv_user_nombre', perfil.nombre)
+    localStorage.setItem('sv_user_rol', perfil.rol)
+    localStorage.setItem('sv_user_username', perfil.username)
+    localStorage.setItem('sv_user_id', userId)
+    
+    mostrarExito('¡Bienvenido/a ' + perfil.nombre.split(' ')[0] + '! Redirigiendo...')
+    
+    // Redirigir según rol
+    setTimeout(function(){
+      if(perfil.rol === 'coord_junior'){
+        window.location.href = 'menu-coord-jr.html'
+      } else {
+        window.location.href = 'menu-coordinador.html'
+      }
+    }, 800)
+    
+  } catch(e){
+    console.error('Error en redirect:', e)
+    mostrarError('Error inesperado. Recarga la página e intenta de nuevo.')
+    setLoading(false)
+  }
+}
+
+async function login(){
+  limpiarError()
+  
+  var username = document.getElementById('username').value.trim().toLowerCase()
+  var password = document.getElementById('password').value
+  
+  if(!username){
+    mostrarError('Ingresa tu usuario')
+    document.getElementById('username').focus()
+    return
+  }
+  
+  if(!password){
+    mostrarError('Ingresa tu contraseña')
+    document.getElementById('password').focus()
+    return
+  }
+  
+  // Limpiar username: solo caracteres válidos
+  username = username.replace(/[^a-z0-9_]/g, '')
+  var email = username + '@serviruta.local'
+  
+  setLoading(true)
+  
+  try {
+    var {data, error} = await supabase.auth.signInWithPassword({
+      email: email,
+      password: password
+    })
+    
+    if(error){
+      console.error('Login error:', error)
+      if(error.message.indexOf('Invalid') >= 0 || error.message.indexOf('credentials') >= 0){
+        mostrarError('Usuario o contraseña incorrectos')
+      } else if(error.message.indexOf('confirm') >= 0){
+        mostrarError('Cuenta no confirmada. Contacta a Angel.')
+      } else {
+        mostrarError('Error: ' + error.message)
+      }
+      setLoading(false)
+      return
+    }
+    
+    if(!data.user){
+      mostrarError('No se pudo iniciar sesión')
+      setLoading(false)
+      return
+    }
+    
+    // Login OK → redirigir por rol
+    await redirigirPorRol(data.user.id)
+    
+  } catch(e){
+    console.error('Excepción login:', e)
+    mostrarError('Error inesperado. Intenta de nuevo.')
+    setLoading(false)
+  }
+}
+
+// Enter key = submit
+document.getElementById('password').addEventListener('keydown', function(e){
+  if(e.key === 'Enter') login()
+})
+document.getElementById('username').addEventListener('keydown', function(e){
+  if(e.key === 'Enter') document.getElementById('password').focus()
+})
+
+// Al cargar, checar si ya hay sesión
+checarSesion()
+</script>
 
 </body>
 </html>

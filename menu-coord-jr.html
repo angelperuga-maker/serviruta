@@ -4,15 +4,48 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Hub Junior · Serviruta</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-// GUARD DE ACCESO: si no hay sesión, redirigir al login
-(function(){
+// GUARD: verificar sesión real y sincronizar rol
+(async function(){
   try {
-    var rol = localStorage.getItem('sv_user_rol');
-    if(!rol){
+    var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co';
+    var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s';
+    var sb = window.supabase.createClient(SB_URL, SB_KEY);
+    var {data:{session}} = await sb.auth.getSession();
+    
+    // Sin sesión → al login
+    if(!session){
+      localStorage.removeItem('sv_user_nombre');
+      localStorage.removeItem('sv_user_rol');
+      localStorage.removeItem('sv_user_username');
+      localStorage.removeItem('sv_user_id');
       window.location.replace('login.html');
+      return;
     }
-  } catch(e){}
+    
+    // Verificar rol real desde la BD
+    var r = await fetch(SB_URL + '/rest/v1/user_profiles?user_id=eq.' + session.user.id + '&select=nombre,rol,username', {
+      headers: {'apikey': SB_KEY, 'Authorization': 'Bearer ' + session.access_token}
+    });
+    if(r.ok){
+      var perfiles = await r.json();
+      if(perfiles && perfiles[0]){
+        var rolReal = perfiles[0].rol;
+        localStorage.setItem('sv_user_nombre', perfiles[0].nombre);
+        localStorage.setItem('sv_user_rol', rolReal);
+        localStorage.setItem('sv_user_username', perfiles[0].username);
+        localStorage.setItem('sv_user_id', session.user.id);
+        
+        // Si es owner o senior → mandar al hub principal (no debería estar aquí)
+        if(rolReal === 'owner' || rolReal === 'coord_senior'){
+          window.location.replace('menu-coordinador.html');
+        }
+      }
+    }
+  } catch(e){
+    console.error('Guard error:', e);
+  }
 })();
 </script>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Instrument+Serif&display=swap" rel="stylesheet">

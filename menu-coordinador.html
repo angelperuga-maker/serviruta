@@ -4,15 +4,49 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Hub Coordinador · Serviruta</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-// GUARD DE ROL: si es junior, redirigir al hub jr antes de renderizar
-(function(){
+// GUARD DE ROL con verificación de sesión real de Supabase
+(async function(){
   try {
-    var rol = localStorage.getItem('sv_user_rol');
-    if(rol === 'coord_junior'){
-      window.location.replace('menu-coord-jr.html');
+    var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co';
+    var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s';
+    var sb = window.supabase.createClient(SB_URL, SB_KEY);
+    var {data:{session}} = await sb.auth.getSession();
+    
+    // Si NO hay sesión activa → limpiar localStorage residual
+    if(!session){
+      localStorage.removeItem('sv_user_nombre');
+      localStorage.removeItem('sv_user_rol');
+      localStorage.removeItem('sv_user_username');
+      localStorage.removeItem('sv_user_id');
+      // Permitir acceso sin sesión por ahora (retrocompat)
+      return;
     }
-  } catch(e){}
+    
+    // Si hay sesión, verificar el rol REAL desde la BD
+    var r = await fetch(SB_URL + '/rest/v1/user_profiles?user_id=eq.' + session.user.id + '&select=nombre,rol,username', {
+      headers: {'apikey': SB_KEY, 'Authorization': 'Bearer ' + session.access_token}
+    });
+    if(r.ok){
+      var perfiles = await r.json();
+      if(perfiles && perfiles[0]){
+        var rolReal = perfiles[0].rol;
+        // Actualizar localStorage con el valor real (por si cambió)
+        localStorage.setItem('sv_user_nombre', perfiles[0].nombre);
+        localStorage.setItem('sv_user_rol', rolReal);
+        localStorage.setItem('sv_user_username', perfiles[0].username);
+        localStorage.setItem('sv_user_id', session.user.id);
+        
+        // Redirigir si es junior
+        if(rolReal === 'coord_junior'){
+          window.location.replace('menu-coord-jr.html');
+        }
+      }
+    }
+  } catch(e){
+    console.error('Guard error:', e);
+  }
 })();
 </script>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">

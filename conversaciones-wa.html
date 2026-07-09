@@ -84,6 +84,8 @@ input:focus{outline:none;border-color:var(--dorado)}
 .badge.coty{background:rgba(34,197,94,0.15);color:var(--verde)}
 .badge.humano{background:rgba(245,197,24,0.15);color:var(--amarillo)}
 .badge.crm{background:rgba(212,175,55,0.15);color:var(--dorado)}
+.badge.badge-link{text-decoration:none;cursor:pointer;transition:all 150ms}
+.badge.badge-link:hover{background:var(--dorado);color:#000;transform:scale(1.05)}
 
 /* Panel de detalle */
 .detalle-wrap{background:var(--s1);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column;min-height:0}
@@ -346,7 +348,9 @@ function renderLista(){
     html += '<span class="badge ' + agente + '">' + agente.toUpperCase() + '</span>'
     html += '<span class="badge-cat ' + cat + '">' + catEmoji + ' ' + cat.toUpperCase() + '</span>'
     html += '<span class="badge-canal ' + canal + '">' + canal.toUpperCase() + '</span>'
-    if(isCliente) html += '<span class="badge crm">CRM</span>'
+    if(isCliente){
+      html += '<a class="badge crm badge-link" href="clientes-crm.html?tel=' + (c.telefono||'') + '" target="_blank" onclick="event.stopPropagation()" title="Ver ficha del cliente en CRM">🗂 CRM</a>'
+    }
     html += '</div>'
     html += '</div>'
   })

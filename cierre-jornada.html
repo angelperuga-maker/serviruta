@@ -100,7 +100,7 @@ select{cursor:pointer}
 <body>
 
 <header class="bar">
-  <button class="back" onclick="location.href='menu-coordinador.html'">← Volver</button>
+  <button class="back" onclick="location.href=(localStorage.getItem('sv_user_rol')==='coord_junior'?'menu-coord-jr.html':'menu-coordinador.html')">← Volver</button>
   <div class="sigil">S</div>
   <div class="title">Cierre de Jornada<small>Asignación de técnicos</small></div>
 </header>

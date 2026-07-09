@@ -4,665 +4,644 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Agenda · Serviruta</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0A0A0D;--s1:#111114;--s2:#16161B;--s3:#1C1C23;--line:#26262E;--rojo:#E8210A;--rojo-l:#FF4D2E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--naranja:#FB923C;--t1:#F6F4EF;--t2:#C7C5BF;--t3:#8B8990;--t4:#56555C;--display:'Syne',sans-serif;--body:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace}
+:root{--bg:#0A0A0D;--s1:#111114;--s2:#16161B;--s3:#1C1C23;--line:#26262E;--rojo:#E8210A;--rojo-l:#FF4D2E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--violeta:#A78BFA;--dorado:#D4AF37;--naranja:#F97316;--t1:#F6F4EF;--t2:#C7C5BF;--t3:#8B8990;--display:'Syne',sans-serif;--body:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace}
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--t2);font-family:var(--body);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100vh}
-a{color:inherit;text-decoration:none}
-button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
-input,select,textarea{font-family:inherit;font-size:14px}
-.bar{position:sticky;top:0;z-index:50;background:rgba(10,10,13,0.85);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;align-items:center;gap:12px}
-.back{font-family:var(--mono);font-size:11px;color:var(--t3);padding:6px 10px;border:1px solid var(--line);border-radius:6px}
-.title{font-family:var(--display);font-weight:800;font-size:15px;color:var(--t1);flex:1}
-.sigil{width:32px;height:32px;background:var(--rojo);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:14px;color:#fff}
-.shell{max-width:900px;margin:0 auto;padding:20px 16px 80px}
+body{background:var(--bg);color:var(--t2);font-family:var(--body);font-size:14px;line-height:1.5;min-height:100vh;padding-bottom:80px}
+button,input,select,textarea{border:none;background:none;color:inherit;font-family:inherit;font-size:14px}
+input,select,textarea{background:var(--s2);border:1px solid var(--line);border-radius:8px;padding:9px 12px;color:var(--t1);width:100%}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--dorado)}
 
-/* Date picker */
-.fecha-bar{background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;align-items:center;gap:12px;margin-bottom:20px}
-.fecha-nav{width:36px;height:36px;border:1px solid var(--line);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--t1);font-size:18px}
-.fecha-nav:hover{background:var(--s2);border-color:var(--rojo)}
-.fecha-info{flex:1;text-align:center}
-.fecha-dia{font-family:var(--display);font-weight:800;font-size:18px;color:var(--t1)}
-.fecha-sub{font-family:var(--mono);font-size:11px;color:var(--t3);letter-spacing:0.05em;margin-top:2px}
-.fecha-hoy{font-family:var(--mono);font-size:10px;background:var(--rojo);color:#fff;padding:4px 10px;border-radius:999px;letter-spacing:0.1em;font-weight:700}
+.bar{position:sticky;top:0;z-index:50;background:rgba(10,10,13,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;align-items:center;gap:10px}
+.back{font-family:var(--mono);font-size:10px;color:var(--t3);padding:6px 10px;border:1px solid var(--line);border-radius:6px;cursor:pointer}
+.sigil{width:34px;height:34px;background:linear-gradient(135deg,var(--rojo),var(--dorado));border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:14px;color:#000}
+.title{font-family:var(--display);font-weight:800;font-size:14px;color:var(--t1);flex:1;line-height:1.1}
+.title small{display:block;font-family:var(--mono);font-size:9px;color:var(--dorado);letter-spacing:0.15em;margin-top:2px;font-weight:700}
+.btn-add{padding:8px 14px;background:var(--dorado);color:#000;border-radius:8px;font-family:var(--display);font-weight:800;font-size:11px;cursor:pointer;letter-spacing:0.05em}
 
-/* Eventos */
-.dia-resumen{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding:0 4px}
-.cuenta{font-family:var(--display);font-weight:700;font-size:13px;color:var(--t1)}
-.cuenta b{color:var(--rojo-l)}
-.btn-nuevo{background:var(--rojo);color:#fff;border-radius:10px;padding:10px 18px;font-family:var(--display);font-weight:800;font-size:12px;letter-spacing:0.05em;display:flex;align-items:center;gap:6px;min-height:42px}
-.btn-nuevo:hover{background:var(--rojo-l)}
+.controls{background:var(--s1);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;flex-direction:column;gap:10px}
+.vista-tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.vista-tabs::-webkit-scrollbar{display:none}
+.tab{padding:8px 14px;background:var(--s2);border:1px solid var(--line);border-radius:10px;font-family:var(--mono);font-size:11px;color:var(--t2);cursor:pointer;font-weight:700;letter-spacing:0.05em;white-space:nowrap}
+.tab:hover{color:var(--t1)}
+.tab.active{background:var(--dorado);color:#000;border-color:var(--dorado)}
 
-.eventos{display:flex;flex-direction:column;gap:10px}
-.evento{background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:14px;display:grid;grid-template-columns:70px 1fr auto;gap:14px;align-items:center;transition:all 120ms}
-.evento:hover{background:var(--s2);border-color:var(--rojo);cursor:pointer}
-.hora{font-family:var(--mono);font-weight:700;font-size:18px;color:var(--t1);text-align:center}
-.hora-est{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;margin-top:2px}
-.evento-body{min-width:0}
-.evento-cliente{font-family:var(--display);font-weight:700;font-size:14px;color:var(--t1);margin-bottom:2px}
-.evento-meta{font-size:12px;color:var(--t3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.evento-tag{display:inline-block;font-family:var(--mono);font-size:9px;padding:2px 8px;border-radius:999px;letter-spacing:0.1em;text-transform:uppercase;font-weight:700;margin-right:6px}
-.tag-agendado{background:rgba(96,165,250,0.15);color:var(--azul)}
-.tag-confirmado{background:rgba(34,197,94,0.15);color:var(--verde)}
-.tag-en-ruta{background:rgba(251,146,60,0.15);color:var(--naranja)}
-.tag-completado{background:rgba(167,139,250,0.15);color:#A78BFA}
-.tag-cancelado{background:rgba(232,33,10,0.15);color:var(--rojo-l)}
-.estado-icon{width:32px;height:32px;border-radius:8px;background:var(--s3);display:flex;align-items:center;justify-content:center;font-size:14px}
+.rango-nav{display:flex;align-items:center;gap:8px;justify-content:space-between;flex-wrap:wrap}
+.rango-btns{display:flex;gap:6px}
+.rango-btn{padding:6px 10px;background:var(--s2);border:1px solid var(--line);border-radius:6px;font-family:var(--mono);font-size:10px;color:var(--t2);cursor:pointer;font-weight:700}
+.rango-btn:hover{color:var(--t1)}
+.rango-btn.hoy{background:rgba(212,175,55,0.15);color:var(--dorado);border-color:var(--dorado)}
+.rango-fecha{font-family:var(--display);font-weight:800;font-size:16px;color:var(--t1);letter-spacing:-0.3px;text-align:center}
+.rango-fecha small{display:block;font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;font-weight:700;margin-top:1px}
 
-.empty{text-align:center;padding:60px 20px;color:var(--t3)}
-.empty-ico{font-size:48px;margin-bottom:12px;opacity:0.3}
-.empty-titulo{font-family:var(--display);font-weight:700;font-size:16px;color:var(--t1);margin-bottom:6px}
+.tec-filter{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.tec-filter::-webkit-scrollbar{display:none}
+.chip-tec{padding:6px 12px;background:var(--s2);border:1px solid var(--line);border-radius:8px;font-family:var(--mono);font-size:10px;color:var(--t2);cursor:pointer;font-weight:700;letter-spacing:0.05em;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.chip-tec:hover{color:var(--t1)}
+.chip-tec.active{background:var(--dorado);color:#000;border-color:var(--dorado)}
+.tec-dot{width:8px;height:8px;border-radius:50%}
 
-/* Modal */
-.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:none;align-items:flex-end;justify-content:center;z-index:100;padding:0}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:12px 16px;background:var(--s1);border-bottom:1px solid var(--line)}
+.kpi{background:var(--s2);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.kpi-lbl{font-family:var(--mono);font-size:8px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;font-weight:700}
+.kpi-val{font-family:var(--display);font-weight:900;font-size:20px;color:var(--t1);margin-top:2px;line-height:1}
+.kpi.urg .kpi-val{color:var(--rojo-l)}
+.kpi.pend .kpi-val{color:var(--amarillo)}
+.kpi.asig .kpi-val{color:var(--verde)}
+.kpi.comp .kpi-val{color:var(--azul)}
+
+.shell{max-width:1400px;margin:0 auto;padding:14px 16px}
+
+.carriles{display:grid;gap:10px}
+.carril{background:var(--s1);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.carril-hdr{background:var(--s2);padding:10px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line)}
+.carril-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--dorado),var(--rojo));display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:900;color:#000;font-size:12px}
+.carril-nom{font-family:var(--display);font-weight:800;font-size:14px;color:var(--t1);flex:1}
+.carril-count{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.05em;font-weight:700}
+.carril-body{padding:10px}
+.carril-body.vacio{padding:20px;text-align:center;color:var(--t3);font-size:12px;font-style:italic}
+
+.evento{background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:8px;display:grid;grid-template-columns:auto 1fr auto;gap:12px;cursor:pointer;transition:border-color 200ms;border-left:3px solid var(--verde)}
+.evento:hover{border-color:var(--dorado)}
+.evento.urgente{border-left-color:var(--rojo)}
+.evento.solicitada{border-left-color:var(--amarillo)}
+.evento.completado{border-left-color:var(--azul);opacity:0.75}
+.evento.reagendar{border-left-color:var(--naranja)}
+.evento.cancelado{border-left-color:var(--t3);opacity:0.5}
+.evento.sin-tec{border-left-color:var(--amarillo)}
+.ev-hora{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--t1);letter-spacing:0.05em}
+.ev-hora small{display:block;font-size:8px;color:var(--t3);font-weight:700;margin-top:2px;letter-spacing:0.1em}
+.ev-body{min-width:0}
+.ev-cliente{color:var(--t1);font-weight:700;font-size:13px;margin-bottom:2px}
+.ev-servicio{color:var(--t2);font-size:11px;margin-bottom:4px;line-height:1.4}
+.ev-meta{display:flex;gap:8px;font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.05em;flex-wrap:wrap}
+.ev-badge{font-family:var(--mono);font-size:7px;padding:1px 5px;border-radius:3px;font-weight:700;letter-spacing:0.05em;display:inline-block;margin-left:4px}
+.ev-badge.urg{background:rgba(232,33,10,0.2);color:var(--rojo-l)}
+.ev-badge.bot{background:rgba(212,175,55,0.15);color:var(--dorado)}
+.ev-badge.est{background:var(--s3);color:var(--t2)}
+.ev-actions{display:flex;flex-direction:column;gap:4px;align-items:flex-end;min-width:120px}
+.ev-btn{padding:4px 8px;background:var(--s3);border:1px solid var(--line);border-radius:5px;font-family:var(--mono);font-size:9px;color:var(--t2);cursor:pointer;font-weight:700;white-space:nowrap;letter-spacing:0.05em}
+.ev-btn.chat{background:rgba(34,197,94,0.1);border-color:rgba(34,197,94,0.35);color:var(--verde)}
+.ev-assign{width:100%;padding:5px 8px;background:var(--s3);border:1px solid var(--line);border-radius:5px;font-family:var(--mono);font-size:9px;color:var(--t1);cursor:pointer;font-weight:700;letter-spacing:0.05em}
+.ev-assign.sin-tec{background:rgba(245,197,24,0.15);border-color:rgba(245,197,24,0.4);color:var(--amarillo)}
+.ev-assign:hover{border-color:var(--dorado)}
+.ev-assign:focus{outline:none;border-color:var(--dorado)}
+.ev-estado-quick{display:flex;gap:2px;flex-wrap:wrap;margin-top:2px}
+.ev-est-btn{padding:2px 6px;background:var(--s3);border:1px solid var(--line);border-radius:4px;font-family:var(--mono);font-size:8px;color:var(--t3);cursor:pointer;font-weight:700;letter-spacing:0.05em}
+.ev-est-btn:hover{color:var(--t1);border-color:var(--dorado)}
+.ev-est-btn.active-est{background:var(--verde);color:#000;border-color:var(--verde)}
+
+.semana{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.dia{background:var(--s1);border:1px solid var(--line);border-radius:12px;overflow:hidden;min-height:200px}
+.dia.hoy{border-color:var(--dorado);box-shadow:0 0 0 1px var(--dorado)}
+.dia-hdr{background:var(--s2);padding:8px 10px;border-bottom:1px solid var(--line);text-align:center}
+.dia-hdr .dia-lbl{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;font-weight:700}
+.dia-hdr .dia-num{font-family:var(--display);font-weight:900;font-size:20px;color:var(--t1);letter-spacing:-0.5px;line-height:1;margin-top:1px}
+.dia.hoy .dia-hdr .dia-num{color:var(--dorado)}
+.dia-body{padding:6px;max-height:400px;overflow-y:auto}
+.dia-body.vacio{padding:16px 8px;text-align:center;color:var(--t3);font-size:10px;font-style:italic}
+.mini-ev{background:var(--s2);border-radius:6px;padding:6px 8px;margin-bottom:4px;font-size:11px;cursor:pointer;border-left:3px solid var(--verde)}
+.mini-ev.urgente{border-left-color:var(--rojo)}
+.mini-ev.solicitada{border-left-color:var(--amarillo)}
+.mini-ev.completado{border-left-color:var(--azul);opacity:0.7}
+.mini-hora{font-family:var(--mono);font-size:9px;color:var(--dorado);font-weight:700;letter-spacing:0.05em}
+.mini-cli{font-weight:700;color:var(--t1);font-size:11px;margin:2px 0;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mini-tec{font-family:var(--mono);font-size:8px;color:var(--t3);letter-spacing:0.05em}
+
+.tec-semana{background:var(--s1);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:14px}
+.tec-hdr{background:linear-gradient(135deg,var(--s2),var(--s1));padding:14px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px}
+.tec-avatar-lg{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--dorado),var(--rojo));display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:900;color:#000;font-size:16px}
+.tec-info{flex:1}
+.tec-nom-lg{font-family:var(--display);font-weight:800;font-size:16px;color:var(--t1);letter-spacing:-0.3px}
+.tec-stats{font-family:var(--mono);font-size:10px;color:var(--t3);margin-top:2px;letter-spacing:0.05em}
+.tec-dias{display:grid;grid-template-columns:100px 1fr;border-bottom:1px solid var(--line)}
+.tec-dias:last-child{border-bottom:none}
+.tec-dia-lbl{background:var(--s2);padding:12px 14px;font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.1em;font-weight:700;text-transform:uppercase;border-right:1px solid var(--line);display:flex;flex-direction:column;justify-content:center}
+.tec-dia-lbl.hoy{color:var(--dorado)}
+.tec-dia-lbl .fecha{font-family:var(--display);font-weight:900;font-size:18px;color:var(--t1);margin-top:2px}
+.tec-dia-lbl.hoy .fecha{color:var(--dorado)}
+.tec-dia-content{padding:10px 12px}
+.tec-dia-content.vacio{padding:14px;color:var(--t3);font-style:italic;font-size:11px}
+
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:none;align-items:center;justify-content:center;padding:16px;z-index:200;backdrop-filter:blur(6px)}
 .modal-bg.open{display:flex}
-.modal{background:var(--s1);border:1px solid var(--line);border-radius:18px 18px 0 0;padding:20px;width:100%;max-width:600px;max-height:90vh;overflow-y:auto}
-@media(min-width:640px){.modal-bg{align-items:center;padding:20px}.modal{border-radius:18px}}
-.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;padding-bottom:12px;border-bottom:1px solid var(--line)}
-.modal-titulo{font-family:var(--display);font-weight:800;font-size:18px;color:var(--t1)}
-.modal-close{width:32px;height:32px;border-radius:50%;background:var(--s3);display:flex;align-items:center;justify-content:center;color:var(--t2)}
-.modal-close:hover{background:var(--rojo);color:#fff}
+.modal{background:var(--s1);border:1px solid var(--line);border-radius:16px;max-width:640px;width:100%;max-height:90vh;overflow-y:auto;padding:24px}
+.modal-tit{font-family:var(--display);font-weight:900;font-size:18px;color:var(--t1);margin-bottom:16px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.form-full{grid-column:1/-1}
+.form-lbl{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.1em;font-weight:700;margin-bottom:4px;display:block;text-transform:uppercase}
+.form-actions{display:flex;gap:8px;margin-top:16px;justify-content:flex-end;flex-wrap:wrap}
+.btn-cancel{padding:10px 18px;background:var(--s2);border:1px solid var(--line);border-radius:8px;font-family:var(--mono);font-size:11px;cursor:pointer;color:var(--t2);font-weight:700}
+.btn-save{padding:10px 20px;background:var(--dorado);color:#000;border-radius:8px;font-family:var(--display);font-weight:800;font-size:12px;cursor:pointer;letter-spacing:0.05em}
+.btn-del{padding:10px 18px;background:rgba(232,33,10,0.1);border:1px solid rgba(232,33,10,0.35);border-radius:8px;font-family:var(--mono);font-size:11px;cursor:pointer;color:var(--rojo-l);font-weight:700;margin-right:auto}
 
-.field{margin-bottom:14px}
-.field label{display:block;font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.1em;margin-bottom:6px;text-transform:uppercase;font-weight:700}
-.field input,.field select,.field textarea{width:100%;background:var(--s2);border:1px solid var(--line);border-radius:8px;padding:11px 14px;color:var(--t1);font-size:14px;transition:border 120ms}
-.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--rojo)}
-.field textarea{min-height:60px;resize:vertical;font-family:inherit}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-
-.tec-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
-.tec-chip{background:var(--s2);border:1px solid var(--line);border-radius:8px;padding:10px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:all 120ms;min-height:48px}
-.tec-chip:hover{border-color:var(--line)}
-.tec-chip.selected{background:rgba(232,33,10,0.12);border-color:var(--rojo)}
-.tec-chip input{display:none}
-.tec-chip-dot{width:10px;height:10px;border-radius:50%;background:var(--t4);flex-shrink:0}
-.tec-chip.selected .tec-chip-dot{background:var(--rojo)}
-.tec-chip-nombre{font-size:12px;color:var(--t1);font-weight:600}
-
-.btn-guardar{width:100%;background:var(--rojo);color:#fff;border-radius:10px;padding:14px;font-family:var(--display);font-weight:800;font-size:14px;letter-spacing:0.05em;margin-top:8px;min-height:50px}
-.btn-guardar:hover{background:var(--rojo-l)}
-.btn-guardar:disabled{opacity:0.5;cursor:not-allowed}
-.btn-secondary{width:100%;background:transparent;border:1px solid var(--line);color:var(--t2);border-radius:10px;padding:12px;font-size:13px;margin-top:10px}
-.btn-secondary:hover{border-color:var(--rojo);color:var(--rojo-l)}
-
-.diag{background:var(--s3);border:1px solid var(--line);border-radius:8px;padding:10px 14px;font-family:var(--mono);font-size:10px;color:var(--t3);margin-top:12px;display:none}
-.diag.show{display:block}
-.diag.error{border-color:var(--rojo);background:rgba(232,33,10,0.08);color:var(--rojo-l)}
-.diag.ok{border-color:var(--verde);background:rgba(34,197,94,0.08);color:var(--verde)}
-
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:14px 20px;font-size:13px;font-weight:600;color:var(--t1);opacity:0;transition:all 250ms;pointer-events:none;z-index:200;max-width:90%;box-shadow:0 8px 24px rgba(0,0,0,0.4)}
+.toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-20px);background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:10px 16px;font-size:12px;color:var(--t1);opacity:0;transition:all 300ms;pointer-events:none;z-index:300}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .toast.ok{border-color:var(--verde);color:var(--verde)}
-.toast.err{border-color:var(--rojo);color:var(--rojo-l);background:rgba(232,33,10,0.1)}
-.toast.warn{border-color:var(--amarillo);color:var(--amarillo)}
+.toast.err{border-color:var(--rojo);color:var(--rojo-l)}
 
-.fab{position:fixed;bottom:24px;right:24px;width:56px;height:56px;background:var(--rojo);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:28px;font-weight:300;box-shadow:0 4px 20px rgba(232,33,10,0.4);z-index:40;cursor:pointer;border:none}
-.fab:hover{background:var(--rojo-l);transform:scale(1.05)}
+.loader{padding:40px 20px;text-align:center;color:var(--t3);font-family:var(--mono);font-size:11px}
+.loader::before{content:"◐";display:inline-block;animation:spin 1s linear infinite;margin-right:6px;font-size:16px}
+@keyframes spin{100%{transform:rotate(360deg)}}
+
+@media(max-width:900px){
+  .semana{grid-template-columns:repeat(3,1fr)}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:640px){
+  .semana{grid-template-columns:1fr}
+  .form-grid{grid-template-columns:1fr}
+  .tec-dias{grid-template-columns:80px 1fr}
+}
 </style>
 </head>
 <body>
 
 <header class="bar">
-  <button class="back" onclick="history.back()">← Volver</button>
-  <div class="sigil">S</div>
-  <div class="title" id="page-title">Agenda</div>
+  <button class="back" onclick="location.href='menu-coordinador.html'">← Volver</button>
+  <div class="sigil">📅</div>
+  <div class="title">Agenda<small>SERVIRUTA</small></div>
+  <button class="btn-add" onclick="abrirNuevo()">+ Nuevo</button>
 </header>
 
-<div class="shell">
-
-  <!-- Selector de fecha -->
-  <div class="fecha-bar">
-    <button class="fecha-nav" onclick="cambiarDia(-1)">‹</button>
-    <div class="fecha-info">
-      <div class="fecha-dia" id="fecha-dia">—</div>
-      <div class="fecha-sub" id="fecha-sub">—</div>
+<div class="controls">
+  <div class="vista-tabs">
+    <button class="tab active" data-vista="dia" onclick="cambiarVista('dia')">📆 Por día (carriles técnicos)</button>
+    <button class="tab" data-vista="semana" onclick="cambiarVista('semana')">📅 Semana completa</button>
+    <button class="tab" data-vista="tecnico" onclick="cambiarVista('tecnico')">🔧 Por técnico (semana)</button>
+  </div>
+  
+  <div class="rango-nav">
+    <div class="rango-btns">
+      <button class="rango-btn" onclick="navFecha(-1)">← Ayer</button>
+      <button class="rango-btn hoy" onclick="irHoy()">Hoy</button>
+      <button class="rango-btn" onclick="navFecha(1)">Mañana →</button>
     </div>
-    <button class="fecha-nav" onclick="cambiarDia(1)">›</button>
+    <div class="rango-fecha" id="rango-lbl">Cargando...</div>
+    <div class="rango-btns">
+      <button class="rango-btn" onclick="navSemana(-1)">← Semana</button>
+      <button class="rango-btn" onclick="navSemana(1)">Semana →</button>
+    </div>
   </div>
-
-  <!-- Resumen + Botón nuevo -->
-  <div class="dia-resumen">
-    <div class="cuenta"><b id="num-eventos">0</b> servicios <span id="cuenta-sub">agendados</span></div>
-    <button class="btn-nuevo" id="btn-nuevo" onclick="abrirNuevo()">+ Nuevo</button>
-  </div>
-
-  <!-- Lista de eventos -->
-  <div class="eventos" id="eventos"></div>
-
+  
+  <div class="tec-filter" id="tec-filter"></div>
 </div>
 
-<!-- Botón flotante para móvil -->
-<button class="fab" onclick="abrirNuevo()" title="Nuevo evento">+</button>
+<div class="kpis">
+  <div class="kpi urg"><div class="kpi-lbl">🚨 Urgentes</div><div class="kpi-val" id="k-urg">0</div></div>
+  <div class="kpi pend"><div class="kpi-lbl">⏳ Sin Asignar</div><div class="kpi-val" id="k-pend">0</div></div>
+  <div class="kpi asig"><div class="kpi-lbl">✅ Asignados</div><div class="kpi-val" id="k-asig">0</div></div>
+  <div class="kpi comp"><div class="kpi-lbl">📊 Total</div><div class="kpi-val" id="k-tot">0</div></div>
+</div>
 
-<!-- Modal nuevo evento -->
-<div class="modal-bg" id="modal" onclick="if(event.target===this)cerrarModal()">
+<div class="shell" id="contenido">
+  <div class="loader">Cargando agenda...</div>
+</div>
+
+<div class="modal-bg" id="modal-bg" onclick="if(event.target.id==='modal-bg')cerrarModal()">
   <div class="modal">
-    <div class="modal-head">
-      <div class="modal-titulo">Nuevo agendamiento</div>
-      <button class="modal-close" onclick="cerrarModal()">×</button>
-    </div>
-
-    <div class="row">
-      <div class="field">
-        <label>Fecha *</label>
-        <input type="date" id="f-fecha">
+    <div class="modal-tit" id="modal-tit">Nuevo evento</div>
+    <div class="form-grid">
+      <div class="form-full"><label class="form-lbl">Cliente *</label><input id="f-cliente"></div>
+      <div><label class="form-lbl">Teléfono</label><input id="f-tel"></div>
+      <div><label class="form-lbl">Vehículo</label><input id="f-veh"></div>
+      <div><label class="form-lbl">Fecha *</label><input type="date" id="f-fecha"></div>
+      <div><label class="form-lbl">Hora *</label><input type="time" id="f-hora" value="10:00"></div>
+      <div class="form-full"><label class="form-lbl">Servicio *</label><input id="f-servicio"></div>
+      <div><label class="form-lbl">Estado</label>
+        <select id="f-estado">
+          <option value="solicitada">Solicitada</option>
+          <option value="agendado">Agendado</option>
+          <option value="confirmado">Confirmado</option>
+          <option value="en-ruta">En Ruta</option>
+          <option value="completado">Completado</option>
+          <option value="reagendar">Reagendar</option>
+          <option value="cancelado">Cancelado</option>
+        </select>
       </div>
-      <div class="field">
-        <label>Hora *</label>
-        <input type="time" id="f-hora" value="09:00">
+      <div><label class="form-lbl">Urgencia</label>
+        <select id="f-urg"><option value="normal">Normal</option><option value="urgente">🔥 Urgente</option></select>
       </div>
-    </div>
-
-    <div class="field">
-      <label>Técnicos asignados *</label>
-      <div class="tec-grid" id="tec-grid"></div>
-    </div>
-
-    <div class="field">
-      <label>Cliente *</label>
-      <input type="text" id="f-cliente" placeholder="Nombre del cliente">
-    </div>
-
-    <div class="row">
-      <div class="field">
-        <label>Teléfono</label>
-        <input type="tel" id="f-tel" placeholder="+56 9 ...">
+      <div class="form-full"><label class="form-lbl">Técnico</label>
+        <select id="f-tecnico"><option value="POR ASIGNAR">⚠️ Sin asignar</option></select>
       </div>
-      <div class="field">
-        <label>Vehículo</label>
-        <input type="text" id="f-vehiculo" placeholder="Marca / patente">
-      </div>
+      <div class="form-full"><label class="form-lbl">Dirección</label><input id="f-direccion"></div>
+      <div class="form-full"><label class="form-lbl">Notas</label><textarea id="f-notas" rows="2"></textarea></div>
     </div>
-
-    <div class="field">
-      <label>Servicio</label>
-      <input type="text" id="f-servicio" placeholder="Ej: cambio embrague, frenos, etc.">
+    <div class="form-actions">
+      <button class="btn-del" id="btn-del" style="display:none" onclick="eliminarEvento()">🗑 Eliminar</button>
+      <button class="btn-cancel" onclick="cerrarModal()">Cancelar</button>
+      <button class="btn-save" onclick="guardar()">💾 Guardar</button>
     </div>
-
-    <div class="field">
-      <label>Dirección</label>
-      <input type="text" id="f-direccion" placeholder="Comuna / dirección de visita">
-    </div>
-
-    <div class="field">
-      <label>Notas (opcional)</label>
-      <textarea id="f-notas" placeholder="Observaciones..."></textarea>
-    </div>
-
-    <button class="btn-guardar" id="btn-g" onclick="guardar()">Agendar servicio</button>
-    <button class="btn-secondary" onclick="cerrarModal()">Cancelar</button>
-
-    <div class="diag" id="diag"></div>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-// ==========================================
-// CONFIG
-// ==========================================
 var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
 var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+var TECNICOS = []
+var EVENTOS = []
+var VISTA = 'dia'
+var FECHA = new Date(); FECHA.setHours(0,0,0,0)
+var FILTRO_TEC = 'todos'
+var EDITANDO = null
+var COLORES = ['#22C55E','#60A5FA','#A78BFA','#F97316','#F5C518','#EC4899','#14B8A6','#EF4444']
 
-var TECNICOS=[
-  {nombre:'Reynaldo Aguas Bertel',tel:'+56935287199'},
-  {nombre:'Kiven Henz',tel:'+56964880196'},
-  {nombre:'Giovanino Perugini',tel:'+56933592097'}
-]
-
-// Cargar técnicos activos desde BD al inicio
-async function cargarTecnicosDB(){
-  try{
-    var url = 'https://bqlgfmqcefledqyodkii.supabase.co/rest/v1/tecnicos?activo=eq.true&select=nombre,telefono&order=nombre.asc'
-    var key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
-    var r = await fetch(url, {headers:{'apikey':key,'Authorization':'Bearer '+key}})
-    if(r.ok){
-      var data = await r.json()
-      if(data && data.length){
-        TECNICOS = data.map(function(t){return {nombre:t.nombre, tel:t.telefono||''}})
-        console.log('[AGENDA] Técnicos activos cargados:', TECNICOS.length)
-      }
-    }
-  }catch(e){console.error('Err cargar técnicos:',e)}
-}
-cargarTecnicosDB()
-
-var fechaActual=new Date()
-fechaActual.setHours(0,0,0,0)
-
-// Detectar tipo de usuario
-var coordAuth = sessionStorage.getItem('coord_auth')
-var tecnicoNombre = sessionStorage.getItem('tecnico_nombre')
-var isCoord = !!coordAuth
-var isTecnico = !!tecnicoNombre && !isCoord
-
-console.log('[AGENDA] Usuario:', isCoord ? 'Coordinador' : (isTecnico ? 'Técnico: '+tecnicoNombre : 'Sin sesión'))
-
-// ==========================================
-// HELPERS
-// ==========================================
-function toast(msg,tipo){
-  var t=document.getElementById('toast')
-  t.textContent=msg
-  t.className='toast '+(tipo||'')
+function toast(msg, tipo){
+  var t = document.getElementById('toast')
+  t.textContent = msg
+  t.className = 'toast ' + (tipo||'')
   t.classList.add('show')
-  setTimeout(function(){t.classList.remove('show')},3500)
+  setTimeout(function(){t.classList.remove('show')}, 2500)
+}
+function fmtISO(d){
+  var y = d.getFullYear(), m = String(d.getMonth()+1).padStart(2,'0'), dd = String(d.getDate()).padStart(2,'0')
+  return y + '-' + m + '-' + dd
+}
+function fmtFecha(d){return d.toLocaleDateString('es-CL', {weekday:'long', day:'numeric', month:'long', year:'numeric'})}
+function fmtDiaCorto(d){return d.toLocaleDateString('es-CL', {weekday:'short'}).replace('.','').toUpperCase()}
+function inicioSemana(d){
+  var day = d.getDay(), diff = day === 0 ? -6 : 1 - day
+  var r = new Date(d); r.setDate(d.getDate() + diff); r.setHours(0,0,0,0)
+  return r
+}
+function esHoy(d){var hoy = new Date(); hoy.setHours(0,0,0,0); return d.getTime() === hoy.getTime()}
+function iniciales(nombre){return (nombre||'?').split(' ').slice(0,2).map(function(s){return (s[0]||'').toUpperCase()}).join('')}
+function colorTec(nombre){
+  if(!nombre || nombre === 'POR ASIGNAR') return '#8B8990'
+  var i = TECNICOS.findIndex(function(t){return t.nombre === nombre})
+  return COLORES[i % COLORES.length] || '#8B8990'
 }
 
-function diag(msg,tipo){
-  var d=document.getElementById('diag')
-  d.textContent=msg
-  d.className='diag show '+(tipo||'')
+async function sbReq(method, path, data){
+  var opts = {method, headers: {'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=representation'}}
+  if(data) opts.body = JSON.stringify(data)
+  return await fetch(SB_URL + '/rest/v1/' + path, opts)
 }
 
-function fmtFecha(d){
-  return d.toISOString().slice(0,10)
-}
-
-function pintarFecha(){
-  var f=fechaActual
-  var dias=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado']
-  var meses=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre']
-  var hoy=new Date(); hoy.setHours(0,0,0,0)
-  var esHoy=f.getTime()===hoy.getTime()
-  var manana=new Date(hoy); manana.setDate(manana.getDate()+1)
-  var esManana=f.getTime()===manana.getTime()
-  
-  var label=dias[f.getDay()]+' '+f.getDate()+' de '+meses[f.getMonth()]
-  if(esHoy) label+=' <span class="fecha-hoy">HOY</span>'
-  else if(esManana) label+=' <span class="fecha-hoy" style="background:var(--azul)">MAÑANA</span>'
-  
-  document.getElementById('fecha-dia').innerHTML=label
-  document.getElementById('fecha-sub').textContent=f.getFullYear()+' · Santiago RM'
-}
-
-function cambiarDia(d){
-  fechaActual.setDate(fechaActual.getDate()+d)
-  pintarFecha()
-  cargarEventos()
-}
-
-// ==========================================
-// SUPABASE - sin librería para máxima compatibilidad
-// ==========================================
-async function sbInsert(tabla, datos){
-  console.log('[SB] INSERT en', tabla, datos)
-  try{
-    var resp = await fetch(SB_URL+'/rest/v1/'+tabla, {
-      method:'POST',
-      headers:{
-        'apikey': SB_KEY,
-        'Authorization': 'Bearer '+SB_KEY,
-        'Content-Type': 'application/json',
-        'Prefer': 'return=representation'
-      },
-      body: JSON.stringify(datos)
-    })
-    var text = await resp.text()
-    console.log('[SB] Status:', resp.status, 'Body:', text)
-    if(!resp.ok){
-      return {ok:false, status:resp.status, error:text}
-    }
-    var data = JSON.parse(text)
-    return {ok:true, status:resp.status, data:data}
-  } catch(e) {
-    console.error('[SB] Network error:', e)
-    return {ok:false, error:'Error de conexión: '+(e.message||e), exception:true}
+async function cargarTecnicos(){
+  var r = await sbReq('GET', 'tecnicos?activo=eq.true&select=nombre,telefono&order=nombre.asc')
+  TECNICOS = r.ok ? await r.json() : []
+  if(TECNICOS.length === 0){
+    TECNICOS = [{nombre:'Reynaldo Aguas Bertel',telefono:'+56935287199'},{nombre:'Kiven Henz',telefono:'+56964880196'},{nombre:'Giovanino Perugini',telefono:'+56933592097'}]
   }
+  var filter = document.getElementById('tec-filter')
+  var html = '<button class="chip-tec active" data-tec="todos" onclick="filtrarTecnico(\'todos\')">👥 Todos</button>'
+  html += '<button class="chip-tec" data-tec="POR ASIGNAR" onclick="filtrarTecnico(\'POR ASIGNAR\')">⚠️ Sin asignar</button>'
+  TECNICOS.forEach(function(t){
+    html += '<button class="chip-tec" data-tec="'+t.nombre.replace(/"/g,'&quot;')+'" onclick="filtrarTecnico(\''+t.nombre.replace(/'/g,"\\'")+'\')">'
+    html += '<span class="tec-dot" style="background:'+colorTec(t.nombre)+'"></span>'
+    html += t.nombre.split(' ')[0]
+    html += '</button>'
+  })
+  filter.innerHTML = html
+  var sel = document.getElementById('f-tecnico')
+  sel.innerHTML = '<option value="POR ASIGNAR">⚠️ Sin asignar</option>'
+  TECNICOS.forEach(function(t){sel.innerHTML += '<option value="'+t.nombre.replace(/"/g,'&quot;')+'">🔧 '+t.nombre+'</option>'})
 }
-
-async function sbSelect(tabla, query){
-  try{
-    var resp = await fetch(SB_URL+'/rest/v1/'+tabla+'?'+query, {
-      headers:{
-        'apikey': SB_KEY,
-        'Authorization': 'Bearer '+SB_KEY
-      }
-    })
-    if(!resp.ok) return {ok:false, error:await resp.text()}
-    return {ok:true, data:await resp.json()}
-  } catch(e) {
-    return {ok:false, error:e.message}
-  }
-}
-
-async function sbUpdate(tabla, query, datos){
-  try{
-    var resp = await fetch(SB_URL+'/rest/v1/'+tabla+'?'+query, {
-      method:'PATCH',
-      headers:{
-        'apikey': SB_KEY,
-        'Authorization': 'Bearer '+SB_KEY,
-        'Content-Type': 'application/json',
-        'Prefer': 'return=representation'
-      },
-      body: JSON.stringify(datos)
-    })
-    if(!resp.ok) return {ok:false, error:await resp.text()}
-    return {ok:true, data:await resp.json()}
-  } catch(e) {
-    return {ok:false, error:e.message}
-  }
-}
-
-// ==========================================
-// CARGAR EVENTOS
-// ==========================================
-var eventos=[]
 
 async function cargarEventos(){
-  var cont=document.getElementById('eventos')
-  cont.innerHTML='<div class="empty"><div class="empty-ico">⏳</div><div class="empty-titulo">Cargando...</div></div>'
-  
-  var fecha=fmtFecha(fechaActual)
-  
-  // Si es técnico, filtrar por su nombre. Si es coordinador, mostrar todos
-  var query='fecha=eq.'+fecha+'&order=hora.asc'
-  if(isTecnico){
-    query='fecha=eq.'+fecha+'&tecnico=ilike.*'+encodeURIComponent(tecnicoNombre)+'*&order=hora.asc'
-  }
-  
-  var r=await sbSelect('agenda',query)
-  
-  if(!r.ok){
-    cont.innerHTML='<div class="empty"><div class="empty-ico">⚠️</div><div class="empty-titulo">Error cargando</div><div>'+(r.error||'')+'</div></div>'
-    return
-  }
-  
-  eventos=r.data||[]
-  document.getElementById('num-eventos').textContent=eventos.length
-  
-  if(eventos.length===0){
-    var msgVacio = isTecnico 
-      ? '<div class="empty-titulo">Sin servicios asignados</div><div>No tienes citas para este día</div>'
-      : '<div class="empty-titulo">Sin agendamientos</div><div>Toca <b>+ Nuevo</b> para agregar uno</div>'
-    cont.innerHTML='<div class="empty"><div class="empty-ico">📅</div>'+msgVacio+'</div>'
-    return
-  }
-  
-  cont.innerHTML=eventos.map(function(e){
-    var hora=(e.hora||'').slice(0,5)
-    var iconos={'agendado':'📋','confirmado':'✅','en-ruta':'🚗','completado':'🏁','cancelado':'❌'}
-    var tecCorto = isTecnico ? '✓ ASIGNADO' : (e.tecnico||'').split(' ')[0].toUpperCase()
-    var botonBot = ''
-    if(e.origen==='agente' && e.telefono){
-      botonBot = '<button onclick="event.stopPropagation();window.open(\'conversaciones-wa.html?tel='+encodeURIComponent(e.telefono)+'\',\'_blank\')" style="margin-top:8px;padding:5px 10px;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.35);border-radius:6px;font-family:JetBrains Mono,monospace;font-size:10px;color:#22C55E;cursor:pointer;font-weight:700;letter-spacing:0.05em">💬 Ver chat del bot' + (e.agente_solicitante?' · '+e.agente_solicitante.toUpperCase():'') + '</button>'
-    }
-    return '<div class="evento" onclick="verDetalle(\''+e.id+'\')">'+
-      '<div class="hora">'+hora+'<div class="hora-est">'+tecCorto+'</div></div>'+
-      '<div class="evento-body">'+
-        '<div class="evento-cliente">'+(e.cliente||'Sin cliente')+'</div>'+
-        '<div class="evento-meta"><span class="evento-tag tag-'+(e.estado||'agendado')+'">'+(e.estado||'agendado')+'</span>'+(e.servicio||'-')+(e.direccion?' · '+e.direccion:'')+'</div>'+
-        botonBot +
-      '</div>'+
-      '<div class="estado-icon">'+(iconos[e.estado]||'📋')+'</div>'+
-    '</div>'
-  }).join('')
+  var r = await sbReq('GET', 'agenda?select=*&order=fecha.asc,hora.asc')
+  EVENTOS = r.ok ? await r.json() : []
 }
 
-// ==========================================
-// MODAL NUEVO
-// ==========================================
-function abrirNuevo(){
-  document.getElementById('f-fecha').value=fmtFecha(fechaActual)
-  document.getElementById('f-hora').value='09:00'
-  document.getElementById('f-cliente').value=''
-  document.getElementById('f-tel').value=''
-  document.getElementById('f-vehiculo').value=''
-  document.getElementById('f-servicio').value=''
-  document.getElementById('f-direccion').value=''
-  document.getElementById('f-notas').value=''
-  document.getElementById('diag').className='diag'
-  
-  // Pintar técnicos
-  var grid=document.getElementById('tec-grid')
-  grid.innerHTML=TECNICOS.map(function(t,i){
-    return '<label class="tec-chip" onclick="toggleTecnico(event, this)">'+
-      '<input type="checkbox" class="t-chk" value="'+t.nombre.replace(/"/g,'&quot;')+'" style="pointer-events:none">'+
-      '<div class="tec-chip-dot"></div>'+
-      '<div class="tec-chip-nombre">'+t.nombre.split(' ')[0]+'</div>'+
-    '</label>'
-  }).join('')
-  
-  document.getElementById('modal').classList.add('open')
-}
-
-function cerrarModal(){
-  document.getElementById('modal').classList.remove('open')
-}
-
-// Toggle sincronizado del chip técnico (checkbox + clase visual)
-function toggleTecnico(ev, label){
-  ev.preventDefault()
-  var chk = label.querySelector('.t-chk')
-  var estaba = label.classList.contains('selected')
-  if(estaba){
-    label.classList.remove('selected')
-    chk.checked = false
-  } else {
-    label.classList.add('selected')
-    chk.checked = true
-  }
-}
-
-// ==========================================
-// GUARDAR (la función clave)
-// ==========================================
-async function guardar(){
-  var btn=document.getElementById('btn-g')
-  var textoOriginal=btn.textContent
-  
-  // Recoger datos
-  var fecha=document.getElementById('f-fecha').value
-  var hora=document.getElementById('f-hora').value
-  var cliente=document.getElementById('f-cliente').value.trim()
-  var tel=document.getElementById('f-tel').value.trim()
-  var vehiculo=document.getElementById('f-vehiculo').value.trim()
-  var servicio=document.getElementById('f-servicio').value.trim()
-  var direccion=document.getElementById('f-direccion').value.trim()
-  var notas=document.getElementById('f-notas').value.trim()
-  
-  var checkboxesSeleccionados=Array.from(document.querySelectorAll('.tec-chip.selected .t-chk'))
-  var tecnicosSeleccionados=checkboxesSeleccionados.map(function(c){return c.value})
-  
-  // Validar
-  if(!fecha){toast('⚠️ Falta la fecha','err');return}
-  if(!hora){toast('⚠️ Falta la hora','err');return}
-  if(!cliente){toast('⚠️ Falta el cliente','err');return}
-  if(tecnicosSeleccionados.length===0){toast('⚠️ Selecciona al menos 1 técnico','err');return}
-  
-  // Bloquear botón
-  btn.disabled=true
-  btn.textContent='Guardando...'
-  diag('Conectando a Supabase...','')
-  
-  // Preparar datos
-  var datos={
-    fecha:fecha,
-    hora:hora+':00',
-    tecnico:tecnicosSeleccionados.join(', '),
-    cliente:cliente,
-    telefono:tel||null,
-    vehiculo:vehiculo||null,
-    servicio:servicio||null,
-    direccion:direccion||null,
-    notas:notas||null,
-    estado:'agendado'
-  }
-  
-  console.log('[GUARDAR] Iniciando con datos:',datos)
-  
-  // GUARDAR
-  var r=await sbInsert('agenda',datos)
-  
-  console.log('[GUARDAR] Resultado:',r)
-  
-  if(!r.ok){
-    console.error('[GUARDAR] FALLO:',r)
-    diag('❌ ERROR: '+(r.error||'sin detalle'),'error')
-    btn.disabled=false
-    btn.textContent=textoOriginal
-    
-    var msg='No se pudo guardar.\n\n'
-    if(r.exception) msg+='Posible problema de conexión a internet.\n'
-    if(r.status) msg+='Código HTTP: '+r.status+'\n'
-    msg+='\nDetalle: '+(r.error||'sin detalle')+'\n\n'
-    msg+='✋ NO se enviarán los WhatsApp porque la cita no se guardó.'
-    alert(msg)
-    return
-  }
-  
-  // CONFIRMAR que data tiene contenido
-  if(!r.data || r.data.length===0){
-    diag('❌ La BD respondió OK pero sin confirmación','error')
-    btn.disabled=false
-    btn.textContent=textoOriginal
-    alert('Algo raro: el servidor respondió OK pero no devolvió el registro. Por favor recarga la página y revisa si quedó guardado.')
-    return
-  }
-  
-  console.log('[GUARDAR] ✅ Guardado OK con id:',r.data[0].id)
-  diag('✅ Guardado con id '+r.data[0].id.slice(0,8)+'...','ok')
-  
-  // Generar links WhatsApp para cada técnico
-  var linksWhatsApp=[]
-  if(isCoord){
-    tecnicosSeleccionados.forEach(function(nombre){
-      var tec=TECNICOS.find(function(t){return t.nombre===nombre})
-      if(tec){
-        var msg='🔧 NUEVO SERVICIO\n\n'+
-                'Hola '+nombre.split(' ')[0]+'!\n\n'+
-                '📅 '+fecha+' a las '+hora+'\n'+
-                '👤 '+cliente+(tel?' ('+tel+')':'')+'\n'+
-                (servicio?'🔧 '+servicio+'\n':'')+
-                (direccion?'📍 '+direccion+'\n':'')+
-                (vehiculo?'🚗 '+vehiculo+'\n':'')+
-                '\nConfirma recepción.\nServiruta +56 9 8505 8250'
-        var url='https://wa.me/'+tec.tel.replace(/\D/g,'')+'?text='+encodeURIComponent(msg)
-        linksWhatsApp.push({tecnico:nombre, url:url})
-      }
-    })
-  }
-  
-  // Cerrar modal
-  cerrarModal()
-  
-  // Mostrar mensaje + abrir WhatsApp en background con confirmación
-  toast('✅ Guardado correctamente','ok')
+async function cargar(){
+  await cargarTecnicos()
   await cargarEventos()
-  
-  // Enviar WhatsApp uno por uno con confirmación
-  if(linksWhatsApp.length>0){
-    setTimeout(function(){
-      if(confirm('✅ Cita guardada.\n\n¿Quieres abrir WhatsApp para notificar a '+linksWhatsApp.length+' técnico(s)?')){
-        linksWhatsApp.forEach(function(item){
-          window.open(item.url,'_blank')
-        })
-      }
-    },500)
+  actualizarKPIs()
+  render()
+}
+
+function eventosFiltrados(){
+  var arr = EVENTOS
+  if(FILTRO_TEC !== 'todos'){
+    if(FILTRO_TEC === 'POR ASIGNAR'){arr = arr.filter(function(e){return !e.tecnico || e.tecnico === 'POR ASIGNAR'})}
+    else{arr = arr.filter(function(e){return e.tecnico && e.tecnico.indexOf(FILTRO_TEC) >= 0})}
   }
+  return arr
 }
 
-// ==========================================
-// VER DETALLE Y CAMBIAR ESTADO
-// ==========================================
-function verDetalle(id){
-  var ev=eventos.find(function(e){return e.id===id})
-  if(!ev) return
-  
-  var menu='👤 Cliente: '+ev.cliente+'\n'+
-           '⏰ Hora: '+(ev.hora||'').slice(0,5)+'\n'+
-           '👷 Técnico: '+ev.tecnico+'\n'+
-           '📞 Tel: '+(ev.telefono||'-')+'\n'+
-           '🔧 Servicio: '+(ev.servicio||'-')+'\n'+
-           '📍 Dirección: '+(ev.direccion||'-')+'\n'+
-           '🚗 Vehículo: '+(ev.vehiculo||'-')+'\n'+
-           '📊 Estado: '+ev.estado+'\n'+
-           (ev.notas?'📝 Notas: '+ev.notas+'\n':'')+'\n'+
-           '¿Qué acción tomar?\n'+
-           '1 - ✅ Confirmar\n'+
-           '2 - 🚗 En ruta\n'+
-           '3 - 🏁 Completar\n'+
-           '4 - ❌ Cancelar\n'+
-           '5 - 🗑️ Eliminar\n'+
-           '6 - 💬 WhatsApp técnico\n'+
-           '7 - 💬 WhatsApp cliente\n'+
-           '0 - Cancelar'
-  
-  var opcion=prompt(menu)
-  if(!opcion||opcion==='0') return
-  
-  if(opcion==='1') cambiarEstado(id,'confirmado')
-  else if(opcion==='2') cambiarEstado(id,'en-ruta')
-  else if(opcion==='3') cambiarEstado(id,'completado')
-  else if(opcion==='4') cambiarEstado(id,'cancelado')
-  else if(opcion==='5') eliminar(id)
-  else if(opcion==='6') waTecnico(ev)
-  else if(opcion==='7') waCliente(ev)
+function actualizarKPIs(){
+  var arr = eventosFiltrados()
+  var urg = arr.filter(function(e){return e.urgencia==='urgente' && e.estado !== 'completado' && e.estado !== 'cancelado'}).length
+  var pend = arr.filter(function(e){return (!e.tecnico || e.tecnico==='POR ASIGNAR') && e.estado !== 'completado' && e.estado !== 'cancelado'}).length
+  var asig = arr.filter(function(e){return e.tecnico && e.tecnico!=='POR ASIGNAR' && e.estado !== 'completado' && e.estado !== 'cancelado'}).length
+  document.getElementById('k-urg').textContent = urg
+  document.getElementById('k-pend').textContent = pend
+  document.getElementById('k-asig').textContent = asig
+  document.getElementById('k-tot').textContent = arr.length
 }
 
-async function cambiarEstado(id,nuevoEstado){
-  var r=await sbUpdate('agenda','id=eq.'+id,{estado:nuevoEstado})
+function filtrarTecnico(tec){
+  FILTRO_TEC = tec
+  document.querySelectorAll('.chip-tec').forEach(function(c){c.classList.toggle('active', c.dataset.tec === tec)})
+  actualizarKPIs()
+  render()
+}
+
+function cambiarVista(v){
+  VISTA = v
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.toggle('active', t.dataset.vista === v)})
+  render()
+}
+
+function navFecha(delta){FECHA.setDate(FECHA.getDate() + delta); render()}
+function navSemana(delta){FECHA.setDate(FECHA.getDate() + (delta*7)); render()}
+function irHoy(){FECHA = new Date(); FECHA.setHours(0,0,0,0); render()}
+
+function eventoHTML(e){
+  var hora = (e.hora||'').substring(0,5)
+  var estado = e.estado || 'agendado'
+  var sinTec = !e.tecnico || e.tecnico === 'POR ASIGNAR'
+  var cls = 'evento ' + estado + (e.urgencia==='urgente'?' urgente':'') + (sinTec?' sin-tec':'')
+  var html = '<div class="'+cls+'" onclick="editar(\''+e.id+'\')">'
+  html += '<div class="ev-hora">'+hora
+  var fechaObj = e.fecha ? new Date(e.fecha+'T00:00:00') : null
+  if(fechaObj){
+    if(esHoy(fechaObj)) html += '<small>HOY</small>'
+    else html += '<small>'+fechaObj.toLocaleDateString('es-CL',{day:'2-digit',month:'2-digit'})+'</small>'
+  }
+  html += '</div>'
+  html += '<div class="ev-body">'
+  html += '<div class="ev-cliente">'+(e.cliente||'Sin cliente')
+  if(e.urgencia==='urgente') html += '<span class="ev-badge urg">URGENTE</span>'
+  if(e.origen==='agente' && e.agente_solicitante) html += '<span class="ev-badge bot">🤖 '+e.agente_solicitante.toUpperCase()+'</span>'
+  html += '<span class="ev-badge est">'+estado.toUpperCase()+'</span>'
+  html += '</div>'
+  html += '<div class="ev-servicio">'+(e.servicio||'Sin detalle')+'</div>'
+  html += '<div class="ev-meta">'
+  if(e.vehiculo) html += '<span>🚗 '+e.vehiculo+'</span>'
+  if(e.telefono) html += '<span>📱 +'+e.telefono+'</span>'
+  if(e.direccion) html += '<span>📍 '+e.direccion.substring(0,30)+'</span>'
+  html += '</div></div>'
+  html += '<div class="ev-actions" onclick="event.stopPropagation()">'
+  // Dropdown de asignación rápida
+  var sinTecAssign = !e.tecnico || e.tecnico === 'POR ASIGNAR'
+  html += '<select class="ev-assign' + (sinTecAssign?' sin-tec':'') + '" onchange="asignarRapido(\''+e.id+'\',this.value)">'
+  html += '<option value="POR ASIGNAR"' + (sinTecAssign?' selected':'') + '>⚠️ Sin asignar</option>'
+  TECNICOS.forEach(function(t){
+    var sel = e.tecnico && e.tecnico.indexOf(t.nombre) >= 0 ? ' selected' : ''
+    html += '<option value="'+t.nombre.replace(/"/g,'&quot;')+'"'+sel+'>🔧 '+t.nombre.split(' ')[0]+'</option>'
+  })
+  html += '</select>'
+  // Estado rápido
+  html += '<div class="ev-estado-quick">'
+  var estados = [
+    {v:'agendado',lbl:'AGN'},
+    {v:'en-ruta',lbl:'RUTA'},
+    {v:'completado',lbl:'✓ OK'}
+  ]
+  estados.forEach(function(est){
+    var isActive = e.estado === est.v ? ' active-est' : ''
+    html += '<button class="ev-est-btn'+isActive+'" onclick="cambiarEstadoRapido(\''+e.id+'\',\''+est.v+'\')">'+est.lbl+'</button>'
+  })
+  html += '</div>'
+  // Botones de comunicación
+  html += '<div style="display:flex;gap:4px;margin-top:2px">'
+  if(e.telefono) html += '<button class="ev-btn" onclick="window.open(\'https://wa.me/'+e.telefono.replace(/[^0-9]/g,'')+'\',\'_blank\')">💬 WA</button>'
+  if(e.origen==='agente' && e.telefono) html += '<button class="ev-btn chat" onclick="window.open(\'conversaciones-wa.html?tel='+e.telefono+'\',\'_blank\')">💬 BOT</button>'
+  html += '</div>'
+  html += '</div></div>'
+  return html
+}
+
+async function asignarRapido(id, tecnico){
+  var r = await sbReq('PATCH', 'agenda?id=eq.'+id, {tecnico: tecnico, estado: tecnico==='POR ASIGNAR'?'solicitada':'agendado'})
   if(r.ok){
-    toast('✅ Estado cambiado a '+nuevoEstado,'ok')
-    cargarEventos()
+    // Actualizar localmente sin recargar todo
+    var e = EVENTOS.find(function(x){return x.id === id})
+    if(e){
+      e.tecnico = tecnico
+      if(tecnico !== 'POR ASIGNAR' && e.estado === 'solicitada') e.estado = 'agendado'
+    }
+    toast(tecnico === 'POR ASIGNAR' ? '⚠ Sin asignar' : '✅ Asignado a ' + tecnico.split(' ')[0], 'ok')
+    // Notificar al técnico si se asignó
+    if(tecnico !== 'POR ASIGNAR' && e){
+      var t = TECNICOS.find(function(t){return t.nombre === tecnico})
+      if(t && t.telefono){
+        var hora = (e.hora||'').substring(0,5)
+        var msg = 'Nueva asignación: ' + e.cliente + ' - ' + (e.servicio||'') + ' - ' + e.fecha + ' ' + hora
+        console.log('[notif]', t.telefono, msg)
+      }
+    }
+    actualizarKPIs()
+    render()
   } else {
-    toast('❌ Error: '+r.error,'err')
+    toast('❌ Error al asignar', 'err')
   }
 }
 
-async function eliminar(id){
-  if(!confirm('¿Eliminar este agendamiento? Esta acción es irreversible.')) return
-  try{
-    var resp = await fetch(SB_URL+'/rest/v1/agenda?id=eq.'+id, {
-      method:'DELETE',
-      headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY}
-    })
-    if(resp.ok){toast('🗑️ Eliminado','ok');cargarEventos()}
-    else toast('❌ Error eliminando','err')
-  } catch(e) {
-    toast('❌ '+e.message,'err')
+async function cambiarEstadoRapido(id, estado){
+  var r = await sbReq('PATCH', 'agenda?id=eq.'+id, {estado: estado})
+  if(r.ok){
+    var e = EVENTOS.find(function(x){return x.id === id})
+    if(e) e.estado = estado
+    toast('✅ Estado: ' + estado, 'ok')
+    actualizarKPIs()
+    render()
+  } else {
+    toast('❌ Error', 'err')
   }
 }
 
-function waTecnico(ev){
-  var tec=TECNICOS.find(function(t){return ev.tecnico.indexOf(t.nombre)>=0})
-  if(!tec){toast('No tengo el tel del técnico','err');return}
-  var msg='Hola '+tec.nombre.split(' ')[0]+'! Te recuerdo el servicio:\n\n'+
-          (ev.hora||'').slice(0,5)+' · '+ev.cliente+'\n'+
-          (ev.servicio?ev.servicio+'\n':'')+
-          (ev.direccion||'')
-  window.open('https://wa.me/'+tec.tel.replace(/\D/g,'')+'?text='+encodeURIComponent(msg),'_blank')
+function miniEventoHTML(e){
+  var hora = (e.hora||'').substring(0,5)
+  var estado = e.estado || 'agendado'
+  var cls = 'mini-ev ' + estado + (e.urgencia==='urgente'?' urgente':'')
+  var tecCorto = e.tecnico && e.tecnico!=='POR ASIGNAR' ? e.tecnico.split(' ')[0] : '⚠ SIN'
+  return '<div class="'+cls+'" onclick="editar(\''+e.id+'\')" style="border-left-color:'+colorTec(e.tecnico)+'">'+
+    '<div class="mini-hora">'+hora+'</div>'+
+    '<div class="mini-cli">'+(e.cliente||'?')+'</div>'+
+    '<div class="mini-tec">🔧 '+tecCorto+'</div></div>'
 }
 
-function waCliente(ev){
-  if(!ev.telefono){toast('Sin teléfono','err');return}
-  var msg='Hola '+(ev.cliente||'').split(' ')[0]+'! Te recuerdo tu servicio Serviruta para hoy a las '+(ev.hora||'').slice(0,5)+'.\n\n'+
-          (ev.servicio?'Servicio: '+ev.servicio:'')+'\n\nNos vemos pronto!'
-  window.open('https://wa.me/'+ev.telefono.replace(/\D/g,'')+'?text='+encodeURIComponent(msg),'_blank')
+function renderVistaDia(){
+  var lbl = document.getElementById('rango-lbl')
+  lbl.innerHTML = fmtFecha(FECHA) + '<small>' + (esHoy(FECHA)?'HOY':(FECHA<new Date()?'PASADO':'FUTURO')) + '</small>'
+  var fechaISO = fmtISO(FECHA)
+  var arr = eventosFiltrados().filter(function(e){return e.fecha === fechaISO})
+  var porTec = {}, sinAsignar = []
+  arr.forEach(function(e){
+    if(!e.tecnico || e.tecnico === 'POR ASIGNAR') sinAsignar.push(e)
+    else {
+      var t = TECNICOS.find(function(t){return e.tecnico.indexOf(t.nombre) >= 0}) 
+      var nombre = t ? t.nombre : e.tecnico
+      if(!porTec[nombre]) porTec[nombre] = []
+      porTec[nombre].push(e)
+    }
+  })
+  var html = '<div class="carriles">'
+  if(FILTRO_TEC === 'todos' || FILTRO_TEC === 'POR ASIGNAR'){
+    html += '<div class="carril" style="border-color:'+(sinAsignar.length>0?'var(--amarillo)':'var(--line)')+'">'
+    html += '<div class="carril-hdr">'
+    html += '<div class="carril-avatar" style="background:linear-gradient(135deg,#F5C518,#B8933A)">⚠</div>'
+    html += '<div class="carril-nom">Sin asignar</div>'
+    html += '<div class="carril-count">'+sinAsignar.length+' servicios</div>'
+    html += '</div>'
+    html += '<div class="carril-body' + (sinAsignar.length===0?' vacio':'') + '">'
+    if(sinAsignar.length === 0) html += 'Sin pendientes 🎉'
+    else sinAsignar.sort(function(a,b){return (a.hora||'').localeCompare(b.hora||'')}).forEach(function(e){html += eventoHTML(e)})
+    html += '</div></div>'
+  }
+  TECNICOS.forEach(function(t){
+    if(FILTRO_TEC !== 'todos' && FILTRO_TEC !== t.nombre) return
+    var evs = porTec[t.nombre] || []
+    var col = colorTec(t.nombre)
+    html += '<div class="carril" style="border-left:4px solid '+col+'">'
+    html += '<div class="carril-hdr">'
+    html += '<div class="carril-avatar" style="background:linear-gradient(135deg,'+col+', #000)">' + iniciales(t.nombre) + '</div>'
+    html += '<div class="carril-nom">'+t.nombre+'</div>'
+    html += '<div class="carril-count">'+evs.length+' servicio'+(evs.length!==1?'s':'')+'</div>'
+    html += '</div>'
+    html += '<div class="carril-body' + (evs.length===0?' vacio':'') + '">'
+    if(evs.length === 0) html += 'Sin servicios este día'
+    else evs.sort(function(a,b){return (a.hora||'').localeCompare(b.hora||'')}).forEach(function(e){html += eventoHTML(e)})
+    html += '</div></div>'
+  })
+  html += '</div>'
+  document.getElementById('contenido').innerHTML = html
 }
 
-// ==========================================
-// INIT - personalizar UI según rol
-// ==========================================
-if(isTecnico){
-  // El técnico ve solo SU agenda
-  document.getElementById('page-title').textContent='Mi Agenda · '+tecnicoNombre.split(' ')[0]
-  document.getElementById('cuenta-sub').textContent='asignados a ti'
-  // Ocultar botones de crear
-  document.getElementById('btn-nuevo').style.display='none'
-  document.querySelector('.fab').style.display='none'
-} else if(!isCoord) {
-  // Sin sesión - mostrar advertencia
-  document.getElementById('page-title').textContent='Agenda (sin sesión)'
-  document.getElementById('cuenta-sub').textContent='(modo demo)'
+function renderVistaSemana(){
+  var inicio = inicioSemana(FECHA)
+  var fin = new Date(inicio); fin.setDate(inicio.getDate() + 6)
+  var lbl = document.getElementById('rango-lbl')
+  lbl.innerHTML = 'Semana del ' + inicio.getDate() + ' al ' + fin.getDate() + ' ' + fin.toLocaleDateString('es-CL',{month:'short'})
+  lbl.innerHTML += '<small>' + inicio.toLocaleDateString('es-CL',{month:'long',year:'numeric'}).toUpperCase() + '</small>'
+  var html = '<div class="semana">'
+  for(var i = 0; i < 7; i++){
+    var d = new Date(inicio); d.setDate(inicio.getDate() + i)
+    var fechaISO = fmtISO(d)
+    var arr = eventosFiltrados().filter(function(e){return e.fecha === fechaISO}).sort(function(a,b){return (a.hora||'').localeCompare(b.hora||'')})
+    var esHoyDia = esHoy(d)
+    html += '<div class="dia'+(esHoyDia?' hoy':'')+'">'
+    html += '<div class="dia-hdr"><div class="dia-lbl">'+fmtDiaCorto(d)+'</div><div class="dia-num">'+d.getDate()+'</div></div>'
+    html += '<div class="dia-body' + (arr.length===0?' vacio':'') + '">'
+    if(arr.length === 0) html += 'Sin servicios'
+    else arr.forEach(function(e){html += miniEventoHTML(e)})
+    html += '</div></div>'
+  }
+  html += '</div>'
+  document.getElementById('contenido').innerHTML = html
 }
 
-pintarFecha()
-cargarEventos()
+function renderVistaTecnico(){
+  var inicio = inicioSemana(FECHA)
+  var fin = new Date(inicio); fin.setDate(inicio.getDate() + 6)
+  var lbl = document.getElementById('rango-lbl')
+  lbl.innerHTML = 'Semana del ' + inicio.getDate() + ' al ' + fin.getDate() + ' ' + fin.toLocaleDateString('es-CL',{month:'short'})
+  lbl.innerHTML += '<small>VISTA POR TÉCNICO</small>'
+  var html = ''
+  TECNICOS.forEach(function(t){
+    if(FILTRO_TEC !== 'todos' && FILTRO_TEC !== t.nombre) return
+    var evsTec = eventosFiltrados().filter(function(e){return e.tecnico && e.tecnico.indexOf(t.nombre)>=0})
+    var col = colorTec(t.nombre)
+    html += '<div class="tec-semana" style="border-left:4px solid '+col+'">'
+    html += '<div class="tec-hdr">'
+    html += '<div class="tec-avatar-lg" style="background:linear-gradient(135deg,'+col+', #000)">' + iniciales(t.nombre) + '</div>'
+    html += '<div class="tec-info"><div class="tec-nom-lg">'+t.nombre+'</div><div class="tec-stats">'+evsTec.length+' servicios en la semana</div></div>'
+    html += '</div>'
+    for(var i = 0; i < 7; i++){
+      var d = new Date(inicio); d.setDate(inicio.getDate() + i)
+      var fechaISO = fmtISO(d)
+      var evsDia = evsTec.filter(function(e){return e.fecha === fechaISO}).sort(function(a,b){return (a.hora||'').localeCompare(b.hora||'')})
+      var esHoyDia = esHoy(d)
+      html += '<div class="tec-dias">'
+      html += '<div class="tec-dia-lbl'+(esHoyDia?' hoy':'')+'"><div>'+fmtDiaCorto(d)+'</div><div class="fecha">'+d.getDate()+'</div></div>'
+      html += '<div class="tec-dia-content' + (evsDia.length===0?' vacio':'') + '">'
+      if(evsDia.length === 0) html += 'Sin servicios'
+      else evsDia.forEach(function(e){html += eventoHTML(e)})
+      html += '</div></div>'
+    }
+    html += '</div>'
+  })
+  if(html === '') html = '<div class="loader">Sin técnicos activos</div>'
+  document.getElementById('contenido').innerHTML = html
+}
+
+function render(){
+  if(VISTA === 'dia') renderVistaDia()
+  else if(VISTA === 'semana') renderVistaSemana()
+  else if(VISTA === 'tecnico') renderVistaTecnico()
+}
+
+function abrirNuevo(){
+  EDITANDO = null
+  document.getElementById('modal-tit').textContent = '➕ Nuevo evento'
+  document.getElementById('f-cliente').value = ''
+  document.getElementById('f-tel').value = ''
+  document.getElementById('f-veh').value = ''
+  document.getElementById('f-fecha').value = fmtISO(FECHA)
+  document.getElementById('f-hora').value = '10:00'
+  document.getElementById('f-servicio').value = ''
+  document.getElementById('f-estado').value = 'agendado'
+  document.getElementById('f-urg').value = 'normal'
+  document.getElementById('f-tecnico').value = 'POR ASIGNAR'
+  document.getElementById('f-direccion').value = ''
+  document.getElementById('f-notas').value = ''
+  document.getElementById('btn-del').style.display = 'none'
+  document.getElementById('modal-bg').classList.add('open')
+}
+
+function editar(id){
+  var e = EVENTOS.find(function(x){return x.id === id})
+  if(!e) return
+  EDITANDO = id
+  document.getElementById('modal-tit').textContent = '✏️ ' + (e.cliente || 'Evento')
+  document.getElementById('f-cliente').value = e.cliente || ''
+  document.getElementById('f-tel').value = e.telefono || ''
+  document.getElementById('f-veh').value = e.vehiculo || ''
+  document.getElementById('f-fecha').value = e.fecha || fmtISO(new Date())
+  document.getElementById('f-hora').value = (e.hora || '10:00').substring(0,5)
+  document.getElementById('f-servicio').value = e.servicio || ''
+  document.getElementById('f-estado').value = e.estado || 'agendado'
+  document.getElementById('f-urg').value = e.urgencia || 'normal'
+  document.getElementById('f-tecnico').value = e.tecnico || 'POR ASIGNAR'
+  document.getElementById('f-direccion').value = e.direccion || ''
+  document.getElementById('f-notas').value = e.notas || ''
+  document.getElementById('btn-del').style.display = 'inline-block'
+  document.getElementById('modal-bg').classList.add('open')
+}
+
+function cerrarModal(){document.getElementById('modal-bg').classList.remove('open')}
+
+async function guardar(){
+  var cliente = document.getElementById('f-cliente').value.trim()
+  var fecha = document.getElementById('f-fecha').value
+  var hora = document.getElementById('f-hora').value
+  var servicio = document.getElementById('f-servicio').value.trim()
+  if(!cliente || !fecha || !hora || !servicio){toast('Cliente, fecha, hora y servicio son obligatorios','err'); return}
+  var data = {
+    cliente,
+    telefono: document.getElementById('f-tel').value.trim() || null,
+    vehiculo: document.getElementById('f-veh').value.trim() || null,
+    fecha, hora: hora + ':00', servicio,
+    estado: document.getElementById('f-estado').value,
+    urgencia: document.getElementById('f-urg').value,
+    tecnico: document.getElementById('f-tecnico').value,
+    direccion: document.getElementById('f-direccion').value.trim() || null,
+    notas: document.getElementById('f-notas').value.trim() || null
+  }
+  var r
+  if(EDITANDO){r = await sbReq('PATCH', 'agenda?id=eq.' + EDITANDO, data)}
+  else{data.origen = 'manual'; r = await sbReq('POST', 'agenda', data)}
+  if(r.ok){toast('✅ Guardado', 'ok'); cerrarModal(); setTimeout(cargar, 300)}
+  else{var t = await r.text(); toast('❌ Error: ' + t.substring(0, 60), 'err')}
+}
+
+async function eliminarEvento(){
+  if(!EDITANDO) return
+  if(!confirm('¿Eliminar este evento?')) return
+  var r = await sbReq('DELETE', 'agenda?id=eq.' + EDITANDO)
+  if(r.ok){toast('🗑 Eliminado', 'ok'); cerrarModal(); setTimeout(cargar, 300)}
+  else{toast('❌ Error', 'err')}
+}
+
+cargar()
+setInterval(cargar, 60000)
 </script>
-
 </body>
 </html>

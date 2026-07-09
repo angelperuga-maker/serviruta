@@ -91,6 +91,11 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--dorado)}
 .ev-est-btn{padding:2px 6px;background:var(--s3);border:1px solid var(--line);border-radius:4px;font-family:var(--mono);font-size:8px;color:var(--t3);cursor:pointer;font-weight:700;letter-spacing:0.05em}
 .ev-est-btn:hover{color:var(--t1);border-color:var(--dorado)}
 .ev-est-btn.active-est{background:var(--verde);color:#000;border-color:var(--verde)}
+.ev-est-btn.ev-can{background:rgba(249,115,22,0.08);border-color:rgba(249,115,22,0.35);color:var(--naranja)}
+.ev-est-btn.ev-can:hover{background:rgba(249,115,22,0.2);color:var(--naranja)}
+.ev-est-btn.ev-can.active-can{background:var(--naranja);color:#000;border-color:var(--naranja)}
+.ev-est-btn.ev-del{background:rgba(232,33,10,0.08);border-color:rgba(232,33,10,0.35);color:var(--rojo-l)}
+.ev-est-btn.ev-del:hover{background:rgba(232,33,10,0.2)}
 
 .semana{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
 .dia{background:var(--s1);border:1px solid var(--line);border-radius:12px;overflow:hidden;min-height:200px}
@@ -436,6 +441,12 @@ function eventoHTML(e){
     var isActive = e.estado === est.v ? ' active-est' : ''
     html += '<button class="ev-est-btn'+isActive+'" onclick="cambiarEstadoRapido(\''+e.id+'\',\''+est.v+'\')">'+est.lbl+'</button>'
   })
+  // Botón cancelar (solo coordinador)
+  if(IS_COORD){
+    var cancActive = e.estado === 'cancelado' ? ' active-can' : ''
+    html += '<button class="ev-est-btn ev-can'+cancActive+'" onclick="cancelarServicio(\''+e.id+'\')" title="Cliente canceló">✕ CAN</button>'
+    html += '<button class="ev-est-btn ev-del" onclick="eliminarServicio(\''+e.id+'\')" title="Eliminar completamente">🗑</button>'
+  }
   html += '</div>'
   // Botones de comunicación
   html += '<div style="display:flex;gap:4px;margin-top:2px">'
@@ -572,6 +583,107 @@ async function cambiarEstadoRapido(id, estado){
       console.log('Servicio completado:', e.cliente)
     }
     
+    actualizarKPIs()
+    render()
+  } catch(err){
+    console.error(err)
+    toast('❌ Error', 'err')
+  }
+}
+
+async function cancelarServicio(id){
+  var e = EVENTOS.find(function(x){return x.id === id})
+  if(!e) return
+  
+  var razon = prompt('Motivo de cancelación (opcional):\n\nEj: "Cliente reagenda", "Cliente cambió de opinión", "Vehículo ya reparado"')
+  if(razon === null) return  // Cancel del prompt
+  
+  var notasFinal = e.notas ? (e.notas + '\n\n[CANCELADO ' + new Date().toISOString().substring(0,10) + '] ' + (razon || 'Sin motivo')) : ('[CANCELADO ' + new Date().toISOString().substring(0,10) + '] ' + (razon || 'Sin motivo'))
+  
+  try {
+    var r = await sbReq('PATCH', 'agenda?id=eq.'+id, {
+      estado: 'cancelado',
+      notas: notasFinal
+    })
+    if(!r.ok){
+      var errTxt = await r.text()
+      toast('❌ Error: ' + errTxt.substring(0, 40), 'err')
+      return
+    }
+    
+    e.estado = 'cancelado'
+    e.notas = notasFinal
+    toast('✕ Servicio cancelado', 'ok')
+    
+    // Si tenía técnico asignado, notificarle
+    if(e.tecnico && e.tecnico !== 'POR ASIGNAR'){
+      var t = TECNICOS.find(function(x){return x.nombre === e.tecnico})
+      // Fallback a BD si no está en cache
+      if(!t || !t.telefono){
+        var rTec = await sbReq('GET', 'tecnicos?nombre=eq.' + encodeURIComponent(e.tecnico) + '&select=nombre,telefono')
+        if(rTec.ok){
+          var arr = await rTec.json()
+          if(arr && arr[0]) t = arr[0]
+        }
+      }
+      
+      if(t && t.telefono){
+        var hora = (e.hora||'').substring(0,5)
+        var fechaObj = e.fecha ? new Date(e.fecha+'T00:00:00') : new Date()
+        var fechaFmt = fechaObj.toLocaleDateString('es-CL',{weekday:'long', day:'numeric', month:'long'})
+        
+        var msgTec = '❌ *Servicio CANCELADO*\n\n'
+        msgTec += '👤 *Cliente:* ' + (e.cliente || 'Sin nombre') + '\n'
+        msgTec += '🛠️ *Servicio:* ' + (e.servicio || 'Sin detalle') + '\n'
+        msgTec += '📅 *Iba para:* ' + fechaFmt + ' · ' + hora + '\n'
+        if(razon) msgTec += '\n📝 *Motivo:* ' + razon + '\n'
+        msgTec += '\nYa NO vas a este servicio. Elimínalo de tu agenda personal.'
+        
+        try {
+          var envTec = await fetch(SB_URL + '/functions/v1/send-outbound', {
+            method: 'POST',
+            headers: {'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json'},
+            body: JSON.stringify({
+              telefono: t.telefono.replace(/[^0-9]/g,''),
+              mensaje: msgTec,
+              agente_id: 'humano',
+              cliente_nombre: t.nombre
+            })
+          })
+          var envData = await envTec.json()
+          if(envData.ok) toast('📤 Técnico avisado', 'ok')
+          else console.error('Error notif cancelación técnico:', envData)
+        } catch(er){
+          console.error('Error notif técnico cancelación:', er)
+        }
+      }
+    }
+    
+    actualizarKPIs()
+    render()
+  } catch(err){
+    console.error(err)
+    toast('❌ Error', 'err')
+  }
+}
+
+async function eliminarServicio(id){
+  var e = EVENTOS.find(function(x){return x.id === id})
+  if(!e) return
+  
+  if(!confirm('¿Eliminar completamente este servicio?\n\nCliente: ' + (e.cliente||'?') + '\nServicio: ' + (e.servicio||'?') + '\n\n⚠️ Esta acción NO se puede deshacer.\n\nSi el cliente canceló, usa el botón ✕ CAN (mantiene el historial).')) return
+  
+  try {
+    var r = await sbReq('DELETE', 'agenda?id=eq.'+id)
+    if(!r.ok){
+      var errTxt = await r.text()
+      toast('❌ Error: ' + errTxt.substring(0, 40), 'err')
+      return
+    }
+    
+    // Remover del array local
+    EVENTOS = EVENTOS.filter(function(x){return x.id !== id})
+    toast('🗑 Servicio eliminado', 'ok')
     actualizarKPIs()
     render()
   } catch(err){

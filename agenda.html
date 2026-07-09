@@ -402,7 +402,7 @@ function eventoHTML(e){
   // Botones de comunicación
   html += '<div style="display:flex;gap:4px;margin-top:2px">'
   if(e.telefono) html += '<button class="ev-btn" onclick="window.open(\'https://wa.me/'+e.telefono.replace(/[^0-9]/g,'')+'\',\'_blank\')">💬 WA</button>'
-  if(e.origen==='agente' && e.telefono) html += '<button class="ev-btn chat" onclick="window.open(\'conversaciones-wa.html?tel='+e.telefono+'\',\'_blank\')">💬 BOT</button>'
+  if(e.telefono) html += '<button class="ev-btn chat" onclick="window.open(\'conversaciones-wa.html?tel='+e.telefono+'\',\'_blank\')">💬 CHAT</button>'
   html += '</div>'
   html += '</div></div>'
   return html

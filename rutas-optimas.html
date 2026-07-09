@@ -75,6 +75,51 @@ input,select{background:var(--s2);border:1px solid var(--line);border-radius:8px
 .toast.ok{border-color:var(--verde);color:var(--verde)}
 .toast.err{border-color:var(--rojo);color:var(--rojo-l)}
 
+/* Modal de sugerencias */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:none;align-items:center;justify-content:center;padding:16px;z-index:400;backdrop-filter:blur(6px)}
+.modal-bg.open{display:flex}
+.modal{background:var(--s1);border:1px solid var(--line);border-radius:16px;max-width:720px;width:100%;max-height:88vh;overflow-y:auto;padding:20px}
+.modal-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.modal-tit{font-family:var(--display);font-weight:900;font-size:18px;color:var(--t1)}
+.modal-tit small{display:block;font-family:var(--mono);font-size:9px;color:var(--dorado);letter-spacing:0.15em;font-weight:700;margin-top:2px}
+.modal-close{padding:8px 12px;background:var(--s2);border:1px solid var(--line);border-radius:8px;font-family:var(--mono);font-size:11px;color:var(--t2);cursor:pointer}
+.modal-actions{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px;padding:10px 14px;background:var(--s2);border-radius:10px;border:1px solid var(--line);flex-wrap:wrap}
+.modal-actions-lbl{font-family:var(--mono);font-size:10px;color:var(--dorado);letter-spacing:0.15em;font-weight:700}
+.btn-all{padding:8px 12px;background:var(--verde);color:#000;border-radius:8px;font-family:var(--display);font-weight:800;font-size:11px;letter-spacing:0.05em;cursor:pointer}
+.btn-all:hover{filter:brightness(1.1)}
+
+.sug-item{background:var(--s2);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:10px;display:grid;grid-template-columns:1fr auto;gap:12px}
+.sug-item.aceptado{border-color:var(--verde);background:rgba(34,197,94,0.06);opacity:0.6}
+.sug-item.rechazado{border-color:var(--rojo);background:rgba(232,33,10,0.06);opacity:0.4}
+.sug-servicio-tit{font-family:var(--display);font-weight:800;font-size:15px;color:var(--t1);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.sug-badge{font-family:var(--mono);font-size:8px;padding:2px 5px;border-radius:3px;font-weight:700;letter-spacing:0.05em}
+.sug-badge.urg{background:rgba(232,33,10,0.2);color:var(--rojo-l)}
+.sug-servicio-dir{color:var(--t2);font-size:12px;margin:4px 0;line-height:1.4}
+.sug-hora{font-family:var(--mono);font-size:11px;color:var(--dorado);font-weight:700;letter-spacing:0.05em;margin-top:4px}
+
+.sug-tecnico{background:var(--s3);border:1px solid rgba(212,175,55,0.3);border-radius:8px;padding:8px 10px;margin-top:8px;display:flex;align-items:center;gap:8px}
+.sug-avatar{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:900;color:#000;font-size:10px;flex-shrink:0}
+.sug-tec-nom{font-family:var(--display);font-weight:800;font-size:13px;color:var(--t1);flex:1}
+.sug-tec-info{font-family:var(--mono);font-size:9px;color:var(--verde);font-weight:700;letter-spacing:0.05em}
+.sug-tec-info span{color:var(--t3);margin:0 4px}
+
+.sug-alternativas{margin-top:6px;padding-left:32px;font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.05em}
+.sug-alternativas span{color:var(--t2);margin-right:8px}
+
+.sug-btns{display:flex;flex-direction:column;gap:6px;align-items:stretch;min-width:100px}
+.sug-btn{padding:8px 10px;border-radius:8px;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.05em;cursor:pointer;text-align:center;white-space:nowrap}
+.sug-btn.aceptar{background:var(--verde);color:#000}
+.sug-btn.aceptar:hover{filter:brightness(1.1)}
+.sug-btn.rechazar{background:var(--s3);border:1px solid var(--line);color:var(--rojo-l)}
+.sug-btn.rechazar:hover{border-color:var(--rojo)}
+.sug-btn.alternativa{background:var(--s3);border:1px solid var(--line);color:var(--t2);font-size:9px;padding:6px 8px}
+.sug-btn.alternativa:hover{border-color:var(--dorado);color:var(--t1)}
+
+@media(max-width:640px){
+  .sug-item{grid-template-columns:1fr}
+  .sug-btns{flex-direction:row;justify-content:flex-end}
+}
+
 @media(max-width:900px){
   .layout{grid-template-columns:1fr;grid-template-rows:60vh 40vh}
   #mapa{height:100%}
@@ -88,6 +133,7 @@ input,select{background:var(--s2);border:1px solid var(--line);border-radius:8px
   <div class="sigil">🗺</div>
   <div class="title">Rutas Óptimas<small>SERVIRUTA · RUTEO INTELIGENTE</small></div>
   <button class="btn-secondary" onclick="geocodificarPendientes()" id="btn-geo">📍 Geocodificar direcciones</button>
+  <button class="btn-secondary" onclick="mostrarSugerencias()" id="btn-sugerir">🎯 Sugerir asignaciones</button>
   <button class="btn-primary" onclick="optimizarRuta()">✨ Optimizar ruta</button>
 </header>
 
@@ -114,6 +160,21 @@ input,select{background:var(--s2);border:1px solid var(--line);border-radius:8px
 </div>
 
 <div class="toast" id="toast"></div>
+
+<!-- Modal de sugerencias -->
+<div class="modal-bg" id="modal-sug" onclick="if(event.target.id==='modal-sug')cerrarSug()">
+  <div class="modal">
+    <div class="modal-hdr">
+      <div class="modal-tit">🎯 Sugerencias de asignación<small>ANÁLISIS POR DISTANCIA</small></div>
+      <button class="modal-close" onclick="cerrarSug()">✕ Cerrar</button>
+    </div>
+    <div class="modal-actions">
+      <span class="modal-actions-lbl" id="sug-resumen">Analizando...</span>
+      <button class="btn-all" onclick="aceptarTodasSug()">✅ Aceptar TODAS las sugerencias</button>
+    </div>
+    <div id="sug-lista"></div>
+  </div>
+</div>
 
 <script>
 var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
@@ -539,6 +600,281 @@ async function cargar(){
   await cargarTecnicos()
   await cargarServicios()
   renderTodo()
+}
+
+// ══════════════════════════════════════
+// SISTEMA DE SUGERENCIAS INTELIGENTES
+// ══════════════════════════════════════
+
+var SUGERENCIAS_ACTUALES = []
+
+// Calcular centroide de un conjunto de puntos (para técnicos con servicios ya asignados)
+function calcularCentroide(puntos){
+  if(puntos.length === 0) return null
+  var sumLat = 0, sumLng = 0
+  puntos.forEach(function(p){sumLat += p.lat; sumLng += p.lng})
+  return {lat: sumLat/puntos.length, lng: sumLng/puntos.length}
+}
+
+// Genera sugerencia para UN servicio: retorna array de técnicos rankeados por proximidad
+function generarSugerenciasPorServicio(servicio, todosServicios){
+  var ranking = []
+  
+  TECNICOS.forEach(function(t){
+    // Servicios ya asignados a este técnico (mismo día, con coordenadas)
+    var suyos = todosServicios.filter(function(s){
+      return s.tecnico === t.nombre && s.lat && s.lng && 
+             s.estado !== 'completado' && s.estado !== 'cancelado' &&
+             s.id !== servicio.id
+    })
+    
+    var referencia = null
+    var tipo = ''
+    
+    if(suyos.length > 0){
+      // Centroide de sus servicios asignados
+      referencia = calcularCentroide(suyos)
+      tipo = suyos.length + ' srv'
+    } else if(t.lat_base && t.lng_base){
+      // Ubicación base del técnico
+      referencia = {lat: parseFloat(t.lat_base), lng: parseFloat(t.lng_base)}
+      tipo = 'base'
+    } else {
+      // Sin datos: usa Santiago Centro
+      referencia = {lat: CENTRO_SANTIAGO[0], lng: CENTRO_SANTIAGO[1]}
+      tipo = 'sin ref'
+    }
+    
+    var distancia = haversine(referencia.lat, referencia.lng, servicio.lat, servicio.lng)
+    var minEst = Math.round(distancia * 3) // ~3 min/km
+    
+    // Penalización por sobrecarga: si el técnico ya tiene muchos servicios, sube la "distancia"
+    var carga = suyos.length
+    var distEfectiva = distancia
+    if(carga >= 5) distEfectiva *= 1.4 // 40% más si tiene 5+
+    else if(carga >= 3) distEfectiva *= 1.15 // 15% más si tiene 3+
+    
+    ranking.push({
+      tecnico: t,
+      distancia: distancia,
+      distEfectiva: distEfectiva,
+      minEst: minEst,
+      carga: carga,
+      tipoRef: tipo
+    })
+  })
+  
+  // Ordenar por distancia efectiva
+  ranking.sort(function(a, b){return a.distEfectiva - b.distEfectiva})
+  return ranking
+}
+
+function mostrarSugerencias(){
+  // Buscar servicios sin asignar con coordenadas
+  var sinAsignar = SERVICIOS.filter(function(s){
+    return (!s.tecnico || s.tecnico === 'POR ASIGNAR') && 
+           s.lat && s.lng &&
+           s.estado !== 'completado' && s.estado !== 'cancelado'
+  })
+  
+  if(sinAsignar.length === 0){
+    var sinCoords = SERVICIOS.filter(function(s){
+      return (!s.tecnico || s.tecnico === 'POR ASIGNAR') && (!s.lat || !s.lng)
+    })
+    if(sinCoords.length > 0){
+      toast('⚠️ Hay '+sinCoords.length+' sin coordenadas. Toca "Geocodificar" primero', 'err')
+    } else {
+      toast('✅ Todos los servicios ya están asignados', 'ok')
+    }
+    return
+  }
+  
+  // Generar sugerencias para cada servicio
+  SUGERENCIAS_ACTUALES = sinAsignar.map(function(s){
+    var ranking = generarSugerenciasPorServicio(s, SERVICIOS)
+    return {
+      servicio: s,
+      ranking: ranking,
+      recomendado: ranking[0],
+      estado: 'pendiente'  // pendiente | aceptado | rechazado
+    }
+  })
+  
+  // Ordenar por urgencia primero, luego por hora
+  SUGERENCIAS_ACTUALES.sort(function(a, b){
+    var urgA = a.servicio.urgencia === 'urgente' ? 0 : 1
+    var urgB = b.servicio.urgencia === 'urgente' ? 0 : 1
+    if(urgA !== urgB) return urgA - urgB
+    return (a.servicio.hora || '').localeCompare(b.servicio.hora || '')
+  })
+  
+  renderSugerencias()
+  document.getElementById('modal-sug').classList.add('open')
+}
+
+function renderSugerencias(){
+  var lista = document.getElementById('sug-lista')
+  var resumen = document.getElementById('sug-resumen')
+  
+  var pendientes = SUGERENCIAS_ACTUALES.filter(function(s){return s.estado === 'pendiente'}).length
+  var aceptadas = SUGERENCIAS_ACTUALES.filter(function(s){return s.estado === 'aceptado'}).length
+  var rechazadas = SUGERENCIAS_ACTUALES.filter(function(s){return s.estado === 'rechazado'}).length
+  
+  resumen.textContent = pendientes + ' pendientes · ' + aceptadas + ' aceptadas · ' + rechazadas + ' rechazadas'
+  
+  var html = ''
+  SUGERENCIAS_ACTUALES.forEach(function(sug, idx){
+    var s = sug.servicio
+    var rec = sug.recomendado
+    var hora = (s.hora || '').substring(0, 5)
+    var col = colorTec(rec.tecnico.nombre)
+    var cls = 'sug-item' + (sug.estado === 'aceptado' ? ' aceptado' : '') + (sug.estado === 'rechazado' ? ' rechazado' : '')
+    
+    html += '<div class="'+cls+'">'
+    html += '<div>'
+    html += '<div class="sug-servicio-tit">'
+    html += (s.cliente || 'Sin cliente')
+    if(s.urgencia === 'urgente') html += '<span class="sug-badge urg">URGENTE</span>'
+    html += '</div>'
+    html += '<div class="sug-servicio-dir">🛠️ '+(s.servicio || 'Sin detalle')+'</div>'
+    html += '<div class="sug-servicio-dir">📍 '+(s.direccion || 'Sin dirección')+'</div>'
+    html += '<div class="sug-hora">⏰ '+hora+'</div>'
+    
+    if(sug.estado === 'pendiente'){
+      html += '<div class="sug-tecnico">'
+      html += '<div class="sug-avatar" style="background:linear-gradient(135deg,'+col+',#000)">'+iniciales(rec.tecnico.nombre)+'</div>'
+      html += '<div class="sug-tec-nom">🎯 '+rec.tecnico.nombre+'</div>'
+      html += '<div class="sug-tec-info">'+rec.distancia.toFixed(1)+' km <span>·</span> ~'+rec.minEst+' min <span>·</span> ' + rec.tipoRef + '</div>'
+      html += '</div>'
+      
+      // Alternativas
+      if(sug.ranking.length > 1){
+        html += '<div class="sug-alternativas">Alternativas: '
+        for(var i = 1; i < Math.min(sug.ranking.length, 4); i++){
+          var alt = sug.ranking[i]
+          html += '<button class="sug-btn alternativa" onclick="cambiarSugerencia('+idx+','+i+')">'+alt.tecnico.nombre.split(' ')[0]+' ('+alt.distancia.toFixed(1)+'km)</button> '
+        }
+        html += '</div>'
+      }
+    } else if(sug.estado === 'aceptado'){
+      html += '<div class="sug-tecnico" style="border-color:var(--verde)">'
+      html += '<div class="sug-avatar" style="background:linear-gradient(135deg,'+col+',#000)">'+iniciales(rec.tecnico.nombre)+'</div>'
+      html += '<div class="sug-tec-nom">✅ Asignado a '+rec.tecnico.nombre+'</div>'
+      html += '</div>'
+    } else if(sug.estado === 'rechazado'){
+      html += '<div class="sug-tecnico" style="border-color:var(--rojo)">'
+      html += '<div class="sug-tec-nom">❌ Rechazado - queda sin asignar</div>'
+      html += '</div>'
+    }
+    
+    html += '</div>'
+    html += '<div class="sug-btns">'
+    if(sug.estado === 'pendiente'){
+      html += '<button class="sug-btn aceptar" onclick="aceptarSugerencia('+idx+')">✅ Aceptar</button>'
+      html += '<button class="sug-btn rechazar" onclick="rechazarSugerencia('+idx+')">❌ Saltar</button>'
+    }
+    html += '</div>'
+    html += '</div>'
+  })
+  
+  lista.innerHTML = html
+}
+
+function cambiarSugerencia(idx, altIdx){
+  // Swap: la alternativa se vuelve la recomendada
+  var alt = SUGERENCIAS_ACTUALES[idx].ranking.splice(altIdx, 1)[0]
+  SUGERENCIAS_ACTUALES[idx].ranking.unshift(alt)
+  SUGERENCIAS_ACTUALES[idx].recomendado = alt
+  renderSugerencias()
+}
+
+async function aceptarSugerencia(idx){
+  var sug = SUGERENCIAS_ACTUALES[idx]
+  if(sug.estado !== 'pendiente') return
+  
+  var s = sug.servicio
+  var t = sug.recomendado.tecnico
+  
+  // Actualizar en BD
+  var r = await sbReq('PATCH', 'agenda?id=eq.'+s.id, {
+    tecnico: t.nombre,
+    estado: s.estado === 'solicitada' ? 'agendado' : s.estado
+  })
+  
+  if(!r.ok){
+    toast('❌ Error asignando', 'err')
+    return
+  }
+  
+  // Actualizar local
+  var srvLocal = SERVICIOS.find(function(x){return x.id === s.id})
+  if(srvLocal){
+    srvLocal.tecnico = t.nombre
+    if(srvLocal.estado === 'solicitada') srvLocal.estado = 'agendado'
+  }
+  sug.estado = 'aceptado'
+  
+  // Enviar notificación al técnico (usar Edge Function)
+  await notificarTecnico(t, s)
+  
+  renderSugerencias()
+  toast('✅ '+t.nombre.split(' ')[0]+' asignado a '+(s.cliente||'?'), 'ok')
+}
+
+function rechazarSugerencia(idx){
+  SUGERENCIAS_ACTUALES[idx].estado = 'rechazado'
+  renderSugerencias()
+}
+
+async function aceptarTodasSug(){
+  var pendientes = SUGERENCIAS_ACTUALES.filter(function(s){return s.estado === 'pendiente'})
+  if(pendientes.length === 0){
+    toast('Nada pendiente', 'ok')
+    return
+  }
+  if(!confirm('¿Aceptar TODAS las '+pendientes.length+' sugerencias?\n\nSe asignarán a los técnicos y se les enviará notificación por WhatsApp.')) return
+  
+  for(var i = 0; i < SUGERENCIAS_ACTUALES.length; i++){
+    if(SUGERENCIAS_ACTUALES[i].estado === 'pendiente'){
+      await aceptarSugerencia(i)
+    }
+  }
+  toast('✅ Todas asignadas', 'ok')
+}
+
+async function notificarTecnico(tecnico, servicio){
+  if(!tecnico.telefono) return
+  var hora = (servicio.hora||'').substring(0,5)
+  var fechaObj = servicio.fecha ? new Date(servicio.fecha+'T00:00:00') : new Date()
+  var fechaFmt = fechaObj.toLocaleDateString('es-CL',{weekday:'long', day:'numeric', month:'long'})
+  var urgIcon = servicio.urgencia==='urgente' ? '🔥 *URGENTE*\n\n' : ''
+  var msg = urgIcon + '🔧 *Nuevo servicio asignado*\n\n'
+  msg += '👤 *Cliente:* ' + (servicio.cliente || 'Sin nombre') + '\n'
+  if(servicio.telefono) msg += '📱 *Tel:* +' + servicio.telefono + '\n'
+  if(servicio.vehiculo) msg += '🚗 *Vehículo:* ' + servicio.vehiculo + '\n'
+  msg += '🛠️ *Servicio:* ' + (servicio.servicio || 'Sin detalle') + '\n'
+  msg += '📅 *Fecha:* ' + fechaFmt + '\n'
+  msg += '⏰ *Hora:* ' + hora + '\n'
+  if(servicio.direccion) msg += '📍 *Dirección:* ' + servicio.direccion + '\n'
+  msg += '\n━━━━━━━━━━━━━━━━━━━\n⚠️ *Responde:*\n\n✅ CONFIRMO / 🚗 EN CAMINO / ✅ LISTO / ❌ RECHAZO'
+  
+  try {
+    await fetch(SB_URL + '/functions/v1/send-outbound', {
+      method: 'POST',
+      headers: {'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'},
+      body: JSON.stringify({
+        telefono: tecnico.telefono.replace(/[^0-9]/g,''),
+        mensaje: msg,
+        agente_id: 'humano',
+        cliente_nombre: tecnico.nombre
+      })
+    })
+  } catch(e){console.error('notif tec err:', e)}
+}
+
+function cerrarSug(){
+  document.getElementById('modal-sug').classList.remove('open')
+  cargar() // Recargar para ver los cambios en el mapa
 }
 
 // Inicializar

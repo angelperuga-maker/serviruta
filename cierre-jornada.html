@@ -184,11 +184,12 @@ async function cargar(){
   // Cargar técnicos activos
   TECNICOS=await sbGet('tecnicos?activo=eq.true&select=nombre,telefono&order=nombre.asc')
   
-  // Cargar servicios según filtro
-  var query='agenda?select=*&order=urgencia.desc,hora.asc'
+  // Cargar servicios según filtro (siempre excluyendo finalizados)
+  var estadosPendientes='&estado=in.(solicitada,agendado,en-ruta,confirmado)'
+  var query='agenda?select=*&order=urgencia.desc,hora.asc'+estadosPendientes
   if(FILTRO==='manana') query+='&fecha=eq.'+mananaISO()
   else if(FILTRO==='hoy') query+='&fecha=eq.'+hoyISO()
-  else if(FILTRO==='todos') query+='&estado=in.(solicitada,agendado)&fecha=gte.'+hoyISO()
+  else if(FILTRO==='todos') query+='&fecha=gte.'+hoyISO()
   
   SERVICIOS=await sbGet(query)
   render()

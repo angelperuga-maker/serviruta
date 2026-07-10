@@ -76,6 +76,13 @@ select{cursor:pointer}
 .batch-msg{flex:1;font-size:13px;color:var(--dorado);font-weight:600}
 .batch-btn{padding:10px 20px;background:var(--verde);color:#000;border-radius:10px;font-family:var(--display);font-weight:800;font-size:12px;letter-spacing:0.05em}
 
+.cierre-btns{display:flex;gap:6px;margin-top:10px}
+.cbtn{padding:8px 12px;border-radius:8px;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.05em;cursor:pointer;transition:all 150ms;border:1px solid var(--line)}
+.cbtn.ok{background:rgba(34,197,94,0.12);border-color:rgba(34,197,94,0.4);color:var(--verde);flex:2}
+.cbtn.ok:hover{background:var(--verde);color:#000}
+.cbtn.cancel{background:rgba(232,33,10,0.08);border-color:rgba(232,33,10,0.35);color:var(--rojo-l);flex:1}
+.cbtn.cancel:hover{background:rgba(232,33,10,0.25)}
+
 /* Empty */
 .empty{padding:30px 16px;text-align:center;color:var(--t3);font-size:12px;font-style:italic}
 
@@ -256,6 +263,11 @@ function renderServicios(arr){
     if(s.origen==='agente' && s.telefono){
       html+='<button onclick="event.stopPropagation();verConversacion(\''+s.telefono+'\')" style="margin-top:8px;padding:6px 12px;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);border-radius:8px;font-family:var(--mono);font-size:10px;color:var(--verde);cursor:pointer;font-weight:700;letter-spacing:0.05em">💬 Ver chat del bot</button>'
     }
+    // Botones de cierre rápido
+    html+='<div class="cierre-btns">'
+    html+='<button class="cbtn ok" onclick="event.stopPropagation();terminarServicio(\''+s.id+'\')">✅ Terminado y pagado</button>'
+    html+='<button class="cbtn cancel" onclick="event.stopPropagation();cancelarServicio(\''+s.id+'\')">✕ Cancelar</button>'
+    html+='</div>'
     html+='</div>'
     html+='<div class="serv-tecnico">'
     html+='<select onchange="cambiarTecnico(\''+s.id+'\',this.value)" class="'+(sinAsig?'sin-asignar':'')+'">'
@@ -272,6 +284,60 @@ function renderServicios(arr){
 
 function verConversacion(tel){
   window.open('conversaciones-wa.html?tel='+encodeURIComponent(tel), '_blank')
+}
+
+// Cierre rápido: terminado → directo a completado + pagado
+async function terminarServicio(id){
+  var s = SERVICIOS.find(function(x){return x.id === id})
+  if(!s) return
+  
+  if(!confirm('✅ ¿Marcar como TERMINADO Y PAGADO?\n\nCliente: '+(s.cliente||'?')+'\nServicio: '+(s.servicio||'?')+'\n\nEl servicio pasará a estado PAGADO directamente.')) return
+  
+  var r = await fetch(SB_URL+'/rest/v1/agenda?id=eq.'+id, {
+    method: 'PATCH',
+    headers: {'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+    body: JSON.stringify({
+      estado: 'pagado',
+      notas: (s.notas||'') + '\n[Cerrado como terminado+pagado por ' + (localStorage.getItem('sv_user_username')||'coordinador') + ' el ' + hoyISO() + ']'
+    })
+  })
+  
+  if(!r.ok){
+    alert('❌ Error al actualizar. Intenta de nuevo.')
+    return
+  }
+  
+  // Remover del listado local (ya no está pendiente)
+  SERVICIOS = SERVICIOS.filter(function(x){return x.id !== id})
+  render()
+}
+
+// Cancelar servicio (soft-delete manteniendo historial)
+async function cancelarServicio(id){
+  var s = SERVICIOS.find(function(x){return x.id === id})
+  if(!s) return
+  
+  var razon = prompt('✕ Cancelar servicio de '+(s.cliente||'?')+'\n\n¿Motivo de la cancelación? (opcional)')
+  if(razon === null) return // canceló el prompt
+  
+  var lineaCancel = '[CANCELADO ' + hoyISO() + ']' + (razon ? ' ' + razon : '')
+  
+  var r = await fetch(SB_URL+'/rest/v1/agenda?id=eq.'+id, {
+    method: 'PATCH',
+    headers: {'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
+    body: JSON.stringify({
+      estado: 'cancelado',
+      notas: s.notas ? (s.notas + '\n' + lineaCancel) : lineaCancel
+    })
+  })
+  
+  if(!r.ok){
+    alert('❌ Error al cancelar. Intenta de nuevo.')
+    return
+  }
+  
+  SERVICIOS = SERVICIOS.filter(function(x){return x.id !== id})
+  render()
 }
 
 function filtrar(f){

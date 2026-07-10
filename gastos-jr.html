@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Control de Gastos · Serviruta</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0A0D;--s1:#111114;--s2:#16161B;--s3:#1C1C23;--line:#26262E;--rojo:#E8210A;--rojo-l:#FF4D2E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--violeta:#A78BFA;--dorado:#D4AF37;--naranja:#F97316;--t1:#F6F4EF;--t2:#C7C5BF;--t3:#8B8990;--display:'Syne',sans-serif;--body:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--t2);font-family:var(--body);font-size:14px;line-height:1.5;padding-bottom:90px}
+button,input,textarea,select{border:none;background:none;color:inherit;font-family:inherit;font-size:14px}
+input,textarea,select{background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:11px 13px;color:var(--t1);width:100%;transition:border-color 200ms}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--dorado)}
+
+.bar{position:sticky;top:0;z-index:50;background:rgba(10,10,13,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:10px 14px;display:flex;align-items:center;gap:10px}
+.back{font-family:var(--mono);font-size:10px;color:var(--t3);padding:6px 10px;border:1px solid var(--line);border-radius:6px;cursor:pointer}
+.sigil{width:32px;height:32px;background:linear-gradient(135deg,var(--naranja),var(--amarillo));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.title{font-family:var(--display);font-weight:800;font-size:14px;color:var(--t1);flex:1;line-height:1.1}
+.title small{display:block;font-family:var(--mono);font-size:9px;color:var(--naranja);letter-spacing:0.15em;margin-top:2px}
+
+.shell{max-width:760px;margin:0 auto;padding:18px 14px}
+
+/* KPIs del mes */
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.kpi{background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:12px}
+.kpi-lbl{font-family:var(--mono);font-size:8px;color:var(--t3);letter-spacing:0.15em;font-weight:700;text-transform:uppercase}
+.kpi-val{font-family:var(--display);font-weight:900;font-size:19px;color:var(--t1);letter-spacing:-0.5px;margin-top:3px}
+.kpi.total .kpi-val{color:var(--naranja)}
+.kpi.transf .kpi-val{color:var(--azul)}
+.kpi.compras .kpi-val{color:var(--verde)}
+
+/* Botón principal registrar */
+.btn-registrar{width:100%;padding:15px;background:linear-gradient(135deg,var(--naranja),#C2410C);color:#fff;border-radius:12px;font-family:var(--display);font-weight:900;font-size:14px;cursor:pointer;letter-spacing:0.05em;margin-bottom:18px;transition:all 200ms;display:flex;align-items:center;justify-content:center;gap:8px}
+.btn-registrar:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(249,115,22,0.3)}
+
+/* Filtros */
+.filtros{display:flex;gap:6px;overflow-x:auto;margin-bottom:14px;padding-bottom:2px;scrollbar-width:none}
+.filtros::-webkit-scrollbar{display:none}
+.chip{padding:7px 12px;background:var(--s2);border:1px solid var(--line);border-radius:8px;font-family:var(--mono);font-size:10px;color:var(--t2);font-weight:700;letter-spacing:0.05em;cursor:pointer;white-space:nowrap}
+.chip.active{background:var(--naranja);color:#000;border-color:var(--naranja)}
+
+/* Sección label */
+.sec-lbl{font-family:var(--mono);font-size:10px;color:var(--naranja);letter-spacing:0.2em;font-weight:700;margin:16px 0 10px;display:flex;justify-content:space-between;align-items:center}
+.sec-lbl small{color:var(--t3)}
+
+/* Toggle de vistas */
+.vista-toggle{display:flex;gap:6px;margin-bottom:4px}
+.vt-btn{flex:1;padding:9px;background:var(--s2);border:1px solid var(--line);border-radius:8px;font-family:var(--mono);font-size:10px;color:var(--t2);font-weight:700;cursor:pointer;letter-spacing:0.05em}
+.vt-btn.active{background:rgba(249,115,22,0.15);border-color:var(--naranja);color:var(--naranja)}
+
+/* Card por técnico */
+.tec-gasto{background:var(--s1);border:1px solid var(--line);border-radius:14px;margin-bottom:10px;overflow:hidden}
+.tec-gasto-hdr{display:flex;align-items:center;gap:12px;padding:14px;border-bottom:1px solid var(--line);cursor:pointer}
+.tec-gasto-hdr:hover{background:var(--s2)}
+.tec-gasto-avatar{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:900;font-size:14px;color:#000;background:linear-gradient(135deg,var(--naranja),var(--amarillo));flex-shrink:0}
+.tec-gasto-nom{flex:1;font-family:var(--display);font-weight:800;font-size:14px;color:var(--t1)}
+.tec-gasto-nom small{display:block;font-family:var(--mono);font-size:9px;color:var(--t3);font-weight:700;letter-spacing:0.05em;margin-top:2px}
+.tec-gasto-total{font-family:var(--display);font-weight:900;font-size:17px;color:var(--naranja)}
+.tec-gasto-body{padding:8px 14px;display:none}
+.tec-gasto.open .tec-gasto-body{display:block}
+.tec-gasto-item{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--line);font-size:12px;cursor:pointer}
+.tec-gasto-item:last-child{border-bottom:none}
+.tec-gasto-item:hover .desc{color:var(--t1)}
+.tec-gasto-item .desc{color:var(--t2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding-right:10px}
+.tec-gasto-item .m{font-family:var(--mono);font-weight:700;color:var(--naranja);white-space:nowrap}
+
+/* Gasto item */
+.gasto{background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:13px 14px;margin-bottom:8px;display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;cursor:pointer;transition:all 150ms}
+.gasto:hover{border-color:var(--naranja)}
+.gasto-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;background:var(--s2);flex-shrink:0}
+.gasto-icon.transferencia_tecnico{background:rgba(96,165,250,0.12)}
+.gasto-icon.repuestos{background:rgba(34,197,94,0.12)}
+.gasto-icon.combustible{background:rgba(245,197,24,0.12)}
+.gasto-info{min-width:0}
+.gasto-desc{color:var(--t1);font-weight:700;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gasto-meta{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.05em;margin-top:2px;display:flex;gap:8px;flex-wrap:wrap}
+.gasto-meta .metodo{color:var(--azul)}
+.gasto-monto{font-family:var(--display);font-weight:900;font-size:16px;color:var(--naranja);letter-spacing:-0.5px;white-space:nowrap}
+.gasto .foto-tag{font-size:11px}
+
+.empty{padding:40px 20px;text-align:center;color:var(--t3);font-style:italic;font-size:13px}
+
+/* Modal */
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.85);display:none;align-items:flex-end;justify-content:center;z-index:100;backdrop-filter:blur(4px)}
+.modal-bg.open{display:flex}
+.modal{background:var(--s1);border:1px solid var(--line);border-radius:20px 20px 0 0;width:100%;max-width:760px;max-height:92vh;overflow-y:auto;padding:22px 18px}
+.modal-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.modal-tit{font-family:var(--display);font-weight:900;font-size:19px;color:var(--t1)}
+.modal-close{padding:8px 12px;background:var(--s2);border:1px solid var(--line);border-radius:8px;font-family:var(--mono);font-size:11px;cursor:pointer}
+
+.f-group{margin-bottom:12px}
+.f-lbl{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.15em;font-weight:700;text-transform:uppercase;margin-bottom:5px;display:block}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+/* Categorías como grid de botones */
+.cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}
+.cat-btn{background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:10px 4px;cursor:pointer;text-align:center;transition:all 150ms}
+.cat-btn:hover{border-color:var(--naranja)}
+.cat-btn.selected{background:rgba(249,115,22,0.15);border-color:var(--naranja)}
+.cat-btn .ico{font-size:20px;display:block;margin-bottom:3px}
+.cat-btn .nom{font-family:var(--mono);font-size:8px;color:var(--t2);font-weight:700;letter-spacing:0.03em;line-height:1.2}
+.cat-btn.selected .nom{color:var(--naranja)}
+
+/* Método de pago pills */
+.pills{display:flex;gap:6px;margin-bottom:4px}
+.pill{flex:1;padding:9px;background:var(--s2);border:1px solid var(--line);border-radius:8px;font-family:var(--mono);font-size:10px;color:var(--t2);font-weight:700;cursor:pointer;text-align:center;letter-spacing:0.05em}
+.pill.selected{background:rgba(96,165,250,0.15);border-color:var(--azul);color:var(--azul)}
+
+.foto-zone{border:2px dashed var(--line);border-radius:12px;padding:16px;text-align:center;cursor:pointer;transition:all 200ms;margin-bottom:12px}
+.foto-zone:hover{border-color:var(--naranja)}
+.foto-zone.has-img{border-style:solid;border-color:var(--verde);padding:8px}
+.foto-zone img{max-width:100%;max-height:180px;border-radius:8px}
+.foto-zone .txt{font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:0.05em}
+
+.btn-guardar{width:100%;padding:14px;background:linear-gradient(135deg,var(--verde),#15803D);color:#fff;border-radius:10px;font-family:var(--display);font-weight:900;font-size:14px;cursor:pointer;letter-spacing:0.05em;margin-top:6px}
+.btn-guardar:disabled{opacity:0.5;cursor:not-allowed}
+.btn-eliminar{width:100%;padding:11px;background:none;border:1px solid rgba(232,33,10,0.4);color:var(--rojo-l);border-radius:10px;font-family:var(--mono);font-weight:700;font-size:11px;cursor:pointer;margin-top:8px;letter-spacing:0.05em}
+
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(30px);background:var(--s2);border:1px solid var(--line);border-radius:12px;padding:12px 18px;font-size:12px;color:var(--t1);opacity:0;transition:all 300ms;pointer-events:none;z-index:300}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.ok{border-color:var(--verde);color:var(--verde)}
+.toast.err{border-color:var(--rojo);color:var(--rojo-l)}
+
+/* Resumen por categoría */
+.cat-resumen{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:16px}
+.cat-res-item{background:var(--s1);border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:10px}
+.cat-res-item .ico{font-size:18px}
+.cat-res-item .info{flex:1;min-width:0}
+.cat-res-item .nom{font-family:var(--mono);font-size:8px;color:var(--t3);letter-spacing:0.1em;font-weight:700;text-transform:uppercase}
+.cat-res-item .val{font-family:var(--display);font-weight:800;font-size:13px;color:var(--t1)}
+
+@media(max-width:640px){
+  .kpis{grid-template-columns:repeat(3,1fr)}
+  .cat-grid{grid-template-columns:repeat(4,1fr)}
+  .f-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <button class="back" onclick="location.href=(localStorage.getItem('sv_user_rol')==='coord_junior'?'menu-coord-jr.html':'menu-coordinador.html')">← Volver</button>
+  <div class="sigil">💸</div>
+  <div class="title">Control de Gastos<small>COMPRAS · TRANSFERENCIAS · TÉCNICOS</small></div>
+</header>
+
+<div class="shell">
+
+  <div class="kpis">
+    <div class="kpi total"><div class="kpi-lbl">Total mes</div><div class="kpi-val" id="k-total">$0</div></div>
+    <div class="kpi transf"><div class="kpi-lbl">Transferencias</div><div class="kpi-val" id="k-transf">$0</div></div>
+    <div class="kpi compras"><div class="kpi-lbl">Compras</div><div class="kpi-val" id="k-compras">$0</div></div>
+  </div>
+
+  <button class="btn-registrar" onclick="abrirNuevo()">➕ Registrar gasto o transferencia</button>
+
+  <div class="cat-resumen" id="cat-resumen"></div>
+
+  <div class="filtros" id="filtros">
+    <button class="chip active" data-f="todos" onclick="filtrar('todos')">📊 Todos</button>
+    <button class="chip" data-f="transferencia_tecnico" onclick="filtrar('transferencia_tecnico')">💸 Transferencias</button>
+    <button class="chip" data-f="repuestos" onclick="filtrar('repuestos')">🔩 Repuestos</button>
+    <button class="chip" data-f="combustible" onclick="filtrar('combustible')">⛽ Combustible</button>
+    <button class="chip" data-f="viaticos" onclick="filtrar('viaticos')">🍔 Viáticos</button>
+    <button class="chip" data-f="otro" onclick="filtrar('otro')">📦 Otros</button>
+  </div>
+
+  <div class="vista-toggle">
+    <button class="vt-btn active" data-v="lista" onclick="cambiarVistaG('lista')">📋 Lista</button>
+    <button class="vt-btn" data-v="tecnico" onclick="cambiarVistaG('tecnico')">🔧 Por técnico</button>
+    <button class="vt-btn" data-v="ppto" onclick="cambiarVistaG('ppto')">📄 Por presupuesto</button>
+  </div>
+
+  <div class="sec-lbl">GASTOS DEL MES <small id="mes-lbl"></small></div>
+  <div id="lista"></div>
+
+</div>
+
+<!-- Modal registro -->
+<div class="modal-bg" id="modal-bg" onclick="if(event.target.id==='modal-bg')cerrarModal()">
+  <div class="modal">
+    <div class="modal-hdr">
+      <div class="modal-tit" id="modal-tit">➕ Nuevo gasto</div>
+      <button class="modal-close" onclick="cerrarModal()">✕</button>
+    </div>
+    
+    <div class="f-group">
+      <label class="f-lbl">Categoría</label>
+      <div class="cat-grid" id="cat-grid"></div>
+    </div>
+    
+    <div class="f-group">
+      <label class="f-lbl">Método de pago</label>
+      <div class="pills" id="metodo-pills">
+        <button class="pill selected" data-m="transferencia" onclick="selMetodo('transferencia')">💳 TRANSF</button>
+        <button class="pill" data-m="efectivo" onclick="selMetodo('efectivo')">💵 EFECTIVO</button>
+        <button class="pill" data-m="tarjeta" onclick="selMetodo('tarjeta')">💳 TARJETA</button>
+      </div>
+    </div>
+    
+    <div class="f-row">
+      <div class="f-group">
+        <label class="f-lbl">Monto ($)</label>
+        <input type="number" id="f-monto" placeholder="25000" min="0">
+      </div>
+      <div class="f-group">
+        <label class="f-lbl">Fecha</label>
+        <input type="date" id="f-fecha">
+      </div>
+    </div>
+    
+    <div class="f-group">
+      <label class="f-lbl">Descripción</label>
+      <input type="text" id="f-desc" placeholder="Ej: Kit embrague Yaris / Transferencia bencina Kiven">
+    </div>
+    
+    <div class="f-row">
+      <div class="f-group" id="grupo-destinatario">
+        <label class="f-lbl">Destinatario / Proveedor</label>
+        <input type="text" id="f-destinatario" placeholder="Kiven / Repuestos García" list="dest-list">
+        <datalist id="dest-list"></datalist>
+      </div>
+      <div class="f-group">
+        <label class="f-lbl">Técnico relacionado (opcional)</label>
+        <select id="f-tecnico"><option value="">— Ninguno —</option></select>
+      </div>
+    </div>
+    
+    <div class="f-group">
+      <label class="f-lbl">Vincular a presupuesto (opcional)</label>
+      <select id="f-presupuesto"><option value="">— Sin vincular —</option></select>
+    </div>
+    
+    <div class="f-group">
+      <label class="f-lbl">Comprobante / boleta (opcional)</label>
+      <div class="foto-zone" id="foto-zone" onclick="document.getElementById('f-foto').click()">
+        <div class="txt" id="foto-txt">📷 Toca para subir foto de la boleta o comprobante</div>
+        <img id="foto-preview" style="display:none">
+      </div>
+      <input type="file" id="f-foto" accept="image/*" style="display:none" onchange="cargarFoto(this)">
+    </div>
+    
+    <div class="f-group">
+      <label class="f-lbl">Notas (opcional)</label>
+      <textarea id="f-notas" rows="2" placeholder="Contexto adicional..."></textarea>
+    </div>
+    
+    <button class="btn-guardar" id="btn-guardar" onclick="guardar()">💾 Guardar gasto</button>
+    <button class="btn-eliminar" id="btn-eliminar" style="display:none" onclick="eliminar()">🗑 Eliminar este gasto</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+
+var USERNAME = localStorage.getItem('sv_user_username') || 'desconocido'
+var ROL = localStorage.getItem('sv_user_rol') || ''
+var GASTOS = []
+var TECNICOS = []
+var PPTOS = []
+var FILTRO = 'todos'
+var VISTA_G = 'lista'
+var EDITANDO = null
+var FOTO_B64 = null
+
+async function cargarPptos(){
+  // Presupuestos de los últimos 45 días para vincular
+  var hace45 = new Date(Date.now() - 45*86400000)
+  var r = await sbReq('GET', 'presupuestos?created_at=gte.'+hace45.toISOString()+'&select=id,numero,cliente,tecnico,estado&order=created_at.desc&limit=60')
+  PPTOS = r.ok ? await r.json() : []
+  var sel = document.getElementById('f-presupuesto')
+  var html = '<option value="">— Sin vincular —</option>'
+  PPTOS.forEach(function(p){
+    html += '<option value="'+p.id+'">#'+(p.numero||'?')+' · '+(p.cliente||'?')+' ('+(p.tecnico||'?')+')</option>'
+  })
+  sel.innerHTML = html
+}
+
+var CATEGORIAS = [
+  {key:'transferencia_tecnico', ico:'💸', nom:'TRANSF TÉCNICO'},
+  {key:'repuestos', ico:'🔩', nom:'REPUESTOS'},
+  {key:'combustible', ico:'⛽', nom:'COMBUSTIBLE'},
+  {key:'peajes', ico:'🛣️', nom:'PEAJES'},
+  {key:'herramientas', ico:'🔧', nom:'HERRAMIENTAS'},
+  {key:'viaticos', ico:'🍔', nom:'VIÁTICOS'},
+  {key:'insumos', ico:'🧴', nom:'INSUMOS'},
+  {key:'otro', ico:'📦', nom:'OTRO'}
+]
+var CAT_SEL = 'repuestos'
+var METODO_SEL = 'transferencia'
+
+function toast(msg, tipo){
+  var t = document.getElementById('toast')
+  t.textContent = msg
+  t.className = 'toast ' + (tipo||'')
+  t.classList.add('show')
+  setTimeout(function(){t.classList.remove('show')}, 2500)
+}
+
+function fmtMonto(n){
+  return '$' + (n||0).toLocaleString('es-CL')
+}
+
+function fmtISO(d){var y=d.getFullYear(),m=String(d.getMonth()+1).padStart(2,'0'),dd=String(d.getDate()).padStart(2,'0');return y+'-'+m+'-'+dd}
+
+async function sbReq(method, path, data){
+  var opts={method,headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=representation'}}
+  if(data)opts.body=JSON.stringify(data)
+  return await fetch(SB_URL+'/rest/v1/'+path,opts)
+}
+
+async function cargarTecnicos(){
+  var r = await sbReq('GET', 'tecnicos?activo=eq.true&select=nombre&order=nombre.asc')
+  TECNICOS = r.ok ? await r.json() : []
+  var sel = document.getElementById('f-tecnico')
+  var html = '<option value="">— Ninguno —</option>'
+  TECNICOS.forEach(function(t){html += '<option value="'+t.nombre+'">'+t.nombre+'</option>'})
+  sel.innerHTML = html
+  // También al datalist de destinatarios
+  var dl = document.getElementById('dest-list')
+  var dlHtml = ''
+  TECNICOS.forEach(function(t){dlHtml += '<option value="'+t.nombre+'">'})
+  dl.innerHTML = dlHtml
+}
+
+async function cargarGastos(){
+  var hoy = new Date()
+  var inicioMes = new Date(hoy.getFullYear(), hoy.getMonth(), 1)
+  var finMes = new Date(hoy.getFullYear(), hoy.getMonth() + 1, 0)
+  
+  // Junior ve solo lo que registró; owner/senior ven todo
+  var filtroUser = ''
+  if(ROL === 'coord_junior'){
+    filtroUser = '&registrado_por=eq.' + USERNAME
+  }
+  
+  var r = await sbReq('GET', 'gastos?fecha=gte.'+fmtISO(inicioMes)+'&fecha=lte.'+fmtISO(finMes)+filtroUser+'&select=*&order=fecha.desc,created_at.desc')
+  GASTOS = r.ok ? await r.json() : []
+  
+  document.getElementById('mes-lbl').textContent = hoy.toLocaleDateString('es-CL',{month:'long',year:'numeric'}).toUpperCase()
+  render()
+}
+
+function catInfo(key){
+  return CATEGORIAS.find(function(c){return c.key === key}) || {ico:'📦', nom:key||'OTRO'}
+}
+
+function cambiarVistaG(v){
+  VISTA_G = v
+  document.querySelectorAll('.vt-btn').forEach(function(b){b.classList.toggle('active', b.dataset.v === v)})
+  render()
+}
+
+function toggleTecCard(el){
+  el.parentElement.classList.toggle('open')
+}
+
+function renderListaNormal(arr, cont){
+  if(arr.length === 0){
+    cont.innerHTML = '<div class="empty">Sin gastos registrados' + (FILTRO !== 'todos' ? ' en esta categoría' : ' este mes') + '</div>'
+    return
+  }
+  var html = ''
+  arr.forEach(function(g){
+    var info = catInfo(g.categoria)
+    var fecha = g.fecha ? new Date(g.fecha+'T00:00:00').toLocaleDateString('es-CL',{day:'numeric',month:'short'}) : ''
+    var ppto = g.presupuesto_id ? PPTOS.find(function(p){return p.id === g.presupuesto_id}) : null
+    html += '<div class="gasto" onclick="abrirEditar(\''+g.id+'\')">'
+    html += '<div class="gasto-icon '+(g.categoria||'')+'">'+info.ico+'</div>'
+    html += '<div class="gasto-info">'
+    html += '<div class="gasto-desc">'+(g.descripcion || 'Sin descripción')+'</div>'
+    html += '<div class="gasto-meta">'
+    html += '<span>'+fecha+'</span>'
+    if(g.metodo_pago) html += '<span class="metodo">'+g.metodo_pago.toUpperCase()+'</span>'
+    if(g.destinatario) html += '<span>→ '+g.destinatario+'</span>'
+    else if(g.tecnico) html += '<span>🔧 '+g.tecnico.split(' ')[0]+'</span>'
+    if(ppto) html += '<span style="color:var(--dorado)">📄 #'+(ppto.numero||'?')+'</span>'
+    if(g.foto_url) html += '<span class="foto-tag">📷</span>'
+    html += '</div>'
+    html += '</div>'
+    html += '<div class="gasto-monto">'+fmtMonto(g.monto)+'</div>'
+    html += '</div>'
+  })
+  cont.innerHTML = html
+}
+
+function renderPorTecnico(arr, cont){
+  // Agrupar por técnico
+  var porTec = {}
+  var sinTec = []
+  arr.forEach(function(g){
+    if(g.tecnico){
+      if(!porTec[g.tecnico]) porTec[g.tecnico] = []
+      porTec[g.tecnico].push(g)
+    } else sinTec.push(g)
+  })
+  
+  var nombres = Object.keys(porTec).sort(function(a,b){
+    var ta = porTec[a].reduce(function(s,g){return s+(g.monto||0)},0)
+    var tb = porTec[b].reduce(function(s,g){return s+(g.monto||0)},0)
+    return tb - ta
+  })
+  
+  if(nombres.length === 0 && sinTec.length === 0){
+    cont.innerHTML = '<div class="empty">Sin gastos este mes</div>'
+    return
+  }
+  
+  var html = ''
+  nombres.forEach(function(nom){
+    var gs = porTec[nom]
+    var total = gs.reduce(function(s,g){return s+(g.monto||0)},0)
+    var iniciales = nom.split(' ').slice(0,2).map(function(s){return (s[0]||'').toUpperCase()}).join('')
+    html += '<div class="tec-gasto">'
+    html += '<div class="tec-gasto-hdr" onclick="toggleTecCard(this)">'
+    html += '<div class="tec-gasto-avatar">'+iniciales+'</div>'
+    html += '<div class="tec-gasto-nom">'+nom+'<small>'+gs.length+' gastos este mes</small></div>'
+    html += '<div class="tec-gasto-total">'+fmtMonto(total)+'</div>'
+    html += '</div>'
+    html += '<div class="tec-gasto-body">'
+    gs.forEach(function(g){
+      var fecha = g.fecha ? new Date(g.fecha+'T00:00:00').toLocaleDateString('es-CL',{day:'numeric',month:'short'}) : ''
+      var info = catInfo(g.categoria)
+      html += '<div class="tec-gasto-item" onclick="abrirEditar(\''+g.id+'\')">'
+      html += '<span class="desc">'+info.ico+' '+fecha+' · '+(g.descripcion||'?')+'</span>'
+      html += '<span class="m">'+fmtMonto(g.monto)+'</span>'
+      html += '</div>'
+    })
+    html += '</div>'
+    html += '</div>'
+  })
+  
+  if(sinTec.length > 0){
+    var totalSin = sinTec.reduce(function(s,g){return s+(g.monto||0)},0)
+    html += '<div class="tec-gasto">'
+    html += '<div class="tec-gasto-hdr" onclick="toggleTecCard(this)">'
+    html += '<div class="tec-gasto-avatar" style="background:var(--s3);color:var(--t3)">—</div>'
+    html += '<div class="tec-gasto-nom">Sin técnico asociado<small>'+sinTec.length+' gastos generales</small></div>'
+    html += '<div class="tec-gasto-total">'+fmtMonto(totalSin)+'</div>'
+    html += '</div>'
+    html += '<div class="tec-gasto-body">'
+    sinTec.forEach(function(g){
+      var fecha = g.fecha ? new Date(g.fecha+'T00:00:00').toLocaleDateString('es-CL',{day:'numeric',month:'short'}) : ''
+      var info = catInfo(g.categoria)
+      html += '<div class="tec-gasto-item" onclick="abrirEditar(\''+g.id+'\')">'
+      html += '<span class="desc">'+info.ico+' '+fecha+' · '+(g.descripcion||'?')+'</span>'
+      html += '<span class="m">'+fmtMonto(g.monto)+'</span>'
+      html += '</div>'
+    })
+    html += '</div>'
+    html += '</div>'
+  }
+  
+  cont.innerHTML = html
+}
+
+function renderPorPpto(arr, cont){
+  var conPpto = arr.filter(function(g){return g.presupuesto_id})
+  var sinPpto = arr.filter(function(g){return !g.presupuesto_id})
+  
+  if(conPpto.length === 0){
+    cont.innerHTML = '<div class="empty">Sin gastos vinculados a presupuestos este mes.<br><br>💡 Al registrar un gasto usa "Vincular a presupuesto" para asociarlo.</div>'
+    return
+  }
+  
+  var porPpto = {}
+  conPpto.forEach(function(g){
+    if(!porPpto[g.presupuesto_id]) porPpto[g.presupuesto_id] = []
+    porPpto[g.presupuesto_id].push(g)
+  })
+  
+  var html = ''
+  Object.keys(porPpto).forEach(function(pid){
+    var gs = porPpto[pid]
+    var total = gs.reduce(function(s,g){return s+(g.monto||0)},0)
+    var ppto = PPTOS.find(function(p){return p.id === pid})
+    var titulo = ppto ? '#'+(ppto.numero||'?')+' · '+(ppto.cliente||'?') : 'Presupuesto '+pid.substring(0,8)
+    var sub = ppto ? (ppto.tecnico||'?')+' · '+(ppto.estado||'') : ''
+    html += '<div class="tec-gasto">'
+    html += '<div class="tec-gasto-hdr" onclick="toggleTecCard(this)">'
+    html += '<div class="tec-gasto-avatar" style="background:linear-gradient(135deg,var(--dorado),#B8933A)">📄</div>'
+    html += '<div class="tec-gasto-nom">'+titulo+'<small>'+sub+' · '+gs.length+' gastos</small></div>'
+    html += '<div class="tec-gasto-total">'+fmtMonto(total)+'</div>'
+    html += '</div>'
+    html += '<div class="tec-gasto-body">'
+    gs.forEach(function(g){
+      var fecha = g.fecha ? new Date(g.fecha+'T00:00:00').toLocaleDateString('es-CL',{day:'numeric',month:'short'}) : ''
+      var info = catInfo(g.categoria)
+      html += '<div class="tec-gasto-item" onclick="abrirEditar(\''+g.id+'\')">'
+      html += '<span class="desc">'+info.ico+' '+fecha+' · '+(g.descripcion||'?')+'</span>'
+      html += '<span class="m">'+fmtMonto(g.monto)+'</span>'
+      html += '</div>'
+    })
+    html += '</div>'
+    html += '</div>'
+  })
+  
+  if(sinPpto.length > 0){
+    var totalSin = sinPpto.reduce(function(s,g){return s+(g.monto||0)},0)
+    html += '<div style="text-align:center;padding:12px;font-family:var(--mono);font-size:10px;color:var(--t3)">+ '+sinPpto.length+' gastos sin presupuesto vinculado ('+fmtMonto(totalSin)+')</div>'
+  }
+  
+  cont.innerHTML = html
+}
+
+function render(){
+  // KPIs
+  var total = 0, transf = 0, compras = 0
+  GASTOS.forEach(function(g){
+    total += g.monto || 0
+    if(g.categoria === 'transferencia_tecnico') transf += g.monto || 0
+    else compras += g.monto || 0
+  })
+  document.getElementById('k-total').textContent = fmtMonto(total)
+  document.getElementById('k-transf').textContent = fmtMonto(transf)
+  document.getElementById('k-compras').textContent = fmtMonto(compras)
+  
+  // Resumen por categoría
+  var porCat = {}
+  GASTOS.forEach(function(g){
+    var c = g.categoria || 'otro'
+    porCat[c] = (porCat[c] || 0) + (g.monto || 0)
+  })
+  var resHtml = ''
+  Object.keys(porCat).sort(function(a,b){return porCat[b]-porCat[a]}).slice(0,4).forEach(function(c){
+    var info = catInfo(c)
+    resHtml += '<div class="cat-res-item">'
+    resHtml += '<span class="ico">'+info.ico+'</span>'
+    resHtml += '<div class="info"><div class="nom">'+info.nom+'</div><div class="val">'+fmtMonto(porCat[c])+'</div></div>'
+    resHtml += '</div>'
+  })
+  document.getElementById('cat-resumen').innerHTML = resHtml
+  
+  // Lista según vista
+  var arr = GASTOS
+  if(FILTRO !== 'todos') arr = arr.filter(function(g){return g.categoria === FILTRO})
+  
+  var cont = document.getElementById('lista')
+  if(VISTA_G === 'tecnico') renderPorTecnico(arr, cont)
+  else if(VISTA_G === 'ppto') renderPorPpto(arr, cont)
+  else renderListaNormal(arr, cont)
+}
+
+function filtrar(f){
+  FILTRO = f
+  document.querySelectorAll('.chip').forEach(function(c){c.classList.toggle('active', c.dataset.f === f)})
+  render()
+}
+
+// ═══════════ MODAL ═══════════
+function renderCatGrid(){
+  var html = ''
+  CATEGORIAS.forEach(function(c){
+    var sel = CAT_SEL === c.key ? ' selected' : ''
+    html += '<button class="cat-btn'+sel+'" onclick="selCat(\''+c.key+'\')">'
+    html += '<span class="ico">'+c.ico+'</span>'
+    html += '<span class="nom">'+c.nom+'</span>'
+    html += '</button>'
+  })
+  document.getElementById('cat-grid').innerHTML = html
+}
+
+function selCat(key){
+  CAT_SEL = key
+  renderCatGrid()
+  // Ajustar placeholder del destinatario según categoría
+  var dest = document.getElementById('f-destinatario')
+  if(key === 'transferencia_tecnico'){
+    dest.placeholder = 'Nombre del técnico que recibe'
+  } else if(key === 'repuestos'){
+    dest.placeholder = 'Proveedor (Repuestos García, MercadoLibre...)'
+  } else {
+    dest.placeholder = 'Destinatario o proveedor'
+  }
+}
+
+function selMetodo(m){
+  METODO_SEL = m
+  document.querySelectorAll('.pill').forEach(function(p){p.classList.toggle('selected', p.dataset.m === m)})
+}
+
+function abrirNuevo(){
+  EDITANDO = null
+  FOTO_B64 = null
+  CAT_SEL = 'repuestos'
+  METODO_SEL = 'transferencia'
+  document.getElementById('modal-tit').textContent = '➕ Nuevo gasto'
+  document.getElementById('f-monto').value = ''
+  document.getElementById('f-fecha').value = fmtISO(new Date())
+  document.getElementById('f-desc').value = ''
+  document.getElementById('f-destinatario').value = ''
+  document.getElementById('f-tecnico').value = ''
+  document.getElementById('f-presupuesto').value = ''
+  document.getElementById('f-notas').value = ''
+  document.getElementById('foto-preview').style.display = 'none'
+  document.getElementById('foto-txt').style.display = 'block'
+  document.getElementById('foto-zone').classList.remove('has-img')
+  document.getElementById('btn-eliminar').style.display = 'none'
+  renderCatGrid()
+  selMetodo('transferencia')
+  document.getElementById('modal-bg').classList.add('open')
+}
+
+function abrirEditar(id){
+  var g = GASTOS.find(function(x){return x.id === id})
+  if(!g) return
+  EDITANDO = id
+  FOTO_B64 = g.foto_url || null
+  CAT_SEL = g.categoria || 'otro'
+  METODO_SEL = g.metodo_pago || 'transferencia'
+  document.getElementById('modal-tit').textContent = '✏️ Editar gasto'
+  document.getElementById('f-monto').value = g.monto || ''
+  document.getElementById('f-fecha').value = g.fecha || fmtISO(new Date())
+  document.getElementById('f-desc').value = g.descripcion || ''
+  document.getElementById('f-destinatario').value = g.destinatario || ''
+  document.getElementById('f-tecnico').value = g.tecnico || ''
+  document.getElementById('f-presupuesto').value = g.presupuesto_id || ''
+  document.getElementById('f-notas').value = g.notas || ''
+  
+  if(g.foto_url){
+    document.getElementById('foto-preview').src = g.foto_url
+    document.getElementById('foto-preview').style.display = 'block'
+    document.getElementById('foto-txt').style.display = 'none'
+    document.getElementById('foto-zone').classList.add('has-img')
+  } else {
+    document.getElementById('foto-preview').style.display = 'none'
+    document.getElementById('foto-txt').style.display = 'block'
+    document.getElementById('foto-zone').classList.remove('has-img')
+  }
+  
+  document.getElementById('btn-eliminar').style.display = 'block'
+  renderCatGrid()
+  selMetodo(METODO_SEL)
+  document.getElementById('modal-bg').classList.add('open')
+}
+
+function cerrarModal(){
+  document.getElementById('modal-bg').classList.remove('open')
+}
+
+function cargarFoto(input){
+  var file = input.files[0]
+  if(!file) return
+  
+  // Comprimir imagen antes de guardar (max 800px)
+  var reader = new FileReader()
+  reader.onload = function(e){
+    var img = new Image()
+    img.onload = function(){
+      var canvas = document.createElement('canvas')
+      var maxDim = 800
+      var w = img.width, h = img.height
+      if(w > maxDim || h > maxDim){
+        if(w > h){h = h * maxDim / w; w = maxDim}
+        else {w = w * maxDim / h; h = maxDim}
+      }
+      canvas.width = w; canvas.height = h
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h)
+      FOTO_B64 = canvas.toDataURL('image/jpeg', 0.7)
+      document.getElementById('foto-preview').src = FOTO_B64
+      document.getElementById('foto-preview').style.display = 'block'
+      document.getElementById('foto-txt').style.display = 'none'
+      document.getElementById('foto-zone').classList.add('has-img')
+    }
+    img.src = e.target.result
+  }
+  reader.readAsDataURL(file)
+}
+
+async function guardar(){
+  var monto = parseInt(document.getElementById('f-monto').value)
+  var desc = document.getElementById('f-desc').value.trim()
+  
+  if(!monto || monto <= 0){toast('⚠️ Ingresa el monto', 'err'); return}
+  if(!desc){toast('⚠️ Ingresa una descripción', 'err'); return}
+  
+  var btn = document.getElementById('btn-guardar')
+  btn.disabled = true
+  btn.textContent = '⏳ Guardando...'
+  
+  var data = {
+    monto: monto,
+    descripcion: desc,
+    fecha: document.getElementById('f-fecha').value || fmtISO(new Date()),
+    categoria: CAT_SEL,
+    metodo_pago: METODO_SEL,
+    destinatario: document.getElementById('f-destinatario').value.trim() || null,
+    tecnico: document.getElementById('f-tecnico').value || null,
+    presupuesto_id: document.getElementById('f-presupuesto').value || null,
+    notas: document.getElementById('f-notas').value.trim() || null,
+    foto_url: FOTO_B64,
+    tipo: catInfo(CAT_SEL).nom, // compatibilidad con campo tipo existente
+    registrado_por: USERNAME,
+    estado: 'registrado'
+  }
+  
+  var r
+  if(EDITANDO){
+    r = await sbReq('PATCH', 'gastos?id=eq.'+EDITANDO, data)
+  } else {
+    r = await sbReq('POST', 'gastos', data)
+  }
+  
+  btn.disabled = false
+  btn.textContent = '💾 Guardar gasto'
+  
+  if(!r.ok){
+    var err = await r.text()
+    toast('❌ Error: ' + err.substring(0, 50), 'err')
+    return
+  }
+  
+  toast(EDITANDO ? '✅ Gasto actualizado' : '✅ Gasto registrado', 'ok')
+  cerrarModal()
+  cargarGastos()
+}
+
+async function eliminar(){
+  if(!EDITANDO) return
+  if(!confirm('¿Eliminar este gasto? No se puede deshacer.')) return
+  
+  var r = await sbReq('DELETE', 'gastos?id=eq.'+EDITANDO)
+  if(!r.ok){toast('❌ Error al eliminar', 'err'); return}
+  
+  toast('🗑 Gasto eliminado', 'ok')
+  cerrarModal()
+  cargarGastos()
+}
+
+// Init
+cargarTecnicos()
+cargarPptos()
+cargarGastos()
+</script>
+
+</body>
+</html>

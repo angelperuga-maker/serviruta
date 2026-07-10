@@ -113,6 +113,22 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--dorado)}
 .ev-sug-geo:hover{background:rgba(96,165,250,0.15);border-color:var(--azul)}
 
 .semana{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+.mes{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.mes .dia-mes{background:var(--s1);border:1px solid var(--line);border-radius:8px;overflow:hidden;min-height:110px;font-size:11px;display:flex;flex-direction:column}
+.mes .dia-mes.hoy{border-color:var(--dorado);box-shadow:0 0 0 1px var(--dorado)}
+.mes .dia-mes.otro-mes{opacity:0.35}
+.mes .dia-mes-hdr{background:var(--s2);padding:4px 6px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.05em;font-weight:700}
+.mes .dia-mes-hdr .num{font-family:var(--display);font-size:14px;color:var(--t1);font-weight:900;letter-spacing:-0.5px}
+.mes .dia-mes.hoy .dia-mes-hdr .num{color:var(--dorado)}
+.mes .dia-mes-body{padding:3px;flex:1;overflow-y:auto;max-height:200px}
+.mes .mini-ev{background:var(--s2);border-left:2px solid var(--dorado);border-radius:4px;padding:3px 5px;margin-bottom:2px;font-size:9px;line-height:1.3;cursor:pointer}
+.mes .mini-ev:hover{background:var(--s3)}
+.mes .mini-ev.urg{border-left-color:var(--rojo)}
+.mes .mini-ev-hora{font-family:var(--mono);color:var(--dorado);font-weight:700;font-size:8px}
+.mes .mini-ev-cli{color:var(--t1);font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mes .mas-eventos{text-align:center;color:var(--t3);font-family:var(--mono);font-size:8px;font-weight:700;padding:2px}
+.mes-hdr-row{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:6px}
+.mes-hdr-row .hdr{text-align:center;padding:6px;font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;font-weight:700;text-transform:uppercase;background:var(--s2);border-radius:6px}
 .dia{background:var(--s1);border:1px solid var(--line);border-radius:12px;overflow:hidden;min-height:200px}
 .dia.hoy{border-color:var(--dorado);box-shadow:0 0 0 1px var(--dorado)}
 .dia-hdr{background:var(--s2);padding:8px 10px;border-bottom:1px solid var(--line);text-align:center}
@@ -188,7 +204,9 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--dorado)}
 <div class="controls">
   <div class="vista-tabs">
     <button class="tab active" data-vista="dia" onclick="cambiarVista('dia')">📆 Por día (carriles técnicos)</button>
-    <button class="tab" data-vista="semana" onclick="cambiarVista('semana')">📅 Semana completa</button>
+    <button class="tab" data-vista="semana" onclick="cambiarVista('semana')">📅 Semana actual</button>
+    <button class="tab" data-vista="semana-sig" onclick="cambiarVista('semana-sig')">➡️ Semana entrante</button>
+    <button class="tab" data-vista="mes" onclick="cambiarVista('mes')">🗓️ Mes completo</button>
     <button class="tab" data-vista="tecnico" onclick="cambiarVista('tecnico')">🔧 Por técnico (semana)</button>
   </div>
   
@@ -1012,9 +1030,97 @@ function renderVistaTecnico(){
   document.getElementById('contenido').innerHTML = html
 }
 
+function renderVistaSemanaSig(){
+  // Próxima semana: siempre desde el lunes siguiente al de HOY
+  var hoy = new Date()
+  var inicioActual = inicioSemana(hoy)
+  var inicio = new Date(inicioActual); inicio.setDate(inicioActual.getDate() + 7)
+  var fin = new Date(inicio); fin.setDate(inicio.getDate() + 6)
+  var lbl = document.getElementById('rango-lbl')
+  lbl.innerHTML = 'Semana entrante: ' + inicio.getDate() + ' al ' + fin.getDate() + ' ' + fin.toLocaleDateString('es-CL',{month:'short'})
+  lbl.innerHTML += '<small>PRÓXIMA SEMANA · ' + inicio.toLocaleDateString('es-CL',{month:'long',year:'numeric'}).toUpperCase() + '</small>'
+  var html = '<div class="semana">'
+  for(var i = 0; i < 7; i++){
+    var d = new Date(inicio); d.setDate(inicio.getDate() + i)
+    var fechaISO = fmtISO(d)
+    var arr = eventosFiltrados().filter(function(e){return e.fecha === fechaISO}).sort(function(a,b){return (a.hora||'').localeCompare(b.hora||'')})
+    html += '<div class="dia">'
+    html += '<div class="dia-hdr"><div class="dia-lbl">'+fmtDiaCorto(d)+'</div><div class="dia-num">'+d.getDate()+'</div></div>'
+    html += '<div class="dia-body' + (arr.length===0?' vacio':'') + '">'
+    if(arr.length === 0) html += 'Sin servicios'
+    else arr.forEach(function(e){html += miniEventoHTML(e)})
+    html += '</div></div>'
+  }
+  html += '</div>'
+  document.getElementById('contenido').innerHTML = html
+}
+
+function renderVistaMes(){
+  var mesFecha = new Date(FECHA.getFullYear(), FECHA.getMonth(), 1)
+  var lastDay = new Date(FECHA.getFullYear(), FECHA.getMonth() + 1, 0)
+  var lbl = document.getElementById('rango-lbl')
+  lbl.innerHTML = mesFecha.toLocaleDateString('es-CL',{month:'long',year:'numeric'}).toUpperCase()
+  lbl.innerHTML += '<small>MES COMPLETO · ' + eventosFiltrados().filter(function(e){
+    var f = new Date(e.fecha+'T00:00:00')
+    return f.getMonth() === FECHA.getMonth() && f.getFullYear() === FECHA.getFullYear()
+  }).length + ' servicios</small>'
+  
+  // Encontrar el lunes anterior o igual al 1 del mes
+  var primerLunes = new Date(mesFecha)
+  var day = primerLunes.getDay()
+  var diff = day === 0 ? -6 : 1 - day
+  primerLunes.setDate(mesFecha.getDate() + diff)
+  
+  var html = '<div class="mes-hdr-row">'
+  var dias = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom']
+  dias.forEach(function(d){html += '<div class="hdr">'+d+'</div>'})
+  html += '</div>'
+  
+  html += '<div class="mes">'
+  
+  // Renderizar hasta 6 semanas (42 días) para cubrir cualquier mes
+  var cur = new Date(primerLunes)
+  for(var w = 0; w < 6; w++){
+    for(var i = 0; i < 7; i++){
+      var fechaISO = fmtISO(cur)
+      var arr = eventosFiltrados().filter(function(e){return e.fecha === fechaISO}).sort(function(a,b){return (a.hora||'').localeCompare(b.hora||'')})
+      var esOtroMes = cur.getMonth() !== FECHA.getMonth()
+      var esHoyDia = esHoy(cur)
+      var cls = 'dia-mes'
+      if(esOtroMes) cls += ' otro-mes'
+      if(esHoyDia) cls += ' hoy'
+      html += '<div class="'+cls+'">'
+      html += '<div class="dia-mes-hdr">'
+      html += '<span class="num">'+cur.getDate()+'</span>'
+      if(arr.length > 0) html += '<span>'+arr.length+'</span>'
+      html += '</div>'
+      html += '<div class="dia-mes-body">'
+      var maxShow = 4
+      arr.slice(0, maxShow).forEach(function(e){
+        var hora = (e.hora||'').substring(0,5)
+        var urg = e.urgencia === 'urgente' ? ' urg' : ''
+        html += '<div class="mini-ev'+urg+'" onclick="editar(\''+e.id+'\')">'
+        html += '<div class="mini-ev-hora">'+hora+'</div>'
+        html += '<div class="mini-ev-cli">'+(e.cliente || 'Sin nombre').substring(0, 20)+'</div>'
+        html += '</div>'
+      })
+      if(arr.length > maxShow) html += '<div class="mas-eventos">+ '+(arr.length - maxShow)+' más</div>'
+      html += '</div>'
+      html += '</div>'
+      cur.setDate(cur.getDate() + 1)
+    }
+    // Si ya pasamos el último día del mes y estamos en un domingo, cortar
+    if(cur > lastDay && cur.getDay() === 1) break
+  }
+  html += '</div>'
+  document.getElementById('contenido').innerHTML = html
+}
+
 function render(){
   if(VISTA === 'dia') renderVistaDia()
   else if(VISTA === 'semana') renderVistaSemana()
+  else if(VISTA === 'semana-sig') renderVistaSemanaSig()
+  else if(VISTA === 'mes') renderVistaMes()
   else if(VISTA === 'tecnico') renderVistaTecnico()
 }
 

@@ -118,10 +118,10 @@ button{border:none;background:none;color:inherit;font-family:inherit;cursor:poin
   <div class="sigil">JR</div>
   <div class="title">Hub Coordinador Junior<small>SERVIRUTA · ACCESO LIMITADO</small></div>
   <div class="reloj">
-    <div class="reloj-hora">12:35</div>
-    <div class="reloj-info">MIÉ 09 JUL · ABIERTO</div>
+    <div class="reloj-hora" id="reloj-hora">--:--</div>
+    <div class="reloj-info" id="reloj-info">CARGANDO...</div>
   </div>
-  <button class="user-btn" onclick="cerrarSesion()"><div class="avatar" id="user-avatar">L</div> <span id="user-nom">Lily</span> · <span id="user-rol-txt">JUNIOR</span></button>
+  <button class="user-btn" onclick="cerrarSesion()"><div class="avatar" id="user-avatar">L</div> <span id="user-nom">Lilly</span> · <span id="user-rol-txt">JUNIOR</span></button>
 </header>
 
 <script>
@@ -161,13 +161,41 @@ function cerrarSesion(){
   } catch(e){}
   window.location.replace('login.html');
 }
+
+// Reloj en vivo con hora de Chile
+function actualizarReloj(){
+  try {
+    var ahora = new Date();
+    // Hora Chile
+    var opts = {timeZone:'America/Santiago', hour:'2-digit', minute:'2-digit', hour12:false};
+    var hora = ahora.toLocaleTimeString('es-CL', opts);
+    
+    var optsFecha = {timeZone:'America/Santiago', weekday:'short', day:'numeric', month:'short'};
+    var fecha = ahora.toLocaleDateString('es-CL', optsFecha).toUpperCase().replace(/\./g,'');
+    
+    // Estado abierto/cerrado (Lun-Sáb 8-19 hora Chile)
+    var horaChile = parseInt(ahora.toLocaleTimeString('es-CL', {timeZone:'America/Santiago', hour:'2-digit', hour12:false}));
+    var diaChile = new Date(ahora.toLocaleString('en-US', {timeZone:'America/Santiago'})).getDay();
+    var abierto = diaChile >= 1 && diaChile <= 6 && horaChile >= 8 && horaChile < 19;
+    
+    var hEl = document.getElementById('reloj-hora');
+    var iEl = document.getElementById('reloj-info');
+    if(hEl) hEl.textContent = hora;
+    if(iEl){
+      iEl.textContent = fecha + ' · ' + (abierto ? 'ABIERTO' : 'CERRADO');
+      iEl.style.color = abierto ? 'var(--verde)' : 'var(--rojo-l)';
+    }
+  } catch(e){}
+}
+actualizarReloj();
+setInterval(actualizarReloj, 30000);
 </script>
 
 <div class="shell">
 
   <div class="hero">
     <div class="hero-kicker">👋 BIENVENIDA A SERVIRUTA</div>
-    <div class="hero-tit" id="hero-tit">Hola <em id="hero-nom">Lily</em>. Aquí están tus herramientas.</div>
+    <div class="hero-tit" id="hero-tit">Hola <em id="hero-nom">Lilly</em>. Aquí están tus herramientas.</div>
     <div class="hero-desc">Tienes acceso a los módulos operativos para coordinar servicios. Los datos financieros históricos y sensibles están fuera de tu perímetro.</div>
   </div>
 

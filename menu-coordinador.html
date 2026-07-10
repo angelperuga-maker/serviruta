@@ -4,9 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Hub Coordinador · Serviruta</title>
+<script>
+// GUARD SINCRÓNICO ULTRA-RÁPIDO (evita flash)
+(function(){
+  try {
+    var rol = localStorage.getItem('sv_user_rol');
+    if(rol === 'coord_junior'){
+      window.location.replace('menu-coord-jr.html');
+      throw new Error('Redirect'); // detener ejecución del resto de la página
+    }
+  } catch(e){
+    if(e.message === 'Redirect') throw e;
+  }
+})();
+</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-// GUARD DE ROL con verificación de sesión real de Supabase
+// GUARD ASÍNCRONO: verifica sesión real después del render
 (async function(){
   try {
     var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co';
@@ -14,17 +28,14 @@
     var sb = window.supabase.createClient(SB_URL, SB_KEY);
     var {data:{session}} = await sb.auth.getSession();
     
-    // Si NO hay sesión activa → limpiar localStorage residual
     if(!session){
       localStorage.removeItem('sv_user_nombre');
       localStorage.removeItem('sv_user_rol');
       localStorage.removeItem('sv_user_username');
       localStorage.removeItem('sv_user_id');
-      // Permitir acceso sin sesión por ahora (retrocompat)
       return;
     }
     
-    // Si hay sesión, verificar el rol REAL desde la BD
     var r = await fetch(SB_URL + '/rest/v1/user_profiles?user_id=eq.' + session.user.id + '&select=nombre,rol,username', {
       headers: {'apikey': SB_KEY, 'Authorization': 'Bearer ' + session.access_token}
     });
@@ -32,20 +43,18 @@
       var perfiles = await r.json();
       if(perfiles && perfiles[0]){
         var rolReal = perfiles[0].rol;
-        // Actualizar localStorage con el valor real (por si cambió)
         localStorage.setItem('sv_user_nombre', perfiles[0].nombre);
         localStorage.setItem('sv_user_rol', rolReal);
         localStorage.setItem('sv_user_username', perfiles[0].username);
         localStorage.setItem('sv_user_id', session.user.id);
         
-        // Redirigir si es junior
         if(rolReal === 'coord_junior'){
           window.location.replace('menu-coord-jr.html');
         }
       }
     }
   } catch(e){
-    console.error('Guard error:', e);
+    console.error('Guard async error:', e);
   }
 })();
 </script>
@@ -446,6 +455,12 @@ button{border:none;background:none;color:inherit;font-family:inherit;cursor:poin
         <div class="card-icon">🗺</div>
         <div class="card-tit">Rutas Óptimas</div>
         <div class="card-desc">Optimizar y sugerir asignaciones</div>
+      </div>
+      <div class="card admin" onclick="location.href='protocolo-llamadas.html'">
+        <span class="card-tag new">NUEVO</span>
+        <div class="card-icon">📞</div>
+        <div class="card-tit">Protocolo Llamadas</div>
+        <div class="card-desc">Wizard 8 preguntas + diagnóstico</div>
       </div>
       <div class="card admin" onclick="location.href='buenos-dias.html'">
         <div class="card-icon">☀️</div>

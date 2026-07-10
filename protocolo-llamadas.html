@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Protocolo de Llamadas · Serviruta</title>
+<script>
+// GUARD: verificar sesión
+(function(){
+  try {
+    var rol = localStorage.getItem('sv_user_rol');
+    if(!rol){ /* permitir sin sesión por ahora */ }
+  } catch(e){}
+})();
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Instrument+Serif&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0A0A0D;--s1:#111114;--s2:#16161B;--s3:#1C1C23;--line:#26262E;
+  --rojo:#E8210A;--rojo-l:#FF4D2E;--verde:#22C55E;--amarillo:#F5C518;
+  --azul:#60A5FA;--violeta:#A78BFA;--dorado:#D4AF37;--naranja:#F97316;
+  --t1:#F6F4EF;--t2:#C7C5BF;--t3:#8B8990;
+  --display:'Syne',sans-serif;--body:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace;--serif:'Instrument Serif',serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--t2);font-family:var(--body);font-size:14px;line-height:1.5;min-height:100vh;padding-bottom:80px}
+button,input,textarea,select{border:none;background:none;color:inherit;font-family:inherit;font-size:14px}
+input,textarea,select{background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:12px 14px;color:var(--t1);width:100%;transition:border-color 200ms}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--dorado)}
+textarea{resize:vertical;min-height:70px;font-family:var(--body)}
+
+.bar{position:sticky;top:0;z-index:50;background:rgba(10,10,13,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:10px 14px;display:flex;align-items:center;gap:10px}
+.back{font-family:var(--mono);font-size:10px;color:var(--t3);padding:6px 10px;border:1px solid var(--line);border-radius:6px;cursor:pointer}
+.sigil{width:32px;height:32px;background:linear-gradient(135deg,var(--verde),var(--azul));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.title{font-family:var(--display);font-weight:800;font-size:14px;color:var(--t1);flex:1;line-height:1.1}
+.title small{display:block;font-family:var(--mono);font-size:9px;color:var(--verde);letter-spacing:0.15em;margin-top:2px}
+.reloj{padding:6px 10px;border-left:1px solid var(--line);font-family:var(--mono);font-size:11px;color:var(--dorado);font-weight:700}
+
+.shell{max-width:600px;margin:0 auto;padding:24px 16px}
+
+/* Progress bar */
+.progress-bar{background:var(--s2);border-radius:20px;height:6px;overflow:hidden;margin-bottom:14px;border:1px solid var(--line)}
+.progress-fill{background:linear-gradient(90deg,var(--verde),var(--dorado));height:100%;transition:width 400ms cubic-bezier(0.4,0,0.2,1);border-radius:20px}
+.progress-info{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.15em;font-weight:700;margin-bottom:20px;text-transform:uppercase}
+.progress-info .step{color:var(--dorado)}
+
+/* Card / Step */
+.step-card{background:var(--s1);border:1px solid var(--line);border-radius:18px;padding:24px 22px;margin-bottom:14px;position:relative;overflow:hidden}
+.step-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:2px;background:linear-gradient(90deg,var(--verde),var(--dorado))}
+.step-kicker{font-family:var(--mono);font-size:10px;color:var(--verde);letter-spacing:0.25em;font-weight:700;margin-bottom:8px}
+.step-title{font-family:var(--display);font-weight:900;font-size:22px;color:var(--t1);letter-spacing:-0.5px;line-height:1.15;margin-bottom:6px}
+.step-title em{font-family:var(--serif);font-style:italic;color:var(--dorado);font-weight:400}
+.step-desc{color:var(--t3);font-size:12px;margin-bottom:18px;line-height:1.5}
+
+/* Speech bubble para el saludo */
+.speech{background:linear-gradient(135deg,rgba(34,197,94,0.1),rgba(34,197,94,0.02));border:1px solid rgba(34,197,94,0.35);border-radius:14px;padding:16px 18px;margin-bottom:14px;position:relative}
+.speech-lbl{font-family:var(--mono);font-size:9px;color:var(--verde);letter-spacing:0.2em;font-weight:700;margin-bottom:6px}
+.speech-txt{font-family:var(--serif);font-size:17px;color:var(--t1);line-height:1.5;font-style:italic}
+.speech-txt strong{color:var(--dorado);font-style:normal;font-family:var(--display);font-weight:800}
+
+/* Grid de opciones */
+.options{display:grid;gap:8px;margin-bottom:14px}
+.options.cols-2{grid-template-columns:repeat(2,1fr)}
+.options.cols-3{grid-template-columns:repeat(3,1fr)}
+.opt-btn{background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:12px 14px;cursor:pointer;transition:all 150ms;text-align:left;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--t2);font-weight:500}
+.opt-btn:hover{border-color:var(--dorado);background:var(--s3);color:var(--t1)}
+.opt-btn.selected{background:linear-gradient(135deg,rgba(212,175,55,0.15),rgba(212,175,55,0.05));border-color:var(--dorado);color:var(--t1)}
+.opt-btn .ico{font-size:18px;flex-shrink:0}
+.opt-btn .body{flex:1;min-width:0}
+.opt-btn .body strong{color:var(--t1);font-family:var(--display);font-weight:800;display:block;font-size:13px}
+.opt-btn .body small{color:var(--t3);font-family:var(--mono);font-size:9px;letter-spacing:0.05em;display:block;margin-top:1px}
+
+/* Campos */
+.field-group{margin-bottom:12px}
+.field-lbl{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.15em;font-weight:700;text-transform:uppercase;margin-bottom:5px;display:block}
+.field-row{display:grid;gap:8px}
+.field-row.cols-2{grid-template-columns:1fr 1fr}
+.field-row.cols-3{grid-template-columns:1fr 1fr 1fr}
+
+/* Botones de navegación */
+.nav-buttons{display:flex;gap:10px;justify-content:space-between;margin-top:6px}
+.btn{padding:12px 18px;border-radius:10px;font-family:var(--display);font-weight:800;font-size:12px;cursor:pointer;letter-spacing:0.05em;transition:all 200ms;display:flex;align-items:center;justify-content:center;gap:6px;border:1px solid var(--line);flex:1}
+.btn.primary{background:linear-gradient(135deg,var(--dorado),#B8933A);color:#000;border-color:var(--dorado)}
+.btn.primary:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 6px 16px rgba(212,175,55,0.3)}
+.btn.primary:disabled{opacity:0.4;cursor:not-allowed}
+.btn.ghost{background:var(--s2);color:var(--t2);font-family:var(--mono);font-weight:700}
+.btn.ghost:hover{border-color:var(--t2);color:var(--t1)}
+.btn.wide{flex:2}
+
+/* Resumen final */
+.resumen{background:linear-gradient(135deg,rgba(34,197,94,0.08),rgba(212,175,55,0.03));border:2px solid var(--dorado);border-radius:18px;padding:22px 20px;margin-bottom:14px}
+.resumen-kicker{font-family:var(--mono);font-size:11px;color:var(--dorado);letter-spacing:0.25em;font-weight:700;margin-bottom:8px}
+.resumen-tit{font-family:var(--display);font-weight:900;font-size:22px;color:var(--t1);letter-spacing:-0.5px;line-height:1.1;margin-bottom:14px}
+.resumen-tit em{font-family:var(--serif);font-style:italic;color:var(--dorado);font-weight:400}
+
+.diag-box{background:var(--s2);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.diag-lbl{font-family:var(--mono);font-size:9px;color:var(--dorado);letter-spacing:0.2em;font-weight:700;margin-bottom:6px}
+.diag-txt{color:var(--t1);font-size:14px;line-height:1.5;font-weight:500}
+
+.info-grid{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;background:var(--s2);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:12px;font-size:12px}
+.info-lbl{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;font-weight:700;text-transform:uppercase;align-self:center}
+.info-val{color:var(--t1);font-weight:600}
+
+.badge{display:inline-block;padding:3px 8px;border-radius:6px;font-family:var(--mono);font-size:9px;letter-spacing:0.1em;font-weight:700}
+.badge.urg{background:rgba(232,33,10,0.15);color:var(--rojo-l)}
+.badge.normal{background:rgba(96,165,250,0.15);color:var(--azul)}
+.badge.prev{background:rgba(34,197,94,0.15);color:var(--verde)}
+
+/* Actions final */
+.actions-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.action-btn{background:var(--s2);border:1px solid var(--line);border-radius:12px;padding:14px 12px;cursor:pointer;text-align:center;transition:all 200ms}
+.action-btn:hover{border-color:var(--dorado);transform:translateY(-1px)}
+.action-btn .ico{font-size:24px;margin-bottom:6px;display:block}
+.action-btn .lbl{font-family:var(--display);font-weight:800;font-size:11px;color:var(--t1);letter-spacing:0.03em;line-height:1.2}
+.action-btn.wa{background:linear-gradient(135deg,rgba(34,197,94,0.15),rgba(34,197,94,0.02));border-color:var(--verde)}
+.action-btn.wa .lbl{color:var(--verde)}
+.action-btn.agenda{background:linear-gradient(135deg,rgba(212,175,55,0.15),rgba(212,175,55,0.02));border-color:var(--dorado)}
+.action-btn.agenda .lbl{color:var(--dorado)}
+
+/* Tip visible durante todo el proceso */
+.tip-flotante{background:var(--s2);border-left:3px solid var(--verde);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--t2);margin-bottom:14px;line-height:1.5;font-style:italic}
+.tip-flotante strong{color:var(--verde);font-style:normal;font-family:var(--mono);font-size:10px;letter-spacing:0.1em}
+
+/* Toast */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(30px);background:var(--s2);border:1px solid var(--line);border-radius:12px;padding:12px 18px;font-size:12px;color:var(--t1);opacity:0;transition:all 300ms;pointer-events:none;z-index:200}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.ok{border-color:var(--verde);color:var(--verde)}
+
+@media(max-width:640px){
+  .step-title{font-size:18px}
+  .options.cols-2, .options.cols-3{grid-template-columns:1fr}
+  .field-row.cols-2, .field-row.cols-3{grid-template-columns:1fr}
+  .actions-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <button class="back" onclick="volverHub()">← Volver</button>
+  <div class="sigil">📞</div>
+  <div class="title">Protocolo de Llamada<small>SERVIRUTA · ATENCIÓN TELEFÓNICA</small></div>
+  <div class="reloj" id="reloj">--:--</div>
+</header>
+
+<div class="shell">
+
+  <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:12%"></div></div>
+  <div class="progress-info">
+    <span class="step" id="step-lbl">PASO 1 DE 8</span>
+    <span id="step-name">SALUDO INICIAL</span>
+  </div>
+
+  <div id="contenido"></div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// ESTADO
+// ═══════════════════════════════════════════════════════
+var STEP = 1
+var TOTAL_STEPS = 8
+var DATOS = {
+  // Paso 2: Vehículo
+  marca: '', modelo: '', anio: '', combustible: '',
+  // Paso 3: Síntoma
+  sintoma_categoria: '', sintoma_detalle: '',
+  // Paso 4: Cuándo empezó
+  desde_cuando: '',
+  // Paso 5: Cuándo pasa
+  contexto: [],
+  // Paso 6: Luces tablero
+  luces_tablero: [],
+  // Paso 7: Estado / urgencia
+  estado_vehiculo: '', urgencia: 'normal',
+  // Paso 8: Cliente
+  nombre: '', telefono: '', comuna: ''
+}
+
+var STEP_NAMES = [
+  'SALUDO INICIAL',
+  '¿QUÉ VEHÍCULO?',
+  '¿QUÉ SÍNTOMA?',
+  '¿DESDE CUÁNDO?',
+  '¿CUÁNDO OCURRE?',
+  '¿LUZ EN TABLERO?',
+  '¿ESTADO ACTUAL?',
+  'DATOS CLIENTE'
+]
+
+// Categorías de síntoma con sus posibles diagnósticos
+var SINTOMAS = [
+  {key:'no_arranca', icono:'🚫', nombre:'No arranca / se apaga', desc:'motor no gira o gira sin arrancar', diag:'batería, alternador, motor de arranque, sensor de cigüeñal, combustible'},
+  {key:'ruido', icono:'🔊', nombre:'Ruido raro', desc:'chirridos, golpeteos, ronroneo', diag:'suspensión, frenos, correa, rodamiento, admisión'},
+  {key:'fuga', icono:'💧', nombre:'Fuga', desc:'aceite, agua, combustible, líquido', diag:'sello, empaque, radiador, cañería, cárter'},
+  {key:'luz_tablero', icono:'🚨', nombre:'Luz encendida', desc:'motor, batería, aceite, ABS', diag:'sensor, sistema eléctrico, requiere scanner'},
+  {key:'humo_potencia', icono:'💨', nombre:'Humo o baja potencia', desc:'humo negro/blanco/azul, sin fuerza', diag:'DPF/FAP, turbo, EGR, inyectores, filtro aire'},
+  {key:'frenos_susp', icono:'🛑', nombre:'Frenos / suspensión', desc:'no frena bien, chirrido al frenar, dureza', diag:'pastillas, discos, amortiguadores, líquido freno'},
+  {key:'embrague_caja', icono:'⚙️', nombre:'Embrague / caja', desc:'patina, no engancha, ruido al cambiar', diag:'kit embrague, aceite caja, sincros'},
+  {key:'mantencion', icono:'🔧', nombre:'Mantención preventiva', desc:'aceite, filtros, revisión general, pre-RT', diag:'mantención según kilometraje o pre-RT'},
+  {key:'otro', icono:'❓', nombre:'Otro / no sé', desc:'lo describo con palabras', diag:'diagnóstico presencial requerido'}
+]
+
+var CONTEXTOS = [
+  {key:'siempre', icono:'♾️', nombre:'Siempre'},
+  {key:'arranque_frio', icono:'❄️', nombre:'Al arrancar en frío'},
+  {key:'motor_caliente', icono:'🔥', nombre:'Con motor caliente'},
+  {key:'aceleracion', icono:'📈', nombre:'Al acelerar'},
+  {key:'frenar', icono:'⬇️', nombre:'Al frenar'},
+  {key:'doblar', icono:'↩️', nombre:'Al doblar'},
+  {key:'alta_velocidad', icono:'🏁', nombre:'A alta velocidad'},
+  {key:'ralenti', icono:'⏸️', nombre:'En ralentí (detenido)'}
+]
+
+var LUCES = [
+  {key:'motor', icono:'🔧', nombre:'Motor (check engine)'},
+  {key:'bateria', icono:'🔋', nombre:'Batería'},
+  {key:'aceite', icono:'🛢️', nombre:'Aceite'},
+  {key:'temperatura', icono:'🌡️', nombre:'Temperatura'},
+  {key:'abs', icono:'⚠️', nombre:'ABS / frenos'},
+  {key:'airbag', icono:'💥', nombre:'Airbag'},
+  {key:'ninguna', icono:'✅', nombre:'Ninguna'}
+]
+
+// ═══════════════════════════════════════════════════════
+// UTILIDADES
+// ═══════════════════════════════════════════════════════
+function reloj(){
+  var d = new Date()
+  var h = String(d.getHours()).padStart(2,'0')
+  var m = String(d.getMinutes()).padStart(2,'0')
+  document.getElementById('reloj').textContent = h+':'+m
+}
+setInterval(reloj, 30000)
+reloj()
+
+function toast(msg, tipo){
+  var t = document.getElementById('toast')
+  t.textContent = msg
+  t.className = 'toast ' + (tipo||'')
+  t.classList.add('show')
+  setTimeout(function(){t.classList.remove('show')}, 2500)
+}
+
+function volverHub(){
+  if(STEP > 1 && !confirm('¿Salir del protocolo? Perderás los datos.')) return
+  var rol = localStorage.getItem('sv_user_rol')
+  location.href = rol === 'coord_junior' ? 'menu-coord-jr.html' : 'menu-coordinador.html'
+}
+
+function actualizarProgress(){
+  var pct = (STEP / TOTAL_STEPS) * 100
+  document.getElementById('progress-fill').style.width = pct + '%'
+  document.getElementById('step-lbl').textContent = 'PASO ' + STEP + ' DE ' + TOTAL_STEPS
+  document.getElementById('step-name').textContent = STEP_NAMES[STEP - 1]
+}
+
+function siguiente(){
+  if(STEP < TOTAL_STEPS){
+    STEP++
+    render()
+  } else {
+    STEP++ // paso 9 = resumen
+    renderResumen()
+  }
+}
+
+function anterior(){
+  if(STEP > 1){
+    STEP--
+    render()
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// RENDER DE PASOS
+// ═══════════════════════════════════════════════════════
+function render(){
+  actualizarProgress()
+  var c = document.getElementById('contenido')
+  var html = ''
+  
+  if(STEP === 1){
+    // SALUDO
+    html += '<div class="step-card">'
+    html += '<div class="step-kicker">🎬 INICIO DE LLAMADA</div>'
+    html += '<div class="step-title">Comienza <em>siempre</em> con este saludo</div>'
+    html += '<div class="step-desc">Lo lees tal cual. Es amable y profesional.</div>'
+    
+    html += '<div class="speech">'
+    html += '<div class="speech-lbl">🎤 DILO AL RESPONDER</div>'
+    html += '<div class="speech-txt">Hola buen día, habla con <strong>Serviruta</strong>, servicio automotriz a domicilio, <strong>¿en qué te puedo ayudar?</strong></div>'
+    html += '</div>'
+    
+    html += '<div class="tip-flotante"><strong>💡 TIP:</strong> Escucha primero al cliente y toma notas mentales. Cuando termine de explicar, comenzás con la primera pregunta clave.</div>'
+    
+    html += '<div class="nav-buttons">'
+    html += '<button class="btn primary wide" onclick="siguiente()">Empezar preguntas →</button>'
+    html += '</div>'
+    html += '</div>'
+  }
+  
+  else if(STEP === 2){
+    // VEHÍCULO
+    html += '<div class="step-card">'
+    html += '<div class="step-kicker">PREGUNTA 1</div>'
+    html += '<div class="step-title">¿Qué vehículo <em>tienes</em>?</div>'
+    html += '<div class="step-desc">"Cuéntame, ¿qué vehículo es? Marca, modelo y año."</div>'
+    
+    html += '<div class="field-row cols-2">'
+    html += '<div class="field-group"><label class="field-lbl">Marca</label><input type="text" id="f-marca" placeholder="Toyota, Peugeot..." value="'+DATOS.marca+'"></div>'
+    html += '<div class="field-group"><label class="field-lbl">Modelo</label><input type="text" id="f-modelo" placeholder="Yaris, Corolla..." value="'+DATOS.modelo+'"></div>'
+    html += '</div>'
+    html += '<div class="field-row cols-2">'
+    html += '<div class="field-group"><label class="field-lbl">Año</label><input type="number" id="f-anio" placeholder="2018" min="1980" max="2027" value="'+DATOS.anio+'"></div>'
+    html += '<div class="field-group"><label class="field-lbl">Combustible</label>'
+    html += '<select id="f-combustible">'
+    var combs = ['Bencina', 'Diesel', 'GNC', 'Eléctrico', 'Híbrido']
+    html += '<option value="">Selecciona</option>'
+    combs.forEach(function(c){
+      html += '<option value="'+c+'"'+(DATOS.combustible===c?' selected':'')+'>'+c+'</option>'
+    })
+    html += '</select>'
+    html += '</div>'
+    html += '</div>'
+    
+    html += '<div class="tip-flotante"><strong>💡 TIP:</strong> Si no sabes el año exacto, pregunta "más o menos qué año".</div>'
+    
+    html += '<div class="nav-buttons">'
+    html += '<button class="btn ghost" onclick="anterior()">← Volver</button>'
+    html += '<button class="btn primary wide" onclick="guardarVehiculoYSeguir()">Siguiente →</button>'
+    html += '</div>'
+    html += '</div>'
+  }
+  
+  else if(STEP === 3){
+    // SÍNTOMA
+    html += '<div class="step-card">'
+    html += '<div class="step-kicker">PREGUNTA 2</div>'
+    html += '<div class="step-title">¿Qué está <em>pasando</em>?</div>'
+    html += '<div class="step-desc">"Cuéntame qué está pasando con el auto. ¿Cuál es el problema principal?"</div>'
+    
+    html += '<div class="options">'
+    SINTOMAS.forEach(function(s){
+      var sel = DATOS.sintoma_categoria === s.key ? ' selected' : ''
+      html += '<button class="opt-btn'+sel+'" onclick="seleccionarSintoma(\''+s.key+'\')">'
+      html += '<span class="ico">'+s.icono+'</span>'
+      html += '<div class="body"><strong>'+s.nombre+'</strong><small>'+s.desc+'</small></div>'
+      html += '</button>'
+    })
+    html += '</div>'
+    
+    html += '<div class="field-group"><label class="field-lbl">Descripción libre (opcional)</label><textarea id="f-sintoma-detalle" placeholder="Anota lo que el cliente diga literal, por ejemplo: hace un ruido tipo click cuando doy vuelta">'+DATOS.sintoma_detalle+'</textarea></div>'
+    
+    html += '<div class="nav-buttons">'
+    html += '<button class="btn ghost" onclick="anterior()">← Volver</button>'
+    html += '<button class="btn primary wide" onclick="guardarSintomaYSeguir()" '+(DATOS.sintoma_categoria?'':'disabled')+'>Siguiente →</button>'
+    html += '</div>'
+    html += '</div>'
+  }
+  
+  else if(STEP === 4){
+    // DESDE CUÁNDO
+    html += '<div class="step-card">'
+    html += '<div class="step-kicker">PREGUNTA 3</div>'
+    html += '<div class="step-title">¿Desde <em>cuándo</em>?</div>'
+    html += '<div class="step-desc">"¿Hace cuánto tiempo empezó el problema?"</div>'
+    
+    var opciones = [
+      {key:'hoy', ico:'⚡', nom:'Hoy', desc:'apenas comenzó'},
+      {key:'esta_semana', ico:'📅', nom:'Esta semana', desc:'hace 1-6 días'},
+      {key:'2_semanas', ico:'📆', nom:'Hace 2 semanas', desc:'reciente'},
+      {key:'mas_1_mes', ico:'🗓️', nom:'Más de 1 mes', desc:'lleva un tiempo'},
+      {key:'siempre', ico:'♾️', nom:'Siempre lo ha tenido', desc:'desde que lo tiene'}
+    ]
+    
+    html += '<div class="options">'
+    opciones.forEach(function(o){
+      var sel = DATOS.desde_cuando === o.key ? ' selected' : ''
+      html += '<button class="opt-btn'+sel+'" onclick="seleccionarDesdeCuando(\''+o.key+'\')">'
+      html += '<span class="ico">'+o.ico+'</span>'
+      html += '<div class="body"><strong>'+o.nom+'</strong><small>'+o.desc+'</small></div>'
+      html += '</button>'
+    })
+    html += '</div>'
+    
+    html += '<div class="nav-buttons">'
+    html += '<button class="btn ghost" onclick="anterior()">← Volver</button>'
+    html += '<button class="btn primary wide" onclick="siguiente()" '+(DATOS.desde_cuando?'':'disabled')+'>Siguiente →</button>'
+    html += '</div>'
+    html += '</div>'
+  }
+  
+  else if(STEP === 5){
+    // CUÁNDO OCURRE (contexto)
+    html += '<div class="step-card">'
+    html += '<div class="step-kicker">PREGUNTA 4</div>'
+    html += '<div class="step-title">¿Cuándo <em>ocurre</em>?</div>'
+    html += '<div class="step-desc">"¿En qué momento pasa? Podés marcar más de uno."</div>'
+    
+    html += '<div class="options">'
+    CONTEXTOS.forEach(function(c){
+      var sel = DATOS.contexto.indexOf(c.key) >= 0 ? ' selected' : ''
+      html += '<button class="opt-btn'+sel+'" onclick="toggleContexto(\''+c.key+'\')">'
+      html += '<span class="ico">'+c.icono+'</span>'
+      html += '<div class="body"><strong>'+c.nombre+'</strong></div>'
+      html += '</button>'
+    })
+    html += '</div>'
+    
+    html += '<div class="tip-flotante"><strong>💡 TIP:</strong> Puedes marcar varios. Ej: "al arrancar en frío" + "en ralentí" ayuda mucho al diagnóstico.</div>'
+    
+    html += '<div class="nav-buttons">'
+    html += '<button class="btn ghost" onclick="anterior()">← Volver</button>'
+    html += '<button class="btn primary wide" onclick="siguiente()">Siguiente →</button>'
+    html += '</div>'
+    html += '</div>'
+  }
+  
+  else if(STEP === 6){
+    // LUZ TABLERO
+    html += '<div class="step-card">'
+    html += '<div class="step-kicker">PREGUNTA 5</div>'
+    html += '<div class="step-title">¿Hay alguna <em>luz</em> encendida en el tablero?</div>'
+    html += '<div class="step-desc">"¿Se te enciende alguna luz de advertencia? Puedes decirme el color o el símbolo."</div>'
+    
+    html += '<div class="options">'
+    LUCES.forEach(function(l){
+      var sel = DATOS.luces_tablero.indexOf(l.key) >= 0 ? ' selected' : ''
+      html += '<button class="opt-btn'+sel+'" onclick="toggleLuz(\''+l.key+'\')">'
+      html += '<span class="ico">'+l.icono+'</span>'
+      html += '<div class="body"><strong>'+l.nombre+'</strong></div>'
+      html += '</button>'
+    })
+    html += '</div>'
+    
+    html += '<div class="nav-buttons">'
+    html += '<button class="btn ghost" onclick="anterior()">← Volver</button>'
+    html += '<button class="btn primary wide" onclick="siguiente()">Siguiente →</button>'
+    html += '</div>'
+    html += '</div>'
+  }
+  
+  else if(STEP === 7){
+    // ESTADO / URGENCIA
+    html += '<div class="step-card">'
+    html += '<div class="step-kicker">PREGUNTA 6</div>'
+    html += '<div class="step-title">¿Puede <em>manejar</em>?</div>'
+    html += '<div class="step-desc">"¿El vehículo se puede mover o está detenido?"</div>'
+    
+    var estados = [
+      {key:'detenido', ico:'🚫', nom:'Detenido / no se puede mover', desc:'necesita grúa o técnico ahora', urg:'urgente'},
+      {key:'malo', ico:'⚠️', nom:'Puede manejar pero mal', desc:'llega a taller pero con dificultad', urg:'urgente'},
+      {key:'ok', ico:'🚗', nom:'Puede manejar bien', desc:'no es urgente inmediato', urg:'normal'},
+      {key:'preventivo', ico:'🛠️', nom:'Sin problema actual', desc:'quiere mantención preventiva', urg:'preventivo'}
+    ]
+    
+    html += '<div class="options">'
+    estados.forEach(function(e){
+      var sel = DATOS.estado_vehiculo === e.key ? ' selected' : ''
+      html += '<button class="opt-btn'+sel+'" onclick="seleccionarEstado(\''+e.key+'\',\''+e.urg+'\')">'
+      html += '<span class="ico">'+e.ico+'</span>'
+      html += '<div class="body"><strong>'+e.nom+'</strong><small>'+e.desc+'</small></div>'
+      html += '</button>'
+    })
+    html += '</div>'
+    
+    html += '<div class="nav-buttons">'
+    html += '<button class="btn ghost" onclick="anterior()">← Volver</button>'
+    html += '<button class="btn primary wide" onclick="siguiente()" '+(DATOS.estado_vehiculo?'':'disabled')+'>Siguiente →</button>'
+    html += '</div>'
+    html += '</div>'
+  }
+  
+  else if(STEP === 8){
+    // DATOS CLIENTE
+    html += '<div class="step-card">'
+    html += '<div class="step-kicker">DATOS FINALES</div>'
+    html += '<div class="step-title">¿A <em>nombre</em> de quién?</div>'
+    html += '<div class="step-desc">"Perfecto, para agendarte necesito: tu nombre, un teléfono y en qué comuna estás."</div>'
+    
+    html += '<div class="field-group"><label class="field-lbl">Nombre</label><input type="text" id="f-nombre" placeholder="Juan Pérez" value="'+DATOS.nombre+'"></div>'
+    html += '<div class="field-group"><label class="field-lbl">Teléfono WhatsApp</label><input type="tel" id="f-telefono" placeholder="+56 9 1234 5678" value="'+DATOS.telefono+'"></div>'
+    html += '<div class="field-group"><label class="field-lbl">Comuna</label><input type="text" id="f-comuna" placeholder="Providencia, La Florida, Maipú..." value="'+DATOS.comuna+'"></div>'
+    
+    html += '<div class="tip-flotante"><strong>💡 TIP:</strong> El teléfono es para agendar por WhatsApp también y mandarle recordatorios automáticos.</div>'
+    
+    html += '<div class="nav-buttons">'
+    html += '<button class="btn ghost" onclick="anterior()">← Volver</button>'
+    html += '<button class="btn primary wide" onclick="guardarDatosYFinalizar()">Ver resumen 🎯</button>'
+    html += '</div>'
+    html += '</div>'
+  }
+  
+  c.innerHTML = html
+}
+
+// ═══════════════════════════════════════════════════════
+// HANDLERS DE SELECCIÓN
+// ═══════════════════════════════════════════════════════
+function guardarVehiculoYSeguir(){
+  DATOS.marca = document.getElementById('f-marca').value.trim()
+  DATOS.modelo = document.getElementById('f-modelo').value.trim()
+  DATOS.anio = document.getElementById('f-anio').value.trim()
+  DATOS.combustible = document.getElementById('f-combustible').value
+  if(!DATOS.marca || !DATOS.modelo){
+    toast('⚠️ Falta marca y modelo', 'err')
+    return
+  }
+  siguiente()
+}
+
+function seleccionarSintoma(key){
+  DATOS.sintoma_categoria = key
+  var det = document.getElementById('f-sintoma-detalle')
+  if(det) DATOS.sintoma_detalle = det.value
+  render()
+}
+
+function guardarSintomaYSeguir(){
+  DATOS.sintoma_detalle = document.getElementById('f-sintoma-detalle').value.trim()
+  siguiente()
+}
+
+function seleccionarDesdeCuando(key){
+  DATOS.desde_cuando = key
+  render()
+}
+
+function toggleContexto(key){
+  var i = DATOS.contexto.indexOf(key)
+  if(i >= 0) DATOS.contexto.splice(i, 1)
+  else DATOS.contexto.push(key)
+  render()
+}
+
+function toggleLuz(key){
+  // 'ninguna' es exclusivo
+  if(key === 'ninguna'){
+    DATOS.luces_tablero = DATOS.luces_tablero.indexOf('ninguna') >= 0 ? [] : ['ninguna']
+  } else {
+    // Si tenía 'ninguna', quitarla
+    DATOS.luces_tablero = DATOS.luces_tablero.filter(function(x){return x !== 'ninguna'})
+    var i = DATOS.luces_tablero.indexOf(key)
+    if(i >= 0) DATOS.luces_tablero.splice(i, 1)
+    else DATOS.luces_tablero.push(key)
+  }
+  render()
+}
+
+function seleccionarEstado(key, urg){
+  DATOS.estado_vehiculo = key
+  DATOS.urgencia = urg
+  render()
+}
+
+function guardarDatosYFinalizar(){
+  DATOS.nombre = document.getElementById('f-nombre').value.trim()
+  DATOS.telefono = document.getElementById('f-telefono').value.trim()
+  DATOS.comuna = document.getElementById('f-comuna').value.trim()
+  if(!DATOS.nombre || !DATOS.telefono){
+    toast('⚠️ Falta nombre o teléfono', 'err')
+    return
+  }
+  siguiente()
+}
+
+// ═══════════════════════════════════════════════════════
+// LÓGICA DE DIAGNÓSTICO
+// ═══════════════════════════════════════════════════════
+function generarDiagnostico(){
+  var s = SINTOMAS.find(function(x){return x.key === DATOS.sintoma_categoria})
+  var diag = 'Diagnóstico presuntivo: '
+  var reco = ''
+  var categoria = 'livianos'
+  
+  // Categoría por vehículo
+  var mLower = (DATOS.marca + ' ' + DATOS.modelo).toLowerCase()
+  if(/camion|cami\u00f3n|scania|volvo fh|kenworth|actros|iveco|freightliner|mercedes.*sprinter/i.test(mLower)) categoria = 'pesados'
+  
+  // Diagnóstico específico
+  if(DATOS.sintoma_categoria === 'humo_potencia' && DATOS.combustible === 'Diesel'){
+    diag += 'Muy probable saturación de DPF/FAP, turbo o válvula EGR.'
+    reco = 'Enviar técnico con scanner profesional. Servicio DPF a domicilio, desde $149.000.'
+  }
+  else if(DATOS.sintoma_categoria === 'embrague_caja' && DATOS.contexto.indexOf('aceleracion') >= 0){
+    diag += 'Muy probable kit de embrague desgastado.'
+    reco = 'Cotización kit + mano de obra. Servicio DPF NO aplica.'
+  }
+  else if(DATOS.sintoma_categoria === 'no_arranca'){
+    diag += 'Puede ser batería, alternador, motor de arranque o combustible.'
+    reco = 'Visita técnica con scanner + multímetro. Batería típicamente $80-120k.'
+  }
+  else if(DATOS.sintoma_categoria === 'luz_tablero' || DATOS.luces_tablero.indexOf('motor') >= 0){
+    diag += 'Requiere scanner OBD para leer códigos de falla.'
+    reco = 'Visita técnica con scanner ($35.000, se descuenta si acepta reparación).'
+  }
+  else if(DATOS.sintoma_categoria === 'ruido'){
+    diag += 'Puede ser suspensión, rodamientos, frenos o correa.'
+    reco = 'Visita técnica presencial para diagnóstico auditivo.'
+  }
+  else if(DATOS.sintoma_categoria === 'fuga'){
+    diag += 'Fuga a determinar (sello, empaque, cañería).'
+    reco = 'Visita técnica para identificar origen. Presupuesto después.'
+  }
+  else if(DATOS.sintoma_categoria === 'frenos_susp'){
+    diag += 'Sistema de frenos o suspensión.'
+    reco = 'Revisión y presupuesto según estado.'
+  }
+  else if(DATOS.sintoma_categoria === 'mantencion'){
+    diag += 'Mantención preventiva.'
+    reco = 'Servicio de mantención a domicilio. Cotizar según kilometraje.'
+  }
+  else {
+    diag += (s ? s.diag : 'Requiere diagnóstico presencial.')
+    reco = 'Visita técnica con scanner y diagnóstico presencial.'
+  }
+  
+  return {diagnostico: diag, recomendacion: reco, categoria: categoria}
+}
+
+// ═══════════════════════════════════════════════════════
+// RESUMEN FINAL
+// ═══════════════════════════════════════════════════════
+function renderResumen(){
+  document.getElementById('progress-fill').style.width = '100%'
+  document.getElementById('step-lbl').textContent = '✅ COMPLETO'
+  document.getElementById('step-name').textContent = 'RESUMEN Y ACCIONES'
+  
+  var diag = generarDiagnostico()
+  var s = SINTOMAS.find(function(x){return x.key === DATOS.sintoma_categoria}) || {nombre:'?', icono:'❓'}
+  var vehiculo = [DATOS.marca, DATOS.modelo, DATOS.anio].filter(Boolean).join(' ')
+  if(DATOS.combustible) vehiculo += ' ('+DATOS.combustible+')'
+  
+  var contextos = DATOS.contexto.map(function(c){
+    var f = CONTEXTOS.find(function(x){return x.key === c})
+    return f ? f.nombre : c
+  }).join(', ') || 'No especificado'
+  
+  var luces = DATOS.luces_tablero.map(function(l){
+    var f = LUCES.find(function(x){return x.key === l})
+    return f ? f.nombre : l
+  }).join(', ') || 'No revisado'
+  
+  var urgBadge = 'normal'
+  var urgTxt = 'Normal'
+  if(DATOS.urgencia === 'urgente'){urgBadge = 'urg'; urgTxt = '🔥 URGENTE'}
+  if(DATOS.urgencia === 'preventivo'){urgBadge = 'prev'; urgTxt = '🛠️ PREVENTIVO'}
+  
+  var c = document.getElementById('contenido')
+  var html = ''
+  
+  html += '<div class="resumen">'
+  html += '<div class="resumen-kicker">✅ LLAMADA COMPLETADA</div>'
+  html += '<div class="resumen-tit">Resumen para <em>'+(DATOS.nombre||'Cliente')+'</em></div>'
+  
+  html += '<div class="diag-box">'
+  html += '<div class="diag-lbl">🎯 DIAGNÓSTICO PRESUNTIVO</div>'
+  html += '<div class="diag-txt">'+diag.diagnostico+'</div>'
+  html += '</div>'
+  
+  html += '<div class="diag-box">'
+  html += '<div class="diag-lbl">🔧 RECOMENDACIÓN</div>'
+  html += '<div class="diag-txt">'+diag.recomendacion+'</div>'
+  html += '</div>'
+  
+  html += '<div class="info-grid">'
+  html += '<div class="info-lbl">Cliente</div><div class="info-val">'+DATOS.nombre+'</div>'
+  html += '<div class="info-lbl">Teléfono</div><div class="info-val">'+DATOS.telefono+'</div>'
+  html += '<div class="info-lbl">Comuna</div><div class="info-val">'+(DATOS.comuna||'—')+'</div>'
+  html += '<div class="info-lbl">Vehículo</div><div class="info-val">'+vehiculo+'</div>'
+  html += '<div class="info-lbl">Categoría</div><div class="info-val">'+diag.categoria.toUpperCase()+'</div>'
+  html += '<div class="info-lbl">Síntoma</div><div class="info-val">'+s.icono+' '+s.nombre+'</div>'
+  html += '<div class="info-lbl">Desde</div><div class="info-val">'+DATOS.desde_cuando.replace(/_/g,' ')+'</div>'
+  html += '<div class="info-lbl">Ocurre</div><div class="info-val">'+contextos+'</div>'
+  html += '<div class="info-lbl">Luces</div><div class="info-val">'+luces+'</div>'
+  html += '<div class="info-lbl">Urgencia</div><div class="info-val"><span class="badge '+urgBadge+'">'+urgTxt+'</span></div>'
+  if(DATOS.sintoma_detalle) {
+    html += '<div class="info-lbl">Detalle</div><div class="info-val" style="font-style:italic;color:var(--t2)">"'+DATOS.sintoma_detalle+'"</div>'
+  }
+  html += '</div>'
+  
+  html += '<div class="actions-grid">'
+  html += '<button class="action-btn wa" onclick="abrirWA()"><span class="ico">📱</span><span class="lbl">Enviar por WhatsApp</span></button>'
+  html += '<button class="action-btn agenda" onclick="crearAgenda()"><span class="ico">📅</span><span class="lbl">Agendar servicio</span></button>'
+  html += '<button class="action-btn" onclick="copiarResumen()"><span class="ico">📋</span><span class="lbl">Copiar resumen</span></button>'
+  html += '<button class="action-btn" onclick="nuevaLlamada()"><span class="ico">🔄</span><span class="lbl">Nueva llamada</span></button>'
+  html += '</div>'
+  
+  html += '</div>'
+  
+  c.innerHTML = html
+}
+
+// ═══════════════════════════════════════════════════════
+// ACCIONES FINALES
+// ═══════════════════════════════════════════════════════
+function textoResumen(){
+  var diag = generarDiagnostico()
+  var s = SINTOMAS.find(function(x){return x.key === DATOS.sintoma_categoria}) || {nombre:'?'}
+  var vehiculo = [DATOS.marca, DATOS.modelo, DATOS.anio].filter(Boolean).join(' ')
+  if(DATOS.combustible) vehiculo += ' ('+DATOS.combustible+')'
+  
+  var contextos = DATOS.contexto.map(function(c){
+    var f = CONTEXTOS.find(function(x){return x.key === c})
+    return f ? f.nombre : c
+  }).join(', ') || '—'
+  
+  var luces = DATOS.luces_tablero.map(function(l){
+    var f = LUCES.find(function(x){return x.key === l})
+    return f ? f.nombre : l
+  }).join(', ') || '—'
+  
+  var t = '🚗 *RESUMEN DE LLAMADA · SERVIRUTA*\n\n'
+  t += '👤 *Cliente:* ' + DATOS.nombre + '\n'
+  t += '📱 *Tel:* ' + DATOS.telefono + '\n'
+  if(DATOS.comuna) t += '📍 *Comuna:* ' + DATOS.comuna + '\n'
+  t += '\n🚙 *Vehículo:* ' + vehiculo + '\n'
+  t += '⚠️ *Síntoma:* ' + s.nombre + '\n'
+  t += '📅 *Desde:* ' + DATOS.desde_cuando.replace(/_/g,' ') + '\n'
+  t += '🕐 *Cuándo ocurre:* ' + contextos + '\n'
+  t += '💡 *Luces tablero:* ' + luces + '\n'
+  t += '🚨 *Estado:* ' + DATOS.estado_vehiculo + '\n'
+  t += '🔥 *Urgencia:* ' + DATOS.urgencia.toUpperCase() + '\n'
+  if(DATOS.sintoma_detalle) t += '\n📝 *Detalle:* ' + DATOS.sintoma_detalle + '\n'
+  t += '\n🎯 *DIAGNÓSTICO:* ' + diag.diagnostico + '\n'
+  t += '🔧 *RECOMENDACIÓN:* ' + diag.recomendacion + '\n'
+  return t
+}
+
+function copiarResumen(){
+  var t = textoResumen()
+  navigator.clipboard.writeText(t).then(function(){
+    toast('📋 Resumen copiado al portapapeles', 'ok')
+  }).catch(function(){
+    // Fallback
+    var ta = document.createElement('textarea')
+    ta.value = t
+    document.body.appendChild(ta)
+    ta.select()
+    document.execCommand('copy')
+    document.body.removeChild(ta)
+    toast('📋 Copiado', 'ok')
+  })
+}
+
+function abrirWA(){
+  var tel = DATOS.telefono.replace(/[^0-9]/g, '')
+  if(!tel){toast('⚠️ Falta teléfono', 'err'); return}
+  if(tel.length < 9){toast('⚠️ Teléfono inválido', 'err'); return}
+  if(!tel.startsWith('56')) tel = '56' + tel
+  
+  var diag = generarDiagnostico()
+  var s = SINTOMAS.find(function(x){return x.key === DATOS.sintoma_categoria}) || {nombre:'?'}
+  var vehiculo = [DATOS.marca, DATOS.modelo, DATOS.anio].filter(Boolean).join(' ')
+  
+  var msg = '¡Hola ' + (DATOS.nombre.split(' ')[0] || '') + '!\n\n'
+  msg += 'Te escribo desde Serviruta 🚗 según nuestra conversación telefónica.\n\n'
+  msg += '📋 *Resumen de tu caso:*\n'
+  msg += '🚙 Vehículo: ' + vehiculo + '\n'
+  msg += '⚠️ Problema: ' + s.nombre + '\n\n'
+  msg += '🎯 ' + diag.diagnostico + '\n\n'
+  msg += '🔧 ' + diag.recomendacion + '\n\n'
+  msg += '¿Confirmamos la visita del técnico?'
+  
+  window.open('https://wa.me/'+tel+'?text='+encodeURIComponent(msg), '_blank')
+}
+
+function crearAgenda(){
+  // Redirigir a agenda con datos precargados (via localStorage)
+  var s = SINTOMAS.find(function(x){return x.key === DATOS.sintoma_categoria}) || {nombre:'?'}
+  var vehiculo = [DATOS.marca, DATOS.modelo, DATOS.anio].filter(Boolean).join(' ')
+  var diag = generarDiagnostico()
+  
+  var preload = {
+    cliente: DATOS.nombre,
+    telefono: DATOS.telefono.replace(/[^0-9]/g,''),
+    vehiculo: vehiculo,
+    servicio: s.nombre + (DATOS.sintoma_detalle ? ' · ' + DATOS.sintoma_detalle : ''),
+    direccion: DATOS.comuna || '',
+    urgencia: DATOS.urgencia,
+    notas: 'Diagnóstico presuntivo: ' + diag.diagnostico + '\nRecomendación: ' + diag.recomendacion,
+    origen: 'llamada'
+  }
+  
+  localStorage.setItem('sv_prellenado_agenda', JSON.stringify(preload))
+  toast('✅ Datos guardados, redirigiendo a agenda...', 'ok')
+  setTimeout(function(){
+    location.href = 'agenda.html?nueva=1'
+  }, 1000)
+}
+
+function nuevaLlamada(){
+  if(!confirm('¿Iniciar nueva llamada? Se borrarán los datos actuales.')) return
+  STEP = 1
+  DATOS = {marca:'', modelo:'', anio:'', combustible:'', sintoma_categoria:'', sintoma_detalle:'', desde_cuando:'', contexto:[], luces_tablero:[], estado_vehiculo:'', urgencia:'normal', nombre:'', telefono:'', comuna:''}
+  render()
+}
+
+// Iniciar
+render()
+</script>
+
+</body>
+</html>

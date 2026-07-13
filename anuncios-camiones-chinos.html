@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Creativos Anuncios · Camiones Chinos · Serviruta</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0A0D;--s1:#111114;--s2:#16161B;--line:#26262E;--rojo:#E8210A;--rojo-l:#FF4D2E;--verde:#22C55E;--amarillo:#F5C518;--dorado:#D4AF37;--t1:#F6F4EF;--t2:#C7C5BF;--t3:#8B8990;--display:'Syne',sans-serif;--body:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace;--serif:'Instrument Serif',serif}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#000;color:var(--t2);font-family:var(--body);padding:30px 16px;display:flex;flex-direction:column;align-items:center;gap:40px}
+.instrucciones{max-width:540px;text-align:center;color:var(--t3);font-size:13px;line-height:1.6}
+.instrucciones strong{color:var(--dorado)}
+.ad{width:540px;height:540px;position:relative;overflow:hidden;border-radius:4px;flex-shrink:0;display:flex;flex-direction:column;justify-content:space-between}
+.ad-label{font-family:var(--mono);font-size:11px;color:var(--t3);letter-spacing:0.15em;margin-bottom:-30px;align-self:flex-start;max-width:540px;width:540px}
+
+/* ═══ AD 1: JAC HUÉRFANO ═══ */
+.ad1{background:linear-gradient(160deg,#0A0A0D 0%,#16161B 60%,#1a1005 100%);border:1px solid var(--line);padding:44px 40px}
+.ad1 .kicker{font-family:var(--mono);font-size:13px;color:var(--dorado);letter-spacing:0.3em;font-weight:700}
+.ad1 h1{font-family:var(--display);font-weight:900;font-size:52px;color:var(--t1);letter-spacing:-2px;line-height:1.02;margin-top:14px}
+.ad1 h1 em{font-family:var(--serif);font-style:italic;color:var(--dorado);font-weight:400}
+.ad1 .marcas{display:flex;gap:8px;flex-wrap:wrap;margin-top:20px}
+.ad1 .marca{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--t1);background:var(--s2);border:1px solid var(--line);padding:7px 14px;border-radius:6px;letter-spacing:0.05em}
+.ad1 .beneficios{margin-top:auto}
+.ad1 .ben{display:flex;align-items:center;gap:10px;font-size:17px;color:var(--t2);margin-bottom:8px;font-weight:600}
+.ad1 .ben b{color:var(--verde)}
+.ad1 .cta{margin-top:18px;background:linear-gradient(135deg,var(--dorado),#B8933A);color:#000;font-family:var(--display);font-weight:900;font-size:19px;padding:16px;text-align:center;border-radius:12px;letter-spacing:0.02em}
+
+/* ═══ AD 2: PLATA PERDIDA ═══ */
+.ad2{background:#0A0A0D;border:1px solid var(--line);padding:0;position:relative}
+.ad2 .top{background:linear-gradient(135deg,var(--rojo),#8B1400);padding:40px 40px 34px}
+.ad2 .top h1{font-family:var(--display);font-weight:900;font-size:42px;color:#fff;letter-spacing:-1.5px;line-height:1.05}
+.ad2 .top .sub{font-family:var(--mono);font-size:14px;color:rgba(255,255,255,0.85);margin-top:10px;letter-spacing:0.05em;font-weight:700}
+.ad2 .bottom{padding:32px 40px;display:flex;flex-direction:column;height:calc(100% - 210px)}
+.ad2 .servicios{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ad2 .srv{display:flex;align-items:center;gap:8px;font-size:16px;color:var(--t1);font-weight:700}
+.ad2 .srv span{color:var(--dorado);font-size:18px}
+.ad2 .domicilio{margin-top:auto;text-align:center}
+.ad2 .domicilio .big{font-family:var(--serif);font-style:italic;font-size:26px;color:var(--dorado)}
+.ad2 .domicilio .promo{margin-top:12px;background:rgba(212,175,55,0.12);border:1.5px solid var(--dorado);border-radius:10px;padding:11px;font-family:var(--display);font-weight:800;font-size:17px;color:var(--dorado)}
+
+/* ═══ AD 3: ANTI-ESPERA ═══ */
+.ad3{background:linear-gradient(180deg,#0A0A0D,#111114);border:1px solid var(--line);padding:44px 40px;text-align:center}
+.ad3 .quote{font-family:var(--serif);font-style:italic;font-size:29px;color:var(--t2);line-height:1.35}
+.ad3 .quote .mal{color:var(--rojo-l)}
+.ad3 .vs{font-family:var(--display);font-weight:900;font-size:70px;color:var(--dorado);letter-spacing:-3px;margin:16px 0 8px}
+.ad3 .resp{font-family:var(--display);font-weight:900;font-size:34px;color:var(--t1);letter-spacing:-1px;line-height:1.1}
+.ad3 .resp em{color:var(--verde);font-style:normal}
+.ad3 .marcas{font-family:var(--mono);font-size:13px;color:var(--t3);margin-top:20px;letter-spacing:0.1em;font-weight:700}
+.ad3 .cta{margin-top:26px;background:#25D366;color:#000;font-family:var(--display);font-weight:900;font-size:18px;padding:15px 20px;border-radius:12px}
+
+/* ═══ AD 4: FLOTAS ═══ */
+.ad4{background:#0D0D10;border:1px solid var(--line);padding:44px 40px;background-image:radial-gradient(circle at 85% 15%,rgba(212,175,55,0.08),transparent 45%)}
+.ad4 .kicker{font-family:var(--mono);font-size:13px;color:var(--verde);letter-spacing:0.3em;font-weight:700}
+.ad4 h1{font-family:var(--display);font-weight:900;font-size:44px;color:var(--t1);letter-spacing:-1.8px;line-height:1.05;margin-top:12px}
+.ad4 h1 em{font-family:var(--serif);font-style:italic;color:var(--dorado);font-weight:400}
+.ad4 .puntos{margin-top:26px}
+.ad4 .punto{display:flex;gap:12px;margin-bottom:14px;align-items:flex-start}
+.ad4 .punto .n{font-family:var(--display);font-weight:900;color:var(--dorado);font-size:20px;flex-shrink:0}
+.ad4 .punto .t{font-size:17px;color:var(--t2);font-weight:600;line-height:1.35}
+.ad4 .punto .t b{color:var(--t1)}
+.ad4 .footer{margin-top:auto;display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:18px}
+.ad4 .logo{font-family:var(--display);font-weight:900;font-size:21px;color:var(--t1)}
+.ad4 .logo span{color:var(--rojo-l)}
+.ad4 .factura{font-family:var(--mono);font-size:12px;color:var(--verde);font-weight:700;letter-spacing:0.1em}
+
+.brand-strip{position:absolute;bottom:0;left:0;right:0;background:rgba(10,10,13,0.85);backdrop-filter:blur(6px);border-top:1px solid var(--line);padding:9px 40px;display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:11px;color:var(--t3);letter-spacing:0.1em}
+.brand-strip b{color:var(--dorado)}
+
+@media(max-width:600px){.ad{width:100%;height:auto;aspect-ratio:1/1}.ad-label{width:100%}}
+</style>
+</head>
+<body>
+
+<div class="instrucciones">
+  <strong>📸 CREATIVOS PARA META ADS · 1080×1080</strong><br>
+  Haz zoom para que cada cuadro llene la pantalla y toma captura, o usa una herramienta de screenshot por elemento. Cada uno corresponde a un copy que ya tienes. Publica con el texto del anuncio como caption.
+</div>
+
+<!-- ═══════════ AD 1 ═══════════ -->
+<div class="ad-label">AD 1 · "JAC HUÉRFANO" · Audiencia: dueños JAC/Foton/JMC</div>
+<div class="ad ad1">
+  <div>
+    <div class="kicker">MECÁNICA A DOMICILIO · SANTIAGO</div>
+    <h1>¿Tu camión chino quedó <em>huérfano</em>?</h1>
+    <div class="marcas">
+      <span class="marca">JAC</span>
+      <span class="marca">FOTON</span>
+      <span class="marca">JMC</span>
+      <span class="marca">DONGFENG</span>
+      <span class="marca">MAXUS</span>
+      <span class="marca">HYUNDAI</span>
+    </div>
+  </div>
+  <div class="beneficios">
+    <div class="ben"><b>✓</b> Embrague · Alternador · Sistema de aire · DPF</div>
+    <div class="ben"><b>✓</b> Vamos donde está tu camión</div>
+    <div class="ben"><b>✓</b> Repuestos disponibles, sin mitos</div>
+    <div class="cta">💬 Escríbenos → respuesta inmediata</div>
+  </div>
+</div>
+
+<!-- ═══════════ AD 2 ═══════════ -->
+<div class="ad-label">AD 2 · "PLATA PERDIDA" · Audiencia: transportistas independientes</div>
+<div class="ad ad2">
+  <div class="top">
+    <h1>Cada día con el camión parado pierdes $150.000+</h1>
+    <div class="sub">NOSOTROS VAMOS HOY. TÚ SIGUES TRABAJANDO MAÑANA.</div>
+  </div>
+  <div class="bottom">
+    <div class="servicios">
+      <div class="srv"><span>⚙️</span> Kit embrague</div>
+      <div class="srv"><span>🔋</span> Alternador</div>
+      <div class="srv"><span>💨</span> Sistema de aire</div>
+      <div class="srv"><span>🛑</span> Frenos</div>
+      <div class="srv"><span>🔥</span> Limpieza DPF</div>
+      <div class="srv"><span>🔧</span> Mantención</div>
+    </div>
+    <div class="domicilio">
+      <div class="big">Servicio a domicilio · camiones hasta 15 ton</div>
+      <div class="promo">🎉 MARTES −15% EN TODO</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ AD 3 ═══════════ -->
+<div class="ad-label">AD 3 · "ANTI-ESPERA" · Audiencia: frustrados con servicio oficial</div>
+<div class="ad ad3">
+  <div>
+    <div class="quote">"En el servicio oficial me dieron hora <span class="mal">para dentro de 20 días</span>"</div>
+    <div class="vs">VS</div>
+    <div class="resp">Nosotros vamos <em>MAÑANA</em> a tu bodega</div>
+  </div>
+  <div>
+    <div class="marcas">ESPECIALISTAS EN CAMIONES CHINOS<br>JAC · FOTON · JMC · DONGFENG · MAXUS</div>
+    <div class="cta">💬 WhatsApp +56 9 8507 9392</div>
+  </div>
+</div>
+
+<!-- ═══════════ AD 4 ═══════════ -->
+<div class="ad-label">AD 4 · "FLOTAS" · Audiencia: pymes de reparto / last-mile</div>
+<div class="ad ad4">
+  <div>
+    <div class="kicker">PARA FLOTAS DE REPARTO</div>
+    <h1>Tu flota no pierde <em>ni una vuelta</em></h1>
+    <div class="puntos">
+      <div class="punto"><div class="n">1</div><div class="t"><b>Mantención en TU bodega</b>, fuera del horario de reparto</div></div>
+      <div class="punto"><div class="n">2</div><div class="t"><b>Convenio para 3+ camiones</b> con precios preferentes</div></div>
+      <div class="punto"><div class="n">3</div><div class="t"><b>Especialistas en Foton, JAC, Maxus</b> y todo camión ≤15 ton</div></div>
+    </div>
+  </div>
+  <div class="footer">
+    <div class="logo">SERVI<span>RUTA</span></div>
+    <div class="factura">FACTURAMOS · +10 AÑOS</div>
+  </div>
+</div>
+
+</body>
+</html>

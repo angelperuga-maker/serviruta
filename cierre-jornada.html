@@ -337,6 +337,17 @@ async function cancelarServicio(id){
     return
   }
   
+  // Notificar al técnico asignado por WhatsApp (si tiene)
+  if(s.tecnico && s.tecnico !== 'POR ASIGNAR'){
+    fetch(SB_URL.replace('.supabase.co','.supabase.co')+'/functions/v1/notificar-cancelacion', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({agenda_id: id, motivo: razon || null, accion: 'cancelado'})
+    }).then(function(rr){return rr.json()}).then(function(j){
+      if(j.notificado) alert('✅ Servicio cancelado.\n📱 '+(j.tecnico||'El técnico')+' fue notificado por WhatsApp.')
+    }).catch(function(){})
+  }
+  
   SERVICIOS = SERVICIOS.filter(function(x){return x.id !== id})
   render()
 }

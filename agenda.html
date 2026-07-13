@@ -1175,6 +1175,22 @@ async function guardar(){
   var hora = document.getElementById('f-hora').value
   var servicio = document.getElementById('f-servicio').value.trim()
   if(!cliente || !fecha || !hora || !servicio){toast('Cliente, fecha, hora y servicio son obligatorios','err'); return}
+  
+  // VALIDACIÓN DE HORARIOS DE NEGOCIO
+  var fObj = new Date(fecha + 'T12:00:00')
+  var dia = fObj.getDay() // 0=domingo, 6=sábado
+  var h = parseInt(hora.substring(0,2))
+  var problemas = []
+  if(dia === 0) problemas.push('❌ DOMINGO: no se agenda los domingos')
+  if(dia === 6 && h >= 13) problemas.push('❌ SÁBADO PM: los sábados solo se agenda hasta las 13:00')
+  if(h > 18) problemas.push('❌ HORA TARDÍA: la última hora agendable es 18:00')
+  if(h < 8) problemas.push('❌ HORA TEMPRANA: se agenda desde las 08:00')
+  
+  if(problemas.length > 0){
+    var msg = '⚠️ HORARIO FUERA DE REGLAS:\n\n' + problemas.join('\n') + '\n\n¿Agendar IGUAL como excepción? (solo casos especiales)'
+    if(!confirm(msg)) return
+  }
+  
   var data = {
     cliente,
     telefono: document.getElementById('f-tel').value.trim() || null,
@@ -1184,7 +1200,7 @@ async function guardar(){
     urgencia: document.getElementById('f-urg').value,
     tecnico: document.getElementById('f-tecnico').value,
     direccion: document.getElementById('f-direccion').value.trim() || null,
-    notas: document.getElementById('f-notas').value.trim() || null
+    notas: (document.getElementById('f-notas').value.trim() || '') + (problemas.length > 0 ? '\n[EXCEPCIÓN HORARIO autorizada por ' + (localStorage.getItem('sv_user_username')||'coordinador') + ']' : '') || null
   }
   var r
   if(EDITANDO){r = await sbReq('PATCH', 'agenda?id=eq.' + EDITANDO, data)}
@@ -1195,7 +1211,31 @@ async function guardar(){
 
 async function eliminarEvento(){
   if(!EDITANDO) return
-  if(!confirm('¿Eliminar este evento?')) return
+  var ev = EVENTOS.find(function(x){return x.id === EDITANDO})
+  var tieneTecnico = ev && ev.tecnico && ev.tecnico !== 'POR ASIGNAR'
+  
+  var msgConfirm = '¿Eliminar este evento?'
+  if(tieneTecnico) msgConfirm = '⚠️ Este servicio tiene técnico asignado: ' + ev.tecnico + '\n\nSi lo eliminas, le avisaremos por WhatsApp para que NO asista.\n\n¿Eliminar?'
+  if(!confirm(msgConfirm)) return
+  
+  var motivo = null
+  if(tieneTecnico){
+    motivo = prompt('Motivo (se le enviará al técnico, opcional):')
+  }
+  
+  // Notificar al técnico ANTES de borrar (la función lee el servicio de la BD)
+  if(tieneTecnico){
+    try {
+      var nr = await fetch(SB_URL + '/functions/v1/notificar-cancelacion', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({agenda_id: EDITANDO, motivo: motivo || null, accion: 'eliminado'})
+      })
+      var nj = await nr.json()
+      if(nj.notificado) toast('📱 ' + (nj.tecnico||'Técnico') + ' notificado por WA', 'ok')
+    } catch(e){ console.error('Notif error:', e) }
+  }
+  
   var r = await sbReq('DELETE', 'agenda?id=eq.' + EDITANDO)
   if(r.ok){toast('🗑 Eliminado', 'ok'); cerrarModal(); setTimeout(cargar, 300)}
   else{toast('❌ Error', 'err')}

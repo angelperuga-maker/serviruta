@@ -570,9 +570,9 @@ function eventoHTML(e){
   html += '</div>'
   // Botones de comunicación
   html += '<div style="display:flex;gap:4px;margin-top:2px">'
-  if(e.telefono) html += '<button class="ev-btn" onclick="window.open(\'https://wa.me/'+e.telefono.replace(/[^0-9]/g,'')+'\',\'_blank\')">💬 WA</button>'
+  if(e.telefono) html += '<a class="ev-btn" href="https://wa.me/'+e.telefono.replace(/[^0-9]/g,'')+'" target="_blank" onclick="event.stopPropagation()" style="text-decoration:none;display:inline-block">💬 WA</a>'
   // Chat del bot solo para coordinador
-  if(e.telefono && IS_COORD) html += '<button class="ev-btn chat" onclick="window.open(\'conversaciones-wa.html?tel='+e.telefono+'\',\'_blank\')">💬 CHAT</button>'
+  if(e.telefono && IS_COORD) html += '<a class="ev-btn chat" href="conversaciones-wa.html?tel='+(e.telefono||'').replace(/[^0-9]/g,'')+'" target="_blank" onclick="event.stopPropagation()" style="text-decoration:none;display:inline-block">💬 CHAT</a>'
   html += '</div>'
   html += '</div></div>'
   return html

@@ -243,7 +243,8 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--dorado)}
     <div class="form-grid">
       <div class="form-full"><label class="form-lbl">Cliente *</label><input id="f-cliente"></div>
       <div><label class="form-lbl">Teléfono</label><input id="f-tel"></div>
-      <div><label class="form-lbl">Vehículo</label><input id="f-veh"></div>
+      <div><label class="form-lbl">Vehículo (marca modelo)</label><input id="f-veh" placeholder="JAC Urban 1040"></div>
+      <div><label class="form-lbl">Patente *</label><input id="f-patente" placeholder="ABCD12" style="text-transform:uppercase"></div>
       <div><label class="form-lbl">Fecha *</label><input type="date" id="f-fecha"></div>
       <div><label class="form-lbl">Hora *</label><input type="time" id="f-hora" value="10:00"></div>
       <div class="form-full"><label class="form-lbl">Servicio *</label><input id="f-servicio"></div>
@@ -1130,6 +1131,7 @@ function abrirNuevo(){
   document.getElementById('f-cliente').value = ''
   document.getElementById('f-tel').value = ''
   document.getElementById('f-veh').value = ''
+  document.getElementById('f-patente').value = ''
   document.getElementById('f-fecha').value = fmtISO(FECHA)
   document.getElementById('f-hora').value = '10:00'
   document.getElementById('f-servicio').value = ''
@@ -1155,6 +1157,7 @@ function editar(id){
   document.getElementById('f-cliente').value = e.cliente || ''
   document.getElementById('f-tel').value = e.telefono || ''
   document.getElementById('f-veh').value = e.vehiculo || ''
+  document.getElementById('f-patente').value = e.patente || ''
   document.getElementById('f-fecha').value = e.fecha || fmtISO(new Date())
   document.getElementById('f-hora').value = (e.hora || '10:00').substring(0,5)
   document.getElementById('f-servicio').value = e.servicio || ''
@@ -1174,14 +1177,43 @@ async function guardar(){
   var fecha = document.getElementById('f-fecha').value
   var hora = document.getElementById('f-hora').value
   var servicio = document.getElementById('f-servicio').value.trim()
-  if(!cliente || !fecha || !hora || !servicio){toast('Cliente, fecha, hora y servicio son obligatorios','err'); return}
+  var telefono = document.getElementById('f-tel').value.trim()
+  var vehiculo = document.getElementById('f-veh').value.trim()
+  var patente = document.getElementById('f-patente').value.trim().toUpperCase()
+  var direccion = document.getElementById('f-direccion').value.trim()
+  
+  // DATOS MÍNIMOS OBLIGATORIOS
+  var faltantes = []
+  if(!cliente) faltantes.push('Nombre')
+  if(!telefono) faltantes.push('Teléfono de contacto')
+  if(!direccion) faltantes.push('Dirección')
+  if(!vehiculo) faltantes.push('Vehículo (marca y modelo)')
+  if(!patente) faltantes.push('Patente')
+  if(!servicio) faltantes.push('Descripción del servicio')
+  if(!fecha) faltantes.push('Fecha')
+  if(!hora) faltantes.push('Hora')
+  
+  if(faltantes.length > 0){
+    if(faltantes.length <= 2 && !faltantes.includes('Nombre') && !faltantes.includes('Fecha') && !faltantes.includes('Hora') && !faltantes.includes('Descripción del servicio')){
+      // Datos secundarios faltantes: permitir con confirmación
+      if(!confirm('⚠️ DATOS MÍNIMOS INCOMPLETOS:\n\n• ' + faltantes.join('\n• ') + '\n\nPara un buen despacho se necesitan TODOS los datos.\n\n¿Guardar igual y completar después?')) return
+    } else {
+      toast('⚠️ Faltan: ' + faltantes.join(', '), 'err')
+      return
+    }
+  }
   
   // VALIDACIÓN DE HORARIOS DE NEGOCIO
+  var FERIADOS_FIJOS = ['01-01','05-01','05-21','06-21','07-16','08-15','09-18','09-19','11-01','12-08','12-25']
+  var FERIADOS_MOVILES = ['2026-04-03','2026-04-04','2026-06-29','2026-10-12','2026-10-31','2027-03-26','2027-03-27','2027-06-28','2027-10-11']
   var fObj = new Date(fecha + 'T12:00:00')
   var dia = fObj.getDay() // 0=domingo, 6=sábado
   var h = parseInt(hora.substring(0,2))
+  var mmdd = fecha.substring(5)
+  var esFeriadoDia = FERIADOS_FIJOS.indexOf(mmdd) >= 0 || FERIADOS_MOVILES.indexOf(fecha) >= 0
   var problemas = []
   if(dia === 0) problemas.push('❌ DOMINGO: no se agenda los domingos')
+  if(esFeriadoDia) problemas.push('❌ FERIADO: ese día es feriado en Chile, no se agenda')
   if(dia === 6 && h >= 13) problemas.push('❌ SÁBADO PM: los sábados solo se agenda hasta las 13:00')
   if(h > 18) problemas.push('❌ HORA TARDÍA: la última hora agendable es 18:00')
   if(h < 8) problemas.push('❌ HORA TEMPRANA: se agenda desde las 08:00')
@@ -1193,8 +1225,9 @@ async function guardar(){
   
   var data = {
     cliente,
-    telefono: document.getElementById('f-tel').value.trim() || null,
-    vehiculo: document.getElementById('f-veh').value.trim() || null,
+    telefono: telefono || null,
+    vehiculo: vehiculo || null,
+    patente: patente || null,
     fecha, hora: hora + ':00', servicio,
     estado: document.getElementById('f-estado').value,
     urgencia: document.getElementById('f-urg').value,

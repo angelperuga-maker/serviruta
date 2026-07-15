@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Remuneraciones · Serviruta</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/supabase-js/2.39.0/supabase.min.js"></script>
+<style>
+  :root{
+    --bg:#0f1115; --panel:#171a21; --panel2:#1f232c; --border:#2a2f3a;
+    --text:#e8eaed; --muted:#9aa1ac; --red:#e8210a; --green:#2ecc71;
+    --yellow:#f0b429; --blue:#4f8ef7;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);}
+  header{padding:16px 20px;background:var(--panel);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10;}
+  header h1{margin:0;font-size:18px;display:flex;align-items:center;gap:8px;}
+  header .sub{color:var(--muted);font-size:12px;margin-top:2px;}
+  .wrap{max-width:1100px;margin:0 auto;padding:16px;}
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px;}
+  select,input,button,textarea{background:var(--panel2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:9px 12px;font-size:14px;}
+  select:focus,input:focus,textarea:focus{outline:none;border-color:var(--red);}
+  button{cursor:pointer;font-weight:600;transition:.15s;}
+  button.primary{background:var(--red);border-color:var(--red);color:white;}
+  button.primary:hover{background:#c91b08;}
+  button.ghost:hover{background:#262b35;}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 16px;}
+  .card h3{margin:0 0 4px;font-size:15px;}
+  .card .cargo{color:var(--muted);font-size:12px;margin-bottom:10px;}
+  .row{display:flex;justify-content:space-between;font-size:13px;padding:3px 0;}
+  .row .label{color:var(--muted);}
+  .saldo{font-size:20px;font-weight:700;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);}
+  .saldo.pos{color:var(--green);}
+  .saldo.neg{color:var(--red);}
+  .card button{width:100%;margin-top:10px;font-size:13px;padding:8px;}
+  .tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;background:var(--panel2);color:var(--muted);}
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--border);}
+  th{color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;}
+  .tipo-anticipo{color:var(--yellow);}
+  .tipo-bono, .tipo-comision{color:var(--green);}
+  .tipo-descuento{color:var(--red);}
+  .tipo-pago_sueldo{color:var(--blue);}
+  .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:100;padding:16px;}
+  .modal-bg.show{display:flex;}
+  .modal{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:20px;max-width:420px;width:100%;max-height:90vh;overflow-y:auto;}
+  .modal h2{margin-top:0;font-size:17px;}
+  .field{margin-bottom:12px;}
+  .field label{display:block;font-size:12px;color:var(--muted);margin-bottom:5px;}
+  .field select,.field input,.field textarea{width:100%;}
+  .modal-actions{display:flex;gap:8px;margin-top:16px;}
+  .modal-actions button{flex:1;}
+  .empty{text-align:center;color:var(--muted);padding:40px;}
+  .totales{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;}
+  .totales .box{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px 16px;flex:1;min-width:120px;}
+  .totales .box .n{font-size:18px;font-weight:700;}
+  .totales .box .l{font-size:11px;color:var(--muted);text-transform:uppercase;}
+  .detail-toggle{background:none;border:none;color:var(--blue);font-size:12px;padding:4px 0;width:auto;}
+  .loading{text-align:center;padding:40px;color:var(--muted);}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>💰 Control de Remuneraciones</h1>
+  <div class="sub">Serviruta — anticipos, bonos, comisiones y saldo por empleado</div>
+</header>
+
+<div class="wrap">
+
+  <div class="totales" id="totales"></div>
+
+  <div class="toolbar">
+    <select id="periodoSel"></select>
+    <select id="cargoFiltro">
+      <option value="">Todos los cargos</option>
+      <option value="tecnico">Técnicos</option>
+      <option value="coord_senior">Coord. Senior</option>
+      <option value="coord_junior">Coord. Junior</option>
+      <option value="otro">Otro</option>
+    </select>
+    <button class="ghost" onclick="openEmpleadoModal()">+ Nuevo empleado</button>
+    <button class="primary" onclick="openMovModal()">+ Registrar movimiento</button>
+  </div>
+
+  <div id="content" class="loading">Cargando...</div>
+
+</div>
+
+<!-- Modal: nuevo empleado -->
+<div class="modal-bg" id="modalEmpleado">
+  <div class="modal">
+    <h2>Nuevo empleado</h2>
+    <div class="field"><label>Nombre</label><input id="emp_nombre" placeholder="Ej: Juan Pérez"></div>
+    <div class="field"><label>Cargo</label>
+      <select id="emp_cargo">
+        <option value="tecnico">Técnico</option>
+        <option value="coord_senior">Coordinador senior</option>
+        <option value="coord_junior">Coordinador junior</option>
+        <option value="otro">Otro</option>
+      </select>
+    </div>
+    <div class="field"><label>Sueldo base (CLP)</label><input id="emp_sueldo" type="number" placeholder="0"></div>
+    <div class="field"><label>Teléfono</label><input id="emp_telefono" placeholder="+56 9..."></div>
+    <div class="field"><label>Fecha de ingreso</label><input id="emp_fecha" type="date"></div>
+    <div class="modal-actions">
+      <button class="ghost" onclick="closeModal('modalEmpleado')">Cancelar</button>
+      <button class="primary" onclick="guardarEmpleado()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: nuevo movimiento -->
+<div class="modal-bg" id="modalMov">
+  <div class="modal">
+    <h2 id="movTitulo">Registrar movimiento</h2>
+    <div class="field"><label>Empleado</label>
+      <select id="mov_empleado"></select>
+    </div>
+    <div class="field"><label>Tipo</label>
+      <select id="mov_tipo">
+        <option value="anticipo">Anticipo</option>
+        <option value="bono">Bono</option>
+        <option value="comision">Comisión</option>
+        <option value="descuento">Descuento</option>
+        <option value="pago_sueldo">Pago de sueldo</option>
+      </select>
+    </div>
+    <div class="field"><label>Monto (CLP)</label><input id="mov_monto" type="number" placeholder="0"></div>
+    <div class="field"><label>Fecha</label><input id="mov_fecha" type="date"></div>
+    <div class="field"><label>Notas</label><textarea id="mov_notas" rows="2" placeholder="Opcional"></textarea></div>
+    <div class="modal-actions">
+      <button class="ghost" onclick="closeModal('modalMov')">Cancelar</button>
+      <button class="primary" onclick="guardarMovimiento()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://bqlgfmqcefledqyodkii.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_h33L3eMAcskEsPi93Liohg__FfzCxOE';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let empleados = [];
+let movimientos = [];
+let periodoActual = mesActual();
+let cargoFiltro = '';
+let expandido = {};
+
+function mesActual(){
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
+}
+
+function generarPeriodos(){
+  const sel = document.getElementById('periodoSel');
+  const hoy = new Date();
+  let opts = '';
+  for(let i=0;i<12;i++){
+    const d = new Date(hoy.getFullYear(), hoy.getMonth()-i, 1);
+    const val = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
+    const label = d.toLocaleDateString('es-CL',{month:'long',year:'numeric'});
+    opts += `<option value="${val}">${label.charAt(0).toUpperCase()+label.slice(1)}</option>`;
+  }
+  sel.innerHTML = opts;
+  sel.value = periodoActual;
+  sel.onchange = () => { periodoActual = sel.value; render(); };
+}
+
+async function cargarDatos(){
+  document.getElementById('content').innerHTML = '<div class="loading">Cargando...</div>';
+  const [{data: emp, error: e1}, {data: mov, error: e2}] = await Promise.all([
+    sb.from('empleados_rrhh').select('*').order('nombre'),
+    sb.from('movimientos_remuneracion').select('*').order('fecha', {ascending:false})
+  ]);
+  if(e1 || e2){
+    document.getElementById('content').innerHTML = '<div class="empty">Error cargando datos. Revisa la consola.</div>';
+    console.error(e1,e2);
+    return;
+  }
+  empleados = emp || [];
+  movimientos = mov || [];
+  render();
+}
+
+function fmt(n){
+  return '$' + Number(n||0).toLocaleString('es-CL');
+}
+
+function movsDeEmpleadoPeriodo(empId, periodo){
+  return movimientos.filter(m => m.empleado_id === empId && m.periodo === periodo);
+}
+
+function calcularSaldo(emp, periodo){
+  const movs = movsDeEmpleadoPeriodo(emp.id, periodo);
+  let anticipos=0, bonos=0, comisiones=0, descuentos=0, pagado=0;
+  movs.forEach(m=>{
+    if(m.tipo==='anticipo') anticipos += m.monto;
+    else if(m.tipo==='bono') bonos += m.monto;
+    else if(m.tipo==='comision') comisiones += m.monto;
+    else if(m.tipo==='descuento') descuentos += m.monto;
+    else if(m.tipo==='pago_sueldo') pagado += m.monto;
+  });
+  const bruto = (emp.sueldo_base||0) + bonos + comisiones;
+  const saldo = bruto - anticipos - descuentos - pagado;
+  return {anticipos,bonos,comisiones,descuentos,pagado,bruto,saldo,movs};
+}
+
+function render(){
+  const cont = document.getElementById('content');
+  let lista = empleados.filter(e=>e.activo);
+  if(cargoFiltro) lista = lista.filter(e=>e.cargo===cargoFiltro);
+
+  if(lista.length===0){
+    cont.innerHTML = '<div class="empty">No hay empleados para este filtro. Agrega uno con "+ Nuevo empleado".</div>';
+    document.getElementById('totales').innerHTML = '';
+    return;
+  }
+
+  let totalSueldos=0, totalAnticipos=0, totalPendiente=0;
+
+  const cards = lista.map(emp=>{
+    const c = calcularSaldo(emp, periodoActual);
+    totalSueldos += (emp.sueldo_base||0);
+    totalAnticipos += c.anticipos;
+    totalPendiente += c.saldo;
+
+    const cargoLabel = {tecnico:'Técnico', coord_senior:'Coordinador senior', coord_junior:'Coordinador junior', otro:'Otro'}[emp.cargo] || emp.cargo;
+    const saldoClass = c.saldo >= 0 ? 'pos' : 'neg';
+    const expId = 'exp_'+emp.id;
+    const isOpen = expandido[emp.id];
+
+    let detalleHtml = '';
+    if(isOpen){
+      if(c.movs.length===0){
+        detalleHtml = '<div style="color:var(--muted);font-size:12px;padding:8px 0;">Sin movimientos este período</div>';
+      } else {
+        detalleHtml = '<table>' + c.movs.map(m=>`
+          <tr>
+            <td>${new Date(m.fecha+'T00:00:00').toLocaleDateString('es-CL')}</td>
+            <td class="tipo-${m.tipo}">${etiquetaTipo(m.tipo)}</td>
+            <td>${fmt(m.monto)}</td>
+            <td style="color:var(--muted);font-size:11px;">${m.notas||''}</td>
+          </tr>`).join('') + '</table>';
+      }
+    }
+
+    return `
+      <div class="card">
+        <h3>${emp.nombre}</h3>
+        <div class="cargo"><span class="tag">${cargoLabel}</span></div>
+        <div class="row"><span class="label">Sueldo base</span><span>${fmt(emp.sueldo_base)}</span></div>
+        <div class="row"><span class="label">Bonos + comisiones</span><span>${fmt(c.bonos+c.comisiones)}</span></div>
+        <div class="row"><span class="label">Anticipos</span><span>-${fmt(c.anticipos)}</span></div>
+        <div class="row"><span class="label">Descuentos</span><span>-${fmt(c.descuentos)}</span></div>
+        <div class="row"><span class="label">Ya pagado</span><span>-${fmt(c.pagado)}</span></div>
+        <div class="saldo ${saldoClass}">Saldo: ${fmt(c.saldo)}</div>
+        <button class="detail-toggle" onclick="toggleDetalle('${emp.id}')">${isOpen ? '▲ Ocultar movimientos' : '▼ Ver movimientos ('+c.movs.length+')'}</button>
+        <div id="${expId}">${detalleHtml}</div>
+        <button class="ghost" onclick="openMovModal('${emp.id}')">+ Movimiento</button>
+      </div>
+    `;
+  }).join('');
+
+  document.getElementById('totales').innerHTML = `
+    <div class="box"><div class="n">${fmt(totalSueldos)}</div><div class="l">Sueldos base</div></div>
+    <div class="box"><div class="n">${fmt(totalAnticipos)}</div><div class="l">Anticipos del mes</div></div>
+    <div class="box"><div class="n">${fmt(totalPendiente)}</div><div class="l">Total por pagar</div></div>
+  `;
+
+  cont.innerHTML = `<div class="grid">${cards}</div>`;
+}
+
+function etiquetaTipo(t){
+  return {anticipo:'Anticipo', bono:'Bono', comision:'Comisión', descuento:'Descuento', pago_sueldo:'Pago sueldo'}[t] || t;
+}
+
+function toggleDetalle(id){
+  expandido[id] = !expandido[id];
+  render();
+}
+
+// ---- Modales ----
+function openEmpleadoModal(){
+  document.getElementById('emp_nombre').value='';
+  document.getElementById('emp_sueldo').value='';
+  document.getElementById('emp_telefono').value='';
+  document.getElementById('emp_fecha').value='';
+  document.getElementById('emp_cargo').value='tecnico';
+  document.getElementById('modalEmpleado').classList.add('show');
+}
+
+function openMovModal(empleadoId){
+  const sel = document.getElementById('mov_empleado');
+  sel.innerHTML = empleados.filter(e=>e.activo).map(e=>`<option value="${e.id}">${e.nombre}</option>`).join('');
+  if(empleadoId) sel.value = empleadoId;
+  document.getElementById('mov_monto').value='';
+  document.getElementById('mov_notas').value='';
+  document.getElementById('mov_fecha').value = new Date().toISOString().slice(0,10);
+  document.getElementById('mov_tipo').value='anticipo';
+  document.getElementById('modalMov').classList.add('show');
+}
+
+function closeModal(id){
+  document.getElementById(id).classList.remove('show');
+}
+
+async function guardarEmpleado(){
+  const nombre = document.getElementById('emp_nombre').value.trim();
+  if(!nombre){ alert('Ingresa un nombre'); return; }
+  const payload = {
+    nombre,
+    cargo: document.getElementById('emp_cargo').value,
+    sueldo_base: parseInt(document.getElementById('emp_sueldo').value)||0,
+    telefono: document.getElementById('emp_telefono').value.trim()||null,
+    fecha_ingreso: document.getElementById('emp_fecha').value||null,
+    activo: true
+  };
+  const {error} = await sb.from('empleados_rrhh').insert(payload);
+  if(error){ alert('Error guardando: '+error.message); console.error(error); return; }
+  closeModal('modalEmpleado');
+  await cargarDatos();
+}
+
+async function guardarMovimiento(){
+  const empleado_id = document.getElementById('mov_empleado').value;
+  const monto = parseInt(document.getElementById('mov_monto').value)||0;
+  const fecha = document.getElementById('mov_fecha').value;
+  if(!empleado_id || monto<=0 || !fecha){ alert('Completa empleado, monto y fecha'); return; }
+  const periodo = fecha.slice(0,7);
+  const payload = {
+    empleado_id,
+    tipo: document.getElementById('mov_tipo').value,
+    monto,
+    fecha,
+    periodo,
+    notas: document.getElementById('mov_notas').value.trim()||null
+  };
+  const {error} = await sb.from('movimientos_remuneracion').insert(payload);
+  if(error){ alert('Error guardando: '+error.message); console.error(error); return; }
+  closeModal('modalMov');
+  await cargarDatos();
+}
+
+document.getElementById('cargoFiltro').onchange = (e)=>{ cargoFiltro = e.target.value; render(); };
+
+generarPeriodos();
+cargarDatos();
+</script>
+
+</body>
+</html>

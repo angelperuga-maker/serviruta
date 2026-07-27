@@ -99,7 +99,7 @@ fbq('track', 'PageView');
 <body>
 
 <div class="top">
-  <button class="top-back" onclick="location.href=(localStorage.getItem('sv_user_rol')==='coord_junior'?'menu-coord-jr.html':'menu-coordinador.html')">← Volver</button>
+  <button class="top-back" onclick="location.href=(localStorage.getItem('sv_user_rol')==='tecnico'?'menu-tecnico.html':(localStorage.getItem('sv_user_rol')==='coord_junior'?'menu-coord-jr.html':'menu-coordinador.html'))">← Volver</button>
   <div class="top-title">📋 Presupuestos</div>
   <button onclick="load()" style="background:none;border:none;color:var(--txt3);cursor:pointer;font-size:20px;">↻</button>
 </div>

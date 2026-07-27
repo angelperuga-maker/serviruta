@@ -130,7 +130,7 @@ button{cursor:pointer;border:none;background:none;color:inherit}
 <body>
 
 <header class="bar">
-  <button class="back" onclick="location.href=(localStorage.getItem('sv_user_rol')==='coord_junior'?'menu-coord-jr.html':'menu-coordinador.html')">← Volver</button>
+  <button class="back" onclick="location.href=(localStorage.getItem('sv_user_rol')==='tecnico'?'menu-tecnico.html':(localStorage.getItem('sv_user_rol')==='coord_junior'?'menu-coord-jr.html':'menu-coordinador.html'))">← Volver</button>
   <div class="sigil">S</div>
   <div class="title">CRM Clientes<small>Seguimiento · ventas · sugerencias</small></div>
 </header>

@@ -144,7 +144,7 @@ input:focus{outline:none;border-color:var(--dorado)}
 <body>
 
 <header class="bar">
-  <button class="back" onclick="location.href=(localStorage.getItem('sv_user_rol')==='coord_junior'?'menu-coord-jr.html':'menu-coordinador.html')">← Volver</button>
+  <button class="back" onclick="location.href=(localStorage.getItem('sv_user_rol')==='tecnico'?'menu-tecnico.html':(localStorage.getItem('sv_user_rol')==='coord_junior'?'menu-coord-jr.html':'menu-coordinador.html'))">← Volver</button>
   <div class="sigil">C</div>
   <div class="title">Conversaciones WhatsApp<small>MONITOR EN VIVO</small></div>
   <button class="refresh" onclick="cargar()" title="Recargar">↻ Recargar</button>

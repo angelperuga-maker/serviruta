@@ -195,7 +195,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--dorado)}
 <body>
 
 <header class="bar">
-  <button class="back" onclick="location.href=(localStorage.getItem('sv_user_rol')==='coord_junior'?'menu-coord-jr.html':'menu-coordinador.html')">← Volver</button>
+  <button class="back" onclick="location.href=(localStorage.getItem('sv_user_rol')==='tecnico'?'menu-tecnico.html':(localStorage.getItem('sv_user_rol')==='coord_junior'?'menu-coord-jr.html':'menu-coordinador.html'))">← Volver</button>
   <div class="sigil">📅</div>
   <div class="title">Agenda<small>SERVIRUTA</small></div>
   <button class="btn-add" onclick="abrirNuevo()">+ Nuevo</button>

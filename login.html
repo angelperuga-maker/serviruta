@@ -302,7 +302,9 @@ async function redirigirPorRol(userId){
     
     // Redirigir según rol
     setTimeout(function(){
-      if(perfil.rol === 'coord_junior'){
+      if(perfil.rol === 'tecnico'){
+        window.location.href = 'menu-tecnico.html'
+      } else if(perfil.rol === 'coord_junior'){
         window.location.href = 'menu-coord-jr.html'
       } else {
         window.location.href = 'menu-coordinador.html'

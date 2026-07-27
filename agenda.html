@@ -441,6 +441,14 @@ async function cargarTecnicos(){
 async function cargarEventos(){
   var r = await sbReq('GET', 'agenda?select=*&order=fecha.asc,hora.asc')
   EVENTOS = r.ok ? await r.json() : []
+  // ROL TÉCNICO: solo ve SUS servicios
+  if(localStorage.getItem('sv_user_rol') === 'tecnico'){
+    var miNombre = (localStorage.getItem('sv_user_nombre') || '').toLowerCase()
+    EVENTOS = EVENTOS.filter(function(e){
+      var t = (e.tecnico || '').toLowerCase()
+      return miNombre && (t === miNombre || t.indexOf(miNombre) === 0 || miNombre.indexOf(t) === 0)
+    })
+  }
 }
 
 async function cargar(){

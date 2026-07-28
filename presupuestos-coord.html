@@ -205,6 +205,14 @@ function getDB(){if(!db)db=supabase.createClient(SB_URL,SB_KEY);return db;}
 
 async function load(){
   var r=await getDB().from('presupuestos').select('*').order('created_at',{ascending:false})
+  // ═══ ROL TÉCNICO: solo ve SUS presupuestos ═══
+  if(r.data && esRolTecnico()){
+    var miNom = (localStorage.getItem('sv_user_nombre')||'').toLowerCase()
+    r.data = r.data.filter(function(s){
+      var t = (s.tecnico||'').toLowerCase()
+      return miNom && (t===miNom || t.indexOf(miNom)===0 || miNom.indexOf(t)===0)
+    })
+  }
   todos=r.data||[]
   renderTab(tabActual)
 }
@@ -285,7 +293,7 @@ function cardHTML(s){
     '<div class="pc-top">'+
       '<span class="pc-num">#'+(s.numero||'—')+'</span>'+
       '<span class="pc-cliente">'+s.cliente+'</span>'+
-      '<span class="pc-total">'+(s.total?'$'+s.total.toLocaleString('es-CL'):'Sin precio')+'</span>'+
+      '<span class="pc-total">'+(s.total?montoVisible(s, s.total):'Sin precio')+'</span>'+
     '</div>'+
     '<div class="pc-info">'+
       '<span class="pc-tag">👷 '+s.tecnico+'</span>'+
@@ -327,7 +335,7 @@ function renderPorTecnico(){
       return '<div style="margin-bottom:16px">'+
         '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">'+
           '<div style="font-family:Syne,sans-serif;font-weight:700;font-size:13px;color:var(--azul)">👷 '+tec+'</div>'+
-          '<div style="font-size:12px;color:var(--verde)">$'+total.toLocaleString('es-CL')+' · '+porTec[tec].length+' ppto'+(porTec[tec].length!==1?'s':'')+'</div>'+
+          '<div style="font-size:12px;color:var(--verde)">'+(esRolTecnico()?'':('$'+total.toLocaleString('es-CL')+' · '))+porTec[tec].length+' ppto'+(porTec[tec].length!==1?'s':'')+'</div>'+
         '</div>'+
         porTec[tec].map(cardHTML).join('')+
       '</div>'
@@ -355,7 +363,7 @@ function renderContabilidad(){
   document.getElementById('resumen-cont').innerHTML=
     '<div style="background:linear-gradient(135deg,rgba(34,197,94,0.1),rgba(34,197,94,0.05));border:1px solid rgba(34,197,94,0.3);border-radius:10px;padding:12px">'+
       '<div style="font-size:10px;color:var(--txt3);text-transform:uppercase;margin-bottom:4px">Total contabilidad</div>'+
-      '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:22px;color:var(--verde)">$'+totalComp.toLocaleString('es-CL')+'</div>'+
+      '<div style="font-family:Syne,sans-serif;font-weight:800;font-size:22px;color:var(--verde)">'+(esRolTecnico()?completados.length+' servicios':'$'+totalComp.toLocaleString('es-CL'))+'</div>'+
       '<div style="font-size:11px;color:var(--txt3)">'+completados.length+' servicio'+(completados.length!==1?'s':'')+'</div>'+
     '</div>'+
     '<div style="background:linear-gradient(135deg,rgba(167,139,250,0.1),rgba(167,139,250,0.05));border:1px solid rgba(167,139,250,0.3);border-radius:10px;padding:12px;text-align:right">'+
@@ -504,16 +512,29 @@ function toggleIva(){
   calcTotal()
 }
 
+// ═══ Helpers rol técnico ═══
+function esRolTecnico(){return localStorage.getItem('sv_user_rol')==='tecnico'}
+function pptoAprobado(s){return s && (s.estado==='aprobada' || s.pago_cliente==='pagado' || s.estado_servicio==='completado')}
+function montoVisible(s, monto){
+  if(esRolTecnico() && pptoAprobado(s)) return '🔒'
+  return '$'+(monto||0).toLocaleString('es-CL')
+}
+
 function calcTotal(){
   var items=pptoActual?pptoActual.items||[]:[]
   var coordExtra=getCoordItems()
   var sub=items.concat(coordExtra).reduce(function(s,i){return s+((i.precio_venta||0)*(i.cant||1))},0)
   var iva=document.getElementById('aplica-iva').checked?Math.round(sub*0.19):0
   var total=sub+iva
-  document.getElementById('total-box').innerHTML=
-    '<div class="total-row"><span>Subtotal</span><span>$'+sub.toLocaleString('es-CL')+'</span></div>'+
-    (iva?'<div class="total-row"><span>IVA 19%</span><span>+$'+iva.toLocaleString('es-CL')+'</span></div>':'')+
-    '<div class="total-final"><span>TOTAL</span><span style="color:var(--verde)">$'+total.toLocaleString('es-CL')+'</span></div>'
+  if(esRolTecnico() && pptoAprobado(pptoActual)){
+    document.getElementById('total-box').innerHTML=
+      '<div class="total-final"><span>TOTAL</span><span style="color:var(--txt3)">🔒 Aprobado</span></div>'
+  } else {
+    document.getElementById('total-box').innerHTML=
+      '<div class="total-row"><span>Subtotal</span><span>$'+sub.toLocaleString('es-CL')+'</span></div>'+
+      (iva?'<div class="total-row"><span>IVA 19%</span><span>+$'+iva.toLocaleString('es-CL')+'</span></div>':'')+
+      '<div class="total-final"><span>TOTAL</span><span style="color:var(--verde)">$'+total.toLocaleString('es-CL')+'</span></div>'
+  }
   var ivaBadge=document.getElementById('iva-badge')
   var ivaInfo=document.getElementById('iva-info')
   if(ivaBadge){ivaBadge.textContent=iva?'+$'+iva.toLocaleString('es-CL'):'+$0';ivaBadge.style.color=iva?'var(--amarillo)':'var(--txt3)'}

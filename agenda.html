@@ -448,6 +448,14 @@ async function cargarEventos(){
       var t = (e.tecnico || '').toLowerCase()
       return miNombre && (t === miNombre || t.indexOf(miNombre) === 0 || miNombre.indexOf(t) === 0)
     })
+    // Banner visible: confirma que el filtro está activo
+    if(!document.getElementById('banner-tecnico')){
+      var bt = document.createElement('div')
+      bt.id = 'banner-tecnico'
+      bt.style.cssText = 'background:rgba(212,175,55,0.12);border:1px solid #D4AF37;color:#D4AF37;font-size:12px;padding:8px 14px;border-radius:10px;margin:8px 16px;text-align:center;font-weight:600'
+      bt.textContent = '👷 Vista de técnico: solo tus servicios (' + (localStorage.getItem('sv_user_nombre')||'') + ')'
+      document.body.insertBefore(bt, document.body.children[1])
+    }
   }
 }
 

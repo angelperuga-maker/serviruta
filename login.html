@@ -172,16 +172,31 @@ var supabase = window.supabase.createClient(SB_URL, SB_KEY, {
 async function checarSesion(){
   var {data:{session}} = await supabase.auth.getSession()
   if(session && session.user){
-    // Mostrar card de sesión activa en vez de auto-redirigir
-    var nombre = localStorage.getItem('sv_user_nombre') || 'Usuario'
-    var rol = localStorage.getItem('sv_user_rol') || 'coord_junior'
-    var username = localStorage.getItem('sv_user_username') || 'usuario'
+    // Consultar el perfil REAL a la BD (no confiar en datos viejos del navegador)
+    var nombre = 'Usuario', rol = '', username = 'usuario'
+    try {
+      var r = await fetch(SB_URL + '/rest/v1/user_profiles?user_id=eq.' + session.user.id + '&select=nombre,rol,username', {
+        headers: {'apikey': SB_KEY, 'Authorization': 'Bearer ' + session.access_token}
+      })
+      var ps = r.ok ? await r.json() : []
+      if(ps && ps[0]){
+        nombre = ps[0].nombre; rol = ps[0].rol; username = ps[0].username
+        // Refrescar localStorage con la verdad
+        localStorage.setItem('sv_user_nombre', nombre)
+        localStorage.setItem('sv_user_rol', rol)
+        localStorage.setItem('sv_user_username', username)
+        localStorage.setItem('sv_user_id', session.user.id)
+      }
+    } catch(e){ console.error('perfil sesión:', e) }
+    
+    if(!rol){ rol = localStorage.getItem('sv_user_rol') || 'coord_junior'; nombre = localStorage.getItem('sv_user_nombre') || nombre; username = localStorage.getItem('sv_user_username') || username }
     
     var rolTxt = 'JUNIOR'
     var rolCls = 'junior'
     if(rol === 'owner'){rolTxt = 'OWNER · FUNDADOR'; rolCls = ''}
     else if(rol === 'coord_senior'){rolTxt = 'COORDINADOR SENIOR'; rolCls = 'senior'}
     else if(rol === 'coord_junior'){rolTxt = 'COORDINADOR JUNIOR'; rolCls = 'junior'}
+    else if(rol === 'tecnico'){rolTxt = 'TÉCNICO 🔧'; rolCls = 'senior'}
     
     document.getElementById('active-nom').textContent = nombre
     document.getElementById('active-rol').textContent = username + ' · ' + rolTxt

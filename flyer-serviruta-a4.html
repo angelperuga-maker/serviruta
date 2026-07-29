@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Serviruta — Flyer A4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Barlow+Condensed:wght@500;600&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --grafito:#14181D;
+    --asfalto:#232A31;
+    --senal:#F2B705;
+    --papel:#FFFFFF;
+    --humo:#EDEBE6;
+    --texto:#2B3138;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#8A8F94}
+  body{font-family:'Barlow',system-ui,sans-serif;color:var(--texto);
+       -webkit-print-color-adjust:exact;print-color-adjust:exact}
+
+  .hoja{
+    width:210mm;height:297mm;background:var(--papel);
+    margin:8mm auto;overflow:hidden;position:relative;
+    display:flex;flex-direction:column;
+    box-shadow:0 4px 24px rgba(0,0,0,.35);
+  }
+
+  .cinta{height:5mm;flex:none;
+    background:repeating-linear-gradient(115deg,var(--senal) 0 7mm,var(--grafito) 7mm 14mm);}
+
+  /* ---------- cabecera ---------- */
+  .cabecera{background:var(--grafito);color:#fff;padding:9mm 12mm 8mm;flex:none;
+            display:flex;justify-content:space-between;align-items:flex-end;gap:8mm}
+  .marca{font-family:'Archivo Black',sans-serif;font-size:19mm;line-height:.86;
+         letter-spacing:-.5mm;color:#fff}
+  .marca span{color:var(--senal)}
+  .bajada{font-family:'Barlow Condensed',sans-serif;font-size:4.6mm;letter-spacing:1.4mm;
+          text-transform:uppercase;color:#9AA4AE;margin-top:2.5mm}
+  .contacto-top{text-align:right;flex:none}
+  .contacto-top .rotulo{font-family:'Barlow Condensed',sans-serif;font-size:3.6mm;
+          letter-spacing:1mm;text-transform:uppercase;color:#9AA4AE}
+  .contacto-top .fono{font-family:'Archivo Black',sans-serif;font-size:7.4mm;
+          color:var(--senal);line-height:1.15;white-space:nowrap}
+
+  /* ---------- titular ---------- */
+  .titular{padding:8mm 12mm 6mm;flex:none}
+  .titular h1{font-family:'Archivo Black',sans-serif;font-size:11mm;line-height:1.02;
+              color:var(--grafito);text-transform:uppercase;letter-spacing:-.3mm}
+  .titular h1 em{font-style:normal;background:var(--senal);padding:0 1.5mm}
+  .titular p{font-size:4.5mm;line-height:1.45;color:#4A5259;margin-top:4mm;max-width:150mm}
+
+  /* ---------- fotos ---------- */
+  .fotos{display:grid;grid-template-columns:1.35fr 1fr 1fr;gap:2mm;
+         padding:0 12mm;flex:none}
+  .fotos figure{height:44mm;overflow:hidden;background:var(--asfalto)}
+  .fotos img{width:100%;height:100%;object-fit:cover;display:block}
+
+  /* ---------- servicios ---------- */
+  .servicios{display:grid;grid-template-columns:1fr 1fr;gap:9mm;
+             padding:8mm 12mm 0;flex:1 1 auto}
+  .placa{display:inline-flex;align-items:stretch;border:.6mm solid var(--grafito);
+         border-radius:1.2mm;overflow:hidden;margin-bottom:5mm}
+  .placa .cl{background:#173F8A;color:#fff;font-family:'Barlow Condensed',sans-serif;
+             font-size:3.2mm;letter-spacing:.4mm;padding:1.2mm 1.6mm;display:flex;
+             align-items:center}
+  .placa .txt{font-family:'Archivo Black',sans-serif;font-size:5.4mm;letter-spacing:1.6mm;
+              padding:1.6mm 3.5mm 1.2mm;color:var(--grafito);text-transform:uppercase}
+  .servicios ul{list-style:none}
+  .servicios li{font-size:4.2mm;line-height:1.35;padding:2.6mm 0 2.6mm 7mm;
+                border-bottom:.25mm solid #DAD7D1;position:relative}
+  .servicios li:before{content:"";position:absolute;left:0;top:4.2mm;
+                width:3.4mm;height:1.6mm;background:var(--senal)}
+
+  /* ---------- franja de datos ---------- */
+  .datos{display:grid;grid-template-columns:repeat(3,1fr);background:var(--humo);
+         margin:8mm 12mm 0;flex:none}
+  .datos div{padding:4.5mm 4mm;text-align:center;border-right:.25mm solid #CFCCC5}
+  .datos div:last-child{border-right:none}
+  .datos strong{display:block;font-family:'Archivo Black',sans-serif;font-size:7mm;
+                color:var(--grafito);line-height:1}
+  .datos span{font-family:'Barlow Condensed',sans-serif;font-size:3.6mm;letter-spacing:.8mm;
+              text-transform:uppercase;color:#6A716F}
+
+  /* ---------- pie ---------- */
+  .pie{background:var(--grafito);color:#fff;padding:8mm 12mm;flex:none;
+       display:flex;justify-content:space-between;align-items:center;gap:8mm;margin-top:8mm}
+  .pie .llamado{font-family:'Archivo Black',sans-serif;font-size:6.6mm;line-height:1.25;
+                text-transform:uppercase}
+  .pie .llamado b{color:var(--senal);display:block;font-size:8.4mm;white-space:nowrap}
+  .pie .detalle{font-size:3.9mm;line-height:1.6;color:#B7BFC7;text-align:right}
+  .pie .detalle b{color:#fff;font-weight:600}
+
+  @page{size:A4 portrait;margin:0}
+  @media print{
+    html,body{background:#fff}
+    .hoja{margin:0;box-shadow:none;page-break-after:avoid}
+  }
+</style>
+</head>
+<body>
+<div class="hoja">
+  <div class="cinta"></div>
+
+  <header class="cabecera">
+    <div>
+      <div class="marca">SERVI<span>RUTA</span></div>
+      <div class="bajada">Flotacentro móvil</div>
+    </div>
+    <div class="contacto-top">
+      <div class="rotulo">Whatsapp directo</div>
+      <div class="fono">+56 9 4521 0814</div>
+    </div>
+  </header>
+
+  <section class="titular">
+    <h1>Mecánica a domicilio<br>y <em>asistencia en ruta</em></h1>
+    <p>No muevas el vehículo ni pagues grúa. Llegamos con la unidad equipada y técnicos capacitados donde esté detenido: tu casa, la empresa, la faena o la carretera.</p>
+  </section>
+
+  <section class="fotos">
+    <figure><img src="https://serviruta.cl/wp-content/uploads/2022/09/20190117_131309-scaled.jpg" alt="Asistencia en ruta a camión"></figure>
+    <figure><img src="https://serviruta.cl/wp-content/uploads/2022/09/IMG_20180730_111003.jpg" alt="Técnico trabajando en terreno"></figure>
+    <figure><img src="https://serviruta.cl/wp-content/uploads/2022/09/WhatsApp-Image-2022-09-08-at-4.50.36-PM.jpeg" alt="Vulcanización a domicilio"></figure>
+  </section>
+
+  <section class="servicios">
+    <div>
+      <div class="placa"><span class="cl">CL</span><span class="txt">Livianos</span></div>
+      <ul>
+        <li>Diagnóstico con escáner</li>
+        <li>Electricidad, alternador y batería</li>
+        <li>Frenos y suspensión</li>
+        <li>Aire acondicionado</li>
+        <li>Cambio de aceite y filtros</li>
+        <li>Mantención preventiva</li>
+        <li>Vulcanización a domicilio</li>
+      </ul>
+    </div>
+    <div>
+      <div class="placa"><span class="cl">CL</span><span class="txt">Pesados</span></div>
+      <ul>
+        <li>Cambio de embrague</li>
+        <li>Frenos de aire</li>
+        <li>Servicios DPF</li>
+        <li>Sistemas hidráulicos</li>
+        <li>Válvulas y mangueras</li>
+        <li>Diagnóstico ECM Cummins, Detroit y CAT</li>
+        <li>Vulcanización de camión en el lugar</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="datos">
+    <div><strong>+10</strong><span>Años de experiencia</span></div>
+    <div><strong>+5.000</strong><span>Servicios realizados</span></div>
+    <div><strong>24/7</strong><span>Emergencias en ruta</span></div>
+  </section>
+
+  <footer class="pie">
+    <div class="llamado">Agenda tu servicio<b>+56 9 4521 0814</b></div>
+    <div class="detalle">
+      <b>+56 9 8505 8250</b><br>
+      Mapocho 3411, Quinta Normal<br>
+      Lunes a viernes 09:00 a 19:00 hrs<br>
+      Instagram @servirutastgo · Facebook /servirutacl
+    </div>
+  </footer>
+
+  <div class="cinta"></div>
+</div>
+</body>
+</html>

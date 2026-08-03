@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Serviruta · Red de Grúas</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--bg:#F7F7F5;--card:#FFF;--dark:#1A1A1A;--mid:#6B6B6B;--muted:#9CA3AF;
+--border:#E5E5E3;--accent:#2563EB;--accent-bg:#EFF6FF;
+--green:#059669;--green-bg:#ECFDF5;--orange:#EA580C;--orange-bg:#FFF7ED;
+--red:#DC2626;--red-bg:#FEF2F2;--purple:#7C3AED;--purple-bg:#F5F3FF;
+--radius:12px;--shadow:0 1px 3px rgba(0,0,0,.06);
+}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--dark);-webkit-font-smoothing:antialiased;padding-bottom:80px}
+
+/* HEADER */
+.header{background:var(--card);border-bottom:1px solid var(--border);padding:14px 16px;position:sticky;top:0;z-index:50}
+.header-inner{max-width:1000px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+.header-logo{font-weight:800;font-size:18px;display:flex;align-items:center;gap:8px}
+.header-logo .icon{width:28px;height:28px;background:var(--accent);border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:800}
+.header-logo span{color:var(--accent)}
+.header-badge{background:var(--green-bg);color:var(--green);padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600}
+
+/* TABS */
+.tabs{display:flex;gap:2px;padding:8px 16px;background:var(--card);border-bottom:1px solid var(--border);overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tab{padding:8px 16px;font-size:13px;font-weight:600;color:var(--mid);border-radius:8px;cursor:pointer;white-space:nowrap;transition:all .2s;border:none;background:none}
+.tab.active{background:var(--accent);color:#fff}
+.tab:hover:not(.active){background:var(--bg)}
+
+/* CONTENT */
+.content{max-width:1000px;margin:0 auto;padding:16px}
+.panel{display:none}
+.panel.active{display:block}
+
+/* KPI ROW */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:20px}
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;text-align:center}
+.kpi .value{font-size:28px;font-weight:800;line-height:1}
+.kpi .label{font-size:11px;color:var(--mid);margin-top:4px;font-weight:500}
+.kpi.accent .value{color:var(--accent)}
+.kpi.green .value{color:var(--green)}
+.kpi.orange .value{color:var(--orange)}
+.kpi.purple .value{color:var(--purple)}
+
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:10px;box-shadow:var(--shadow)}
+.card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.card-title{font-size:15px;font-weight:700}
+.card-sub{font-size:12px;color:var(--mid);margin-top:2px}
+.badge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;display:inline-block}
+.badge-pending{background:var(--orange-bg);color:var(--orange)}
+.badge-active{background:var(--accent-bg);color:var(--accent)}
+.badge-done{background:var(--green-bg);color:var(--green)}
+.badge-cancel{background:var(--red-bg);color:var(--red)}
+.badge-zone{background:var(--purple-bg);color:var(--purple)}
+
+.card-row{display:flex;gap:8px;font-size:13px;color:var(--mid);margin-bottom:4px;align-items:center}
+.card-row strong{color:var(--dark);font-weight:600}
+.card-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+
+/* BUTTONS */
+.btn{padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--dark);transition:all .2s}
+.btn:hover{border-color:var(--dark)}
+.btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn-primary:hover{opacity:.9}
+.btn-green{background:var(--green);color:#fff;border-color:var(--green)}
+.btn-green:hover{opacity:.9}
+.btn-orange{background:var(--orange);color:#fff;border-color:var(--orange)}
+.btn-sm{padding:6px 12px;font-size:12px}
+.btn-icon{width:36px;height:36px;padding:0;display:flex;align-items:center;justify-content:center;border-radius:8px}
+
+/* FORMS */
+.form-group{margin-bottom:14px}
+.form-label{display:block;font-size:12px;font-weight:600;color:var(--mid);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}
+.form-input{width:100%;padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-size:14px;font-family:inherit;background:var(--card);color:var(--dark);transition:border-color .2s}
+.form-input:focus{outline:none;border-color:var(--accent)}
+select.form-input{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236B6B6B' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+textarea.form-input{resize:vertical;min-height:60px}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:100;align-items:flex-end;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--card);border-radius:20px 20px 0 0;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;padding:24px 20px 32px}
+.modal-bar{width:40px;height:4px;background:var(--border);border-radius:4px;margin:0 auto 20px}
+.modal h3{font-size:18px;font-weight:700;margin-bottom:16px}
+
+/* TABLE */
+.table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:10px 12px;font-size:11px;font-weight:600;color:var(--mid);text-transform:uppercase;letter-spacing:.5px;border-bottom:2px solid var(--border);white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
+tr:hover td{background:var(--bg)}
+
+/* FILTERS */
+.filters{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
+.filter-btn{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--card);color:var(--mid);transition:all .2s}
+.filter-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.search-input{padding:8px 14px;border:1px solid var(--border);border-radius:8px;font-size:13px;width:200px;font-family:inherit}
+.search-input:focus{outline:none;border-color:var(--accent)}
+
+/* EMPTY STATE */
+.empty{text-align:center;padding:48px 20px;color:var(--mid)}
+.empty .icon{font-size:48px;margin-bottom:12px;opacity:.4}
+.empty p{font-size:14px;margin-bottom:16px}
+
+/* CROSSSELL PIPELINE */
+.pipeline{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:20px}
+.pipe-col{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:12px;min-height:200px}
+.pipe-header{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.pipe-count{background:var(--bg);padding:2px 8px;border-radius:10px;font-size:11px;color:var(--mid)}
+.pipe-card{background:var(--bg);border-radius:8px;padding:10px;margin-bottom:6px;font-size:12px;cursor:pointer;transition:background .2s}
+.pipe-card:hover{background:var(--border)}
+.pipe-card .name{font-weight:600;margin-bottom:2px}
+.pipe-card .detail{color:var(--mid);font-size:11px}
+
+/* TOAST */
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:var(--dark);color:#fff;padding:12px 24px;border-radius:12px;font-size:14px;font-weight:500;z-index:200;opacity:0;transition:opacity .3s;pointer-events:none}
+.toast.show{opacity:1}
+
+@media(max-width:640px){
+  .form-row{grid-template-columns:1fr}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .pipeline{grid-template-columns:1fr}
+  .search-input{width:100%}
+}
+@media(min-width:641px){
+  .modal-overlay{align-items:center}
+  .modal{border-radius:20px;margin:20px}
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="header-logo"><div class="icon">S</div>Servi<span>ruta</span> · Grúas</div>
+    <div class="header-badge" id="gruasActivas">0 activas</div>
+  </div>
+</div>
+
+<div class="tabs" role="tablist">
+  <button class="tab active" onclick="showTab('dashboard')">Dashboard</button>
+  <button class="tab" onclick="showTab('solicitudes')">Solicitudes</button>
+  <button class="tab" onclick="showTab('grueros')">Grueros</button>
+  <button class="tab" onclick="showTab('crosssell')">Cross-sell</button>
+</div>
+
+<div class="content">
+
+<!-- ==================== DASHBOARD ==================== -->
+<div class="panel active" id="panel-dashboard">
+  <div class="kpis">
+    <div class="kpi accent"><div class="value" id="kpi-total">-</div><div class="label">Solicitudes hoy</div></div>
+    <div class="kpi green"><div class="value" id="kpi-completadas">-</div><div class="label">Completadas</div></div>
+    <div class="kpi orange"><div class="value" id="kpi-pendientes">-</div><div class="label">Pendientes</div></div>
+    <div class="kpi purple"><div class="value" id="kpi-crosssell">-</div><div class="label">Cross-sell este mes</div></div>
+  </div>
+
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <h3 style="font-size:16px;font-weight:700">Últimas solicitudes</h3>
+    <button class="btn btn-primary btn-sm" onclick="openModal('nueva-solicitud')">+ Nueva solicitud</button>
+  </div>
+  <div id="dashboard-list"></div>
+</div>
+
+<!-- ==================== SOLICITUDES ==================== -->
+<div class="panel" id="panel-solicitudes">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <h3 style="font-size:16px;font-weight:700">Solicitudes de grúa</h3>
+    <button class="btn btn-primary btn-sm" onclick="openModal('nueva-solicitud')">+ Nueva</button>
+  </div>
+  <div class="filters">
+    <button class="filter-btn active" onclick="filterSol('todas',this)">Todas</button>
+    <button class="filter-btn" onclick="filterSol('pendiente',this)">Pendientes</button>
+    <button class="filter-btn" onclick="filterSol('asignada',this)">Asignadas</button>
+    <button class="filter-btn" onclick="filterSol('en_camino',this)">En camino</button>
+    <button class="filter-btn" onclick="filterSol('completada',this)">Completadas</button>
+  </div>
+  <div id="solicitudes-list"></div>
+</div>
+
+<!-- ==================== GRUEROS ==================== -->
+<div class="panel" id="panel-grueros">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <h3 style="font-size:16px;font-weight:700">Grueros suscritos</h3>
+    <button class="btn btn-primary btn-sm" onclick="openModal('nuevo-gruero')">+ Agregar</button>
+  </div>
+  <div class="filters">
+    <input type="text" class="search-input" placeholder="Buscar gruero..." oninput="searchGrueros(this.value)">
+    <button class="filter-btn active" onclick="filterGrueros('todos',this)">Todos</button>
+    <button class="filter-btn" onclick="filterGrueros('disponible',this)">Disponibles</button>
+    <button class="filter-btn" onclick="filterGrueros('ocupado',this)">Ocupados</button>
+  </div>
+  <div class="kpis" style="margin-bottom:16px">
+    <div class="kpi accent"><div class="value" id="kpi-grueros-total">-</div><div class="label">Total grueros</div></div>
+    <div class="kpi green"><div class="value" id="kpi-grueros-disp">-</div><div class="label">Disponibles</div></div>
+    <div class="kpi orange"><div class="value" id="kpi-grueros-serv">-</div><div class="label">Servicios este mes</div></div>
+    <div class="kpi purple"><div class="value" id="kpi-grueros-bonos">-</div><div class="label">Bonos acumulados</div></div>
+  </div>
+  <div id="grueros-list"></div>
+</div>
+
+<!-- ==================== CROSS-SELL ==================== -->
+<div class="panel" id="panel-crosssell">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <h3 style="font-size:16px;font-weight:700">Pipeline Cross-sell · Grúa → Mecánico</h3>
+  </div>
+  <div class="kpis" style="margin-bottom:16px">
+    <div class="kpi accent"><div class="value" id="kpi-cs-ofrecidos">-</div><div class="label">Ofrecidos</div></div>
+    <div class="kpi green"><div class="value" id="kpi-cs-agendados">-</div><div class="label">Agendados</div></div>
+    <div class="kpi purple"><div class="value" id="kpi-cs-completados">-</div><div class="label">Completados</div></div>
+    <div class="kpi orange"><div class="value" id="kpi-cs-tasa">-</div><div class="label">Tasa conversión</div></div>
+  </div>
+  <div class="pipeline" id="crosssell-pipeline"></div>
+  <h4 style="font-size:14px;font-weight:700;margin:20px 0 10px">Historial completo</h4>
+  <div id="crosssell-list"></div>
+</div>
+
+</div><!-- /content -->
+
+<!-- ==================== MODALS ==================== -->
+
+<!-- Nueva solicitud -->
+<div class="modal-overlay" id="modal-nueva-solicitud">
+  <div class="modal">
+    <div class="modal-bar"></div>
+    <h3>Nueva solicitud de grúa</h3>
+    <form onsubmit="crearSolicitud(event)">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Nombre cliente</label><input class="form-input" id="sol-nombre" required></div>
+        <div class="form-group"><label class="form-label">Teléfono</label><input class="form-input" id="sol-telefono" required></div>
+      </div>
+      <div class="form-group"><label class="form-label">Ubicación</label><input class="form-input" id="sol-ubicacion" placeholder="Dirección o referencia"></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Marca</label><input class="form-input" id="sol-marca"></div>
+        <div class="form-group"><label class="form-label">Modelo</label><input class="form-input" id="sol-modelo"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Patente</label><input class="form-input" id="sol-patente"></div>
+        <div class="form-group">
+          <label class="form-label">Tipo vehículo</label>
+          <select class="form-input" id="sol-vtipo"><option value="auto">Auto</option><option value="camioneta">Camioneta</option><option value="suv">SUV</option><option value="moto">Moto</option><option value="camion">Camión</option></select>
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label">Problema</label><textarea class="form-input" id="sol-problema" required placeholder="¿Qué le pasó?"></textarea></div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Tipo problema</label>
+          <select class="form-input" id="sol-ptipo"><option value="no_enciende">No enciende</option><option value="bateria">Batería</option><option value="neumatico">Neumático</option><option value="accidente">Accidente</option><option value="traslado">Traslado programado</option><option value="otro">Otro</option></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Canal</label>
+          <select class="form-input" id="sol-canal"><option value="whatsapp">WhatsApp</option><option value="google">Google</option><option value="llamada">Llamada</option><option value="b2b">Convenio B2B</option><option value="referido">Referido</option></select>
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label">Destino</label><input class="form-input" id="sol-destino" placeholder="¿A dónde llevar?"></div>
+      <div class="form-group"><label class="form-label">Precio grúa ($)</label><input class="form-input" id="sol-precio" type="number" placeholder="30000"></div>
+      <div class="form-group">
+        <label class="form-label">Asignar gruero</label>
+        <select class="form-input" id="sol-gruero"><option value="">— Sin asignar —</option></select>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:20px">
+        <button type="submit" class="btn btn-primary" style="flex:1">Crear solicitud</button>
+        <button type="button" class="btn" onclick="closeModal('nueva-solicitud')">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Nuevo gruero -->
+<div class="modal-overlay" id="modal-nuevo-gruero">
+  <div class="modal">
+    <div class="modal-bar"></div>
+    <h3>Agregar gruero a la red</h3>
+    <form onsubmit="crearGruero(event)">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Nombre</label><input class="form-input" id="gr-nombre" required></div>
+        <div class="form-group"><label class="form-label">Teléfono</label><input class="form-input" id="gr-telefono" required></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Zona</label>
+          <select class="form-input" id="gr-zona"><option value="sur">Sur</option><option value="poniente">Poniente</option><option value="oriente">Oriente</option><option value="norte">Norte</option><option value="centro">Centro</option><option value="periferia">Periferia</option></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Tipo grúa</label>
+          <select class="form-input" id="gr-tipo"><option value="cama">Cama</option><option value="arrastre">Arrastre</option><option value="plataforma">Plataforma</option><option value="mixta">Mixta</option></select>
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label">Patente</label><input class="form-input" id="gr-patente"></div>
+      <div class="form-group"><label class="form-label">Notas</label><textarea class="form-input" id="gr-notas" placeholder="Comunas que cubre, horarios, etc."></textarea></div>
+      <div style="display:flex;gap:10px;margin-top:20px">
+        <button type="submit" class="btn btn-primary" style="flex:1">Agregar gruero</button>
+        <button type="button" class="btn" onclick="closeModal('nuevo-gruero')">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Cross-sell modal -->
+<div class="modal-overlay" id="modal-crosssell">
+  <div class="modal">
+    <div class="modal-bar"></div>
+    <h3>Ofrecer mecánico con 15% dcto</h3>
+    <form onsubmit="crearCrosssell(event)">
+      <input type="hidden" id="cs-solicitud-id">
+      <input type="hidden" id="cs-gruero-id">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Cliente</label><input class="form-input" id="cs-nombre" readonly></div>
+        <div class="form-group"><label class="form-label">Teléfono</label><input class="form-input" id="cs-telefono" readonly></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Tipo servicio mecánico</label>
+        <select class="form-input" id="cs-tipo"><option value="diagnostico">Diagnóstico + Scanner</option><option value="frenos">Frenos</option><option value="motor">Motor</option><option value="electrico">Eléctrico / Batería</option><option value="neumaticos">Neumáticos</option><option value="mantencion">Mantención preventiva</option><option value="otro">Otro</option></select>
+      </div>
+      <div class="form-group"><label class="form-label">Descripción</label><textarea class="form-input" id="cs-desc"></textarea></div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Precio normal ($)</label><input class="form-input" id="cs-precio" type="number" oninput="calcDcto()"></div>
+        <div class="form-group"><label class="form-label">Con 15% dcto ($)</label><input class="form-input" id="cs-precio-dcto" readonly></div>
+      </div>
+      <div style="display:flex;gap:10px;margin-top:20px">
+        <button type="submit" class="btn btn-green" style="flex:1">Registrar cross-sell</button>
+        <button type="button" class="btn" onclick="closeModal('crosssell')">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// === SUPABASE INIT ===
+const SUPA_URL = 'https://bqlgfmqcefledqyodkii.supabase.co';
+const SUPA_KEY = 'REEMPLAZAR_CON_TU_ANON_KEY';
+const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+// === STATE ===
+let allSolicitudes = [];
+let allGrueros = [];
+let allCrosssell = [];
+let currentFilter = 'todas';
+let gruerosFilter = 'todos';
+
+// === INIT ===
+async function init() {
+  await Promise.all([loadSolicitudes(), loadGrueros(), loadCrosssell()]);
+  renderDashboard();
+}
+
+// === DATA LOADING ===
+async function loadSolicitudes() {
+  const { data } = await sb.from('solicitudes_grua').select('*').order('fecha_solicitud', { ascending: false });
+  allSolicitudes = data || [];
+}
+async function loadGrueros() {
+  const { data } = await sb.from('grueros').select('*').order('nombre');
+  allGrueros = data || [];
+  populateGrueroSelect();
+  document.getElementById('gruasActivas').textContent = allGrueros.filter(g => g.disponible && g.activo).length + ' activas';
+}
+async function loadCrosssell() {
+  const { data } = await sb.from('crosssell_grua').select('*').order('created_at', { ascending: false });
+  allCrosssell = data || [];
+}
+
+// === TABS ===
+function showTab(tab) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-' + tab).classList.add('active');
+  event.target.classList.add('active');
+  if (tab === 'dashboard') renderDashboard();
+  if (tab === 'solicitudes') renderSolicitudes();
+  if (tab === 'grueros') renderGrueros();
+  if (tab === 'crosssell') renderCrosssell();
+}
+
+// === DASHBOARD ===
+function renderDashboard() {
+  const today = new Date().toISOString().slice(0, 10);
+  const hoy = allSolicitudes.filter(s => s.fecha_solicitud?.slice(0, 10) === today);
+  const mesActual = new Date().getMonth();
+  const csMes = allCrosssell.filter(c => new Date(c.created_at).getMonth() === mesActual);
+
+  document.getElementById('kpi-total').textContent = hoy.length;
+  document.getElementById('kpi-completadas').textContent = hoy.filter(s => s.estado === 'completada').length;
+  document.getElementById('kpi-pendientes').textContent = hoy.filter(s => s.estado === 'pendiente').length;
+  document.getElementById('kpi-crosssell').textContent = csMes.filter(c => c.estado === 'completado').length + '/' + csMes.length;
+
+  const list = document.getElementById('dashboard-list');
+  const recent = allSolicitudes.slice(0, 8);
+  if (!recent.length) { list.innerHTML = emptyState('🚛', 'Sin solicitudes aún', 'Crea la primera solicitud para empezar'); return; }
+  list.innerHTML = recent.map(s => solicitudCard(s)).join('');
+}
+
+// === SOLICITUDES ===
+function renderSolicitudes() {
+  const filtered = currentFilter === 'todas' ? allSolicitudes : allSolicitudes.filter(s => s.estado === currentFilter);
+  const list = document.getElementById('solicitudes-list');
+  if (!filtered.length) { list.innerHTML = emptyState('📋', 'Sin solicitudes ' + currentFilter); return; }
+  list.innerHTML = filtered.map(s => solicitudCard(s)).join('');
+}
+
+function filterSol(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('#panel-solicitudes .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderSolicitudes();
+}
+
+function solicitudCard(s) {
+  const gruero = allGrueros.find(g => g.id === s.gruero_id);
+  const badges = { pendiente: 'badge-pending', asignada: 'badge-active', en_camino: 'badge-active', completada: 'badge-done', cancelada: 'badge-cancel' };
+  const estadoLabel = { pendiente: 'Pendiente', asignada: 'Asignada', en_camino: 'En camino', completada: 'Completada', cancelada: 'Cancelada' };
+  const csLabel = s.crosssell_aceptado ? '<span class="badge badge-done">✓ Mecánico agendado</span>' : s.crosssell_ofrecido ? '<span class="badge badge-pending">Dcto ofrecido</span>' : '';
+  const hora = s.fecha_solicitud ? new Date(s.fecha_solicitud).toLocaleString('es-CL', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) : '';
+
+  let actions = '';
+  if (s.estado === 'pendiente') actions = `<button class="btn btn-primary btn-sm" onclick="cambiarEstado('${s.id}','asignada')">Asignar</button>`;
+  if (s.estado === 'asignada') actions = `<button class="btn btn-orange btn-sm" onclick="cambiarEstado('${s.id}','en_camino')">En camino</button>`;
+  if (s.estado === 'en_camino') actions = `<button class="btn btn-green btn-sm" onclick="cambiarEstado('${s.id}','completada')">Completar</button>`;
+  if (s.estado === 'completada' && !s.crosssell_ofrecido) actions = `<button class="btn btn-green btn-sm" onclick="abrirCrosssell('${s.id}')">Ofrecer 15% dcto</button>`;
+
+  return `<div class="card">
+    <div class="card-header">
+      <div><div class="card-title">${s.cliente_nombre || 'Sin nombre'}</div><div class="card-sub">${hora} · vía ${s.canal || 'whatsapp'}</div></div>
+      <span class="badge ${badges[s.estado] || 'badge-pending'}">${estadoLabel[s.estado] || s.estado}</span>
+    </div>
+    <div class="card-row"><strong>Problema:</strong> ${s.problema || '-'}</div>
+    <div class="card-row"><strong>Vehículo:</strong> ${[s.vehiculo_marca, s.vehiculo_modelo, s.vehiculo_patente].filter(Boolean).join(' ') || '-'}</div>
+    <div class="card-row"><strong>Ubicación:</strong> ${s.cliente_ubicacion || '-'} → ${s.destino || '-'}</div>
+    ${gruero ? `<div class="card-row"><strong>Gruero:</strong> ${gruero.nombre} (${gruero.zona})</div>` : ''}
+    ${s.precio_grua ? `<div class="card-row"><strong>Precio:</strong> $${s.precio_grua.toLocaleString('es-CL')}</div>` : ''}
+    <div style="display:flex;gap:6px;align-items:center;margin-top:6px;flex-wrap:wrap">${csLabel}</div>
+    <div class="card-actions">${actions}
+      <a href="https://wa.me/56${(s.cliente_telefono||'').replace(/\D/g,'')}" target="_blank" class="btn btn-sm" style="color:var(--green)">WhatsApp</a>
+    </div>
+  </div>`;
+}
+
+// === GRUEROS ===
+function renderGrueros() {
+  let list = allGrueros;
+  if (gruerosFilter === 'disponible') list = list.filter(g => g.disponible && g.activo);
+  if (gruerosFilter === 'ocupado') list = list.filter(g => !g.disponible || !g.activo);
+
+  const total = allGrueros.length;
+  const disp = allGrueros.filter(g => g.disponible && g.activo).length;
+  const servMes = allGrueros.reduce((a, g) => a + (g.servicios_mes || 0), 0);
+  const bonos = allGrueros.reduce((a, g) => a + (g.bono_acumulado || 0), 0);
+
+  document.getElementById('kpi-grueros-total').textContent = total;
+  document.getElementById('kpi-grueros-disp').textContent = disp;
+  document.getElementById('kpi-grueros-serv').textContent = servMes;
+  document.getElementById('kpi-grueros-bonos').textContent = '$' + bonos.toLocaleString('es-CL');
+
+  const el = document.getElementById('grueros-list');
+  if (!list.length) { el.innerHTML = emptyState('🚛', 'Sin grueros registrados'); return; }
+
+  const zonas = { sur: 'Zona Sur', poniente: 'Poniente', oriente: 'Oriente', norte: 'Norte', centro: 'Centro', periferia: 'Periferia' };
+  el.innerHTML = `<div class="table-wrap"><table>
+    <thead><tr><th>Nombre</th><th>Zona</th><th>Tipo</th><th>Estado</th><th>Serv/mes</th><th>Conv</th><th>Bono</th><th></th></tr></thead>
+    <tbody>${list.map(g => `<tr>
+      <td><strong>${g.nombre}</strong><br><span style="font-size:11px;color:var(--mid)">${g.telefono}</span></td>
+      <td><span class="badge badge-zone">${zonas[g.zona] || g.zona}</span></td>
+      <td>${g.tipo_grua || '-'}</td>
+      <td>${g.disponible && g.activo ? '<span style="color:var(--green);font-weight:600">Disponible</span>' : '<span style="color:var(--orange);font-weight:600">Ocupado</span>'}</td>
+      <td>${g.servicios_mes || 0}</td>
+      <td>${g.conversiones_mes || 0}</td>
+      <td>$${(g.bono_acumulado || 0).toLocaleString('es-CL')}</td>
+      <td><button class="btn btn-sm" onclick="toggleDisp('${g.id}',${!g.disponible})">${g.disponible ? 'Marcar ocupado' : 'Marcar disponible'}</button></td>
+    </tr>`).join('')}</tbody></table></div>`;
+}
+
+function filterGrueros(f, btn) {
+  gruerosFilter = f;
+  document.querySelectorAll('#panel-grueros .filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderGrueros();
+}
+
+function searchGrueros(q) {
+  const el = document.getElementById('grueros-list');
+  const filtered = allGrueros.filter(g => g.nombre.toLowerCase().includes(q.toLowerCase()) || g.zona.includes(q.toLowerCase()));
+  // re-render with filtered
+  gruerosFilter = 'todos';
+  const zonas = { sur: 'Zona Sur', poniente: 'Poniente', oriente: 'Oriente', norte: 'Norte', centro: 'Centro', periferia: 'Periferia' };
+  el.innerHTML = `<div class="table-wrap"><table>
+    <thead><tr><th>Nombre</th><th>Zona</th><th>Tipo</th><th>Estado</th><th>Serv/mes</th><th>Conv</th><th>Bono</th><th></th></tr></thead>
+    <tbody>${filtered.map(g => `<tr>
+      <td><strong>${g.nombre}</strong><br><span style="font-size:11px;color:var(--mid)">${g.telefono}</span></td>
+      <td><span class="badge badge-zone">${zonas[g.zona] || g.zona}</span></td>
+      <td>${g.tipo_grua || '-'}</td>
+      <td>${g.disponible && g.activo ? '<span style="color:var(--green)">Disponible</span>' : '<span style="color:var(--orange)">Ocupado</span>'}</td>
+      <td>${g.servicios_mes || 0}</td><td>${g.conversiones_mes || 0}</td>
+      <td>$${(g.bono_acumulado || 0).toLocaleString('es-CL')}</td>
+      <td><button class="btn btn-sm" onclick="toggleDisp('${g.id}',${!g.disponible})">${g.disponible ? 'Ocupado' : 'Disponible'}</button></td>
+    </tr>`).join('')}</tbody></table></div>`;
+}
+
+// === CROSS-SELL ===
+function renderCrosssell() {
+  const estados = ['ofrecido', 'aceptado', 'agendado', 'completado'];
+  const labels = { ofrecido: 'Ofrecido', aceptado: 'Aceptado', agendado: 'Agendado', completado: 'Completado' };
+  const colors = { ofrecido: 'var(--orange)', aceptado: 'var(--accent)', agendado: 'var(--purple)', completado: 'var(--green)' };
+
+  const total = allCrosssell.length || 1;
+  const completados = allCrosssell.filter(c => c.estado === 'completado').length;
+  const agendados = allCrosssell.filter(c => c.estado === 'agendado').length;
+  const ofrecidos = allCrosssell.filter(c => c.estado === 'ofrecido').length;
+  const tasa = total > 0 ? Math.round((completados / allCrosssell.length) * 100) : 0;
+
+  document.getElementById('kpi-cs-ofrecidos').textContent = ofrecidos;
+  document.getElementById('kpi-cs-agendados').textContent = agendados;
+  document.getElementById('kpi-cs-completados').textContent = completados;
+  document.getElementById('kpi-cs-tasa').textContent = (allCrosssell.length ? tasa : 0) + '%';
+
+  // Pipeline
+  const pipe = document.getElementById('crosssell-pipeline');
+  pipe.innerHTML = estados.map(e => {
+    const items = allCrosssell.filter(c => c.estado === e);
+    return `<div class="pipe-col">
+      <div class="pipe-header" style="color:${colors[e]}">${labels[e]} <span class="pipe-count">${items.length}</span></div>
+      ${items.length ? items.slice(0, 5).map(c => `<div class="pipe-card" onclick="avanzarCrosssell('${c.id}','${e}')">
+        <div class="name">${c.cliente_nombre || 'Cliente'}</div>
+        <div class="detail">${c.tipo_servicio || '-'} · ${c.precio_con_dcto ? '$' + c.precio_con_dcto.toLocaleString('es-CL') : '-'}</div>
+      </div>`).join('') : '<div style="text-align:center;color:var(--muted);font-size:12px;padding:20px 0">Vacío</div>'}
+    </div>`;
+  }).join('');
+
+  // History list
+  const list = document.getElementById('crosssell-list');
+  if (!allCrosssell.length) { list.innerHTML = emptyState('🔧', 'Sin cross-sell aún', 'Completa una solicitud de grúa para ofrecer mecánico con descuento'); return; }
+  list.innerHTML = allCrosssell.map(c => {
+    const badgeClass = c.estado === 'completado' ? 'badge-done' : c.estado === 'agendado' ? 'badge-active' : 'badge-pending';
+    return `<div class="card">
+      <div class="card-header">
+        <div><div class="card-title">${c.cliente_nombre || 'Cliente'}</div><div class="card-sub">${c.tipo_servicio || '-'}</div></div>
+        <span class="badge ${badgeClass}">${c.estado}</span>
+      </div>
+      ${c.precio_servicio ? `<div class="card-row"><strong>Precio:</strong> $${c.precio_servicio.toLocaleString('es-CL')} → <strong style="color:var(--green)">$${(c.precio_con_dcto || 0).toLocaleString('es-CL')}</strong> (15% dcto)</div>` : ''}
+      ${c.bono_gruero ? `<div class="card-row"><strong>Bono gruero:</strong> $${c.bono_gruero.toLocaleString('es-CL')}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+// === ACTIONS ===
+async function crearSolicitud(e) {
+  e.preventDefault();
+  const data = {
+    cliente_nombre: v('sol-nombre'), cliente_telefono: v('sol-telefono'), cliente_ubicacion: v('sol-ubicacion'),
+    vehiculo_marca: v('sol-marca'), vehiculo_modelo: v('sol-modelo'), vehiculo_patente: v('sol-patente'),
+    vehiculo_tipo: v('sol-vtipo'), problema: v('sol-problema'), problema_tipo: v('sol-ptipo'),
+    destino: v('sol-destino'), canal: v('sol-canal'),
+    precio_grua: parseInt(v('sol-precio')) || null,
+    gruero_id: v('sol-gruero') || null,
+    estado: v('sol-gruero') ? 'asignada' : 'pendiente',
+    fecha_asignacion: v('sol-gruero') ? new Date().toISOString() : null
+  };
+  const { error } = await sb.from('solicitudes_grua').insert(data);
+  if (error) { toast('Error: ' + error.message); return; }
+  closeModal('nueva-solicitud');
+  e.target.reset();
+  toast('Solicitud creada');
+  await loadSolicitudes();
+  renderDashboard();
+}
+
+async function crearGruero(e) {
+  e.preventDefault();
+  const data = { nombre: v('gr-nombre'), telefono: v('gr-telefono'), zona: v('gr-zona'), tipo_grua: v('gr-tipo'), patente: v('gr-patente'), notas: v('gr-notas') };
+  const { error } = await sb.from('grueros').insert(data);
+  if (error) { toast('Error: ' + error.message); return; }
+  closeModal('nuevo-gruero');
+  e.target.reset();
+  toast('Gruero agregado');
+  await loadGrueros();
+  renderGrueros();
+}
+
+async function cambiarEstado(id, estado) {
+  const updates = { estado, updated_at: new Date().toISOString() };
+  if (estado === 'completada') updates.fecha_completada = new Date().toISOString();
+  if (estado === 'en_camino') updates.fecha_llegada = new Date().toISOString();
+  await sb.from('solicitudes_grua').update(updates).eq('id', id);
+  toast('Estado → ' + estado);
+  await loadSolicitudes();
+  renderDashboard();
+  renderSolicitudes();
+}
+
+async function toggleDisp(id, disp) {
+  await sb.from('grueros').update({ disponible: disp, updated_at: new Date().toISOString() }).eq('id', id);
+  toast(disp ? 'Gruero disponible' : 'Gruero ocupado');
+  await loadGrueros();
+  renderGrueros();
+}
+
+function abrirCrosssell(solId) {
+  const sol = allSolicitudes.find(s => s.id === solId);
+  if (!sol) return;
+  document.getElementById('cs-solicitud-id').value = sol.id;
+  document.getElementById('cs-gruero-id').value = sol.gruero_id || '';
+  document.getElementById('cs-nombre').value = sol.cliente_nombre || '';
+  document.getElementById('cs-telefono').value = sol.cliente_telefono || '';
+  openModal('crosssell');
+}
+
+function calcDcto() {
+  const precio = parseInt(v('cs-precio')) || 0;
+  document.getElementById('cs-precio-dcto').value = Math.round(precio * 0.85);
+}
+
+async function crearCrosssell(e) {
+  e.preventDefault();
+  const precio = parseInt(v('cs-precio')) || 0;
+  const data = {
+    solicitud_grua_id: v('cs-solicitud-id'), gruero_id: v('cs-gruero-id') || null,
+    cliente_nombre: v('cs-nombre'), cliente_telefono: v('cs-telefono'),
+    tipo_servicio: v('cs-tipo'), descripcion: v('cs-desc'),
+    precio_servicio: precio, descuento_pct: 15, precio_con_dcto: Math.round(precio * 0.85),
+    estado: 'ofrecido'
+  };
+  const { error } = await sb.from('crosssell_grua').insert(data);
+  if (error) { toast('Error: ' + error.message); return; }
+  // Marcar solicitud
+  await sb.from('solicitudes_grua').update({ crosssell_ofrecido: true, crosssell_estado: 'ofrecido', updated_at: new Date().toISOString() }).eq('id', v('cs-solicitud-id'));
+  closeModal('crosssell');
+  e.target.reset();
+  toast('Cross-sell registrado · 15% dcto');
+  await Promise.all([loadSolicitudes(), loadCrosssell()]);
+  renderDashboard();
+}
+
+async function avanzarCrosssell(id, estadoActual) {
+  const next = { ofrecido: 'aceptado', aceptado: 'agendado', agendado: 'completado' };
+  const nextEstado = next[estadoActual];
+  if (!nextEstado) return;
+  if (!confirm(`Mover a "${nextEstado}"?`)) return;
+  const updates = { estado: nextEstado, updated_at: new Date().toISOString() };
+  if (nextEstado === 'agendado') updates.fecha_agendada = new Date().toISOString();
+  await sb.from('crosssell_grua').update(updates).eq('id', id);
+  // Si se completa, marcar en solicitud
+  if (nextEstado === 'completado') {
+    const cs = allCrosssell.find(c => c.id === id);
+    if (cs?.solicitud_grua_id) {
+      await sb.from('solicitudes_grua').update({ crosssell_aceptado: true, crosssell_estado: 'completado' }).eq('id', cs.solicitud_grua_id);
+    }
+  }
+  toast('Cross-sell → ' + nextEstado);
+  await Promise.all([loadSolicitudes(), loadCrosssell()]);
+  renderCrosssell();
+}
+
+// === HELPERS ===
+function v(id) { return document.getElementById(id)?.value?.trim() || ''; }
+function openModal(name) { document.getElementById('modal-' + name).classList.add('open'); }
+function closeModal(name) { document.getElementById('modal-' + name).classList.remove('open'); }
+function toast(msg) { const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2500); }
+function emptyState(icon, title, sub) { return `<div class="empty"><div class="icon">${icon}</div><p><strong>${title}</strong>${sub ? '<br>' + sub : ''}</p></div>`; }
+function populateGrueroSelect() {
+  const sel = document.getElementById('sol-gruero');
+  if (!sel) return;
+  const opts = allGrueros.filter(g => g.activo).map(g => `<option value="${g.id}">${g.nombre} (${g.zona}${g.disponible ? '' : ' · ocupado'})</option>`);
+  sel.innerHTML = '<option value="">— Sin asignar —</option>' + opts.join('');
+}
+
+// Close modals on overlay click
+document.querySelectorAll('.modal-overlay').forEach(m => {
+  m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); });
+});
+
+// Init
+init();
+</script>
+</body>
+</html>

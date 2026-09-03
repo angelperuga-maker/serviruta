@@ -143,6 +143,12 @@ async function loadPptos() {
     const { data, error } = await getDB().from('presupuestos').select('*').order('created_at', {ascending: false})
     if (error) throw error
     pptos = data || []
+    // ROL TÉCNICO: solo ve SUS presupuestos (coincidencia exacta, fail-closed)
+    if(localStorage.getItem('sv_user_rol') === 'tecnico'){
+      var _n=function(x){return (x||'').toString().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\s+/g,' ').trim()}
+      var miNom = _n(localStorage.getItem('sv_user_nombre'))
+      pptos = miNom ? pptos.filter(function(p){ return _n(p.tecnico)===miNom }) : []
+    }
     renderLista()
   } catch(e) {
     document.getElementById('pptos-list').innerHTML = '<div class="loading">❌ Error: ' + e.message + '</div>'

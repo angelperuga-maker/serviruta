@@ -639,7 +639,7 @@ async function loadTecnicos() {
     </tr>`).join('') + `</tbody>`
   // poblar select
   const sel = document.getElementById('f-tecnico')
-  sel.innerHTML = '<option value="">Sin asignar</option>' + data.map(t=>`<option value="${t.id}">${t.nombre}</option>`).join('')
+  sel.innerHTML = '<option value="">Sin asignar</option>' + data.filter(t=>t.activo).sort((a,b)=>(a.nombre||'').localeCompare(b.nombre||'')).map(t=>`<option value="${t.id}">${t.nombre}</option>`).join('')
 }
 
 // ════════════════════════════════

@@ -441,13 +441,12 @@ async function cargarTecnicos(){
 async function cargarEventos(){
   var r = await sbReq('GET', 'agenda?select=*&order=fecha.asc,hora.asc')
   EVENTOS = r.ok ? await r.json() : []
-  // ROL TÉCNICO: solo ve SUS servicios
+  // ROL TÉCNICO: solo ve SUS servicios (coincidencia EXACTA, sin tildes/mayúsculas; cierra por defecto)
   if(localStorage.getItem('sv_user_rol') === 'tecnico'){
-    var miNombre = (localStorage.getItem('sv_user_nombre') || '').toLowerCase()
-    EVENTOS = EVENTOS.filter(function(e){
-      var t = (e.tecnico || '').toLowerCase()
-      return miNombre && (t === miNombre || t.indexOf(miNombre) === 0 || miNombre.indexOf(t) === 0)
-    })
+    var normNom = function(x){ return (x||'').toString().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\s+/g,' ').trim() }
+    var miNombre = normNom(localStorage.getItem('sv_user_nombre'))
+    // Si no hay identidad válida, no se muestra nada (fail-closed) en vez de exponer toda la agenda
+    EVENTOS = miNombre ? EVENTOS.filter(function(e){ return normNom(e.tecnico) === miNombre }) : []
     // Banner visible: confirma que el filtro está activo
     if(!document.getElementById('banner-tecnico')){
       var bt = document.createElement('div')

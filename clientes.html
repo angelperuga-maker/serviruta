@@ -119,12 +119,13 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
       <label class="lbl">Técnico</label>
       <select class="inp" id="ag-tecnico">
         <option value="">Sin asignar</option>
-        <option>Reynaldo Aguas Bertel</option>
-        <option>Reynaldo Aguas</option>
-        <option>Kiven Henz</option>
-        <option>Humberto Morales</option>
+        <!-- Respaldo estático (se reemplaza dinámicamente al cargar) -->
+        <option>Abraham</option>
+        <option>Cristian Guerrero</option>
         <option>Giovanino Perugini</option>
-        <option>Javier Honores</option>
+        <option>Javier Honoré</option>
+        <option>Kiven Henz</option>
+        <option>Reynaldo Aguas Bertel</option>
       </select>
       <div class="row2">
         <div><label class="lbl">Fecha</label><input class="inp" type="date" id="ag-fecha" style="margin-bottom:0"></div>
@@ -306,6 +307,27 @@ function mostrarNotas(){
 function toast(msg,type){var t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(type?' '+type:'');t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2500)}
 
 load()
+</script>
+<script>
+/* Serviruta: técnicos activos dinámicos en #ag-tecnico (Abraham, Cristian y futuros aparecen solos) */
+(function(){
+  function cargar(){
+    var sel=document.getElementById('ag-tecnico');
+    if(!sel||typeof SB==='undefined') return;
+    fetch(SB+'/rest/v1/tecnicos?activo=eq.true&select=nombre&order=nombre.asc',{headers:{apikey:SK,Authorization:'Bearer '+SK}})
+      .then(function(r){return r.ok?r.json():null})
+      .then(function(rows){
+        if(!rows||!rows.length) return;
+        var prev=sel.value;
+        var html='<option value="">Sin asignar</option>';
+        html+=rows.map(function(t){return '<option value="'+t.nombre.replace(/"/g,'&quot;')+'">'+t.nombre+'</option>';}).join('');
+        sel.innerHTML=html;
+        if(prev){for(var i=0;i<sel.options.length;i++){if(sel.options[i].value===prev){sel.value=prev;break;}}}
+      }).catch(function(){});
+  }
+  if(document.readyState!=='loading')cargar();
+  else document.addEventListener('DOMContentLoaded',cargar);
+})();
 </script>
 </body>
 </html>

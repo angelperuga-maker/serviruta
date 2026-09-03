@@ -133,15 +133,13 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
     <div class="modal-title">Asignar técnico</div>
     <label class="lbl">Técnico</label>
     <select class="sel" id="as-tecnico">
-      
-      
-      
-      <option value="Reynaldo Aguas Bertel">Reynaldo Aguas Bertel</option>
-      <option value="Reynaldo Aguas">Reynaldo Aguas</option>
-      <option value="Kiven Henz">Kiven Henz</option>
-      <option value="Humberto Morales">Humberto Morales</option>
+      <!-- Respaldo estático (se reemplaza dinámicamente al cargar) -->
+      <option value="Abraham">Abraham</option>
+      <option value="Cristian Guerrero">Cristian Guerrero</option>
       <option value="Giovanino Perugini">Giovanino Perugini</option>
-      <option value="Javier Honores">Javier Honores</option>
+      <option value="Javier Honoré">Javier Honoré</option>
+      <option value="Kiven Henz">Kiven Henz</option>
+      <option value="Reynaldo Aguas Bertel">Reynaldo Aguas Bertel</option>
     </select>
     <button class="btn-cancel" onclick="document.getElementById('modal-asignar').classList.remove('open')">Cancelar</button>
     <button class="btn-save" onclick="confirmarAsignacion()">Asignar y notificar</button>
@@ -160,15 +158,13 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
     <div style="height:10px"></div>
     <label class="lbl">Técnico asignado</label>
     <select class="inp" id="ag-tecnico">
-      
-      
-      
-      <option value="Reynaldo Aguas Bertel">Reynaldo Aguas Bertel</option>
-      <option value="Kiven Henz">Kiven Henz</option>
-      <option value="Humberto Morales">Humberto Morales</option>
+      <!-- Respaldo estático (se reemplaza dinámicamente al cargar) -->
+      <option value="Abraham">Abraham</option>
+      <option value="Cristian Guerrero">Cristian Guerrero</option>
       <option value="Giovanino Perugini">Giovanino Perugini</option>
-      <option value="Javier Honores">Javier Honores</option>
-      <option value="Reynaldo Aguas">Reynaldo Aguas</option>
+      <option value="Javier Honoré">Javier Honoré</option>
+      <option value="Kiven Henz">Kiven Henz</option>
+      <option value="Reynaldo Aguas Bertel">Reynaldo Aguas Bertel</option>
     </select>
     <label class="lbl">Cliente</label>
     <input class="inp" id="ag-cliente" placeholder="Nombre">
@@ -371,6 +367,30 @@ function contactarCliente(tel,nombre,problema){
 
 function toast(msg,type){var t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(type?' '+type:'');t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2500);}
 load();
+</script>
+<script>
+/* Serviruta: técnicos activos dinámicos en #as-tecnico y #ag-tecnico + mapa TELS (nombre->telefono) */
+(function(){
+  function fill(selId, rows){
+    var sel=document.getElementById(selId); if(!sel) return;
+    var prev=sel.value;
+    sel.innerHTML=rows.map(function(t){return '<option value="'+t.nombre.replace(/"/g,'&quot;')+'">'+t.nombre+'</option>';}).join('');
+    if(prev){for(var i=0;i<sel.options.length;i++){if(sel.options[i].value===prev){sel.value=prev;break;}}}
+  }
+  function cargar(){
+    if(typeof SB_URL==='undefined') return;
+    fetch(SB_URL+'/rest/v1/tecnicos?activo=eq.true&select=nombre,telefono&order=nombre.asc',{headers:{apikey:SB_KEY,Authorization:'Bearer '+SB_KEY}})
+      .then(function(r){return r.ok?r.json():null})
+      .then(function(rows){
+        if(!rows||!rows.length) return;
+        fill('as-tecnico',rows); fill('ag-tecnico',rows);
+        // Reconstruir mapa de telefonos para notificar por WhatsApp
+        try{ if(typeof TELS==='object'&&TELS){ rows.forEach(function(t){ if(t.telefono) TELS[t.nombre]=t.telefono; }); } }catch(e){}
+      }).catch(function(){});
+  }
+  if(document.readyState!=='loading')cargar();
+  else document.addEventListener('DOMContentLoaded',cargar);
+})();
 </script>
 </body>
 </html>

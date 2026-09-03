@@ -192,13 +192,11 @@ async function cargar(){
   else if(FILTRO==='todos') query+='&fecha=gte.'+hoyISO()
   
   SERVICIOS=await sbGet(query)
-  // ROL TÉCNICO: solo ve SUS servicios
+  // ROL TÉCNICO: solo ve SUS servicios (coincidencia exacta, sin tildes; fail-closed)
   if(localStorage.getItem('sv_user_rol') === 'tecnico'){
-    var miNombre = (localStorage.getItem('sv_user_nombre') || '').toLowerCase()
-    SERVICIOS = SERVICIOS.filter(function(e){
-      var t = (e.tecnico || '').toLowerCase()
-      return miNombre && (t === miNombre || t.indexOf(miNombre) === 0 || miNombre.indexOf(t) === 0)
-    })
+    var _n=function(x){return (x||'').toString().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\s+/g,' ').trim()}
+    var miNombre = _n(localStorage.getItem('sv_user_nombre'))
+    SERVICIOS = miNombre ? SERVICIOS.filter(function(e){ return _n(e.tecnico)===miNombre }) : []
   }
   render()
 }

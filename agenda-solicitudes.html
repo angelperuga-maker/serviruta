@@ -143,14 +143,13 @@ a{color:inherit;text-decoration:none}
       <label>👤 Técnico asignado</label>
       <select id="m-tecnico">
         <option value="">Seleccionar...</option>
-        <option value="Isaias Robles">Isaias Robles</option>
-        <option value="Miguel Landaeta">Miguel Landaeta</option>
-        <option value="Javier Honores">Javier Honores</option>
+        <!-- Respaldo estático (se reemplaza dinámicamente al cargar) -->
+        <option value="Abraham">Abraham</option>
+        <option value="Cristian Guerrero">Cristian Guerrero</option>
         <option value="Giovanino Perugini">Giovanino Perugini</option>
-        <option value="Reynaldo Aguas">Reynaldo Aguas</option>
+        <option value="Javier Honoré">Javier Honoré</option>
         <option value="Kiven Henz">Kiven Henz</option>
-        <option value="Humberto Morales">Humberto Morales</option>
-        <option value="Angel Peruga">Angel Peruga</option>
+        <option value="Reynaldo Aguas Bertel">Reynaldo Aguas Bertel</option>
       </select>
     </div>
     <div class="campo">
@@ -367,5 +366,26 @@ document.getElementById('modal').addEventListener('click',function(e){
 cargar()
 </script>
 
+<script>
+/* Serviruta: carga dinámica de técnicos activos en #m-tecnico (conserva "Seleccionar..."). */
+(function(){
+  function cargarTecnicosDinamico(){
+    var sel=document.getElementById('m-tecnico');
+    if(!sel||typeof SB_URL==='undefined') return;
+    fetch(SB_URL+'/rest/v1/tecnicos?activo=eq.true&select=nombre&order=nombre.asc',{headers:{apikey:SB_KEY,Authorization:'Bearer '+SB_KEY}})
+      .then(function(r){return r.ok?r.json():null})
+      .then(function(rows){
+        if(!rows||!rows.length) return;
+        var prev=sel.value;
+        var html='<option value="">Seleccionar...</option>';
+        html+=rows.map(function(t){return '<option value="'+t.nombre.replace(/"/g,'&quot;')+'">'+t.nombre+'</option>';}).join('');
+        sel.innerHTML=html;
+        if(prev)sel.value=prev;
+      }).catch(function(){});
+  }
+  if(document.readyState!=='loading')cargarTecnicosDinamico();
+  else document.addEventListener('DOMContentLoaded',cargarTecnicosDinamico);
+})();
+</script>
 </body>
 </html>

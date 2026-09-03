@@ -245,6 +245,12 @@ async function cargarServicios(){
   }
   var r = await sbReq('GET', 'agenda?fecha=eq.'+fecha+'&estado=in.(solicitada,agendado,confirmado,en-ruta,completado)&select=*&order=hora.asc')
   SERVICIOS = r.ok ? await r.json() : []
+  // ROL TÉCNICO: solo sus servicios (coincidencia exacta, fail-closed)
+  if(localStorage.getItem('sv_user_rol') === 'tecnico'){
+    var _n=function(x){return (x||'').toString().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\s+/g,' ').trim()}
+    var miNom = _n(localStorage.getItem('sv_user_nombre'))
+    SERVICIOS = miNom ? SERVICIOS.filter(function(s){ return _n(s.tecnico)===miNom }) : []
+  }
 }
 
 function serviciosFiltrados(){

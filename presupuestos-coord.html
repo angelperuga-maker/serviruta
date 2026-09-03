@@ -169,11 +169,13 @@ fbq('track', 'PageView');
     <div class="row2">
       <div><label class="lbl">Técnico</label>
         <select class="inp" id="n-tecnico" style="margin-bottom:0">
-          
-          <option>Reynaldo Aguas Bertel</option><option>Reynaldo Aguas</option>
-          <option>Kiven Henz</option><option>Humberto Morales</option><option>Giovanino Perugini</option>
-      <option>Javier Honores</option>
-      <option value="Javier Honores">Javier Honores</option>
+          <!-- Respaldo estático (se reemplaza dinámicamente al cargar) -->
+          <option>Abraham</option>
+          <option>Cristian Guerrero</option>
+          <option>Giovanino Perugini</option>
+          <option>Javier Honoré</option>
+          <option>Kiven Henz</option>
+          <option>Reynaldo Aguas Bertel</option>
         </select>
       </div>
       <div><label class="lbl">N° Presupuesto</label><input class="inp" id="n-num" placeholder="001" style="margin-bottom:0"></div>
@@ -207,11 +209,10 @@ async function load(){
   var r=await getDB().from('presupuestos').select('*').order('created_at',{ascending:false})
   // ═══ ROL TÉCNICO: solo ve SUS presupuestos ═══
   if(r.data && esRolTecnico()){
-    var miNom = (localStorage.getItem('sv_user_nombre')||'').toLowerCase()
-    r.data = r.data.filter(function(s){
-      var t = (s.tecnico||'').toLowerCase()
-      return miNom && (t===miNom || t.indexOf(miNom)===0 || miNom.indexOf(t)===0)
-    })
+    var _n=function(x){return (x||'').toString().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\s+/g,' ').trim()}
+    var miNom = _n(localStorage.getItem('sv_user_nombre'))
+    // coincidencia EXACTA + fail-closed: si no hay identidad, no muestra nada
+    r.data = miNom ? r.data.filter(function(s){ return _n(s.tecnico)===miNom }) : []
   }
   todos=r.data||[]
   renderTab(tabActual)
@@ -679,6 +680,26 @@ function toast(msg,type){var t=document.getElementById('toast');t.textContent=ms
 
 load()
 
+</script>
+<script>
+/* Serviruta: carga dinámica de técnicos activos en #n-tecnico.
+   Abraham, Cristian Guerrero y cualquier técnico nuevo (tecnicos.activo=true) aparecen automáticamente. */
+(function(){
+  function cargarTecnicosDinamico(){
+    var sel=document.getElementById('n-tecnico');
+    if(!sel||typeof SB_URL==='undefined') return;
+    fetch(SB_URL+'/rest/v1/tecnicos?activo=eq.true&select=nombre&order=nombre.asc',{headers:{apikey:SB_KEY,Authorization:'Bearer '+SB_KEY}})
+      .then(function(r){return r.ok?r.json():null})
+      .then(function(rows){
+        if(!rows||!rows.length) return;
+        var prev=sel.value;
+        sel.innerHTML=rows.map(function(t){return '<option value="'+t.nombre.replace(/"/g,'&quot;')+'">'+t.nombre+'</option>';}).join('');
+        if(prev){for(var i=0;i<sel.options.length;i++){if(sel.options[i].value===prev){sel.value=prev;break;}}}
+      }).catch(function(){});
+  }
+  if(document.readyState!=='loading')cargarTecnicosDinamico();
+  else document.addEventListener('DOMContentLoaded',cargarTecnicosDinamico);
+})();
 </script>
 </body>
 </html>

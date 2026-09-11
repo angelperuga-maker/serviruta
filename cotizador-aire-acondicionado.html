@@ -1,0 +1,530 @@
+<!-- ============================================================
+     SERVIRUTA · COTIZADOR DE AIRE ACONDICIONADO AUTOMOTRIZ
+     Bloque único: pegar en Elementor > HTML o en un widget HTML
+     de WordPress. Sin librerías externas.
+     Todo lo editable está en el bloque CONFIG.
+     ============================================================ -->
+
+<div id="srt-aa">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&display=swap');
+
+#srt-aa{
+  --tinta:#14171C;
+  --acero:#4A5461;
+  --humo:#E7E9EC;
+  --papel:#F4F5F7;
+  --frio:#0E7C86;
+  --frio-claro:#14A0AC;
+  --cinta:#F2C14E;
+  --ok:#1E7A48;
+
+  font-family:'Barlow',system-ui,-apple-system,sans-serif;
+  color:var(--tinta);
+  background:var(--papel);
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  max-width:920px;
+  margin:0 auto;
+  border:1px solid var(--humo);
+}
+#srt-aa *,#srt-aa *::before,#srt-aa *::after{box-sizing:border-box}
+#srt-aa p,#srt-aa h1,#srt-aa h2,#srt-aa ul,#srt-aa li{margin:0;padding:0}
+#srt-aa ul{list-style:none}
+#srt-aa button{font:inherit;color:inherit;cursor:pointer}
+
+/* cinta */
+#srt-aa .aa-cinta{background:var(--cinta);border-bottom:2px solid var(--tinta);overflow:hidden;white-space:nowrap}
+#srt-aa .aa-pista{
+  display:inline-block;padding:7px 0;
+  font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:15px;
+  animation:aa-desliza 26s linear infinite;
+}
+#srt-aa .aa-pista span{padding:0 26px;border-right:1px solid rgba(20,23,28,.28)}
+@keyframes aa-desliza{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){
+  #srt-aa .aa-pista{animation:none}
+  #srt-aa .aa-cinta{white-space:normal}
+}
+
+/* cabecera */
+#srt-aa .aa-cab{padding:30px 26px 22px;background:var(--tinta);color:#fff;position:relative;overflow:hidden}
+#srt-aa .aa-cab h1{
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;
+  font-size:clamp(30px,6vw,46px);line-height:.98;letter-spacing:-.01em;position:relative;
+}
+#srt-aa .aa-cab h1 em{font-style:normal;color:#7FD6DE}
+#srt-aa .aa-cab p{margin-top:10px;max-width:52ch;color:#B8BFC8;font-size:15.5px;position:relative}
+#srt-aa .aa-sello{
+  display:inline-block;margin-top:16px;padding:5px 12px;
+  border:1px solid var(--frio-claro);color:#7FD6DE;
+  font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:14px;position:relative;
+}
+
+/* pasos */
+#srt-aa .aa-cuerpo{padding:26px}
+#srt-aa .aa-paso{padding:22px 0;border-top:1px solid var(--humo)}
+#srt-aa .aa-paso:first-child{border-top:0;padding-top:4px}
+#srt-aa .aa-paso-t{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
+#srt-aa .aa-num{
+  font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;
+  width:24px;height:24px;flex:0 0 24px;border-radius:50%;
+  background:var(--tinta);color:#fff;display:grid;place-items:center;transform:translateY(2px);
+}
+#srt-aa .aa-paso-t h2{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:21px}
+#srt-aa .aa-ayuda{font-size:13.5px;color:var(--acero);margin:0 0 14px 34px}
+
+/* campos */
+#srt-aa .aa-campos{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+#srt-aa label{display:block;font-size:13.5px;color:var(--acero);margin-bottom:5px}
+#srt-aa select{
+  width:100%;padding:11px 12px;font:inherit;font-size:15.5px;
+  background:#fff;border:1px solid var(--humo);color:var(--tinta);appearance:none;border-radius:0;
+}
+#srt-aa select:disabled{background:var(--humo);color:#98A0AA}
+#srt-aa select:focus-visible,#srt-aa .aa-serv:focus-visible,#srt-aa .aa-gas:focus-visible,#srt-aa .aa-wsp:focus-visible{
+  outline:2px solid var(--frio);outline-offset:2px;
+}
+
+/* servicios */
+#srt-aa .aa-servs{display:grid;gap:8px}
+#srt-aa .aa-serv{
+  display:flex;align-items:flex-start;gap:13px;text-align:left;width:100%;
+  padding:14px;background:#fff;border:1px solid var(--humo);transition:border-color .12s,background .12s;
+}
+#srt-aa .aa-serv:hover{border-color:var(--acero)}
+#srt-aa .aa-serv[aria-pressed="true"]{border-color:var(--frio);background:#F0F8F9;box-shadow:inset 3px 0 0 var(--frio)}
+#srt-aa .aa-tick{
+  flex:0 0 20px;width:20px;height:20px;margin-top:2px;
+  border:1.5px solid var(--acero);display:grid;place-items:center;
+  font-size:13px;color:#fff;line-height:1;
+}
+#srt-aa .aa-serv[aria-pressed="true"] .aa-tick{background:var(--frio);border-color:var(--frio)}
+#srt-aa .aa-tick::after{content:"✓";opacity:0}
+#srt-aa .aa-serv[aria-pressed="true"] .aa-tick::after{opacity:1}
+#srt-aa .aa-serv-txt{flex:1 1 auto;min-width:0}
+#srt-aa .aa-serv b{display:block;font-weight:600;font-size:16px}
+#srt-aa .aa-serv small{display:block;color:var(--acero);font-size:13.5px;line-height:1.4}
+#srt-aa .aa-serv .aa-val{
+  flex:0 0 auto;font-family:'Barlow Condensed',sans-serif;font-weight:700;
+  font-size:18px;white-space:nowrap;margin-top:1px;
+}
+#srt-aa .aa-serv .aa-val i{font-style:normal;font-weight:500;font-size:12.5px;color:var(--acero);display:block;text-align:right}
+
+/* gas */
+#srt-aa .aa-gases{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+#srt-aa .aa-gas{padding:13px;background:#fff;border:1px solid var(--humo);text-align:left}
+#srt-aa .aa-gas[aria-pressed="true"]{border-color:var(--frio);background:#F0F8F9;box-shadow:inset 3px 0 0 var(--frio)}
+#srt-aa .aa-gas b{display:block;font-weight:600;font-size:15.5px}
+#srt-aa .aa-gas small{display:block;color:var(--acero);font-size:13px;line-height:1.35}
+
+/* resultado */
+#srt-aa .aa-res{background:var(--tinta);color:#fff;padding:24px 26px;display:none}
+#srt-aa .aa-res.activo{display:block}
+#srt-aa .aa-res-veh{font-family:'Barlow Condensed',sans-serif;font-size:18px;color:#7FD6DE}
+#srt-aa .aa-detalle{margin:14px 0 4px;border-top:1px solid #2C3138}
+#srt-aa .aa-detalle li{
+  display:flex;justify-content:space-between;gap:16px;
+  padding:9px 0;border-bottom:1px solid #2C3138;font-size:15px;color:#D4D9DF;
+}
+#srt-aa .aa-detalle li span:last-child{font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:17px;color:#fff;white-space:nowrap}
+#srt-aa .aa-total{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:clamp(34px,8vw,52px);line-height:1;margin:16px 0 2px}
+#srt-aa .aa-total small{font-size:16px;font-weight:500;color:#B8BFC8;margin-left:8px}
+#srt-aa .aa-incluye{display:flex;flex-wrap:wrap;gap:8px 20px;margin:14px 0 20px}
+#srt-aa .aa-incluye li{font-size:14.5px;color:#D4D9DF;display:flex;align-items:center;gap:7px}
+#srt-aa .aa-incluye li::before{content:"";width:7px;height:7px;background:var(--ok);flex:0 0 7px}
+#srt-aa .aa-wsp{
+  display:inline-flex;align-items:center;gap:10px;background:var(--frio);color:#fff;border:0;
+  padding:14px 22px;font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:19px;transition:background .12s;
+}
+#srt-aa .aa-wsp:hover{background:var(--frio-claro)}
+#srt-aa .aa-nota{margin-top:14px;font-size:13px;color:#98A0AA;max-width:62ch}
+
+/* pie */
+#srt-aa .aa-pie{padding:20px 26px 26px;border-top:1px solid var(--humo)}
+#srt-aa .aa-pie p{font-size:13.5px;color:var(--acero);margin-bottom:10px}
+#srt-aa .aa-chips{display:flex;flex-wrap:wrap;gap:7px}
+#srt-aa .aa-chip{
+  padding:5px 11px;background:#fff;border:1px solid var(--humo);
+  font-family:'Barlow Condensed',sans-serif;font-weight:600;font-size:14px;color:var(--acero);
+}
+
+@media (max-width:620px){
+  #srt-aa .aa-campos,#srt-aa .aa-gases{grid-template-columns:1fr}
+  #srt-aa .aa-cuerpo,#srt-aa .aa-cab,#srt-aa .aa-res,#srt-aa .aa-pie{padding-left:18px;padding-right:18px}
+  #srt-aa .aa-serv{flex-wrap:wrap}
+  #srt-aa .aa-serv .aa-val{width:100%;text-align:left;padding-left:33px}
+  #srt-aa .aa-serv .aa-val i{text-align:left;display:inline;margin-left:6px}
+}
+</style>
+
+<div class="aa-cinta"><div class="aa-pista" id="aaCinta"></div></div>
+
+<header class="aa-cab">
+  <h1>Tu aire tira aire,<br><em>pero no enfría</em></h1>
+  <p>Recarga de gas, detección de fugas y sanitización del sistema, hechos donde tengas el vehículo. Arma tu servicio y mira el valor antes de escribirnos.</p>
+  <div class="aa-sello">Atención a domicilio en la Región Metropolitana</div>
+</header>
+
+<div class="aa-cuerpo">
+
+  <section class="aa-paso">
+    <div class="aa-paso-t"><span class="aa-num">1</span><h2>Tu vehículo</h2></div>
+    <p class="aa-ayuda">Con esto ajustamos la carga de gas y el tiempo de trabajo.</p>
+    <div class="aa-campos">
+      <div>
+        <label for="aaMarca">Marca</label>
+        <select id="aaMarca"><option value="">Elige la marca</option></select>
+      </div>
+      <div>
+        <label for="aaModelo">Modelo</label>
+        <select id="aaModelo" disabled><option value="">Elige el modelo</option></select>
+      </div>
+      <div>
+        <label for="aaAno">Año</label>
+        <select id="aaAno"><option value="">Elige el año</option></select>
+      </div>
+    </div>
+  </section>
+
+  <section class="aa-paso">
+    <div class="aa-paso-t"><span class="aa-num">2</span><h2>¿Qué necesitas?</h2></div>
+    <p class="aa-ayuda">Puedes marcar más de uno. Si no sabes qué tiene, marca el diagnóstico.</p>
+    <div class="aa-servs" id="aaServs"></div>
+  </section>
+
+  <section class="aa-paso" id="aaPasoGas" style="display:none">
+    <div class="aa-paso-t"><span class="aa-num">3</span><h2>Gas que usa tu vehículo</h2></div>
+    <p class="aa-ayuda" id="aaAyudaGas">Lo dejamos marcado según el año. Si sabes cuál es, corrígelo.</p>
+    <div class="aa-gases" id="aaGases"></div>
+  </section>
+
+</div>
+
+<div class="aa-res" id="aaRes" aria-live="polite">
+  <div class="aa-res-veh" id="aaResVeh"></div>
+  <ul class="aa-detalle" id="aaDetalle"></ul>
+  <div class="aa-total" id="aaTotal"></div>
+  <ul class="aa-incluye" id="aaIncluye"></ul>
+  <button type="button" class="aa-wsp" id="aaWsp">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.5 14c-.2.6-1.2 1.2-1.7 1.2-.5.1-1 .1-1.6-.1-.4-.1-.9-.3-1.5-.6-2.6-1.1-4.3-3.8-4.5-4-.1-.2-1-1.4-1-2.6s.6-1.8.9-2.1c.2-.2.5-.3.6-.3h.5c.2 0 .4 0 .6.4l.8 1.9c.1.1.1.3 0 .5l-.3.4-.4.4c-.1.1-.3.3-.1.6.1.3.6 1.1 1.4 1.8 1 .9 1.8 1.1 2 1.2.3.1.4.1.6-.1l.8-1c.2-.2.4-.2.6-.1l1.8.9c.2.1.4.2.4.3.1.1.1.5-.1 1z"/></svg>
+    Agendar por WhatsApp
+  </button>
+  <p class="aa-nota" id="aaNota"></p>
+</div>
+
+<div class="aa-pie">
+  <p>Trabajamos con equipo de recuperación y vacío, y gas certificado de:</p>
+  <div class="aa-chips" id="aaChips"></div>
+</div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ============================================================
+   CONFIG — edita solo esto
+   ============================================================ */
+var CONFIG = {
+
+  telefono: "56900000000",
+
+  cinta: [
+    "Recarga con máquina de vacío, no con latas",
+    "Detección de fugas con trazador UV",
+    "El diagnóstico se descuenta si haces la reparación",
+    "Sanitización que saca el olor a humedad",
+    "Llegamos donde tengas el vehículo"
+  ],
+
+  // Año desde el cual asumimos refrigerante R1234yf
+  anoR1234yf: 2017,
+
+  anoDesde: 1995,
+
+  marcas: ["Honeywell","Chemours / Opteon","Dupont","Valeo","Denso","Behr","Sanden","Delphi"],
+
+  /* Servicios.
+     precio: por segmento L (auto), M (SUV/camioneta), C (furgón/camión liviano)
+     porGas: true  -> el precio se toma de preciosGas según el refrigerante
+     desde:  true  -> se muestra como valor "desde", sujeto a modelo
+     solo:   true  -> al marcarlo se desmarcan los demás
+  */
+  servicios: [
+    { id:"carga", titulo:"Recarga de gas con vacío",
+      detalle:"Recuperación del gas viejo, vacío, prueba de estanqueidad y carga al peso que indica el fabricante.",
+      porGas:true },
+
+    { id:"fuga", titulo:"Detección de fuga",
+      detalle:"Trazador UV y revisión de mangueras, condensador y evaporador. Se descuenta del valor si reparamos.",
+      precio:{ L:45000, M:45000, C:55000 } },
+
+    { id:"sanitizacion", titulo:"Sanitización del evaporador y ductos",
+      detalle:"Elimina el olor a humedad y los hongos que se acumulan en el evaporador.",
+      precio:{ L:35000, M:38000, C:45000 } },
+
+    { id:"filtro", titulo:"Cambio de filtro de cabina",
+      detalle:"Filtro incluido. Es la causa más común de poco flujo de aire.",
+      precio:{ L:25000, M:28000, C:34000 } },
+
+    { id:"deshidratador", titulo:"Cambio de filtro deshidratador",
+      detalle:"Obligatorio si el circuito quedó abierto o entró humedad. Incluye recarga.",
+      precio:{ L:95000, M:110000, C:135000 } },
+
+    { id:"compresor", titulo:"Cambio de compresor",
+      detalle:"Incluye repuesto, aceite, deshidratador y carga. El valor final depende del número de parte.",
+      precio:{ L:320000, M:380000, C:460000 }, desde:true },
+
+    { id:"diagnostico", titulo:"No sé qué tiene, quiero diagnóstico",
+      detalle:"Revisión completa del sistema con manómetros. Si haces la reparación con nosotros, no se cobra.",
+      precio:{ L:35000, M:35000, C:42000 }, solo:true }
+  ],
+
+  // Precio de la recarga según refrigerante y segmento
+  preciosGas: {
+    R134a:   { L:65000,  M:75000,  C:92000  },
+    R1234yf: { L:145000, M:165000, C:198000 }
+  },
+
+  gases: [
+    { id:"R134a",   titulo:"R134a",   detalle:"La mayoría de los vehículos anteriores a 2017." },
+    { id:"R1234yf", titulo:"R1234yf", detalle:"Modelos nuevos. El gas cuesta bastante más." },
+    { id:"nose",    titulo:"No lo sé", detalle:"Lo confirmamos en la etiqueta del capó al llegar." }
+  ],
+
+  incluye: ["Traslado del técnico","Mano de obra","Prueba de temperatura en salida","Garantía de 3 meses en mano de obra"],
+
+  // Catálogo: L = auto liviano, M = SUV/camioneta, C = furgón/camión liviano
+  vehiculos: {
+    "Chevrolet":[["Sail","L"],["Spark","L"],["Aveo","L"],["Cruze","L"],["Onix","L"],["Tracker","M"],["Captiva","M"],["D-Max","M"],["Colorado","M"],["N300 / N400","C"]],
+    "Hyundai":[["Accent","L"],["i10","L"],["Elantra","L"],["Tucson","M"],["Santa Fe","M"],["Creta","M"],["H1","C"],["Porter","C"]],
+    "Kia":[["Morning","L"],["Rio","L"],["Cerato","L"],["Sportage","M"],["Sorento","M"],["Seltos","M"],["Frontier","C"],["K2500","C"]],
+    "Nissan":[["March","L"],["Versa","L"],["Sentra","L"],["Qashqai","M"],["X-Trail","M"],["Navara / NP300","M"],["Terrano","M"],["Urvan","C"]],
+    "Toyota":[["Yaris","L"],["Corolla","L"],["Etios","L"],["RAV4","M"],["Hilux","M"],["Fortuner","M"],["Land Cruiser","M"],["Hiace","C"]],
+    "Suzuki":[["Alto","L"],["Swift","L"],["Baleno","L"],["Vitara","M"],["S-Cross","M"],["Jimny","M"],["APV","C"]],
+    "Mazda":[["Mazda 2","L"],["Mazda 3","L"],["Mazda 6","L"],["CX-5","M"],["CX-30","M"],["BT-50","M"]],
+    "Ford":[["Fiesta","L"],["Focus","L"],["EcoSport","M"],["Escape","M"],["Ranger","M"],["Transit","C"]],
+    "Peugeot":[["208","L"],["301","L"],["308","L"],["2008","M"],["3008","M"],["Partner","C"],["Boxer","C"]],
+    "Renault":[["Sandero","L"],["Logan","L"],["Duster","M"],["Captur","M"],["Oroch","M"],["Kangoo","C"],["Master","C"]],
+    "Volkswagen":[["Gol","L"],["Polo","L"],["Voyage","L"],["T-Cross","M"],["Amarok","M"],["Tiguan","M"],["Crafter","C"]],
+    "Mitsubishi":[["Lancer","L"],["Mirage","L"],["ASX","M"],["Outlander","M"],["L200","M"],["Montero","M"]],
+    "Great Wall":[["Voleex","L"],["Haval H6","M"],["Wingle","M"],["Poer","M"]],
+    "Chery":[["QQ","L"],["Tiggo 2","M"],["Tiggo 4","M"],["Tiggo 7","M"]],
+    "JAC":[["S2","M"],["S3","M"],["T6","M"],["Sunray","C"],["HFC 1035","C"]],
+    "Maxus":[["T60","M"],["V80","C"],["Deliver 9","C"]],
+    "Fiat":[["Palio","L"],["Argo","L"],["Cronos","L"],["Strada","M"],["Ducato","C"]],
+    "Mercedes-Benz":[["Clase A","L"],["Clase C","L"],["Vito","C"],["Sprinter","C"]],
+    "Citroën":[["C3","L"],["C4","L"],["Berlingo","C"],["Jumper","C"]],
+    "Otra marca":[["Auto / sedán","L"],["SUV / camioneta","M"],["Furgón / camión liviano","C"]]
+  }
+};
+
+/* ============================================================
+   De aquí hacia abajo no necesitas tocar nada
+   ============================================================ */
+
+var estado = { marca:"", modelo:"", segmento:"", ano:"", gas:"", gasManual:false, elegidos:[] };
+var $ = function(id){ return document.getElementById(id); };
+
+function evento(nombre, datos){
+  window.dataLayer = window.dataLayer || [];
+  var d = { event:nombre };
+  for (var k in datos) if (Object.prototype.hasOwnProperty.call(datos,k)) d[k] = datos[k];
+  window.dataLayer.push(d);
+}
+function pesos(n){ return "$" + n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
+function servicio(id){
+  for (var i=0;i<CONFIG.servicios.length;i++) if (CONFIG.servicios[i].id === id) return CONFIG.servicios[i];
+  return null;
+}
+function valorDe(s, seg, gas){
+  if (!seg) return null;
+  if (s.porGas){
+    var g = (gas === "R1234yf") ? "R1234yf" : "R134a";
+    return CONFIG.preciosGas[g][seg];
+  }
+  return s.precio[seg];
+}
+
+/* cinta */
+(function(){
+  var uno = CONFIG.cinta.map(function(t){ return "<span>"+t+"</span>"; }).join("");
+  $("aaCinta").innerHTML = uno + uno;
+})();
+
+/* chips */
+$("aaChips").innerHTML = CONFIG.marcas.map(function(m){
+  return '<span class="aa-chip">'+m+'</span>';
+}).join("");
+
+/* selects */
+(function(){
+  var sMarca = $("aaMarca"), sAno = $("aaAno");
+  Object.keys(CONFIG.vehiculos).forEach(function(m){
+    sMarca.insertAdjacentHTML("beforeend", '<option value="'+m+'">'+m+'</option>');
+  });
+  var hoy = new Date().getFullYear();
+  for (var a = hoy + 1; a >= CONFIG.anoDesde; a--){
+    sAno.insertAdjacentHTML("beforeend", '<option value="'+a+'">'+a+'</option>');
+  }
+})();
+
+$("aaMarca").addEventListener("change", function(){
+  var sModelo = $("aaModelo");
+  estado.marca = this.value; estado.modelo = ""; estado.segmento = "";
+  sModelo.innerHTML = '<option value="">Elige el modelo</option>';
+  sModelo.disabled = !estado.marca;
+  if (estado.marca){
+    CONFIG.vehiculos[estado.marca].forEach(function(mo){
+      sModelo.insertAdjacentHTML("beforeend", '<option value="'+mo[1]+'">'+mo[0]+'</option>');
+    });
+  }
+  evento("cotizador_aa_seleccion", { aa_campo:"marca", aa_valor:estado.marca });
+  pintaServicios(); calcula();
+});
+
+$("aaModelo").addEventListener("change", function(){
+  estado.segmento = this.value;
+  estado.modelo = this.value ? this.options[this.selectedIndex].text : "";
+  evento("cotizador_aa_seleccion", { aa_campo:"modelo", aa_valor:estado.marca+" "+estado.modelo });
+  pintaServicios(); calcula();
+});
+
+$("aaAno").addEventListener("change", function(){
+  estado.ano = this.value;
+  if (!estado.gasManual && estado.ano){
+    estado.gas = parseInt(estado.ano,10) >= CONFIG.anoR1234yf ? "R1234yf" : "R134a";
+    marcaGas();
+  }
+  pintaServicios(); calcula();
+});
+
+/* servicios */
+function pintaServicios(){
+  $("aaServs").innerHTML = CONFIG.servicios.map(function(s){
+    var v = valorDe(s, estado.segmento, estado.gas);
+    var etiqueta = v === null
+      ? '<span class="aa-val" style="color:#98A0AA;font-size:14px">Elige el vehículo</span>'
+      : '<span class="aa-val">'+pesos(v)+(s.desde ? '<i>valor desde</i>' : '')+'</span>';
+    var activo = estado.elegidos.indexOf(s.id) !== -1;
+    return '<button type="button" class="aa-serv" aria-pressed="'+(activo?'true':'false')+'" data-id="'+s.id+'">'+
+             '<span class="aa-tick" aria-hidden="true"></span>'+
+             '<span class="aa-serv-txt"><b>'+s.titulo+'</b><small>'+s.detalle+'</small></span>'+
+             etiqueta+
+           '</button>';
+  }).join("");
+}
+pintaServicios();
+
+$("aaServs").addEventListener("click", function(e){
+  var btn = e.target.closest(".aa-serv");
+  if (!btn) return;
+  var id = btn.getAttribute("data-id");
+  var s = servicio(id);
+  var i = estado.elegidos.indexOf(id);
+
+  if (i !== -1){
+    estado.elegidos.splice(i,1);
+  } else if (s.solo){
+    estado.elegidos = [id];
+  } else {
+    estado.elegidos = estado.elegidos.filter(function(x){ return !servicio(x).solo; });
+    estado.elegidos.push(id);
+  }
+
+  pintaServicios();
+  $("aaPasoGas").style.display = estado.elegidos.indexOf("carga") !== -1 ||
+                                 estado.elegidos.indexOf("deshidratador") !== -1 ? "" : "none";
+  evento("cotizador_aa_seleccion", { aa_campo:"servicios", aa_valor:estado.elegidos.join(",") });
+  calcula();
+});
+
+/* gas */
+function pintaGases(){
+  $("aaGases").innerHTML = CONFIG.gases.map(function(g){
+    return '<button type="button" class="aa-gas" aria-pressed="false" data-id="'+g.id+'">'+
+             '<b>'+g.titulo+'</b><small>'+g.detalle+'</small></button>';
+  }).join("");
+}
+function marcaGas(){
+  Array.prototype.forEach.call($("aaGases").querySelectorAll(".aa-gas"), function(b){
+    b.setAttribute("aria-pressed", b.getAttribute("data-id") === estado.gas ? "true" : "false");
+  });
+}
+pintaGases();
+
+$("aaGases").addEventListener("click", function(e){
+  var btn = e.target.closest(".aa-gas");
+  if (!btn) return;
+  estado.gas = btn.getAttribute("data-id");
+  estado.gasManual = true;
+  $("aaAyudaGas").textContent = estado.gas === "nose"
+    ? "Cotizamos con R134a. Si el vehículo usa R1234yf te avisamos la diferencia antes de cargar."
+    : "Lo dejamos marcado según el año. Si sabes cuál es, corrígelo.";
+  marcaGas(); pintaServicios(); calcula();
+});
+
+/* cálculo */
+function calcula(){
+  var res = $("aaRes");
+  if (!estado.segmento || !estado.ano || !estado.elegidos.length){
+    res.classList.remove("activo");
+    return;
+  }
+
+  var total = 0, hayDesde = false, filas = [];
+  estado.elegidos.forEach(function(id){
+    var s = servicio(id);
+    var v = valorDe(s, estado.segmento, estado.gas);
+    total += v;
+    if (s.desde) hayDesde = true;
+    var nombre = s.porGas && estado.gas && estado.gas !== "nose" ? s.titulo + " (" + estado.gas + ")" : s.titulo;
+    filas.push("<li><span>"+nombre+"</span><span>"+pesos(v)+"</span></li>");
+  });
+
+  $("aaResVeh").textContent = estado.marca + " " + estado.modelo + " " + estado.ano;
+  $("aaDetalle").innerHTML = filas.join("");
+  $("aaTotal").innerHTML = (hayDesde ? "desde " : "") + pesos(total) +
+    '<small>' + (estado.elegidos.length > 1 ? "todo en una sola visita" : "a domicilio") + '</small>';
+  $("aaIncluye").innerHTML = CONFIG.incluye.map(function(t){ return "<li>"+t+"</li>"; }).join("");
+
+  var nota = "Valor referencial para " + estado.marca + " " + estado.modelo + " " + estado.ano + ".";
+  if (estado.gas === "nose") nota += " Calculado con R134a; confirmamos el refrigerante en la etiqueta del capó.";
+  if (hayDesde) nota += " El compresor se confirma al identificar el número de parte.";
+  nota += " Si el sistema tiene una fuga, la recarga no dura: conviene detectarla primero.";
+  $("aaNota").textContent = nota;
+
+  estado.total = total; estado.hayDesde = hayDesde;
+  res.classList.add("activo");
+
+  evento("cotizador_aa_resultado", {
+    aa_marca:estado.marca, aa_modelo:estado.modelo, aa_ano:estado.ano,
+    aa_segmento:estado.segmento, aa_gas:estado.gas || "",
+    aa_servicios:estado.elegidos.join(","), aa_valor:total
+  });
+}
+
+/* WhatsApp */
+$("aaWsp").addEventListener("click", function(){
+  var lista = estado.elegidos.map(function(id){ return "· " + servicio(id).titulo; }).join("\n");
+  var texto =
+    "Hola, cotizé aire acondicionado en la página.\n\n" +
+    "Vehículo: " + estado.marca + " " + estado.modelo + " " + estado.ano + "\n" +
+    (estado.gas && estado.gas !== "nose" ? "Gas: " + estado.gas + "\n" : "") +
+    "Servicios:\n" + lista + "\n\n" +
+    "Total del cotizador: " + (estado.hayDesde ? "desde " : "") + pesos(estado.total) + "\n\n" +
+    "Mi dirección es: \n" +
+    "Prefiero que vayan: ";
+
+  evento("cotizador_aa_whatsapp", {
+    aa_marca:estado.marca, aa_modelo:estado.modelo, aa_ano:estado.ano,
+    aa_gas:estado.gas || "", aa_servicios:estado.elegidos.join(","), aa_valor:estado.total
+  });
+
+  window.open("https://wa.me/" + CONFIG.telefono + "?text=" + encodeURIComponent(texto), "_blank");
+});
+
+evento("cotizador_aa_inicio", { aa_version:"aire-v1" });
+})();
+</script>

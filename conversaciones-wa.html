@@ -134,6 +134,32 @@ input:focus{outline:none;border-color:var(--dorado)}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .toast.ok{border-color:var(--verde);color:var(--verde)}
 
+/* ORIGEN DE ANUNCIOS */
+.origenes{display:grid;grid-template-columns:1fr 1fr;gap:10px;grid-column:1/-1}
+.ocard{border-radius:12px;padding:12px 14px;cursor:pointer;border:2px solid transparent;transition:all 150ms;text-align:left;display:flex;flex-direction:column;gap:4px}
+.ocard.google{background:linear-gradient(135deg,rgba(232,33,10,0.18),rgba(232,33,10,0.05));border-color:rgba(255,77,46,0.35)}
+.ocard.meta{background:linear-gradient(135deg,rgba(96,165,250,0.18),rgba(96,165,250,0.05));border-color:rgba(96,165,250,0.35)}
+.ocard.active.google{border-color:var(--rojo-l);box-shadow:0 0 0 3px rgba(255,77,46,0.2)}
+.ocard.active.meta{border-color:var(--azul);box-shadow:0 0 0 3px rgba(96,165,250,0.2)}
+.ocard-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.ocard-tit{font-family:var(--display);font-weight:800;font-size:13px;color:var(--t1)}
+.ocard-tag{font-family:var(--mono);font-size:8px;font-weight:700;letter-spacing:0.1em;padding:2px 6px;border-radius:4px}
+.ocard.google .ocard-tag{background:var(--rojo);color:#fff}
+.ocard.meta .ocard-tag{background:var(--azul);color:#000}
+.ocard-num{font-family:var(--display);font-weight:900;font-size:30px;line-height:1;letter-spacing:-1px}
+.ocard.google .ocard-num{color:var(--rojo-l)}
+.ocard.meta .ocard-num{color:var(--azul)}
+.ocard-sub{font-family:var(--mono);font-size:9px;color:var(--t2);letter-spacing:0.03em}
+.ocard-sub b{color:var(--t1)}
+.conv.o-google{border-left:4px solid var(--rojo-l)}
+.conv.o-meta{border-left:4px solid var(--azul)}
+.badge-org{font-family:var(--mono);font-size:8px;padding:2px 6px;border-radius:4px;font-weight:700;letter-spacing:0.05em}
+.badge-org.google{background:rgba(232,33,10,0.2);color:var(--rojo-l)}
+.badge-org.meta{background:rgba(96,165,250,0.2);color:var(--azul)}
+.badge-org.organico{background:rgba(139,137,144,0.15);color:var(--t3)}
+.espera{font-family:var(--mono);font-size:8px;padding:2px 6px;border-radius:4px;font-weight:700;background:rgba(245,197,24,0.15);color:var(--amarillo)}
+.espera.alta{background:var(--rojo);color:#fff}
+
 @media(max-width:900px){
   .shell{grid-template-columns:1fr;height:auto}
   .detalle-wrap{min-height:60vh}
@@ -152,6 +178,19 @@ input:focus{outline:none;border-color:var(--dorado)}
 
 <div class="shell">
   
+  <div class="origenes">
+    <button class="ocard google" id="oc-google" onclick="setOrigen('google')">
+      <div class="ocard-top"><div class="ocard-tit">🔴 Google</div><div class="ocard-tag">ATENCIÓN INMEDIATA</div></div>
+      <div class="ocard-num" id="o-google">0</div>
+      <div class="ocard-sub" id="o-google-sub">abiertas · últimas 48 h</div>
+    </button>
+    <button class="ocard meta" id="oc-meta" onclick="setOrigen('meta')">
+      <div class="ocard-top"><div class="ocard-tit">🔵 Facebook / Instagram</div><div class="ocard-tag">SEGUIMIENTO</div></div>
+      <div class="ocard-num" id="o-meta">0</div>
+      <div class="ocard-sub" id="o-meta-sub">abiertas · últimos 7 días</div>
+    </button>
+  </div>
+
   <div class="kpis">
     <div class="kpi total"><div class="kpi-lbl">💬 Total</div><div class="kpi-num" id="k-total">0</div></div>
     <div class="kpi activas"><div class="kpi-lbl">🟢 Bot activo</div><div class="kpi-num" id="k-activas">0</div></div>
@@ -165,6 +204,8 @@ input:focus{outline:none;border-color:var(--dorado)}
       <div class="lista-tit">Conversaciones</div>
       <input type="text" id="buscar" placeholder="Buscar por nombre o teléfono..." oninput="filtrar()">
       <div class="filtros-row">
+        <div class="filtro-lbl">ORIGEN</div>
+        <div class="filtros-fila" id="chips-origen"></div>
         <div class="filtro-lbl">CATEGORÍA</div>
         <div class="filtros-fila" id="chips-cat"></div>
         <div class="filtro-lbl">CANAL</div>
@@ -196,6 +237,20 @@ var SELECTED_ID = null
 var FILTRO = ''
 var FILTRO_CAT = 'todas'
 var FILTRO_CANAL = 'todos'
+var FILTRO_ORIGEN = 'todos'
+var ORIGENES = [
+  {id:'todos', lbl:'📡 Todos'},
+  {id:'google', lbl:'🔴 Google'},
+  {id:'meta', lbl:'🔵 Facebook'},
+  {id:'organico', lbl:'⚪ Orgánico'}
+]
+var H = 3600*1000
+function abierta(c){ return !c.cerrada_at && c.estado !== 'cerrada' }
+function pendienteOrigen(c, org){
+  var ventana = org === 'google' ? 48*H : 7*24*H
+  return (c.origen||'organico') === org && abierta(c) && (Date.now() - new Date(c.ultima_actividad).getTime()) < ventana
+}
+function setOrigen(o){ FILTRO_ORIGEN = (FILTRO_ORIGEN === o && o !== 'todos') ? 'todos' : o; renderChips(); renderLista() }
 
 var CATEGORIAS = [
   {id:'todas', lbl:'📋 Todas', emoji:'📋'},
@@ -280,6 +335,18 @@ async function cargar(){
   }).length
   
   document.getElementById('k-total').textContent = TODAS.length
+  try{
+    var rc = await fetch(SB_URL + '/rest/v1/conversaciones_wa?select=id', {method:'HEAD', headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Prefer':'count=exact','Range':'0-0'}})
+    var cr = rc.headers.get('content-range'); if(cr && cr.split('/')[1]) document.getElementById('k-total').textContent = cr.split('/')[1]
+  }catch(e){}
+  ;['google','meta'].forEach(function(org){
+    var pend = TODAS.filter(function(c){return pendienteOrigen(c, org)})
+    var hand = pend.filter(function(c){return c.handoff_humano}).length
+    document.getElementById('o-'+org).textContent = pend.length
+    var sub = org === 'google' ? 'abiertas · últimas 48 h' : 'abiertas · últimos 7 días'
+    if(hand) sub += ' · <b>🙋 ' + hand + ' esperan humano</b>'
+    document.getElementById('o-'+org+'-sub').innerHTML = sub
+  })
   document.getElementById('k-activas').textContent = activas
   document.getElementById('k-handoff').textContent = handoff
   document.getElementById('k-hoy').textContent = hoy
@@ -300,6 +367,13 @@ function renderChips(){
     htmlN += '<button class="chip"'+(FILTRO_CANAL===c.id?' style="background:var(--dorado);color:#000;border-color:var(--dorado)"':'')+' onclick="setCanal(\''+c.id+'\')">'+c.lbl+'</button>'
   })
   contCanal.innerHTML = htmlN
+  var htmlO=''
+  ORIGENES.forEach(function(o){
+    htmlO += '<button class="chip"'+(FILTRO_ORIGEN===o.id?' style="background:var(--dorado);color:#000;border-color:var(--dorado)"':'')+' onclick="setOrigen(\''+o.id+'\')">'+o.lbl+'</button>'
+  })
+  document.getElementById('chips-origen').innerHTML = htmlO
+  document.getElementById('oc-google').classList.toggle('active', FILTRO_ORIGEN==='google')
+  document.getElementById('oc-meta').classList.toggle('active', FILTRO_ORIGEN==='meta')
 }
 function setCat(c){FILTRO_CAT=c; renderChips(); renderLista()}
 function setCanal(c){FILTRO_CANAL=c; renderChips(); renderLista()}
@@ -321,6 +395,18 @@ function renderLista(){
     filtradas = filtradas.filter(function(c){return (c.canal||'whatsapp') === FILTRO_CANAL})
   }
   
+  if(FILTRO_ORIGEN !== 'todos'){
+    filtradas = filtradas.filter(function(c){return (c.origen||'organico') === FILTRO_ORIGEN})
+    // Abiertas primero; dentro de ellas: las que piden humano, luego Google = más reciente arriba, Meta = la más antigua sin tocar arriba
+    filtradas = filtradas.slice().sort(function(a,b){
+      var pa = pendienteOrigen(a, FILTRO_ORIGEN)?1:0, pb = pendienteOrigen(b, FILTRO_ORIGEN)?1:0
+      if(pa!==pb) return pb-pa
+      if(pa && a.handoff_humano!==b.handoff_humano) return a.handoff_humano?-1:1
+      var ta = new Date(a.ultima_actividad).getTime(), tb = new Date(b.ultima_actividad).getTime()
+      return (pa && FILTRO_ORIGEN==='meta') ? ta-tb : tb-ta
+    })
+  }
+
   if(filtradas.length === 0){
     lista.innerHTML = '<div class="loader" style="animation:none">Sin resultados</div>'
     return
@@ -334,7 +420,8 @@ function renderLista(){
     var agente = c.handoff_humano ? 'humano' : (c.agente_actual || 'rita')
     var isCliente = c.cliente_id ? true : false
     
-    html += '<div class="conv ' + (c.id === SELECTED_ID ? 'selected' : '') + '" onclick="seleccionar(\'' + c.id + '\')">'
+    var org = c.origen || 'organico'
+    html += '<div class="conv o-' + org + ' ' + (c.id === SELECTED_ID ? 'selected' : '') + '" onclick="seleccionar(\'' + c.id + '\')">'
     html += '<div class="conv-head">'
     html += '<div class="conv-nombre">' + (c.nombre || 'Sin nombre') + '</div>'
     html += '<div class="conv-hora">' + fmtHora(c.ultima_actividad) + '</div>'
@@ -345,9 +432,14 @@ function renderLista(){
     var canal = c.canal || 'whatsapp'
     var catEmoji = (CATEGORIAS.find(function(x){return x.id===cat})||{emoji:'❓'}).emoji
     html += '<div class="conv-tags">'
+    if(org==='google' && abierta(c)){
+      var hrs = (Date.now() - new Date(c.ultima_actividad).getTime())/H
+      if(hrs < 48) html += '<span class="espera' + (hrs>=2?' alta':'') + '">⏱ ' + fmtHora(c.ultima_actividad) + '</span>'
+    }
     html += '<span class="badge ' + agente + '">' + agente.toUpperCase() + '</span>'
     html += '<span class="badge-cat ' + cat + '">' + catEmoji + ' ' + cat.toUpperCase() + '</span>'
     html += '<span class="badge-canal ' + canal + '">' + canal.toUpperCase() + '</span>'
+    html += '<span class="badge-org ' + org + '">' + (org==='google'?'🔴 GOOGLE':org==='meta'?'🔵 FACEBOOK':'⚪ ORGÁNICO') + '</span>'
     if(isCliente){
       html += '<a class="badge crm badge-link" href="clientes-crm.html?tel=' + (c.telefono||'') + '" target="_blank" onclick="event.stopPropagation()" title="Ver ficha del cliente en CRM">🗂 CRM</a>'
     }

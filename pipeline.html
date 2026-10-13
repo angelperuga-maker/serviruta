@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Pipeline en vivo · Serviruta</title>
+<script>
+// Guard rápido: los técnicos no ven el pipeline; sin sesión, al login
+(function(){
+  try{
+    var rol = localStorage.getItem('sv_user_rol')
+    if(rol === 'tecnico'){ window.location.replace('menu-tecnico.html') }
+    else if(!rol){ window.location.replace('login.html') }
+  }catch(e){}
+})()
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0A0D;--s1:#111114;--s2:#16161B;--s3:#1C1C23;--line:#26262E;--rojo:#E8210A;--rojo-l:#FF4D2E;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--violeta:#A78BFA;--dorado:#D4AF37;--rosa:#FF6B9D;--t1:#F6F4EF;--t2:#C7C5BF;--t3:#8B8990;--display:'Syne',sans-serif;--body:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--t2);font-family:var(--body);font-size:14px;line-height:1.5;min-height:100vh}
+button{border:none;background:none;color:inherit;font-family:inherit;cursor:pointer}
+input,select,textarea{background:var(--s2);border:1px solid var(--line);border-radius:8px;padding:9px 11px;color:var(--t1);font-family:inherit;font-size:13px;width:100%}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--dorado)}
+button:focus-visible,.lead:focus-visible{outline:2px solid var(--dorado);outline-offset:2px}
+
+/* Barra */
+.bar{position:sticky;top:0;z-index:50;background:rgba(10,10,13,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;align-items:center;gap:10px}
+.back{font-family:var(--mono);font-size:10px;color:var(--t3);padding:6px 10px;border:1px solid var(--line);border-radius:6px;white-space:nowrap}
+.sigil{width:34px;height:34px;background:linear-gradient(135deg,var(--dorado),var(--rojo-l));border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:14px;color:#000;flex-shrink:0}
+.title{font-family:var(--display);font-weight:800;font-size:14px;color:var(--t1);flex:1;line-height:1.1;min-width:0}
+.title small{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.08em;margin-top:3px;font-weight:700}
+.pulso{width:7px;height:7px;border-radius:50%;background:var(--verde);box-shadow:0 0 0 0 rgba(34,197,94,0.6);animation:pulso 2s infinite}
+.pulso.off{background:var(--rojo-l);animation:none}
+@keyframes pulso{70%{box-shadow:0 0 0 7px rgba(34,197,94,0)}100%{box-shadow:0 0 0 0 rgba(34,197,94,0)}}
+.yo{font-family:var(--mono);font-size:10px;color:var(--t2);padding:6px 10px;background:var(--s2);border:1px solid var(--line);border-radius:8px;white-space:nowrap}
+.refresh{padding:6px 12px;background:var(--s2);border:1px solid var(--line);border-radius:8px;font-family:var(--mono);font-size:10px;color:var(--t2)}
+.refresh:hover{color:var(--dorado)}
+
+.shell{max-width:1440px;margin:0 auto;padding:16px;display:flex;flex-direction:column;gap:14px}
+
+/* Tarjetas de estado */
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.tile{background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:12px 14px;text-align:left;display:flex;flex-direction:column;gap:2px}
+button.tile:hover{border-color:var(--t3)}
+.tile-lbl{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;font-weight:700}
+.tile-num{font-family:var(--display);font-weight:900;font-size:28px;line-height:1.05;letter-spacing:-1px;color:var(--t1)}
+.tile-sub{font-family:var(--mono);font-size:9px;color:var(--t3)}
+.tile.rojo{border-color:rgba(255,77,46,0.45);background:linear-gradient(135deg,rgba(232,33,10,0.16),rgba(232,33,10,0.03))}
+.tile.rojo .tile-num{color:var(--rojo-l)}
+.tile.amarillo .tile-num{color:var(--amarillo)}
+.tile.azul .tile-num{color:var(--azul)}
+
+/* Números */
+.panel{background:var(--s1);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.panel-head{padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;border-bottom:1px solid var(--line)}
+.panel-tit{font-family:var(--display);font-weight:800;font-size:14px;color:var(--t1);margin-right:auto}
+.seg{display:flex;background:var(--s2);border:1px solid var(--line);border-radius:8px;padding:2px;gap:2px}
+.seg button{padding:5px 10px;border-radius:6px;font-family:var(--mono);font-size:10px;font-weight:700;color:var(--t3);white-space:nowrap}
+.seg button.active{background:var(--dorado);color:#000}
+.tog{font-family:var(--mono);font-size:9px;color:var(--t3);padding:5px 8px;border:1px solid var(--line);border-radius:6px}
+.tog:hover{color:var(--dorado)}
+.num-body{overflow-x:auto}
+.num-body.oculto{display:none}
+table.num{width:100%;border-collapse:collapse;min-width:720px}
+table.num th{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.08em;text-transform:uppercase;font-weight:700;text-align:right;padding:9px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+table.num th:first-child,table.num td:first-child{text-align:left}
+table.num td{padding:10px 14px;border-bottom:1px solid var(--s3);text-align:right;font-family:var(--mono);font-size:13px;color:var(--t1);white-space:nowrap;font-variant-numeric:tabular-nums}
+table.num td small{display:block;font-size:9px;color:var(--t3);font-weight:500}
+table.num td:first-child{font-family:var(--body);font-weight:700;font-size:13px}
+table.num tr.total td{background:var(--s2);border-bottom:none}
+table.num td.cierre{font-weight:700}
+.barra{display:block;height:3px;border-radius:2px;background:var(--s3);margin-top:5px;overflow:hidden;min-width:60px}
+.barra i{display:block;height:100%;background:var(--dorado)}
+.num-nota{padding:9px 16px;font-family:var(--mono);font-size:9px;color:var(--t3);border-top:1px solid var(--line)}
+
+/* Trabajo */
+.trabajo{display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:14px;align-items:start}
+.lista-head{padding:12px 14px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
+.fila{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;align-items:center}
+.fila::-webkit-scrollbar{display:none}
+.tab{padding:7px 12px;background:var(--s2);border:1px solid var(--line);border-radius:8px;font-family:var(--mono);font-size:10px;color:var(--t3);font-weight:700;white-space:nowrap;flex-shrink:0;display:flex;align-items:center;gap:6px}
+.tab b{font-family:var(--display);font-size:12px;color:var(--t2)}
+.tab:hover{color:var(--t1)}
+.tab.active{background:var(--t1);color:#000;border-color:var(--t1)}
+.tab.active b{color:#000}
+.tab.urg b{color:var(--rojo-l)}
+.tab.urg.active{background:var(--rojo);border-color:var(--rojo);color:#fff}
+.tab.urg.active b{color:#fff}
+.chip{padding:5px 10px;background:var(--s2);border:1px solid var(--line);border-radius:8px;font-family:var(--mono);font-size:10px;color:var(--t3);font-weight:700;white-space:nowrap;flex-shrink:0}
+.chip:hover{color:var(--t1)}
+.chip.active{background:var(--dorado);color:#000;border-color:var(--dorado)}
+.filtro-lbl{font-family:var(--mono);font-size:8px;color:var(--t3);letter-spacing:0.1em;font-weight:700;flex-shrink:0;width:54px}
+.buscar-row{display:grid;grid-template-columns:1fr 170px;gap:8px}
+
+.lead{display:grid;grid-template-columns:4px 1fr;gap:12px;padding:12px 14px 12px 0;border-bottom:1px solid var(--s3);cursor:pointer;transition:background 150ms}
+.lead:hover{background:var(--s2)}
+.lead.sel{background:var(--s3)}
+.lead-sem{border-radius:0 3px 3px 0;background:var(--line)}
+.lead.c-rojo .lead-sem{background:var(--rojo-l)}
+.lead.c-amarillo .lead-sem{background:var(--amarillo)}
+.lead.c-verde .lead-sem{background:var(--verde)}
+.lead-main{min-width:0;display:flex;flex-direction:column;gap:3px}
+.lead-top{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.lead-nom{font-weight:700;color:var(--t1);font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lead-edad{font-family:var(--mono);font-size:9px;color:var(--t3);white-space:nowrap;flex-shrink:0}
+.estado{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:0.03em}
+.estado.c-rojo{color:var(--rojo-l)}
+.estado.c-amarillo{color:var(--amarillo)}
+.estado.c-verde{color:var(--verde)}
+.estado.c-gris{color:var(--t3)}
+.estado em{font-style:normal;font-weight:500;color:var(--t2)}
+.lead-msg{font-size:12px;color:var(--t3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:2px}
+.badge{font-family:var(--mono);font-size:8px;padding:2px 6px;border-radius:4px;font-weight:700;letter-spacing:0.05em;white-space:nowrap}
+.b-google{background:rgba(232,33,10,0.2);color:var(--rojo-l)}
+.b-meta{background:rgba(96,165,250,0.2);color:var(--azul)}
+.b-organico{background:rgba(139,137,144,0.15);color:var(--t2)}
+.b-cat{background:rgba(167,139,250,0.14);color:var(--violeta)}
+.b-etapa{background:rgba(212,175,55,0.15);color:var(--dorado)}
+.b-resp{background:rgba(34,197,94,0.14);color:var(--verde)}
+.b-sinresp{background:transparent;border:1px dashed var(--line);color:var(--t3)}
+.b-plano{background:var(--s3);color:var(--t2)}
+.lead.flash{animation:flash 5s ease-out}
+@keyframes flash{0%{background:rgba(212,175,55,0.28)}100%{background:transparent}}
+.lista-foot{padding:12px 14px;font-family:var(--mono);font-size:10px;color:var(--t3);text-align:center}
+.mas{margin:12px auto;display:block;padding:8px 16px;background:var(--s2);border:1px solid var(--line);border-radius:8px;font-family:var(--mono);font-size:10px;color:var(--t2);font-weight:700}
+.vacio{padding:44px 20px;text-align:center;color:var(--t3);font-size:13px}
+.vacio b{display:block;color:var(--t1);font-family:var(--display);font-size:15px;margin-bottom:4px}
+
+/* Detalle */
+.detalle{position:sticky;top:76px;max-height:calc(100vh - 92px);overflow-y:auto;display:flex;flex-direction:column}
+.det-vacio{padding:60px 24px;text-align:center;color:var(--t3);font-size:13px}
+.det-head{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;gap:10px;align-items:flex-start}
+.det-nom{font-family:var(--display);font-weight:800;font-size:16px;color:var(--t1);line-height:1.2;word-break:break-word}
+.det-tel{font-family:var(--mono);font-size:10px;color:var(--t3);margin-top:3px}
+.cerrar{display:none;font-family:var(--mono);font-size:11px;color:var(--t2);padding:6px 10px;border:1px solid var(--line);border-radius:6px;margin-left:auto;flex-shrink:0}
+.det-sec{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:9px}
+.det-sec:last-child{border-bottom:none}
+.sec-tit{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.12em;font-weight:700;text-transform:uppercase}
+.sem-box{border-radius:10px;padding:10px 12px;background:var(--s2);border:1px solid var(--line);border-left-width:4px}
+.sem-box.c-rojo{border-left-color:var(--rojo-l)}
+.sem-box.c-amarillo{border-left-color:var(--amarillo)}
+.sem-box.c-verde{border-left-color:var(--verde)}
+.sem-box .estado{font-size:11px}
+.sem-box p{font-size:12px;color:var(--t2);margin-top:3px}
+.hitos{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;font-size:12px}
+.hitos dt{font-family:var(--mono);font-size:10px;color:var(--t3);white-space:nowrap}
+.hitos dd{color:var(--t1);min-width:0;word-break:break-word}
+.btns{display:flex;gap:6px;flex-wrap:wrap}
+.btn{padding:8px 12px;background:var(--s2);border:1px solid var(--line);border-radius:8px;font-family:var(--mono);font-size:10px;color:var(--t2);font-weight:700;letter-spacing:0.03em;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
+.btn:hover{color:var(--dorado);border-color:var(--dorado)}
+.btn.pri{background:linear-gradient(135deg,var(--dorado),#B8933A);color:#000;border-color:transparent}
+.btn.pri:hover{color:#000;filter:brightness(1.08)}
+.btn.rojo{color:var(--rojo-l);border-color:rgba(232,33,10,0.35)}
+.btn.rojo:hover{background:rgba(232,33,10,0.1);color:var(--rojo-l);border-color:var(--rojo-l)}
+.btn:disabled{opacity:0.45;cursor:not-allowed}
+.dos{display:grid;grid-template-columns:1fr auto;gap:6px;align-items:center}
+.ayuda{font-size:11px;color:var(--t3)}
+.chat{display:flex;flex-direction:column;gap:6px;max-height:300px;overflow-y:auto;padding-right:2px}
+.msg{max-width:88%;padding:7px 10px;border-radius:10px;font-size:12px;line-height:1.35;word-break:break-word;white-space:pre-wrap}
+.msg.in{background:var(--s3);color:var(--t1);align-self:flex-start;border-bottom-left-radius:3px}
+.msg.out{background:#0F3B2A;color:var(--t1);align-self:flex-end;border-bottom-right-radius:3px}
+.msg time{display:block;font-family:var(--mono);font-size:8px;color:var(--t3);margin-top:3px}
+.bita{display:flex;flex-direction:column;gap:6px}
+.bita div{font-size:12px;color:var(--t2);padding-left:10px;border-left:2px solid var(--line)}
+.bita time{font-family:var(--mono);font-size:9px;color:var(--t3);display:block}
+
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:10px 16px;font-size:12px;color:var(--t1);opacity:0;transition:all 300ms;pointer-events:none;z-index:300;max-width:90vw}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.ok{border-color:var(--verde);color:var(--verde)}
+.toast.err{border-color:var(--rojo-l);color:var(--rojo-l)}
+.loader{padding:40px 20px;text-align:center;color:var(--t3);font-family:var(--mono);font-size:11px}
+
+@media(max-width:1000px){
+  .trabajo{grid-template-columns:1fr}
+  .detalle{display:none;position:fixed;inset:0;top:0;max-height:none;z-index:120;border-radius:0;border:none}
+  .detalle.open{display:flex}
+  .cerrar{display:block}
+  .tiles{grid-template-columns:repeat(2,1fr)}
+  .yo{display:none}
+}
+@media(max-width:520px){
+  .shell{padding:12px}
+  .buscar-row{grid-template-columns:1fr}
+  .tile-num{font-size:24px}
+}
+@media(prefers-reduced-motion:reduce){.pulso,.lead.flash{animation:none}}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <button class="back" id="volver">← Volver</button>
+  <div class="sigil">P</div>
+  <div class="title">Pipeline en vivo<small><span class="pulso" id="pulso"></span><span id="sync">CONECTANDO…</span></small></div>
+  <div class="yo" id="yo"></div>
+  <button class="refresh" data-act="recargar" title="Recargar todo">↻ Recargar</button>
+</header>
+
+<main class="shell">
+
+  <section class="tiles" aria-label="Estado del día">
+    <div class="tile azul"><div class="tile-lbl">Leads hoy</div><div class="tile-num" id="t-hoy">–</div><div class="tile-sub" id="t-hoy-sub">&nbsp;</div></div>
+    <button class="tile rojo" data-act="ver-humano"><div class="tile-lbl">Esperan a una persona</div><div class="tile-num" id="t-humano">–</div><div class="tile-sub" id="t-humano-sub">&nbsp;</div></button>
+    <button class="tile" data-act="ver-rojo"><div class="tile-lbl">Seguimientos atrasados</div><div class="tile-num" id="t-rojo" style="color:var(--rojo-l)">–</div><div class="tile-sub">semáforo rojo</div></button>
+    <button class="tile amarillo" data-act="ver-amarillo"><div class="tile-lbl">Tocan ahora</div><div class="tile-num" id="t-amarillo">–</div><div class="tile-sub">semáforo amarillo</div></button>
+  </section>
+
+  <section class="panel" aria-label="Números">
+    <div class="panel-head">
+      <div class="panel-tit">Números</div>
+      <div class="seg" id="seg-periodo"></div>
+      <div class="seg" id="seg-dim"></div>
+      <button class="tog" data-act="tog-numeros" id="tog-numeros">▾ Ocultar</button>
+    </div>
+    <div class="num-body" id="num-body"><div class="loader">Cargando…</div></div>
+  </section>
+
+  <section class="trabajo">
+    <div class="panel">
+      <div class="lista-head">
+        <div class="fila" id="tabs"></div>
+        <div class="fila" id="fila-etapas"><span class="filtro-lbl">ETAPA</span></div>
+        <div class="fila" id="fila-origen"><span class="filtro-lbl">ORIGEN</span></div>
+        <div class="buscar-row">
+          <input type="search" id="buscar" placeholder="Buscar por nombre, teléfono o mensaje…" aria-label="Buscar lead">
+          <select id="f-resp" aria-label="Filtrar por responsable"></select>
+        </div>
+      </div>
+      <div id="lista"><div class="loader">Cargando leads…</div></div>
+    </div>
+
+    <aside class="panel detalle" id="detalle" aria-label="Detalle del lead">
+      <div class="det-vacio">Selecciona un lead para ver su historia y gestionarlo.</div>
+    </aside>
+  </section>
+
+</main>
+
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* ============================================================
+   CONFIGURACIÓN — se puede ajustar sin tocar el resto del código
+   ============================================================ */
+var CFG = {
+  ventana_dias: 35,        // cuántos días de leads se cargan
+  poll_rapido_s: 10,       // cada cuánto se buscan mensajes nuevos
+  recarga_total_s: 180,    // cada cuánto se recarga todo (agenda, presupuestos, gestión de otros)
+  // Minutos que un cliente puede esperar a una persona antes de cambiar de color
+  humano_min: { amarillo: 10, rojo: 30 },
+  // Horas, contadas desde el último mensaje del cliente, en que toca cada seguimiento
+  secuencias: {
+    nuevo:     [2, 24],          // escribió una vez y no siguió
+    rapida:    [3, 24, 72],      // Google y orgánico, sin agenda
+    lenta:     [24, 72, 168],    // Facebook / Instagram, sin agenda
+    cotizado:  [24, 72, 168],    // presupuesto emitido sin pago
+    recuperar: [24, 72],         // canceló o quedó por reagendar
+    visitado:  [24, 72]          // visita con fecha pasada y sin presupuesto
+  },
+  frio_dias: 14,           // tope: sin movimiento por más de estos días = frío
+  // En las etapas de solo conversación (nuevo, conversando, con precio) el lead pasa a frío
+  // cuando se agotó la ventana de su secuencia (último paso + la mitad de ese paso, mínimo 24 h)
+  responsables: ['Lilly', 'Angel', 'Nicolás'],
+  motivos: [
+    ['precio', 'Precio'],
+    ['sin_respuesta', 'No respondió más'],
+    ['otro_proveedor', 'Lo resolvió con otro'],
+    ['solo_cotizaba', 'Solo cotizaba'],
+    ['fuera_zona', 'Fuera de zona'],
+    ['sin_disponibilidad', 'Sin hora disponible'],
+    ['no_hacemos', 'Servicio que no hacemos'],
+    ['otro', 'Otro']
+  ]
+}
+
+var SB_URL = 'https://bqlgfmqcefledqyodkii.supabase.co'
+var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+var HDR = { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
+
+var MIN = 60000, HORA = 3600000, DIA = 86400000
+
+var ETAPAS = {
+  nuevo: 'Nuevo', conversando: 'Conversando', con_precio: 'Con precio', agendado: 'Agendado',
+  visitado: 'Visita sin cierre', cotizado: 'Cotizado', cancelado: 'Canceló', reagendar: 'Por reagendar',
+  ganado: 'Ganado', perdido: 'Perdido', dormido: 'Dormido', descartado: 'No es lead'
+}
+var PESO = { cotizado: 9, visitado: 8, cancelado: 7, reagendar: 7, agendado: 7, con_precio: 6, conversando: 4, nuevo: 3 }
+var FILTRO_ETAPAS = [
+  ['todas', 'Todas'], ['nuevo', 'Nuevo'], ['conversando', 'Conversando'], ['con_precio', 'Con precio'],
+  ['agendado', 'Agendado'], ['visitado', 'Visita sin cierre'], ['cotizado', 'Cotizado'], ['recuperar', 'Por recuperar']
+]
+var ORIGENES = [['todos', 'Todos'], ['google', 'Google'], ['meta', 'Facebook / Instagram'], ['organico', 'Orgánico']]
+var ORIGEN_LBL = { google: 'GOOGLE', meta: 'FACEBOOK', organico: 'ORGÁNICO' }
+var CAT_LBL = { emergencia: 'Emergencia', embrague: 'Embrague', dpf: 'DPF / FAP', cotizacion: 'Cotización', mantencion: 'Mantención', precompra: 'Precompra', pre_rt: 'Pre-RT', b2b: 'B2B', reagendar: 'Reagendar', consulta: 'Consulta' }
+var TABS = [
+  ['atender', 'Atender ahora'], ['abiertos', 'Abiertos'], ['cerrar', 'Por cerrar'], ['dormidos', 'Dormidos'],
+  ['frios', 'Fríos'], ['perdidos', 'Perdidos'], ['ganados', 'Ganados']
+]
+var PERIODOS = [['hoy', 'Hoy'], ['ayer', 'Ayer'], ['7d', '7 días'], ['30d', '30 días']]
+var DIMS = [['origen', 'Por origen'], ['categoria', 'Por servicio'], ['responsable', 'Por responsable']]
+
+/* ============================ Estado ============================ */
+var LEADS = {}            // id -> fila de v_leads_vivo
+var EVAL = {}             // id -> resultado del semáforo
+var SEL = null            // id seleccionado
+var DET = { id: null, chat: null, log: null, firma: '' }
+var UI = { tab: 'atender', etapa: 'todas', origen: 'todos', resp: 'todos', q: '', color: null, periodo: '30d', dim: 'origen', limite: 150, numOcultos: false }
+var ULT_SYNC = 0, ULT_TOTAL = 0, ULT_OK = 0, CARGADO = false, ENLINEA = true
+var FLASH = {}            // id -> hasta cuándo resaltar
+
+var YO = (function(){
+  try{
+    var n = (localStorage.getItem('sv_user_nombre') || '').trim()
+    if(!n) return ''
+    var p = n.split(/\s+/)[0]
+    var m = CFG.responsables.filter(function(r){ return sinTilde(r) === sinTilde(p) })[0]
+    return m || p
+  }catch(e){ return '' }
+})()
+try{ var _u = JSON.parse(localStorage.getItem('pv_ui') || '{}'); ['periodo','dim','numOcultos'].forEach(function(k){ if(_u[k] !== undefined) UI[k] = _u[k] }) }catch(e){}
+
+/* ============================ Utilidades ============================ */
+function sinTilde(s){ return (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '') }
+function esc(s){ return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;') }
+function T(iso){ return iso ? new Date(iso).getTime() : 0 }
+function $(id){ return document.getElementById(id) }
+function plata(n){ return '$' + Math.round(n || 0).toLocaleString('es-CL') }
+function dur(ms){
+  ms = Math.max(0, ms)
+  if(ms < MIN) return 'menos de 1 min'
+  if(ms < HORA) return Math.floor(ms / MIN) + ' min'
+  if(ms < 2 * DIA) return Math.floor(ms / HORA) + ' h'
+  return Math.floor(ms / DIA) + ' días'
+}
+function fechaHora(iso){
+  if(!iso) return ''
+  return new Date(iso).toLocaleString('es-CL', { timeZone: 'America/Santiago', weekday: 'short', day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false })
+}
+function fechaVisita(l){
+  if(!l.ag_fecha) return ''
+  var p = l.ag_fecha.split('-')
+  var d = new Date(Date.UTC(+p[0], +p[1] - 1, +p[2], 12))
+  var s = d.toLocaleDateString('es-CL', { timeZone: 'UTC', weekday: 'short', day: '2-digit', month: '2-digit' })
+  return s + (l.ag_hora ? ' ' + l.ag_hora.substring(0, 5) : '')
+}
+// Inicio del día en Santiago, como instante. dias=0 hoy, 1 ayer, etc.
+function inicioDia(dias){
+  var ahora = new Date()
+  var p = {}
+  new Intl.DateTimeFormat('en-GB', { timeZone: 'America/Santiago', hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23' })
+    .formatToParts(ahora).forEach(function(x){ p[x.type] = +x.value })
+  var desdeMedianoche = (p.hour * 3600 + p.minute * 60 + p.second) * 1000 + ahora.getMilliseconds()
+  return ahora.getTime() - desdeMedianoche - (dias || 0) * DIA
+}
+// Instante de la visita agendada (hora de Santiago)
+function instanteVisita(l){
+  if(!l.ag_fecha) return 0
+  var p = l.ag_fecha.split('-'), h = (l.ag_hora || '12:00').split(':')
+  var utc = Date.UTC(+p[0], +p[1] - 1, +p[2], +h[0], +h[1] || 0)
+  var enStgo = new Date(new Date(utc).toLocaleString('en-US', { timeZone: 'America/Santiago' })).getTime()
+  var enUtc = new Date(new Date(utc).toLocaleString('en-US', { timeZone: 'UTC' })).getTime()
+  return utc + (enUtc - enStgo)
+}
+function toast(msg, tipo){
+  var t = $('toast')
+  t.textContent = msg
+  t.className = 'toast show ' + (tipo || '')
+  clearTimeout(toast._t)
+  toast._t = setTimeout(function(){ t.classList.remove('show') }, 2800)
+}
+function telWA(tel){ var d = String(tel || '').replace(/\D/g, ''); return d.length === 9 ? '56' + d : d }
+
+/* ============================ Datos ============================ */
+async function sbGet(path){
+  var r = await fetch(SB_URL + '/rest/v1/' + path, { headers: HDR })
+  if(!r.ok) throw new Error('HTTP ' + r.status)
+  return r.json()
+}
+async function sbGetTodo(path){
+  var out = [], desde = 0, tam = 1000
+  for(;;){
+    var r = await fetch(SB_URL + '/rest/v1/' + path, { headers: Object.assign({ 'Range-Unit': 'items', 'Range': desde + '-' + (desde + tam - 1) }, HDR) })
+    if(!r.ok) throw new Error('HTTP ' + r.status)
+    var j = await r.json()
+    out = out.concat(j)
+    if(j.length < tam) break
+    desde += tam
+  }
+  return out
+}
+async function sbPost(path, body, prefer){
+  var r = await fetch(SB_URL + '/rest/v1/' + path, {
+    method: 'POST',
+    headers: Object.assign({ 'Content-Type': 'application/json', 'Prefer': prefer || 'return=minimal' }, HDR),
+    body: JSON.stringify(body)
+  })
+  if(!r.ok){ var t = ''; try{ t = await r.text() }catch(e){}; throw new Error('HTTP ' + r.status + ' ' + t.substring(0, 140)) }
+  return true
+}
+function guardarGestion(id, campos){
+  var body = Object.assign({ conversacion_id: id, updated_by: YO || null }, campos)
+  return sbPost('lead_gestion?on_conflict=conversacion_id', body, 'resolution=merge-duplicates,return=minimal')
+}
+function bitacora(id, tipo, detalle, canal, resultado){
+  return sbPost('lead_gestion_log', { conversacion_id: id, tipo: tipo, detalle: detalle || '', canal: canal || null, resultado: resultado || null, responsable: YO || '' })
+}
+
+function fusionar(filas, marcar){
+  var cambios = 0
+  filas.forEach(function(f){
+    var a = LEADS[f.id]
+    if(marcar && (!a || a.ult_cliente_at !== f.ult_cliente_at)) FLASH[f.id] = Date.now() + 5000
+    if(!a || a.cambio_at !== f.cambio_at || a.ultima_actividad !== f.ultima_actividad || a.seguimientos_post !== f.seguimientos_post || a.etapa !== f.etapa) cambios++
+    LEADS[f.id] = f
+  })
+  return cambios
+}
+
+async function cargarTodo(){
+  var t0 = Date.now()
+  var desde = new Date(t0 - CFG.ventana_dias * DIA).toISOString()
+  var filas = await sbGetTodo('v_leads_vivo?select=*&ultima_actividad=gte.' + encodeURIComponent(desde) + '&order=id')
+  var nuevo = {}
+  filas.forEach(function(f){ nuevo[f.id] = f })
+  if(CARGADO) filas.forEach(function(f){ var a = LEADS[f.id]; if(!a || a.ult_cliente_at !== f.ult_cliente_at) FLASH[f.id] = Date.now() + 5000 })
+  // Leads dormidos que ya despertaron y quedaron fuera de la ventana de días
+  try{
+    var dorm = await sbGet('lead_gestion?select=conversacion_id&estado_manual=eq.dormido&proxima_accion_at=lte.' + encodeURIComponent(new Date(t0 + 5 * MIN).toISOString()))
+    var faltan = dorm.map(function(d){ return d.conversacion_id }).filter(function(id){ return !nuevo[id] })
+    if(faltan.length){
+      var extra = await sbGet('v_leads_vivo?select=*&id=in.(' + faltan.slice(0, 100).join(',') + ')')
+      extra.forEach(function(f){ nuevo[f.id] = f })
+    }
+  }catch(e){ console.warn('Dormidos:', e) }
+  LEADS = nuevo
+  ULT_SYNC = t0; ULT_TOTAL = t0; ULT_OK = Date.now(); CARGADO = true
+  pintar()
+}
+async function cargarCambios(){
+  var t0 = Date.now()
+  var desde = new Date(ULT_SYNC - 90000).toISOString()
+  var filas = await sbGet('v_leads_vivo?select=*&ultima_actividad=gte.' + encodeURIComponent(desde))
+  var n = fusionar(filas, true)
+  ULT_SYNC = t0; ULT_OK = Date.now()
+  if(n) pintar()
+}
+async function recargarLead(id){
+  var f = await sbGet('v_leads_vivo?select=*&id=eq.' + id)
+  if(f && f[0]) LEADS[id] = f[0]
+  pintar()
+}
+var ocupado = false
+async function ciclo(forzarTotal){
+  if(ocupado || document.hidden) return
+  ocupado = true
+  try{
+    if(forzarTotal || !CARGADO || Date.now() - ULT_TOTAL > CFG.recarga_total_s * 1000) await cargarTodo()
+    else await cargarCambios()
+    ENLINEA = true
+  }catch(e){
+    console.error('Pipeline:', e)
+    ENLINEA = false
+    if(!CARGADO) $('lista').innerHTML = '<div class="vacio"><b>No se pudo cargar</b>Revisa la conexión. Se reintenta solo en unos segundos.</div>'
+  }
+  ocupado = false
+  pintarSync()
+}
+
+/* ============================ Semáforo ============================ */
+function secuenciaDe(l){
+  var e = l.etapa
+  if(e === 'cotizado') return 'cotizado'
+  if(e === 'cancelado' || e === 'reagendar') return 'recuperar'
+  if(e === 'visitado') return 'visitado'
+  if(e === 'nuevo') return 'nuevo'
+  return l.origen === 'meta' ? 'lenta' : 'rapida'
+}
+// Devuelve {c: color, grupo, lbl, txt, pri, ayuda}
+function evaluar(l, now){
+  var e = l.etapa
+  if(e === 'ganado') return { c: 'verde', grupo: 'ganados', lbl: 'GANADO', txt: l.monto_pagado ? 'pagó ' + plata(l.monto_pagado) : '', pri: 0 }
+  if(e === 'perdido') return { c: 'gris', grupo: 'perdidos', lbl: 'PERDIDO', txt: motivoLbl(l.motivo_no_cierre), pri: 0 }
+  if(e === 'descartado') return { c: 'gris', grupo: 'perdidos', lbl: 'NO ES LEAD', txt: '', pri: 0 }
+  if(e === 'dormido') return { c: 'gris', grupo: 'dormidos', lbl: 'DORMIDO', txt: 'hasta ' + fechaHora(l.proxima_accion_at) + (l.proxima_accion ? ' · ' + l.proxima_accion : ''), pri: 0 }
+
+  var uc = T(l.ult_cliente_at), un = T(l.ult_nuestro_at)
+  var peso = PESO[e] || 1
+
+  // 1) Cliente esperando a una persona (bot pausado) o sin respuesta del bot
+  var sinBot = !l.handoff_humano && uc && (!un || uc > un + 3 * MIN) && now - uc < 2 * DIA
+  if((l.espera_humano || sinBot) && now - uc <= CFG.frio_dias * DIA){
+    var esp = now - uc
+    var col = esp >= CFG.humano_min.rojo * MIN ? 'rojo' : esp >= CFG.humano_min.amarillo * MIN ? 'amarillo' : 'verde'
+    return { c: col, grupo: 'activo', humano: true, lbl: l.espera_humano ? 'ESPERA A UNA PERSONA' : 'SIN RESPUESTA DEL BOT', txt: 'hace ' + dur(esp),
+      ayuda: l.espera_humano ? 'El bot está pausado en este chat y el último mensaje del cliente no tiene respuesta registrada.' : 'El cliente escribió y no hay respuesta registrada.',
+      pri: 5000 - Math.min(esp / HORA, 400) }
+  }
+
+  // 2) Dormido que ya despertó
+  if(l.estado_manual === 'dormido' && l.proxima_accion_at && T(l.proxima_accion_at) <= now && T(l.estado_manual_at) >= uc){
+    var desp = now - T(l.proxima_accion_at)
+    return { c: desp > DIA ? 'rojo' : 'amarillo', grupo: 'activo', lbl: 'DESPERTÓ', txt: (l.proxima_accion || 'Retomar contacto') + ' · hace ' + dur(desp),
+      ayuda: 'Venció la fecha hasta la que estaba dormido.', pri: (desp > DIA ? 3000 : 2000) + peso * 10 }
+  }
+
+  // 3) Con visita agendada a futuro
+  if(e === 'agendado'){
+    var tv = instanteVisita(l), falta = tv - now
+    if(l.ag_estado === 'solicitada'){
+      var urg = falta < DIA
+      return { c: urg ? 'rojo' : 'amarillo', grupo: 'activo', lbl: 'SOLICITUD SIN CONFIRMAR', txt: 'visita ' + fechaVisita(l),
+        ayuda: 'El bot pidió la hora y falta aprobarla en la Bandeja de Solicitudes.', pri: (urg ? 3000 : 2000) + peso * 10 }
+    }
+    return { c: 'verde', grupo: 'activo', lbl: 'VISITA CONFIRMADA', txt: fechaVisita(l) + (l.ag_tecnico && l.ag_tecnico !== 'POR ASIGNAR' ? ' · ' + l.ag_tecnico : ' · sin técnico'), pri: 100 }
+  }
+
+  // 4) Seguimiento según la secuencia de su etapa y origen
+  var pasos = CFG.secuencias[secuenciaDe(l)]
+  var ref = T(l.ref_at) || T(l.created_at)
+  var n = l.seguimientos_post || 0
+  var ult = pasos[pasos.length - 1]
+  var frioEn = (e === 'nuevo' || e === 'conversando' || e === 'con_precio') ? Math.min(CFG.frio_dias * DIA, (ult + Math.max(24, ult * 0.5)) * HORA) : CFG.frio_dias * DIA
+  if(now - ref > frioEn) return { c: 'gris', grupo: 'frios', lbl: 'FRÍO', txt: 'sin movimiento hace ' + dur(now - ref), pri: 0 }
+  if(n >= pasos.length) return { c: 'gris', grupo: 'cerrar', lbl: 'SECUENCIA COMPLETA', txt: n + ' seguimientos sin respuesta',
+    ayuda: 'Ya se hicieron todos los seguimientos. Márcalo perdido con su motivo o duérmelo hasta una fecha.', pri: 0 }
+  var vence = ref + pasos[n] * HORA
+  var gracia = Math.min(24, Math.max(2, pasos[n] * 0.5)) * HORA
+  var paso = 'seguimiento ' + (n + 1) + ' de ' + pasos.length
+  if(now < vence) return { c: 'verde', grupo: 'activo', lbl: 'AL DÍA', txt: paso + ' en ' + dur(vence - now), pri: 100 }
+  var atraso = now - vence
+  if(atraso < gracia) return { c: 'amarillo', grupo: 'activo', lbl: 'TOCA AHORA', txt: paso, ayuda: textoSecuencia(l), pri: 2000 + peso * 10 - atraso / DIA }
+  return { c: 'rojo', grupo: 'activo', lbl: 'ATRASADO', txt: paso + ' · hace ' + dur(atraso), ayuda: textoSecuencia(l), pri: 3000 + peso * 10 - atraso / DIA }
+}
+function textoSecuencia(l){
+  var k = secuenciaDe(l), p = CFG.secuencias[k]
+  var que = { nuevo: 'Escribió una sola vez', rapida: 'Lead de respuesta rápida sin agenda', lenta: 'Lead de Facebook / Instagram sin agenda', cotizado: 'Presupuesto emitido sin pago', recuperar: 'Visita cancelada o por reagendar', visitado: 'Visita con fecha pasada y sin presupuesto' }[k]
+  return que + '. Seguimientos a las ' + p.map(function(h){ return h < 24 ? h + ' h' : (h / 24) + ' d' }).join(' · ') + ' desde su último mensaje.'
+}
+function motivoLbl(m){ var x = CFG.motivos.filter(function(a){ return a[0] === m })[0]; return x ? x[1] : (m === 'no_es_lead' ? 'No es lead' : (m || '')) }
+
+/* ============================ Pintado ============================ */
+function todos(){ return Object.keys(LEADS).map(function(k){ return LEADS[k] }) }
+
+function enTab(l, ev){
+  switch(UI.tab){
+    case 'atender': return ev.grupo === 'activo' && (ev.c === 'rojo' || ev.c === 'amarillo' || !!ev.humano)
+    case 'abiertos': return ev.grupo === 'activo'
+    case 'cerrar': return ev.grupo === 'cerrar'
+    case 'dormidos': return ev.grupo === 'dormidos'
+    case 'frios': return ev.grupo === 'frios'
+    case 'perdidos': return ev.grupo === 'perdidos'
+    case 'ganados': return ev.grupo === 'ganados'
+  }
+  return false
+}
+function pasaFiltros(l, ev){
+  if(UI.color === 'humano' && !ev.humano) return false
+  if((UI.color === 'rojo' || UI.color === 'amarillo') && (ev.c !== UI.color || ev.humano)) return false
+  if(UI.etapa !== 'todas'){
+    if(UI.etapa === 'recuperar'){ if(l.etapa !== 'cancelado' && l.etapa !== 'reagendar') return false }
+    else if(l.etapa !== UI.etapa) return false
+  }
+  if(UI.origen !== 'todos' && l.origen !== UI.origen) return false
+  if(UI.resp === 'sin'){ if(l.responsable) return false }
+  else if(UI.resp !== 'todos' && l.responsable !== UI.resp) return false
+  if(UI.q){
+    var q = sinTilde(UI.q), qd = UI.q.replace(/\D/g, '')
+    var en = sinTilde((l.nombre || '') + ' ' + (l.ult_cliente_txt || '') + ' ' + (l.notas || ''))
+    if(en.indexOf(q) === -1 && !(qd.length >= 4 && String(l.telefono || '').indexOf(qd) !== -1)) return false
+  }
+  return true
+}
+
+function pintar(){
+  if(!CARGADO) return
+  var now = Date.now(), ls = todos()
+  EVAL = {}
+  var cuenta = { atender: 0, abiertos: 0, cerrar: 0, dormidos: 0, frios: 0, perdidos: 0, ganados: 0 }
+  var humano = 0, rojo = 0, amarillo = 0, humanoMax = 0
+  ls.forEach(function(l){
+    var ev = EVAL[l.id] = evaluar(l, now)
+    if(ev.grupo === 'activo'){
+      cuenta.abiertos++
+      if(ev.c === 'rojo' || ev.c === 'amarillo' || ev.humano) cuenta.atender++
+      if(ev.humano){ humano++; humanoMax = Math.max(humanoMax, now - T(l.ult_cliente_at)) }
+      else if(ev.c === 'rojo') rojo++
+      else if(ev.c === 'amarillo') amarillo++
+    } else cuenta[ev.grupo]++
+  })
+
+  // Tarjetas
+  var i0 = inicioDia(0), i1 = inicioDia(1)
+  var hoy = ls.filter(function(l){ return T(l.created_at) >= i0 }).length
+  var ayerMismaHora = ls.filter(function(l){ var t = T(l.created_at); return t >= i1 && t < now - DIA }).length
+  $('t-hoy').textContent = hoy
+  $('t-hoy-sub').textContent = 'ayer a esta hora: ' + ayerMismaHora
+  $('t-humano').textContent = humano
+  $('t-humano-sub').textContent = humano ? 'el más antiguo: ' + dur(humanoMax) : 'nadie esperando'
+  $('t-rojo').textContent = rojo
+  $('t-amarillo').textContent = amarillo
+
+  // Pestañas
+  $('tabs').innerHTML = TABS.map(function(t){
+    return '<button class="tab' + (t[0] === 'atender' ? ' urg' : '') + (UI.tab === t[0] ? ' active' : '') + '" data-act="tab" data-v="' + t[0] + '">' + t[1] + ' <b>' + cuenta[t[0]] + '</b></button>'
+  }).join('')
+  $('fila-etapas').innerHTML = '<span class="filtro-lbl">ETAPA</span>' + FILTRO_ETAPAS.map(function(t){
+    return '<button class="chip' + (UI.etapa === t[0] ? ' active' : '') + '" data-act="etapa" data-v="' + t[0] + '">' + t[1] + '</button>'
+  }).join('')
+  $('fila-origen').innerHTML = '<span class="filtro-lbl">ORIGEN</span>' + ORIGENES.map(function(t){
+    return '<button class="chip' + (UI.origen === t[0] ? ' active' : '') + '" data-act="origen" data-v="' + t[0] + '">' + t[1] + '</button>'
+  }).join('') + (UI.color ? '<button class="chip active" data-act="color" data-v="">' + ({ humano: 'Solo esperan persona', rojo: 'Solo atrasados', amarillo: 'Solo tocan ahora' })[UI.color] + ' ✕</button>' : '')
+
+  pintarLista(ls, now)
+  pintarNumeros(ls, now)
+  pintarDetalle(false)
+}
+
+function pintarLista(ls, now){
+  var vis = ls.filter(function(l){ var ev = EVAL[l.id]; return enTab(l, ev) && pasaFiltros(l, ev) })
+  var porActividad = UI.tab === 'ganados' || UI.tab === 'perdidos' || UI.tab === 'frios' || UI.tab === 'dormidos' || UI.tab === 'cerrar'
+  vis.sort(function(a, b){
+    if(!porActividad){ var d = EVAL[b.id].pri - EVAL[a.id].pri; if(d) return d }
+    return T(b.ultima_actividad) - T(a.ultima_actividad)
+  })
+  var cont = $('lista')
+  if(!vis.length){
+    var m = UI.tab === 'atender' && !UI.q && UI.etapa === 'todas' && UI.origen === 'todos' && UI.resp === 'todos' && !UI.color
+      ? '<b>Todo al día</b>No hay leads en rojo ni en amarillo.'
+      : '<b>Sin resultados</b>Ningún lead coincide con esta pestaña y estos filtros.'
+    cont.innerHTML = '<div class="vacio">' + m + '</div>'
+    return
+  }
+  var html = vis.slice(0, UI.limite).map(function(l){ return filaLead(l, EVAL[l.id], now) }).join('')
+  if(vis.length > UI.limite) html += '<button class="mas" data-act="mas">Mostrar más (' + (vis.length - UI.limite) + ' restantes)</button>'
+  else html += '<div class="lista-foot">' + vis.length + (vis.length === 1 ? ' lead' : ' leads') + '</div>'
+  cont.innerHTML = html
+}
+
+function filaLead(l, ev, now){
+  var flash = FLASH[l.id] && FLASH[l.id] > now
+  var h = '<div class="lead c-' + ev.c + (l.id === SEL ? ' sel' : '') + (flash ? ' flash' : '') + '" data-act="sel" data-id="' + l.id + '" tabindex="0" role="button">'
+  h += '<div class="lead-sem"></div><div class="lead-main">'
+  h += '<div class="lead-top"><span class="lead-nom">' + esc(l.nombre || 'Sin nombre') + '</span><span class="lead-edad">entró hace ' + dur(now - T(l.created_at)) + '</span></div>'
+  h += '<div class="estado c-' + ev.c + '">' + ev.lbl + (ev.txt ? ' <em>· ' + esc(ev.txt) + '</em>' : '') + '</div>'
+  if(l.ult_cliente_txt) h += '<div class="lead-msg">“' + esc(l.ult_cliente_txt.replace(/\s+/g, ' ')) + '”</div>'
+  h += '<div class="tags">'
+  h += '<span class="badge b-' + esc(l.origen) + '">' + (ORIGEN_LBL[l.origen] || esc(String(l.origen).toUpperCase())) + '</span>'
+  h += '<span class="badge b-cat">' + esc(String(CAT_LBL[l.categoria] || l.categoria).toUpperCase()) + '</span>'
+  h += '<span class="badge b-etapa">' + esc(String(ETAPAS[l.etapa] || l.etapa).toUpperCase()) + '</span>'
+  if(l.recompra) h += '<span class="badge b-plano">YA ES CLIENTE</span>'
+  if(l.etapa === 'cotizado' && l.pp_total) h += '<span class="badge b-plano">' + plata(l.pp_total) + '</span>'
+  h += l.responsable ? '<span class="badge b-resp">' + esc(String(l.responsable).toUpperCase()) + '</span>' : '<span class="badge b-sinresp">SIN RESPONSABLE</span>'
+  if(l.toques) h += '<span class="badge b-plano">' + l.toques + (l.toques === 1 ? ' TOQUE' : ' TOQUES') + '</span>'
+  h += '</div></div></div>'
+  return h
+}
+
+/* ---------- Números ---------- */
+function pintarNumeros(ls, now){
+  $('seg-periodo').innerHTML = PERIODOS.map(function(p){ return '<button class="' + (UI.periodo === p[0] ? 'active' : '') + '" data-act="periodo" data-v="' + p[0] + '">' + p[1] + '</button>' }).join('')
+  $('seg-dim').innerHTML = DIMS.map(function(p){ return '<button class="' + (UI.dim === p[0] ? 'active' : '') + '" data-act="dim" data-v="' + p[0] + '">' + p[1] + '</button>' }).join('')
+  $('tog-numeros').textContent = UI.numOcultos ? '▸ Mostrar' : '▾ Ocultar'
+  $('num-body').classList.toggle('oculto', !!UI.numOcultos)
+  if(UI.numOcultos) return
+
+  var desde, hasta = Infinity
+  if(UI.periodo === 'hoy') desde = inicioDia(0)
+  else if(UI.periodo === 'ayer'){ desde = inicioDia(1); hasta = inicioDia(0) }
+  else if(UI.periodo === '7d') desde = inicioDia(6)
+  else desde = inicioDia(29)
+
+  var g = {}, tot = nuevoGrupo('Total')
+  ls.forEach(function(l){
+    var t = T(l.created_at)
+    if(t < desde || t >= hasta) return
+    var k = UI.dim === 'origen' ? l.origen : UI.dim === 'categoria' ? l.categoria : (l.responsable || '—')
+    var x = g[k] || (g[k] = nuevoGrupo(k))
+    ;[x, tot].forEach(function(a){
+      a.leads++
+      if(l.msgs_cliente >= 2) a.sigue++
+      if(l.precio_dado) a.precio++
+      if(l.tuvo_agenda) a.agenda++
+      if(l.tuvo_ppto) a.ppto++
+      if(l.pago){ a.pago++; a.monto += +l.monto_pagado || 0 }
+    })
+  })
+  var filas = Object.keys(g).map(function(k){ return g[k] }).sort(function(a, b){ return b.leads - a.leads })
+  if(!filas.length){ $('num-body').innerHTML = '<div class="vacio"><b>Sin leads en este período</b>Todavía no entra ninguno.</div>'; return }
+
+  function celda(n, base){ return '<td>' + n + '<small>' + (base ? Math.round(n / base * 100) + '%' : '–') + '</small></td>' }
+  function fila(x, cls){
+    var nombre = UI.dim === 'origen' ? ({ google: 'Google', meta: 'Facebook / Instagram', organico: 'Orgánico' }[x.k] || x.k)
+      : UI.dim === 'categoria' ? (CAT_LBL[x.k] || x.k) : (x.k === '—' ? 'Sin responsable' : x.k)
+    if(cls) nombre = 'Total'
+    var cierre = x.leads ? (x.pago / x.leads * 100) : 0
+    return '<tr class="' + (cls || '') + '"><td>' + esc(nombre) + '</td>'
+      + '<td>' + x.leads + '<small>&nbsp;</small></td>'
+      + celda(x.sigue, x.leads) + celda(x.precio, x.leads) + celda(x.agenda, x.leads) + celda(x.ppto, x.leads) + celda(x.pago, x.leads)
+      + '<td class="cierre">' + cierre.toFixed(1).replace('.', ',') + '%<span class="barra"><i style="width:' + Math.min(100, cierre * 4) + '%"></i></span></td>'
+      + '<td>' + plata(x.monto) + '<small>' + (x.pago ? plata(x.monto / x.pago) + ' c/u' : '&nbsp;') + '</small></td></tr>'
+  }
+  var h = '<table class="num"><thead><tr><th>' + ({ origen: 'Origen', categoria: 'Servicio', responsable: 'Responsable' })[UI.dim] + '</th><th>Leads</th><th>Siguieron la conversación</th><th>Recibieron precio</th><th>Agendaron</th><th>Con presupuesto</th><th>Pagaron</th><th>Cierre</th><th>Pagado</th></tr></thead><tbody>'
+  h += filas.map(function(x){ return fila(x) }).join('')
+  if(filas.length > 1) h += fila(tot, 'total')
+  h += '</tbody></table>'
+  h += '<div class="num-nota">Leads que entraron en el período, sin postulantes ni técnicos. Agenda, presupuesto y pago se cruzan por teléfono. Los leads recientes todavía pueden avanzar.</div>'
+  $('num-body').innerHTML = h
+}
+function nuevoGrupo(k){ return { k: k, leads: 0, sigue: 0, precio: 0, agenda: 0, ppto: 0, pago: 0, monto: 0 } }
+
+/* ---------- Detalle ---------- */
+function firmaAcciones(l){ return [l.id, l.etapa, l.estado_manual, l.responsable, l.notas, DET.log ? DET.log.length : -1, DET.chat ? DET.chat.length : -1].join('|') }
+
+function pintarDetalle(forzar){
+  var cont = $('detalle')
+  var l = SEL && LEADS[SEL]
+  if(!l){ cont.innerHTML = '<div class="det-vacio">Selecciona un lead para ver su historia y gestionarlo.</div>'; cont.classList.remove('open'); DET.firma = ''; return }
+  var now = Date.now(), ev = EVAL[l.id] || evaluar(l, now)
+
+  if(!$('det-info') || DET.id !== l.id){
+    cont.innerHTML = '<div id="det-info"></div><div id="det-acc"></div>'
+    DET.id = l.id; DET.firma = ''
+  }
+
+  // Parte que se refresca sola
+  var h = '<div class="det-head"><div style="min-width:0"><div class="det-nom">' + esc(l.nombre || 'Sin nombre') + '</div>'
+  h += '<div class="det-tel">+' + esc(l.telefono) + ' · entró ' + fechaHora(l.created_at) + '</div>'
+  h += '<div class="tags" style="margin-top:7px"><span class="badge b-' + esc(l.origen) + '">' + (ORIGEN_LBL[l.origen] || '') + '</span><span class="badge b-cat">' + esc(String(CAT_LBL[l.categoria] || l.categoria).toUpperCase()) + '</span><span class="badge b-etapa">' + esc(String(ETAPAS[l.etapa] || l.etapa).toUpperCase()) + '</span>' + (l.recompra ? '<span class="badge b-plano">YA ES CLIENTE</span>' : '') + '</div></div>'
+  h += '<button class="cerrar" data-act="cerrar-det">✕ Cerrar</button></div>'
+  h += '<div class="det-sec"><div class="sem-box c-' + ev.c + '"><div class="estado c-' + ev.c + '">' + ev.lbl + (ev.txt ? ' <em>· ' + esc(ev.txt) + '</em>' : '') + '</div>' + (ev.ayuda ? '<p>' + esc(ev.ayuda) + '</p>' : '') + '</div>'
+  h += '<dl class="hitos">'
+  h += '<dt>Último del cliente</dt><dd>' + (l.ult_cliente_at ? 'hace ' + dur(now - T(l.ult_cliente_at)) + ' · ' + l.msgs_cliente + ' mensajes' : '—') + '</dd>'
+  h += '<dt>Atiende</dt><dd>' + (l.handoff_humano ? 'Persona (bot pausado)' : 'Bot · ' + esc(l.agente_actual || 'rita')) + '</dd>'
+  if(l.agenda_id) h += '<dt>Visita</dt><dd>' + esc(fechaVisita(l)) + ' · ' + esc(l.ag_estado || '') + (l.ag_tecnico ? ' · ' + esc(l.ag_tecnico) : '') + (l.ag_servicio ? '<br>' + esc(l.ag_servicio) : '') + '</dd>'
+  if(l.ppto_id) h += '<dt>Presupuesto</dt><dd>#' + esc(l.pp_numero) + ' · ' + plata(l.pp_total) + ' · ' + (l.pp_pago === 'pagado' ? 'pagado' : 'sin pago, emitido hace ' + dur(now - T(l.pp_created_at))) + '</dd>'
+  if(l.n_pagados) h += '<dt>Pagado</dt><dd>' + plata(l.monto_pagado) + ' en ' + l.n_pagados + (l.n_pagados === 1 ? ' presupuesto' : ' presupuestos') + '</dd>'
+  h += '<dt>Seguimientos</dt><dd>' + (l.seguimientos_post || 0) + ' desde su último mensaje · ' + (l.toques || 0) + ' toques registrados</dd>'
+  if(l.etapa === 'perdido') h += '<dt>Motivo</dt><dd>' + esc(motivoLbl(l.motivo_no_cierre)) + '</dd>'
+  h += '</dl></div>'
+  $('det-info').innerHTML = h
+
+  // Parte con campos: solo se repinta si cambió algo de fondo y nadie está escribiendo
+  var firma = firmaAcciones(l)
+  var escribiendo = document.activeElement && $('det-acc').contains(document.activeElement) && /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)
+  if(!forzar && (firma === DET.firma || escribiendo)) return
+  DET.firma = firma
+
+  var cerrado = l.etapa === 'perdido' || l.etapa === 'descartado' || l.etapa === 'dormido'
+  var a = ''
+  a += '<div class="det-sec"><div class="btns">'
+  a += '<a class="btn pri" href="conversaciones-wa.html?tel=' + encodeURIComponent(l.telefono) + '" target="_blank" rel="noopener">💬 Abrir chat en el hub</a>'
+  a += '<a class="btn" href="https://wa.me/' + telWA(l.telefono) + '" target="_blank" rel="noopener">WhatsApp</a>'
+  a += '<a class="btn" href="tel:+' + telWA(l.telefono) + '">Llamar</a>'
+  if(l.cliente_id) a += '<a class="btn" href="clientes-crm.html?tel=' + encodeURIComponent(l.telefono) + '" target="_blank" rel="noopener">Ficha CRM</a>'
+  a += '</div></div>'
+
+  a += '<div class="det-sec"><div class="sec-tit">Responsable</div><div class="dos"><select id="d-resp"><option value="">Sin responsable</option>'
+  var lista = CFG.responsables.slice(); if(l.responsable && lista.indexOf(l.responsable) === -1) lista.push(l.responsable); if(YO && lista.indexOf(YO) === -1) lista.push(YO)
+  a += lista.map(function(r){ return '<option' + (l.responsable === r ? ' selected' : '') + '>' + esc(r) + '</option>' }).join('')
+  a += '</select>' + (YO && l.responsable !== YO ? '<button class="btn" data-act="tomar">Tomarlo yo</button>' : '<span></span>') + '</div></div>'
+
+  if(l.etapa !== 'ganado'){
+    if(cerrado){
+      a += '<div class="det-sec"><div class="sec-tit">Estado</div><div class="btns"><button class="btn" data-act="reabrir">↩ Reabrir lead</button></div></div>'
+    } else {
+      a += '<div class="det-sec"><div class="sec-tit">Registrar un toque</div>'
+      a += '<input id="d-nota-toque" placeholder="Qué pasó (opcional)" maxlength="300">'
+      a += '<div class="btns"><button class="btn" data-act="toque" data-canal="llamada" data-res="contactado">📞 Hablé con el cliente</button><button class="btn" data-act="toque" data-canal="llamada" data-res="no_contesta">No contestó</button><button class="btn" data-act="toque" data-canal="whatsapp" data-res="enviado">Le escribí</button></div>'
+      a += '<div class="ayuda">Lo que respondas desde el hub se cuenta solo. Registra aquí las llamadas y lo que contestes directo desde el teléfono.</div></div>'
+
+      a += '<div class="det-sec"><div class="sec-tit">Dormir hasta</div>'
+      a += '<input id="d-nota-dormir" placeholder="Qué hay que hacer al retomar (opcional)" maxlength="200">'
+      a += '<div class="btns"><button class="btn" data-act="dormir" data-d="1">Mañana</button><button class="btn" data-act="dormir" data-d="3">3 días</button><button class="btn" data-act="dormir" data-d="7">7 días</button><button class="btn" data-act="dormir" data-d="30">30 días</button></div></div>'
+
+      a += '<div class="det-sec"><div class="sec-tit">Cerrar</div><div class="dos"><select id="d-motivo"><option value="">Motivo de no cierre…</option>'
+      a += CFG.motivos.map(function(m){ return '<option value="' + m[0] + '">' + esc(m[1]) + '</option>' }).join('')
+      a += '</select><button class="btn rojo" data-act="perder">Marcar perdido</button></div>'
+      a += '<div class="btns"><button class="btn" data-act="descartar">No es un lead</button></div></div>'
+    }
+  }
+
+  a += '<div class="det-sec"><div class="sec-tit">Nota</div><textarea id="d-notas" rows="2" maxlength="1000" placeholder="Contexto que conviene recordar de este lead">' + esc(l.notas || '') + '</textarea><div class="btns"><button class="btn" data-act="nota">Guardar nota</button></div></div>'
+
+  a += '<div class="det-sec"><div class="sec-tit">Últimos mensajes</div>'
+  if(DET.chat === null) a += '<div class="ayuda">Cargando…</div>'
+  else if(!DET.chat.length) a += '<div class="ayuda">Sin mensajes registrados.</div>'
+  else a += '<div class="chat" id="d-chat">' + DET.chat.map(function(m){ return '<div class="msg ' + (m.tipo === 'recibido' ? 'in' : 'out') + '">' + esc(m.mensaje || '') + '<time>' + fechaHora(m.created_at) + '</time></div>' }).join('') + '</div>'
+  a += '</div>'
+
+  a += '<div class="det-sec"><div class="sec-tit">Bitácora de gestión</div>'
+  if(DET.log === null) a += '<div class="ayuda">Cargando…</div>'
+  else if(!DET.log.length) a += '<div class="ayuda">Aún sin gestión registrada.</div>'
+  else a += '<div class="bita">' + DET.log.map(function(g){ return '<div><time>' + fechaHora(g.created_at) + (g.responsable ? ' · ' + esc(g.responsable) : '') + '</time>' + esc(textoLog(g)) + '</div>' }).join('') + '</div>'
+  a += '</div>'
+
+  $('det-acc').innerHTML = a
+  var c = $('d-chat'); if(c) c.scrollTop = c.scrollHeight
+}
+function textoLog(g){
+  if(g.tipo === 'toque'){
+    var t = g.resultado === 'contactado' ? 'Habló con el cliente' : g.resultado === 'no_contesta' ? 'Llamó, no contestó' : 'Le escribió'
+    return t + (g.detalle ? ' — ' + g.detalle : '')
+  }
+  return g.detalle || g.tipo
+}
+
+async function seleccionar(id){
+  SEL = id
+  DET = { id: null, chat: null, log: null, firma: '' }
+  $('detalle').classList.add('open')
+  $('detalle').scrollTop = 0
+  pintar()
+  cargarHistoria(id)
+}
+async function cargarHistoria(id){
+  var l = LEADS[id]; if(!l) return
+  try{
+    var r = await Promise.all([
+      sbGet('whatsapp_log?select=tipo,mensaje,created_at&telefono=eq.' + encodeURIComponent(l.telefono) + '&tipo=in.(recibido,enviado)&order=created_at.desc&limit=30'),
+      sbGet('lead_gestion_log?select=*&conversacion_id=eq.' + id + '&order=created_at.desc&limit=40')
+    ])
+    if(SEL !== id) return
+    DET.chat = r[0].reverse(); DET.log = r[1]
+  }catch(e){
+    if(SEL !== id) return
+    DET.chat = DET.chat || []; DET.log = DET.log || []
+  }
+  pintarDetalle(false)
+}
+
+/* ============================ Acciones ============================ */
+async function accion(id, fn, okMsg){
+  try{
+    await fn()
+    toast(okMsg, 'ok')
+    DET.log = null
+    await recargarLead(id)
+    cargarHistoria(id)
+  }catch(e){
+    console.error(e)
+    toast('No se pudo guardar. Intenta de nuevo.', 'err')
+  }
+}
+function asignar(id, nombre){
+  return accion(id, async function(){
+    await guardarGestion(id, { responsable: nombre || null })
+    await bitacora(id, 'asignacion', nombre ? 'Asignado a ' + nombre : 'Quedó sin responsable')
+  }, nombre ? 'Asignado a ' + nombre : 'Sin responsable')
+}
+function registrarToque(id, canal, res){
+  var l = LEADS[id], nota = ($('d-nota-toque') || {}).value || ''
+  return accion(id, async function(){
+    var campos = {}
+    if(!l.responsable && YO) campos.responsable = YO
+    if(l.estado_manual === 'dormido'){ campos.estado_manual = null; campos.estado_manual_at = null; campos.proxima_accion = null; campos.proxima_accion_at = null }
+    if(Object.keys(campos).length) await guardarGestion(id, campos)
+    await bitacora(id, 'toque', nota.trim(), canal, res)
+  }, 'Toque registrado')
+}
+function dormir(id, dias){
+  var nota = (($('d-nota-dormir') || {}).value || '').trim()
+  // Despierta a las 09:00 de Santiago del día elegido
+  var hasta = new Date(inicioDia(0) + dias * DIA + 9 * HORA).toISOString()
+  return accion(id, async function(){
+    await guardarGestion(id, { estado_manual: 'dormido', estado_manual_at: new Date().toISOString(), proxima_accion: nota || 'Retomar contacto', proxima_accion_at: hasta })
+    await bitacora(id, 'estado', 'Dormido ' + dias + (dias === 1 ? ' día' : ' días') + (nota ? ' — ' + nota : ''))
+  }, 'Dormido hasta ' + fechaHora(hasta))
+}
+function perder(id){
+  var m = ($('d-motivo') || {}).value
+  if(!m){ toast('Elige el motivo de no cierre', 'err'); $('d-motivo') && $('d-motivo').focus(); return }
+  return accion(id, async function(){
+    await guardarGestion(id, { estado_manual: 'perdido', estado_manual_at: new Date().toISOString(), motivo_no_cierre: m, proxima_accion: null, proxima_accion_at: null })
+    await bitacora(id, 'estado', 'Perdido — ' + motivoLbl(m))
+  }, 'Marcado como perdido')
+}
+function descartar(id){
+  return accion(id, async function(){
+    await guardarGestion(id, { estado_manual: 'descartado', estado_manual_at: new Date().toISOString(), motivo_no_cierre: 'no_es_lead', proxima_accion: null, proxima_accion_at: null })
+    await bitacora(id, 'estado', 'Marcado como no es un lead')
+  }, 'Sacado del pipeline')
+}
+function reabrir(id){
+  return accion(id, async function(){
+    await guardarGestion(id, { estado_manual: null, estado_manual_at: null, motivo_no_cierre: null, proxima_accion: null, proxima_accion_at: null })
+    await bitacora(id, 'estado', 'Lead reabierto')
+  }, 'Lead reabierto')
+}
+function guardarNota(id){
+  var txt = (($('d-notas') || {}).value || '').trim()
+  return accion(id, async function(){ await guardarGestion(id, { notas: txt }) }, 'Nota guardada')
+}
+
+/* ============================ Eventos ============================ */
+function guardarUI(){ try{ localStorage.setItem('pv_ui', JSON.stringify({ periodo: UI.periodo, dim: UI.dim, numOcultos: UI.numOcultos })) }catch(e){} }
+function irA(tab, color){ UI.tab = tab; UI.color = color || null; UI.etapa = 'todas'; UI.limite = 150; pintar(); document.querySelector('.trabajo').scrollIntoView({ behavior: 'smooth', block: 'start' }) }
+
+document.addEventListener('click', function(ev){
+  var el = ev.target.closest('[data-act]'); if(!el) return
+  var act = el.getAttribute('data-act'), v = el.getAttribute('data-v')
+  switch(act){
+    case 'recargar': ciclo(true); toast('Recargando…'); break
+    case 'tab': UI.tab = v; UI.color = null; UI.limite = 150; pintar(); break
+    case 'etapa': UI.etapa = v; UI.limite = 150; pintar(); break
+    case 'origen': UI.origen = v; UI.limite = 150; pintar(); break
+    case 'color': UI.color = null; pintar(); break
+    case 'mas': UI.limite += 150; pintar(); break
+    case 'periodo': UI.periodo = v; guardarUI(); pintar(); break
+    case 'dim': UI.dim = v; guardarUI(); pintar(); break
+    case 'tog-numeros': UI.numOcultos = !UI.numOcultos; guardarUI(); pintar(); break
+    case 'ver-humano': irA('atender', 'humano'); break
+    case 'ver-rojo': irA('atender', 'rojo'); break
+    case 'ver-amarillo': irA('atender', 'amarillo'); break
+    case 'sel': seleccionar(el.getAttribute('data-id')); break
+    case 'cerrar-det': SEL = null; pintar(); break
+    case 'tomar': if(SEL) asignar(SEL, YO); break
+    case 'toque': if(SEL) registrarToque(SEL, el.getAttribute('data-canal'), el.getAttribute('data-res')); break
+    case 'dormir': if(SEL) dormir(SEL, +el.getAttribute('data-d')); break
+    case 'perder': if(SEL) perder(SEL); break
+    case 'descartar':
+      if(el.getAttribute('data-ok')){ if(SEL) descartar(SEL) }
+      else { el.setAttribute('data-ok', '1'); el.textContent = '¿Seguro? Toca de nuevo para confirmar'; el.classList.add('rojo') }
+      break
+    case 'reabrir': if(SEL) reabrir(SEL); break
+    case 'nota': if(SEL) guardarNota(SEL); break
+  }
+})
+document.addEventListener('change', function(ev){
+  if(ev.target.id === 'd-resp' && SEL) asignar(SEL, ev.target.value)
+  if(ev.target.id === 'f-resp'){ UI.resp = ev.target.value; UI.limite = 150; pintar() }
+})
+document.addEventListener('keydown', function(ev){
+  if((ev.key === 'Enter' || ev.key === ' ') && ev.target.classList && ev.target.classList.contains('lead')){ ev.preventDefault(); seleccionar(ev.target.getAttribute('data-id')) }
+  if(ev.key === 'Escape' && SEL && !/INPUT|TEXTAREA|SELECT/.test((document.activeElement || {}).tagName || '')){ SEL = null; pintar() }
+})
+var _bt
+$('buscar').addEventListener('input', function(){ clearTimeout(_bt); var v = this.value; _bt = setTimeout(function(){ UI.q = v.trim(); UI.limite = 150; pintar() }, 180) })
+$('volver').addEventListener('click', function(){
+  var rol = ''; try{ rol = localStorage.getItem('sv_user_rol') || '' }catch(e){}
+  location.href = rol === 'coord_junior' ? 'menu-coord-jr.html' : 'menu-coordinador.html'
+})
+
+function pintarSync(){
+  var p = $('pulso'), s = $('sync')
+  if(!ENLINEA){ p.classList.add('off'); s.textContent = 'SIN CONEXIÓN · REINTENTANDO'; return }
+  p.classList.remove('off')
+  if(!ULT_OK){ s.textContent = 'CONECTANDO…'; return }
+  var seg = Math.round((Date.now() - ULT_OK) / 1000)
+  s.textContent = 'EN VIVO · ACTUALIZADO HACE ' + (seg < 2 ? '1 S' : seg + ' S')
+}
+
+/* ============================ Arranque ============================ */
+$('yo').textContent = YO ? '👤 ' + YO : 'Sin sesión'
+$('f-resp').innerHTML = '<option value="todos">Todos los responsables</option><option value="sin">Sin responsable</option>' +
+  CFG.responsables.map(function(r){ return '<option>' + esc(r) + '</option>' }).join('')
+
+ciclo(true)
+setInterval(function(){ ciclo(false) }, CFG.poll_rapido_s * 1000)
+setInterval(pintarSync, 1000)
+// Los tiempos y colores avanzan aunque no llegue nada nuevo
+setInterval(function(){ if(CARGADO && !document.hidden) pintar() }, 30000)
+document.addEventListener('visibilitychange', function(){ if(!document.hidden) ciclo(Date.now() - ULT_TOTAL > 60000) })
+</script>
+
+</body>
+</html>

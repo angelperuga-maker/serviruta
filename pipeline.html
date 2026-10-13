@@ -81,6 +81,8 @@ table.num td.cierre{font-weight:700}
 .fila::-webkit-scrollbar{display:none}
 .tab{padding:7px 12px;background:var(--s2);border:1px solid var(--line);border-radius:8px;font-family:var(--mono);font-size:10px;color:var(--t3);font-weight:700;white-space:nowrap;flex-shrink:0;display:flex;align-items:center;gap:6px}
 .tab b{font-family:var(--display);font-size:12px;color:var(--t2)}
+.chip b{color:var(--t1)}
+.chip.active b{color:#000}
 .tab:hover{color:var(--t1)}
 .tab.active{background:var(--t1);color:#000;border-color:var(--t1)}
 .tab.active b{color:#000}
@@ -223,6 +225,7 @@ table.num td.cierre{font-weight:700}
         <div class="fila" id="tabs"></div>
         <div class="fila" id="fila-etapas"><span class="filtro-lbl">ETAPA</span></div>
         <div class="fila" id="fila-origen"><span class="filtro-lbl">ORIGEN</span></div>
+        <div class="fila" id="fila-act"><span class="filtro-lbl">MENSAJES</span></div>
         <div class="buscar-row">
           <input type="search" id="buscar" placeholder="Buscar por nombre, teléfono o mensaje…" aria-label="Buscar lead">
           <select id="f-resp" aria-label="Filtrar por responsable"></select>
@@ -306,7 +309,7 @@ var LEADS = {}            // id -> fila de v_leads_vivo
 var EVAL = {}             // id -> resultado del semáforo
 var SEL = null            // id seleccionado
 var DET = { id: null, chat: null, log: null, firma: '' }
-var UI = { tab: 'atender', etapa: 'todas', origen: 'todos', resp: 'todos', q: '', color: null, periodo: '30d', dim: 'origen', limite: 150, numOcultos: false }
+var UI = { tab: 'atender', etapa: 'todas', origen: 'todos', resp: 'todos', q: '', color: null, act: '', periodo: '30d', dim: 'origen', limite: 150, numOcultos: false }
 var ULT_SYNC = 0, ULT_TOTAL = 0, ULT_OK = 0, CARGADO = false, ENLINEA = true
 var FLASH = {}            // id -> hasta cuándo resaltar
 
@@ -603,7 +606,7 @@ function pintar(){
 
   // Pestañas
   $('tabs').innerHTML = TABS.map(function(t){
-    return '<button class="tab' + (t[0] === 'atender' ? ' urg' : '') + (UI.tab === t[0] ? ' active' : '') + '" data-act="tab" data-v="' + t[0] + '">' + t[1] + ' <b>' + cuenta[t[0]] + '</b></button>'
+    return '<button class="tab' + (t[0] === 'atender' ? ' urg' : '') + (UI.tab === t[0] && !UI.act ? ' active' : '') + '" data-act="tab" data-v="' + t[0] + '">' + t[1] + ' <b>' + cuenta[t[0]] + '</b></button>'
   }).join('')
   $('fila-etapas').innerHTML = '<span class="filtro-lbl">ETAPA</span>' + FILTRO_ETAPAS.map(function(t){
     return '<button class="chip' + (UI.etapa === t[0] ? ' active' : '') + '" data-act="etapa" data-v="' + t[0] + '">' + t[1] + '</button>'
@@ -612,21 +615,28 @@ function pintar(){
     return '<button class="chip' + (UI.origen === t[0] ? ' active' : '') + '" data-act="origen" data-v="' + t[0] + '">' + t[1] + '</button>'
   }).join('') + (UI.color ? '<button class="chip active" data-act="color" data-v="">' + ({ humano: 'Solo esperan persona', rojo: 'Solo atrasados', amarillo: 'Solo tocan ahora' })[UI.color] + ' ✕</button>' : '')
 
+  var nHoy = ls.filter(function(l){ return T(l.ult_cliente_at) >= i0 }).length
+  var n24 = ls.filter(function(l){ return T(l.ult_cliente_at) >= now - DIA }).length
+  $('fila-act').innerHTML = '<span class="filtro-lbl">MENSAJES</span>' + [['', 'Todos'], ['hoy', 'Hoy <b>' + nHoy + '</b>'], ['24h', 'Últimas 24 h <b>' + n24 + '</b>']].map(function(t){
+    return '<button class="chip' + (UI.act === t[0] ? ' active' : '') + '" data-act="act" data-v="' + t[0] + '">' + t[1] + '</button>'
+  }).join('')
   pintarLista(ls, now)
   pintarNumeros(ls, now)
   pintarDetalle(false)
 }
 
 function pintarLista(ls, now){
-  var vis = ls.filter(function(l){ var ev = EVAL[l.id]; return enTab(l, ev) && pasaFiltros(l, ev) })
+  var desdeAct = UI.act === 'hoy' ? inicioDia(0) : UI.act === '24h' ? now - DIA : 0
+  var vis = ls.filter(function(l){ var ev = EVAL[l.id]; return (desdeAct ? T(l.ult_cliente_at) >= desdeAct : enTab(l, ev)) && pasaFiltros(l, ev) })
   var porActividad = UI.tab === 'ganados' || UI.tab === 'perdidos' || UI.tab === 'frios' || UI.tab === 'dormidos' || UI.tab === 'cerrar'
   vis.sort(function(a, b){
+    if(desdeAct) return T(b.ult_cliente_at) - T(a.ult_cliente_at)
     if(!porActividad){ var d = EVAL[b.id].pri - EVAL[a.id].pri; if(d) return d }
     return T(b.ultima_actividad) - T(a.ultima_actividad)
   })
   var cont = $('lista')
   if(!vis.length){
-    var m = UI.tab === 'atender' && !UI.q && UI.etapa === 'todas' && UI.origen === 'todos' && UI.resp === 'todos' && !UI.color
+    var m = UI.tab === 'atender' && !UI.act && !UI.q && UI.etapa === 'todas' && UI.origen === 'todos' && UI.resp === 'todos' && !UI.color
       ? '<b>Todo al día</b>No hay leads en rojo ni en amarillo.'
       : '<b>Sin resultados</b>Ningún lead coincide con esta pestaña y estos filtros.'
     cont.innerHTML = '<div class="vacio">' + m + '</div>'
@@ -642,7 +652,7 @@ function filaLead(l, ev, now){
   var flash = FLASH[l.id] && FLASH[l.id] > now
   var h = '<div class="lead c-' + ev.c + (l.id === SEL ? ' sel' : '') + (flash ? ' flash' : '') + '" data-act="sel" data-id="' + l.id + '" tabindex="0" role="button">'
   h += '<div class="lead-sem"></div><div class="lead-main">'
-  h += '<div class="lead-top"><span class="lead-nom">' + esc(l.nombre || 'Sin nombre') + '</span><span class="lead-edad">entró hace ' + dur(now - T(l.created_at)) + '</span></div>'
+  h += '<div class="lead-top"><span class="lead-nom">' + esc(l.nombre || 'Sin nombre') + '</span><span class="lead-edad">' + (UI.act && l.ult_cliente_at ? 'escribió ' + fechaHora(l.ult_cliente_at) : 'entró hace ' + dur(now - T(l.created_at))) + '</span></div>'
   h += '<div class="estado c-' + ev.c + '">' + ev.lbl + (ev.txt ? ' <em>· ' + esc(ev.txt) + '</em>' : '') + '</div>'
   if(l.ult_cliente_txt) h += '<div class="lead-msg">“' + esc(l.ult_cliente_txt.replace(/\s+/g, ' ')) + '”</div>'
   h += '<div class="tags">'
@@ -902,7 +912,8 @@ document.addEventListener('click', function(ev){
   var act = el.getAttribute('data-act'), v = el.getAttribute('data-v')
   switch(act){
     case 'recargar': ciclo(true); toast('Recargando…'); break
-    case 'tab': UI.tab = v; UI.color = null; UI.limite = 150; pintar(); break
+    case 'tab': UI.tab = v; UI.act = ''; UI.color = null; UI.limite = 150; pintar(); break
+    case 'act': UI.act = v; UI.color = null; UI.limite = 150; pintar(); break
     case 'etapa': UI.etapa = v; UI.limite = 150; pintar(); break
     case 'origen': UI.origen = v; UI.limite = 150; pintar(); break
     case 'color': UI.color = null; pintar(); break

@@ -498,7 +498,7 @@ function evaluar(l, now){
     var col = esp >= CFG.humano_min.rojo * MIN ? 'rojo' : esp >= CFG.humano_min.amarillo * MIN ? 'amarillo' : 'verde'
     return { c: col, grupo: 'activo', humano: true, lbl: l.espera_humano ? 'ESPERA A UNA PERSONA' : 'SIN RESPUESTA DEL BOT', txt: 'hace ' + dur(esp),
       ayuda: l.espera_humano ? 'El bot está pausado en este chat y el último mensaje del cliente no tiene respuesta registrada.' : 'El cliente escribió y no hay respuesta registrada.',
-      pri: 5000 + Math.min(esp / HORA, 900) }   // el que lleva más tiempo esperando va primero (orden de llegada)
+      pri: 5000 - Math.min(esp / HORA, 900) }   // el mensaje más reciente va primero
   }
 
   // 2) Dormido que ya despertó

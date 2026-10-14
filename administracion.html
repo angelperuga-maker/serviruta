@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Administración · Serviruta</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/supabase-js/2.39.0/supabase.min.js"></script>
+<style>
+  :root{--bg:#0f1115;--panel:#171a21;--panel2:#1f232c;--border:#2a2f3a;--text:#e8eaed;--muted:#9aa1ac;--red:#e8210a;--green:#2ecc71;--yellow:#f0b429;--blue:#4f8ef7;--orange:#fb923c;--violet:#a78bfa;}
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);}
+  header{padding:12px 16px;background:var(--panel);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:12px;}
+  header h1{margin:0;font-size:17px;flex:1;}
+  header .sub{color:var(--muted);font-size:12px;margin-top:2px;display:flex;gap:8px;align-items:center;}
+  header a{color:var(--muted);font-size:12px;text-decoration:none;}
+  .live{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);}
+  .live .dot{width:8px;height:8px;border-radius:50%;background:var(--muted);}
+  .live.on .dot{background:var(--green);box-shadow:0 0 6px var(--green);}
+  .wrap{max-width:1200px;margin:0 auto;padding:12px 14px 60px;}
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px;}
+  select,input,button,textarea{background:var(--panel2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:8px 11px;font-size:14px;font-family:inherit;}
+  select:focus,input:focus,textarea:focus{outline:none;border-color:var(--blue);}
+  button{cursor:pointer;font-weight:600;}
+  button.primary{background:var(--red);border-color:var(--red);color:#fff;}
+  button.blue{background:var(--blue);border-color:var(--blue);color:#fff;}
+  button.sm{padding:5px 9px;font-size:12px;}
+  button.ghost{background:transparent;}
+  .tabs{display:flex;gap:4px;margin-bottom:12px;border-bottom:1px solid var(--border);overflow-x:auto;}
+  .tab{padding:9px 14px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;}
+  .tab.active{color:var(--text);border-color:var(--blue);}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-bottom:14px;}
+  .kpi{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px 12px;}
+  .kpi .n{font-size:18px;font-weight:700;}
+  .kpi .l{font-size:11px;color:var(--muted);text-transform:uppercase;}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:12px;}
+  .card h3{margin:0 0 6px;font-size:15px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;}
+  .row{display:flex;justify-content:space-between;font-size:13px;padding:4px 0;gap:8px;}
+  .row .label{color:var(--muted);}
+  .row.total{font-weight:700;border-top:1px solid var(--border);margin-top:4px;padding-top:8px;font-size:15px;}
+  .pos{color:var(--green);} .neg{color:var(--red);} .warn{color:var(--yellow);}
+  .tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;background:var(--panel2);color:var(--muted);white-space:nowrap;}
+  .tag.pagado,.tag.ok{background:rgba(46,204,113,.15);color:var(--green);}
+  .tag.pendiente{background:rgba(240,180,41,.15);color:var(--yellow);}
+  .tag.visita{background:rgba(79,142,247,.15);color:var(--blue);}
+  .tag.fuera,.tag.off{background:rgba(251,146,60,.15);color:var(--orange);}
+  .tag.tipo{background:rgba(167,139,250,.15);color:var(--violet);}
+  .tbl{overflow-x:auto;}
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th,td{padding:7px 8px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;}
+  th{color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;}
+  td.num,th.num{text-align:right;}
+  td input{padding:5px 8px;font-size:13px;}
+  .muted{color:var(--muted);font-size:12px;}
+  .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;z-index:100;padding:14px;}
+  .modal-bg.show{display:flex;}
+  .modal{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px;max-width:460px;width:100%;max-height:92vh;overflow-y:auto;}
+  .modal h2{margin:0 0 10px;font-size:16px;}
+  .field{margin-bottom:10px;}
+  .field label{display:block;font-size:12px;color:var(--muted);margin-bottom:4px;}
+  .field select,.field input,.field textarea{width:100%;}
+  .modal-actions{display:flex;gap:8px;margin-top:14px;}
+  .modal-actions button{flex:1;}
+  .empty{text-align:center;color:var(--muted);padding:40px;}
+  .acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+  .acts button{flex:1;min-width:90px;}
+  .grid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px;}
+  details summary{cursor:pointer;color:var(--blue);font-size:12px;margin-top:8px;}
+  .toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:var(--panel2);border:1px solid var(--border);padding:10px 16px;border-radius:10px;font-size:13px;display:none;z-index:200;}
+  .hint{background:rgba(79,142,247,.08);border:1px solid rgba(79,142,247,.25);border-radius:10px;padding:10px 12px;font-size:12px;color:var(--muted);margin-bottom:12px;}
+</style>
+</head>
+<body>
+<header>
+  <div style="flex:1">
+    <h1>🧮 Administración</h1>
+    <div class="sub"><span id="subTxt">Ventas, compras, comisiones y servicios</span><span class="live" id="live"><span class="dot"></span><span id="liveTxt">conectando…</span></span></div>
+  </div>
+  <a href="menu-admin.html" id="lnkMenu">← Menú</a>
+</header>
+
+<div class="wrap">
+  <div class="toolbar">
+    <select id="periodo" onchange="cambiarPeriodo()"></select>
+    <select id="fTec" onchange="render()"><option value="">Todos los técnicos</option></select>
+    <button class="ghost sm" onclick="cargar(true)">↻ Actualizar</button>
+  </div>
+
+  <div class="kpis" id="kpis"></div>
+
+  <div class="tabs">
+    <div class="tab active" data-t="resumen" onclick="setTab('resumen')">Resumen</div>
+    <div class="tab" data-t="ventas" onclick="setTab('ventas')">Ventas y cobros</div>
+    <div class="tab" data-t="compras" onclick="setTab('compras')">Compras</div>
+    <div class="tab" data-t="comisiones" onclick="setTab('comisiones')">Comisiones y sueldos</div>
+    <div class="tab" data-t="reglas" onclick="setTab('reglas')">Reglas de comisión</div>
+    <div class="tab" data-t="equipo" onclick="setTab('equipo')">Equipo</div>
+    <div class="tab" data-t="servicios" onclick="setTab('servicios')">Servicios</div>
+  </div>
+
+  <div id="view"><div class="empty">Cargando…</div></div>
+</div>
+
+<!-- Modal cobro -->
+<div class="modal-bg" id="mCobro"><div class="modal">
+  <h2>Registrar cobro</h2>
+  <div class="muted" id="cobroInfo" style="margin-bottom:10px"></div>
+  <div class="field"><label>Monto cobrado</label><input type="number" id="cMonto"></div>
+  <div class="field"><label>Medio de pago</label><select id="cMedio"><option value="transferencia">Transferencia</option><option value="tarjeta">Tarjeta</option><option value="efectivo">Efectivo</option></select></div>
+  <div class="field"><label>Fecha de pago</label><input type="date" id="cFecha"></div>
+  <div class="modal-actions"><button class="ghost" onclick="closeModal('mCobro')">Cancelar</button><button class="primary" onclick="guardarCobro()">Marcar cobrado</button></div>
+</div></div>
+
+<!-- Modal compra -->
+<div class="modal-bg" id="mCompra"><div class="modal">
+  <h2>Registrar compra / gasto</h2>
+  <div class="field"><label>Fecha</label><input type="date" id="gFecha"></div>
+  <div class="field"><label>Tipo</label><select id="gTipo">
+    <option value="Materiales">Materiales y repuestos</option><option value="Herramientas">Herramientas y equipos</option><option value="Combustible">Combustible y traslado</option><option value="Costos fijos">Costos fijos</option><option value="Impuestos">Impuestos y legal</option><option value="Otros">Otros</option></select></div>
+  <div class="field"><label>Descripción</label><input id="gDesc" placeholder="Ej: Kit de embrague Foton"></div>
+  <div class="field"><label>Proveedor</label><select id="gProv"><option value="">— sin proveedor —</option></select></div>
+  <div class="field"><label>Monto</label><input type="number" id="gMonto"></div>
+  <div class="field"><label>Medio de pago</label><select id="gMedio"><option value="transferencia">Transferencia empresa</option><option value="tarjeta">Tarjeta</option><option value="efectivo">Efectivo</option><option value="plata_propia">Plata propia (reembolsar)</option></select></div>
+  <div class="field"><label>Técnico (opcional)</label><select id="gTec"><option value="">— general —</option></select></div>
+  <div class="field"><label>Presupuesto asociado (opcional)</label><select id="gPpto"><option value="">— ninguno —</option></select></div>
+  <div class="field"><label>N° documento / boleta</label><input id="gDoc"></div>
+  <div class="field"><label>Notas</label><textarea id="gNotas" rows="2"></textarea></div>
+  <div class="modal-actions"><button class="ghost" onclick="closeModal('mCompra')">Cancelar</button><button class="blue" onclick="guardarCompra()">Guardar</button></div>
+</div></div>
+
+<!-- Modal movimiento -->
+<div class="modal-bg" id="mMov"><div class="modal">
+  <h2 id="movTitulo">Registrar movimiento</h2>
+  <div class="field"><label>Tipo</label><select id="mTipo" onchange="movTipoChange()"><option value="anticipo">Anticipo</option><option value="bono">Bono</option><option value="descuento">Descuento</option><option value="pago">Pago de sueldo</option></select></div>
+  <div class="field" id="fCat" style="display:none"><label>Categoría del descuento</label><select id="mCat" onchange="movCatChange()"><option value="otro">Otro</option><option value="herramienta">Herramienta</option><option value="danio">Daño / retrabajo</option><option value="prestamo">Préstamo</option></select></div>
+  <div class="field" id="fHerr" style="display:none"><label>Herramienta</label><select id="mHerr"></select></div>
+  <div class="field"><label>Monto</label><input type="number" id="mMonto"></div>
+  <div class="field"><label>Fecha</label><input type="date" id="mFecha"></div>
+  <div class="field"><label>Notas</label><textarea id="mNotas" rows="2"></textarea></div>
+  <div class="modal-actions"><button class="ghost" onclick="closeModal('mMov')">Cancelar</button><button class="primary" onclick="guardarMovimiento()">Guardar</button></div>
+</div></div>
+
+<!-- Modal técnico -->
+<div class="modal-bg" id="mTec"><div class="modal">
+  <h2 id="tecTitulo">Agregar técnico</h2>
+  <div class="field"><label>Técnico del sistema (recomendado)</label><select id="tSel" onchange="tecSelChange()"><option value="">— nuevo, no está en la lista —</option></select></div>
+  <div class="field"><label>Nombre</label><input id="tNombre"></div>
+  <div class="field"><label>Teléfono</label><input id="tTel" placeholder="+569..."></div>
+  <div class="field"><label>Sueldo base mensual</label><input type="number" id="tSueldo"></div>
+  <div class="field"><label>Fecha de ingreso</label><input type="date" id="tFecha"></div>
+  <div class="modal-actions"><button class="ghost" onclick="closeModal('mTec')">Cancelar</button><button class="blue" onclick="guardarTecnico()">Guardar</button></div>
+</div></div>
+
+<!-- Modal tipo de servicio -->
+<div class="modal-bg" id="mTipoSrv"><div class="modal">
+  <h2 id="tsTitulo">Tipo de servicio</h2>
+  <div class="field"><label>Nombre</label><input id="tsNombre"></div>
+  <div class="field"><label>Palabras clave (separadas por coma) — se buscan en la descripción del presupuesto</label><input id="tsKeys" placeholder="embrague, clutch"></div>
+  <div class="field"><label>% de comisión sobre el total del trabajo</label><input type="number" step="0.5" id="tsPct"></div>
+  <div class="field"><label>Vigente desde</label><input type="date" id="tsDesde"></div>
+  <div class="field"><label>Orden de prioridad (menor = primero)</label><input type="number" id="tsOrden" value="100"></div>
+  <div class="field"><label><input type="checkbox" id="tsActivo" style="width:auto"> Activo</label></div>
+  <div class="modal-actions"><button class="ghost" onclick="closeModal('mTipoSrv')">Cancelar</button><button class="blue" onclick="guardarTipoSrv()">Guardar</button></div>
+</div></div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SUPABASE_URL = 'https://bqlgfmqcefledqyodkii.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_h33L3eMAcskEsPi93Liohg__FfzCxOE';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ---- guard: admin, owner o senior ----
+(async function(){
+  try{
+    const {data:{session}} = await sb.auth.getSession();
+    if(!session){ window.location.replace('login.html'); return; }
+    const r = await fetch(SUPABASE_URL+'/rest/v1/user_profiles?user_id=eq.'+session.user.id+'&select=nombre,rol,username',{headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+session.access_token}});
+    const p = r.ok ? await r.json() : [];
+    const rol = p[0] ? p[0].rol : null;
+    if(!rol || !['admin','owner','coord_senior'].includes(rol)){ window.location.replace('login.html'); return; }
+    document.getElementById('lnkMenu').href = rol==='admin' ? 'menu-admin.html' : 'menu-coordinador.html';
+    window.SV_USER = p[0].username;
+  }catch(e){ console.error(e); }
+})();
+
+let tab = (location.hash||'#resumen').slice(1);
+let periodo = mesActual();
+let D = { pptos:[], liq:[], det:[], movs:[], emp:[], empTodos:[], tecs:[], herr:[], params:[], tramos:[], tipos:[], gastos:[], prov:[], agenda:[] };
+let cobroId=null, movEmp=null, tipoSrvId=null, filtroPago='todos', filtroGasto='';
+
+function mesActual(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); }
+function fmt(n){ return '$'+Math.round(n||0).toLocaleString('es-CL'); }
+function esc(s){ return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function hoy(){ return new Date().toISOString().slice(0,10); }
+function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.style.display='block'; setTimeout(()=>t.style.display='none',2500); }
+function closeModal(id){ document.getElementById(id).classList.remove('show'); }
+function openModal(id){ document.getElementById(id).classList.add('show'); }
+
+function generarPeriodos(){
+  const sel=document.getElementById('periodo'); const d=new Date(); let html='';
+  for(let i=0;i<14;i++){ const p=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
+    const lbl=d.toLocaleDateString('es-CL',{month:'long',year:'numeric'});
+    html+=`<option value="${p}" ${p===periodo?'selected':''}>${lbl}</option>`; d.setMonth(d.getMonth()-1); }
+  sel.innerHTML=html;
+}
+function cambiarPeriodo(){ periodo=document.getElementById('periodo').value; cargar(); }
+function setTab(t){ tab=t; history.replaceState(null,'','#'+t); document.querySelectorAll('.tab').forEach(e=>e.classList.toggle('active',e.dataset.t===t)); render(); }
+window.addEventListener('hashchange',()=>{ setTab((location.hash||'#resumen').slice(1)); });
+
+async function cargar(manual){
+  const ini=periodo+'-01', fin=new Date(periodo.slice(0,4), periodo.slice(5,7), 1).toISOString().slice(0,10);
+  const R = await Promise.all([
+    sb.from('presupuestos').select('id,numero,tecnico,tecnico_id,cliente,telefono,vehiculo,patente,items,obs,total,estado,estado_servicio,pago_cliente,fecha_pago,pagado_at,monto_cobrado,medio_pago,created_at,agenda_id')
+      .or(`and(created_at.gte.${ini},created_at.lt.${fin}),and(fecha_pago.gte.${ini},fecha_pago.lt.${fin})`).neq('estado','nuevo').order('created_at',{ascending:false}).limit(3000),
+    sb.from('v_liquidacion_tecnico').select('*').eq('periodo',periodo).order('cobrado',{ascending:false}),
+    sb.from('v_comision_detalle').select('*').eq('periodo',periodo).order('fecha'),
+    sb.from('movimientos_remuneracion').select('*').eq('periodo',periodo).order('fecha',{ascending:false}),
+    sb.from('empleados_rrhh').select('*').order('nombre'),
+    sb.from('tecnicos').select('id,nombre,telefono,activo').order('nombre'),
+    sb.from('herramientas').select('id,tecnico_id,nombre,valor,estado'),
+    sb.from('comision_params').select('*').order('clave'),
+    sb.from('comision_tramos').select('*').eq('vigente',true).order('desde'),
+    sb.from('comision_tipo_servicio').select('*').order('orden'),
+    sb.from('gastos').select('*').gte('fecha',ini).lt('fecha',fin).order('fecha',{ascending:false}),
+    sb.from('proveedores').select('id,nombre,categoria').eq('activo',true).order('nombre'),
+    sb.from('agenda').select('id,fecha,hora,tecnico,tecnico_id,cliente,telefono,vehiculo,patente,servicio,estado,presupuesto_id,origen,direccion').gte('fecha',ini).lt('fecha',fin).order('fecha',{ascending:false}).order('hora').limit(3000),
+  ]);
+  const [p,l,d,m,e,t,h,pa,tr,ts,g,pv,ag]=R;
+  D={ pptos:p.data||[], liq:l.data||[], det:d.data||[], movs:m.data||[], empTodos:e.data||[], emp:(e.data||[]).filter(x=>x.activo), tecs:t.data||[], herr:h.data||[], params:pa.data||[], tramos:tr.data||[], tipos:ts.data||[], gastos:g.data||[], prov:pv.data||[], agenda:ag.data||[] };
+  const err=R.find(r=>r.error); if(err) toast('Error: '+err.error.message);
+  const ft=document.getElementById('fTec'); const cur=ft.value;
+  ft.innerHTML='<option value="">Todos los técnicos</option>'+D.emp.filter(x=>x.cargo==='tecnico').map(x=>`<option value="${x.id}">${esc(x.nombre)}</option>`).join('');
+  ft.value=cur;
+  render(); if(manual) toast('Actualizado');
+}
+
+function empSel(){ return document.getElementById('fTec').value; }
+function empDe(p){ const e=D.emp.find(x=>x.tecnico_id===p.tecnico_id); return e?e.id:null; }
+function nombreTec(p){ const e=D.empTodos.find(x=>x.tecnico_id===p.tecnico_id); return e?e.nombre:(p.tecnico||'—'); }
+function resumenItems(items){ try{ const a=Array.isArray(items)?items:[]; return a.map(i=>i.desc||i.descripcion||i.nombre||i.item||'').filter(Boolean).join(', ').slice(0,70); }catch{ return ''; } }
+function tecFiltro(x){ const f=empSel(); if(!f) return true; const e=D.emp.find(y=>y.id===f); return e && (x.tecnico_id===e.tecnico_id || (x.tecnico||'').toLowerCase().startsWith(e.nombre.toLowerCase().split(' ')[0])); }
+
+function totales(){
+  const f=empSel(); const pp=D.pptos.filter(p=>!f||empDe(p)===f); const liq=D.liq.filter(l=>!f||l.empleado_id===f);
+  const cob=pp.filter(p=>p.pago_cliente==='pagado'); const pend=pp.filter(p=>p.pago_cliente!=='pagado'&&p.total>0);
+  const gastos=D.gastos.filter(g=>!f||tecFiltro(g));
+  return {
+    cobrado: cob.reduce((s,p)=>s+(p.monto_cobrado||p.total||0),0), nCob: cob.length,
+    porCobrar: pend.reduce((s,p)=>s+(p.total||0),0), nPend: pend.length,
+    compras: gastos.reduce((s,g)=>s+(g.monto||0),0), nCompras: gastos.length,
+    comisiones: liq.reduce((s,l)=>s+l.comision_neta,0),
+    haberes: liq.reduce((s,l)=>s+l.haberes,0),
+    saldo: liq.reduce((s,l)=>s+l.saldo_por_pagar,0),
+    cob, pend, gastos, liq
+  };
+}
+function kpis(){
+  const t=totales(); const margen=t.cobrado-t.compras-t.haberes;
+  const k=[['Cobrado',fmt(t.cobrado)+` <span class="muted">(${t.nCob})</span>`,'pos'],['Por cobrar',fmt(t.porCobrar)+` <span class="muted">(${t.nPend})</span>`,'warn'],['Compras y gastos',fmt(t.compras)],['Comisiones',fmt(t.comisiones)],['Sueldos (haberes)',fmt(t.haberes)],['Margen estimado',fmt(margen),margen>=0?'pos':'neg']];
+  document.getElementById('kpis').innerHTML=k.map(x=>`<div class="kpi"><div class="n ${x[2]||''}">${x[1]}</div><div class="l">${x[0]}</div></div>`).join('');
+}
+
+function render(){
+  kpis();
+  const v=document.getElementById('view');
+  const map={resumen:renderResumen,ventas:renderVentas,compras:renderCompras,comisiones:renderLiquidacion,reglas:renderReglas,equipo:renderEquipo,servicios:renderServicios};
+  v.innerHTML=(map[tab]||renderResumen)();
+}
+
+/* ---------- RESUMEN ---------- */
+function renderResumen(){
+  const t=totales();
+  const porTec={}; t.cob.forEach(p=>{ const n=nombreTec(p); porTec[n]=porTec[n]||{n:0,m:0}; porTec[n].n++; porTec[n].m+=(p.monto_cobrado||p.total||0); });
+  const porMedio={}; t.cob.forEach(p=>{ const k=p.medio_pago||'sin dato'; porMedio[k]=(porMedio[k]||0)+(p.monto_cobrado||p.total||0); });
+  const porTipo={}; t.gastos.forEach(g=>{ porTipo[g.tipo||'Otros']=(porTipo[g.tipo||'Otros']||0)+(g.monto||0); });
+  let h='<div class="grid2">';
+  h+=`<div class="card"><h3>Ventas cobradas por técnico</h3><table><tbody>${Object.entries(porTec).sort((a,b)=>b[1].m-a[1].m).map(([n,x])=>`<tr><td>${esc(n)}</td><td class="muted">${x.n} trabajos</td><td class="num pos">${fmt(x.m)}</td></tr>`).join('')||'<tr><td class="muted">Sin cobros en el período</td></tr>'}</tbody></table></div>`;
+  h+=`<div class="card"><h3>Cobros por medio de pago</h3><table><tbody>${Object.entries(porMedio).sort((a,b)=>b[1]-a[1]).map(([k,m])=>`<tr><td>${esc(k)}</td><td class="num">${fmt(m)}</td></tr>`).join('')||'<tr><td class="muted">—</td></tr>'}</tbody></table></div>`;
+  h+=`<div class="card"><h3>Compras y gastos por tipo</h3><table><tbody>${Object.entries(porTipo).sort((a,b)=>b[1]-a[1]).map(([k,m])=>`<tr><td>${esc(k)}</td><td class="num">${fmt(m)}</td></tr>`).join('')||'<tr><td class="muted">Sin gastos registrados en el período</td></tr>'}</tbody></table></div>`;
+  h+=`<div class="card"><h3>Remuneraciones del mes</h3><table><tbody>${t.liq.map(l=>`<tr><td>${esc(l.nombre)}</td><td class="muted">${l.trabajos} trab.</td><td class="num">${fmt(l.comision_neta)}</td><td class="num"><b>${fmt(l.haberes)}</b></td></tr>`).join('')||'<tr><td class="muted">—</td></tr>'}</tbody></table><div class="muted" style="margin-top:6px">comisión neta · total haberes</div></div>`;
+  h+=`<div class="card"><h3>Resultado del mes</h3>
+    <div class="row"><span class="label">Cobrado</span><span class="pos">${fmt(t.cobrado)}</span></div>
+    <div class="row"><span class="label">− Compras y gastos</span><span>${fmt(t.compras)}</span></div>
+    <div class="row"><span class="label">− Sueldos y comisiones (haberes)</span><span>${fmt(t.haberes)}</span></div>
+    <div class="row total"><span class="label">Margen estimado</span><span class="${t.cobrado-t.compras-t.haberes>=0?'pos':'neg'}">${fmt(t.cobrado-t.compras-t.haberes)}</span></div>
+    <div class="muted" style="margin-top:6px">No incluye costos fijos que no estén cargados en gastos (publicidad, sistema, etc.).</div></div>`;
+  return h+'</div>';
+}
+
+/* ---------- VENTAS ---------- */
+function setFiltroPago(x){ filtroPago=x; render(); }
+function renderVentas(){
+  const f=empSel(); let pp=D.pptos.filter(p=>!f||empDe(p)===f);
+  if(filtroPago==='pagado') pp=pp.filter(p=>p.pago_cliente==='pagado');
+  if(filtroPago==='pendiente') pp=pp.filter(p=>p.pago_cliente!=='pagado');
+  const btn=(k,l)=>`<button class="sm ${filtroPago===k?'primary':'ghost'}" onclick="setFiltroPago('${k}')">${l}</button>`;
+  let h=`<div class="toolbar">${btn('todos','Todos')}${btn('pagado','Cobrados')}${btn('pendiente','Por cobrar')}<span class="muted">${pp.length} presupuestos</span></div>`;
+  if(!pp.length) return h+'<div class="empty">Sin presupuestos en este período</div>';
+  h+=`<div class="card tbl"><table><thead><tr><th>#</th><th>Fecha</th><th>Técnico</th><th>Cliente</th><th>Vehículo</th><th>Servicio</th><th class="num">Total</th><th>Estado</th><th>Cobro</th><th></th></tr></thead><tbody>`;
+  for(const p of pp){
+    const pag=p.pago_cliente==='pagado';
+    h+=`<tr><td>${p.numero||''}</td><td>${(p.created_at||'').slice(0,10)}</td><td>${esc(nombreTec(p))}</td><td>${esc(p.cliente||'')}</td><td>${esc(p.vehiculo||'')} <span class="muted">${esc(p.patente||'')}</span></td><td class="muted">${esc(resumenItems(p.items)||(p.obs||'').slice(0,70))}</td><td class="num">${fmt(p.total)}</td><td><span class="tag">${esc(p.estado||'')}</span></td>
+      <td>${pag?`<span class="tag pagado">pagado ${p.fecha_pago||''}</span><div class="muted">${fmt(p.monto_cobrado||p.total)} ${esc(p.medio_pago||'')}</div>`:`<span class="tag pendiente">pendiente</span>`}</td>
+      <td>${pag?`<button class="sm ghost" onclick="desmarcarCobro('${p.id}')">Revertir</button>`:`<button class="sm primary" onclick="abrirCobro('${p.id}')">Cobrar</button>`}</td></tr>`;
+  }
+  return h+'</tbody></table></div>';
+}
+function abrirCobro(id){ const p=D.pptos.find(x=>x.id===id); if(!p) return; cobroId=id;
+  document.getElementById('cobroInfo').textContent=`#${p.numero||''} · ${p.cliente||''} · ${nombreTec(p)} · total ${fmt(p.total)}`;
+  document.getElementById('cMonto').value=p.total||''; document.getElementById('cMedio').value=p.medio_pago||'transferencia'; document.getElementById('cFecha').value=hoy(); openModal('mCobro'); }
+async function guardarCobro(){
+  const monto=parseInt(document.getElementById('cMonto').value||0); const fecha=document.getElementById('cFecha').value||hoy();
+  const {error}=await sb.from('presupuestos').update({pago_cliente:'pagado',pagado_at:new Date().toISOString(),fecha_pago:fecha,monto_cobrado:monto,medio_pago:document.getElementById('cMedio').value}).eq('id',cobroId);
+  if(error) return toast('Error: '+error.message); closeModal('mCobro'); toast('Cobro registrado'); cargar(); }
+async function desmarcarCobro(id){ if(!confirm('¿Revertir el cobro de este presupuesto?')) return;
+  const {error}=await sb.from('presupuestos').update({pago_cliente:'pendiente',pagado_at:null,fecha_pago:null,monto_cobrado:null}).eq('id',id);
+  if(error) return toast('Error: '+error.message); toast('Cobro revertido'); cargar(); }
+
+/* ---------- COMPRAS ---------- */
+function setFiltroGasto(x){ filtroGasto=x; render(); }
+function renderCompras(){
+  const f=empSel(); let gg=D.gastos.filter(g=>!f||tecFiltro(g));
+  const tipos=[...new Set(D.gastos.map(g=>g.tipo||'Otros'))];
+  if(filtroGasto) gg=gg.filter(g=>(g.tipo||'Otros')===filtroGasto);
+  const btn=(k,l)=>`<button class="sm ${filtroGasto===k?'blue':'ghost'}" onclick="setFiltroGasto('${k}')">${l}</button>`;
+  let h=`<div class="toolbar">${btn('','Todos')}${tipos.map(t=>btn(t,t)).join('')}<span class="muted">${gg.length} registros · ${fmt(gg.reduce((s,g)=>s+(g.monto||0),0))}</span><button class="sm blue" style="margin-left:auto" onclick="abrirCompra()">+ Compra / gasto</button></div>`;
+  if(!gg.length) return h+'<div class="empty">Sin compras ni gastos en este período. Registra la primera con "+ Compra / gasto".</div>';
+  h+=`<div class="card tbl"><table><thead><tr><th>Fecha</th><th>Tipo</th><th>Descripción</th><th>Proveedor</th><th>Técnico</th><th>Medio</th><th>Doc</th><th class="num">Monto</th><th></th></tr></thead><tbody>`;
+  for(const g of gg){
+    const pp=g.presupuesto_id?D.pptos.find(p=>p.id===g.presupuesto_id):null;
+    h+=`<tr><td>${g.fecha||''}</td><td><span class="tag">${esc(g.tipo||'')}</span></td><td>${esc(g.descripcion||'')}${pp?`<div class="muted">Ppto #${pp.numero||''} · ${esc(pp.cliente||'')}</div>`:''}${g.notas?`<div class="muted">${esc(g.notas)}</div>`:''}</td><td>${esc(g.proveedor||'')}</td><td>${esc(g.tecnico||'')}</td><td class="muted">${esc(g.metodo_pago||'')}</td><td class="muted">${esc(g.documento||'')}${g.foto_url?` <a href="${esc(g.foto_url)}" target="_blank">📷</a>`:''}</td><td class="num">${fmt(g.monto)}</td><td><button class="sm ghost" onclick="borrarGasto('${g.id}')">✕</button></td></tr>`;
+  }
+  return h+'</tbody></table></div>';
+}
+function abrirCompra(){
+  document.getElementById('gFecha').value=hoy(); document.getElementById('gDesc').value=''; document.getElementById('gMonto').value=''; document.getElementById('gDoc').value=''; document.getElementById('gNotas').value='';
+  document.getElementById('gProv').innerHTML='<option value="">— sin proveedor —</option>'+D.prov.map(p=>`<option value="${esc(p.nombre)}">${esc(p.nombre)}</option>`).join('');
+  document.getElementById('gTec').innerHTML='<option value="">— general —</option>'+D.emp.filter(e=>e.cargo==='tecnico').map(e=>`<option value="${esc(e.nombre)}" data-tid="${e.tecnico_id||''}">${esc(e.nombre)}</option>`).join('');
+  document.getElementById('gPpto').innerHTML='<option value="">— ninguno —</option>'+D.pptos.slice(0,300).map(p=>`<option value="${p.id}">#${p.numero||''} · ${esc(p.cliente||'')} · ${fmt(p.total)}</option>`).join('');
+  openModal('mCompra');
+}
+async function guardarCompra(){
+  const monto=parseInt(document.getElementById('gMonto').value||0); const desc=document.getElementById('gDesc').value.trim();
+  if(!monto||!desc) return toast('Falta descripción o monto');
+  const fecha=document.getElementById('gFecha').value||hoy();
+  const payload={fecha,tipo:document.getElementById('gTipo').value,descripcion:desc,monto,proveedor:document.getElementById('gProv').value||null,metodo_pago:document.getElementById('gMedio').value,tecnico:document.getElementById('gTec').value||null,presupuesto_id:document.getElementById('gPpto').value||null,documento:document.getElementById('gDoc').value.trim()||null,notas:document.getElementById('gNotas').value.trim()||null,registrado_por:window.SV_USER||'administracion',periodo:fecha.slice(0,7),clase:'operacion'};
+  const {error}=await sb.from('gastos').insert(payload);
+  if(error) return toast('Error: '+error.message); closeModal('mCompra'); toast('Compra registrada'); cargar();
+}
+async function borrarGasto(id){ if(!confirm('¿Eliminar este registro?')) return; const {error}=await sb.from('gastos').delete().eq('id',id); if(error) return toast('Error: '+error.message); cargar(); }
+
+/* ---------- COMISIONES Y SUELDOS ---------- */
+function renderLiquidacion(){
+  const f=empSel(); const emps=D.emp.filter(e=>e.cargo==='tecnico'&&(!f||e.id===f));
+  let h='<div class="hint">Cálculo en tiempo real: sueldo base + comisión por trabajos cobrados (según reglas) + bonos − anticipos − descuentos − pagos. Cambia el sueldo base en la pestaña <b>Equipo</b> y los porcentajes en <b>Reglas de comisión</b>.</div><div class="grid2">';
+  for(const e of emps){
+    const l=D.liq.find(x=>x.empleado_id===e.id)||{sueldo_base:e.sueldo_base,comision_bruta:0,ajuste_aprobacion:0,castigo_rechazos:0,castigo_inasistencias:0,castigo_atrasos:0,castigo_incidencias:0,comision_neta:0,bonos:0,anticipos:0,desc_herramientas:0,desc_otros:0,pagos:0,haberes:e.sueldo_base,saldo_por_pagar:e.sueldo_base,trabajos:0,visitas:0,cobrado:0};
+    const movs=D.movs.filter(m=>m.empleado_id===e.id); const det=D.det.filter(d=>d.empleado_id===e.id);
+    const r=(lbl,val,cls,hide)=> (hide&&!val)?'':`<div class="row"><span class="label">${lbl}</span><span class="${cls||''}">${val<0?'-':''}${fmt(Math.abs(val))}</span></div>`;
+    h+=`<div class="card"><h3>${esc(e.nombre)} <span class="tag">${l.trabajos} trabajos · ${l.visitas} visitas</span></h3>
+      <div class="muted" style="margin-bottom:6px">${fmt(l.cobrado)} cobrado${l.tasa_aprobacion!=null?` · aprobación ${l.tasa_aprobacion}%`:''}${l.llave_abierta===false?' · <span class="tag off">llave cerrada</span>':''}</div>
+      ${r('Sueldo base',l.sueldo_base)}
+      ${r('Comisión por servicios',l.comision_bruta,'pos')}
+      ${r('Ajuste por aprobación',l.ajuste_aprobacion,l.ajuste_aprobacion<0?'neg':'pos',true)}
+      ${r('Castigo rechazos',-l.castigo_rechazos,'neg',true)}
+      ${r('Castigo inasistencias',-l.castigo_inasistencias,'neg',true)}
+      ${r('Castigo atrasos',-l.castigo_atrasos,'neg',true)}
+      ${r('Castigo incidencias',-l.castigo_incidencias,'neg',true)}
+      ${l.comision_neta!==l.comision_bruta?r('Comisión neta',l.comision_neta,'pos'):''}
+      ${r('Bonos',l.bonos,'pos',true)}
+      <div class="row total"><span class="label">Total haberes</span><span>${fmt(l.haberes)}</span></div>
+      ${r('Anticipos',-l.anticipos,'warn',true)}
+      ${r('Descuento herramientas',-l.desc_herramientas,'neg',true)}
+      ${r('Otros descuentos',-l.desc_otros,'neg',true)}
+      ${r('Pagado',-l.pagos,'',true)}
+      <div class="row total"><span class="label">Saldo por pagar</span><span class="${l.saldo_por_pagar>=0?'pos':'neg'}">${fmt(l.saldo_por_pagar)}</span></div>
+      <div class="acts"><button class="sm" onclick="abrirMov('${e.id}','anticipo')">+ Anticipo</button><button class="sm" onclick="abrirMov('${e.id}','bono')">+ Bono</button><button class="sm" onclick="abrirMov('${e.id}','descuento')">+ Descuento</button><button class="sm primary" onclick="abrirMov('${e.id}','pago')">Pagar</button></div>`;
+    if(det.length){ h+=`<details><summary>${det.length} servicios valorizados</summary><div class="tbl"><table style="margin-top:6px"><thead><tr><th>Fecha</th><th>#</th><th>Cliente</th><th>Tipo</th><th class="num">Total</th><th class="num">%</th><th class="num">Comisión</th></tr></thead><tbody>`;
+      for(const d of det) h+=`<tr><td>${d.fecha}</td><td>${d.numero||''}</td><td>${esc(d.cliente||'')}<div class="muted">${esc(d.vehiculo||'')} ${esc(resumenItems(d.items))}</div></td><td>${d.es_visita?'<span class="tag visita">visita</span>':(d.tipo_servicio?`<span class="tag tipo">${esc(d.tipo_servicio)}</span>`:`<span class="muted">escalera N°${d.n}</span>`)}</td><td class="num">${fmt(d.total)}</td><td class="num">${d.pct}%${d.fuera_horario?' <span class="tag fuera">FH</span>':''}</td><td class="num ${d.comision?'pos':''}">${fmt(d.comision)}</td></tr>`;
+      h+='</tbody></table></div></details>'; }
+    if(movs.length){ h+=`<details><summary>${movs.length} movimientos del período</summary><table style="margin-top:6px"><tbody>`;
+      for(const m of movs) h+=`<tr><td>${m.fecha}</td><td><span class="tag">${m.tipo}${m.categoria?' · '+esc(m.categoria):''}</span></td><td class="muted">${esc(m.notas||'')}</td><td class="num">${fmt(m.monto)}</td><td><button class="sm ghost" onclick="borrarMov('${m.id}')">✕</button></td></tr>`;
+      h+='</tbody></table></details>'; }
+    h+='</div>';
+  }
+  if(!emps.length) h+='<div class="empty">No hay técnicos activos. Agrega uno en la pestaña Equipo.</div>';
+  return h+'</div>';
+}
+function abrirMov(empId,tipo){ movEmp=empId; const e=D.emp.find(x=>x.id===empId);
+  document.getElementById('movTitulo').textContent=(tipo==='pago'?'Registrar pago a ':'Registrar movimiento · ')+(e?e.nombre:'');
+  document.getElementById('mTipo').value=tipo; document.getElementById('mMonto').value=''; document.getElementById('mNotas').value=''; document.getElementById('mFecha').value=hoy(); document.getElementById('mCat').value='otro';
+  const hs=document.getElementById('mHerr'); hs.innerHTML='<option value="">— sin vincular —</option>'+D.herr.filter(h=>h.tecnico_id===e?.tecnico_id).map(h=>`<option value="${h.id}" data-v="${h.valor||0}">${esc(h.nombre)} (${fmt(h.valor)})</option>`).join('');
+  if(tipo==='pago'){ const l=D.liq.find(x=>x.empleado_id===empId); if(l&&l.saldo_por_pagar>0) document.getElementById('mMonto').value=l.saldo_por_pagar; }
+  movTipoChange(); openModal('mMov'); }
+function movTipoChange(){ const t=document.getElementById('mTipo').value; document.getElementById('fCat').style.display=t==='descuento'?'':'none'; movCatChange(); }
+function movCatChange(){ const t=document.getElementById('mTipo').value, c=document.getElementById('mCat').value; document.getElementById('fHerr').style.display=(t==='descuento'&&c==='herramienta')?'':'none'; }
+document.getElementById('mHerr').addEventListener('change',e=>{ const o=e.target.selectedOptions[0]; if(o&&o.dataset.v&&!document.getElementById('mMonto').value) document.getElementById('mMonto').value=o.dataset.v; });
+async function guardarMovimiento(){
+  const tipo=document.getElementById('mTipo').value; const monto=parseInt(document.getElementById('mMonto').value||0);
+  if(!monto) return toast('Ingresa un monto');
+  const payload={empleado_id:movEmp,tipo,monto,fecha:document.getElementById('mFecha').value||hoy(),periodo,estado:'registrado',notas:document.getElementById('mNotas').value||null,registrado_por:window.SV_USER||'administracion'};
+  if(tipo==='descuento'){ payload.categoria=document.getElementById('mCat').value; const h=document.getElementById('mHerr').value; if(payload.categoria==='herramienta'&&h) payload.herramienta_id=h; }
+  const {error}=await sb.from('movimientos_remuneracion').insert(payload);
+  if(error) return toast('Error: '+error.message); closeModal('mMov'); toast('Guardado'); cargar(); }
+async function borrarMov(id){ if(!confirm('¿Eliminar este movimiento?')) return; const {error}=await sb.from('movimientos_remuneracion').delete().eq('id',id); if(error) return toast('Error: '+error.message); cargar(); }
+
+/* ---------- REGLAS ---------- */
+function renderReglas(){
+  let h=`<div class="card"><h3>Comisión por tipo de servicio <button class="sm blue" onclick="abrirTipoSrv()">+ Tipo</button></h3>
+    <div class="muted" style="margin-bottom:8px">Si el trabajo cobrado calza con un tipo activo (por sus palabras clave) paga ese %. Si no calza con ninguno, usa la escalera por cantidad de trabajos. La visita (total ≤ umbral) nunca paga comisión.</div>
+    <div class="tbl"><table><thead><tr><th>Tipo</th><th>Palabras clave</th><th class="num">%</th><th>Desde</th><th>Estado</th><th></th></tr></thead><tbody>`;
+  for(const t of D.tipos) h+=`<tr><td><b>${esc(t.nombre)}</b></td><td class="muted" style="white-space:normal">${esc((t.palabras_clave||[]).join(', '))}</td><td class="num">${t.pct!=null?t.pct+'%':'<span class="muted">—</span>'}</td><td class="muted">${t.vigente_desde||''}</td><td>${t.activo&&t.pct!=null?'<span class="tag ok">activo</span>':'<span class="tag">inactivo</span>'}</td><td><button class="sm ghost" onclick="abrirTipoSrv(${t.id})">✎</button> <button class="sm ghost" onclick="toggleTipoSrv(${t.id},${!t.activo})">${t.activo?'Desactivar':'Activar'}</button></td></tr>`;
+  h+='</tbody></table></div></div>';
+  h+=`<div class="card"><h3>Escalera por cantidad de trabajos cobrados en el mes</h3><div class="muted" style="margin-bottom:6px">Editable: el cambio aplica de inmediato.</div><div class="tbl"><table><thead><tr><th>Desde trabajo N°</th><th>Hasta</th><th class="num">%</th><th>Requiere 0 inasistencias</th><th class="num">% sin llave</th></tr></thead><tbody>`;
+  for(const t of D.tramos) h+=`<tr><td><input type="number" value="${t.desde}" style="width:80px" onchange="guardarTramo(${t.id},'desde',this.value)"></td><td><input type="number" value="${t.hasta??''}" placeholder="∞" style="width:80px" onchange="guardarTramo(${t.id},'hasta',this.value)"></td><td class="num"><input type="number" step="0.5" value="${t.pct}" style="width:80px;text-align:right" onchange="guardarTramo(${t.id},'pct',this.value)"></td><td><input type="checkbox" ${t.requiere_llave?'checked':''} style="width:auto" onchange="guardarTramo(${t.id},'requiere_llave',this.checked)"></td><td class="num"><input type="number" step="0.5" value="${t.pct_sin_llave??''}" style="width:80px;text-align:right" onchange="guardarTramo(${t.id},'pct_sin_llave',this.value)"></td></tr>`;
+  h+='</tbody></table></div></div>';
+  h+=`<div class="card"><h3>Parámetros generales</h3><div class="tbl"><table><tbody>`;
+  for(const p of D.params) h+=`<tr><td><b>${esc(p.clave)}</b><div class="muted" style="white-space:normal">${esc(p.descripcion||'')}</div></td><td class="num"><input type="number" step="any" value="${p.valor}" style="width:120px;text-align:right" onchange="guardarParam('${esc(p.clave)}',this.value)"></td></tr>`;
+  return h+'</tbody></table></div></div>';
+}
+function abrirTipoSrv(id){ tipoSrvId=id||null; const t=id?D.tipos.find(x=>x.id===id):null;
+  document.getElementById('tsTitulo').textContent=t?'Editar tipo de servicio':'Nuevo tipo de servicio';
+  document.getElementById('tsNombre').value=t?t.nombre:''; document.getElementById('tsKeys').value=t?(t.palabras_clave||[]).join(', '):'';
+  document.getElementById('tsPct').value=t&&t.pct!=null?t.pct:''; document.getElementById('tsDesde').value=t?t.vigente_desde:'2026-11-01'; document.getElementById('tsOrden').value=t?t.orden:100; document.getElementById('tsActivo').checked=t?t.activo:true;
+  openModal('mTipoSrv'); }
+async function guardarTipoSrv(){
+  const nombre=document.getElementById('tsNombre').value.trim(); if(!nombre) return toast('Falta el nombre');
+  const pctRaw=document.getElementById('tsPct').value; const payload={nombre,palabras_clave:document.getElementById('tsKeys').value.split(',').map(s=>s.trim().toLowerCase()).filter(Boolean),pct:pctRaw===''?null:parseFloat(pctRaw),vigente_desde:document.getElementById('tsDesde').value||'2026-11-01',orden:parseInt(document.getElementById('tsOrden').value||100),activo:document.getElementById('tsActivo').checked,updated_at:new Date().toISOString()};
+  const q=tipoSrvId?sb.from('comision_tipo_servicio').update(payload).eq('id',tipoSrvId):sb.from('comision_tipo_servicio').insert(payload);
+  const {error}=await q; if(error) return toast('Error: '+error.message); closeModal('mTipoSrv'); toast('Guardado'); cargar(); }
+async function toggleTipoSrv(id,activo){ const {error}=await sb.from('comision_tipo_servicio').update({activo,updated_at:new Date().toISOString()}).eq('id',id); if(error) return toast('Error: '+error.message); cargar(); }
+async function guardarTramo(id,campo,valor){ const v=campo==='requiere_llave'?valor:(valor===''?null:parseFloat(valor)); const {error}=await sb.from('comision_tramos').update({[campo]:v}).eq('id',id); if(error) return toast('Error: '+error.message); toast('Tramo guardado'); cargar(); }
+async function guardarParam(clave,valor){ const {error}=await sb.from('comision_params').update({valor:parseFloat(valor),updated_at:new Date().toISOString()}).eq('clave',clave); if(error) return toast('Error: '+error.message); toast('Parámetro guardado'); cargar(); }
+
+/* ---------- EQUIPO ---------- */
+function renderEquipo(){
+  const act=D.empTodos.filter(e=>e.cargo==='tecnico'&&e.activo); const inact=D.empTodos.filter(e=>e.cargo==='tecnico'&&!e.activo&&e.tecnico_id);
+  let h=`<div class="card"><h3>Técnicos activos (${act.length}) <button class="sm blue" onclick="abrirTec()">+ Agregar técnico</button></h3>
+    <div class="muted" style="margin-bottom:8px">El sueldo base se edita aquí y aplica de inmediato a la liquidación del mes. "Quitar" lo saca del equipo (no borra su historial; se puede reincorporar).</div>
+    <div class="tbl"><table><thead><tr><th>Nombre</th><th>Teléfono</th><th class="num">Sueldo base</th><th>Ingreso</th><th>Vínculo sistema</th><th></th></tr></thead><tbody>`;
+  for(const e of act){ const t=D.tecs.find(x=>x.id===e.tecnico_id);
+    h+=`<tr><td><b>${esc(e.nombre)}</b></td><td class="muted">${esc(e.telefono||'')}</td><td class="num"><input type="number" value="${e.sueldo_base||0}" style="width:130px;text-align:right" onchange="guardarSueldo('${e.id}',this.value)"></td><td class="muted">${e.fecha_ingreso||''}</td><td>${t?`<span class="tag ok">${esc(t.nombre)}</span>`:'<span class="tag off">sin vincular</span>'}</td><td><button class="sm ghost" onclick="quitarTec('${e.id}')">Quitar</button></td></tr>`; }
+  h+='</tbody></table></div></div>';
+  // dedupe inactivos por tecnico_id
+  const seen=new Set(); const inactU=inact.filter(e=>{ if(seen.has(e.tecnico_id)||act.some(a=>a.tecnico_id===e.tecnico_id)) return false; seen.add(e.tecnico_id); return true; });
+  if(inactU.length){ h+=`<div class="card"><h3>Técnicos retirados</h3><div class="tbl"><table><tbody>`;
+    for(const e of inactU) h+=`<tr><td>${esc(e.nombre)}</td><td class="muted">${esc(e.telefono||'')}</td><td><button class="sm ghost" onclick="reincorporarTec('${e.id}')">Reincorporar</button></td></tr>`;
+    h+='</tbody></table></div></div>'; }
+  return h;
+}
+function abrirTec(){
+  const usados=new Set(D.emp.filter(e=>e.cargo==='tecnico').map(e=>e.tecnico_id));
+  document.getElementById('tSel').innerHTML='<option value="">— nuevo, no está en la lista —</option>'+D.tecs.filter(t=>!usados.has(t.id)).map(t=>`<option value="${t.id}" data-n="${esc(t.nombre)}" data-tel="${esc(t.telefono||'')}">${esc(t.nombre)}${t.activo?'':' (inactivo)'}</option>`).join('');
+  document.getElementById('tNombre').value=''; document.getElementById('tTel').value=''; document.getElementById('tFecha').value=hoy();
+  const ref=D.params.find(p=>p.clave==='sueldo_base_ref'); document.getElementById('tSueldo').value=ref?ref.valor:'';
+  openModal('mTec');
+}
+function tecSelChange(){ const o=document.getElementById('tSel').selectedOptions[0]; if(o&&o.value){ document.getElementById('tNombre').value=o.dataset.n; document.getElementById('tTel').value=o.dataset.tel; } }
+async function guardarTecnico(){
+  const nombre=document.getElementById('tNombre').value.trim(); if(!nombre) return toast('Falta el nombre');
+  let tecnico_id=document.getElementById('tSel').value||null; const telefono=document.getElementById('tTel').value.trim()||null;
+  if(!tecnico_id){ const {data,error}=await sb.from('tecnicos').insert({nombre,telefono,activo:true}).select('id').single(); if(error) return toast('Error creando técnico: '+error.message); tecnico_id=data.id; }
+  // si existe registro inactivo para ese tecnico_id, reactivar en vez de duplicar
+  const prev=D.empTodos.find(e=>e.tecnico_id===tecnico_id&&e.cargo==='tecnico');
+  const payload={nombre,cargo:'tecnico',telefono,sueldo_base:parseInt(document.getElementById('tSueldo').value||0),fecha_ingreso:document.getElementById('tFecha').value||null,activo:true,tecnico_id};
+  const q=prev?sb.from('empleados_rrhh').update(payload).eq('id',prev.id):sb.from('empleados_rrhh').insert(payload);
+  const {error}=await q; if(error) return toast('Error: '+error.message);
+  await sb.from('tecnicos').update({activo:true}).eq('id',tecnico_id);
+  closeModal('mTec'); toast('Técnico agregado'); cargar();
+}
+async function guardarSueldo(id,v){ const {error}=await sb.from('empleados_rrhh').update({sueldo_base:parseInt(v||0)}).eq('id',id); if(error) return toast('Error: '+error.message); toast('Sueldo base actualizado'); cargar(); }
+async function quitarTec(id){ const e=D.empTodos.find(x=>x.id===id); if(!confirm('¿Quitar a '+(e?e.nombre:'')+' del equipo? Dejará de aparecer en liquidaciones y de recibir asignaciones.')) return;
+  const {error}=await sb.from('empleados_rrhh').update({activo:false}).eq('id',id); if(error) return toast('Error: '+error.message);
+  if(e&&e.tecnico_id) await sb.from('tecnicos').update({activo:false,disponible:false}).eq('id',e.tecnico_id);
+  toast('Técnico retirado'); cargar(); }
+async function reincorporarTec(id){ const e=D.empTodos.find(x=>x.id===id); const {error}=await sb.from('empleados_rrhh').update({activo:true}).eq('id',id); if(error) return toast('Error: '+error.message);
+  if(e&&e.tecnico_id) await sb.from('tecnicos').update({activo:true}).eq('id',e.tecnico_id); toast('Reincorporado'); cargar(); }
+
+/* ---------- SERVICIOS ---------- */
+function renderServicios(){
+  const f=empSel(); const ag=D.agenda.filter(a=>!f||tecFiltro(a));
+  const est={}; ag.forEach(a=>{ est[a.estado||'?']=(est[a.estado||'?']||0)+1; });
+  let h=`<div class="toolbar"><span class="muted">${ag.length} servicios agendados en el período</span>${Object.entries(est).map(([k,n])=>`<span class="tag">${esc(k)}: ${n}</span>`).join(' ')}</div>`;
+  if(!ag.length) return h+'<div class="empty">Sin servicios en este período</div>';
+  h+=`<div class="card tbl"><table><thead><tr><th>Fecha</th><th>Hora</th><th>Técnico</th><th>Cliente</th><th>Vehículo</th><th>Servicio</th><th>Origen</th><th>Estado</th><th>Presupuesto</th></tr></thead><tbody>`;
+  for(const a of ag){ const p=a.presupuesto_id?D.pptos.find(x=>x.id===a.presupuesto_id):null;
+    h+=`<tr><td>${a.fecha||''}</td><td>${a.hora||''}</td><td>${esc(a.tecnico||'')}</td><td>${esc(a.cliente||'')}</td><td>${esc(a.vehiculo||'')} <span class="muted">${esc(a.patente||'')}</span></td><td style="white-space:normal;max-width:260px">${esc(a.servicio||'')}</td><td class="muted">${esc(a.origen||'')}</td><td><span class="tag">${esc(a.estado||'')}</span></td><td>${p?`#${p.numero||''} ${fmt(p.total)} ${p.pago_cliente==='pagado'?'<span class="tag pagado">pagado</span>':'<span class="tag pendiente">pendiente</span>'}`:'<span class="muted">—</span>'}</td></tr>`; }
+  return h+'</tbody></table></div>';
+}
+
+/* ---- tiempo real ---- */
+let refrescoPend=null;
+function programarRefresco(){ clearTimeout(refrescoPend); refrescoPend=setTimeout(()=>cargar(),800); }
+function conectarRealtime(){
+  const ch=sb.channel('administracion-live');
+  ['presupuestos','movimientos_remuneracion','empleados_rrhh','gastos','agenda','comision_params','comision_tramos','comision_tipo_servicio','incidencias_tecnico','asistencia_tecnico'].forEach(t=>ch.on('postgres_changes',{event:'*',schema:'public',table:t},programarRefresco));
+  ch.subscribe(st=>{ const el=document.getElementById('live'); const ok=st==='SUBSCRIBED'; el.classList.toggle('on',ok); document.getElementById('liveTxt').textContent=ok?'en vivo':'reconectando…'; });
+  setInterval(()=>cargar(),60000);
+}
+
+generarPeriodos(); document.querySelectorAll('.tab').forEach(e=>e.classList.toggle('active',e.dataset.t===tab)); cargar(); conectarRealtime();
+</script>
+</body>
+</html>

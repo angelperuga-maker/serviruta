@@ -197,6 +197,7 @@ async function checarSesion(){
     else if(rol === 'coord_senior'){rolTxt = 'COORDINADOR SENIOR'; rolCls = 'senior'}
     else if(rol === 'coord_junior'){rolTxt = 'COORDINADOR JUNIOR'; rolCls = 'junior'}
     else if(rol === 'tecnico'){rolTxt = 'TÉCNICO 🔧'; rolCls = 'senior'}
+    else if(rol === 'admin'){rolTxt = 'ADMINISTRACIÓN'; rolCls = 'senior'}
     
     document.getElementById('active-nom').textContent = nombre
     document.getElementById('active-rol').textContent = username + ' · ' + rolTxt
@@ -321,6 +322,8 @@ async function redirigirPorRol(userId){
         window.location.href = 'menu-tecnico.html'
       } else if(perfil.rol === 'coord_junior'){
         window.location.href = 'menu-coord-jr.html'
+      } else if(perfil.rol === 'admin'){
+        window.location.href = 'menu-admin.html'
       } else {
         window.location.href = 'menu-coordinador.html'
       }

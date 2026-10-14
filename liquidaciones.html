@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta - Liquidaciones</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/supabase-js/2.39.0/supabase.min.js"></script>
+<style>
+  :root{--bg:#0f1115;--panel:#171a21;--panel2:#1f232c;--border:#2a2f3a;--text:#e8eaed;--muted:#9aa1ac;--red:#e8210a;--green:#2ecc71;--yellow:#f0b429;--blue:#4f8ef7;--orange:#fb923c;}
+  *{box-sizing:border-box;}
+  body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);}
+  header{padding:12px 16px;background:var(--panel);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10;}
+  header h1{margin:0;font-size:17px;display:flex;align-items:center;gap:8px;}
+  header .sub{color:var(--muted);font-size:12px;margin-top:2px;display:flex;gap:8px;align-items:center;}
+  .live{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);}
+  .live .dot{width:8px;height:8px;border-radius:50%;background:var(--muted);}
+  .live.on .dot{background:var(--green);box-shadow:0 0 6px var(--green);}
+  .wrap{max-width:1150px;margin:0 auto;padding:12px 14px 60px;}
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px;}
+  select,input,button,textarea{background:var(--panel2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:8px 11px;font-size:14px;}
+  select:focus,input:focus,textarea:focus{outline:none;border-color:var(--red);}
+  button{cursor:pointer;font-weight:600;}
+  button.primary{background:var(--red);border-color:var(--red);color:#fff;}
+  button.sm{padding:5px 9px;font-size:12px;}
+  button.ghost{background:transparent;}
+  .tabs{display:flex;gap:4px;margin-bottom:12px;border-bottom:1px solid var(--border);overflow-x:auto;}
+  .tab{padding:9px 14px;font-size:13px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;}
+  .tab.active{color:var(--text);border-color:var(--red);}
+  .kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;margin-bottom:14px;}
+  .kpi{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px 12px;}
+  .kpi .n{font-size:18px;font-weight:700;}
+  .kpi .l{font-size:11px;color:var(--muted);text-transform:uppercase;}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:12px;}
+  .card h3{margin:0;font-size:15px;display:flex;justify-content:space-between;align-items:center;gap:8px;}
+  .row{display:flex;justify-content:space-between;font-size:13px;padding:4px 0;gap:8px;}
+  .row .label{color:var(--muted);}
+  .row.total{font-weight:700;border-top:1px solid var(--border);margin-top:4px;padding-top:8px;font-size:15px;}
+  .pos{color:var(--green);} .neg{color:var(--red);} .warn{color:var(--yellow);}
+  .tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;background:var(--panel2);color:var(--muted);white-space:nowrap;}
+  .tag.pagado{background:rgba(46,204,113,.15);color:var(--green);}
+  .tag.pendiente{background:rgba(240,180,41,.15);color:var(--yellow);}
+  .tag.visita{background:rgba(79,142,247,.15);color:var(--blue);}
+  .tag.fuera{background:rgba(251,146,60,.15);color:var(--orange);}
+  .tbl{overflow-x:auto;}
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th,td{padding:7px 8px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap;}
+  th{color:var(--muted);font-weight:600;font-size:11px;text-transform:uppercase;}
+  td.num,th.num{text-align:right;}
+  tr.sel td{background:rgba(232,33,10,.06);}
+  .muted{color:var(--muted);font-size:12px;}
+  .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;align-items:center;justify-content:center;z-index:100;padding:14px;}
+  .modal-bg.show{display:flex;}
+  .modal{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px;max-width:440px;width:100%;max-height:92vh;overflow-y:auto;}
+  .modal h2{margin:0 0 10px;font-size:16px;}
+  .field{margin-bottom:10px;}
+  .field label{display:block;font-size:12px;color:var(--muted);margin-bottom:4px;}
+  .field select,.field input,.field textarea{width:100%;}
+  .modal-actions{display:flex;gap:8px;margin-top:14px;}
+  .modal-actions button{flex:1;}
+  .empty{text-align:center;color:var(--muted);padding:40px;}
+  .acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px;}
+  .acts button{flex:1;min-width:90px;}
+  .grid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px;}
+  details summary{cursor:pointer;color:var(--blue);font-size:12px;margin-top:8px;}
+  .toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:var(--panel2);border:1px solid var(--border);padding:10px 16px;border-radius:10px;font-size:13px;display:none;z-index:200;}
+</style>
+</head>
+<body>
+<header>
+  <h1>💼 Liquidaciones y control de cobros</h1>
+  <div class="sub">
+    <span id="subTxt">Trabajos cobrados, comisiones y sueldo por técnico</span>
+    <span class="live" id="live"><span class="dot"></span><span id="liveTxt">conectando…</span></span>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="toolbar">
+    <select id="periodo" onchange="cambiarPeriodo()"></select>
+    <select id="fTec" onchange="render()"><option value="">Todos los técnicos</option></select>
+    <button class="ghost sm" onclick="cargar(true)">↻ Actualizar</button>
+    <a href="remuneraciones.html" class="muted" style="margin-left:auto">Módulo anterior →</a>
+  </div>
+
+  <div class="kpis" id="kpis"></div>
+
+  <div class="tabs">
+    <div class="tab active" data-t="trabajos" onclick="setTab('trabajos')">Trabajos y cobros</div>
+    <div class="tab" data-t="tecnicos" onclick="setTab('tecnicos')">Servicios por técnico</div>
+    <div class="tab" data-t="liquidacion" onclick="setTab('liquidacion')">Liquidación de sueldos</div>
+    <div class="tab" data-t="params" onclick="setTab('params')">Reglas de comisión</div>
+  </div>
+
+  <div id="view"><div class="empty">Cargando…</div></div>
+</div>
+
+<!-- Modal cobro -->
+<div class="modal-bg" id="mCobro">
+  <div class="modal">
+    <h2>Registrar cobro</h2>
+    <div class="muted" id="cobroInfo" style="margin-bottom:10px"></div>
+    <div class="field"><label>Monto cobrado</label><input type="number" id="cMonto"></div>
+    <div class="field"><label>Medio de pago</label>
+      <select id="cMedio"><option value="transferencia">Transferencia</option><option value="tarjeta">Tarjeta</option><option value="efectivo">Efectivo</option></select></div>
+    <div class="field"><label>Fecha de pago</label><input type="date" id="cFecha"></div>
+    <div class="modal-actions"><button class="ghost" onclick="closeModal('mCobro')">Cancelar</button><button class="primary" onclick="guardarCobro()">Marcar cobrado</button></div>
+  </div>
+</div>
+
+<!-- Modal movimiento -->
+<div class="modal-bg" id="mMov">
+  <div class="modal">
+    <h2 id="movTitulo">Registrar movimiento</h2>
+    <div class="field"><label>Tipo</label>
+      <select id="mTipo" onchange="movTipoChange()">
+        <option value="anticipo">Anticipo</option>
+        <option value="bono">Bono</option>
+        <option value="descuento">Descuento</option>
+        <option value="pago">Pago de sueldo</option>
+      </select></div>
+    <div class="field" id="fCat" style="display:none"><label>Categoría del descuento</label>
+      <select id="mCat" onchange="movCatChange()"><option value="otro">Otro</option><option value="herramienta">Herramienta</option><option value="danio">Daño / retrabajo</option><option value="prestamo">Préstamo</option></select></div>
+    <div class="field" id="fHerr" style="display:none"><label>Herramienta</label><select id="mHerr"></select></div>
+    <div class="field"><label>Monto</label><input type="number" id="mMonto"></div>
+    <div class="field"><label>Fecha</label><input type="date" id="mFecha"></div>
+    <div class="field"><label>Notas</label><textarea id="mNotas" rows="2"></textarea></div>
+    <div class="modal-actions"><button class="ghost" onclick="closeModal('mMov')">Cancelar</button><button class="primary" onclick="guardarMovimiento()">Guardar</button></div>
+  </div>
+</div>
+
+<!-- Modal sueldo base -->
+<div class="modal-bg" id="mSueldo">
+  <div class="modal">
+    <h2>Sueldo base</h2>
+    <div class="muted" id="sueldoInfo" style="margin-bottom:10px"></div>
+    <div class="field"><label>Sueldo base mensual</label><input type="number" id="sMonto"></div>
+    <div class="modal-actions"><button class="ghost" onclick="closeModal('mSueldo')">Cancelar</button><button class="primary" onclick="guardarSueldo()">Guardar</button></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SUPABASE_URL = 'https://bqlgfmqcefledqyodkii.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_h33L3eMAcskEsPi93Liohg__FfzCxOE';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let tab = 'trabajos';
+let periodo = mesActual();
+let D = { pptos:[], liq:[], det:[], movs:[], emp:[], herr:[], params:[], tramos:[] };
+let cobroId = null, movEmp = null, sueldoEmp = null;
+
+function mesActual(){ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'); }
+function fmt(n){ return '$'+Math.round(n||0).toLocaleString('es-CL'); }
+function esc(s){ return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function hoy(){ return new Date().toISOString().slice(0,10); }
+function toast(m){ const t=document.getElementById('toast'); t.textContent=m; t.style.display='block'; setTimeout(()=>t.style.display='none',2500); }
+function closeModal(id){ document.getElementById(id).classList.remove('show'); }
+
+function generarPeriodos(){
+  const sel=document.getElementById('periodo'); const d=new Date(); let html='';
+  for(let i=0;i<12;i++){ const p=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
+    const lbl=d.toLocaleDateString('es-CL',{month:'long',year:'numeric'});
+    html+=`<option value="${p}" ${p===periodo?'selected':''}>${lbl}</option>`; d.setMonth(d.getMonth()-1); }
+  sel.innerHTML=html;
+}
+function cambiarPeriodo(){ periodo=document.getElementById('periodo').value; cargar(); }
+function setTab(t){ tab=t; document.querySelectorAll('.tab').forEach(e=>e.classList.toggle('active',e.dataset.t===t)); render(); }
+
+async function cargar(manual){
+  const ini=periodo+'-01', fin=new Date(periodo.slice(0,4), periodo.slice(5,7), 1).toISOString().slice(0,10);
+  const [p,l,d,m,e,h,pa,tr] = await Promise.all([
+    sb.from('presupuestos').select('id,numero,tecnico,tecnico_id,cliente,vehiculo,patente,items,obs,total,estado,pago_cliente,fecha_pago,pagado_at,monto_cobrado,medio_pago,created_at')
+      .or(`and(created_at.gte.${ini},created_at.lt.${fin}),and(fecha_pago.gte.${ini},fecha_pago.lt.${fin})`).neq('estado','nuevo').order('created_at',{ascending:false}).limit(2000),
+    sb.from('v_liquidacion_tecnico').select('*').eq('periodo',periodo).order('cobrado',{ascending:false}),
+    sb.from('v_comision_detalle').select('*').eq('periodo',periodo).order('fecha'),
+    sb.from('movimientos_remuneracion').select('*').eq('periodo',periodo).order('fecha',{ascending:false}),
+    sb.from('empleados_rrhh').select('*').eq('activo',true).order('nombre'),
+    sb.from('herramientas').select('id,tecnico_id,nombre,valor,estado'),
+    sb.from('comision_params').select('*').order('clave'),
+    sb.from('comision_tramos').select('*').eq('vigente',true).order('desde'),
+  ]);
+  D={ pptos:p.data||[], liq:l.data||[], det:d.data||[], movs:m.data||[], emp:e.data||[], herr:h.data||[], params:pa.data||[], tramos:tr.data||[] };
+  const err=[p,l,d,m,e].find(r=>r.error); if(err) toast('Error: '+err.error.message);
+  const ft=document.getElementById('fTec'); const cur=ft.value;
+  ft.innerHTML='<option value="">Todos los técnicos</option>'+D.emp.filter(x=>x.cargo==='tecnico').map(x=>`<option value="${x.id}">${esc(x.nombre)}</option>`).join('');
+  ft.value=cur;
+  render(); if(manual) toast('Actualizado');
+}
+
+function empSel(){ return document.getElementById('fTec').value; }
+function empDe(p){ const e=D.emp.find(x=>x.tecnico_id===p.tecnico_id); return e?e.id:null; }
+function nombreTec(p){ const e=D.emp.find(x=>x.tecnico_id===p.tecnico_id); return e?e.nombre:(p.tecnico||'—'); }
+function resumenItems(items){ try{ const a=Array.isArray(items)?items:[]; return a.map(i=>i.desc||i.descripcion||i.nombre||i.item||'').filter(Boolean).join(', ').slice(0,70); }catch{ return ''; } }
+
+function kpis(){
+  const f=empSel(); const pp=D.pptos.filter(p=>!f||empDe(p)===f); const liq=D.liq.filter(l=>!f||l.empleado_id===f);
+  const cob=pp.filter(p=>p.pago_cliente==='pagado'); const pend=pp.filter(p=>p.pago_cliente!=='pagado'&&p.total>0);
+  const k=[
+    ['Trabajos cobrados', cob.length],
+    ['Cobrado', fmt(cob.reduce((s,p)=>s+(p.monto_cobrado||p.total||0),0)),'pos'],
+    ['Por cobrar', fmt(pend.reduce((s,p)=>s+(p.total||0),0))+` <span class="muted">(${pend.length})</span>`,'warn'],
+    ['Comisiones', fmt(liq.reduce((s,l)=>s+l.comision_neta,0))],
+    ['Total haberes', fmt(liq.reduce((s,l)=>s+l.haberes,0))],
+    ['Saldo por pagar', fmt(liq.reduce((s,l)=>s+l.saldo_por_pagar,0)),'neg'],
+  ];
+  document.getElementById('kpis').innerHTML=k.map(x=>`<div class="kpi"><div class="n ${x[2]||''}">${x[1]}</div><div class="l">${x[0]}</div></div>`).join('');
+}
+
+function render(){
+  kpis();
+  const v=document.getElementById('view');
+  if(tab==='trabajos') v.innerHTML=renderTrabajos();
+  else if(tab==='tecnicos') v.innerHTML=renderTecnicos();
+  else if(tab==='liquidacion') v.innerHTML=renderLiquidacion();
+  else v.innerHTML=renderParams();
+}
+
+let filtroPago='todos';
+function setFiltroPago(x){ filtroPago=x; render(); }
+function renderTrabajos(){
+  const f=empSel(); let pp=D.pptos.filter(p=>!f||empDe(p)===f);
+  if(filtroPago==='pagado') pp=pp.filter(p=>p.pago_cliente==='pagado');
+  if(filtroPago==='pendiente') pp=pp.filter(p=>p.pago_cliente!=='pagado');
+  const btn=(k,l)=>`<button class="sm ${filtroPago===k?'primary':'ghost'}" onclick="setFiltroPago('${k}')">${l}</button>`;
+  let h=`<div class="toolbar">${btn('todos','Todos')}${btn('pagado','Cobrados')}${btn('pendiente','Por cobrar')}<span class="muted">${pp.length} presupuestos</span></div>`;
+  if(!pp.length) return h+'<div class="empty">Sin presupuestos en este período</div>';
+  h+=`<div class="card tbl"><table><thead><tr><th>#</th><th>Fecha</th><th>Técnico</th><th>Cliente</th><th>Vehículo</th><th>Servicio</th><th class="num">Total</th><th>Estado</th><th>Cobro</th><th></th></tr></thead><tbody>`;
+  for(const p of pp){
+    const pag=p.pago_cliente==='pagado';
+    h+=`<tr><td>${p.numero||''}</td><td>${(p.created_at||'').slice(0,10)}</td><td>${esc(nombreTec(p))}</td><td>${esc(p.cliente||'')}</td><td>${esc(p.vehiculo||'')} <span class="muted">${esc(p.patente||'')}</span></td><td class="muted">${esc(resumenItems(p.items)||(p.obs||'').slice(0,70))}</td><td class="num">${fmt(p.total)}</td><td><span class="tag">${esc(p.estado||'')}</span></td>
+      <td>${pag?`<span class="tag pagado">pagado ${p.fecha_pago||''}</span><div class="muted">${fmt(p.monto_cobrado||p.total)} ${esc(p.medio_pago||'')}</div>`:`<span class="tag pendiente">pendiente</span>`}</td>
+      <td>${pag?`<button class="sm ghost" onclick="desmarcarCobro('${p.id}')">Revertir</button>`:`<button class="sm primary" onclick="abrirCobro('${p.id}')">Cobrar</button>`}</td></tr>`;
+  }
+  return h+'</tbody></table></div>';
+}
+
+function renderTecnicos(){
+  const f=empSel(); const emps=D.emp.filter(e=>e.cargo==='tecnico'&&(!f||e.id===f));
+  let h='<div class="grid2">';
+  for(const e of emps){
+    const det=D.det.filter(d=>d.empleado_id===e.id); const l=D.liq.find(x=>x.empleado_id===e.id)||{};
+    const trab=det.filter(d=>!d.es_visita), vis=det.filter(d=>d.es_visita);
+    h+=`<div class="card"><h3>${esc(e.nombre)} <span class="tag">${trab.length} trabajos · ${vis.length} visitas</span></h3>
+      <div class="row"><span class="label">Cobrado en trabajos</span><span>${fmt(l.cobrado)}</span></div>
+      <div class="row"><span class="label">Tramo actual</span><span>${l.tramo_pct||0}%${l.llave_abierta===false?' <span class="tag fuera">llave cerrada</span>':''}</span></div>
+      <div class="row"><span class="label">Comisión bruta</span><span class="pos">${fmt(l.comision_bruta)}</span></div>`;
+    if(!det.length) h+='<div class="muted" style="padding:8px 0">Sin servicios cobrados en el período</div>';
+    else { h+=`<div class="tbl" style="margin-top:8px"><table><thead><tr><th>N°</th><th>Fecha</th><th>#</th><th>Cliente / vehículo</th><th class="num">Total</th><th class="num">%</th><th class="num">Comisión</th></tr></thead><tbody>`;
+      for(const d of det) h+=`<tr><td>${d.es_visita?'<span class="tag visita">visita</span>':d.n}</td><td>${d.fecha}</td><td>${d.numero||''}</td><td>${esc(d.cliente||'')}<div class="muted">${esc(d.vehiculo||'')} ${esc(d.patente||'')} ${esc(resumenItems(d.items))}</div></td><td class="num">${fmt(d.total)}</td><td class="num">${d.pct}%${d.fuera_horario?' <span class="tag fuera">FH</span>':''}</td><td class="num ${d.comision?'pos':''}">${fmt(d.comision)}</td></tr>`;
+      h+='</tbody></table></div>'; }
+    h+='</div>';
+  }
+  return h+'</div>';
+}
+
+function renderLiquidacion(){
+  const f=empSel(); const emps=D.emp.filter(e=>e.cargo==='tecnico'&&(!f||e.id===f));
+  let h='<div class="grid2">';
+  for(const e of emps){
+    const l=D.liq.find(x=>x.empleado_id===e.id)||{sueldo_base:e.sueldo_base,comision_bruta:0,ajuste_aprobacion:0,castigo_rechazos:0,castigo_inasistencias:0,castigo_atrasos:0,castigo_incidencias:0,comision_neta:0,bonos:0,anticipos:0,desc_herramientas:0,desc_otros:0,pagos:0,haberes:e.sueldo_base,saldo_por_pagar:e.sueldo_base,trabajos:0,visitas:0,cobrado:0};
+    const movs=D.movs.filter(m=>m.empleado_id===e.id);
+    const r=(lbl,val,cls,hide)=> (hide&&!val)?'':`<div class="row"><span class="label">${lbl}</span><span class="${cls||''}">${val<0?'-':''}${fmt(Math.abs(val))}</span></div>`;
+    h+=`<div class="card"><h3>${esc(e.nombre)} <button class="sm ghost" onclick="abrirSueldo('${e.id}')">✎ sueldo base</button></h3>
+      <div class="muted" style="margin-bottom:6px">${l.trabajos} trabajos · ${l.visitas} visitas · ${fmt(l.cobrado)} cobrado${l.tasa_aprobacion!=null?` · aprobación ${l.tasa_aprobacion}%`:''}</div>
+      ${r('Sueldo base',l.sueldo_base)}
+      ${r('Comisión por servicios ('+(l.tramo_pct||0)+'%)',l.comision_bruta,'pos')}
+      ${r('Ajuste por aprobación de presupuestos',l.ajuste_aprobacion,l.ajuste_aprobacion<0?'neg':'pos',true)}
+      ${r('Castigo rechazos injustificados',-l.castigo_rechazos,'neg',true)}
+      ${r('Castigo inasistencias',-l.castigo_inasistencias,'neg',true)}
+      ${r('Castigo atrasos',-l.castigo_atrasos,'neg',true)}
+      ${r('Castigo incidencias',-l.castigo_incidencias,'neg',true)}
+      ${l.comision_neta!==l.comision_bruta?r('Comisión neta',l.comision_neta,'pos'):''}
+      ${r('Bonos',l.bonos,'pos',true)}
+      <div class="row total"><span class="label">Total haberes</span><span>${fmt(l.haberes)}</span></div>
+      ${r('Anticipos',-l.anticipos,'warn',true)}
+      ${r('Descuento herramientas',-l.desc_herramientas,'neg',true)}
+      ${r('Otros descuentos',-l.desc_otros,'neg',true)}
+      ${r('Pagado',-l.pagos,'',true)}
+      <div class="row total"><span class="label">Saldo por pagar</span><span class="${l.saldo_por_pagar>=0?'pos':'neg'}">${fmt(l.saldo_por_pagar)}</span></div>
+      <div class="acts"><button class="sm" onclick="abrirMov('${e.id}','anticipo')">+ Anticipo</button><button class="sm" onclick="abrirMov('${e.id}','bono')">+ Bono</button><button class="sm" onclick="abrirMov('${e.id}','descuento')">+ Descuento</button><button class="sm primary" onclick="abrirMov('${e.id}','pago')">Pagar</button></div>`;
+    if(movs.length){ h+=`<details><summary>${movs.length} movimientos del período</summary><table style="margin-top:6px"><tbody>`;
+      for(const m of movs) h+=`<tr><td>${m.fecha}</td><td><span class="tag">${m.tipo}${m.categoria?' · '+esc(m.categoria):''}</span></td><td class="muted">${esc(m.notas||'')}</td><td class="num">${fmt(m.monto)}</td><td><button class="sm ghost" onclick="borrarMov('${m.id}')">✕</button></td></tr>`;
+      h+='</tbody></table></details>'; }
+    h+='</div>';
+  }
+  return h+'</div>';
+}
+
+function renderParams(){
+  let h=`<div class="card"><h3>Tramos vigentes (escalera por cantidad de trabajos cobrados en el mes)</h3><div class="tbl"><table><thead><tr><th>Trabajo N°</th><th class="num">% comisión</th><th>Condición</th></tr></thead><tbody>`;
+  for(const t of D.tramos) h+=`<tr><td>${t.desde} ${t.hasta?'a '+t.hasta:'en adelante'}</td><td class="num">${t.pct}%</td><td class="muted">${t.requiere_llave?'Requiere 0 inasistencias; si no, paga '+t.pct_sin_llave+'%':''}</td></tr>`;
+  h+='</tbody></table></div></div>';
+  h+=`<div class="card"><h3>Parámetros</h3><div class="muted" style="margin-bottom:6px">Editables: el cambio aplica de inmediato a todos los cálculos.</div><div class="tbl"><table><tbody>`;
+  for(const p of D.params) h+=`<tr><td><b>${esc(p.clave)}</b><div class="muted" style="white-space:normal">${esc(p.descripcion||'')}</div></td><td class="num"><input type="number" step="any" value="${p.valor}" style="width:110px;text-align:right" onchange="guardarParam('${esc(p.clave)}',this.value)"></td></tr>`;
+  return h+'</tbody></table></div></div>';
+}
+
+/* ---- acciones ---- */
+function abrirCobro(id){ const p=D.pptos.find(x=>x.id===id); if(!p) return; cobroId=id;
+  document.getElementById('cobroInfo').textContent=`#${p.numero||''} · ${p.cliente||''} · ${nombreTec(p)} · total ${fmt(p.total)}`;
+  document.getElementById('cMonto').value=p.total||''; document.getElementById('cMedio').value=p.medio_pago||'transferencia'; document.getElementById('cFecha').value=hoy();
+  document.getElementById('mCobro').classList.add('show'); }
+async function guardarCobro(){
+  const monto=parseInt(document.getElementById('cMonto').value||0); const fecha=document.getElementById('cFecha').value||hoy();
+  const {error}=await sb.from('presupuestos').update({pago_cliente:'pagado',pagado_at:new Date().toISOString(),fecha_pago:fecha,monto_cobrado:monto,medio_pago:document.getElementById('cMedio').value}).eq('id',cobroId);
+  if(error) return toast('Error: '+error.message); closeModal('mCobro'); toast('Cobro registrado'); cargar(); }
+async function desmarcarCobro(id){ if(!confirm('¿Revertir el cobro de este presupuesto?')) return;
+  const {error}=await sb.from('presupuestos').update({pago_cliente:'pendiente',pagado_at:null,fecha_pago:null,monto_cobrado:null}).eq('id',id);
+  if(error) return toast('Error: '+error.message); toast('Cobro revertido'); cargar(); }
+
+function abrirMov(empId,tipo){ movEmp=empId; const e=D.emp.find(x=>x.id===empId);
+  document.getElementById('movTitulo').textContent=(tipo==='pago'?'Registrar pago a ':'Registrar movimiento · ')+(e?e.nombre:'');
+  document.getElementById('mTipo').value=tipo; document.getElementById('mMonto').value=''; document.getElementById('mNotas').value=''; document.getElementById('mFecha').value=hoy();
+  document.getElementById('mCat').value='otro';
+  const hs=document.getElementById('mHerr'); hs.innerHTML='<option value="">— sin vincular —</option>'+D.herr.filter(h=>h.tecnico_id===e?.tecnico_id).map(h=>`<option value="${h.id}" data-v="${h.valor||0}">${esc(h.nombre)} (${fmt(h.valor)})</option>`).join('');
+  if(tipo==='pago'){ const l=D.liq.find(x=>x.empleado_id===empId); if(l&&l.saldo_por_pagar>0) document.getElementById('mMonto').value=l.saldo_por_pagar; }
+  movTipoChange(); document.getElementById('mMov').classList.add('show'); }
+function movTipoChange(){ const t=document.getElementById('mTipo').value; document.getElementById('fCat').style.display=t==='descuento'?'':'none'; movCatChange(); }
+function movCatChange(){ const t=document.getElementById('mTipo').value, c=document.getElementById('mCat').value; document.getElementById('fHerr').style.display=(t==='descuento'&&c==='herramienta')?'':'none'; }
+document.getElementById('mHerr').addEventListener('change',e=>{ const o=e.target.selectedOptions[0]; if(o&&o.dataset.v&&!document.getElementById('mMonto').value) document.getElementById('mMonto').value=o.dataset.v; });
+async function guardarMovimiento(){
+  const tipo=document.getElementById('mTipo').value; const monto=parseInt(document.getElementById('mMonto').value||0);
+  if(!monto) return toast('Ingresa un monto');
+  const payload={empleado_id:movEmp,tipo,monto,fecha:document.getElementById('mFecha').value||hoy(),periodo,estado:'registrado',notas:document.getElementById('mNotas').value||null,registrado_por:'liquidaciones'};
+  if(tipo==='descuento'){ payload.categoria=document.getElementById('mCat').value; const h=document.getElementById('mHerr').value; if(payload.categoria==='herramienta'&&h) payload.herramienta_id=h; }
+  const {error}=await sb.from('movimientos_remuneracion').insert(payload);
+  if(error) return toast('Error: '+error.message); closeModal('mMov'); toast('Guardado'); cargar(); }
+async function borrarMov(id){ if(!confirm('¿Eliminar este movimiento?')) return; const {error}=await sb.from('movimientos_remuneracion').delete().eq('id',id); if(error) return toast('Error: '+error.message); cargar(); }
+
+function abrirSueldo(empId){ sueldoEmp=empId; const e=D.emp.find(x=>x.id===empId); document.getElementById('sueldoInfo').textContent=e?e.nombre:''; document.getElementById('sMonto').value=e?e.sueldo_base:''; document.getElementById('mSueldo').classList.add('show'); }
+async function guardarSueldo(){ const v=parseInt(document.getElementById('sMonto').value||0); const {error}=await sb.from('empleados_rrhh').update({sueldo_base:v}).eq('id',sueldoEmp); if(error) return toast('Error: '+error.message); closeModal('mSueldo'); toast('Sueldo base actualizado'); cargar(); }
+async function guardarParam(clave,valor){ const {error}=await sb.from('comision_params').update({valor:parseFloat(valor),updated_at:new Date().toISOString()}).eq('clave',clave); if(error) return toast('Error: '+error.message); toast('Parámetro guardado'); cargar(); }
+
+/* ---- tiempo real ---- */
+let refrescoPend=null;
+function programarRefresco(){ clearTimeout(refrescoPend); refrescoPend=setTimeout(()=>cargar(),800); }
+function conectarRealtime(){
+  const ch=sb.channel('liquidaciones-live');
+  ['presupuestos','movimientos_remuneracion','empleados_rrhh','incidencias_tecnico','asistencia_tecnico'].forEach(t=>ch.on('postgres_changes',{event:'*',schema:'public',table:t},programarRefresco));
+  ch.subscribe(st=>{ const el=document.getElementById('live'); const ok=st==='SUBSCRIBED'; el.classList.toggle('on',ok); document.getElementById('liveTxt').textContent=ok?'en vivo':'reconectando…'; });
+  setInterval(()=>cargar(),60000); // respaldo
+}
+
+generarPeriodos(); cargar(); conectarRealtime();
+</script>
+</body>
+</html>

@@ -209,6 +209,15 @@ table.num td.cierre{font-weight:700}
     <button class="tile amarillo" data-act="ver-amarillo"><div class="tile-lbl">Tocan ahora</div><div class="tile-num" id="t-amarillo">–</div><div class="tile-sub">semáforo amarillo</div></button>
   </section>
 
+  <section class="panel" aria-label="Pendientes" id="panel-pend">
+    <div class="panel-head">
+      <div class="panel-tit">Pendientes <span id="pend-total" style="font-weight:400;opacity:.7"></span></div>
+      <div class="seg" id="seg-pend"></div>
+      <button class="tog" id="tog-pend">▾ Ocultar</button>
+    </div>
+    <div class="num-body" id="pend-body"><div class="loader">Cargando pendientes…</div></div>
+  </section>
+
   <section class="panel" aria-label="Números">
     <div class="panel-head">
       <div class="panel-tit">Números</div>
@@ -973,6 +982,36 @@ setInterval(pintarSync, 1000)
 // Los tiempos y colores avanzan aunque no llegue nada nuevo
 setInterval(function(){ if(CARGADO && !document.hidden) pintar() }, 30000)
 document.addEventListener('visibilitychange', function(){ if(!document.hidden) ciclo(Date.now() - ULT_TOTAL > 60000) })
+
+// ===== Pendientes (Etapa A): lista única desde v_pendientes =====
+var PEND = [], PEND_TIPO = 'todos', PEND_OCULTO = false
+var PEND_LBL = { sin_asignar:'Sin asignar', sin_resultado:'Visita sin resultado', ejecutada_sin_ppto:'Ejecutada sin presupuesto', ppto_sin_decision:'Ppto sin decisión', aprobado_sin_pago:'Aprobado sin pago', pago_con_excepcion:'Pago con excepción', cliente_seguimiento:'Cliente a seguir', lead_accion_vencida:'Lead con acción vencida' }
+function pendSem(h){ return h >= 72 ? 'rojo' : h >= 24 ? 'amarillo' : 'verde' }
+function pendDur(h){ return h >= 48 ? Math.round(h/24) + ' d' : Math.round(h) + ' h' }
+async function cargarPendientes(){
+  try{ PEND = (await sbGetTodo('v_pendientes?select=*&order=horas.desc')) || [] }catch(e){ PEND = []; console.error('v_pendientes', e) }
+  pintarPendientes()
+}
+function pintarPendientes(){
+  var cuenta = {}; PEND.forEach(function(p){ cuenta[p.tipo] = (cuenta[p.tipo]||0) + 1 })
+  $('pend-total').textContent = PEND.length ? '· ' + PEND.length : ''
+  var tipos = Object.keys(PEND_LBL).filter(function(t){ return cuenta[t] })
+  $('seg-pend').innerHTML = '<button class="' + (PEND_TIPO === 'todos' ? 'active' : '') + '" data-pend="todos">Todos <b>' + PEND.length + '</b></button>' +
+    tipos.map(function(t){ return '<button class="' + (PEND_TIPO === t ? 'active' : '') + '" data-pend="' + t + '">' + PEND_LBL[t] + ' <b>' + cuenta[t] + '</b></button>' }).join('')
+  var vis = PEND.filter(function(p){ return PEND_TIPO === 'todos' || p.tipo === PEND_TIPO }).slice(0, 80)
+  if(!vis.length){ $('pend-body').innerHTML = '<div class="vacio"><b>Todo al día</b>No hay pendientes en esta categoría.</div>'; return }
+  $('pend-body').innerHTML = '<div style="display:grid;gap:6px">' + vis.map(function(p){
+    var c = pendSem(+p.horas || 0)
+    return '<a class="lead c-' + c + '" href="' + p.pantalla + (p.ref_tabla === 'presupuestos' ? '?id=' + p.ref_id : '') + '" style="text-decoration:none;display:block">' +
+      '<div style="display:flex;justify-content:space-between;gap:8px;align-items:baseline"><b>' + (p.quien || '—') + '</b><span style="font-size:11px;opacity:.8">' + pendDur(+p.horas || 0) + ' · ' + (p.responsable || '') + '</span></div>' +
+      '<div style="font-size:12px;opacity:.85">' + (PEND_LBL[p.tipo] || p.tipo) + (p.detalle ? ' · ' + p.detalle : '') + '</div></a>'
+  }).join('') + '</div>'
+}
+document.addEventListener('click', function(ev){
+  var b = ev.target.closest('[data-pend]'); if(b){ PEND_TIPO = b.getAttribute('data-pend'); pintarPendientes(); return }
+  if(ev.target.id === 'tog-pend'){ PEND_OCULTO = !PEND_OCULTO; $('pend-body').style.display = PEND_OCULTO ? 'none' : ''; ev.target.textContent = PEND_OCULTO ? '▸ Mostrar' : '▾ Ocultar' }
+})
+document.addEventListener('DOMContentLoaded', function(){ cargarPendientes(); setInterval(cargarPendientes, 5 * 60 * 1000) })
 </script>
 
 </body>

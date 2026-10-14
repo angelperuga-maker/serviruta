@@ -282,6 +282,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--dorado)}
 var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
 var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
 var TECNICOS = []
+var ESTADOS_FIN = ['ejecutada','cerrada','no_ejecutada','cancelado']
 var EVENTOS = []
 var VISTA = 'dia'
 var FECHA = new Date(); FECHA.setHours(0,0,0,0)
@@ -366,7 +367,7 @@ function sugerirTecnicoPara(servicio){
            e.id !== servicio.id &&
            e.tecnico && e.tecnico !== 'POR ASIGNAR' &&
            e.lat && e.lng &&
-           e.estado !== 'completado' && e.estado !== 'cancelado'
+           !ESTADOS_FIN.includes(e.estado)
   })
   
   var mejor = null
@@ -476,9 +477,9 @@ function eventosFiltrados(){
 
 function actualizarKPIs(){
   var arr = eventosFiltrados()
-  var urg = arr.filter(function(e){return e.urgencia==='urgente' && e.estado !== 'completado' && e.estado !== 'cancelado'}).length
-  var pend = arr.filter(function(e){return (!e.tecnico || e.tecnico==='POR ASIGNAR') && e.estado !== 'completado' && e.estado !== 'cancelado'}).length
-  var asig = arr.filter(function(e){return e.tecnico && e.tecnico!=='POR ASIGNAR' && e.estado !== 'completado' && e.estado !== 'cancelado'}).length
+  var urg = arr.filter(function(e){return e.urgencia==='urgente' && !ESTADOS_FIN.includes(e.estado)}).length
+  var pend = arr.filter(function(e){return (!e.tecnico || e.tecnico==='POR ASIGNAR') && !ESTADOS_FIN.includes(e.estado)}).length
+  var asig = arr.filter(function(e){return e.tecnico && e.tecnico!=='POR ASIGNAR' && !ESTADOS_FIN.includes(e.estado)}).length
   document.getElementById('k-urg').textContent = urg
   document.getElementById('k-pend').textContent = pend
   document.getElementById('k-asig').textContent = asig
@@ -571,7 +572,8 @@ function eventoHTML(e){
   var estados = [
     {v:'agendado',lbl:'AGN'},
     {v:'en-ruta',lbl:'RUTA'},
-    {v:'completado',lbl:'✓ OK'}
+    {v:'ejecutada',lbl:'✓ OK'},
+    {v:'no_ejecutada',lbl:'✗ NO'}
   ]
   estados.forEach(function(est){
     var isActive = e.estado === est.v ? ' active-est' : ''
@@ -726,7 +728,15 @@ async function cambiarEstadoRapido(id, estado){
   var e = EVENTOS.find(function(x){return x.id === id})
   if(!e) return
   try {
-    var r = await sbReq('PATCH', 'agenda?id=eq.'+id, {estado: estado})
+    var patch = {estado: estado}
+    if(estado === 'no_ejecutada'){
+      var mot = prompt('¿Por qué no se realizó la visita?\n\nEj: "Cliente no estaba", "Vehículo no disponible", "Cliente canceló en la puerta"')
+      if(mot === null) return
+      if(!mot.trim()){ toast('⚠️ El motivo es obligatorio', 'err'); return }
+      patch.motivo_resultado = mot.trim()
+    }
+    if(estado === 'ejecutada' || estado === 'no_ejecutada') patch.resultado_registrado_por = localStorage.getItem('sv_user_nombre') || localStorage.getItem('sv_user_username') || 'portal'
+    var r = await sbReq('PATCH', 'agenda?id=eq.'+id, patch)
     if(!r.ok){
       var errTxt = await r.text()
       console.error('PATCH estado error:', errTxt)
@@ -734,11 +744,11 @@ async function cambiarEstadoRapido(id, estado){
       return
     }
     e.estado = estado
-    var msgEstado = estado === 'completado' ? '✅ Completado (dispara encuesta)' : '✅ Estado: ' + estado
+    var msgEstado = estado === 'ejecutada' ? '✅ Ejecutada (el pago se registra en el presupuesto)' : (estado === 'no_ejecutada' ? '✗ Registrada como no realizada' : '✅ Estado: ' + estado)
     toast(msgEstado, 'ok')
     
     // Si pasa a completado y hay teléfono del cliente, avisar coordinación
-    if(estado === 'completado' && e.telefono){
+    if(estado === 'ejecutada' && e.telefono){
       console.log('Servicio completado:', e.cliente)
     }
     
@@ -926,9 +936,9 @@ function renderVistaDia(){
     var col = colorTec(TECNICO_NOMBRE) || '#D4AF37'
     
     // Resumen personal en lugar de KPIs de admin
-    var completados = misServicios.filter(function(e){return e.estado === 'completado'}).length
-    var pendientes = misServicios.filter(function(e){return e.estado !== 'completado' && e.estado !== 'cancelado'}).length
-    var urgentes = misServicios.filter(function(e){return e.urgencia==='urgente' && e.estado !== 'completado'}).length
+    var completados = misServicios.filter(function(e){return (e.estado==='ejecutada'||e.estado==='cerrada')}).length
+    var pendientes = misServicios.filter(function(e){return !ESTADOS_FIN.includes(e.estado)}).length
+    var urgentes = misServicios.filter(function(e){return e.urgencia==='urgente' && !ESTADOS_FIN.includes(e.estado)}).length
     
     html += '<div style="background:var(--s1);border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin-bottom:14px">'
     html += '<div style="font-family:var(--mono);font-size:10px;color:var(--dorado);letter-spacing:0.2em;font-weight:700;margin-bottom:12px">📋 TU DÍA</div>'

@@ -185,7 +185,7 @@ async function cargar(){
   TECNICOS=await sbGet('tecnicos?activo=eq.true&select=nombre,telefono&order=nombre.asc')
   
   // Cargar servicios según filtro (siempre excluyendo finalizados)
-  var estadosPendientes='&estado=in.(solicitada,agendado,en-ruta,confirmado)'
+  var estadosPendientes='&estado=in.(solicitada,agendado,en-ruta,reagendar)'
   var query='agenda?select=*&order=urgencia.desc,hora.asc'+estadosPendientes
   if(FILTRO==='manana') query+='&fecha=eq.'+mananaISO()
   else if(FILTRO==='hoy') query+='&fecha=eq.'+hoyISO()
@@ -272,7 +272,7 @@ function renderServicios(arr){
     }
     // Botones de cierre rápido
     html+='<div class="cierre-btns">'
-    html+='<button class="cbtn ok" onclick="event.stopPropagation();terminarServicio(\''+s.id+'\')">✅ Terminado y pagado</button>'
+    html+='<button class="cbtn ok" onclick="event.stopPropagation();terminarServicio(\''+s.id+'\')">✅ Ejecutada</button>'
     html+='<button class="cbtn cancel" onclick="event.stopPropagation();cancelarServicio(\''+s.id+'\')">✕ Cancelar</button>'
     html+='</div>'
     html+='</div>'
@@ -293,19 +293,20 @@ function verConversacion(tel){
   window.open('conversaciones-wa.html?tel='+encodeURIComponent(tel), '_blank')
 }
 
-// Cierre rápido: terminado → directo a completado + pagado
+// Cierre: ejecutada (el pago se registra en el presupuesto — Etapa A)
 async function terminarServicio(id){
   var s = SERVICIOS.find(function(x){return x.id === id})
   if(!s) return
   
-  if(!confirm('✅ ¿Marcar como TERMINADO Y PAGADO?\n\nCliente: '+(s.cliente||'?')+'\nServicio: '+(s.servicio||'?')+'\n\nEl servicio pasará a estado PAGADO directamente.')) return
+  if(!confirm('✅ ¿Marcar como EJECUTADA?\n\nCliente: '+(s.cliente||'?')+'\nServicio: '+(s.servicio||'?')+'\n\nEl pago se registra en el presupuesto, no aquí.')) return
   
   var r = await fetch(SB_URL+'/rest/v1/agenda?id=eq.'+id, {
     method: 'PATCH',
     headers: {'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'},
     body: JSON.stringify({
-      estado: 'pagado',
-      notas: (s.notas||'') + '\n[Cerrado como terminado+pagado por ' + (localStorage.getItem('sv_user_username')||'coordinador') + ' el ' + hoyISO() + ']'
+      estado: 'ejecutada',
+      resultado_registrado_por: localStorage.getItem('sv_user_username')||'coordinador',
+      notas: (s.notas||'') + '\n[Marcada ejecutada por ' + (localStorage.getItem('sv_user_username')||'coordinador') + ' el ' + hoyISO() + ']'
     })
   })
   
@@ -317,6 +318,8 @@ async function terminarServicio(id){
   // Remover del listado local (ya no está pendiente)
   SERVICIOS = SERVICIOS.filter(function(x){return x.id !== id})
   render()
+  // Si hay presupuesto enlazado, llevar a registrar el pago donde corresponde
+  if(s.presupuesto_id && confirm('¿Registrar el pago ahora en el presupuesto?')) window.open('presupuestos-coord.html?id='+s.presupuesto_id, '_blank')
 }
 
 // Cancelar servicio (soft-delete manteniendo historial)

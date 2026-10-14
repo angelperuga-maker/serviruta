@@ -6,7 +6,9 @@
 <title>Serviruta · Presupuestos</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <script>
-if (!sessionStorage.getItem("tecnico_nombre")) { location.href = "login-tecnico.html"; }
+// Acepta la sesión del sistema nuevo (Supabase Auth, menu-tecnico) además del PIN antiguo
+if (!sessionStorage.getItem("tecnico_nombre") && localStorage.getItem("sv_user_nombre")) { sessionStorage.setItem("tecnico_nombre", localStorage.getItem("sv_user_nombre")); }
+if (!sessionStorage.getItem("tecnico_nombre")) { location.href = "login.html"; }
 </script>
 <style>
 .srv-back-bar{position:sticky;top:0;z-index:1000;background:#0F0F12;border-bottom:1px solid #2C2C32;padding:10px 16px;display:flex;align-items:center;gap:10px;}
@@ -228,6 +230,8 @@ body{background:var(--negro);color:var(--txt);font-family:'DM Sans',sans-serif;m
 
   <!-- Formulario -->
   <div class="page active" id="tec-form">
+    <div class="sec">Visita de origen (tu agenda de ayer, hoy y mañana)</div>
+    <select class="inp" id="t-agenda" onchange="tPrellenarDesdeAgenda()" style="margin-bottom:12px"><option value="">— elegir la visita a la que corresponde —</option></select>
     <div class="sec">Cliente y vehículo</div>
     <label class="lbl">Nombre del cliente</label>
     <input class="inp" id="t-nombre" placeholder="Ej: Carlos Medina" autocomplete="off">
@@ -300,6 +304,15 @@ body{background:var(--negro);color:var(--txt);font-family:'DM Sans',sans-serif;m
       <div id="tec-resumen"></div>
     </div>
 
+    <div id="decision-wrap" style="background:var(--c2);border:1px solid var(--borde);border-radius:10px;padding:14px;margin-bottom:16px;display:none">
+      <div style="font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--txt3);margin-bottom:6px">Resultado de la visita (obligatorio)</div>
+      <p style="font-size:12px;color:var(--txt3);margin-bottom:10px;line-height:1.5">¿Qué respondió el cliente al presupuesto? Si aún no hay respuesta, marca "Decide después".</p>
+      <button class="btn btn-azul" onclick="tDecision('vendido')">✅ Vendido / aceptó</button>
+      <button class="btn btn-sec" onclick="tDecision('decide_despues')">⏳ Decide después</button>
+      <select class="inp" id="t-motivo-nv" style="margin-top:6px"><option value="">Motivo si NO vende…</option><option>precio</option><option>lo hará en taller</option><option>lo hará con otro</option><option>no era la falla</option><option>sin presupuesto / solo visita</option><option>cliente no estaba</option><option>otro</option></select>
+      <button class="btn btn-sec" onclick="tDecision('no_vende')">❌ No vende</button>
+      <div id="decision-ok" style="font-size:12px;color:var(--txt3);margin-top:6px"></div>
+    </div>
     <button class="btn btn-azul" onclick="tNuevo()">＋ Nuevo trabajo</button>
     <button class="btn btn-sec" onclick="tRefresh()">↻ Actualizar estado</button>
   </div>
@@ -314,6 +327,56 @@ body{background:var(--negro);color:var(--txt);font-family:'DM Sans',sans-serif;m
 const SB_URL = 'https://bqlgfmqcefledqyodkii.supabase.co'
 const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
 let sbClient = null
+let pptoEnCurso = null, agendasTec = []
+
+// ---- Etapa A: agenda del técnico y decisión en terreno ----
+function _norm(x){return (x||'').toString().normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/\s+/g,' ').trim()}
+async function tCargarAgendas(){
+  const nombre = sessionStorage.getItem('tecnico_nombre') || ''
+  const sel = document.getElementById('t-agenda'); if(!sel || !nombre) return
+  const d = new Date(), ayer = new Date(d), man = new Date(d); ayer.setDate(d.getDate()-1); man.setDate(d.getDate()+1)
+  const iso = x => x.toISOString().slice(0,10)
+  const r = await getSB().from('agenda').select('id,fecha,hora,cliente,telefono,servicio,vehiculo,patente,estado,presupuesto_id,tecnico')
+    .gte('fecha', iso(ayer)).lte('fecha', iso(man)).not('estado','in','("cancelado","cerrada")').order('fecha').order('hora')
+  const prim = _norm(nombre).split(' ')[0]
+  agendasTec = (r.data||[]).filter(a => _norm(a.tecnico) === _norm(nombre) || _norm(a.tecnico).split(' ')[0] === prim)
+  agendasTec.forEach(a => {
+    const o = document.createElement('option'); o.value = a.id
+    o.textContent = a.fecha.slice(5) + ' ' + (a.hora||'').slice(0,5) + ' · ' + (a.cliente||'?') + ' · ' + (a.servicio||'') + (a.presupuesto_id ? ' (ya tiene ppto)' : '')
+    sel.appendChild(o)
+  })
+  // Preseleccionar el nombre del técnico en el selector antiguo
+  const ts = document.getElementById('t-tecnico')
+  if (ts && ![...ts.options].some(o => _norm(o.textContent) === _norm(nombre))) { const o = document.createElement('option'); o.textContent = nombre; ts.appendChild(o) }
+  if (ts) ts.value = [...ts.options].find(o => _norm(o.textContent) === _norm(nombre))?.textContent || ts.value
+}
+function tPrellenarDesdeAgenda(){
+  const id = document.getElementById('t-agenda').value
+  const a = agendasTec.find(x => x.id === id); if(!a) return
+  const set = (i,v) => { const el = document.getElementById(i); if (el && v && !el.value) el.value = v }
+  set('t-nombre', a.cliente); set('t-tel', a.telefono); set('t-patente', a.patente); set('t-auto', a.vehiculo)
+}
+async function tDecision(dec){
+  if (!pptoEnCurso || !pptoEnCurso.sb_id) { toast('No hay presupuesto guardado','err'); return }
+  const motivo = document.getElementById('t-motivo-nv').value
+  if (dec === 'no_vende' && !motivo) { toast('⚠️ Indica el motivo de no venta','err'); return }
+  const quien = sessionStorage.getItem('tecnico_nombre') || 'tecnico'
+  const r = await getSB().from('presupuestos').update({
+    decision_terreno: dec,
+    motivo_no_venta: dec === 'no_vende' ? motivo : null,
+    fecha_decision_cliente: new Date().toISOString().slice(0,10),
+    cierre_registrado_at: new Date().toISOString(),
+    cierre_registrado_por: quien
+  }).eq('id', pptoEnCurso.sb_id)
+  if (r.error) { toast('Error: ' + r.error.message, 'err'); return }
+  if (pptoEnCurso.agenda_id) {
+    await getSB().from('agenda').update({ estado: 'ejecutada', resultado_registrado_por: quien }).eq('id', pptoEnCurso.agenda_id).in('estado', ['solicitada','agendado','en-ruta','reagendar'])
+  }
+  document.getElementById('decision-ok').textContent = '✅ Registrado: ' + ({vendido:'vendido',decide_despues:'decide después',no_vende:'no vende · '+motivo})[dec]
+  toast('✅ Resultado registrado','ok')
+}
+document.addEventListener('DOMContentLoaded', tCargarAgendas)
+
 function getSB() {
   if (!sbClient) sbClient = supabase.createClient(SB_URL, SB_KEY)
   return sbClient
@@ -416,7 +479,8 @@ async function tEnviar() {
   try {
     if (!sbClient) sbClient = supabase.createClient('https://bqlgfmqcefledqyodkii.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s')
     var aliadoCodigo = document.getElementById('t-aliado')?.value?.trim() || ''
-    await sbClient.from('presupuestos').insert({
+    var agendaSel = document.getElementById('t-agenda')?.value || null
+    var ins = await sbClient.from('presupuestos').insert({
       numero: sol.pptoNum,
       tecnico: sol.tecnico,
       cliente: sol.cliente,
@@ -428,8 +492,13 @@ async function tEnviar() {
       items: sol.items,
       obs: sol.obs,
       estado: 'en_espera',
-      aliado_codigo: aliadoCodigo
-    })
+      aliado_codigo: aliadoCodigo,
+      agenda_id: agendaSel,
+      enlace_origen: agendaSel ? 'pantalla' : null
+    }).select('id').single()
+    if (ins.error) throw ins.error
+    sol.sb_id = ins.data.id
+    sol.agenda_id = agendaSel
     // Guardar cliente automáticamente en tabla clientes
     if(sol.tel){
       await sbClient.from('clientes').upsert({
@@ -458,6 +527,10 @@ async function tEnviar() {
     (sol.obs ? `<div style="font-size:12px;color:var(--txt3);margin-top:8px">📋 ${sol.obs}</div>` : '')
 
   document.getElementById('t-aliado').value = ''
+  // Bloque de decisión en terreno (Etapa A): solo si el presupuesto quedó guardado
+  pptoEnCurso = sol
+  var dw = document.getElementById('decision-wrap')
+  if (dw) { dw.style.display = sol.sb_id ? 'block' : 'none'; document.getElementById('decision-ok').textContent = '' }
   tPg('tec-estado')
   document.getElementById('tec-hdr-title').textContent = 'Estado del trabajo'
   toast('✅ Enviado al coordinador','ok')

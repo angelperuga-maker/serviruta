@@ -150,6 +150,15 @@ fbq('track', 'PageView');
       <div id="iva-badge" style="margin-left:auto;font-family:Syne,sans-serif;font-weight:800;font-size:13px;color:var(--txt3)">+$0</div>
     </div>
     <div class="total-box" id="total-box"></div>
+    <div class="sec">Visita de origen</div>
+    <div id="det-agenda" style="font-size:12px;color:var(--txt2);margin-bottom:8px">—</div>
+    <select class="inp" id="det-agenda-sel" style="margin-bottom:6px;display:none"><option value="">— elegir agenda —</option></select>
+    <button class="btn btn-sec" id="det-agenda-btn" onclick="enlazarAgendaDetalle()" style="margin-bottom:12px">🔗 Enlazar agenda</button>
+    <div class="sec">Cobro</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+      <div><label class="lbl">Monto cobrado</label><input class="inp" id="det-monto-cobrado" type="number" inputmode="numeric" placeholder="= total" style="margin-bottom:0"></div>
+      <div><label class="lbl">Medio de pago</label><select class="inp" id="det-medio-pago" style="margin-bottom:0"><option value="">—</option><option value="transferencia">Transferencia</option><option value="tarjeta">Tarjeta</option></select></div>
+    </div>
     <div class="sec">Notas</div>
     <textarea class="inp" id="det-notas" placeholder="Notas para el cliente..." rows="2" style="resize:none;margin-bottom:14px"></textarea>
     <button class="btn btn-rojo" onclick="guardarValorizacion()">💾 Guardar valorización</button>
@@ -183,13 +192,15 @@ fbq('track', 'PageView');
     <div style="height:8px"></div>
     <label class="lbl">Cliente</label><input class="inp" id="n-cliente" placeholder="Nombre del cliente">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
-      <div><label class="lbl">Teléfono</label><input class="inp" id="n-tel" placeholder="+56 9..." type="tel" style="margin-bottom:0"></div>
+      <div><label class="lbl">Teléfono</label><input class="inp" id="n-tel" placeholder="+56 9..." type="tel" style="margin-bottom:0" onblur="cargarAgendasNuevo()"></div>
       <div><label class="lbl">Correo (opcional)</label><input class="inp" id="n-email" placeholder="email@..." type="email" style="margin-bottom:0"></div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
       <div><label class="lbl">Patente</label><input class="inp" id="n-patente" placeholder="Ej: ABCD12" style="margin-bottom:0;text-transform:uppercase"></div>
       <div><label class="lbl">Vehículo</label><input class="inp" id="n-vehiculo" placeholder="Marca y modelo" style="margin-bottom:0"></div>
     </div>
+    <label class="lbl">Visita de origen (agenda del cliente, ±3 días)</label>
+    <select class="inp" id="n-agenda" style="margin-bottom:10px"><option value="">— sin enlazar (se avisará al pagar) —</option></select>
     <label class="lbl">Código aliado (opcional)</label><input class="inp" id="n-aliado" placeholder="Ej: GRU-PEDRO01" style="margin-bottom:14px">
     <button class="btn-cancel" onclick="document.getElementById('modal-nuevo').classList.remove('open')">Cancelar</button>
     <button class="btn-save" onclick="crearPpto()">Crear presupuesto</button>
@@ -216,6 +227,9 @@ async function load(){
   }
   todos=r.data||[]
   renderTab(tabActual)
+  // Deep link ?id=<presupuesto> (desde cierre-jornada / pipeline)
+  var _pid=new URLSearchParams(location.search).get('id')
+  if(_pid && !pptoActual && todos.some(function(s){return s.id===_pid})){history.replaceState(null,'',location.pathname);abrirDetalle(_pid)}
 }
 
 function goTabEsp(){
@@ -440,6 +454,9 @@ function abrirDetalle(id){
   document.getElementById('det-cliente').textContent=pptoActual.cliente
   document.getElementById('det-info').textContent='#'+(pptoActual.numero||'—')+' · '+pptoActual.tecnico+(pptoActual.vehiculo?' · '+pptoActual.vehiculo:'')
   document.getElementById('det-notas').value=pptoActual.notas||''
+  document.getElementById('det-monto-cobrado').value=pptoActual.monto_cobrado||''
+  document.getElementById('det-medio-pago').value=pptoActual.medio_pago||''
+  renderAgendaDetalle()
   document.getElementById('aplica-iva').checked=!!(pptoActual.iva&&pptoActual.iva>0)
   document.getElementById('coord-items-wrap').innerHTML=''
   coordItemId=0
@@ -625,15 +642,66 @@ async function pasarContabilidad(){
 async function marcarPagado(){
   if(!pptoActual)return
   var t=calcTotal()
+  var montoCob=parseInt(document.getElementById('det-monto-cobrado').value)||t.total
+  var medio=document.getElementById('det-medio-pago').value||null
+  if(!medio && !confirm('No indicaste el medio de pago (transferencia/tarjeta). ¿Marcar pagado igual? Quedará registrado como excepción.'))return
   try{
-    await getDB().from('presupuestos').update({
+    var r=await getDB().from('presupuestos').update({
       items:pptoActual.items,items_coord:getCoordItems(),
       estado:'aprobada',estado_servicio:'completado',pago_cliente:'pagado',
-      subtotal:t.sub,iva:t.iva,total:t.total
-    }).eq('id',pptoActual.id)
-    toast('💚 Marcado como PAGADO','ok')
-    setTimeout(function(){cerrarDetalle()},1200)
+      subtotal:t.sub,iva:t.iva,total:t.total,
+      monto_cobrado:montoCob,medio_pago:medio
+    }).eq('id',pptoActual.id).select('control_alertas').single()
+    if(r.error)throw r.error
+    var al=(r.data&&r.data.control_alertas)||[]
+    if(al.length){
+      var map={sin_agenda:'sin agenda de origen',sin_decision_terreno:'sin decisión en terreno',sin_medio_pago:'sin medio de pago',monto_cobrado_asumido_igual_total:'monto cobrado asumido = total',sin_cliente_id:'sin cliente enlazado'}
+      toast('💚 PAGADO · pendiente: '+al.map(function(a){return map[a]||a.replace('agenda_no_ejecutada:','agenda no ejecutada (')+(a.indexOf('agenda_no_ejecutada')===0?')':'')}).join(', '),'ok')
+      setTimeout(function(){cerrarDetalle()},3500)
+    }else{
+      toast('💚 Marcado como PAGADO','ok')
+      setTimeout(function(){cerrarDetalle()},1200)
+    }
   }catch(e){toast('Error: '+e.message)}
+}
+
+// ---- Enlace agenda ↔ presupuesto (Etapa A) ----
+function tel9(t){return (t||'').replace(/\D/g,'').slice(-9)}
+function fmtFecha(f){try{var d=new Date(f+'T12:00:00');return d.toLocaleDateString('es-CL',{weekday:'short',day:'numeric',month:'short'})}catch(e){return f}}
+async function agendasDeTelefono(tel,fechaRef){
+  var t9=tel9(tel); if(t9.length<9)return []
+  var base=fechaRef?new Date(fechaRef):new Date()
+  var d1=new Date(base);d1.setDate(d1.getDate()-3);var d2=new Date(base);d2.setDate(d2.getDate()+3)
+  var iso=function(d){return d.toISOString().slice(0,10)}
+  var r=await getDB().from('agenda').select('id,fecha,hora,servicio,tecnico,estado,presupuesto_id').ilike('telefono','%'+t9).gte('fecha',iso(d1)).lte('fecha',iso(d2)).order('fecha',{ascending:false})
+  return r.data||[]
+}
+function opcionAgenda(a){return fmtFecha(a.fecha)+' '+(a.hora||'').slice(0,5)+' · '+(a.servicio||'servicio')+' · '+(a.tecnico||'?')+' · '+(a.estado||'')+(a.presupuesto_id?' (ya tiene ppto)':'')}
+async function cargarAgendasNuevo(){
+  var sel=document.getElementById('n-agenda');sel.innerHTML='<option value="">— sin enlazar (se avisará al pagar) —</option>'
+  var ags=await agendasDeTelefono(document.getElementById('n-tel').value)
+  ags.forEach(function(a){var o=document.createElement('option');o.value=a.id;o.textContent=opcionAgenda(a);sel.appendChild(o)})
+  if(ags.length===1&&!ags[0].presupuesto_id)sel.value=ags[0].id
+}
+async function renderAgendaDetalle(){
+  var el=document.getElementById('det-agenda'),selEl=document.getElementById('det-agenda-sel'),btn=document.getElementById('det-agenda-btn')
+  selEl.style.display='none';selEl.innerHTML='<option value="">— elegir agenda —</option>'
+  if(pptoActual.agenda_id){
+    var r=await getDB().from('agenda').select('id,fecha,hora,servicio,tecnico,estado').eq('id',pptoActual.agenda_id).single()
+    if(r.data){el.innerHTML='✅ '+opcionAgenda(r.data)+' · <a href="agenda.html" style="color:var(--rojo)">ver agenda</a>';btn.style.display='none';return}
+  }
+  el.innerHTML='⚠️ Sin visita enlazada'+(pptoActual.enlace_origen?'':'')
+  btn.style.display='block'
+  var ags=await agendasDeTelefono(pptoActual.telefono,pptoActual.created_at)
+  ags.forEach(function(a){var o=document.createElement('option');o.value=a.id;o.textContent=opcionAgenda(a);selEl.appendChild(o)})
+  if(ags.length){selEl.style.display='block'}else{el.innerHTML+=' · no hay agendas de este teléfono a ±3 días'}
+}
+async function enlazarAgendaDetalle(){
+  var id=document.getElementById('det-agenda-sel').value
+  if(!id){toast('Elige una agenda de la lista');return}
+  var r=await getDB().from('presupuestos').update({agenda_id:id,enlace_origen:'manual'}).eq('id',pptoActual.id)
+  if(r.error){toast('Error: '+r.error.message);return}
+  pptoActual.agenda_id=id;toast('🔗 Agenda enlazada','ok');renderAgendaDetalle()
 }
 
 function enviarWA(){
@@ -659,6 +727,8 @@ async function crearPpto(){
     telefono:document.getElementById('n-tel').value.trim(),
     vehiculo:document.getElementById('n-vehiculo').value.trim(),
     aliado_codigo:document.getElementById('n-aliado').value.trim(),
+    agenda_id:document.getElementById('n-agenda').value||null,
+    enlace_origen:document.getElementById('n-agenda').value?'pantalla':null,
     estado:'nuevo',items:[]
   }).select()
   if(r.error){toast('Error: '+r.error.message);return}

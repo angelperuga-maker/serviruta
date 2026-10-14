@@ -223,8 +223,8 @@ function renderKPIs(){
   var pend=SOLICITUDES.filter(function(s){return s.estado==='solicitada'})
   var urg=SOLICITUDES.filter(function(s){return s.urgencia==='urgente' && s.estado==='solicitada'})
   var hoy=new Date().toISOString().substring(0,10)
-  var confHoy=SOLICITUDES.filter(function(s){return s.estado==='confirmada' && s.confirmado_at && s.confirmado_at.substring(0,10)===hoy})
-  var monto=SOLICITUDES.filter(function(s){return s.estado!=='rechazada'}).reduce(function(sum,s){return sum+(s.monto_estimado||0)},0)
+  var confHoy=SOLICITUDES.filter(function(s){return (s.estado==='agendado'||s.estado==='confirmada') && s.confirmado_at && s.confirmado_at.substring(0,10)===hoy})
+  var monto=SOLICITUDES.filter(function(s){return (s.estado!=='rechazada' && s.estado!=='cancelado')}).reduce(function(sum,s){return sum+(s.monto_estimado||0)},0)
   
   document.getElementById('kpi-total').textContent=SOLICITUDES.length
   document.getElementById('kpi-pend').textContent=pend.length
@@ -243,8 +243,8 @@ function filtrar(f){
 function renderLista(){
   var lista=SOLICITUDES.slice()
   if(FILTRO==='pendientes') lista=lista.filter(function(s){return s.estado==='solicitada'})
-  else if(FILTRO==='urgentes') lista=lista.filter(function(s){return s.urgencia==='urgente' && s.estado!=='rechazada'})
-  else if(FILTRO==='confirmadas') lista=lista.filter(function(s){return s.estado==='confirmada'})
+  else if(FILTRO==='urgentes') lista=lista.filter(function(s){return s.urgencia==='urgente' && (s.estado!=='rechazada' && s.estado!=='cancelado')})
+  else if(FILTRO==='confirmadas') lista=lista.filter(function(s){return (s.estado==='agendado'||s.estado==='confirmada')})
   
   var cont=document.getElementById('lista')
   if(!lista.length){
@@ -255,8 +255,8 @@ function renderLista(){
   var html=''
   lista.forEach(function(s){
     var ag=AGENTES_MAP[s.agente_solicitante]||{emoji:'🤖',nombre:s.agente_solicitante||'?'}
-    var cls=s.estado==='rechazada'?'rechazada':(s.estado==='confirmada'?'confirmada':(s.urgencia==='urgente'?'urgente':'pendiente'))
-    var badge=s.estado==='confirmada'?'<span class="solic-badge badge-conf">✅ Confirmada</span>':(s.estado==='rechazada'?'<span class="solic-badge badge-rech">Rechazada</span>':(s.urgencia==='urgente'?'<span class="solic-badge badge-urg">🚨 Urgente</span>':'<span class="solic-badge badge-pend">🟡 Pendiente</span>'))
+    var cls=(s.estado==='rechazada'||s.estado==='cancelado')?'rechazada':((s.estado==='agendado'||s.estado==='confirmada')?'confirmada':(s.urgencia==='urgente'?'urgente':'pendiente'))
+    var badge=(s.estado==='agendado'||s.estado==='confirmada')?'<span class="solic-badge badge-conf">✅ Confirmada</span>':((s.estado==='rechazada'||s.estado==='cancelado')?'<span class="solic-badge badge-rech">Rechazada</span>':(s.urgencia==='urgente'?'<span class="solic-badge badge-urg">🚨 Urgente</span>':'<span class="solic-badge badge-pend">🟡 Pendiente</span>'))
     var telWA=(s.telefono||'').replace(/[^0-9]/g,'')
     if(telWA.length===9) telWA='56'+telWA
     
@@ -325,7 +325,7 @@ function abrirConfirmar(id){
 async function confirmarSolic(){
   var id=document.getElementById('m-id').value
   var data={
-    estado:'confirmada',
+    estado:'agendado',
     fecha:document.getElementById('m-fecha').value,
     hora:document.getElementById('m-hora').value,
     tecnico:document.getElementById('m-tecnico').value,
@@ -348,7 +348,8 @@ async function confirmarSolic(){
 
 async function rechazar(id){
   if(!confirm('¿Rechazar esta solicitud?')) return
-  var ok=await sbUpd('agenda?id=eq.'+id,{estado:'rechazada'})
+  var mot=prompt('Motivo del rechazo (obligatorio):'); if(mot===null) return; if(!mot.trim()){toast('⚠️ Indica el motivo','err');return}
+  var ok=await sbUpd('agenda?id=eq.'+id,{estado:'cancelado',motivo_resultado:'rechazada: '+mot.trim()})
   if(ok){
     toast('Solicitud rechazada')
     await cargar()

@@ -1125,7 +1125,7 @@ async function ejecutarTool(nombre, input){
         }
         
         // Marcar agenda como confirmada
-        await getDB().from('agenda').update({estado:'confirmado'}).eq('id', input.agenda_id)
+        await getDB().from('agenda').update({estado:'agendado'}).eq('id', input.agenda_id)
         await loadAll()
         return resultado
       }

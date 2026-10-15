@@ -165,7 +165,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--dorado)}
 <body>
 
 <header class="bar">
-  <button class="back" onclick="location.href='menu-coordinador.html'">← Volver</button>
+  <button class="back" onclick="location.href=(localStorage.getItem('sv_user_rol')==='tecnico'||!localStorage.getItem('sv_user_rol'))?'menu-tecnico.html':'menu-coordinador.html'">← Volver</button>
   <div class="sigil">S</div>
   <div class="title">Revisión Premium 120 Puntos<small>Precompra Camión · Certificación técnica</small></div>
 </header>

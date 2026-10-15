@@ -51,7 +51,7 @@ h2{font-family:Syne,sans-serif;font-size:13px;letter-spacing:.06em;background:#f
   <div class="t">📜 Certificación 120 puntos</div>
   <div>
     <button class="sec" onclick="window.print()">🖨️ Imprimir</button>
-    <button onclick="descargarPDF()">📄 Descargar PDF</button>
+    <button onclick="location.href='https://bqlgfmqcefledqyodkii.supabase.co/functions/v1/certificado-pdf?'+(new URLSearchParams(location.search).get('id')?'id='+new URLSearchParams(location.search).get('id'):'ficha='+new URLSearchParams(location.search).get('ficha'))">📄 Descargar PDF</button>
   </div>
 </div>
 <div class="estado" id="estado">Cargando certificación…</div>

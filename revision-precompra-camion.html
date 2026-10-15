@@ -1100,7 +1100,7 @@ function mostrarSuccess(){
     document.getElementById('success-wa').style.display='none'
   }
   
-  if(REVISION_ID){var so=document.getElementById('success-online');so.href='certificado-precompra-camion.html?id='+REVISION_ID;so.style.display=''}
+  if(REVISION_ID){var so=document.getElementById('success-online');so.href='https://bqlgfmqcefledqyodkii.supabase.co/functions/v1/certificado-pdf?id='+REVISION_ID;so.textContent='📄 PDF oficial con fotos (para el cliente)';so.style.display=''}
   document.getElementById('success').classList.add('show')
   window.scrollTo(0,0)
 }

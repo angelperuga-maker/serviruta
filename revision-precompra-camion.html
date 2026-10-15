@@ -599,7 +599,7 @@ function toast(msg,tipo){
   t.textContent=msg
   t.className='toast '+(tipo||'')
   t.classList.add('show')
-  setTimeout(function(){t.classList.remove('show')},2000)
+  setTimeout(function(){t.classList.remove('show')},3000)
 }
 
 function fmt(n){
@@ -1035,13 +1035,43 @@ async function guardar(){
     precio_servicio:350000
   }
   
+  // 1) Guardar la ficha SIN fotos (liviana, nunca da timeout)
+  data.fotos=[]
+  data.foto_count=0
   try {
-    var saved=await sbPost('revisiones_precompra_camion',data,true)
+    var saved=await sbPost('revisiones_precompra_camion?select=id',data,true)
     REVISION_ID=saved[0].id
-    mostrarSuccess()
   } catch(e){
-    toast('❌ Error: '+e.message,'err')
+    toast('❌ Error al guardar: '+e.message,'err')
+    mostrarFallo(e.message)
+    return
   }
+  // 2) Subir fotos por tandas pequeñas (reintenta cada tanda)
+  var TANDA=3, subidas=0, fallidas=0
+  for(var i=0;i<fotosData.length;i+=TANDA){
+    var chunk=fotosData.slice(i,i+TANDA), okChunk=false
+    for(var intento=0;intento<3&&!okChunk;intento++){
+      try {
+        await sbPost('rpc/agregar_fotos_revision',{p_id:REVISION_ID,p_fotos:chunk},false)
+        okChunk=true
+      } catch(e){ await new Promise(function(r){setTimeout(r,800)}) }
+    }
+    if(okChunk) subidas+=chunk.length; else fallidas+=chunk.length
+    toast('📷 Subiendo fotos '+Math.min(i+TANDA,fotosData.length)+'/'+fotosData.length+'...')
+  }
+  if(fallidas>0) alert('Ficha guardada, pero '+fallidas+' fotos no se pudieron subir (señal débil). El PDF igual incluye todas las fotos.')
+  mostrarSuccess()
+}
+
+function mostrarFallo(msg){
+  NUMERO_FICHA=NUMERO_FICHA||('REV-PC-'+Date.now())
+  document.getElementById('success-num').textContent=NUMERO_FICHA
+  document.getElementById('success-desc').textContent='⚠️ No se pudo guardar en el sistema ('+msg+'). Puedes descargar igual el PDF con todos los datos y fotos, y enviarlo al cliente. Luego avisa a la oficina.'
+  document.getElementById('success-wa').style.display='none'
+  var btnNew=document.querySelector('#success .success-btn.new')
+  if(btnNew){btnNew.textContent='↩ Volver al formulario y reintentar';btnNew.onclick=function(){document.getElementById('success').classList.remove('show')}}
+  document.getElementById('success').classList.add('show')
+  window.scrollTo(0,0)
 }
 
 function mostrarSuccess(){

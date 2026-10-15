@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Certificación 120 Puntos · Serviruta</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<style>
+:root{--dorado:#D4AF37;--rojo:#E8210A;--ok:#22c55e;--atn:#f5c518;--crt:#E8210A;--t1:#111;--t2:#444;--t3:#777;--line:#e5e5e5}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:#1a1a1e;color:var(--t1)}
+.bar{position:sticky;top:0;z-index:5;background:#0d0d10;color:#fff;padding:10px 14px;display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.bar .t{font-family:Syne,sans-serif;font-weight:800;font-size:14px}
+.bar button{background:var(--dorado);border:0;color:#000;font-family:Syne,sans-serif;font-weight:800;font-size:13px;padding:10px 16px;border-radius:10px;cursor:pointer}
+.bar button.sec{background:#2a2a30;color:#fff}
+.estado{color:#fff;text-align:center;padding:40px 16px;font-size:15px}
+#doc{background:#fff;max-width:800px;margin:16px auto;padding:0 0 30px}
+.head{background:var(--dorado);padding:22px 28px 18px;border-bottom:4px solid var(--rojo);display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:10px}
+.head .logo{font-family:Syne,sans-serif;font-weight:800;font-size:26px;letter-spacing:-0.5px}
+.head .sub{font-size:12px;font-weight:700;letter-spacing:.08em;margin-top:2px}
+.head .sub2{font-size:11px;color:#333;margin-top:2px}
+.head .num{text-align:right;font-family:Syne,sans-serif;font-weight:800;font-size:18px}
+.head .num small{display:block;font-family:'DM Sans';font-weight:500;font-size:11px;color:#333}
+.sec{padding:0 28px}
+h2{font-family:Syne,sans-serif;font-size:13px;letter-spacing:.06em;background:#f0f0f0;padding:7px 10px;margin:18px 0 10px;border-left:4px solid var(--dorado)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:6px 18px;font-size:13px}
+.grid b{color:var(--t3);font-weight:600;font-size:11px;letter-spacing:.05em;display:block}
+.resumen{margin:18px 28px 0;background:var(--dorado);padding:12px 14px;border-radius:8px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;font-family:Syne,sans-serif;font-weight:800}
+.resumen .pills span{display:inline-block;background:#fff;border-radius:20px;padding:4px 12px;font-size:12px;margin-left:6px}
+.punto{display:flex;gap:8px;align-items:flex-start;padding:4px 0;border-bottom:1px dashed var(--line);font-size:12.5px;page-break-inside:avoid}
+.mark{flex:0 0 18px;height:18px;border-radius:50%;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.mark.ok{background:var(--ok)}.mark.atencion{background:var(--atn);color:#000}.mark.critico{background:var(--crt)}.mark.na{background:#ccc}
+.punto .d{color:var(--t3);font-size:11px}
+.punto .nota{font-style:italic;color:#555;font-size:11.5px;margin-top:2px}
+.fotos{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 4px 26px}
+.fotos img{width:150px;height:112px;object-fit:cover;border-radius:6px;border:1px solid var(--line)}
+.veredicto{margin:22px 28px 0;padding:14px 16px;border-radius:8px;color:#fff;font-family:Syne,sans-serif;font-weight:800;font-size:16px;page-break-inside:avoid}
+.veredicto.recomendar{background:var(--ok)}.veredicto.negociar{background:var(--atn);color:#000}.veredicto.no_recomendar{background:var(--crt)}
+.obs{margin:10px 28px 0;font-size:13px;white-space:pre-wrap}
+.firmas{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin:26px 28px 0;page-break-inside:avoid}
+.firma{border-top:1px solid #000;padding-top:6px;font-size:12px}
+.firma img{display:block;width:100%;max-width:240px;height:80px;object-fit:contain;background:#fff;margin-bottom:4px}
+.firma b{display:block;font-size:11px;color:var(--t3);letter-spacing:.05em}
+.foot{text-align:center;color:#999;font-size:10px;margin-top:26px}
+@media print{body{background:#fff}.bar{display:none}#doc{margin:0;max-width:none}.fotos img{width:120px;height:90px}}
+</style>
+</head>
+<body>
+<div class="bar">
+  <div class="t">📜 Certificación 120 puntos</div>
+  <div>
+    <button class="sec" onclick="window.print()">🖨️ Imprimir</button>
+    <button onclick="descargarPDF()">📄 Descargar PDF</button>
+  </div>
+</div>
+<div class="estado" id="estado">Cargando certificación…</div>
+<div id="doc" style="display:none"></div>
+
+<script>
+var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+
+var SECCIONES=[
+  {id:'ident',icon:'📄',nombre:'Identificación y documentación',puntos:[
+    {id:'vin_grabado',n:'VIN grabado en chasis',d:'Coincide con documentos'},
+    {id:'placa_legible',n:'Placa y patente legibles',d:'Sin adulteraciones'},
+    {id:'km_concordante',n:'Kilometraje concordante',d:'Con documentos y estado'},
+    {id:'revision_tecnica',n:'Revisión técnica vigente',d:'Certificado al día'},
+    {id:'permiso_circulacion',n:'Permiso de circulación',d:'Al día'},
+    {id:'soap_vigente',n:'SOAP vigente',d:'Póliza al día'},
+    {id:'padron_tid',n:'Padrón / TID vigente',d:'Sin anotaciones críticas'}
+  ]},
+  {id:'motor_visual',icon:'🔧',nombre:'Motor · Visual y funcional',puntos:[
+    {id:'motor_general',n:'Estado general al ojo',d:'Sin fugas evidentes'},
+    {id:'arranque_frio',n:'Arranque en frío',d:'Tiempo, humo, respuesta'},
+    {id:'ralenti',n:'Ralentí estable',d:'Sin vibraciones'},
+    {id:'aceleracion_vacio',n:'Aceleración en vacío',d:'Respuesta y humo escape'},
+    {id:'turbo_sonido',n:'Sonido del turbo',d:'Sin silbidos raros'},
+    {id:'fugas_aceite_bloque',n:'Fugas de aceite en bloque',d:'Cárter, cabezote'},
+    {id:'fugas_combustible',n:'Fugas de combustible',d:'Ductos, bomba, inyectores'},
+    {id:'tapa_balancines',n:'Estado tapa balancines',d:'Sin fugas de aceite'},
+    {id:'retenes_cigueñal',n:'Retenes cigüeñal',d:'Delantero y trasero'},
+    {id:'correas_visibles',n:'Correas visibles',d:'Sin fisuras, tensión correcta'},
+    {id:'poleas_accesorios',n:'Poleas de accesorios',d:'Rodamientos sin ruido'},
+    {id:'soportes_motor',n:'Soportes de motor',d:'Sin ruptura de gomas'},
+    {id:'ventilador_viscoso',n:'Ventilador y viscoso',d:'Enganche correcto'},
+    {id:'bomba_agua',n:'Bomba de agua',d:'Sin fugas, sin ruidos'}
+  ]},
+  {id:'fluidos',icon:'🛢️',nombre:'Análisis visual de fluidos',puntos:[
+    {id:'aceite_nivel',n:'Nivel de aceite motor',d:'Entre min y max'},
+    {id:'aceite_visual',n:'Aceite motor - inspección visual',d:'Ver campo especial abajo'},
+    {id:'refri_nivel',n:'Nivel de refrigerante',d:'Estanque expansión'},
+    {id:'refri_visual',n:'Refrigerante - inspección visual',d:'Ver campo especial abajo'},
+    {id:'liquido_frenos',n:'Líquido de frenos',d:'Nivel y color'}
+  ]},
+  {id:'obd',icon:'📡',nombre:'Escáner OBD-II · Diagnóstico ECU',puntos:[
+    {id:'ecu_motor',n:'Comunicación ECU motor',d:'Lectura correcta'},
+    {id:'tcm_trans',n:'Comunicación TCM transmisión',d:'Lectura correcta'},
+    {id:'abs_scanner',n:'Comunicación ABS',d:'Lectura correcta'},
+    {id:'bcm_chassis',n:'Comunicación chassis/BCM',d:'Lectura correcta'},
+    {id:'dtc_motor_activos',n:'Códigos DTC activos motor',d:'Registrar en campo especial'},
+    {id:'dtc_abs_activos',n:'Códigos DTC activos ABS',d:'Registrar en campo especial'},
+    {id:'dtc_borrados',n:'Códigos históricos borrados',d:'Verificar que no reaparezcan'},
+    {id:'datos_live',n:'Datos live (RPM, temp, presiones)',d:'Rangos normales'}
+  ]},
+  {id:'emisiones',icon:'💨',nombre:'Emisiones · DPF/EGR/SCR',puntos:[
+    {id:'dpf_contrapresion',n:'DPF: contrapresión',d:'Dentro de rango'},
+    {id:'dpf_regeneraciones',n:'DPF: N° regeneraciones recientes',d:'Frecuencia normal'},
+    {id:'dpf_forzada',n:'DPF: regeneración forzada',d:'Exitosa'},
+    {id:'egr_apertura',n:'EGR: apertura sin humo',d:'Válvula funcional'},
+    {id:'egr_sensores',n:'EGR: sensores calibrados',d:'Sin códigos'},
+    {id:'adblue_nivel',n:'AdBlue: nivel + inyección',d:'Sistema activo'},
+    {id:'sensor_nox',n:'Sensor NOx',d:'Funcional'},
+    {id:'lambda_precat',n:'Lambda pre-catalizador',d:'Rango 0.1-0.9V'},
+    {id:'presion_escape',n:'Presión escape a RPM',d:'Dentro de rango'}
+  ]},
+  {id:'trans',icon:'⚙️',nombre:'Transmisión y embrague',puntos:[
+    {id:'embrague_pedal',n:'Embrague: recorrido pedal',d:'Firme, sin bajones'},
+    {id:'embrague_patinaje',n:'Embrague: patinaje en 3ra',d:'Sin patinaje'},
+    {id:'cambios_manual',n:'Cambios: todas las marchas',d:'Sin dificultades'},
+    {id:'cambios_retrocesos',n:'Cambios: retrocesos',d:'Enganche limpio'},
+    {id:'sincronizados',n:'Sincronizados: sin ruidos',d:'En cambios rápidos'},
+    {id:'aceite_caja_nivel',n:'Nivel aceite de caja',d:'Sin metalizados'},
+    {id:'cardan_crucetas',n:'Cardán y crucetas',d:'Sin juego, sin ruidos'}
+  ]},
+  {id:'neumaticos_sistema',icon:'💨',nombre:'Sistemas neumáticos',puntos:[
+    {id:'compresor_presion',n:'Compresor: presión de trabajo',d:'8-10 bar'},
+    {id:'compresor_llenado',n:'Compresor: tiempo llenado 0-8bar',d:'Menor a 3 min'},
+    {id:'tanques_humedad',n:'Tanques: humedad',d:'Sin agua acumulada'},
+    {id:'tanques_fugas',n:'Tanques: fugas',d:'Presión estable'},
+    {id:'valvula_4vias',n:'Válvula 4 vías',d:'Funcional'},
+    {id:'valvula_reguladora',n:'Válvula reguladora',d:'Cortes correctos'},
+    {id:'valvulas_descarga',n:'Válvulas de descarga',d:'Estanqueidad'},
+    {id:'valv_freno_estac',n:'Válvulas freno estacionamiento',d:'Funcional'},
+    {id:'ductos_neumaticos',n:'Ductos y mangueras neumáticas',d:'Sin fisuras'}
+  ]},
+  {id:'frenos',icon:'🛑',nombre:'Frenos',puntos:[
+    {id:'frenos_carrera',n:'Frenos servicio en carrera',d:'Efectividad'},
+    {id:'freno_estac',n:'Freno estacionamiento',d:'Efectividad'},
+    {id:'retardador',n:'Ralentizador/retardador',d:'Si aplica'},
+    {id:'pastillas_rueda',n:'Pastillas/tambores por rueda',d:'Remanente por eje'},
+    {id:'sensores_desgaste',n:'Sensores desgaste',d:'Sin luz activa'},
+    {id:'abs_sensor_rueda',n:'ABS: sensor por rueda',d:'Todos comunican'},
+    {id:'abs_modulador',n:'ABS: modulador',d:'Sin fallas'},
+    {id:'ebs_comunicacion',n:'EBS: comunicación',d:'Sin códigos'},
+    {id:'valvulas_remolque',n:'Válvulas frenos remolque',d:'Si aplica'},
+    {id:'discos_estado',n:'Discos: deformación',d:'Sin alabeo'}
+  ]},
+  {id:'direccion',icon:'🛞',nombre:'Dirección y suspensión',puntos:[
+    {id:'juego_volante',n:'Juego del volante',d:'Máximo aceptable'},
+    {id:'bomba_hidraulica',n:'Bomba hidráulica dirección',d:'Sin ruidos, sin fugas'},
+    {id:'cilindro_hidraulico',n:'Cilindro hidráulico dirección',d:'Sin fugas'},
+    {id:'terminales_dir',n:'Terminales dirección',d:'Sin juego'},
+    {id:'rotulas',n:'Rótulas',d:'Sin juego'},
+    {id:'amortiguadores_eje',n:'Amortiguadores por eje',d:'Test rebote'},
+    {id:'ballestas_fisuras',n:'Ballestas: fisuras',d:'Ninguna quebrada'},
+    {id:'ballestas_hojas',n:'Ballestas: hojas quebradas',d:'Contar por eje'},
+    {id:'suspension_neumatica',n:'Suspensión neumática (fuelles)',d:'Sin fugas'},
+    {id:'bujes_bujecillos',n:'Bujes y bujecillos',d:'Sin desgaste excesivo'}
+  ]},
+  {id:'chasis',icon:'🏗️',nombre:'Chasis y carrocería',puntos:[
+    {id:'marco_soldaduras',n:'Marco chasis: soldaduras',d:'Originales'},
+    {id:'marco_deformaciones',n:'Marco chasis: deformaciones',d:'Ninguna'},
+    {id:'travesanos',n:'Travesaños: fisuras',d:'Sin fisuras'},
+    {id:'oxido_estructural',n:'Óxido estructural',d:'Zonas críticas'},
+    {id:'golpes_ocultos',n:'Golpes ocultos: mediciones',d:'Simetría'},
+    {id:'simetria_ejes',n:'Simetría de ejes',d:'Alineados'},
+    {id:'pintura_repintados',n:'Pintura: repintados',d:'Uniformidad'},
+    {id:'vidrios_fisuras',n:'Vidrios: fisuras',d:'Sin fisuras críticas'},
+    {id:'puertas_cerraduras',n:'Puertas: cerraduras',d:'Funcionamiento'},
+    {id:'estanqueidad_cabina',n:'Estanqueidad cabina',d:'Sin filtraciones'},
+    {id:'guardafangos',n:'Guardafangos',d:'Sin rupturas'}
+  ]},
+  {id:'electrico',icon:'⚡',nombre:'Sistema eléctrico',puntos:[
+    {id:'baterias_voltaje',n:'Baterías: voltaje',d:'12.4V+ en reposo'},
+    {id:'baterias_densidad',n:'Baterías: densidad/estado',d:'Con densímetro'},
+    {id:'alternador_carga',n:'Alternador: carga',d:'13.5-14.5V'},
+    {id:'motor_partida',n:'Motor partida: consumo',d:'Amperaje normal'},
+    {id:'luces_exteriores',n:'Luces exteriores completas',d:'Todas funcionan'},
+    {id:'luces_interiores',n:'Luces interiores',d:'Cabina, cargas'},
+    {id:'tablero_instrumentos',n:'Tablero e instrumentos',d:'Todos leen'},
+    {id:'testigos_encendidos',n:'Testigos encendidos',d:'Ninguno anormal'},
+    {id:'fusibles_relays',n:'Fusibles y relays',d:'Sin quemados'}
+  ]},
+  {id:'ruedas',icon:'🛞',nombre:'Neumáticos y ruedas',puntos:[
+    {id:'dibujo_por_pos',n:'Dibujo remanente por posición',d:'En mm cada uno'},
+    {id:'antiguedad_dot',n:'Antigüedad DOT',d:'Semana/año'},
+    {id:'desgaste_irregular',n:'Desgaste irregular',d:'Indicador alineación'},
+    {id:'presiones_actuales',n:'Presiones actuales vs recom.',d:'Todas correctas'},
+    {id:'llantas_estado',n:'Llantas: grietas/golpes',d:'Sin daños'},
+    {id:'pernos_esparragos',n:'Pernos y espárragos',d:'Torque correcto'},
+    {id:'rueda_auxiliar',n:'Rueda auxiliar/repuesto',d:'Estado y sujeción'}
+  ]},
+  {id:'cabina',icon:'🚪',nombre:'Cabina y confort',puntos:[
+    {id:'asiento_conductor',n:'Asiento conductor',d:'Regulaciones, estado'},
+    {id:'cinturones_seg',n:'Cinturones de seguridad',d:'Retracción'},
+    {id:'aire_calef',n:'Aire acond. + calefacción',d:'Ambos funcionan'},
+    {id:'espejos_ext',n:'Espejos exteriores',d:'Ajustes y estado'},
+    {id:'bocina',n:'Bocina',d:'Funcional'},
+    {id:'cuenta_km_manip',n:'Cuenta km sin manipulación',d:'Concordante'},
+    {id:'tacografo',n:'Tacógrafo (si aplica)',d:'Vigente y calibrado'}
+  ]},
+  {id:'ruta',icon:'🛣️',nombre:'Prueba de ruta 15 km',puntos:[
+    {id:'aceleracion_0_60',n:'Aceleración 0-60 km/h',d:'Tiempo esperado'},
+    {id:'estabilidad_crucero',n:'Estabilidad a velocidad crucero',d:'Sin desviaciones'},
+    {id:'comportamiento_curvas',n:'Comportamiento en curvas',d:'Sin ruidos'},
+    {id:'comportamiento_pendiente',n:'Comportamiento en pendiente',d:'Fuerza motor'},
+    {id:'frenado_emergencia',n:'Frenado en emergencia',d:'Metros de detención'},
+    {id:'temp_sostenida',n:'Temperatura motor sostenida',d:'Sin recalentamiento'},
+    {id:'cambios_en_carga',n:'Cambios en carga',d:'Sin trepidaciones'}
+  ]}
+]
+
+var R=null
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function v(x,suf){return (x===null||x===undefined||x==='')?'—':esc(x)+(suf||'')}
+function fmtKm(n){return n?parseInt(n).toLocaleString('es-CL')+' km':'—'}
+function fmtCLP(n){return n?'$'+parseInt(n).toLocaleString('es-CL'):'—'}
+function fecha(s){try{return new Date(s).toLocaleDateString('es-CL',{day:'2-digit',month:'2-digit',year:'numeric'})}catch(e){return s||'—'}}
+
+async function cargar(){
+  var q=new URLSearchParams(location.search)
+  var ficha=q.get('ficha'), id=q.get('id')
+  var filtro=id?'id=eq.'+encodeURIComponent(id):'numero_ficha=eq.'+encodeURIComponent(ficha||'')
+  var r=await fetch(SB_URL+'/rest/v1/revisiones_precompra_camion?select=*&'+filtro+'&limit=1',{headers:{apikey:SB_KEY,Authorization:'Bearer '+SB_KEY}})
+  var rows=r.ok?await r.json():[]
+  if(!rows.length){document.getElementById('estado').textContent='No se encontró la certificación '+(ficha||id||'');return}
+  R=rows[0]; render()
+}
+
+function render(){
+  var puntos=R.puntos||{}, fotos=R.fotos||[]
+  var fpp={}; fotos.forEach(function(f){(fpp[f.punto_id]=fpp[f.punto_id]||[]).push(f.data)})
+  var ok=0,atn=0,crt=0
+  Object.values(puntos).forEach(function(p){if(p.estado==='ok')ok++;else if(p.estado==='atencion')atn++;else if(p.estado==='critico')crt++})
+  var h=''
+  h+='<div class="head"><div><div class="logo">SERVI<span style="color:var(--rojo)">RUTA</span></div><div class="sub">CERTIFICACIÓN PREMIUM 120 PUNTOS</div><div class="sub2">Revisión precompra camión · Análisis técnico, fotos y firmas</div></div>'
+  h+='<div class="num">'+esc(R.numero_ficha)+'<small>N° CERTIFICACIÓN</small><small>'+fecha(R.fecha_revision||R.created_at)+'</small><small>'+fotos.length+' fotos · '+(ok+atn+crt)+'/120 pts</small></div></div>'
+  h+='<div class="sec"><h2>VEHÍCULO CERTIFICADO</h2><div class="grid">'
+  h+='<div><b>MARCA / MODELO</b>'+v((R.marca||'')+' '+(R.modelo||''))+'</div><div><b>AÑO</b>'+v(R["año"])+'</div><div><b>PATENTE</b>'+v(R.patente)+'</div><div><b>VIN</b>'+v(R.vin)+'</div><div><b>KILOMETRAJE</b>'+fmtKm(R.kilometraje)+'</div><div><b>COMBUSTIBLE</b>'+v(R.tipo_combustible)+'</div><div><b>COLOR</b>'+v(R.color)+'</div></div>'
+  h+='<h2>CLIENTE COMPRADOR</h2><div class="grid"><div><b>NOMBRE</b>'+v(R.cliente_nombre)+'</div><div><b>RUT</b>'+v(R.cliente_rut)+'</div><div><b>TELÉFONO</b>'+v(R.cliente_telefono)+'</div><div><b>EMAIL</b>'+v(R.cliente_email)+'</div></div>'
+  if(R.vendedor_nombre||R.vendedor_telefono) h+='<h2>VENDEDOR ACTUAL</h2><div class="grid"><div><b>NOMBRE</b>'+v(R.vendedor_nombre)+'</div><div><b>TELÉFONO</b>'+v(R.vendedor_telefono)+'</div></div>'
+  h+='<h2>TÉCNICO CERTIFICADOR SERVIRUTA</h2><div class="grid"><div><b>NOMBRE</b>'+v(R.tecnico_nombre)+'</div><div><b>RUT</b>'+v(R.tecnico_rut)+'</div><div><b>UBICACIÓN</b>'+v(R.ubicacion_revision)+'</div></div></div>'
+  h+='<div class="resumen"><div>RESUMEN · '+(ok+atn+crt)+' / 120 puntos</div><div class="pills"><span>✓ OK '+ok+'</span><span>⚠ Atención '+atn+'</span><span>✗ Críticos '+crt+'</span></div></div>'
+  var dtc=(R.codigos_dtc||[]).filter(function(c){return c&&c.codigo})
+  if(dtc.length){h+='<div class="sec"><h2>📡 ESCÁNER OBD-II · CÓDIGOS DTC</h2>';dtc.forEach(function(c){h+='<div class="punto"><div>'+esc(c.codigo)+' <span class="d">('+esc(c.tipo)+')</span></div></div>'});h+='</div>'}
+  var a=R.analisis_aceite||{}
+  if(a.aceite_color||a.refri_color) h+='<div class="sec"><h2>🛢️ ANÁLISIS DE FLUIDOS</h2><div class="grid"><div><b>ACEITE MOTOR · COLOR</b>'+v(a.aceite_color)+'</div><div><b>ACEITE MOTOR · OLOR</b>'+v(a.aceite_olor)+'</div><div><b>REFRIGERANTE · COLOR</b>'+v(a.refri_color)+'</div><div><b>REFRIGERANTE · PH</b>'+v(a.refri_ph)+'</div>'+(R.informe_laboratorio_url?'<div><b>INFORME LABORATORIO</b>'+v(R.informe_laboratorio_url)+'</div>':'')+'</div></div>'
+  var p=R.prueba_ruta||{}
+  if(p.km_inicial||p.descripcion||p.duracion_min) h+='<div class="sec"><h2>🛣️ PRUEBA DE RUTA</h2><div class="grid"><div><b>KM INICIAL → FINAL</b>'+v(p.km_inicial)+' → '+v(p.km_final)+'</div><div><b>RUTA</b>'+v(p.descripcion)+'</div><div><b>DURACIÓN</b>'+v(p.duracion_min,' min')+'</div><div><b>VEL. MÁX</b>'+v(p.velocidad_maxima,' km/h')+'</div><div><b>TEMP. SOSTENIDA</b>'+v(p.temperatura_sostenida,' °C')+'</div></div>'+(p.observaciones?'<div class="obs" style="margin:8px 0 0">'+esc(p.observaciones)+'</div>':'')+'</div>'
+  h+='<div class="sec">'
+  SECCIONES.forEach(function(s){
+    var rev=s.puntos.filter(function(pt){return puntos[pt.id]}).length
+    if(!rev) return
+    h+='<h2>'+s.icon+' '+esc(s.nombre.toUpperCase())+' ('+rev+'/'+s.puntos.length+')</h2>'
+    s.puntos.forEach(function(pt){
+      var st=puntos[pt.id]; if(!st) return
+      var m=st.estado==='ok'?'✓':(st.estado==='atencion'?'!':'✗')
+      h+='<div class="punto"><div class="mark '+esc(st.estado)+'">'+m+'</div><div><div>'+esc(pt.n)+' <span class="d">'+esc(pt.d||'')+'</span></div>'+(st.nota?'<div class="nota">→ '+esc(st.nota)+'</div>':'')+'</div></div>'
+      if(fpp[pt.id]){h+='<div class="fotos">';fpp[pt.id].forEach(function(d){h+='<img src="'+d+'">'});h+='</div>'}
+    })
+  })
+  h+='</div>'
+  var vl={recomendar:'✅ VEREDICTO CERTIFICADO: RECOMENDAMOS LA COMPRA',negociar:'🟡 VEREDICTO CERTIFICADO: COMPRAR CON NEGOCIACIÓN',no_recomendar:'❌ VEREDICTO CERTIFICADO: NO RECOMENDAMOS LA COMPRA'}
+  h+='<div class="veredicto '+esc(R.veredicto)+'">'+(vl[R.veredicto]||esc(R.veredicto))+(R.veredicto==='negociar'&&R.monto_negociacion_sugerido?'<div style="font-size:13px;margin-top:4px">Descuento sugerido: '+fmtCLP(R.monto_negociacion_sugerido)+'</div>':'')+'</div>'
+  if(R.observaciones_finales) h+='<div class="obs"><b>Observaciones del certificador:</b>\n'+esc(R.observaciones_finales)+'</div>'
+  h+='<div class="firmas"><div class="firma">'+(R.firma_tecnico?'<img src="'+R.firma_tecnico+'">':'')+'<b>TÉCNICO CERTIFICADOR</b>'+v(R.tecnico_nombre)+'<div style="color:#999;font-size:11px">'+fecha(R.firma_tecnico_fecha||R.created_at)+'</div></div>'
+  h+='<div class="firma">'+(R.firma_cliente?'<img src="'+R.firma_cliente+'">':'')+'<b>CLIENTE COMPRADOR</b>'+v(R.cliente_nombre)+'<div style="color:#999;font-size:11px">'+fecha(R.firma_cliente_fecha||R.created_at)+'</div></div></div>'
+  h+='<div class="foot">Serviruta · +56 9 4521 0814 · serviruta.cl · Certificación '+esc(R.numero_ficha)+'</div>'
+  document.getElementById('doc').innerHTML=h
+  document.getElementById('doc').style.display='block'
+  document.getElementById('estado').style.display='none'
+  document.title='Certificación '+R.numero_ficha+' · '+(R.patente||'')
+}
+
+function descargarPDF(){
+  if(!R) return
+  var el=document.getElementById('doc')
+  html2pdf().set({margin:[6,6,8,6],filename:R.numero_ficha+'_'+(R.patente||'')+'.pdf',image:{type:'jpeg',quality:0.85},html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},pagebreak:{mode:['css','legacy'],avoid:['.punto','.fotos','.firmas','.veredicto']}}).from(el).save()
+}
+cargar()
+</script>
+</body>
+</html>

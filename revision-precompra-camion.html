@@ -418,6 +418,7 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--dorado)}
     <div class="success-desc" id="success-desc">La certificación premium de 120 puntos está lista con firmas. Descarga el reporte PDF profesional.</div>
     <div class="success-acciones">
       <button class="success-btn pdf" onclick="descargarPDF()">📄 Descargar Certificación PDF</button>
+      <a class="success-btn pdf" id="success-online" href="#" target="_blank">🔗 Ver certificado online (con fotos)</a>
       <a class="success-btn wa" id="success-wa" href="#" target="_blank">💬 Enviar al cliente por WhatsApp</a>
       <button class="success-btn new" onclick="nuevaRevision()">➕ Nueva certificación</button>
     </div>
@@ -1068,6 +1069,7 @@ function mostrarFallo(msg){
   document.getElementById('success-num').textContent=NUMERO_FICHA
   document.getElementById('success-desc').textContent='⚠️ No se pudo guardar en el sistema ('+msg+'). Puedes descargar igual el PDF con todos los datos y fotos, y enviarlo al cliente. Luego avisa a la oficina.'
   document.getElementById('success-wa').style.display='none'
+  document.getElementById('success-online').style.display='none'
   var btnNew=document.querySelector('#success .success-btn.new')
   if(btnNew){btnNew.textContent='↩ Volver al formulario y reintentar';btnNew.onclick=function(){document.getElementById('success').classList.remove('show')}}
   document.getElementById('success').classList.add('show')
@@ -1098,6 +1100,7 @@ function mostrarSuccess(){
     document.getElementById('success-wa').style.display='none'
   }
   
+  if(REVISION_ID){var so=document.getElementById('success-online');so.href='certificado-precompra-camion.html?id='+REVISION_ID;so.style.display=''}
   document.getElementById('success').classList.add('show')
   window.scrollTo(0,0)
 }

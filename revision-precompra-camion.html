@@ -803,7 +803,7 @@ document.getElementById('foto-input').addEventListener('change',async function(e
   
   toast('📷 Procesando foto...')
   try {
-    var comprimida=await comprimirImagen(file, 1200, 0.7)
+    var comprimida=await comprimirImagen(file, 900, 0.6)
     if(!fotos[puntoActualFoto]) fotos[puntoActualFoto]=[]
     fotos[puntoActualFoto].push({data:comprimida, ts:Date.now()})
     renderSecciones()

@@ -301,6 +301,14 @@ async function loadAll(){
     DATOS.gastos = results[1].data || []
     DATOS.aliados = results[2].data || []
     DATOS.tecnicos_db = results[3].data || []
+    // Técnicos activos nuevos (ej. Lucas) se suman solos al equipo del coordinador
+    DATOS.tecnicos_db.filter(function(t){return t.activo&&t.nombre}).forEach(function(t){
+      var ya=TECNICOS.some(function(x){return (x.nombre||'').toLowerCase()===t.nombre.toLowerCase()})
+      if(!ya){
+        TECNICOS.push({nombre:t.nombre,tel:t.telefono||'',especialidad:(t.especialidades||'general').split(',')})
+        SYSTEM_PROMPT+='\n- Tecnico adicional activo: '+t.nombre+(t.telefono?' ('+t.telefono+')':' (sin telefono registrado)')+' - '+(t.especialidades||'general')
+      }
+    })
     DATOS.inspecciones = results[4].data || []
     DATOS.ubicaciones = results[5].data || []
     DATOS.leads = results[6].data || []

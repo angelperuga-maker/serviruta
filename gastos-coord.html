@@ -217,10 +217,26 @@ var COLS=['#60A5FA','#22C55E','#F5C518','#FB923C','#A78BFA','#34D399']
 
 function getDB(){if(!db)db=supabase.createClient(SB,SK);return db;}
 
+async function cargarTecnicosActivos(){
+  // Suma al selector los técnicos activos que aún no estén en la lista (ej. Lucas)
+  try{
+    var r=await getDB().from('tecnicos').select('nombre').eq('activo',true).order('nombre')
+    var sel=document.getElementById('g-tecnico')
+    if(!sel||!r.data) return
+    var existentes=Array.prototype.map.call(sel.options,function(o){return o.value.toLowerCase()})
+    r.data.forEach(function(t){
+      if(existentes.indexOf(t.nombre.toLowerCase())===-1){
+        var o=document.createElement('option');o.value=t.nombre;o.textContent=t.nombre;sel.appendChild(o)
+      }
+    })
+  }catch(e){}
+}
+
 async function load(){
   var r=await getDB().from('gastos').select('*').order('fecha',{ascending:false})
   gastos=r.data||[]
   renderAll()
+  cargarTecnicosActivos()
 }
 
 function renderAll(){renderResumen();renderTodos();renderTecnicos();renderFijos()}

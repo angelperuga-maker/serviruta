@@ -1,0 +1,721 @@
+{
+ "generado": "2026-10-20T13:07:27.934Z",
+ "cotizador": "aire_acondicionado",
+ "fuente": "https://angelperuga-maker.github.io/serviruta/cotizador-aire-acondicionado.html",
+ "moneda": "CLP",
+ "segmentos": {
+  "L": "auto liviano",
+  "M": "SUV / camioneta",
+  "C": "furgón / camión liviano"
+ },
+ "ano_r1234yf_desde": 2017,
+ "incluye": [
+  "Traslado del técnico",
+  "Mano de obra",
+  "Prueba de temperatura en salida",
+  "Garantía de 3 meses en mano de obra"
+ ],
+ "servicios": [
+  {
+   "id": "carga",
+   "titulo": "Recarga de gas con vacío",
+   "detalle": "Recuperación del gas viejo, vacío, prueba de estanqueidad y carga al peso que indica el fabricante.",
+   "desde": false,
+   "solo": false,
+   "precio": {
+    "R134a": {
+     "L": 65000,
+     "M": 75000,
+     "C": 92000
+    },
+    "R1234yf": {
+     "L": 145000,
+     "M": 165000,
+     "C": 198000
+    }
+   },
+   "por_gas": true
+  },
+  {
+   "id": "fuga",
+   "titulo": "Detección de fuga",
+   "detalle": "Trazador UV y revisión de mangueras, condensador y evaporador. Se descuenta del valor si reparamos.",
+   "desde": false,
+   "solo": false,
+   "precio": {
+    "L": 45000,
+    "M": 45000,
+    "C": 55000
+   },
+   "por_gas": false
+  },
+  {
+   "id": "sanitizacion",
+   "titulo": "Sanitización del evaporador y ductos",
+   "detalle": "Elimina el olor a humedad y los hongos que se acumulan en el evaporador.",
+   "desde": false,
+   "solo": false,
+   "precio": {
+    "L": 35000,
+    "M": 38000,
+    "C": 45000
+   },
+   "por_gas": false
+  },
+  {
+   "id": "filtro",
+   "titulo": "Cambio de filtro de cabina",
+   "detalle": "Filtro incluido. Es la causa más común de poco flujo de aire.",
+   "desde": false,
+   "solo": false,
+   "precio": {
+    "L": 25000,
+    "M": 28000,
+    "C": 34000
+   },
+   "por_gas": false
+  },
+  {
+   "id": "deshidratador",
+   "titulo": "Cambio de filtro deshidratador",
+   "detalle": "Obligatorio si el circuito quedó abierto o entró humedad. Incluye recarga.",
+   "desde": false,
+   "solo": false,
+   "precio": {
+    "L": 95000,
+    "M": 110000,
+    "C": 135000
+   },
+   "por_gas": false
+  },
+  {
+   "id": "compresor",
+   "titulo": "Cambio de compresor",
+   "detalle": "Incluye repuesto, aceite, deshidratador y carga. El valor final depende del número de parte.",
+   "desde": true,
+   "solo": false,
+   "precio": {
+    "L": 320000,
+    "M": 380000,
+    "C": 460000
+   },
+   "por_gas": false
+  },
+  {
+   "id": "diagnostico",
+   "titulo": "No sé qué tiene, quiero diagnóstico",
+   "detalle": "Revisión completa del sistema con manómetros. Si haces la reparación con nosotros, no se cobra.",
+   "desde": false,
+   "solo": true,
+   "precio": {
+    "L": 35000,
+    "M": 35000,
+    "C": 42000
+   },
+   "por_gas": false
+  }
+ ],
+ "total_vehiculos": 120,
+ "vehiculos": [
+  {
+   "marca": "Chevrolet",
+   "modelo": "Sail",
+   "segmento": "L"
+  },
+  {
+   "marca": "Chevrolet",
+   "modelo": "Spark",
+   "segmento": "L"
+  },
+  {
+   "marca": "Chevrolet",
+   "modelo": "Aveo",
+   "segmento": "L"
+  },
+  {
+   "marca": "Chevrolet",
+   "modelo": "Cruze",
+   "segmento": "L"
+  },
+  {
+   "marca": "Chevrolet",
+   "modelo": "Onix",
+   "segmento": "L"
+  },
+  {
+   "marca": "Chevrolet",
+   "modelo": "Tracker",
+   "segmento": "M"
+  },
+  {
+   "marca": "Chevrolet",
+   "modelo": "Captiva",
+   "segmento": "M"
+  },
+  {
+   "marca": "Chevrolet",
+   "modelo": "D-Max",
+   "segmento": "M"
+  },
+  {
+   "marca": "Chevrolet",
+   "modelo": "Colorado",
+   "segmento": "M"
+  },
+  {
+   "marca": "Chevrolet",
+   "modelo": "N300 / N400",
+   "segmento": "C"
+  },
+  {
+   "marca": "Hyundai",
+   "modelo": "Accent",
+   "segmento": "L"
+  },
+  {
+   "marca": "Hyundai",
+   "modelo": "i10",
+   "segmento": "L"
+  },
+  {
+   "marca": "Hyundai",
+   "modelo": "Elantra",
+   "segmento": "L"
+  },
+  {
+   "marca": "Hyundai",
+   "modelo": "Tucson",
+   "segmento": "M"
+  },
+  {
+   "marca": "Hyundai",
+   "modelo": "Santa Fe",
+   "segmento": "M"
+  },
+  {
+   "marca": "Hyundai",
+   "modelo": "Creta",
+   "segmento": "M"
+  },
+  {
+   "marca": "Hyundai",
+   "modelo": "H1",
+   "segmento": "C"
+  },
+  {
+   "marca": "Hyundai",
+   "modelo": "Porter",
+   "segmento": "C"
+  },
+  {
+   "marca": "Kia",
+   "modelo": "Morning",
+   "segmento": "L"
+  },
+  {
+   "marca": "Kia",
+   "modelo": "Rio",
+   "segmento": "L"
+  },
+  {
+   "marca": "Kia",
+   "modelo": "Cerato",
+   "segmento": "L"
+  },
+  {
+   "marca": "Kia",
+   "modelo": "Sportage",
+   "segmento": "M"
+  },
+  {
+   "marca": "Kia",
+   "modelo": "Sorento",
+   "segmento": "M"
+  },
+  {
+   "marca": "Kia",
+   "modelo": "Seltos",
+   "segmento": "M"
+  },
+  {
+   "marca": "Kia",
+   "modelo": "Frontier",
+   "segmento": "C"
+  },
+  {
+   "marca": "Kia",
+   "modelo": "K2500",
+   "segmento": "C"
+  },
+  {
+   "marca": "Nissan",
+   "modelo": "March",
+   "segmento": "L"
+  },
+  {
+   "marca": "Nissan",
+   "modelo": "Versa",
+   "segmento": "L"
+  },
+  {
+   "marca": "Nissan",
+   "modelo": "Sentra",
+   "segmento": "L"
+  },
+  {
+   "marca": "Nissan",
+   "modelo": "Qashqai",
+   "segmento": "M"
+  },
+  {
+   "marca": "Nissan",
+   "modelo": "X-Trail",
+   "segmento": "M"
+  },
+  {
+   "marca": "Nissan",
+   "modelo": "Navara / NP300",
+   "segmento": "M"
+  },
+  {
+   "marca": "Nissan",
+   "modelo": "Terrano",
+   "segmento": "M"
+  },
+  {
+   "marca": "Nissan",
+   "modelo": "Urvan",
+   "segmento": "C"
+  },
+  {
+   "marca": "Toyota",
+   "modelo": "Yaris",
+   "segmento": "L"
+  },
+  {
+   "marca": "Toyota",
+   "modelo": "Corolla",
+   "segmento": "L"
+  },
+  {
+   "marca": "Toyota",
+   "modelo": "Etios",
+   "segmento": "L"
+  },
+  {
+   "marca": "Toyota",
+   "modelo": "RAV4",
+   "segmento": "M"
+  },
+  {
+   "marca": "Toyota",
+   "modelo": "Hilux",
+   "segmento": "M"
+  },
+  {
+   "marca": "Toyota",
+   "modelo": "Fortuner",
+   "segmento": "M"
+  },
+  {
+   "marca": "Toyota",
+   "modelo": "Land Cruiser",
+   "segmento": "M"
+  },
+  {
+   "marca": "Toyota",
+   "modelo": "Hiace",
+   "segmento": "C"
+  },
+  {
+   "marca": "Suzuki",
+   "modelo": "Alto",
+   "segmento": "L"
+  },
+  {
+   "marca": "Suzuki",
+   "modelo": "Swift",
+   "segmento": "L"
+  },
+  {
+   "marca": "Suzuki",
+   "modelo": "Baleno",
+   "segmento": "L"
+  },
+  {
+   "marca": "Suzuki",
+   "modelo": "Vitara",
+   "segmento": "M"
+  },
+  {
+   "marca": "Suzuki",
+   "modelo": "S-Cross",
+   "segmento": "M"
+  },
+  {
+   "marca": "Suzuki",
+   "modelo": "Jimny",
+   "segmento": "M"
+  },
+  {
+   "marca": "Suzuki",
+   "modelo": "APV",
+   "segmento": "C"
+  },
+  {
+   "marca": "Mazda",
+   "modelo": "Mazda 2",
+   "segmento": "L"
+  },
+  {
+   "marca": "Mazda",
+   "modelo": "Mazda 3",
+   "segmento": "L"
+  },
+  {
+   "marca": "Mazda",
+   "modelo": "Mazda 6",
+   "segmento": "L"
+  },
+  {
+   "marca": "Mazda",
+   "modelo": "CX-5",
+   "segmento": "M"
+  },
+  {
+   "marca": "Mazda",
+   "modelo": "CX-30",
+   "segmento": "M"
+  },
+  {
+   "marca": "Mazda",
+   "modelo": "BT-50",
+   "segmento": "M"
+  },
+  {
+   "marca": "Ford",
+   "modelo": "Fiesta",
+   "segmento": "L"
+  },
+  {
+   "marca": "Ford",
+   "modelo": "Focus",
+   "segmento": "L"
+  },
+  {
+   "marca": "Ford",
+   "modelo": "EcoSport",
+   "segmento": "M"
+  },
+  {
+   "marca": "Ford",
+   "modelo": "Escape",
+   "segmento": "M"
+  },
+  {
+   "marca": "Ford",
+   "modelo": "Ranger",
+   "segmento": "M"
+  },
+  {
+   "marca": "Ford",
+   "modelo": "Transit",
+   "segmento": "C"
+  },
+  {
+   "marca": "Peugeot",
+   "modelo": "208",
+   "segmento": "L"
+  },
+  {
+   "marca": "Peugeot",
+   "modelo": "301",
+   "segmento": "L"
+  },
+  {
+   "marca": "Peugeot",
+   "modelo": "308",
+   "segmento": "L"
+  },
+  {
+   "marca": "Peugeot",
+   "modelo": "2008",
+   "segmento": "M"
+  },
+  {
+   "marca": "Peugeot",
+   "modelo": "3008",
+   "segmento": "M"
+  },
+  {
+   "marca": "Peugeot",
+   "modelo": "Partner",
+   "segmento": "C"
+  },
+  {
+   "marca": "Peugeot",
+   "modelo": "Boxer",
+   "segmento": "C"
+  },
+  {
+   "marca": "Renault",
+   "modelo": "Sandero",
+   "segmento": "L"
+  },
+  {
+   "marca": "Renault",
+   "modelo": "Logan",
+   "segmento": "L"
+  },
+  {
+   "marca": "Renault",
+   "modelo": "Duster",
+   "segmento": "M"
+  },
+  {
+   "marca": "Renault",
+   "modelo": "Captur",
+   "segmento": "M"
+  },
+  {
+   "marca": "Renault",
+   "modelo": "Oroch",
+   "segmento": "M"
+  },
+  {
+   "marca": "Renault",
+   "modelo": "Kangoo",
+   "segmento": "C"
+  },
+  {
+   "marca": "Renault",
+   "modelo": "Master",
+   "segmento": "C"
+  },
+  {
+   "marca": "Volkswagen",
+   "modelo": "Gol",
+   "segmento": "L"
+  },
+  {
+   "marca": "Volkswagen",
+   "modelo": "Polo",
+   "segmento": "L"
+  },
+  {
+   "marca": "Volkswagen",
+   "modelo": "Voyage",
+   "segmento": "L"
+  },
+  {
+   "marca": "Volkswagen",
+   "modelo": "T-Cross",
+   "segmento": "M"
+  },
+  {
+   "marca": "Volkswagen",
+   "modelo": "Amarok",
+   "segmento": "M"
+  },
+  {
+   "marca": "Volkswagen",
+   "modelo": "Tiguan",
+   "segmento": "M"
+  },
+  {
+   "marca": "Volkswagen",
+   "modelo": "Crafter",
+   "segmento": "C"
+  },
+  {
+   "marca": "Mitsubishi",
+   "modelo": "Lancer",
+   "segmento": "L"
+  },
+  {
+   "marca": "Mitsubishi",
+   "modelo": "Mirage",
+   "segmento": "L"
+  },
+  {
+   "marca": "Mitsubishi",
+   "modelo": "ASX",
+   "segmento": "M"
+  },
+  {
+   "marca": "Mitsubishi",
+   "modelo": "Outlander",
+   "segmento": "M"
+  },
+  {
+   "marca": "Mitsubishi",
+   "modelo": "L200",
+   "segmento": "M"
+  },
+  {
+   "marca": "Mitsubishi",
+   "modelo": "Montero",
+   "segmento": "M"
+  },
+  {
+   "marca": "Great Wall",
+   "modelo": "Voleex",
+   "segmento": "L"
+  },
+  {
+   "marca": "Great Wall",
+   "modelo": "Haval H6",
+   "segmento": "M"
+  },
+  {
+   "marca": "Great Wall",
+   "modelo": "Wingle",
+   "segmento": "M"
+  },
+  {
+   "marca": "Great Wall",
+   "modelo": "Poer",
+   "segmento": "M"
+  },
+  {
+   "marca": "Chery",
+   "modelo": "QQ",
+   "segmento": "L"
+  },
+  {
+   "marca": "Chery",
+   "modelo": "Tiggo 2",
+   "segmento": "M"
+  },
+  {
+   "marca": "Chery",
+   "modelo": "Tiggo 4",
+   "segmento": "M"
+  },
+  {
+   "marca": "Chery",
+   "modelo": "Tiggo 7",
+   "segmento": "M"
+  },
+  {
+   "marca": "JAC",
+   "modelo": "S2",
+   "segmento": "M"
+  },
+  {
+   "marca": "JAC",
+   "modelo": "S3",
+   "segmento": "M"
+  },
+  {
+   "marca": "JAC",
+   "modelo": "T6",
+   "segmento": "M"
+  },
+  {
+   "marca": "JAC",
+   "modelo": "Sunray",
+   "segmento": "C"
+  },
+  {
+   "marca": "JAC",
+   "modelo": "HFC 1035",
+   "segmento": "C"
+  },
+  {
+   "marca": "Maxus",
+   "modelo": "T60",
+   "segmento": "M"
+  },
+  {
+   "marca": "Maxus",
+   "modelo": "V80",
+   "segmento": "C"
+  },
+  {
+   "marca": "Maxus",
+   "modelo": "Deliver 9",
+   "segmento": "C"
+  },
+  {
+   "marca": "Fiat",
+   "modelo": "Palio",
+   "segmento": "L"
+  },
+  {
+   "marca": "Fiat",
+   "modelo": "Argo",
+   "segmento": "L"
+  },
+  {
+   "marca": "Fiat",
+   "modelo": "Cronos",
+   "segmento": "L"
+  },
+  {
+   "marca": "Fiat",
+   "modelo": "Strada",
+   "segmento": "M"
+  },
+  {
+   "marca": "Fiat",
+   "modelo": "Ducato",
+   "segmento": "C"
+  },
+  {
+   "marca": "Mercedes-Benz",
+   "modelo": "Clase A",
+   "segmento": "L"
+  },
+  {
+   "marca": "Mercedes-Benz",
+   "modelo": "Clase C",
+   "segmento": "L"
+  },
+  {
+   "marca": "Mercedes-Benz",
+   "modelo": "Vito",
+   "segmento": "C"
+  },
+  {
+   "marca": "Mercedes-Benz",
+   "modelo": "Sprinter",
+   "segmento": "C"
+  },
+  {
+   "marca": "Citroën",
+   "modelo": "C3",
+   "segmento": "L"
+  },
+  {
+   "marca": "Citroën",
+   "modelo": "C4",
+   "segmento": "L"
+  },
+  {
+   "marca": "Citroën",
+   "modelo": "Berlingo",
+   "segmento": "C"
+  },
+  {
+   "marca": "Citroën",
+   "modelo": "Jumper",
+   "segmento": "C"
+  },
+  {
+   "marca": "Otra marca",
+   "modelo": "Auto / sedán",
+   "segmento": "L"
+  },
+  {
+   "marca": "Otra marca",
+   "modelo": "SUV / camioneta",
+   "segmento": "M"
+  },
+  {
+   "marca": "Otra marca",
+   "modelo": "Furgón / camión liviano",
+   "segmento": "C"
+  }
+ ]
+}

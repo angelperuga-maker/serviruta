@@ -1,0 +1,35 @@
+{
+ "generado": "2026-10-20T13:07:27.934Z",
+ "cotizadores": [
+  {
+   "cotizador": "kits-mantencion-auto",
+   "url": "https://angelperuga-maker.github.io/serviruta/api/kits-mantencion-auto.json",
+   "fuente": "https://angelperuga-maker.github.io/serviruta/kits-mantencion-auto.html",
+   "registros": 85
+  },
+  {
+   "cotizador": "kits-mantencion-camion",
+   "url": "https://angelperuga-maker.github.io/serviruta/api/kits-mantencion-camion.json",
+   "fuente": "https://angelperuga-maker.github.io/serviruta/kits-mantencion-motor-camion.html",
+   "registros": 29
+  },
+  {
+   "cotizador": "kit-embrague-auto",
+   "url": "https://angelperuga-maker.github.io/serviruta/api/kit-embrague-auto.json",
+   "fuente": "https://angelperuga-maker.github.io/serviruta/kit-embrague-auto.html",
+   "registros": 79
+  },
+  {
+   "cotizador": "kit-embrague-camion",
+   "url": "https://angelperuga-maker.github.io/serviruta/api/kit-embrague-camion.json",
+   "fuente": "https://angelperuga-maker.github.io/serviruta/kit-embrague-camion.html",
+   "registros": 37
+  },
+  {
+   "cotizador": "aire-acondicionado",
+   "url": "https://angelperuga-maker.github.io/serviruta/api/aire-acondicionado.json",
+   "fuente": "https://angelperuga-maker.github.io/serviruta/cotizador-aire-acondicionado.html",
+   "registros": 120
+  }
+ ]
+}

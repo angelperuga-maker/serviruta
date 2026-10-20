@@ -1,0 +1,2683 @@
+{
+ "generado": "2026-10-20T13:07:27.934Z",
+ "cotizador": "embrague_camion",
+ "fuente": "https://angelperuga-maker.github.io/serviruta/kit-embrague-camion.html",
+ "moneda": "CLP",
+ "total_modelos": 37,
+ "modelos": [
+  {
+   "marca_id": "mb",
+   "marca": "Mercedes-Benz",
+   "modelo_id": "lo914",
+   "modelo": "MB LO914 · Atego OH-1315",
+   "desc": "Kit 362mm",
+   "std": 380000,
+   "orig": 435990,
+   "prem": 560000,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 1248000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) Alliance o equivalente",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada o nueva)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 8 horas en tu base",
+      "Prueba dinámica de embrague",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1444000,
+     "desc": "El más solicitado · La marca recomendada por fabricantes",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo EATON original (disco + prensa)",
+      "Collarín nuevo SACHS o equivalente",
+      "Horquilla nueva",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 8 horas",
+      "Revisión cardán y crucetas incluida",
+      "Prueba dinámica + ajuste",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 2002000,
+     "desc": "Calidad alemana · Máxima durabilidad y rendimiento",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS/LUK (alemán premium)",
+      "Disco reforzado para alto torque",
+      "Collarín premium SKF",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Servo embrague nuevo Kongsberg/SORL",
+      "Bombín embrague nuevo",
+      "Aceite caja sintético premium",
+      "2 técnicos senior + ayudante · 8 horas",
+      "Revisión integral cardán, soportes motor",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses sobre kit y servo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mb",
+   "marca": "Mercedes-Benz",
+   "modelo_id": "atego1718",
+   "modelo": "MB Atego 1718 · 1725",
+   "desc": "Kit 362mm",
+   "std": 380000,
+   "orig": 435990,
+   "prem": 560000,
+   "topVentas": true,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 1061000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) Alliance o equivalente",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada o nueva)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 8 horas en tu base",
+      "Prueba dinámica de embrague",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1228000,
+     "desc": "El más solicitado · La marca recomendada por fabricantes",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo EATON original (disco + prensa)",
+      "Collarín nuevo SACHS o equivalente",
+      "Horquilla nueva",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 8 horas",
+      "Revisión cardán y crucetas incluida",
+      "Prueba dinámica + ajuste",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1702000,
+     "desc": "Calidad alemana · Máxima durabilidad y rendimiento",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS/LUK (alemán premium)",
+      "Disco reforzado para alto torque",
+      "Collarín premium SKF",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Servo embrague nuevo Kongsberg/SORL",
+      "Bombín embrague nuevo",
+      "Aceite caja sintético premium",
+      "2 técnicos senior + ayudante · 8 horas",
+      "Revisión integral cardán, soportes motor",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses sobre kit y servo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mb",
+   "marca": "Mercedes-Benz",
+   "modelo_id": "axor",
+   "modelo": "MB Axor 2640 · 3340",
+   "desc": "Kit 395mm",
+   "std": 545000,
+   "orig": 636990,
+   "prem": 780000,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 1463000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) Alliance o equivalente",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada o nueva)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 8 horas en tu base",
+      "Prueba dinámica de embrague",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1706000,
+     "desc": "El más solicitado · La marca recomendada por fabricantes",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo EATON original (disco + prensa)",
+      "Collarín nuevo SACHS o equivalente",
+      "Horquilla nueva",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 8 horas",
+      "Revisión cardán y crucetas incluida",
+      "Prueba dinámica + ajuste",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 2288000,
+     "desc": "Calidad alemana · Máxima durabilidad y rendimiento",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS/LUK (alemán premium)",
+      "Disco reforzado para alto torque",
+      "Collarín premium SKF",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Servo embrague nuevo Kongsberg/SORL",
+      "Bombín embrague nuevo",
+      "Aceite caja sintético premium",
+      "2 técnicos senior + ayudante · 8 horas",
+      "Revisión integral cardán, soportes motor",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses sobre kit y servo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mb",
+   "marca": "Mercedes-Benz",
+   "modelo_id": "actros",
+   "modelo": "MB Actros 4144 · 4844",
+   "desc": "Kit 430mm pesado",
+   "std": 680000,
+   "orig": 799990,
+   "prem": 949990,
+   "topVentas": true,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 1392000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) Alliance o equivalente",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada o nueva)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 8 horas en tu base",
+      "Prueba dinámica de embrague",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1630000,
+     "desc": "El más solicitado · La marca recomendada por fabricantes",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo EATON original (disco + prensa)",
+      "Collarín nuevo SACHS o equivalente",
+      "Horquilla nueva",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 8 horas",
+      "Revisión cardán y crucetas incluida",
+      "Prueba dinámica + ajuste",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 2133000,
+     "desc": "Calidad alemana · Máxima durabilidad y rendimiento",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS/LUK (alemán premium)",
+      "Disco reforzado para alto torque",
+      "Collarín premium SKF",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Servo embrague nuevo Kongsberg/SORL",
+      "Bombín embrague nuevo",
+      "Aceite caja sintético premium",
+      "2 técnicos senior + ayudante · 8 horas",
+      "Revisión integral cardán, soportes motor",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses sobre kit y servo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mb",
+   "marca": "Mercedes-Benz",
+   "modelo_id": "mb1620",
+   "modelo": "MB 1620 · 1622 · 1718",
+   "desc": "Kit 362mm reparto",
+   "std": 380000,
+   "orig": 435990,
+   "prem": 550000,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 1248000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) Alliance o equivalente",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada o nueva)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 8 horas en tu base",
+      "Prueba dinámica de embrague",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1444000,
+     "desc": "El más solicitado · La marca recomendada por fabricantes",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo EATON original (disco + prensa)",
+      "Collarín nuevo SACHS o equivalente",
+      "Horquilla nueva",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 8 horas",
+      "Revisión cardán y crucetas incluida",
+      "Prueba dinámica + ajuste",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1989000,
+     "desc": "Calidad alemana · Máxima durabilidad y rendimiento",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS/LUK (alemán premium)",
+      "Disco reforzado para alto torque",
+      "Collarín premium SKF",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Servo embrague nuevo Kongsberg/SORL",
+      "Bombín embrague nuevo",
+      "Aceite caja sintético premium",
+      "2 técnicos senior + ayudante · 8 horas",
+      "Revisión integral cardán, soportes motor",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses sobre kit y servo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "scania",
+   "marca": "Scania",
+   "modelo_id": "serie4",
+   "modelo": "Scania Serie 4 (P · G · R)",
+   "desc": "Kit estándar serie 4",
+   "std": 540000,
+   "orig": 634990,
+   "prem": 799990,
+   "topVentas": true,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 1238000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) Alliance o equivalente",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada o nueva)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 8 horas en tu base",
+      "Prueba dinámica de embrague",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1448000,
+     "desc": "El más solicitado · La marca recomendada por fabricantes",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo EATON original (disco + prensa)",
+      "Collarín nuevo SACHS o equivalente",
+      "Horquilla nueva",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 8 horas",
+      "Revisión cardán y crucetas incluida",
+      "Prueba dinámica + ajuste",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1967000,
+     "desc": "Calidad alemana · Máxima durabilidad y rendimiento",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS/LUK (alemán premium)",
+      "Disco reforzado para alto torque",
+      "Collarín premium SKF",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Servo embrague nuevo Kongsberg/SORL",
+      "Bombín embrague nuevo",
+      "Aceite caja sintético premium",
+      "2 técnicos senior + ayudante · 8 horas",
+      "Revisión integral cardán, soportes motor",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses sobre kit y servo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "scania",
+   "marca": "Scania",
+   "modelo_id": "serie5",
+   "modelo": "Scania Serie 5",
+   "desc": "Kit estándar serie 5",
+   "std": 720000,
+   "orig": 839990,
+   "prem": 1000000,
+   "topVentas": true,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 1437000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) Alliance o equivalente",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada o nueva)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 8 horas en tu base",
+      "Prueba dinámica de embrague",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1674000,
+     "desc": "El más solicitado · La marca recomendada por fabricantes",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo EATON original (disco + prensa)",
+      "Collarín nuevo SACHS o equivalente",
+      "Horquilla nueva",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 8 horas",
+      "Revisión cardán y crucetas incluida",
+      "Prueba dinámica + ajuste",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 2188000,
+     "desc": "Calidad alemana · Máxima durabilidad y rendimiento",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS/LUK (alemán premium)",
+      "Disco reforzado para alto torque",
+      "Collarín premium SKF",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Servo embrague nuevo Kongsberg/SORL",
+      "Bombín embrague nuevo",
+      "Aceite caja sintético premium",
+      "2 técnicos senior + ayudante · 8 horas",
+      "Revisión integral cardán, soportes motor",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses sobre kit y servo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "scania",
+   "marca": "Scania",
+   "modelo_id": "p230",
+   "modelo": "Scania P230 · P270 · P310",
+   "desc": "Kit DC9 reparto-mediano",
+   "std": 520000,
+   "orig": 634990,
+   "prem": 799990,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 1430000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) Alliance o equivalente",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada o nueva)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 8 horas en tu base",
+      "Prueba dinámica de embrague",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1703000,
+     "desc": "El más solicitado · La marca recomendada por fabricantes",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo EATON original (disco + prensa)",
+      "Collarín nuevo SACHS o equivalente",
+      "Horquilla nueva",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 8 horas",
+      "Revisión cardán y crucetas incluida",
+      "Prueba dinámica + ajuste",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 2314000,
+     "desc": "Calidad alemana · Máxima durabilidad y rendimiento",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS/LUK (alemán premium)",
+      "Disco reforzado para alto torque",
+      "Collarín premium SKF",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Servo embrague nuevo Kongsberg/SORL",
+      "Bombín embrague nuevo",
+      "Aceite caja sintético premium",
+      "2 técnicos senior + ayudante · 8 horas",
+      "Revisión integral cardán, soportes motor",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses sobre kit y servo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "scania",
+   "marca": "Scania",
+   "modelo_id": "p340",
+   "modelo": "Scania P340 · R340",
+   "desc": "Kit DC11",
+   "std": 560000,
+   "orig": 680000,
+   "prem": 830000,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 1482000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) Alliance o equivalente",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada o nueva)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 8 horas en tu base",
+      "Prueba dinámica de embrague",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1762000,
+     "desc": "El más solicitado · La marca recomendada por fabricantes",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo EATON original (disco + prensa)",
+      "Collarín nuevo SACHS o equivalente",
+      "Horquilla nueva",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 8 horas",
+      "Revisión cardán y crucetas incluida",
+      "Prueba dinámica + ajuste",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 2353000,
+     "desc": "Calidad alemana · Máxima durabilidad y rendimiento",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS/LUK (alemán premium)",
+      "Disco reforzado para alto torque",
+      "Collarín premium SKF",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Servo embrague nuevo Kongsberg/SORL",
+      "Bombín embrague nuevo",
+      "Aceite caja sintético premium",
+      "2 técnicos senior + ayudante · 8 horas",
+      "Revisión integral cardán, soportes motor",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses sobre kit y servo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "scania",
+   "marca": "Scania",
+   "modelo_id": "r420",
+   "modelo": "Scania R420 · G420 · P420",
+   "desc": "Kit DC12 pesado",
+   "std": 680000,
+   "orig": 790000,
+   "prem": 920000,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 1638000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) Alliance o equivalente",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada o nueva)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 8 horas en tu base",
+      "Prueba dinámica de embrague",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1905000,
+     "desc": "El más solicitado · La marca recomendada por fabricantes",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo EATON original (disco + prensa)",
+      "Collarín nuevo SACHS o equivalente",
+      "Horquilla nueva",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 8 horas",
+      "Revisión cardán y crucetas incluida",
+      "Prueba dinámica + ajuste",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 2470000,
+     "desc": "Calidad alemana · Máxima durabilidad y rendimiento",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS/LUK (alemán premium)",
+      "Disco reforzado para alto torque",
+      "Collarín premium SKF",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Servo embrague nuevo Kongsberg/SORL",
+      "Bombín embrague nuevo",
+      "Aceite caja sintético premium",
+      "2 técnicos senior + ayudante · 8 horas",
+      "Revisión integral cardán, soportes motor",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses sobre kit y servo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "scania",
+   "marca": "Scania",
+   "modelo_id": "r470",
+   "modelo": "Scania R470 · G470 · DT12",
+   "desc": "Kit DT12 tracto",
+   "std": 740000,
+   "orig": 839990,
+   "prem": 1100000,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 1716000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) Alliance o equivalente",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada o nueva)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 8 horas en tu base",
+      "Prueba dinámica de embrague",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1969000,
+     "desc": "El más solicitado · La marca recomendada por fabricantes",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo EATON original (disco + prensa)",
+      "Collarín nuevo SACHS o equivalente",
+      "Horquilla nueva",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 8 horas",
+      "Revisión cardán y crucetas incluida",
+      "Prueba dinámica + ajuste",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 2704000,
+     "desc": "Calidad alemana · Máxima durabilidad y rendimiento",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS/LUK (alemán premium)",
+      "Disco reforzado para alto torque",
+      "Collarín premium SKF",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Servo embrague nuevo Kongsberg/SORL",
+      "Bombín embrague nuevo",
+      "Aceite caja sintético premium",
+      "2 técnicos senior + ayudante · 8 horas",
+      "Revisión integral cardán, soportes motor",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses sobre kit y servo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "volvo",
+   "marca": "Volvo",
+   "modelo_id": "vm270",
+   "modelo": "Volvo VM 220 · 270",
+   "desc": "Kit MWM 7.2L",
+   "std": 480000,
+   "orig": 560000,
+   "prem": 720000,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 1378000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) Alliance o equivalente",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada o nueva)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 8 horas en tu base",
+      "Prueba dinámica de embrague",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1606000,
+     "desc": "El más solicitado · La marca recomendada por fabricantes",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo EATON original (disco + prensa)",
+      "Collarín nuevo SACHS o equivalente",
+      "Horquilla nueva",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 8 horas",
+      "Revisión cardán y crucetas incluida",
+      "Prueba dinámica + ajuste",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 2210000,
+     "desc": "Calidad alemana · Máxima durabilidad y rendimiento",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS/LUK (alemán premium)",
+      "Disco reforzado para alto torque",
+      "Collarín premium SKF",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Servo embrague nuevo Kongsberg/SORL",
+      "Bombín embrague nuevo",
+      "Aceite caja sintético premium",
+      "2 técnicos senior + ayudante · 8 horas",
+      "Revisión integral cardán, soportes motor",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses sobre kit y servo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "volvo",
+   "marca": "Volvo",
+   "modelo_id": "fm11",
+   "modelo": "Volvo FM 11 · FE",
+   "desc": "Kit D11",
+   "std": 620000,
+   "orig": 720000,
+   "prem": 849990,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 1560000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) Alliance o equivalente",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada o nueva)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 8 horas en tu base",
+      "Prueba dinámica de embrague",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1814000,
+     "desc": "El más solicitado · La marca recomendada por fabricantes",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo EATON original (disco + prensa)",
+      "Collarín nuevo SACHS o equivalente",
+      "Horquilla nueva",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 8 horas",
+      "Revisión cardán y crucetas incluida",
+      "Prueba dinámica + ajuste",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 2379000,
+     "desc": "Calidad alemana · Máxima durabilidad y rendimiento",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS/LUK (alemán premium)",
+      "Disco reforzado para alto torque",
+      "Collarín premium SKF",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Servo embrague nuevo Kongsberg/SORL",
+      "Bombín embrague nuevo",
+      "Aceite caja sintético premium",
+      "2 técnicos senior + ayudante · 8 horas",
+      "Revisión integral cardán, soportes motor",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses sobre kit y servo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "volvo",
+   "marca": "Volvo",
+   "modelo_id": "fh460",
+   "modelo": "Volvo FH 460 · FM 440",
+   "desc": "Kit D13A · D13B",
+   "std": 690000,
+   "orig": 799990,
+   "prem": 949990,
+   "topVentas": true,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 1403000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) Alliance o equivalente",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada o nueva)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 8 horas en tu base",
+      "Prueba dinámica de embrague",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1630000,
+     "desc": "El más solicitado · La marca recomendada por fabricantes",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo EATON original (disco + prensa)",
+      "Collarín nuevo SACHS o equivalente",
+      "Horquilla nueva",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 8 horas",
+      "Revisión cardán y crucetas incluida",
+      "Prueba dinámica + ajuste",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 2133000,
+     "desc": "Calidad alemana · Máxima durabilidad y rendimiento",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS/LUK (alemán premium)",
+      "Disco reforzado para alto torque",
+      "Collarín premium SKF",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Servo embrague nuevo Kongsberg/SORL",
+      "Bombín embrague nuevo",
+      "Aceite caja sintético premium",
+      "2 técnicos senior + ayudante · 8 horas",
+      "Revisión integral cardán, soportes motor",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses sobre kit y servo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "volvo",
+   "marca": "Volvo",
+   "modelo_id": "fh500",
+   "modelo": "Volvo FH 500 · 540 (nuevo)",
+   "desc": "Kit D13K Euro 5/6",
+   "std": 720000,
+   "orig": 830000,
+   "prem": 1000000,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 1690000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) Alliance o equivalente",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada o nueva)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 8 horas en tu base",
+      "Prueba dinámica de embrague",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1957000,
+     "desc": "El más solicitado · La marca recomendada por fabricantes",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo EATON original (disco + prensa)",
+      "Collarín nuevo SACHS o equivalente",
+      "Horquilla nueva",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 8 horas",
+      "Revisión cardán y crucetas incluida",
+      "Prueba dinámica + ajuste",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 2574000,
+     "desc": "Calidad alemana · Máxima durabilidad y rendimiento",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS/LUK (alemán premium)",
+      "Disco reforzado para alto torque",
+      "Collarín premium SKF",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Servo embrague nuevo Kongsberg/SORL",
+      "Bombín embrague nuevo",
+      "Aceite caja sintético premium",
+      "2 técnicos senior + ayudante · 8 horas",
+      "Revisión integral cardán, soportes motor",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses sobre kit y servo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "volvo",
+   "marca": "Volvo",
+   "modelo_id": "fh700",
+   "modelo": "Volvo FH 700",
+   "desc": "Kit D16 alta potencia",
+   "std": 850000,
+   "orig": 980000,
+   "prem": 1180000,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 1859000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) Alliance o equivalente",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada o nueva)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 8 horas en tu base",
+      "Prueba dinámica de embrague",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 2152000,
+     "desc": "El más solicitado · La marca recomendada por fabricantes",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo EATON original (disco + prensa)",
+      "Collarín nuevo SACHS o equivalente",
+      "Horquilla nueva",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 8 horas",
+      "Revisión cardán y crucetas incluida",
+      "Prueba dinámica + ajuste",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 2808000,
+     "desc": "Calidad alemana · Máxima durabilidad y rendimiento",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS/LUK (alemán premium)",
+      "Disco reforzado para alto torque",
+      "Collarín premium SKF",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Servo embrague nuevo Kongsberg/SORL",
+      "Bombín embrague nuevo",
+      "Aceite caja sintético premium",
+      "2 técnicos senior + ayudante · 8 horas",
+      "Revisión integral cardán, soportes motor",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses sobre kit y servo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "ford",
+   "marca": "Ford Cargo",
+   "modelo_id": "cargo814",
+   "modelo": "Ford Cargo 814",
+   "desc": "Conjunto disco y prensa",
+   "std": 260000,
+   "orig": 299990,
+   "prem": 380000,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 1092000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) Alliance o equivalente",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada o nueva)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 8 horas en tu base",
+      "Prueba dinámica de embrague",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1267000,
+     "desc": "El más solicitado · La marca recomendada por fabricantes",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo EATON original (disco + prensa)",
+      "Collarín nuevo SACHS o equivalente",
+      "Horquilla nueva",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 8 horas",
+      "Revisión cardán y crucetas incluida",
+      "Prueba dinámica + ajuste",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1768000,
+     "desc": "Calidad alemana · Máxima durabilidad y rendimiento",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS/LUK (alemán premium)",
+      "Disco reforzado para alto torque",
+      "Collarín premium SKF",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Servo embrague nuevo Kongsberg/SORL",
+      "Bombín embrague nuevo",
+      "Aceite caja sintético premium",
+      "2 técnicos senior + ayudante · 8 horas",
+      "Revisión integral cardán, soportes motor",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses sobre kit y servo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "ford",
+   "marca": "Ford Cargo",
+   "modelo_id": "cargo915e",
+   "modelo": "Ford Cargo 915E",
+   "desc": "Kit 330mm",
+   "std": 285000,
+   "orig": 327990,
+   "prem": 420000,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 1125000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) Alliance o equivalente",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada o nueva)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 8 horas en tu base",
+      "Prueba dinámica de embrague",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1304000,
+     "desc": "El más solicitado · La marca recomendada por fabricantes",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo EATON original (disco + prensa)",
+      "Collarín nuevo SACHS o equivalente",
+      "Horquilla nueva",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 8 horas",
+      "Revisión cardán y crucetas incluida",
+      "Prueba dinámica + ajuste",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1820000,
+     "desc": "Calidad alemana · Máxima durabilidad y rendimiento",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS/LUK (alemán premium)",
+      "Disco reforzado para alto torque",
+      "Collarín premium SKF",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Servo embrague nuevo Kongsberg/SORL",
+      "Bombín embrague nuevo",
+      "Aceite caja sintético premium",
+      "2 técnicos senior + ayudante · 8 horas",
+      "Revisión integral cardán, soportes motor",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses sobre kit y servo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "ford",
+   "marca": "Ford Cargo",
+   "modelo_id": "cargo1723",
+   "modelo": "Ford Cargo 1723 · 1729",
+   "desc": "Kit 365mm",
+   "std": 540000,
+   "orig": 623990,
+   "prem": 760000,
+   "topVentas": true,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 1238000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) Alliance o equivalente",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada o nueva)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 8 horas en tu base",
+      "Prueba dinámica de embrague",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1435000,
+     "desc": "El más solicitado · La marca recomendada por fabricantes",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo EATON original (disco + prensa)",
+      "Collarín nuevo SACHS o equivalente",
+      "Horquilla nueva",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 8 horas",
+      "Revisión cardán y crucetas incluida",
+      "Prueba dinámica + ajuste",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1923000,
+     "desc": "Calidad alemana · Máxima durabilidad y rendimiento",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS/LUK (alemán premium)",
+      "Disco reforzado para alto torque",
+      "Collarín premium SKF",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Servo embrague nuevo Kongsberg/SORL",
+      "Bombín embrague nuevo",
+      "Aceite caja sintético premium",
+      "2 técnicos senior + ayudante · 8 horas",
+      "Revisión integral cardán, soportes motor",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses sobre kit y servo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "ford",
+   "marca": "Ford Cargo",
+   "modelo_id": "cargo2429",
+   "modelo": "Ford Cargo 2429",
+   "desc": "Kit 395mm",
+   "std": 600000,
+   "orig": 698990,
+   "prem": 840000,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 1534000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) Alliance o equivalente",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada o nueva)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 8 horas en tu base",
+      "Prueba dinámica de embrague",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1786000,
+     "desc": "El más solicitado · La marca recomendada por fabricantes",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo EATON original (disco + prensa)",
+      "Collarín nuevo SACHS o equivalente",
+      "Horquilla nueva",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 8 horas",
+      "Revisión cardán y crucetas incluida",
+      "Prueba dinámica + ajuste",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 2366000,
+     "desc": "Calidad alemana · Máxima durabilidad y rendimiento",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS/LUK (alemán premium)",
+      "Disco reforzado para alto torque",
+      "Collarín premium SKF",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Servo embrague nuevo Kongsberg/SORL",
+      "Bombín embrague nuevo",
+      "Aceite caja sintético premium",
+      "2 técnicos senior + ayudante · 8 horas",
+      "Revisión integral cardán, soportes motor",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses sobre kit y servo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "ford",
+   "marca": "Ford Cargo",
+   "modelo_id": "cargo3031",
+   "modelo": "Ford Cargo 1731 · 2431 · 3031 Torqshift",
+   "desc": "Kit 395mm Torqshift premium",
+   "std": 920000,
+   "orig": 1098990,
+   "prem": 1300000,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 1950000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) Alliance o equivalente",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada o nueva)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 8 horas en tu base",
+      "Prueba dinámica de embrague",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 2306000,
+     "desc": "El más solicitado · La marca recomendada por fabricantes",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo EATON original (disco + prensa)",
+      "Collarín nuevo SACHS o equivalente",
+      "Horquilla nueva",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 8 horas",
+      "Revisión cardán y crucetas incluida",
+      "Prueba dinámica + ajuste",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 2964000,
+     "desc": "Calidad alemana · Máxima durabilidad y rendimiento",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS/LUK (alemán premium)",
+      "Disco reforzado para alto torque",
+      "Collarín premium SKF",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Servo embrague nuevo Kongsberg/SORL",
+      "Bombín embrague nuevo",
+      "Aceite caja sintético premium",
+      "2 técnicos senior + ayudante · 8 horas",
+      "Revisión integral cardán, soportes motor",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses sobre kit y servo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "ford",
+   "marca": "Ford Cargo",
+   "modelo_id": "cargoeje",
+   "modelo": "Ford Cargo eje piloto",
+   "desc": "Kit 365mm sobre eje piloto",
+   "std": 530000,
+   "orig": 615990,
+   "prem": 740000,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 1443000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) Alliance o equivalente",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada o nueva)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 8 horas en tu base",
+      "Prueba dinámica de embrague",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1678000,
+     "desc": "El más solicitado · La marca recomendada por fabricantes",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo EATON original (disco + prensa)",
+      "Collarín nuevo SACHS o equivalente",
+      "Horquilla nueva",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 8 horas",
+      "Revisión cardán y crucetas incluida",
+      "Prueba dinámica + ajuste",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 2236000,
+     "desc": "Calidad alemana · Máxima durabilidad y rendimiento",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS/LUK (alemán premium)",
+      "Disco reforzado para alto torque",
+      "Collarín premium SKF",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Servo embrague nuevo Kongsberg/SORL",
+      "Bombín embrague nuevo",
+      "Aceite caja sintético premium",
+      "2 técnicos senior + ayudante · 8 horas",
+      "Revisión integral cardán, soportes motor",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses sobre kit y servo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "ford",
+   "marca": "Ford Cargo",
+   "modelo_id": "cargodoble",
+   "modelo": "Ford Cargo doble disco",
+   "desc": "Kit 365mm doble disco 3 paletas",
+   "std": 720000,
+   "orig": 835990,
+   "prem": 980000,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 1690000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) Alliance o equivalente",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada o nueva)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 8 horas en tu base",
+      "Prueba dinámica de embrague",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1964000,
+     "desc": "El más solicitado · La marca recomendada por fabricantes",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo EATON original (disco + prensa)",
+      "Collarín nuevo SACHS o equivalente",
+      "Horquilla nueva",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 8 horas",
+      "Revisión cardán y crucetas incluida",
+      "Prueba dinámica + ajuste",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 2548000,
+     "desc": "Calidad alemana · Máxima durabilidad y rendimiento",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS/LUK (alemán premium)",
+      "Disco reforzado para alto torque",
+      "Collarín premium SKF",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Servo embrague nuevo Kongsberg/SORL",
+      "Bombín embrague nuevo",
+      "Aceite caja sintético premium",
+      "2 técnicos senior + ayudante · 8 horas",
+      "Revisión integral cardán, soportes motor",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses sobre kit y servo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "vw",
+   "marca": "Volkswagen",
+   "modelo_id": "vw17280",
+   "modelo": "VW 17-280 · 24-280",
+   "desc": "Kit 395mm",
+   "std": 660000,
+   "orig": 763990,
+   "prem": 910000,
+   "topVentas": true,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 1370000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) Alliance o equivalente",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada o nueva)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 8 horas en tu base",
+      "Prueba dinámica de embrague",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1590000,
+     "desc": "El más solicitado · La marca recomendada por fabricantes",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo EATON original (disco + prensa)",
+      "Collarín nuevo SACHS o equivalente",
+      "Horquilla nueva",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 8 horas",
+      "Revisión cardán y crucetas incluida",
+      "Prueba dinámica + ajuste",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 2088000,
+     "desc": "Calidad alemana · Máxima durabilidad y rendimiento",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS/LUK (alemán premium)",
+      "Disco reforzado para alto torque",
+      "Collarín premium SKF",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Servo embrague nuevo Kongsberg/SORL",
+      "Bombín embrague nuevo",
+      "Aceite caja sintético premium",
+      "2 técnicos senior + ayudante · 8 horas",
+      "Revisión integral cardán, soportes motor",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses sobre kit y servo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "vw",
+   "marca": "Volkswagen",
+   "modelo_id": "constellation",
+   "modelo": "VW Constellation",
+   "desc": "Kit 430mm",
+   "std": 720000,
+   "orig": 840000,
+   "prem": 1000000,
+   "topVentas": true,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 1437000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) Alliance o equivalente",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada o nueva)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 8 horas en tu base",
+      "Prueba dinámica de embrague",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1674000,
+     "desc": "El más solicitado · La marca recomendada por fabricantes",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo EATON original (disco + prensa)",
+      "Collarín nuevo SACHS o equivalente",
+      "Horquilla nueva",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 8 horas",
+      "Revisión cardán y crucetas incluida",
+      "Prueba dinámica + ajuste",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 2188000,
+     "desc": "Calidad alemana · Máxima durabilidad y rendimiento",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS/LUK (alemán premium)",
+      "Disco reforzado para alto torque",
+      "Collarín premium SKF",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Servo embrague nuevo Kongsberg/SORL",
+      "Bombín embrague nuevo",
+      "Aceite caja sintético premium",
+      "2 técnicos senior + ayudante · 8 horas",
+      "Revisión integral cardán, soportes motor",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses sobre kit y servo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "vw",
+   "marca": "Volkswagen",
+   "modelo_id": "vw362",
+   "modelo": "VW Worker 17.220 · 9.150",
+   "desc": "Kit 362mm",
+   "std": 580000,
+   "orig": 675990,
+   "prem": 820000,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 1508000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) Alliance o equivalente",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada o nueva)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 8 horas en tu base",
+      "Prueba dinámica de embrague",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1756000,
+     "desc": "El más solicitado · La marca recomendada por fabricantes",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo EATON original (disco + prensa)",
+      "Collarín nuevo SACHS o equivalente",
+      "Horquilla nueva",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 8 horas",
+      "Revisión cardán y crucetas incluida",
+      "Prueba dinámica + ajuste",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 2340000,
+     "desc": "Calidad alemana · Máxima durabilidad y rendimiento",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS/LUK (alemán premium)",
+      "Disco reforzado para alto torque",
+      "Collarín premium SKF",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Servo embrague nuevo Kongsberg/SORL",
+      "Bombín embrague nuevo",
+      "Aceite caja sintético premium",
+      "2 técnicos senior + ayudante · 8 horas",
+      "Revisión integral cardán, soportes motor",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses sobre kit y servo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "iveco",
+   "marca": "Iveco",
+   "modelo_id": "daily",
+   "modelo": "Iveco Daily",
+   "desc": "Embrague Daily (camioneta-furgón)",
+   "std": 290000,
+   "orig": 334990,
+   "prem": 420000,
+   "topVentas": true,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 961000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) Alliance o equivalente",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada o nueva)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 8 horas en tu base",
+      "Prueba dinámica de embrague",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1116000,
+     "desc": "El más solicitado · La marca recomendada por fabricantes",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo EATON original (disco + prensa)",
+      "Collarín nuevo SACHS o equivalente",
+      "Horquilla nueva",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 8 horas",
+      "Revisión cardán y crucetas incluida",
+      "Prueba dinámica + ajuste",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1547000,
+     "desc": "Calidad alemana · Máxima durabilidad y rendimiento",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS/LUK (alemán premium)",
+      "Disco reforzado para alto torque",
+      "Collarín premium SKF",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Servo embrague nuevo Kongsberg/SORL",
+      "Bombín embrague nuevo",
+      "Aceite caja sintético premium",
+      "2 técnicos senior + ayudante · 8 horas",
+      "Revisión integral cardán, soportes motor",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses sobre kit y servo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "iveco",
+   "marca": "Iveco",
+   "modelo_id": "stralis",
+   "modelo": "Iveco Stralis (Cursor 10/13)",
+   "desc": "Kit Cursor pesado",
+   "std": 680000,
+   "orig": 790000,
+   "prem": 950000,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 1638000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) Alliance o equivalente",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada o nueva)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 8 horas en tu base",
+      "Prueba dinámica de embrague",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1905000,
+     "desc": "El más solicitado · La marca recomendada por fabricantes",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo EATON original (disco + prensa)",
+      "Collarín nuevo SACHS o equivalente",
+      "Horquilla nueva",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 8 horas",
+      "Revisión cardán y crucetas incluida",
+      "Prueba dinámica + ajuste",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 2509000,
+     "desc": "Calidad alemana · Máxima durabilidad y rendimiento",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS/LUK (alemán premium)",
+      "Disco reforzado para alto torque",
+      "Collarín premium SKF",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Servo embrague nuevo Kongsberg/SORL",
+      "Bombín embrague nuevo",
+      "Aceite caja sintético premium",
+      "2 técnicos senior + ayudante · 8 horas",
+      "Revisión integral cardán, soportes motor",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses sobre kit y servo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "iveco",
+   "marca": "Iveco",
+   "modelo_id": "trakker",
+   "modelo": "Iveco Trakker",
+   "desc": "Kit Trakker construcción",
+   "std": 720000,
+   "orig": 830000,
+   "prem": 990000,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 1690000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) Alliance o equivalente",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada o nueva)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 8 horas en tu base",
+      "Prueba dinámica de embrague",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1957000,
+     "desc": "El más solicitado · La marca recomendada por fabricantes",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo EATON original (disco + prensa)",
+      "Collarín nuevo SACHS o equivalente",
+      "Horquilla nueva",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 8 horas",
+      "Revisión cardán y crucetas incluida",
+      "Prueba dinámica + ajuste",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 2561000,
+     "desc": "Calidad alemana · Máxima durabilidad y rendimiento",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS/LUK (alemán premium)",
+      "Disco reforzado para alto torque",
+      "Collarín premium SKF",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Servo embrague nuevo Kongsberg/SORL",
+      "Bombín embrague nuevo",
+      "Aceite caja sintético premium",
+      "2 técnicos senior + ayudante · 8 horas",
+      "Revisión integral cardán, soportes motor",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses sobre kit y servo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "international",
+   "marca": "International",
+   "modelo_id": "9800",
+   "modelo": "International 9800i 6x2 · 6x4",
+   "desc": "Kit 430mm americano",
+   "std": 630000,
+   "orig": 735990,
+   "prem": 880000,
+   "topVentas": true,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 1337000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) Alliance o equivalente",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada o nueva)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 8 horas en tu base",
+      "Prueba dinámica de embrague",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1559000,
+     "desc": "El más solicitado · La marca recomendada por fabricantes",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo EATON original (disco + prensa)",
+      "Collarín nuevo SACHS o equivalente",
+      "Horquilla nueva",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 8 horas",
+      "Revisión cardán y crucetas incluida",
+      "Prueba dinámica + ajuste",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 2055000,
+     "desc": "Calidad alemana · Máxima durabilidad y rendimiento",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS/LUK (alemán premium)",
+      "Disco reforzado para alto torque",
+      "Collarín premium SKF",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Servo embrague nuevo Kongsberg/SORL",
+      "Bombín embrague nuevo",
+      "Aceite caja sintético premium",
+      "2 técnicos senior + ayudante · 8 horas",
+      "Revisión integral cardán, soportes motor",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses sobre kit y servo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "international",
+   "marca": "International",
+   "modelo_id": "americano",
+   "modelo": "International 15½\" 4 paletas",
+   "desc": "Kit 15½ 1700 lbs/pie",
+   "std": 530000,
+   "orig": 649990,
+   "prem": 799990,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 1443000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) Alliance o equivalente",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada o nueva)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 8 horas en tu base",
+      "Prueba dinámica de embrague",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1722000,
+     "desc": "El más solicitado · La marca recomendada por fabricantes",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo EATON original (disco + prensa)",
+      "Collarín nuevo SACHS o equivalente",
+      "Horquilla nueva",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 8 horas",
+      "Revisión cardán y crucetas incluida",
+      "Prueba dinámica + ajuste",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 2314000,
+     "desc": "Calidad alemana · Máxima durabilidad y rendimiento",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS/LUK (alemán premium)",
+      "Disco reforzado para alto torque",
+      "Collarín premium SKF",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Servo embrague nuevo Kongsberg/SORL",
+      "Bombín embrague nuevo",
+      "Aceite caja sintético premium",
+      "2 técnicos senior + ayudante · 8 horas",
+      "Revisión integral cardán, soportes motor",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses sobre kit y servo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mack",
+   "marca": "Mack",
+   "modelo_id": "mack15",
+   "modelo": "Mack CH · CL 15½\"",
+   "desc": "Kit 15½\" Mack",
+   "std": 580000,
+   "orig": 679990,
+   "prem": 830000,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 1508000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) Alliance o equivalente",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada o nueva)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 8 horas en tu base",
+      "Prueba dinámica de embrague",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1761000,
+     "desc": "El más solicitado · La marca recomendada por fabricantes",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo EATON original (disco + prensa)",
+      "Collarín nuevo SACHS o equivalente",
+      "Horquilla nueva",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 8 horas",
+      "Revisión cardán y crucetas incluida",
+      "Prueba dinámica + ajuste",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 2353000,
+     "desc": "Calidad alemana · Máxima durabilidad y rendimiento",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS/LUK (alemán premium)",
+      "Disco reforzado para alto torque",
+      "Collarín premium SKF",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Servo embrague nuevo Kongsberg/SORL",
+      "Bombín embrague nuevo",
+      "Aceite caja sintético premium",
+      "2 técnicos senior + ayudante · 8 horas",
+      "Revisión integral cardán, soportes motor",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses sobre kit y servo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mack",
+   "marca": "Mack",
+   "modelo_id": "mack14",
+   "modelo": "Mack Granite 14\"",
+   "desc": "Kit 14\" 1400 lbs/pie",
+   "std": 570000,
+   "orig": 665990,
+   "prem": 830000,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 1495000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) Alliance o equivalente",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada o nueva)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 8 horas en tu base",
+      "Prueba dinámica de embrague",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1743000,
+     "desc": "El más solicitado · La marca recomendada por fabricantes",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo EATON original (disco + prensa)",
+      "Collarín nuevo SACHS o equivalente",
+      "Horquilla nueva",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 8 horas",
+      "Revisión cardán y crucetas incluida",
+      "Prueba dinámica + ajuste",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 2353000,
+     "desc": "Calidad alemana · Máxima durabilidad y rendimiento",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS/LUK (alemán premium)",
+      "Disco reforzado para alto torque",
+      "Collarín premium SKF",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Servo embrague nuevo Kongsberg/SORL",
+      "Bombín embrague nuevo",
+      "Aceite caja sintético premium",
+      "2 técnicos senior + ayudante · 8 horas",
+      "Revisión integral cardán, soportes motor",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses sobre kit y servo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mack",
+   "marca": "Mack",
+   "modelo_id": "mackpesado",
+   "modelo": "Mack tracto 15½\" 6 paletas",
+   "desc": "Kit 15½ 2050 lbs/pie pesado",
+   "std": 690000,
+   "orig": 799990,
+   "prem": 980000,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 1651000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) Alliance o equivalente",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada o nueva)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 8 horas en tu base",
+      "Prueba dinámica de embrague",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1917000,
+     "desc": "El más solicitado · La marca recomendada por fabricantes",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo EATON original (disco + prensa)",
+      "Collarín nuevo SACHS o equivalente",
+      "Horquilla nueva",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 8 horas",
+      "Revisión cardán y crucetas incluida",
+      "Prueba dinámica + ajuste",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 2548000,
+     "desc": "Calidad alemana · Máxima durabilidad y rendimiento",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS/LUK (alemán premium)",
+      "Disco reforzado para alto torque",
+      "Collarín premium SKF",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Servo embrague nuevo Kongsberg/SORL",
+      "Bombín embrague nuevo",
+      "Aceite caja sintético premium",
+      "2 técnicos senior + ayudante · 8 horas",
+      "Revisión integral cardán, soportes motor",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses sobre kit y servo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "volare",
+   "marca": "Volare / Bus",
+   "modelo_id": "volareisf",
+   "modelo": "Volare ISF 3.8",
+   "desc": "Kit 362mm Volare",
+   "std": 380000,
+   "orig": 435990,
+   "prem": 560000,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 1248000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) Alliance o equivalente",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada o nueva)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 8 horas en tu base",
+      "Prueba dinámica de embrague",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1444000,
+     "desc": "El más solicitado · La marca recomendada por fabricantes",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo EATON original (disco + prensa)",
+      "Collarín nuevo SACHS o equivalente",
+      "Horquilla nueva",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 8 horas",
+      "Revisión cardán y crucetas incluida",
+      "Prueba dinámica + ajuste",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 2002000,
+     "desc": "Calidad alemana · Máxima durabilidad y rendimiento",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS/LUK (alemán premium)",
+      "Disco reforzado para alto torque",
+      "Collarín premium SKF",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Servo embrague nuevo Kongsberg/SORL",
+      "Bombín embrague nuevo",
+      "Aceite caja sintético premium",
+      "2 técnicos senior + ayudante · 8 horas",
+      "Revisión integral cardán, soportes motor",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses sobre kit y servo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "volare",
+   "marca": "Volare / Bus",
+   "modelo_id": "volarev8",
+   "modelo": "Volare V8 · W8 · W9",
+   "desc": "Kit 330mm Volare bus reparto",
+   "std": 285000,
+   "orig": 329990,
+   "prem": 420000,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 1125000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) Alliance o equivalente",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada o nueva)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 8 horas en tu base",
+      "Prueba dinámica de embrague",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1306000,
+     "desc": "El más solicitado · La marca recomendada por fabricantes",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo EATON original (disco + prensa)",
+      "Collarín nuevo SACHS o equivalente",
+      "Horquilla nueva",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 8 horas",
+      "Revisión cardán y crucetas incluida",
+      "Prueba dinámica + ajuste",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1820000,
+     "desc": "Calidad alemana · Máxima durabilidad y rendimiento",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS/LUK (alemán premium)",
+      "Disco reforzado para alto torque",
+      "Collarín premium SKF",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Servo embrague nuevo Kongsberg/SORL",
+      "Bombín embrague nuevo",
+      "Aceite caja sintético premium",
+      "2 técnicos senior + ayudante · 8 horas",
+      "Revisión integral cardán, soportes motor",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses sobre kit y servo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "volare",
+   "marca": "Volare / Bus",
+   "modelo_id": "agrale",
+   "modelo": "Agrale MA 8.5 · MA 10.0",
+   "desc": "Kit MF330 Agrale",
+   "std": 600000,
+   "orig": 699990,
+   "prem": 830000,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 1534000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) Alliance o equivalente",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada o nueva)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 8 horas en tu base",
+      "Prueba dinámica de embrague",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1787000,
+     "desc": "El más solicitado · La marca recomendada por fabricantes",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo EATON original (disco + prensa)",
+      "Collarín nuevo SACHS o equivalente",
+      "Horquilla nueva",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 8 horas",
+      "Revisión cardán y crucetas incluida",
+      "Prueba dinámica + ajuste",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 2353000,
+     "desc": "Calidad alemana · Máxima durabilidad y rendimiento",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS/LUK (alemán premium)",
+      "Disco reforzado para alto torque",
+      "Collarín premium SKF",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Servo embrague nuevo Kongsberg/SORL",
+      "Bombín embrague nuevo",
+      "Aceite caja sintético premium",
+      "2 técnicos senior + ayudante · 8 horas",
+      "Revisión integral cardán, soportes motor",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses sobre kit y servo"
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,5364 @@
+{
+ "generado": "2026-10-20T13:07:27.934Z",
+ "cotizador": "mantencion_auto",
+ "fuente": "https://angelperuga-maker.github.io/serviruta/kits-mantencion-auto.html",
+ "moneda": "CLP",
+ "total_modelos": 85,
+ "modelos": [
+  {
+   "marca_id": "toyota",
+   "marca": "Toyota",
+   "modelo_id": "yaris",
+   "modelo": "Yaris (1.3 / 1.5)",
+   "motor": "1NR-FE · 1.3-1.5L",
+   "capAceite": 3.7,
+   "horas": 1,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 98000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (3.7L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 156000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (3.7L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 192000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (3.7L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "toyota",
+   "marca": "Toyota",
+   "modelo_id": "corolla",
+   "modelo": "Corolla 1.8",
+   "motor": "2ZR-FE · 1.8L",
+   "capAceite": 4.4,
+   "horas": 1.2,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 110000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (4.4L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 172000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (4.4L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 212000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (4.4L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "toyota",
+   "marca": "Toyota",
+   "modelo_id": "corollahyb",
+   "modelo": "Corolla Hybrid",
+   "motor": "2ZR-FXE · 1.8L híbrido",
+   "capAceite": 4.4,
+   "horas": 1.3,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 114000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (4.4L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 176000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (4.4L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 216000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (4.4L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "toyota",
+   "marca": "Toyota",
+   "modelo_id": "rav4",
+   "modelo": "RAV4 (2.0 / 2.5)",
+   "motor": "A25A · 2.5L",
+   "capAceite": 4.8,
+   "horas": 1.3,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 117000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (4.8L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 180000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (4.8L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 222000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (4.8L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "toyota",
+   "marca": "Toyota",
+   "modelo_id": "hilux",
+   "modelo": "Hilux 2.4 / 2.8 Diesel",
+   "motor": "2GD-FTV · 2.4L diésel",
+   "capAceite": 7.5,
+   "horas": 1.5,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 177000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (7.5L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 252000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (7.5L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 309000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (7.5L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "toyota",
+   "marca": "Toyota",
+   "modelo_id": "chr",
+   "modelo": "C-HR",
+   "motor": "1.8L híbrido",
+   "capAceite": 4.4,
+   "horas": 1.3,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 114000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (4.4L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 176000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (4.4L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 216000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (4.4L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "toyota",
+   "marca": "Toyota",
+   "modelo_id": "fortuner",
+   "modelo": "Fortuner",
+   "motor": "2GD-FTV · 2.4L diésel",
+   "capAceite": 7.5,
+   "horas": 1.5,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 177000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (7.5L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 252000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (7.5L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 309000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (7.5L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "hyundai",
+   "marca": "Hyundai",
+   "modelo_id": "accent",
+   "modelo": "Accent (1.4 / 1.6)",
+   "motor": "G4FC · 1.4-1.6L",
+   "capAceite": 3.8,
+   "horas": 1,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 99000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (3.8L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 157000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (3.8L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 194000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (3.8L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "hyundai",
+   "marca": "Hyundai",
+   "modelo_id": "i10",
+   "modelo": "i10",
+   "motor": "Kappa 1.2L",
+   "capAceite": 3.6,
+   "horas": 1,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 97000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (3.6L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 155000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (3.6L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 191000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (3.6L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "hyundai",
+   "marca": "Hyundai",
+   "modelo_id": "i20",
+   "modelo": "i20",
+   "motor": "Kappa 1.2-1.4L",
+   "capAceite": 3.6,
+   "horas": 1,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 97000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (3.6L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 155000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (3.6L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 191000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (3.6L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "hyundai",
+   "marca": "Hyundai",
+   "modelo_id": "venue",
+   "modelo": "Venue",
+   "motor": "Kappa 1.6L",
+   "capAceite": 3.8,
+   "horas": 1.2,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 107000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (3.8L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 165000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (3.8L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 202000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (3.8L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "hyundai",
+   "marca": "Hyundai",
+   "modelo_id": "creta",
+   "modelo": "Creta",
+   "motor": "Gamma 1.6L",
+   "capAceite": 4.2,
+   "horas": 1.2,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 109000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (4.2L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 170000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (4.2L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 208000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (4.2L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "hyundai",
+   "marca": "Hyundai",
+   "modelo_id": "tucson",
+   "modelo": "Tucson (2.0 / 2.4)",
+   "motor": "Theta 2.0-2.4L",
+   "capAceite": 4.5,
+   "horas": 1.3,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 115000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (4.5L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 177000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (4.5L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 217000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (4.5L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "hyundai",
+   "marca": "Hyundai",
+   "modelo_id": "h1",
+   "modelo": "H1 / H100 furgón",
+   "motor": "A-Diesel 2.5L CRDi",
+   "capAceite": 6.5,
+   "horas": 1.5,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 152000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (6.5L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 223000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (6.5L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 274000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (6.5L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "hyundai",
+   "marca": "Hyundai",
+   "modelo_id": "santafe",
+   "modelo": "Santa Fe",
+   "motor": "Theta 2.4L",
+   "capAceite": 4.5,
+   "horas": 1.3,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 115000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (4.5L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 177000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (4.5L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 217000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (4.5L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "kia",
+   "marca": "Kia",
+   "modelo_id": "morning",
+   "modelo": "Morning",
+   "motor": "Kappa 1.0-1.25L",
+   "capAceite": 3.3,
+   "horas": 1,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 96000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (3.3L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 152000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (3.3L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 186000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (3.3L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "kia",
+   "marca": "Kia",
+   "modelo_id": "soluto",
+   "modelo": "Soluto / Rio sedán",
+   "motor": "Kappa 1.4L",
+   "capAceite": 3.8,
+   "horas": 1,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 99000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (3.8L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 157000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (3.8L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 194000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (3.8L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "kia",
+   "marca": "Kia",
+   "modelo_id": "rio",
+   "modelo": "Rio hatch",
+   "motor": "Gamma 1.4L",
+   "capAceite": 3.8,
+   "horas": 1,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 99000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (3.8L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 157000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (3.8L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 194000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (3.8L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "kia",
+   "marca": "Kia",
+   "modelo_id": "stonic",
+   "modelo": "Stonic",
+   "motor": "Gamma 1.4-1.6L",
+   "capAceite": 3.8,
+   "horas": 1.2,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 107000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (3.8L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 165000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (3.8L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 202000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (3.8L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "kia",
+   "marca": "Kia",
+   "modelo_id": "seltos",
+   "modelo": "Seltos",
+   "motor": "Smartstream 1.6L",
+   "capAceite": 4.2,
+   "horas": 1.2,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 109000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (4.2L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 170000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (4.2L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 208000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (4.2L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "kia",
+   "marca": "Kia",
+   "modelo_id": "sportage",
+   "modelo": "Sportage",
+   "motor": "Theta II 2.0-2.4L",
+   "capAceite": 4.5,
+   "horas": 1.3,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 115000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (4.5L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 177000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (4.5L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 217000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (4.5L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "kia",
+   "marca": "Kia",
+   "modelo_id": "sorento",
+   "modelo": "Sorento",
+   "motor": "Theta 2.4 / 2.2 diésel",
+   "capAceite": 5,
+   "horas": 1.5,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 126000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (5L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 190000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (5L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 234000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (5L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "kia",
+   "marca": "Kia",
+   "modelo_id": "soul",
+   "modelo": "Soul",
+   "motor": "Gamma 1.6L",
+   "capAceite": 3.8,
+   "horas": 1.2,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 107000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (3.8L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 165000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (3.8L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 202000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (3.8L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "chevrolet",
+   "marca": "Chevrolet",
+   "modelo_id": "spark",
+   "modelo": "Spark / Spark GT",
+   "motor": "1.0-1.2L",
+   "capAceite": 3.5,
+   "horas": 1,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 97000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (3.5L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 154000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (3.5L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 189000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (3.5L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "chevrolet",
+   "marca": "Chevrolet",
+   "modelo_id": "sail",
+   "modelo": "Sail",
+   "motor": "1.4-1.5L",
+   "capAceite": 3.8,
+   "horas": 1,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 99000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (3.8L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 157000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (3.8L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 194000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (3.8L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "chevrolet",
+   "marca": "Chevrolet",
+   "modelo_id": "onix",
+   "modelo": "Onix",
+   "motor": "1.0-1.2L Turbo",
+   "capAceite": 3.8,
+   "horas": 1,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 99000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (3.8L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 157000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (3.8L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 194000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (3.8L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "chevrolet",
+   "marca": "Chevrolet",
+   "modelo_id": "tracker",
+   "modelo": "Tracker",
+   "motor": "1.0-1.2L Turbo",
+   "capAceite": 4,
+   "horas": 1.2,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 108000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (4L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 167000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (4L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 205000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (4L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "chevrolet",
+   "marca": "Chevrolet",
+   "modelo_id": "captiva",
+   "modelo": "Captiva",
+   "motor": "2.4L",
+   "capAceite": 4.8,
+   "horas": 1.3,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 117000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (4.8L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 180000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (4.8L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 222000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (4.8L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "chevrolet",
+   "marca": "Chevrolet",
+   "modelo_id": "colorado",
+   "modelo": "Colorado / DMAX",
+   "motor": "2.5L diésel",
+   "capAceite": 7,
+   "horas": 1.5,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 173000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (7L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 247000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (7L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 301000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (7L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "chevrolet",
+   "marca": "Chevrolet",
+   "modelo_id": "cruze",
+   "modelo": "Cruze",
+   "motor": "1.4-1.8L",
+   "capAceite": 4,
+   "horas": 1.2,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 108000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (4L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 167000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (4L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 205000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (4L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "nissan",
+   "marca": "Nissan",
+   "modelo_id": "march",
+   "modelo": "March",
+   "motor": "HR12 · 1.2L",
+   "capAceite": 3.5,
+   "horas": 1,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 97000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (3.5L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 154000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (3.5L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 189000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (3.5L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "nissan",
+   "marca": "Nissan",
+   "modelo_id": "versa",
+   "modelo": "Versa",
+   "motor": "HR16 · 1.6L",
+   "capAceite": 3.6,
+   "horas": 1,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 97000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (3.6L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 155000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (3.6L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 191000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (3.6L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "nissan",
+   "marca": "Nissan",
+   "modelo_id": "kicks",
+   "modelo": "Kicks",
+   "motor": "HR16 · 1.6L",
+   "capAceite": 3.6,
+   "horas": 1.2,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 106000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (3.6L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 163000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (3.6L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 199000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (3.6L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "nissan",
+   "marca": "Nissan",
+   "modelo_id": "qashqai",
+   "modelo": "Qashqai",
+   "motor": "MR20 · 2.0L",
+   "capAceite": 4.3,
+   "horas": 1.2,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 110000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (4.3L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 171000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (4.3L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 210000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (4.3L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "nissan",
+   "marca": "Nissan",
+   "modelo_id": "xtrail",
+   "modelo": "X-Trail",
+   "motor": "MR20 · 2.0-2.5L",
+   "capAceite": 4.5,
+   "horas": 1.3,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 115000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (4.5L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 177000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (4.5L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 217000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (4.5L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "nissan",
+   "marca": "Nissan",
+   "modelo_id": "sentra",
+   "modelo": "Sentra",
+   "motor": "MRA8 · 1.8L",
+   "capAceite": 4,
+   "horas": 1.2,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 108000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (4L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 167000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (4L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 205000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (4L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "nissan",
+   "marca": "Nissan",
+   "modelo_id": "navara",
+   "modelo": "Navara / Frontier",
+   "motor": "YS23 · 2.3L diésel",
+   "capAceite": 7,
+   "horas": 1.5,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 173000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (7L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 247000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (7L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 301000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (7L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "suzuki",
+   "marca": "Suzuki",
+   "modelo_id": "alto",
+   "modelo": "Alto / Alto 800",
+   "motor": "F8B · 0.8-1.0L",
+   "capAceite": 2.7,
+   "horas": 0.8,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 84000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (2.7L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 137000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (2.7L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 168000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (2.7L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "suzuki",
+   "marca": "Suzuki",
+   "modelo_id": "celerio",
+   "modelo": "Celerio",
+   "motor": "K10B · 1.0L",
+   "capAceite": 3.1,
+   "horas": 0.9,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 90000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (3.1L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 146000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (3.1L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 178000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (3.1L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "suzuki",
+   "marca": "Suzuki",
+   "modelo_id": "swift",
+   "modelo": "Swift",
+   "motor": "K12 · 1.2L",
+   "capAceite": 3.1,
+   "horas": 1,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 94000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (3.1L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 150000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (3.1L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 183000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (3.1L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "suzuki",
+   "marca": "Suzuki",
+   "modelo_id": "baleno",
+   "modelo": "Baleno",
+   "motor": "K14 · 1.4L",
+   "capAceite": 3.3,
+   "horas": 1,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 96000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (3.3L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 152000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (3.3L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 186000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (3.3L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "suzuki",
+   "marca": "Suzuki",
+   "modelo_id": "dzire",
+   "modelo": "Dzire",
+   "motor": "K12 · 1.2L",
+   "capAceite": 3.1,
+   "horas": 1,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 94000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (3.1L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 150000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (3.1L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 183000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (3.1L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "suzuki",
+   "marca": "Suzuki",
+   "modelo_id": "vitara",
+   "modelo": "Vitara / Grand Vitara",
+   "motor": "M16A · 1.6L",
+   "capAceite": 4,
+   "horas": 1.2,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 108000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (4L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 167000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (4L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 205000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (4L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "suzuki",
+   "marca": "Suzuki",
+   "modelo_id": "scross",
+   "modelo": "S-Cross",
+   "motor": "K15 · 1.5L Hybrid",
+   "capAceite": 3.6,
+   "horas": 1.2,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 106000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (3.6L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 163000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (3.6L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 199000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (3.6L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "suzuki",
+   "marca": "Suzuki",
+   "modelo_id": "jimny",
+   "modelo": "Jimny",
+   "motor": "K15B · 1.5L",
+   "capAceite": 3.6,
+   "horas": 1.2,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 106000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (3.6L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 163000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (3.6L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 199000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (3.6L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mazda",
+   "marca": "Mazda",
+   "modelo_id": "2",
+   "modelo": "Mazda 2",
+   "motor": "SkyActiv 1.5L",
+   "capAceite": 3.6,
+   "horas": 1,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 97000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (3.6L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 155000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (3.6L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 191000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (3.6L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mazda",
+   "marca": "Mazda",
+   "modelo_id": "3",
+   "modelo": "Mazda 3",
+   "motor": "SkyActiv 1.5-2.0L",
+   "capAceite": 4,
+   "horas": 1.2,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 108000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (4L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 167000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (4L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 205000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (4L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mazda",
+   "marca": "Mazda",
+   "modelo_id": "6",
+   "modelo": "Mazda 6",
+   "motor": "SkyActiv 2.0-2.5L",
+   "capAceite": 4.5,
+   "horas": 1.3,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 115000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (4.5L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 177000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (4.5L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 217000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (4.5L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mazda",
+   "marca": "Mazda",
+   "modelo_id": "cx3",
+   "modelo": "CX-3",
+   "motor": "SkyActiv 2.0L",
+   "capAceite": 4,
+   "horas": 1.2,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 108000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (4L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 167000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (4L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 205000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (4L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mazda",
+   "marca": "Mazda",
+   "modelo_id": "cx30",
+   "modelo": "CX-30",
+   "motor": "SkyActiv 2.0L",
+   "capAceite": 4.2,
+   "horas": 1.2,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 109000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (4.2L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 170000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (4.2L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 208000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (4.2L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mazda",
+   "marca": "Mazda",
+   "modelo_id": "cx5",
+   "modelo": "CX-5",
+   "motor": "SkyActiv 2.0-2.5L",
+   "capAceite": 4.5,
+   "horas": 1.3,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 115000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (4.5L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 177000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (4.5L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 217000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (4.5L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mazda",
+   "marca": "Mazda",
+   "modelo_id": "bt50",
+   "modelo": "BT-50",
+   "motor": "3.2L diésel",
+   "capAceite": 8,
+   "horas": 1.5,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 180000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (8L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 258000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (8L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 317000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (8L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mitsubishi",
+   "marca": "Mitsubishi",
+   "modelo_id": "mirage",
+   "modelo": "Mirage / Space Star",
+   "motor": "3A92 · 1.2L",
+   "capAceite": 3.3,
+   "horas": 1,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 96000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (3.3L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 152000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (3.3L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 186000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (3.3L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mitsubishi",
+   "marca": "Mitsubishi",
+   "modelo_id": "asx",
+   "modelo": "ASX",
+   "motor": "4B11 · 2.0L",
+   "capAceite": 4.4,
+   "horas": 1.2,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 110000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (4.4L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 172000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (4.4L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 212000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (4.4L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mitsubishi",
+   "marca": "Mitsubishi",
+   "modelo_id": "eclipsecross",
+   "modelo": "Eclipse Cross",
+   "motor": "4J10 · 1.5T",
+   "capAceite": 4,
+   "horas": 1.2,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 108000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (4L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 167000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (4L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 205000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (4L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mitsubishi",
+   "marca": "Mitsubishi",
+   "modelo_id": "outlander",
+   "modelo": "Outlander",
+   "motor": "4J11 · 2.4L",
+   "capAceite": 4.5,
+   "horas": 1.3,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 115000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (4.5L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 177000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (4.5L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 217000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (4.5L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mitsubishi",
+   "marca": "Mitsubishi",
+   "modelo_id": "l200",
+   "modelo": "L200 / Triton",
+   "motor": "4N15 · 2.4L diésel",
+   "capAceite": 6.5,
+   "horas": 1.5,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 152000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (6.5L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 223000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (6.5L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 274000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (6.5L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mitsubishi",
+   "marca": "Mitsubishi",
+   "modelo_id": "montero",
+   "modelo": "Montero Sport",
+   "motor": "4N15 · 2.4L diésel",
+   "capAceite": 6.5,
+   "horas": 1.5,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 152000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (6.5L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 223000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (6.5L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 274000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (6.5L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "vw",
+   "marca": "Volkswagen",
+   "modelo_id": "gol",
+   "modelo": "Gol / Saveiro",
+   "motor": "1.6L MSI",
+   "capAceite": 3.5,
+   "horas": 1,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 97000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (3.5L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 154000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (3.5L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 189000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (3.5L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "vw",
+   "marca": "Volkswagen",
+   "modelo_id": "polo",
+   "modelo": "Polo",
+   "motor": "1.6L MSI",
+   "capAceite": 3.6,
+   "horas": 1,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 97000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (3.6L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 155000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (3.6L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 191000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (3.6L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "vw",
+   "marca": "Volkswagen",
+   "modelo_id": "vento",
+   "modelo": "Vento",
+   "motor": "1.6L MSI",
+   "capAceite": 3.6,
+   "horas": 1,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 97000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (3.6L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 155000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (3.6L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 191000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (3.6L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "vw",
+   "marca": "Volkswagen",
+   "modelo_id": "tcross",
+   "modelo": "T-Cross",
+   "motor": "1.0-1.4 TSI",
+   "capAceite": 4,
+   "horas": 1.2,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 108000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (4L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 167000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (4L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 205000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (4L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "vw",
+   "marca": "Volkswagen",
+   "modelo_id": "tiguan",
+   "modelo": "Tiguan",
+   "motor": "2.0 TSI",
+   "capAceite": 5,
+   "horas": 1.3,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 118000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (5L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 182000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (5L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 225000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (5L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "vw",
+   "marca": "Volkswagen",
+   "modelo_id": "amarok",
+   "modelo": "Amarok",
+   "motor": "2.0 TDI / 3.0 V6 TDI",
+   "capAceite": 6.5,
+   "horas": 1.5,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 152000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (6.5L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 223000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (6.5L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 274000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (6.5L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "ford",
+   "marca": "Ford",
+   "modelo_id": "fiesta",
+   "modelo": "Fiesta",
+   "motor": "1.5-1.6L",
+   "capAceite": 4,
+   "horas": 1,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 100000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (4L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 159000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (4L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 197000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (4L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "ford",
+   "marca": "Ford",
+   "modelo_id": "focus",
+   "modelo": "Focus",
+   "motor": "2.0L",
+   "capAceite": 4.3,
+   "horas": 1.2,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 110000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (4.3L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 171000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (4.3L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 210000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (4.3L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "ford",
+   "marca": "Ford",
+   "modelo_id": "ecosport",
+   "modelo": "EcoSport",
+   "motor": "1.5 Ti-VCT",
+   "capAceite": 4.1,
+   "horas": 1.2,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 109000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (4.1L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 168000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (4.1L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 207000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (4.1L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "ford",
+   "marca": "Ford",
+   "modelo_id": "territory",
+   "modelo": "Territory",
+   "motor": "1.5 EcoBoost",
+   "capAceite": 4.5,
+   "horas": 1.3,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 115000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (4.5L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 177000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (4.5L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 217000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (4.5L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "ford",
+   "marca": "Ford",
+   "modelo_id": "ranger",
+   "modelo": "Ranger",
+   "motor": "2.0-3.2L diésel",
+   "capAceite": 7.5,
+   "horas": 1.5,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 177000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (7.5L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 252000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (7.5L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 309000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (7.5L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "ford",
+   "marca": "Ford",
+   "modelo_id": "f150",
+   "modelo": "F-150",
+   "motor": "3.5 EcoBoost / 5.0L",
+   "capAceite": 6.5,
+   "horas": 1.5,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 152000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (6.5L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 223000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (6.5L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 274000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (6.5L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "peugeot",
+   "marca": "Peugeot",
+   "modelo_id": "208",
+   "modelo": "208",
+   "motor": "1.2 PureTech",
+   "capAceite": 3.7,
+   "horas": 1,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 98000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (3.7L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 156000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (3.7L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 192000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (3.7L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "peugeot",
+   "marca": "Peugeot",
+   "modelo_id": "2008",
+   "modelo": "2008",
+   "motor": "1.2 PureTech 130",
+   "capAceite": 4,
+   "horas": 1.2,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 108000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (4L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 167000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (4L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 205000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (4L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "peugeot",
+   "marca": "Peugeot",
+   "modelo_id": "301",
+   "modelo": "301",
+   "motor": "1.6L HDi",
+   "capAceite": 4,
+   "horas": 1.2,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 108000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (4L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 167000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (4L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 205000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (4L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "peugeot",
+   "marca": "Peugeot",
+   "modelo_id": "3008",
+   "modelo": "3008",
+   "motor": "1.6 THP / 2.0 BlueHDi",
+   "capAceite": 5,
+   "horas": 1.3,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 118000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (5L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 182000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (5L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 225000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (5L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "peugeot",
+   "marca": "Peugeot",
+   "modelo_id": "5008",
+   "modelo": "5008",
+   "motor": "1.6 THP / 2.0 BlueHDi",
+   "capAceite": 5,
+   "horas": 1.3,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 118000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (5L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 182000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (5L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 225000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (5L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "honda",
+   "marca": "Honda",
+   "modelo_id": "city",
+   "modelo": "City",
+   "motor": "L15 · 1.5L",
+   "capAceite": 3.7,
+   "horas": 1,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 98000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (3.7L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 156000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (3.7L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 192000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (3.7L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "honda",
+   "marca": "Honda",
+   "modelo_id": "civic",
+   "modelo": "Civic",
+   "motor": "R18 · 1.8L / L15B 1.5 Turbo",
+   "capAceite": 4.2,
+   "horas": 1.2,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 109000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (4.2L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 170000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (4.2L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 208000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (4.2L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "honda",
+   "marca": "Honda",
+   "modelo_id": "hrv",
+   "modelo": "HR-V",
+   "motor": "R18 · 1.8L",
+   "capAceite": 4,
+   "horas": 1.2,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 108000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (4L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 167000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (4L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 205000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (4L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "honda",
+   "marca": "Honda",
+   "modelo_id": "crv",
+   "modelo": "CR-V",
+   "motor": "L15B · 1.5 Turbo / 2.4L",
+   "capAceite": 4.4,
+   "horas": 1.3,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 114000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (4.4L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 176000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (4.4L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 216000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (4.4L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "honda",
+   "marca": "Honda",
+   "modelo_id": "pilot",
+   "modelo": "Pilot",
+   "motor": "J35Y · 3.5L V6",
+   "capAceite": 5.7,
+   "horas": 1.5,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 147000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (5.7L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 214000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (5.7L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 261000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (5.7L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "subaru",
+   "marca": "Subaru",
+   "modelo_id": "impreza",
+   "modelo": "Impreza",
+   "motor": "FB20 · 2.0L boxer",
+   "capAceite": 4.6,
+   "horas": 1.3,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 116000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (4.6L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 178000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (4.6L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 219000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (4.6L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "subaru",
+   "marca": "Subaru",
+   "modelo_id": "xv",
+   "modelo": "XV / Crosstrek",
+   "motor": "FB20 · 2.0L boxer",
+   "capAceite": 4.6,
+   "horas": 1.3,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 116000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (4.6L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 178000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (4.6L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 219000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (4.6L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "subaru",
+   "marca": "Subaru",
+   "modelo_id": "forester",
+   "modelo": "Forester",
+   "motor": "FB25 · 2.5L boxer",
+   "capAceite": 4.8,
+   "horas": 1.3,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 117000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (4.8L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 180000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (4.8L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 222000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (4.8L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "subaru",
+   "marca": "Subaru",
+   "modelo_id": "outback",
+   "modelo": "Outback",
+   "motor": "FB25 · 2.5L boxer",
+   "capAceite": 4.8,
+   "horas": 1.4,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 121000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (4.8L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 184000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (4.8L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 226000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (4.8L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "subaru",
+   "marca": "Subaru",
+   "modelo_id": "ascent",
+   "modelo": "Ascent",
+   "motor": "FA24 · 2.4L Turbo",
+   "capAceite": 5,
+   "horas": 1.4,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 122000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (5L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 186000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (5L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 230000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (5L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,29 @@
+name: Generar API de cotizadores
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'kits-mantencion-auto.html'
+      - 'kits-mantencion-motor-camion.html'
+      - 'kit-embrague-auto.html'
+      - 'kit-embrague-camion.html'
+      - 'cotizador-aire-acondicionado.html'
+      - 'tools/generar-api.js'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  generar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: node tools/generar-api.js
+      - name: Commit si cambió
+        run: |
+          git config user.name "serviruta-bot"
+          git config user.email "bot@serviruta.cl"
+          git add api
+          git diff --cached --quiet || (git commit -m "API cotizadores regenerada" && git push)

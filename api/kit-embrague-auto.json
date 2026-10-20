@@ -1,0 +1,5865 @@
+{
+ "generado": "2026-10-20T13:07:27.934Z",
+ "cotizador": "embrague_auto",
+ "fuente": "https://angelperuga-maker.github.io/serviruta/kit-embrague-auto.html",
+ "moneda": "CLP",
+ "total_modelos": 79,
+ "modelos": [
+  {
+   "marca_id": "toyota",
+   "marca": "Toyota",
+   "modelo_id": "yaris",
+   "modelo": "Yaris (1.3 / 1.5)",
+   "desc": "Kit Sachs/Luk",
+   "std": 75000,
+   "orig": 110000,
+   "prem": 155000,
+   "horas": 4,
+   "tipo": "auto",
+   "topVentas": true,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 392000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 4 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 475000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 4 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 624000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 4 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "toyota",
+   "marca": "Toyota",
+   "modelo_id": "corolla",
+   "modelo": "Corolla (1.8 sedán)",
+   "desc": "Kit estándar",
+   "std": 85000,
+   "orig": 125000,
+   "prem": 175000,
+   "horas": 4.5,
+   "tipo": "auto",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 507000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 4.5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 611000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 4.5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 793000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 4.5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "toyota",
+   "marca": "Toyota",
+   "modelo_id": "rav4",
+   "modelo": "RAV4 (2.0 / 2.5)",
+   "desc": "Kit SUV mediano",
+   "std": 140000,
+   "orig": 195000,
+   "prem": 265000,
+   "horas": 5.5,
+   "tipo": "suv",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 670000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 5.5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 806000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 5.5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1047000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 5.5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "toyota",
+   "marca": "Toyota",
+   "modelo_id": "hilux24",
+   "modelo": "Hilux 2.4 Diésel",
+   "desc": "Kit pickup 4x4",
+   "std": 240000,
+   "orig": 320000,
+   "prem": 420000,
+   "horas": 6,
+   "tipo": "camioneta",
+   "topVentas": true,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 757000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 6 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 912000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 6 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1188000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 6 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "toyota",
+   "marca": "Toyota",
+   "modelo_id": "hilux28",
+   "modelo": "Hilux 2.8 Diésel",
+   "desc": "Kit pickup reforzado",
+   "std": 280000,
+   "orig": 380000,
+   "prem": 495000,
+   "horas": 6.5,
+   "tipo": "camioneta",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 975000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 6.5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1183000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 6.5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1528000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 6.5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "toyota",
+   "marca": "Toyota",
+   "modelo_id": "fortuner",
+   "modelo": "Fortuner",
+   "desc": "Kit SUV grande 4x4",
+   "std": 295000,
+   "orig": 395000,
+   "prem": 520000,
+   "horas": 6.5,
+   "tipo": "suv",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 936000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 6.5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1131000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 6.5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1443000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 6.5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "hyundai",
+   "marca": "Hyundai",
+   "modelo_id": "accent",
+   "modelo": "Accent (1.4 / 1.6)",
+   "desc": "Kit Luk/Valeo",
+   "std": 70000,
+   "orig": 100000,
+   "prem": 145000,
+   "horas": 4,
+   "tipo": "auto",
+   "topVentas": true,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 387000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 4 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 464000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 4 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 613000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 4 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "hyundai",
+   "marca": "Hyundai",
+   "modelo_id": "i10",
+   "modelo": "i10",
+   "desc": "Kit compacto Kappa",
+   "std": 65000,
+   "orig": 92000,
+   "prem": 135000,
+   "horas": 4,
+   "tipo": "auto",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 449000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 4 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 536000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 4 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 709000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 4 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "hyundai",
+   "marca": "Hyundai",
+   "modelo_id": "i20",
+   "modelo": "i20",
+   "desc": "Kit compacto",
+   "std": 72000,
+   "orig": 105000,
+   "prem": 150000,
+   "horas": 4,
+   "tipo": "auto",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 458000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 4 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 553000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 4 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 728000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 4 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "hyundai",
+   "marca": "Hyundai",
+   "modelo_id": "creta",
+   "modelo": "Creta",
+   "desc": "Kit SUV pequeño",
+   "std": 115000,
+   "orig": 165000,
+   "prem": 230000,
+   "horas": 5,
+   "tipo": "suv",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 605000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 735000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 969000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "hyundai",
+   "marca": "Hyundai",
+   "modelo_id": "tucson",
+   "modelo": "Tucson (2.0)",
+   "desc": "Kit SUV mediano",
+   "std": 140000,
+   "orig": 195000,
+   "prem": 260000,
+   "horas": 5.5,
+   "tipo": "suv",
+   "topVentas": true,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 569000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 5.5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 685000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 5.5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 884000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 5.5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "hyundai",
+   "marca": "Hyundai",
+   "modelo_id": "h100",
+   "modelo": "H100 / Porter",
+   "desc": "Kit furgón liviano",
+   "std": 180000,
+   "orig": 245000,
+   "prem": 325000,
+   "horas": 5.5,
+   "tipo": "camioneta",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 780000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 5.5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 943000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 5.5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1242000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 5.5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "hyundai",
+   "marca": "Hyundai",
+   "modelo_id": "santafe",
+   "modelo": "Santa Fe",
+   "desc": "Kit SUV grande",
+   "std": 175000,
+   "orig": 245000,
+   "prem": 325000,
+   "horas": 6,
+   "tipo": "suv",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 748000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 6 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 904000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 6 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1157000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 6 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "kia",
+   "marca": "Kia",
+   "modelo_id": "morning",
+   "modelo": "Morning",
+   "desc": "Kit Sachs económico",
+   "std": 60000,
+   "orig": 88000,
+   "prem": 130000,
+   "horas": 4,
+   "tipo": "auto",
+   "topVentas": true,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 376000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 4 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 451000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 4 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 597000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 4 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "kia",
+   "marca": "Kia",
+   "modelo_id": "rio",
+   "modelo": "Rio / Soluto",
+   "desc": "Kit Sachs/Luk",
+   "std": 72000,
+   "orig": 105000,
+   "prem": 150000,
+   "horas": 4,
+   "tipo": "auto",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 458000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 4 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 553000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 4 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 728000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 4 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "kia",
+   "marca": "Kia",
+   "modelo_id": "stonic",
+   "modelo": "Stonic",
+   "desc": "Kit SUV compacto",
+   "std": 105000,
+   "orig": 150000,
+   "prem": 210000,
+   "horas": 5,
+   "tipo": "suv",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 592000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 715000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 943000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "kia",
+   "marca": "Kia",
+   "modelo_id": "sportage",
+   "modelo": "Sportage",
+   "desc": "Kit SUV mediano",
+   "std": 145000,
+   "orig": 200000,
+   "prem": 270000,
+   "horas": 5.5,
+   "tipo": "suv",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 676000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 5.5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 813000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 5.5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1053000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 5.5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "kia",
+   "marca": "Kia",
+   "modelo_id": "sorento",
+   "modelo": "Sorento",
+   "desc": "Kit SUV grande",
+   "std": 185000,
+   "orig": 250000,
+   "prem": 335000,
+   "horas": 6,
+   "tipo": "suv",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 761000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 6 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 910000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 6 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1170000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 6 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "kia",
+   "marca": "Kia",
+   "modelo_id": "soul",
+   "modelo": "Soul",
+   "desc": "Kit Gamma 1.6",
+   "std": 90000,
+   "orig": 130000,
+   "prem": 180000,
+   "horas": 4.5,
+   "tipo": "auto",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 514000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 4.5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 618000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 4.5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 800000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 4.5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "kia",
+   "marca": "Kia",
+   "modelo_id": "k2700",
+   "modelo": "K2700 / Frontier",
+   "desc": "Kit camioneta utilitaria",
+   "std": 175000,
+   "orig": 240000,
+   "prem": 320000,
+   "horas": 5.5,
+   "tipo": "camioneta",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 774000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 5.5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 936000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 5.5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1235000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 5.5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "chevrolet",
+   "marca": "Chevrolet",
+   "modelo_id": "spark",
+   "modelo": "Spark / Spark GT",
+   "desc": "Kit compacto",
+   "std": 62000,
+   "orig": 90000,
+   "prem": 130000,
+   "horas": 4,
+   "tipo": "auto",
+   "topVentas": true,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 378000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 4 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 453000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 4 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 597000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 4 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "chevrolet",
+   "marca": "Chevrolet",
+   "modelo_id": "sail",
+   "modelo": "Sail",
+   "desc": "Kit Luk/Sachs",
+   "std": 78000,
+   "orig": 115000,
+   "prem": 160000,
+   "horas": 4,
+   "tipo": "auto",
+   "topVentas": true,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 396000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 4 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 481000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 4 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 630000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 4 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "chevrolet",
+   "marca": "Chevrolet",
+   "modelo_id": "onix",
+   "modelo": "Onix Turbo",
+   "desc": "Kit Turbo 1.0/1.2",
+   "std": 85000,
+   "orig": 125000,
+   "prem": 175000,
+   "horas": 4.5,
+   "tipo": "auto",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 507000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 4.5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 611000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 4.5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 793000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 4.5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "chevrolet",
+   "marca": "Chevrolet",
+   "modelo_id": "tracker",
+   "modelo": "Tracker",
+   "desc": "Kit SUV pequeño",
+   "std": 110000,
+   "orig": 155000,
+   "prem": 220000,
+   "horas": 5,
+   "tipo": "suv",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 598000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 722000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 956000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "chevrolet",
+   "marca": "Chevrolet",
+   "modelo_id": "cruze",
+   "modelo": "Cruze",
+   "desc": "Kit sedán mediano",
+   "std": 95000,
+   "orig": 140000,
+   "prem": 195000,
+   "horas": 4.5,
+   "tipo": "auto",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 520000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 4.5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 631000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 4.5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 819000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 4.5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "chevrolet",
+   "marca": "Chevrolet",
+   "modelo_id": "captiva",
+   "modelo": "Captiva",
+   "desc": "Kit SUV grande",
+   "std": 165000,
+   "orig": 225000,
+   "prem": 300000,
+   "horas": 6,
+   "tipo": "suv",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 735000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 6 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 878000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 6 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1125000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 6 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "chevrolet",
+   "marca": "Chevrolet",
+   "modelo_id": "colorado",
+   "modelo": "Colorado / Tornado",
+   "desc": "Kit camioneta media",
+   "std": 225000,
+   "orig": 305000,
+   "prem": 400000,
+   "horas": 6,
+   "tipo": "camioneta",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 871000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 6 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1053000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 6 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1372000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 6 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "chevrolet",
+   "marca": "Chevrolet",
+   "modelo_id": "dmax",
+   "modelo": "D-Max",
+   "desc": "Kit camioneta 4x4",
+   "std": 255000,
+   "orig": 340000,
+   "prem": 445000,
+   "horas": 6.5,
+   "tipo": "camioneta",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 943000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 6.5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1131000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 6.5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1463000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 6.5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "nissan",
+   "marca": "Nissan",
+   "modelo_id": "march",
+   "modelo": "March",
+   "desc": "Kit compacto HR12",
+   "std": 68000,
+   "orig": 98000,
+   "prem": 140000,
+   "horas": 4,
+   "tipo": "auto",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 452000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 4 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 543000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 4 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 715000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 4 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "nissan",
+   "marca": "Nissan",
+   "modelo_id": "versa",
+   "modelo": "Versa",
+   "desc": "Kit sedán HR16",
+   "std": 78000,
+   "orig": 112000,
+   "prem": 160000,
+   "horas": 4,
+   "tipo": "auto",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 465000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 4 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 562000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 4 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 741000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 4 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "nissan",
+   "marca": "Nissan",
+   "modelo_id": "kicks",
+   "modelo": "Kicks",
+   "desc": "Kit SUV compacto",
+   "std": 115000,
+   "orig": 160000,
+   "prem": 220000,
+   "horas": 5,
+   "tipo": "suv",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 605000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 728000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 956000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "nissan",
+   "marca": "Nissan",
+   "modelo_id": "qashqai",
+   "modelo": "Qashqai",
+   "desc": "Kit SUV mediano",
+   "std": 135000,
+   "orig": 190000,
+   "prem": 260000,
+   "horas": 5.5,
+   "tipo": "suv",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 663000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 5.5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 800000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 5.5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1040000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 5.5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "nissan",
+   "marca": "Nissan",
+   "modelo_id": "xtrail",
+   "modelo": "X-Trail",
+   "desc": "Kit SUV grande",
+   "std": 170000,
+   "orig": 235000,
+   "prem": 315000,
+   "horas": 6,
+   "tipo": "suv",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 741000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 6 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 891000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 6 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1144000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 6 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "nissan",
+   "marca": "Nissan",
+   "modelo_id": "sentra",
+   "modelo": "Sentra",
+   "desc": "Kit sedán mediano",
+   "std": 95000,
+   "orig": 135000,
+   "prem": 190000,
+   "horas": 4.5,
+   "tipo": "auto",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 520000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 4.5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 624000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 4.5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 813000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 4.5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "nissan",
+   "marca": "Nissan",
+   "modelo_id": "navara",
+   "modelo": "Navara / Frontier",
+   "desc": "Kit camioneta 2.3 diésel",
+   "std": 265000,
+   "orig": 355000,
+   "prem": 465000,
+   "horas": 6.5,
+   "tipo": "camioneta",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 956000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 6.5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1151000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 6.5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1489000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 6.5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "nissan",
+   "marca": "Nissan",
+   "modelo_id": "np300",
+   "modelo": "NP300",
+   "desc": "Kit camioneta liviana",
+   "std": 215000,
+   "orig": 295000,
+   "prem": 390000,
+   "horas": 6,
+   "tipo": "camioneta",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 858000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 6 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1040000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 6 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1359000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 6 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "suzuki",
+   "marca": "Suzuki",
+   "modelo_id": "alto",
+   "modelo": "Alto / Alto 800",
+   "desc": "Kit ultracompacto",
+   "std": 55000,
+   "orig": 80000,
+   "prem": 118000,
+   "horas": 3.5,
+   "tipo": "auto",
+   "topVentas": true,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 343000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 3.5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 414000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 3.5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 556000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 3.5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "suzuki",
+   "marca": "Suzuki",
+   "modelo_id": "celerio",
+   "modelo": "Celerio",
+   "desc": "Kit compacto K10",
+   "std": 60000,
+   "orig": 88000,
+   "prem": 125000,
+   "horas": 4,
+   "tipo": "auto",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 442000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 4 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 530000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 4 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 696000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 4 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "suzuki",
+   "marca": "Suzuki",
+   "modelo_id": "swift",
+   "modelo": "Swift",
+   "desc": "Kit Luk K12",
+   "std": 70000,
+   "orig": 102000,
+   "prem": 145000,
+   "horas": 4,
+   "tipo": "auto",
+   "topVentas": true,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 387000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 4 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 466000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 4 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 613000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 4 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "suzuki",
+   "marca": "Suzuki",
+   "modelo_id": "baleno",
+   "modelo": "Baleno",
+   "desc": "Kit Luk K14",
+   "std": 75000,
+   "orig": 108000,
+   "prem": 155000,
+   "horas": 4,
+   "tipo": "auto",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 462000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 4 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 556000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 4 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 735000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 4 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "suzuki",
+   "marca": "Suzuki",
+   "modelo_id": "vitara",
+   "modelo": "Vitara / Grand Vitara",
+   "desc": "Kit SUV compacto",
+   "std": 115000,
+   "orig": 160000,
+   "prem": 225000,
+   "horas": 5,
+   "tipo": "suv",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 605000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 728000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 962000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "suzuki",
+   "marca": "Suzuki",
+   "modelo_id": "scross",
+   "modelo": "S-Cross",
+   "desc": "Kit SUV mediano",
+   "std": 120000,
+   "orig": 170000,
+   "prem": 235000,
+   "horas": 5,
+   "tipo": "suv",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 611000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 741000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 975000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "suzuki",
+   "marca": "Suzuki",
+   "modelo_id": "jimny",
+   "modelo": "Jimny",
+   "desc": "Kit 4x4 mecánico",
+   "std": 135000,
+   "orig": 185000,
+   "prem": 255000,
+   "horas": 5.5,
+   "tipo": "suv",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 663000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 5.5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 793000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 5.5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1034000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 5.5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mazda",
+   "marca": "Mazda",
+   "modelo_id": "2",
+   "modelo": "Mazda 2",
+   "desc": "Kit SkyActiv 1.5",
+   "std": 78000,
+   "orig": 115000,
+   "prem": 165000,
+   "horas": 4,
+   "tipo": "auto",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 465000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 4 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 566000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 4 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 748000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 4 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mazda",
+   "marca": "Mazda",
+   "modelo_id": "3",
+   "modelo": "Mazda 3",
+   "desc": "Kit SkyActiv 1.5/2.0",
+   "std": 95000,
+   "orig": 140000,
+   "prem": 195000,
+   "horas": 4.5,
+   "tipo": "auto",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 520000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 4.5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 631000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 4.5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 819000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 4.5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mazda",
+   "marca": "Mazda",
+   "modelo_id": "cx3",
+   "modelo": "CX-3",
+   "desc": "Kit SUV compacto",
+   "std": 115000,
+   "orig": 165000,
+   "prem": 230000,
+   "horas": 5,
+   "tipo": "suv",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 605000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 735000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 969000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mazda",
+   "marca": "Mazda",
+   "modelo_id": "cx5",
+   "modelo": "CX-5",
+   "desc": "Kit SUV mediano",
+   "std": 155000,
+   "orig": 215000,
+   "prem": 290000,
+   "horas": 5.5,
+   "tipo": "suv",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 689000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 5.5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 832000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 5.5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1079000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 5.5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mazda",
+   "marca": "Mazda",
+   "modelo_id": "bt50",
+   "modelo": "BT-50",
+   "desc": "Kit camioneta 3.2 diésel",
+   "std": 295000,
+   "orig": 395000,
+   "prem": 520000,
+   "horas": 6.5,
+   "tipo": "camioneta",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 995000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 6.5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1203000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 6.5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1560000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 6.5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mitsubishi",
+   "marca": "Mitsubishi",
+   "modelo_id": "mirage",
+   "modelo": "Mirage / Space Star",
+   "desc": "Kit compacto",
+   "std": 62000,
+   "orig": 90000,
+   "prem": 130000,
+   "horas": 4,
+   "tipo": "auto",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 445000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 4 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 533000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 4 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 702000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 4 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mitsubishi",
+   "marca": "Mitsubishi",
+   "modelo_id": "asx",
+   "modelo": "ASX",
+   "desc": "Kit SUV compacto",
+   "std": 120000,
+   "orig": 170000,
+   "prem": 235000,
+   "horas": 5,
+   "tipo": "suv",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 611000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 741000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 975000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mitsubishi",
+   "marca": "Mitsubishi",
+   "modelo_id": "outlander",
+   "modelo": "Outlander",
+   "desc": "Kit SUV mediano",
+   "std": 155000,
+   "orig": 215000,
+   "prem": 290000,
+   "horas": 5.5,
+   "tipo": "suv",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 689000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 5.5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 832000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 5.5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1079000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 5.5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mitsubishi",
+   "marca": "Mitsubishi",
+   "modelo_id": "l200",
+   "modelo": "L200 / Triton",
+   "desc": "Kit camioneta 2.4 diésel",
+   "std": 265000,
+   "orig": 355000,
+   "prem": 465000,
+   "horas": 6.5,
+   "tipo": "camioneta",
+   "topVentas": true,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 812000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 6.5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 978000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 6.5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1265000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 6.5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mitsubishi",
+   "marca": "Mitsubishi",
+   "modelo_id": "montero",
+   "modelo": "Montero Sport",
+   "desc": "Kit SUV grande 4x4",
+   "std": 275000,
+   "orig": 370000,
+   "prem": 485000,
+   "horas": 6.5,
+   "tipo": "suv",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 910000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 6.5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1099000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 6.5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1398000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 6.5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "vw",
+   "marca": "Volkswagen",
+   "modelo_id": "gol",
+   "modelo": "Gol / Saveiro",
+   "desc": "Kit Luk",
+   "std": 75000,
+   "orig": 108000,
+   "prem": 155000,
+   "horas": 4,
+   "tipo": "auto",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 462000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 4 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 556000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 4 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 735000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 4 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "vw",
+   "marca": "Volkswagen",
+   "modelo_id": "polo",
+   "modelo": "Polo",
+   "desc": "Kit Luk/Sachs",
+   "std": 85000,
+   "orig": 125000,
+   "prem": 175000,
+   "horas": 4.5,
+   "tipo": "auto",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 507000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 4.5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 611000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 4.5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 793000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 4.5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "vw",
+   "marca": "Volkswagen",
+   "modelo_id": "vento",
+   "modelo": "Vento",
+   "desc": "Kit sedán",
+   "std": 90000,
+   "orig": 130000,
+   "prem": 180000,
+   "horas": 4.5,
+   "tipo": "auto",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 514000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 4.5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 618000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 4.5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 800000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 4.5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "vw",
+   "marca": "Volkswagen",
+   "modelo_id": "tcross",
+   "modelo": "T-Cross",
+   "desc": "Kit SUV TSI",
+   "std": 130000,
+   "orig": 185000,
+   "prem": 255000,
+   "horas": 5,
+   "tipo": "suv",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 624000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 761000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1001000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "vw",
+   "marca": "Volkswagen",
+   "modelo_id": "tiguan",
+   "modelo": "Tiguan",
+   "desc": "Kit SUV 2.0 TSI",
+   "std": 175000,
+   "orig": 240000,
+   "prem": 325000,
+   "horas": 5.5,
+   "tipo": "suv",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 715000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 5.5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 865000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 5.5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1125000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 5.5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "vw",
+   "marca": "Volkswagen",
+   "modelo_id": "amarok",
+   "modelo": "Amarok",
+   "desc": "Kit camioneta TDI",
+   "std": 285000,
+   "orig": 385000,
+   "prem": 505000,
+   "horas": 6.5,
+   "tipo": "camioneta",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 982000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 6.5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1190000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 6.5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1541000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 6.5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "ford",
+   "marca": "Ford",
+   "modelo_id": "fiesta",
+   "modelo": "Fiesta",
+   "desc": "Kit Luk/Valeo",
+   "std": 75000,
+   "orig": 108000,
+   "prem": 155000,
+   "horas": 4,
+   "tipo": "auto",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 462000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 4 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 556000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 4 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 735000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 4 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "ford",
+   "marca": "Ford",
+   "modelo_id": "focus",
+   "modelo": "Focus",
+   "desc": "Kit Luk/Sachs",
+   "std": 90000,
+   "orig": 130000,
+   "prem": 180000,
+   "horas": 4.5,
+   "tipo": "auto",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 514000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 4.5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 618000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 4.5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 800000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 4.5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "ford",
+   "marca": "Ford",
+   "modelo_id": "ecosport",
+   "modelo": "EcoSport",
+   "desc": "Kit SUV pequeño",
+   "std": 115000,
+   "orig": 165000,
+   "prem": 230000,
+   "horas": 5,
+   "tipo": "suv",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 605000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 735000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 969000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "ford",
+   "marca": "Ford",
+   "modelo_id": "territory",
+   "modelo": "Territory",
+   "desc": "Kit SUV EcoBoost",
+   "std": 155000,
+   "orig": 215000,
+   "prem": 290000,
+   "horas": 5.5,
+   "tipo": "suv",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 689000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 5.5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 832000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 5.5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1079000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 5.5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "ford",
+   "marca": "Ford",
+   "modelo_id": "ranger22",
+   "modelo": "Ranger 2.2 Diésel",
+   "desc": "Kit camioneta media",
+   "std": 245000,
+   "orig": 330000,
+   "prem": 435000,
+   "horas": 6.5,
+   "tipo": "camioneta",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 930000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 6.5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1118000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 6.5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1450000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 6.5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "ford",
+   "marca": "Ford",
+   "modelo_id": "ranger32",
+   "modelo": "Ranger 3.2 Diésel",
+   "desc": "Kit camioneta pesada",
+   "std": 295000,
+   "orig": 395000,
+   "prem": 520000,
+   "horas": 6.5,
+   "tipo": "camioneta",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 995000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 6.5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 1203000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 6.5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1560000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 6.5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "peugeot",
+   "marca": "Peugeot",
+   "modelo_id": "208",
+   "modelo": "Peugeot 208",
+   "desc": "Kit PureTech",
+   "std": 85000,
+   "orig": 125000,
+   "prem": 175000,
+   "horas": 4.5,
+   "tipo": "auto",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 507000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 4.5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 611000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 4.5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 793000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 4.5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "peugeot",
+   "marca": "Peugeot",
+   "modelo_id": "2008",
+   "modelo": "Peugeot 2008",
+   "desc": "Kit SUV pequeño",
+   "std": 115000,
+   "orig": 165000,
+   "prem": 230000,
+   "horas": 5,
+   "tipo": "suv",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 605000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 735000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 969000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "peugeot",
+   "marca": "Peugeot",
+   "modelo_id": "301",
+   "modelo": "Peugeot 301",
+   "desc": "Kit sedán HDi",
+   "std": 95000,
+   "orig": 140000,
+   "prem": 195000,
+   "horas": 4.5,
+   "tipo": "auto",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 520000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 4.5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 631000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 4.5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 819000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 4.5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "peugeot",
+   "marca": "Peugeot",
+   "modelo_id": "3008",
+   "modelo": "Peugeot 3008",
+   "desc": "Kit SUV mediano",
+   "std": 155000,
+   "orig": 215000,
+   "prem": 290000,
+   "horas": 5.5,
+   "tipo": "suv",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 689000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 5.5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 832000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 5.5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1079000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 5.5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "peugeot",
+   "marca": "Peugeot",
+   "modelo_id": "partner",
+   "modelo": "Partner / Rifter",
+   "desc": "Kit furgón liviano",
+   "std": 135000,
+   "orig": 185000,
+   "prem": 255000,
+   "horas": 5,
+   "tipo": "camioneta",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 689000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 832000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1118000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "renault",
+   "marca": "Renault",
+   "modelo_id": "kwid",
+   "modelo": "Kwid",
+   "desc": "Kit compacto",
+   "std": 65000,
+   "orig": 95000,
+   "prem": 135000,
+   "horas": 4,
+   "tipo": "auto",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 449000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 4 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 540000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 4 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 709000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 4 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "renault",
+   "marca": "Renault",
+   "modelo_id": "logan",
+   "modelo": "Logan / Sandero",
+   "desc": "Kit Valeo",
+   "std": 75000,
+   "orig": 108000,
+   "prem": 155000,
+   "horas": 4,
+   "tipo": "auto",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 462000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 4 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 556000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 4 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 735000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 4 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "renault",
+   "marca": "Renault",
+   "modelo_id": "duster",
+   "modelo": "Duster",
+   "desc": "Kit SUV mediano",
+   "std": 130000,
+   "orig": 180000,
+   "prem": 250000,
+   "horas": 5.5,
+   "tipo": "suv",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 657000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 5.5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 787000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 5.5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1027000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 5.5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "renault",
+   "marca": "Renault",
+   "modelo_id": "oroch",
+   "modelo": "Duster Oroch",
+   "desc": "Kit pickup compacta",
+   "std": 175000,
+   "orig": 240000,
+   "prem": 320000,
+   "horas": 5.5,
+   "tipo": "camioneta",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 774000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 5.5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 936000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 5.5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1235000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 5.5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "renault",
+   "marca": "Renault",
+   "modelo_id": "kangoo",
+   "modelo": "Kangoo",
+   "desc": "Kit furgón liviano",
+   "std": 115000,
+   "orig": 165000,
+   "prem": 225000,
+   "horas": 5,
+   "tipo": "camioneta",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 663000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 806000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1079000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "honda",
+   "marca": "Honda",
+   "modelo_id": "city",
+   "modelo": "City",
+   "desc": "Kit Sachs L15",
+   "std": 80000,
+   "orig": 118000,
+   "prem": 165000,
+   "horas": 4,
+   "tipo": "auto",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 468000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 4 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 569000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 4 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 748000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 4 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "honda",
+   "marca": "Honda",
+   "modelo_id": "civic",
+   "modelo": "Civic",
+   "desc": "Kit Sachs R18 / L15B",
+   "std": 105000,
+   "orig": 150000,
+   "prem": 210000,
+   "horas": 4.5,
+   "tipo": "auto",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 533000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 4.5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 644000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 4.5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 839000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 4.5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "honda",
+   "marca": "Honda",
+   "modelo_id": "hrv",
+   "modelo": "HR-V",
+   "desc": "Kit SUV compacto",
+   "std": 125000,
+   "orig": 175000,
+   "prem": 245000,
+   "horas": 5,
+   "tipo": "suv",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 618000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 748000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 988000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "honda",
+   "marca": "Honda",
+   "modelo_id": "crv",
+   "modelo": "CR-V",
+   "desc": "Kit SUV mediano",
+   "std": 155000,
+   "orig": 215000,
+   "prem": 290000,
+   "horas": 5.5,
+   "tipo": "suv",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Estándar",
+     "precio": 689000,
+     "desc": "Kit estándar para uso urbano regular",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Disco + plato (prensa) marca alternativa",
+      "Rodamiento collarín nuevo",
+      "Horquilla embrague (revisada)",
+      "Retén caja de cambios",
+      "Aceite caja completo",
+      "2 técnicos · 5.5 horas en tu base",
+      "Prueba dinámica",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Original",
+     "precio": 832000,
+     "desc": "El más solicitado · Calidad fabricante original",
+     "cambio": null,
+     "destacado": true,
+     "incluye": [
+      "Kit completo LUK / VALEO / EXEDY original",
+      "Collarín nuevo de calidad OEM",
+      "Horquilla nueva o calibrada",
+      "Retén caja + retén cigüeñal",
+      "Aceite caja sintético",
+      "Lubricante específico para mecanismo",
+      "2 técnicos especialistas · 5.5 horas",
+      "Revisión soportes motor y palieres",
+      "Calibración punto de mordida",
+      "Garantía escrita 12 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Premium",
+     "precio": 1079000,
+     "desc": "Calidad premium · Máxima durabilidad",
+     "cambio": null,
+     "destacado": false,
+     "incluye": [
+      "Kit completo SACHS / AISIN (premium)",
+      "Disco reforzado",
+      "Collarín premium SKF / NTN",
+      "Horquilla nueva original",
+      "Retén caja y cigüeñal nuevos",
+      "Bombín embrague nuevo",
+      "Volante motor revisado y rectificado si requiere",
+      "Aceite caja sintético premium",
+      "2 técnicos senior · 5.5 horas",
+      "Inspección integral con scanner",
+      "Calibración punto de mordida con datos en vivo",
+      "Garantía escrita 12 meses sobre kit completo"
+     ]
+    }
+   ]
+  }
+ ]
+}

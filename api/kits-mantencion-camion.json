@@ -1,0 +1,1865 @@
+{
+ "generado": "2026-10-20T13:07:27.934Z",
+ "cotizador": "mantencion_camion",
+ "fuente": "https://angelperuga-maker.github.io/serviruta/kits-mantencion-motor-camion.html",
+ "moneda": "CLP",
+ "total_modelos": 29,
+ "modelos": [
+  {
+   "marca_id": "mb",
+   "marca": "Mercedes-Benz",
+   "modelo_id": "om904la",
+   "modelo": "MB 712 · 912 · 915",
+   "motor": "OM904LA · 4 cil · 4.25L",
+   "capAceite": 14,
+   "horas": 3,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 290000,
+     "desc": "Para uso urbano regular",
+     "cambio": "cada 20.000-30.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 15W40 calidad CI-4 (14L)",
+      "Filtro de aceite Donaldson o Fleetguard",
+      "Filtro de petróleo (combustible)",
+      "Separador de agua",
+      "Mano de obra técnico Serviruta",
+      "Inspección visual de motor incluida",
+      "Reporte escrito y eliminación residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 410000,
+     "desc": "El más solicitado · Mejor relación rendimiento/precio",
+     "cambio": "cada 30.000-40.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 15W40 CK-4 / CJ-4 (14L)",
+      "Filtro de aceite premium (Donaldson/Sogefi)",
+      "Filtro de petróleo + separador de agua",
+      "Filtro de aire del motor",
+      "Filtro de polen cabina",
+      "Mano de obra técnico especialista",
+      "Inspección integral + reporte fotográfico",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 546000,
+     "desc": "Mantención extendida · Para flota de alto rendimiento",
+     "cambio": "cada 40.000-60.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite sintético Low SAPS (compatible DPF) (14L)",
+      "Set completo de filtros premium",
+      "Filtro de polen + revisión clima",
+      "Refrigerante revisado y completado si requiere",
+      "Inspección extendida (correas, mangueras, batería)",
+      "Diagnóstico con scanner incluido",
+      "Reporte técnico digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mb",
+   "marca": "Mercedes-Benz",
+   "modelo_id": "om906la",
+   "modelo": "MB Atego 1718 · 1725",
+   "motor": "OM906LA · 6 cil · 6.4L",
+   "capAceite": 24,
+   "horas": 3.5,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 406000,
+     "desc": "Para uso urbano regular",
+     "cambio": "cada 20.000-30.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 15W40 calidad CI-4 (24L)",
+      "Filtro de aceite Donaldson o Fleetguard",
+      "Filtro de petróleo (combustible)",
+      "Separador de agua",
+      "Mano de obra técnico Serviruta",
+      "Inspección visual de motor incluida",
+      "Reporte escrito y eliminación residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 563000,
+     "desc": "El más solicitado · Mejor relación rendimiento/precio",
+     "cambio": "cada 30.000-40.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 15W40 CK-4 / CJ-4 (24L)",
+      "Filtro de aceite premium (Donaldson/Sogefi)",
+      "Filtro de petróleo + separador de agua",
+      "Filtro de aire del motor",
+      "Filtro de polen cabina",
+      "Mano de obra técnico especialista",
+      "Inspección integral + reporte fotográfico",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 760000,
+     "desc": "Mantención extendida · Para flota de alto rendimiento",
+     "cambio": "cada 40.000-60.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite sintético Low SAPS (compatible DPF) (24L)",
+      "Set completo de filtros premium",
+      "Filtro de polen + revisión clima",
+      "Refrigerante revisado y completado si requiere",
+      "Inspección extendida (correas, mangueras, batería)",
+      "Diagnóstico con scanner incluido",
+      "Reporte técnico digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mb",
+   "marca": "Mercedes-Benz",
+   "modelo_id": "om457la",
+   "modelo": "MB Axor 2640 · 3340",
+   "motor": "OM457LA · 6 cil · 12L",
+   "capAceite": 32,
+   "horas": 4,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 509000,
+     "desc": "Para uso urbano regular",
+     "cambio": "cada 20.000-30.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 15W40 calidad CI-4 (32L)",
+      "Filtro de aceite Donaldson o Fleetguard",
+      "Filtro de petróleo (combustible)",
+      "Separador de agua",
+      "Mano de obra técnico Serviruta",
+      "Inspección visual de motor incluida",
+      "Reporte escrito y eliminación residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 696000,
+     "desc": "El más solicitado · Mejor relación rendimiento/precio",
+     "cambio": "cada 30.000-40.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 15W40 CK-4 / CJ-4 (32L)",
+      "Filtro de aceite premium (Donaldson/Sogefi)",
+      "Filtro de petróleo + separador de agua",
+      "Filtro de aire del motor",
+      "Filtro de polen cabina",
+      "Mano de obra técnico especialista",
+      "Inspección integral + reporte fotográfico",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 941000,
+     "desc": "Mantención extendida · Para flota de alto rendimiento",
+     "cambio": "cada 40.000-60.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite sintético Low SAPS (compatible DPF) (32L)",
+      "Set completo de filtros premium",
+      "Filtro de polen + revisión clima",
+      "Refrigerante revisado y completado si requiere",
+      "Inspección extendida (correas, mangueras, batería)",
+      "Diagnóstico con scanner incluido",
+      "Reporte técnico digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mb",
+   "marca": "Mercedes-Benz",
+   "modelo_id": "om501la",
+   "modelo": "MB Actros 2641 · 3346",
+   "motor": "OM501LA · V6 · 11.9L",
+   "capAceite": 34,
+   "horas": 4,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 522000,
+     "desc": "Para uso urbano regular",
+     "cambio": "cada 20.000-30.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 15W40 calidad CI-4 (34L)",
+      "Filtro de aceite Donaldson o Fleetguard",
+      "Filtro de petróleo (combustible)",
+      "Separador de agua",
+      "Mano de obra técnico Serviruta",
+      "Inspección visual de motor incluida",
+      "Reporte escrito y eliminación residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 717000,
+     "desc": "El más solicitado · Mejor relación rendimiento/precio",
+     "cambio": "cada 30.000-40.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 15W40 CK-4 / CJ-4 (34L)",
+      "Filtro de aceite premium (Donaldson/Sogefi)",
+      "Filtro de petróleo + separador de agua",
+      "Filtro de aire del motor",
+      "Filtro de polen cabina",
+      "Mano de obra técnico especialista",
+      "Inspección integral + reporte fotográfico",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 974000,
+     "desc": "Mantención extendida · Para flota de alto rendimiento",
+     "cambio": "cada 40.000-60.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite sintético Low SAPS (compatible DPF) (34L)",
+      "Set completo de filtros premium",
+      "Filtro de polen + revisión clima",
+      "Refrigerante revisado y completado si requiere",
+      "Inspección extendida (correas, mangueras, batería)",
+      "Diagnóstico con scanner incluido",
+      "Reporte técnico digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mb",
+   "marca": "Mercedes-Benz",
+   "modelo_id": "om541la",
+   "modelo": "MB Actros 4144 · 4844",
+   "motor": "OM541LA · V6 · 11.9L",
+   "capAceite": 34,
+   "horas": 4,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 522000,
+     "desc": "Para uso urbano regular",
+     "cambio": "cada 20.000-30.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 15W40 calidad CI-4 (34L)",
+      "Filtro de aceite Donaldson o Fleetguard",
+      "Filtro de petróleo (combustible)",
+      "Separador de agua",
+      "Mano de obra técnico Serviruta",
+      "Inspección visual de motor incluida",
+      "Reporte escrito y eliminación residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 717000,
+     "desc": "El más solicitado · Mejor relación rendimiento/precio",
+     "cambio": "cada 30.000-40.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 15W40 CK-4 / CJ-4 (34L)",
+      "Filtro de aceite premium (Donaldson/Sogefi)",
+      "Filtro de petróleo + separador de agua",
+      "Filtro de aire del motor",
+      "Filtro de polen cabina",
+      "Mano de obra técnico especialista",
+      "Inspección integral + reporte fotográfico",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 974000,
+     "desc": "Mantención extendida · Para flota de alto rendimiento",
+     "cambio": "cada 40.000-60.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite sintético Low SAPS (compatible DPF) (34L)",
+      "Set completo de filtros premium",
+      "Filtro de polen + revisión clima",
+      "Refrigerante revisado y completado si requiere",
+      "Inspección extendida (correas, mangueras, batería)",
+      "Diagnóstico con scanner incluido",
+      "Reporte técnico digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mb",
+   "marca": "Mercedes-Benz",
+   "modelo_id": "om542la",
+   "modelo": "MB Actros 4855 · 6048",
+   "motor": "OM542LA · V8 · 15.9L",
+   "capAceite": 38,
+   "horas": 4.5,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 568000,
+     "desc": "Para uso urbano regular",
+     "cambio": "cada 20.000-30.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 15W40 calidad CI-4 (38L)",
+      "Filtro de aceite Donaldson o Fleetguard",
+      "Filtro de petróleo (combustible)",
+      "Separador de agua",
+      "Mano de obra técnico Serviruta",
+      "Inspección visual de motor incluida",
+      "Reporte escrito y eliminación residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 778000,
+     "desc": "El más solicitado · Mejor relación rendimiento/precio",
+     "cambio": "cada 30.000-40.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 15W40 CK-4 / CJ-4 (38L)",
+      "Filtro de aceite premium (Donaldson/Sogefi)",
+      "Filtro de petróleo + separador de agua",
+      "Filtro de aire del motor",
+      "Filtro de polen cabina",
+      "Mano de obra técnico especialista",
+      "Inspección integral + reporte fotográfico",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 1058000,
+     "desc": "Mantención extendida · Para flota de alto rendimiento",
+     "cambio": "cada 40.000-60.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite sintético Low SAPS (compatible DPF) (38L)",
+      "Set completo de filtros premium",
+      "Filtro de polen + revisión clima",
+      "Refrigerante revisado y completado si requiere",
+      "Inspección extendida (correas, mangueras, batería)",
+      "Diagnóstico con scanner incluido",
+      "Reporte técnico digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "scania",
+   "marca": "Scania",
+   "modelo_id": "dc9",
+   "modelo": "Scania P230 · P270 · P310",
+   "motor": "DC9 · 5 cil · 9L",
+   "capAceite": 30,
+   "horas": 3.5,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 446000,
+     "desc": "Para uso urbano regular",
+     "cambio": "cada 20.000-30.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 15W40 calidad CI-4 (30L)",
+      "Filtro de aceite Donaldson o Fleetguard",
+      "Filtro de petróleo (combustible)",
+      "Separador de agua",
+      "Mano de obra técnico Serviruta",
+      "Inspección visual de motor incluida",
+      "Reporte escrito y eliminación residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 626000,
+     "desc": "El más solicitado · Mejor relación rendimiento/precio",
+     "cambio": "cada 30.000-40.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 15W40 CK-4 / CJ-4 (30L)",
+      "Filtro de aceite premium (Donaldson/Sogefi)",
+      "Filtro de petróleo + separador de agua",
+      "Filtro de aire del motor",
+      "Filtro de polen cabina",
+      "Mano de obra técnico especialista",
+      "Inspección integral + reporte fotográfico",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 859000,
+     "desc": "Mantención extendida · Para flota de alto rendimiento",
+     "cambio": "cada 40.000-60.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite sintético Low SAPS (compatible DPF) (30L)",
+      "Set completo de filtros premium",
+      "Filtro de polen + revisión clima",
+      "Refrigerante revisado y completado si requiere",
+      "Inspección extendida (correas, mangueras, batería)",
+      "Diagnóstico con scanner incluido",
+      "Reporte técnico digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "scania",
+   "marca": "Scania",
+   "modelo_id": "dc11",
+   "modelo": "Scania P340 · R340",
+   "motor": "DC11 · 6 cil · 10.6L",
+   "capAceite": 35,
+   "horas": 3.5,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 510000,
+     "desc": "Para uso urbano regular",
+     "cambio": "cada 20.000-30.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 15W40 calidad CI-4 (35L)",
+      "Filtro de aceite Donaldson o Fleetguard",
+      "Filtro de petróleo (combustible)",
+      "Separador de agua",
+      "Mano de obra técnico Serviruta",
+      "Inspección visual de motor incluida",
+      "Reporte escrito y eliminación residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 709000,
+     "desc": "El más solicitado · Mejor relación rendimiento/precio",
+     "cambio": "cada 30.000-40.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 15W40 CK-4 / CJ-4 (35L)",
+      "Filtro de aceite premium (Donaldson/Sogefi)",
+      "Filtro de petróleo + separador de agua",
+      "Filtro de aire del motor",
+      "Filtro de polen cabina",
+      "Mano de obra técnico especialista",
+      "Inspección integral + reporte fotográfico",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 971000,
+     "desc": "Mantención extendida · Para flota de alto rendimiento",
+     "cambio": "cada 40.000-60.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite sintético Low SAPS (compatible DPF) (35L)",
+      "Set completo de filtros premium",
+      "Filtro de polen + revisión clima",
+      "Refrigerante revisado y completado si requiere",
+      "Inspección extendida (correas, mangueras, batería)",
+      "Diagnóstico con scanner incluido",
+      "Reporte técnico digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "scania",
+   "marca": "Scania",
+   "modelo_id": "dc12",
+   "modelo": "Scania P380 · R420 · G420",
+   "motor": "DC12 · 6 cil · 11.7L",
+   "capAceite": 38,
+   "horas": 4,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 549000,
+     "desc": "Para uso urbano regular",
+     "cambio": "cada 20.000-30.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 15W40 calidad CI-4 (38L)",
+      "Filtro de aceite Donaldson o Fleetguard",
+      "Filtro de petróleo (combustible)",
+      "Separador de agua",
+      "Mano de obra técnico Serviruta",
+      "Inspección visual de motor incluida",
+      "Reporte escrito y eliminación residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 759000,
+     "desc": "El más solicitado · Mejor relación rendimiento/precio",
+     "cambio": "cada 30.000-40.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 15W40 CK-4 / CJ-4 (38L)",
+      "Filtro de aceite premium (Donaldson/Sogefi)",
+      "Filtro de petróleo + separador de agua",
+      "Filtro de aire del motor",
+      "Filtro de polen cabina",
+      "Mano de obra técnico especialista",
+      "Inspección integral + reporte fotográfico",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 1040000,
+     "desc": "Mantención extendida · Para flota de alto rendimiento",
+     "cambio": "cada 40.000-60.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite sintético Low SAPS (compatible DPF) (38L)",
+      "Set completo de filtros premium",
+      "Filtro de polen + revisión clima",
+      "Refrigerante revisado y completado si requiere",
+      "Inspección extendida (correas, mangueras, batería)",
+      "Diagnóstico con scanner incluido",
+      "Reporte técnico digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "scania",
+   "marca": "Scania",
+   "modelo_id": "dt12",
+   "modelo": "Scania G440 · R440 · R470",
+   "motor": "DT12 · 6 cil · 11.7L Turbo",
+   "capAceite": 38,
+   "horas": 4,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 549000,
+     "desc": "Para uso urbano regular",
+     "cambio": "cada 20.000-30.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 15W40 calidad CI-4 (38L)",
+      "Filtro de aceite Donaldson o Fleetguard",
+      "Filtro de petróleo (combustible)",
+      "Separador de agua",
+      "Mano de obra técnico Serviruta",
+      "Inspección visual de motor incluida",
+      "Reporte escrito y eliminación residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 759000,
+     "desc": "El más solicitado · Mejor relación rendimiento/precio",
+     "cambio": "cada 30.000-40.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 15W40 CK-4 / CJ-4 (38L)",
+      "Filtro de aceite premium (Donaldson/Sogefi)",
+      "Filtro de petróleo + separador de agua",
+      "Filtro de aire del motor",
+      "Filtro de polen cabina",
+      "Mano de obra técnico especialista",
+      "Inspección integral + reporte fotográfico",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 1040000,
+     "desc": "Mantención extendida · Para flota de alto rendimiento",
+     "cambio": "cada 40.000-60.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite sintético Low SAPS (compatible DPF) (38L)",
+      "Set completo de filtros premium",
+      "Filtro de polen + revisión clima",
+      "Refrigerante revisado y completado si requiere",
+      "Inspección extendida (correas, mangueras, batería)",
+      "Diagnóstico con scanner incluido",
+      "Reporte técnico digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "scania",
+   "marca": "Scania",
+   "modelo_id": "dc13",
+   "modelo": "Scania R450 · R500 (Serie nueva)",
+   "motor": "DC13 · 6 cil · 12.7L",
+   "capAceite": 40,
+   "horas": 4.5,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 581000,
+     "desc": "Para uso urbano regular",
+     "cambio": "cada 20.000-30.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 15W40 calidad CI-4 (40L)",
+      "Filtro de aceite Donaldson o Fleetguard",
+      "Filtro de petróleo (combustible)",
+      "Separador de agua",
+      "Mano de obra técnico Serviruta",
+      "Inspección visual de motor incluida",
+      "Reporte escrito y eliminación residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 799000,
+     "desc": "El más solicitado · Mejor relación rendimiento/precio",
+     "cambio": "cada 30.000-40.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 15W40 CK-4 / CJ-4 (40L)",
+      "Filtro de aceite premium (Donaldson/Sogefi)",
+      "Filtro de petróleo + separador de agua",
+      "Filtro de aire del motor",
+      "Filtro de polen cabina",
+      "Mano de obra técnico especialista",
+      "Inspección integral + reporte fotográfico",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 1091000,
+     "desc": "Mantención extendida · Para flota de alto rendimiento",
+     "cambio": "cada 40.000-60.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite sintético Low SAPS (compatible DPF) (40L)",
+      "Set completo de filtros premium",
+      "Filtro de polen + revisión clima",
+      "Refrigerante revisado y completado si requiere",
+      "Inspección extendida (correas, mangueras, batería)",
+      "Diagnóstico con scanner incluido",
+      "Reporte técnico digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "scania",
+   "marca": "Scania",
+   "modelo_id": "dsc11",
+   "modelo": "Scania 113 · 114 (antiguos)",
+   "motor": "DSC11 · 6 cil · 11L",
+   "capAceite": 34,
+   "horas": 4,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 522000,
+     "desc": "Para uso urbano regular",
+     "cambio": "cada 20.000-30.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 15W40 calidad CI-4 (34L)",
+      "Filtro de aceite Donaldson o Fleetguard",
+      "Filtro de petróleo (combustible)",
+      "Separador de agua",
+      "Mano de obra técnico Serviruta",
+      "Inspección visual de motor incluida",
+      "Reporte escrito y eliminación residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 717000,
+     "desc": "El más solicitado · Mejor relación rendimiento/precio",
+     "cambio": "cada 30.000-40.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 15W40 CK-4 / CJ-4 (34L)",
+      "Filtro de aceite premium (Donaldson/Sogefi)",
+      "Filtro de petróleo + separador de agua",
+      "Filtro de aire del motor",
+      "Filtro de polen cabina",
+      "Mano de obra técnico especialista",
+      "Inspección integral + reporte fotográfico",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 974000,
+     "desc": "Mantención extendida · Para flota de alto rendimiento",
+     "cambio": "cada 40.000-60.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite sintético Low SAPS (compatible DPF) (34L)",
+      "Set completo de filtros premium",
+      "Filtro de polen + revisión clima",
+      "Refrigerante revisado y completado si requiere",
+      "Inspección extendida (correas, mangueras, batería)",
+      "Diagnóstico con scanner incluido",
+      "Reporte técnico digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "volvo",
+   "marca": "Volvo",
+   "modelo_id": "d11",
+   "modelo": "Volvo FE · FM 11",
+   "motor": "D11A/B · 6 cil · 11L",
+   "capAceite": 32,
+   "horas": 3.5,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 490000,
+     "desc": "Para uso urbano regular",
+     "cambio": "cada 20.000-30.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 15W40 calidad CI-4 (32L)",
+      "Filtro de aceite Donaldson o Fleetguard",
+      "Filtro de petróleo (combustible)",
+      "Separador de agua",
+      "Mano de obra técnico Serviruta",
+      "Inspección visual de motor incluida",
+      "Reporte escrito y eliminación residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 677000,
+     "desc": "El más solicitado · Mejor relación rendimiento/precio",
+     "cambio": "cada 30.000-40.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 15W40 CK-4 / CJ-4 (32L)",
+      "Filtro de aceite premium (Donaldson/Sogefi)",
+      "Filtro de petróleo + separador de agua",
+      "Filtro de aire del motor",
+      "Filtro de polen cabina",
+      "Mano de obra técnico especialista",
+      "Inspección integral + reporte fotográfico",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 922000,
+     "desc": "Mantención extendida · Para flota de alto rendimiento",
+     "cambio": "cada 40.000-60.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite sintético Low SAPS (compatible DPF) (32L)",
+      "Set completo de filtros premium",
+      "Filtro de polen + revisión clima",
+      "Refrigerante revisado y completado si requiere",
+      "Inspección extendida (correas, mangueras, batería)",
+      "Diagnóstico con scanner incluido",
+      "Reporte técnico digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "volvo",
+   "marca": "Volvo",
+   "modelo_id": "d13",
+   "modelo": "Volvo FH 460 · FM 440",
+   "motor": "D13A/B/C · 6 cil · 12.8L",
+   "capAceite": 38,
+   "horas": 4,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 549000,
+     "desc": "Para uso urbano regular",
+     "cambio": "cada 20.000-30.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 15W40 calidad CI-4 (38L)",
+      "Filtro de aceite Donaldson o Fleetguard",
+      "Filtro de petróleo (combustible)",
+      "Separador de agua",
+      "Mano de obra técnico Serviruta",
+      "Inspección visual de motor incluida",
+      "Reporte escrito y eliminación residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 759000,
+     "desc": "El más solicitado · Mejor relación rendimiento/precio",
+     "cambio": "cada 30.000-40.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 15W40 CK-4 / CJ-4 (38L)",
+      "Filtro de aceite premium (Donaldson/Sogefi)",
+      "Filtro de petróleo + separador de agua",
+      "Filtro de aire del motor",
+      "Filtro de polen cabina",
+      "Mano de obra técnico especialista",
+      "Inspección integral + reporte fotográfico",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 1040000,
+     "desc": "Mantención extendida · Para flota de alto rendimiento",
+     "cambio": "cada 40.000-60.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite sintético Low SAPS (compatible DPF) (38L)",
+      "Set completo de filtros premium",
+      "Filtro de polen + revisión clima",
+      "Refrigerante revisado y completado si requiere",
+      "Inspección extendida (correas, mangueras, batería)",
+      "Diagnóstico con scanner incluido",
+      "Reporte técnico digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "volvo",
+   "marca": "Volvo",
+   "modelo_id": "d13k",
+   "modelo": "Volvo FH 500 · 540 (nuevos)",
+   "motor": "D13K · 6 cil · 12.8L Euro 5/6",
+   "capAceite": 38,
+   "horas": 4,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 549000,
+     "desc": "Para uso urbano regular",
+     "cambio": "cada 20.000-30.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 15W40 calidad CI-4 (38L)",
+      "Filtro de aceite Donaldson o Fleetguard",
+      "Filtro de petróleo (combustible)",
+      "Separador de agua",
+      "Mano de obra técnico Serviruta",
+      "Inspección visual de motor incluida",
+      "Reporte escrito y eliminación residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 759000,
+     "desc": "El más solicitado · Mejor relación rendimiento/precio",
+     "cambio": "cada 30.000-40.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 15W40 CK-4 / CJ-4 (38L)",
+      "Filtro de aceite premium (Donaldson/Sogefi)",
+      "Filtro de petróleo + separador de agua",
+      "Filtro de aire del motor",
+      "Filtro de polen cabina",
+      "Mano de obra técnico especialista",
+      "Inspección integral + reporte fotográfico",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 1040000,
+     "desc": "Mantención extendida · Para flota de alto rendimiento",
+     "cambio": "cada 40.000-60.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite sintético Low SAPS (compatible DPF) (38L)",
+      "Set completo de filtros premium",
+      "Filtro de polen + revisión clima",
+      "Refrigerante revisado y completado si requiere",
+      "Inspección extendida (correas, mangueras, batería)",
+      "Diagnóstico con scanner incluido",
+      "Reporte técnico digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "volvo",
+   "marca": "Volvo",
+   "modelo_id": "d16",
+   "modelo": "Volvo FH 700 (tope línea)",
+   "motor": "D16G · 6 cil · 16.1L",
+   "capAceite": 42,
+   "horas": 4.5,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 595000,
+     "desc": "Para uso urbano regular",
+     "cambio": "cada 20.000-30.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 15W40 calidad CI-4 (42L)",
+      "Filtro de aceite Donaldson o Fleetguard",
+      "Filtro de petróleo (combustible)",
+      "Separador de agua",
+      "Mano de obra técnico Serviruta",
+      "Inspección visual de motor incluida",
+      "Reporte escrito y eliminación residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 820000,
+     "desc": "El más solicitado · Mejor relación rendimiento/precio",
+     "cambio": "cada 30.000-40.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 15W40 CK-4 / CJ-4 (42L)",
+      "Filtro de aceite premium (Donaldson/Sogefi)",
+      "Filtro de petróleo + separador de agua",
+      "Filtro de aire del motor",
+      "Filtro de polen cabina",
+      "Mano de obra técnico especialista",
+      "Inspección integral + reporte fotográfico",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 1124000,
+     "desc": "Mantención extendida · Para flota de alto rendimiento",
+     "cambio": "cada 40.000-60.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite sintético Low SAPS (compatible DPF) (42L)",
+      "Set completo de filtros premium",
+      "Filtro de polen + revisión clima",
+      "Refrigerante revisado y completado si requiere",
+      "Inspección extendida (correas, mangueras, batería)",
+      "Diagnóstico con scanner incluido",
+      "Reporte técnico digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "volvo",
+   "marca": "Volvo",
+   "modelo_id": "mwm",
+   "modelo": "Volvo VM 220 · 270",
+   "motor": "MWM · 6 cil · 7.2L",
+   "capAceite": 22,
+   "horas": 3,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 374000,
+     "desc": "Para uso urbano regular",
+     "cambio": "cada 20.000-30.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 15W40 calidad CI-4 (22L)",
+      "Filtro de aceite Donaldson o Fleetguard",
+      "Filtro de petróleo (combustible)",
+      "Separador de agua",
+      "Mano de obra técnico Serviruta",
+      "Inspección visual de motor incluida",
+      "Reporte escrito y eliminación residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 524000,
+     "desc": "El más solicitado · Mejor relación rendimiento/precio",
+     "cambio": "cada 30.000-40.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 15W40 CK-4 / CJ-4 (22L)",
+      "Filtro de aceite premium (Donaldson/Sogefi)",
+      "Filtro de petróleo + separador de agua",
+      "Filtro de aire del motor",
+      "Filtro de polen cabina",
+      "Mano de obra técnico especialista",
+      "Inspección integral + reporte fotográfico",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 708000,
+     "desc": "Mantención extendida · Para flota de alto rendimiento",
+     "cambio": "cada 40.000-60.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite sintético Low SAPS (compatible DPF) (22L)",
+      "Set completo de filtros premium",
+      "Filtro de polen + revisión clima",
+      "Refrigerante revisado y completado si requiere",
+      "Inspección extendida (correas, mangueras, batería)",
+      "Diagnóstico con scanner incluido",
+      "Reporte técnico digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "iveco",
+   "marca": "Iveco",
+   "modelo_id": "cursor8",
+   "modelo": "Iveco Stralis 380",
+   "motor": "Cursor 8 · 7.8L",
+   "capAceite": 26,
+   "horas": 3.5,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 419000,
+     "desc": "Para uso urbano regular",
+     "cambio": "cada 20.000-30.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 15W40 calidad CI-4 (26L)",
+      "Filtro de aceite Donaldson o Fleetguard",
+      "Filtro de petróleo (combustible)",
+      "Separador de agua",
+      "Mano de obra técnico Serviruta",
+      "Inspección visual de motor incluida",
+      "Reporte escrito y eliminación residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 584000,
+     "desc": "El más solicitado · Mejor relación rendimiento/precio",
+     "cambio": "cada 30.000-40.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 15W40 CK-4 / CJ-4 (26L)",
+      "Filtro de aceite premium (Donaldson/Sogefi)",
+      "Filtro de petróleo + separador de agua",
+      "Filtro de aire del motor",
+      "Filtro de polen cabina",
+      "Mano de obra técnico especialista",
+      "Inspección integral + reporte fotográfico",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 793000,
+     "desc": "Mantención extendida · Para flota de alto rendimiento",
+     "cambio": "cada 40.000-60.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite sintético Low SAPS (compatible DPF) (26L)",
+      "Set completo de filtros premium",
+      "Filtro de polen + revisión clima",
+      "Refrigerante revisado y completado si requiere",
+      "Inspección extendida (correas, mangueras, batería)",
+      "Diagnóstico con scanner incluido",
+      "Reporte técnico digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "iveco",
+   "marca": "Iveco",
+   "modelo_id": "cursor10",
+   "modelo": "Iveco Stralis 450 · Trakker",
+   "motor": "Cursor 10 · 10.3L",
+   "capAceite": 32,
+   "horas": 4,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 509000,
+     "desc": "Para uso urbano regular",
+     "cambio": "cada 20.000-30.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 15W40 calidad CI-4 (32L)",
+      "Filtro de aceite Donaldson o Fleetguard",
+      "Filtro de petróleo (combustible)",
+      "Separador de agua",
+      "Mano de obra técnico Serviruta",
+      "Inspección visual de motor incluida",
+      "Reporte escrito y eliminación residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 696000,
+     "desc": "El más solicitado · Mejor relación rendimiento/precio",
+     "cambio": "cada 30.000-40.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 15W40 CK-4 / CJ-4 (32L)",
+      "Filtro de aceite premium (Donaldson/Sogefi)",
+      "Filtro de petróleo + separador de agua",
+      "Filtro de aire del motor",
+      "Filtro de polen cabina",
+      "Mano de obra técnico especialista",
+      "Inspección integral + reporte fotográfico",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 941000,
+     "desc": "Mantención extendida · Para flota de alto rendimiento",
+     "cambio": "cada 40.000-60.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite sintético Low SAPS (compatible DPF) (32L)",
+      "Set completo de filtros premium",
+      "Filtro de polen + revisión clima",
+      "Refrigerante revisado y completado si requiere",
+      "Inspección extendida (correas, mangueras, batería)",
+      "Diagnóstico con scanner incluido",
+      "Reporte técnico digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "iveco",
+   "marca": "Iveco",
+   "modelo_id": "cursor13",
+   "modelo": "Iveco Stralis Hi-Way 500",
+   "motor": "Cursor 13 · 12.9L",
+   "capAceite": 38,
+   "horas": 4,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 549000,
+     "desc": "Para uso urbano regular",
+     "cambio": "cada 20.000-30.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 15W40 calidad CI-4 (38L)",
+      "Filtro de aceite Donaldson o Fleetguard",
+      "Filtro de petróleo (combustible)",
+      "Separador de agua",
+      "Mano de obra técnico Serviruta",
+      "Inspección visual de motor incluida",
+      "Reporte escrito y eliminación residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 759000,
+     "desc": "El más solicitado · Mejor relación rendimiento/precio",
+     "cambio": "cada 30.000-40.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 15W40 CK-4 / CJ-4 (38L)",
+      "Filtro de aceite premium (Donaldson/Sogefi)",
+      "Filtro de petróleo + separador de agua",
+      "Filtro de aire del motor",
+      "Filtro de polen cabina",
+      "Mano de obra técnico especialista",
+      "Inspección integral + reporte fotográfico",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 1040000,
+     "desc": "Mantención extendida · Para flota de alto rendimiento",
+     "cambio": "cada 40.000-60.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite sintético Low SAPS (compatible DPF) (38L)",
+      "Set completo de filtros premium",
+      "Filtro de polen + revisión clima",
+      "Refrigerante revisado y completado si requiere",
+      "Inspección extendida (correas, mangueras, batería)",
+      "Diagnóstico con scanner incluido",
+      "Reporte técnico digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "iveco",
+   "marca": "Iveco",
+   "modelo_id": "daily",
+   "modelo": "Iveco Daily",
+   "motor": "F1A/F1C · 3L",
+   "capAceite": 7,
+   "horas": 1.5,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 186000,
+     "desc": "Para uso urbano regular",
+     "cambio": "cada 20.000-30.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 15W40 calidad CI-4 (7L)",
+      "Filtro de aceite Donaldson o Fleetguard",
+      "Filtro de petróleo (combustible)",
+      "Separador de agua",
+      "Mano de obra técnico Serviruta",
+      "Inspección visual de motor incluida",
+      "Reporte escrito y eliminación residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 280000,
+     "desc": "El más solicitado · Mejor relación rendimiento/precio",
+     "cambio": "cada 30.000-40.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 15W40 CK-4 / CJ-4 (7L)",
+      "Filtro de aceite premium (Donaldson/Sogefi)",
+      "Filtro de petróleo + separador de agua",
+      "Filtro de aire del motor",
+      "Filtro de polen cabina",
+      "Mano de obra técnico especialista",
+      "Inspección integral + reporte fotográfico",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 374000,
+     "desc": "Mantención extendida · Para flota de alto rendimiento",
+     "cambio": "cada 40.000-60.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite sintético Low SAPS (compatible DPF) (7L)",
+      "Set completo de filtros premium",
+      "Filtro de polen + revisión clima",
+      "Refrigerante revisado y completado si requiere",
+      "Inspección extendida (correas, mangueras, batería)",
+      "Diagnóstico con scanner incluido",
+      "Reporte técnico digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "man",
+   "marca": "MAN",
+   "modelo_id": "d0836",
+   "modelo": "MAN TGS 18 · TGM 18",
+   "motor": "D0836 · 6 cil · 6.9L",
+   "capAceite": 24,
+   "horas": 3.5,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 406000,
+     "desc": "Para uso urbano regular",
+     "cambio": "cada 20.000-30.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 15W40 calidad CI-4 (24L)",
+      "Filtro de aceite Donaldson o Fleetguard",
+      "Filtro de petróleo (combustible)",
+      "Separador de agua",
+      "Mano de obra técnico Serviruta",
+      "Inspección visual de motor incluida",
+      "Reporte escrito y eliminación residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 563000,
+     "desc": "El más solicitado · Mejor relación rendimiento/precio",
+     "cambio": "cada 30.000-40.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 15W40 CK-4 / CJ-4 (24L)",
+      "Filtro de aceite premium (Donaldson/Sogefi)",
+      "Filtro de petróleo + separador de agua",
+      "Filtro de aire del motor",
+      "Filtro de polen cabina",
+      "Mano de obra técnico especialista",
+      "Inspección integral + reporte fotográfico",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 760000,
+     "desc": "Mantención extendida · Para flota de alto rendimiento",
+     "cambio": "cada 40.000-60.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite sintético Low SAPS (compatible DPF) (24L)",
+      "Set completo de filtros premium",
+      "Filtro de polen + revisión clima",
+      "Refrigerante revisado y completado si requiere",
+      "Inspección extendida (correas, mangueras, batería)",
+      "Diagnóstico con scanner incluido",
+      "Reporte técnico digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "man",
+   "marca": "MAN",
+   "modelo_id": "d2066",
+   "modelo": "MAN TGA 18 · TGS 26",
+   "motor": "D2066 · 6 cil · 10.5L",
+   "capAceite": 33,
+   "horas": 4,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 515000,
+     "desc": "Para uso urbano regular",
+     "cambio": "cada 20.000-30.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 15W40 calidad CI-4 (33L)",
+      "Filtro de aceite Donaldson o Fleetguard",
+      "Filtro de petróleo (combustible)",
+      "Separador de agua",
+      "Mano de obra técnico Serviruta",
+      "Inspección visual de motor incluida",
+      "Reporte escrito y eliminación residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 707000,
+     "desc": "El más solicitado · Mejor relación rendimiento/precio",
+     "cambio": "cada 30.000-40.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 15W40 CK-4 / CJ-4 (33L)",
+      "Filtro de aceite premium (Donaldson/Sogefi)",
+      "Filtro de petróleo + separador de agua",
+      "Filtro de aire del motor",
+      "Filtro de polen cabina",
+      "Mano de obra técnico especialista",
+      "Inspección integral + reporte fotográfico",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 957000,
+     "desc": "Mantención extendida · Para flota de alto rendimiento",
+     "cambio": "cada 40.000-60.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite sintético Low SAPS (compatible DPF) (33L)",
+      "Set completo de filtros premium",
+      "Filtro de polen + revisión clima",
+      "Refrigerante revisado y completado si requiere",
+      "Inspección extendida (correas, mangueras, batería)",
+      "Diagnóstico con scanner incluido",
+      "Reporte técnico digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "man",
+   "marca": "MAN",
+   "modelo_id": "d2676",
+   "modelo": "MAN TGX 18 · 26",
+   "motor": "D2676 · 6 cil · 12.4L",
+   "capAceite": 38,
+   "horas": 4,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 549000,
+     "desc": "Para uso urbano regular",
+     "cambio": "cada 20.000-30.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 15W40 calidad CI-4 (38L)",
+      "Filtro de aceite Donaldson o Fleetguard",
+      "Filtro de petróleo (combustible)",
+      "Separador de agua",
+      "Mano de obra técnico Serviruta",
+      "Inspección visual de motor incluida",
+      "Reporte escrito y eliminación residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 759000,
+     "desc": "El más solicitado · Mejor relación rendimiento/precio",
+     "cambio": "cada 30.000-40.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 15W40 CK-4 / CJ-4 (38L)",
+      "Filtro de aceite premium (Donaldson/Sogefi)",
+      "Filtro de petróleo + separador de agua",
+      "Filtro de aire del motor",
+      "Filtro de polen cabina",
+      "Mano de obra técnico especialista",
+      "Inspección integral + reporte fotográfico",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 1040000,
+     "desc": "Mantención extendida · Para flota de alto rendimiento",
+     "cambio": "cada 40.000-60.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite sintético Low SAPS (compatible DPF) (38L)",
+      "Set completo de filtros premium",
+      "Filtro de polen + revisión clima",
+      "Refrigerante revisado y completado si requiere",
+      "Inspección extendida (correas, mangueras, batería)",
+      "Diagnóstico con scanner incluido",
+      "Reporte técnico digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "daf",
+   "marca": "DAF",
+   "modelo_id": "mx11",
+   "modelo": "DAF CF 75 · 85",
+   "motor": "MX-11 · 10.8L",
+   "capAceite": 34,
+   "horas": 4,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 522000,
+     "desc": "Para uso urbano regular",
+     "cambio": "cada 20.000-30.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 15W40 calidad CI-4 (34L)",
+      "Filtro de aceite Donaldson o Fleetguard",
+      "Filtro de petróleo (combustible)",
+      "Separador de agua",
+      "Mano de obra técnico Serviruta",
+      "Inspección visual de motor incluida",
+      "Reporte escrito y eliminación residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 717000,
+     "desc": "El más solicitado · Mejor relación rendimiento/precio",
+     "cambio": "cada 30.000-40.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 15W40 CK-4 / CJ-4 (34L)",
+      "Filtro de aceite premium (Donaldson/Sogefi)",
+      "Filtro de petróleo + separador de agua",
+      "Filtro de aire del motor",
+      "Filtro de polen cabina",
+      "Mano de obra técnico especialista",
+      "Inspección integral + reporte fotográfico",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 974000,
+     "desc": "Mantención extendida · Para flota de alto rendimiento",
+     "cambio": "cada 40.000-60.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite sintético Low SAPS (compatible DPF) (34L)",
+      "Set completo de filtros premium",
+      "Filtro de polen + revisión clima",
+      "Refrigerante revisado y completado si requiere",
+      "Inspección extendida (correas, mangueras, batería)",
+      "Diagnóstico con scanner incluido",
+      "Reporte técnico digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "daf",
+   "marca": "DAF",
+   "modelo_id": "mx13",
+   "modelo": "DAF XF 105 · 106 · 510",
+   "motor": "MX-13 · 12.9L",
+   "capAceite": 38,
+   "horas": 4,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 549000,
+     "desc": "Para uso urbano regular",
+     "cambio": "cada 20.000-30.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 15W40 calidad CI-4 (38L)",
+      "Filtro de aceite Donaldson o Fleetguard",
+      "Filtro de petróleo (combustible)",
+      "Separador de agua",
+      "Mano de obra técnico Serviruta",
+      "Inspección visual de motor incluida",
+      "Reporte escrito y eliminación residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 759000,
+     "desc": "El más solicitado · Mejor relación rendimiento/precio",
+     "cambio": "cada 30.000-40.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 15W40 CK-4 / CJ-4 (38L)",
+      "Filtro de aceite premium (Donaldson/Sogefi)",
+      "Filtro de petróleo + separador de agua",
+      "Filtro de aire del motor",
+      "Filtro de polen cabina",
+      "Mano de obra técnico especialista",
+      "Inspección integral + reporte fotográfico",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 1040000,
+     "desc": "Mantención extendida · Para flota de alto rendimiento",
+     "cambio": "cada 40.000-60.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite sintético Low SAPS (compatible DPF) (38L)",
+      "Set completo de filtros premium",
+      "Filtro de polen + revisión clima",
+      "Refrigerante revisado y completado si requiere",
+      "Inspección extendida (correas, mangueras, batería)",
+      "Diagnóstico con scanner incluido",
+      "Reporte técnico digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "freightliner",
+   "marca": "Freightliner",
+   "modelo_id": "c12",
+   "modelo": "Freightliner Columbia CL 112 · 120",
+   "motor": "Detroit C12 · 11.9L",
+   "capAceite": 36,
+   "horas": 4,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 536000,
+     "desc": "Para uso urbano regular",
+     "cambio": "cada 20.000-30.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 15W40 calidad CI-4 (36L)",
+      "Filtro de aceite Donaldson o Fleetguard",
+      "Filtro de petróleo (combustible)",
+      "Separador de agua",
+      "Mano de obra técnico Serviruta",
+      "Inspección visual de motor incluida",
+      "Reporte escrito y eliminación residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 738000,
+     "desc": "El más solicitado · Mejor relación rendimiento/precio",
+     "cambio": "cada 30.000-40.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 15W40 CK-4 / CJ-4 (36L)",
+      "Filtro de aceite premium (Donaldson/Sogefi)",
+      "Filtro de petróleo + separador de agua",
+      "Filtro de aire del motor",
+      "Filtro de polen cabina",
+      "Mano de obra técnico especialista",
+      "Inspección integral + reporte fotográfico",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 1007000,
+     "desc": "Mantención extendida · Para flota de alto rendimiento",
+     "cambio": "cada 40.000-60.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite sintético Low SAPS (compatible DPF) (36L)",
+      "Set completo de filtros premium",
+      "Filtro de polen + revisión clima",
+      "Refrigerante revisado y completado si requiere",
+      "Inspección extendida (correas, mangueras, batería)",
+      "Diagnóstico con scanner incluido",
+      "Reporte técnico digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "freightliner",
+   "marca": "Freightliner",
+   "modelo_id": "argosy",
+   "modelo": "Freightliner Argosy",
+   "motor": "Detroit C12 · 11.9L",
+   "capAceite": 38,
+   "horas": 4.5,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 568000,
+     "desc": "Para uso urbano regular",
+     "cambio": "cada 20.000-30.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 15W40 calidad CI-4 (38L)",
+      "Filtro de aceite Donaldson o Fleetguard",
+      "Filtro de petróleo (combustible)",
+      "Separador de agua",
+      "Mano de obra técnico Serviruta",
+      "Inspección visual de motor incluida",
+      "Reporte escrito y eliminación residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 778000,
+     "desc": "El más solicitado · Mejor relación rendimiento/precio",
+     "cambio": "cada 30.000-40.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 15W40 CK-4 / CJ-4 (38L)",
+      "Filtro de aceite premium (Donaldson/Sogefi)",
+      "Filtro de petróleo + separador de agua",
+      "Filtro de aire del motor",
+      "Filtro de polen cabina",
+      "Mano de obra técnico especialista",
+      "Inspección integral + reporte fotográfico",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 1058000,
+     "desc": "Mantención extendida · Para flota de alto rendimiento",
+     "cambio": "cada 40.000-60.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite sintético Low SAPS (compatible DPF) (38L)",
+      "Set completo de filtros premium",
+      "Filtro de polen + revisión clima",
+      "Refrigerante revisado y completado si requiere",
+      "Inspección extendida (correas, mangueras, batería)",
+      "Diagnóstico con scanner incluido",
+      "Reporte técnico digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "freightliner",
+   "marca": "Freightliner",
+   "modelo_id": "cascadia",
+   "modelo": "Freightliner Cascadia (más nuevo)",
+   "motor": "DD13/DD15",
+   "capAceite": 40,
+   "horas": 4.5,
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 581000,
+     "desc": "Para uso urbano regular",
+     "cambio": "cada 20.000-30.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 15W40 calidad CI-4 (40L)",
+      "Filtro de aceite Donaldson o Fleetguard",
+      "Filtro de petróleo (combustible)",
+      "Separador de agua",
+      "Mano de obra técnico Serviruta",
+      "Inspección visual de motor incluida",
+      "Reporte escrito y eliminación residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 799000,
+     "desc": "El más solicitado · Mejor relación rendimiento/precio",
+     "cambio": "cada 30.000-40.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 15W40 CK-4 / CJ-4 (40L)",
+      "Filtro de aceite premium (Donaldson/Sogefi)",
+      "Filtro de petróleo + separador de agua",
+      "Filtro de aire del motor",
+      "Filtro de polen cabina",
+      "Mano de obra técnico especialista",
+      "Inspección integral + reporte fotográfico",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 1091000,
+     "desc": "Mantención extendida · Para flota de alto rendimiento",
+     "cambio": "cada 40.000-60.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite sintético Low SAPS (compatible DPF) (40L)",
+      "Set completo de filtros premium",
+      "Filtro de polen + revisión clima",
+      "Refrigerante revisado y completado si requiere",
+      "Inspección extendida (correas, mangueras, batería)",
+      "Diagnóstico con scanner incluido",
+      "Reporte técnico digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  }
+ ]
+}

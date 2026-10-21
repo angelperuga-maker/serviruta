@@ -202,8 +202,8 @@ var SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ
 var db=supabase.createClient(SB,SK);
 
 var DOC_TIPOS={permiso_circulacion:'Permiso de circulación',soap:'SOAP',revision_tecnica:'Revisión técnica',certificado_gases:'Certificado de gases',homologacion:'Homologación (CHI)',seguro_adicional:'Seguro adicional',padron:'Padrón',licencia_conductor:'Licencia de conductor',certificado_dpf:'Certificado DPF',contrato:'Contrato',factura:'Factura',informe_servicio:'Informe de servicio',otro:'Otro'};
-var CATEG={liviano:'Liviano',mediano:'Mediano',camion_5000:'Camión hasta 5.000 kg',camion:'Camión',maquinaria:'Maquinaria'};
-var SEG={flota_menor:'Flota menor',liviano:'Livianos',mediano:'Medianos',camion_5000:'Camión 5.000 kg',camion:'Camiones',dpf:'DPF',mixto:'Mixto'};
+var CATEG={liviano:'Liviano',mediano:'Mediano',camion_5000:'Camión hasta 5.000 kg',camion:'Camión 5.000 a 10.000 kg',maquinaria:'Maquinaria'};
+var SEG={flota_menor:'Flota menor',liviano:'Livianos',mediano:'Medianos',camion_5000:'Camión 5.000 kg',camion:'Camiones 5.000 a 10.000 kg',dpf:'DPF',mixto:'Mixto'};
 var SOL_TIPOS={mantencion:'Mantención',reparacion:'Reparación',neumaticos:'Neumáticos',asistencia_ruta:'Asistencia en ruta',grua:'Grúa',dpf:'DPF',revision_tecnica:'Revisión técnica',otro:'Otro'};
 var SOL_EST={recibida:'Recibida',agendada:'Agendada',en_camino:'En camino',en_proceso:'En proceso',completada:'Completada',cancelada:'Cancelada'};
 var MODALIDAD={mantencion:'Mantención',mantencion_cobertura:'Mantención + Cobertura',demanda:'Por demanda',modulo:'Módulo adicional'};
@@ -663,7 +663,7 @@ var CFG={};
 async function loadCfg(){var r=await db.from('flota_config').select('*');CFG={};(r.data||[]).forEach(function(x){CFG[x.clave]=x.valor_int})}
 function planModal(id){
   var p=S.planes.find(function(x){return x.id===id});
-  var pesado=(p.segmento==='camion'||p.segmento==='mediano');
+  var pesado=(p.segmento==='camion');
   var gruaDef=pesado?CFG.costo_grua_sobre_5000:CFG.costo_grua_hasta_5000;
   var body=
    '<div class="card" style="background:var(--c2);margin-bottom:16px"><h3>Calculadora de precio</h3>'+
@@ -671,6 +671,7 @@ function planModal(id){
    fld('Costo de una grúa (CLP)','c_grua',{type:'number',inputmode:'numeric',value:gruaDef==null?'':gruaDef,hint:pesado?'Vehículos sobre 5.000 kg (pendiente).':'Hasta 5.000 kg.'})+
    fld('Costo de una asistencia en ruta (CLP)','c_asist',{type:'number',inputmode:'numeric',value:CFG.costo_asistencia_ruta==null?'':CFG.costo_asistencia_ruta})+
    fld('Uso esperado de los cupos (%)','c_uso',{type:'number',value:100,hint:'100% = el precio cubre usar todo el cupo.'})+
+   fld('Servicio a domicilio por mantención (CLP)','c_dom',{type:'number',inputmode:'numeric',value:CFG.cargo_domicilio_visita==null?'':CFG.cargo_domicilio_visita,hint:'Se suma por cada mantención, fuera del margen.'})+
    fld('Margen sobre costo (%)','c_margen',{type:'number',value:CFG.margen_objetivo_pct==null?'':CFG.margen_objetivo_pct})+
    fld('Valor del portal (CLP por vehículo / mes)','c_portal',{type:'number',inputmode:'numeric',value:p.valor_portal_mensual_clp==null?(CFG.valor_portal_mensual_vehiculo==null?'':CFG.valor_portal_mensual_vehiculo):p.valor_portal_mensual_clp})+'</div>'+
    '<div id="calc-out" class="note" style="color:var(--txt)"></div>'+
@@ -687,7 +688,7 @@ function planModal(id){
     must(await db.from('flota_planes').update({modo_cobro:f.elements.modo_cobro,precio_mensual_clp:o('precio_mensual_clp'),precio_por_mantencion_clp:o('precio_por_mantencion_clp'),valor_portal_mensual_clp:o('valor_portal_mensual_clp'),visitas_preventivas_anio:n('visitas_preventivas_anio'),cupo_grua_anio:n('cupo_grua_anio'),cupo_asistencia_anio:n('cupo_asistencia_anio'),cupo_neumaticos_mes:n('cupo_neumaticos_mes'),respuesta_horas:o('respuesta_horas'),dcto_mano_obra_pct:n('dcto_mano_obra_pct'),dcto_repuestos_pct:n('dcto_mano_obra_pct'),borrador:form.borrador.checked}).eq('id',id));
     var r=await db.from('flota_planes').select('*').eq('activo',true).order('orden');S.planes=r.data||[];closeModal();toast('Plan actualizado');render()}});
   var f=document.getElementById('mform');_calcPlan=p;
-  ['c_kit','c_grua','c_asist','c_uso','c_margen','c_portal'].forEach(function(k){f.elements[k].addEventListener('input',calcRun)});
+  ['c_kit','c_grua','c_asist','c_uso','c_margen','c_dom','c_portal'].forEach(function(k){f.elements[k].addEventListener('input',calcRun)});
   calcRun();calcRef(p)}
 var _calcPlan=null,_calcRes=null;
 function calcRun(){
@@ -696,12 +697,12 @@ function calcRun(){
   var kit=v('c_kit'),visitas=Number(p.visitas_preventivas_anio)||0;
   var serv=visitas*kit;
   var cob=((Number(p.cupo_grua_anio)||0)*v('c_grua')+(Number(p.cupo_asistencia_anio)||0)*v('c_asist'))*(f.elements.c_uso.value===''?1:v('c_uso')/100);
-  var base=serv+cob,total=base*(1+v('c_margen')/100);
+  var base=serv+cob,dom=visitas*v('c_dom'),total=base*(1+v('c_margen')/100)+dom;
   var r1000=function(x){return Math.round(x/1000)*1000};
   _calcRes={mensual:r1000(total/12),porMant:visitas>0?r1000(total/visitas):null,total:total};
   var out=document.getElementById('calc-out');
   if(!kit){out.innerHTML='Ingresa el precio de una mantención para calcular.';return}
-  out.innerHTML='<div class="kv"><div><span>Mantenciones ('+visitas+' × '+clp(kit)+')</span><b>'+clp(serv)+'</b></div><div><span>Cobertura (grúa y asistencia)</span><b>'+clp(Math.round(cob))+'</b></div><div><span>Total anual con margen</span><b>'+clp(Math.round(total))+'</b></div></div>'+
+  out.innerHTML='<div class="kv"><div><span>Mantenciones ('+visitas+' × '+clp(kit)+')</span><b>'+clp(serv)+'</b></div><div><span>Cobertura (grúa y asistencia)</span><b>'+clp(Math.round(cob))+'</b></div><div><span>Servicio a domicilio ('+visitas+' × '+clp(v('c_dom'))+')</span><b>'+clp(dom)+'</b></div><div><span>Total anual (costos + margen + domicilio)</span><b>'+clp(Math.round(total))+'</b></div></div>'+
    '<div class="kv"><div><span>Precio ÷ 12 (mensual)</span><b style="font-size:18px">'+clp(_calcRes.mensual)+'</b></div><div><span>Precio por mantención</span><b style="font-size:18px">'+(_calcRes.porMant==null?'— (el plan no tiene mantenciones)':clp(_calcRes.porMant))+'</b></div></div>'+
    (v('c_portal')?'<div class="hint">Más portal: '+clp(v('c_portal'))+' por vehículo / mes, como línea aparte.</div>':'')+
    ((!v('c_grua')&&p.cupo_grua_anio>0)||(!v('c_asist')&&p.cupo_asistencia_anio>0)?'<div class="hint" style="color:var(--amarillo)">Falta el costo de grúa o asistencia: el precio no cubre ese cupo todavía.</div>':'')}

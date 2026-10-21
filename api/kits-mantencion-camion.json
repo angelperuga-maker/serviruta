@@ -1,9 +1,9 @@
 {
- "generado": "2026-10-20T13:07:58.609Z",
+ "generado": "2026-10-21T20:27:49.436Z",
  "cotizador": "mantencion_camion",
  "fuente": "https://angelperuga-maker.github.io/serviruta/kits-mantencion-motor-camion.html",
  "moneda": "CLP",
- "total_modelos": 29,
+ "total_modelos": 34,
  "modelos": [
   {
    "marca_id": "mb",
@@ -1293,6 +1293,7 @@
    "motor": "F1A/F1C · 3L",
    "capAceite": 7,
    "horas": 1.5,
+   "filtros": "Aceite MANN W 940/69 (F1C 3.0L) · W 914/28 (F1A 2.3L) · Combustible PU 7004 z · Aire C 40002 (F1C)",
    "kits": [
     {
      "tipo": "basico",
@@ -1338,6 +1339,336 @@
      "destacado": false,
      "incluye": [
       "Aceite sintético Low SAPS (compatible DPF) (7L)",
+      "Set completo de filtros premium",
+      "Filtro de polen + revisión clima",
+      "Refrigerante revisado y completado si requiere",
+      "Inspección extendida (correas, mangueras, batería)",
+      "Diagnóstico con scanner incluido",
+      "Reporte técnico digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "hino",
+   "marca": "Hino",
+   "modelo_id": "hino-n04c",
+   "modelo": "Hino 300 · 515 · 616 · 816 · 917",
+   "motor": "N04C · 4 cil · 4.0L",
+   "capAceite": 9.5,
+   "horas": 1.5,
+   "capEstimada": true,
+   "filtros": "Sin referencia de filtro de aceite en catálogo MANN: confirmar con el proveedor",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 203000,
+     "desc": "Para uso urbano regular",
+     "cambio": "cada 20.000-30.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 15W40 calidad CI-4 (9.5L)",
+      "Filtro de aceite Donaldson o Fleetguard",
+      "Filtro de petróleo (combustible)",
+      "Separador de agua",
+      "Mano de obra técnico Serviruta",
+      "Inspección visual de motor incluida",
+      "Reporte escrito y eliminación residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 306000,
+     "desc": "El más solicitado · Mejor relación rendimiento/precio",
+     "cambio": "cada 30.000-40.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 15W40 CK-4 / CJ-4 (9.5L)",
+      "Filtro de aceite premium (Donaldson/Sogefi)",
+      "Filtro de petróleo + separador de agua",
+      "Filtro de aire del motor",
+      "Filtro de polen cabina",
+      "Mano de obra técnico especialista",
+      "Inspección integral + reporte fotográfico",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 416000,
+     "desc": "Mantención extendida · Para flota de alto rendimiento",
+     "cambio": "cada 40.000-60.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite sintético Low SAPS (compatible DPF) (9.5L)",
+      "Set completo de filtros premium",
+      "Filtro de polen + revisión clima",
+      "Refrigerante revisado y completado si requiere",
+      "Inspección extendida (correas, mangueras, batería)",
+      "Diagnóstico con scanner incluido",
+      "Reporte técnico digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "isuzu",
+   "marca": "Chevrolet / Isuzu",
+   "modelo_id": "isuzu-4jj1",
+   "modelo": "Isuzu NKR · NMR · NPR 71x",
+   "motor": "4JJ1 / 4JZ1 · 4 cil · 3.0L",
+   "capAceite": 6.5,
+   "horas": 1.5,
+   "capEstimada": true,
+   "filtros": "Aceite MANN HU 7074 x (4JJ1) · WK 940/11 x (4JZ1) · Urea U 5001 KIT",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 183000,
+     "desc": "Para uso urbano regular",
+     "cambio": "cada 20.000-30.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 15W40 calidad CI-4 (6.5L)",
+      "Filtro de aceite Donaldson o Fleetguard",
+      "Filtro de petróleo (combustible)",
+      "Separador de agua",
+      "Mano de obra técnico Serviruta",
+      "Inspección visual de motor incluida",
+      "Reporte escrito y eliminación residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 275000,
+     "desc": "El más solicitado · Mejor relación rendimiento/precio",
+     "cambio": "cada 30.000-40.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 15W40 CK-4 / CJ-4 (6.5L)",
+      "Filtro de aceite premium (Donaldson/Sogefi)",
+      "Filtro de petróleo + separador de agua",
+      "Filtro de aire del motor",
+      "Filtro de polen cabina",
+      "Mano de obra técnico especialista",
+      "Inspección integral + reporte fotográfico",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 366000,
+     "desc": "Mantención extendida · Para flota de alto rendimiento",
+     "cambio": "cada 40.000-60.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite sintético Low SAPS (compatible DPF) (6.5L)",
+      "Set completo de filtros premium",
+      "Filtro de polen + revisión clima",
+      "Refrigerante revisado y completado si requiere",
+      "Inspección extendida (correas, mangueras, batería)",
+      "Diagnóstico con scanner incluido",
+      "Reporte técnico digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "isuzu",
+   "marca": "Chevrolet / Isuzu",
+   "modelo_id": "isuzu-4hk1",
+   "modelo": "Isuzu NPR 81x · NQR 919 · Forward",
+   "motor": "4HK1 · 4 cil · 5.2L",
+   "capAceite": 11.5,
+   "horas": 2,
+   "capEstimada": true,
+   "filtros": "Aceite MANN W 1228 · Ventilación cárter LC 8003 x · Urea U 5001 KIT",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 235000,
+     "desc": "Para uso urbano regular",
+     "cambio": "cada 20.000-30.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 15W40 calidad CI-4 (11.5L)",
+      "Filtro de aceite Donaldson o Fleetguard",
+      "Filtro de petróleo (combustible)",
+      "Separador de agua",
+      "Mano de obra técnico Serviruta",
+      "Inspección visual de motor incluida",
+      "Reporte escrito y eliminación residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 346000,
+     "desc": "El más solicitado · Mejor relación rendimiento/precio",
+     "cambio": "cada 30.000-40.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 15W40 CK-4 / CJ-4 (11.5L)",
+      "Filtro de aceite premium (Donaldson/Sogefi)",
+      "Filtro de petróleo + separador de agua",
+      "Filtro de aire del motor",
+      "Filtro de polen cabina",
+      "Mano de obra técnico especialista",
+      "Inspección integral + reporte fotográfico",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 467000,
+     "desc": "Mantención extendida · Para flota de alto rendimiento",
+     "cambio": "cada 40.000-60.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite sintético Low SAPS (compatible DPF) (11.5L)",
+      "Set completo de filtros premium",
+      "Filtro de polen + revisión clima",
+      "Refrigerante revisado y completado si requiere",
+      "Inspección extendida (correas, mangueras, batería)",
+      "Diagnóstico con scanner incluido",
+      "Reporte técnico digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "fuso",
+   "marca": "Mitsubishi Fuso",
+   "modelo_id": "fuso-4p10",
+   "modelo": "Fuso Canter 515 · 615 · 718",
+   "motor": "4P10 · 4 cil · 3.0L",
+   "capAceite": 7,
+   "horas": 1.5,
+   "capEstimada": true,
+   "filtros": "Aceite MANN HU 7022 z KIT · Combustible PU 7004 z",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 186000,
+     "desc": "Para uso urbano regular",
+     "cambio": "cada 20.000-30.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 15W40 calidad CI-4 (7L)",
+      "Filtro de aceite Donaldson o Fleetguard",
+      "Filtro de petróleo (combustible)",
+      "Separador de agua",
+      "Mano de obra técnico Serviruta",
+      "Inspección visual de motor incluida",
+      "Reporte escrito y eliminación residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 280000,
+     "desc": "El más solicitado · Mejor relación rendimiento/precio",
+     "cambio": "cada 30.000-40.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 15W40 CK-4 / CJ-4 (7L)",
+      "Filtro de aceite premium (Donaldson/Sogefi)",
+      "Filtro de petróleo + separador de agua",
+      "Filtro de aire del motor",
+      "Filtro de polen cabina",
+      "Mano de obra técnico especialista",
+      "Inspección integral + reporte fotográfico",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 374000,
+     "desc": "Mantención extendida · Para flota de alto rendimiento",
+     "cambio": "cada 40.000-60.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite sintético Low SAPS (compatible DPF) (7L)",
+      "Set completo de filtros premium",
+      "Filtro de polen + revisión clima",
+      "Refrigerante revisado y completado si requiere",
+      "Inspección extendida (correas, mangueras, batería)",
+      "Diagnóstico con scanner incluido",
+      "Reporte técnico digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "hyundai",
+   "marca": "Hyundai",
+   "modelo_id": "hyundai-hd",
+   "modelo": "Hyundai HD65 · HD72 · HD78",
+   "motor": "D4DD / D4DB · 4 cil · 3.9L",
+   "capAceite": 8.5,
+   "horas": 2,
+   "capEstimada": true,
+   "filtros": "Aceite MANN W 10 703",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 215000,
+     "desc": "Para uso urbano regular",
+     "cambio": "cada 20.000-30.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 15W40 calidad CI-4 (8.5L)",
+      "Filtro de aceite Donaldson o Fleetguard",
+      "Filtro de petróleo (combustible)",
+      "Separador de agua",
+      "Mano de obra técnico Serviruta",
+      "Inspección visual de motor incluida",
+      "Reporte escrito y eliminación residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 314000,
+     "desc": "El más solicitado · Mejor relación rendimiento/precio",
+     "cambio": "cada 30.000-40.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 15W40 CK-4 / CJ-4 (8.5L)",
+      "Filtro de aceite premium (Donaldson/Sogefi)",
+      "Filtro de petróleo + separador de agua",
+      "Filtro de aire del motor",
+      "Filtro de polen cabina",
+      "Mano de obra técnico especialista",
+      "Inspección integral + reporte fotográfico",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 418000,
+     "desc": "Mantención extendida · Para flota de alto rendimiento",
+     "cambio": "cada 40.000-60.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite sintético Low SAPS (compatible DPF) (8.5L)",
       "Set completo de filtros premium",
       "Filtro de polen + revisión clima",
       "Refrigerante revisado y completado si requiere",

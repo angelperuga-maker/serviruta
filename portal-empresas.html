@@ -301,6 +301,7 @@ async function afterLogin(){
   S.me=r.data;
   var pl=await Promise.all([db.from('flota_planes').select('*').eq('activo',true).order('orden'),db.from('flota_beneficios').select('*').eq('activo',true).order('orden')]);
   S.planes=pl[0].data||[];S.benef=pl[1].data||[];
+  if(S.me.rol==='admin'||S.me.rol==='vendedor')await loadCfg();
   if(isStaff()){
     await loadEmpresas();
     var last=null;try{last=localStorage.getItem('flota_emp')}catch(e){}
@@ -367,7 +368,16 @@ function alertas(){
   a.sort(function(x,y){return x.sev-y.sev||x.ord-y.ord});return a}
 function usadoAnio(tipo,ini,fin){var y=hoy().slice(0,4);return S.sol.filter(function(s){return s.tipo===tipo&&s.estado!=='cancelada'&&s.created_at.slice(0,4)===y&&(!ini||s.created_at.slice(0,10)>=ini)&&(!fin||s.created_at.slice(0,10)<=fin)}).length}
 function activeContrato(){return S.contratos.find(function(c){return c.estado==='vigente'||c.estado==='por_vencer'})}
-function precioPlan(p){return p.precio_mensual_clp==null?'Cotización personalizada':clp(p.precio_mensual_clp)}
+function precioPlan(p){
+  if(p.modo_cobro==='por_mantencion')return p.precio_por_mantencion_clp==null?'Cotización personalizada':clp(p.precio_por_mantencion_clp)+' por mantención';
+  return p.precio_mensual_clp==null?'Cotización personalizada':clp(p.precio_mensual_clp)}
+function precioBloque(p){
+  var tiene=p.modo_cobro==='por_mantencion'?p.precio_por_mantencion_clp!=null:p.precio_mensual_clp!=null;
+  if(!tiene)return '<div class="price">Cotización personalizada</div>';
+  var h='<div class="price">'+(p.modo_cobro==='por_mantencion'?clp(p.precio_por_mantencion_clp)+' <small>por mantención, por vehículo + IVA</small>':clp(p.precio_mensual_clp)+' <small>por vehículo / mes + IVA</small>')+'</div>';
+  if(p.valor_portal_mensual_clp)h+='<div style="font-size:12.5px;color:var(--txt2);margin:-2px 0 6px">+ Portal de empresa: '+clp(p.valor_portal_mensual_clp)+' por vehículo / mes</div>';
+  return h}
+function alcanceNota(p){return p.modalidad==='modulo'?'':'<div style="font-size:12.5px;color:var(--txt2);border-top:1px solid var(--borde);padding-top:8px;margin-top:8px"><b style="color:var(--txt)">Solo mantención.</b> Las reparaciones se cotizan aparte y tienen '+p.dcto_mano_obra_pct+'% de descuento.</div>'}
 
 /* =========================================================
    NAVEGACIÓN
@@ -615,49 +625,102 @@ VIEWS.contrato=function(){
   var h='';
   if(isStaff())h+='<div class="toolbar"><div class="sp"></div><button class="btn" onclick="contratoModal()">+ Nuevo contrato</button></div>';
   if(!S.contratos.length)h+='<div class="card empty">Esta empresa aún no tiene un contrato.'+(isStaff()?'':' Tu ejecutivo de Serviruta puede ayudarte a elegir el plan ideal.')+'</div>';
-  S.contratos.forEach(function(c){var p=c.plan;var total=c.vehs.reduce(function(a,x){return a+(x.precio_mensual_clp||0)},0);var sinPrecio=c.vehs.some(function(x){return x.precio_mensual_clp==null});
+  S.contratos.forEach(function(c){var p=c.plan;var pm=c.modo_cobro==='por_mantencion';var kp=pm?'precio_por_mantencion_clp':'precio_mensual_clp';var total=c.vehs.reduce(function(a,x){return a+(x[kp]||0)},0);var sinPrecio=c.vehs.some(function(x){return x[kp]==null});
     h+='<div class="card"><h3>'+esc(p.nombre)+'<span class="sp"></span>'+chip(c.estado==='vigente'?'verde':c.estado==='por_vencer'?'amarillo':'plain',{borrador:'Borrador',vigente:'Vigente',por_vencer:'Por vencer',terminado:'Terminado'}[c.estado])+(isStaff()?'<button class="btn sm sec" onclick="contratoEstadoModal(\''+c.id+'\')">Editar</button>':'')+'</h3>'+
-    '<div class="kv"><div><span>Vigencia</span><b>'+fdate(c.inicio)+' al '+fdate(c.termino)+'</b></div><div><span>Vehículos</span><b>'+c.vehs.length+'</b></div><div><span>Mensualidad</span><b>'+(c.vehs.length&&!sinPrecio?clp(total):'Por cotizar')+'</b></div><div><span>Renovación</span><b>'+(c.renovacion_auto?'Automática (aviso '+c.aviso_termino_dias+' días)':'Manual')+'</b></div>'+(c.dpf_modulo?'<div><span>Módulo</span><b>DPF incluido</b></div>':'')+'</div>';
+    '<div class="kv"><div><span>Vigencia</span><b>'+fdate(c.inicio)+' al '+fdate(c.termino)+'</b></div><div><span>Vehículos</span><b>'+c.vehs.length+'</b></div><div><span>'+(pm?'Valor por mantención (todos los vehículos)':'Mensualidad')+'</span><b>'+(c.vehs.length&&!sinPrecio?clp(total):'Por cotizar')+'</b></div><div><span>Renovación</span><b>'+(c.renovacion_auto?'Automática (aviso '+c.aviso_termino_dias+' días)':'Manual')+'</b></div>'+(c.dpf_modulo?'<div><span>Módulo</span><b>DPF incluido</b></div>':'')+'</div>';
     if(c.estado==='vigente'||c.estado==='por_vencer'){h+='<div style="margin-top:14px">'+cupo('Grúa',usadoAnio('grua',c.inicio,c.termino),p.cupo_grua_anio)+cupo('Asistencia en ruta',usadoAnio('asistencia_ruta',c.inicio,c.termino),p.cupo_asistencia_anio)+'</div>'}
-    h+='<div class="kv" style="margin-top:14px"><div><span>Mantenciones al año</span><b>'+p.visitas_preventivas_anio+'</b></div><div><span>Neumáticos</span><b>'+(p.cupo_neumaticos_mes?p.cupo_neumaticos_mes+' por mes':'Cobro por servicio')+'</b></div><div><span>Dcto. mano de obra</span><b>'+p.dcto_mano_obra_pct+'%</b></div><div><span>Dcto. repuestos</span><b>'+p.dcto_repuestos_pct+'%</b></div><div><span>Respuesta</span><b>'+(p.respuesta_horas?'hasta '+p.respuesta_horas+' h':'—')+'</b></div></div>';
+    h+='<div style="font-size:13px;color:var(--txt2);margin-top:14px"><b style="color:var(--txt)">Solo mantención.</b> Las reparaciones se cotizan aparte y tienen '+p.dcto_mano_obra_pct+'% de descuento.</div><div class="kv" style="margin-top:14px"><div><span>Mantenciones al año</span><b>'+p.visitas_preventivas_anio+'</b></div><div><span>Neumáticos</span><b>'+(p.cupo_neumaticos_mes?p.cupo_neumaticos_mes+' por mes':'Cobro por servicio')+'</b></div><div><span>Dcto. en reparaciones</span><b>'+p.dcto_mano_obra_pct+'%</b></div><div><span>Respuesta</span><b>'+(p.respuesta_horas?'hasta '+p.respuesta_horas+' h':'—')+'</b></div></div>';
     h+='<div class="row" style="margin-top:8px"><div class="main"><div class="s"><b style="color:var(--txt)">Incluye:</b> '+(p.incluye||[]).map(esc).join(' · ')+'</div><div class="s" style="margin-top:6px"><b style="color:var(--txt)">No incluye:</b> '+(p.excluye||[]).map(esc).join(' · ')+'</div></div></div>';
     h+='<div class="s" style="margin-top:6px;color:var(--txt2);font-size:13px"><b style="color:var(--txt)">Vehículos cubiertos:</b> '+(c.vehs.map(function(x){var v=vehById(x.vehiculo_id);return v?esc(v.patente):''}).filter(Boolean).join(', ')||'—')+'</div></div>'});
   h+='<div class="card"><h3>Planes disponibles</h3><div class="filters">'+['','flota_menor','liviano','mediano','camion_5000','camion','dpf'].map(function(k){return '<span class="fchip clk'+(S.fPlanSeg===k?' on':'')+'" onclick="S.fPlanSeg=\''+k+'\';render()">'+(k?SEG[k]:'Todos')+'</span>'}).join('')+'</div><div class="plans">';
   var pl=S.planes.filter(function(p){return !S.fPlanSeg||p.segmento===S.fPlanSeg});
   if(!pl.length)h+='<div class="empty" style="grid-column:1/-1">Sin planes en este segmento.</div>';
-  pl.forEach(function(p){h+='<div class="plan"><div class="mod">'+esc(MODALIDAD[p.modalidad])+(p.nivel!=='n/a'?' · '+esc(p.nivel):'')+(isStaff()&&p.borrador?' · <span style="color:var(--amarillo)">borrador</span>':'')+'</div><h4>'+esc(SEG[p.segmento]||p.segmento)+'</h4><div style="font-size:13px;color:var(--txt2)">'+esc(p.descripcion||'')+'</div><div class="price">'+esc(precioPlan(p))+(p.precio_mensual_clp!=null?' <small>por vehículo / mes + IVA</small>':'')+'</div><ul>'+(p.incluye||[]).map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul><div class="meta">'+(p.modalidad==='modulo'?'Se suma a cualquier plan':p.visitas_preventivas_anio+' mantenciones/año · Grúa '+p.cupo_grua_anio+' · Asistencia '+p.cupo_asistencia_anio+' · Respuesta '+(p.respuesta_horas?'≤'+p.respuesta_horas+' h':'—'))+'</div>'+(isAdmin()?'<button class="btn sm sec" style="margin-top:10px" onclick="planModal(\''+p.id+'\')">Editar plan</button>':'')+'</div>'});
+  pl.forEach(function(p){h+='<div class="plan"><div class="mod">'+esc(MODALIDAD[p.modalidad])+(p.nivel!=='n/a'?' · '+esc(p.nivel):'')+(isStaff()&&p.borrador?' · <span style="color:var(--amarillo)">borrador</span>':'')+'</div><h4>'+esc(SEG[p.segmento]||p.segmento)+'</h4><div style="font-size:13px;color:var(--txt2)">'+esc(p.descripcion||'')+'</div>'+precioBloque(p)+'<ul>'+(p.incluye||[]).map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul><div class="meta">'+(p.modalidad==='modulo'?'Se suma a cualquier plan':p.visitas_preventivas_anio+' mantenciones/año · Grúa '+p.cupo_grua_anio+' · Asistencia '+p.cupo_asistencia_anio+' · Respuesta '+(p.respuesta_horas?'≤'+p.respuesta_horas+' h':'—'))+'</div>'+alcanceNota(p)+(isAdmin()?'<button class="btn sm sec" style="margin-top:10px" onclick="planModal(\''+p.id+'\')">Editar plan</button>':'')+'</div>'});
   h+='</div><div class="note">Precios netos, por vehículo y por mes. Las condiciones finales quedan en el contrato firmado. Los repuestos se cotizan y aprueban antes de ejecutarse.</div></div>';
   return h};
 function cupo(lbl,u,t){var pc=t>0?Math.min(100,Math.round(u/t*100)):0;var cls=t>0&&u>=t?'full':pc>=75?'warn':'';return '<div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;font-size:13px"><span>'+lbl+'</span><span style="color:var(--txt2)">'+u+(t>0?' de '+t+' usados':' usados (cobro por evento)')+'</span></div>'+(t>0?'<div class="bar '+cls+'"><i style="width:'+pc+'%"></i></div>':'')+'</div>'}
 function contratoModal(){
   if(!S.veh.length){toast('Primero agrega los vehículos de la empresa');return}
-  var po=S.planes.filter(function(p){return p.modalidad!=='modulo'}).map(function(p){return '<option value="'+p.id+'">'+esc(p.nombre)+(p.precio_mensual_clp==null?'':' — '+clp(p.precio_mensual_clp))+'</option>'}).join('');
-  openModal('Nuevo contrato',fld('Plan','plan_id',{type:'select',options:po})+'<div class="grid2">'+fld('Inicio','inicio',{type:'date',value:hoy(),required:true})+fld('Término','termino',{type:'date',value:addMonths(hoy(),12),required:true})+fld('Precio mensual por vehículo (CLP, neto)','precio',{type:'number',inputmode:'numeric',hint:'Déjalo vacío si aún no está cotizado.'})+fld('Aviso de término (días)','aviso',{type:'number',value:30})+'</div>'+
+  var po=S.planes.filter(function(p){return p.modalidad!=='modulo'}).map(function(p){return '<option value="'+p.id+'">'+esc(p.nombre)+(precioPlan(p)==='Cotización personalizada'?'':' — '+precioPlan(p))+'</option>'}).join('');
+  openModal('Nuevo contrato',fld('Plan','plan_id',{type:'select',options:po,onchange:'contratoPlanChange(this)'})+'<div class="grid2">'+fld('Modo de cobro','modo_cobro',{type:'select',options:opts({mensual:'Mensual (anual ÷ 12)',por_mantencion:'Por cada mantención'},'mensual')})+fld('Inicio','inicio',{type:'date',value:hoy(),required:true})+fld('Término','termino',{type:'date',value:addMonths(hoy(),12),required:true})+fld('Precio por vehículo (CLP, neto)','precio',{type:'number',inputmode:'numeric',hint:'Es mensual o por mantención según el modo. Vacío si aún no está cotizado.'})+fld('Aviso de término (días)','aviso',{type:'number',value:30})+'</div>'+
    '<label class="chk"><input type="checkbox" name="renov" checked> Renovación automática</label><label class="chk"><input type="checkbox" name="dpf"> Incluye módulo DPF</label><div style="font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--txt3);font-weight:600;margin:6px 0">Vehículos cubiertos</div>'+
    S.veh.map(function(v){return '<label class="chk"><input type="checkbox" name="veh_'+v.id+'" checked> '+esc(vehLabel(v))+'</label>'}).join('')+fld('Notas','notas',{type:'textarea'}),
    {submit:'Crear contrato',onSubmit:async function(f,form){
      var ids=S.veh.filter(function(v){return form['veh_'+v.id].checked}).map(function(v){return v.id});if(!ids.length)throw new Error('Selecciona al menos un vehículo.');
-     var r=must(await db.from('flota_contratos').insert({empresa_id:S.empresaId,plan_id:f.plan_id,estado:'vigente',inicio:f.inicio,termino:f.termino,renovacion_auto:form.renov.checked,aviso_termino_dias:Number(f.aviso||30),dpf_modulo:form.dpf.checked,notas:nn(f.notas)}).select().single());
-     must(await db.from('flota_contrato_vehiculos').insert(ids.map(function(id){return {contrato_id:r.data.id,vehiculo_id:id,precio_mensual_clp:f.precio?Number(f.precio):null}})));
+     var r=must(await db.from('flota_contratos').insert({empresa_id:S.empresaId,plan_id:f.plan_id,estado:'vigente',modo_cobro:f.modo_cobro,inicio:f.inicio,termino:f.termino,renovacion_auto:form.renov.checked,aviso_termino_dias:Number(f.aviso||30),dpf_modulo:form.dpf.checked,notas:nn(f.notas)}).select().single());
+     must(await db.from('flota_contrato_vehiculos').insert(ids.map(function(id){return {contrato_id:r.data.id,vehiculo_id:id,precio_mensual_clp:f.modo_cobro==='mensual'&&f.precio?Number(f.precio):null,precio_por_mantencion_clp:f.modo_cobro==='por_mantencion'&&f.precio?Number(f.precio):null}})));
      if(S.empresa&&S.empresa.estado!=='activa'){must(await db.from('flota_empresas').update({estado:'activa'}).eq('id',S.empresaId))}
      closeModal();toast('Contrato creado');await reload();if(S.empresa)S.empresa.estado='activa'}})}
+function contratoPlanChange(sel){
+  var p=S.planes.find(function(x){return x.id===sel.value});if(!p)return;var f=sel.form.elements;
+  f.modo_cobro.value=p.modo_cobro;
+  var v=p.modo_cobro==='por_mantencion'?p.precio_por_mantencion_clp:p.precio_mensual_clp;f.precio.value=v==null?'':v}
 function contratoEstadoModal(id){
   var c=S.contratos.find(function(x){return x.id===id});
   openModal('Editar contrato',fld('Estado','estado',{type:'select',options:opts({borrador:'Borrador',vigente:'Vigente',por_vencer:'Por vencer',terminado:'Terminado'},c.estado)})+'<div class="grid2">'+fld('Inicio','inicio',{type:'date',value:c.inicio})+fld('Término','termino',{type:'date',value:c.termino})+'</div>'+fld('Notas','notas',{type:'textarea',value:c.notas}),
   {submit:'Guardar',onSubmit:async function(f){must(await db.from('flota_contratos').update({estado:f.estado,inicio:nn(f.inicio),termino:nn(f.termino),notas:nn(f.notas)}).eq('id',id));closeModal();toast('Contrato actualizado');await reload()}})}
+var CFG={};
+async function loadCfg(){var r=await db.from('flota_config').select('*');CFG={};(r.data||[]).forEach(function(x){CFG[x.clave]=x.valor_int})}
 function planModal(id){
   var p=S.planes.find(function(x){return x.id===id});
-  openModal('Editar plan · '+(SEG[p.segmento]||'')+' '+p.nivel,'<div class="grid2">'+fld('Precio mensual por vehículo (CLP neto)','precio_mensual_clp',{type:'number',value:p.precio_mensual_clp,inputmode:'numeric',hint:'Vacío = "Cotización personalizada".'})+fld('Mantenciones preventivas al año','visitas_preventivas_anio',{type:'number',value:p.visitas_preventivas_anio})+
+  var pesado=(p.segmento==='camion'||p.segmento==='mediano');
+  var gruaDef=pesado?CFG.costo_grua_sobre_5000:CFG.costo_grua_hasta_5000;
+  var body=
+   '<div class="card" style="background:var(--c2);margin-bottom:16px"><h3>Calculadora de precio</h3>'+
+   '<div class="grid2">'+fld('Precio de una mantención (CLP)','c_kit',{type:'number',inputmode:'numeric',hint:'Valor del kit del cotizador para este tipo de vehículo.'})+
+   fld('Costo de una grúa (CLP)','c_grua',{type:'number',inputmode:'numeric',value:gruaDef==null?'':gruaDef,hint:pesado?'Vehículos sobre 5.000 kg (pendiente).':'Hasta 5.000 kg.'})+
+   fld('Costo de una asistencia en ruta (CLP)','c_asist',{type:'number',inputmode:'numeric',value:CFG.costo_asistencia_ruta==null?'':CFG.costo_asistencia_ruta})+
+   fld('Uso esperado de los cupos (%)','c_uso',{type:'number',value:100,hint:'100% = el precio cubre usar todo el cupo.'})+
+   fld('Margen sobre costo (%)','c_margen',{type:'number',value:CFG.margen_objetivo_pct==null?'':CFG.margen_objetivo_pct})+
+   fld('Valor del portal (CLP por vehículo / mes)','c_portal',{type:'number',inputmode:'numeric',value:p.valor_portal_mensual_clp==null?(CFG.valor_portal_mensual_vehiculo==null?'':CFG.valor_portal_mensual_vehiculo):p.valor_portal_mensual_clp})+'</div>'+
+   '<div id="calc-out" class="note" style="color:var(--txt)"></div>'+
+   '<div class="toolbar" style="margin:10px 0 0"><button type="button" class="btn sm sec" onclick="calcUsar(\'mensual\')">Usar precio ÷ 12</button><button type="button" class="btn sm sec" onclick="calcUsar(\'por_mantencion\')">Usar precio por mantención</button></div><div class="note" id="calc-ref">Cargando precios de referencia del cotizador…</div></div>'+
+   '<div class="grid2">'+fld('Modo de cobro','modo_cobro',{type:'select',options:opts({mensual:'Mensual (anual ÷ 12)',por_mantencion:'Por cada mantención'},p.modo_cobro||'mensual')})+
+   fld('Precio mensual por vehículo (CLP neto)','precio_mensual_clp',{type:'number',value:p.precio_mensual_clp,inputmode:'numeric',hint:'Vacío = "Cotización personalizada".'})+
+   fld('Precio por mantención (CLP neto)','precio_por_mantencion_clp',{type:'number',value:p.precio_por_mantencion_clp,inputmode:'numeric'})+
+   fld('Valor del portal (CLP por vehículo / mes)','valor_portal_mensual_clp',{type:'number',value:p.valor_portal_mensual_clp,inputmode:'numeric',hint:'Se muestra como línea aparte.'})+
+   fld('Mantenciones preventivas al año','visitas_preventivas_anio',{type:'number',value:p.visitas_preventivas_anio})+
    fld('Cupo de grúa al año','cupo_grua_anio',{type:'number',value:p.cupo_grua_anio})+fld('Cupo de asistencia al año','cupo_asistencia_anio',{type:'number',value:p.cupo_asistencia_anio})+fld('Cupo de neumáticos al mes','cupo_neumaticos_mes',{type:'number',value:p.cupo_neumaticos_mes})+fld('Tiempo de respuesta (horas)','respuesta_horas',{type:'number',value:p.respuesta_horas})+
-   fld('Descuento mano de obra (%)','dcto_mano_obra_pct',{type:'number',value:p.dcto_mano_obra_pct})+fld('Descuento repuestos (%)','dcto_repuestos_pct',{type:'number',value:p.dcto_repuestos_pct})+'</div><label class="chk"><input type="checkbox" name="borrador" '+(p.borrador?'checked':'')+'> Marcar como borrador (solo lo ve el personal de Serviruta)</label>',
-  {submit:'Guardar',onSubmit:async function(f,form){var n=function(k){return Number(f[k]||0)};must(await db.from('flota_planes').update({precio_mensual_clp:f.precio_mensual_clp?Number(f.precio_mensual_clp):null,visitas_preventivas_anio:n('visitas_preventivas_anio'),cupo_grua_anio:n('cupo_grua_anio'),cupo_asistencia_anio:n('cupo_asistencia_anio'),cupo_neumaticos_mes:n('cupo_neumaticos_mes'),respuesta_horas:f.respuesta_horas?Number(f.respuesta_horas):null,dcto_mano_obra_pct:n('dcto_mano_obra_pct'),dcto_repuestos_pct:n('dcto_repuestos_pct'),borrador:form.borrador.checked}).eq('id',id));
-    var r=await db.from('flota_planes').select('*').eq('activo',true).order('orden');S.planes=r.data||[];closeModal();toast('Plan actualizado');render()}})}
+   fld('Descuento en reparaciones (%)','dcto_mano_obra_pct',{type:'number',value:p.dcto_mano_obra_pct,hint:'Aplica a mano de obra y repuestos.'})+'</div><label class="chk"><input type="checkbox" name="borrador" '+(p.borrador?'checked':'')+'> Marcar como borrador (solo lo ve el personal de Serviruta)</label>';
+  openModal('Editar plan · '+(SEG[p.segmento]||'')+' '+p.nivel,body,{wide:true,submit:'Guardar',onSubmit:async function(f,form){
+    var n=function(k){return Number(f[k]||0)},o=function(k){return f[k]===''||f[k]==null?null:Number(f[k])};
+    must(await db.from('flota_planes').update({modo_cobro:f.elements.modo_cobro,precio_mensual_clp:o('precio_mensual_clp'),precio_por_mantencion_clp:o('precio_por_mantencion_clp'),valor_portal_mensual_clp:o('valor_portal_mensual_clp'),visitas_preventivas_anio:n('visitas_preventivas_anio'),cupo_grua_anio:n('cupo_grua_anio'),cupo_asistencia_anio:n('cupo_asistencia_anio'),cupo_neumaticos_mes:n('cupo_neumaticos_mes'),respuesta_horas:o('respuesta_horas'),dcto_mano_obra_pct:n('dcto_mano_obra_pct'),dcto_repuestos_pct:n('dcto_mano_obra_pct'),borrador:form.borrador.checked}).eq('id',id));
+    var r=await db.from('flota_planes').select('*').eq('activo',true).order('orden');S.planes=r.data||[];closeModal();toast('Plan actualizado');render()}});
+  var f=document.getElementById('mform');_calcPlan=p;
+  ['c_kit','c_grua','c_asist','c_uso','c_margen','c_portal'].forEach(function(k){f.elements[k].addEventListener('input',calcRun)});
+  calcRun();calcRef(p)}
+var _calcPlan=null,_calcRes=null;
+function calcRun(){
+  var f=document.getElementById('mform');if(!f||!_calcPlan)return;var p=_calcPlan;
+  var v=function(k){return Number(f.elements[k].value)||0};
+  var kit=v('c_kit'),visitas=Number(p.visitas_preventivas_anio)||0;
+  var serv=visitas*kit;
+  var cob=((Number(p.cupo_grua_anio)||0)*v('c_grua')+(Number(p.cupo_asistencia_anio)||0)*v('c_asist'))*(f.elements.c_uso.value===''?1:v('c_uso')/100);
+  var base=serv+cob,total=base*(1+v('c_margen')/100);
+  var r1000=function(x){return Math.round(x/1000)*1000};
+  _calcRes={mensual:r1000(total/12),porMant:visitas>0?r1000(total/visitas):null,total:total};
+  var out=document.getElementById('calc-out');
+  if(!kit){out.innerHTML='Ingresa el precio de una mantención para calcular.';return}
+  out.innerHTML='<div class="kv"><div><span>Mantenciones ('+visitas+' × '+clp(kit)+')</span><b>'+clp(serv)+'</b></div><div><span>Cobertura (grúa y asistencia)</span><b>'+clp(Math.round(cob))+'</b></div><div><span>Total anual con margen</span><b>'+clp(Math.round(total))+'</b></div></div>'+
+   '<div class="kv"><div><span>Precio ÷ 12 (mensual)</span><b style="font-size:18px">'+clp(_calcRes.mensual)+'</b></div><div><span>Precio por mantención</span><b style="font-size:18px">'+(_calcRes.porMant==null?'— (el plan no tiene mantenciones)':clp(_calcRes.porMant))+'</b></div></div>'+
+   (v('c_portal')?'<div class="hint">Más portal: '+clp(v('c_portal'))+' por vehículo / mes, como línea aparte.</div>':'')+
+   ((!v('c_grua')&&p.cupo_grua_anio>0)||(!v('c_asist')&&p.cupo_asistencia_anio>0)?'<div class="hint" style="color:var(--amarillo)">Falta el costo de grúa o asistencia: el precio no cubre ese cupo todavía.</div>':'')}
+function calcUsar(modo){
+  var f=document.getElementById('mform');if(!_calcRes)return;
+  if(modo==='mensual'){f.elements.precio_mensual_clp.value=_calcRes.mensual}else{if(_calcRes.porMant==null){toast('Este plan no tiene mantenciones');return}f.elements.precio_por_mantencion_clp.value=_calcRes.porMant}
+  f.elements.modo_cobro.value=modo;f.elements.valor_portal_mensual_clp.value=f.elements.c_portal.value;toast('Valores copiados al plan. Revisa y guarda.')}
+async function calcRef(p){
+  var el=document.getElementById('calc-ref');if(!el)return;
+  async function med(u){try{var r=await fetch(u,{cache:'no-store'});var d=await r.json();var by={};d.modelos.forEach(function(m){m.kits.forEach(function(k){(by[k.tipo]=by[k.tipo]||[]).push(k.precio)})});var o={};for(var t in by){var a=by[t].sort(function(x,y){return x-y});o[t]=a[Math.floor(a.length/2)]}return o}catch(e){return null}}
+  var a=await med('api/kits-mantencion-auto.json'),c=await med('api/kits-mantencion-camion.json');
+  var fm=function(o){return o?'Básico '+clp(o.basico)+' · Premium '+clp(o.premium)+' · Plus '+clp(o.plus):'no disponible'};
+  if(document.getElementById('calc-ref'))document.getElementById('calc-ref').innerHTML='Referencia del cotizador (mediana por kit): <b>Autos</b> '+fm(a)+'. <b>Camiones</b> '+fm(c)+'. Son solo una guía; ingresa el valor que corresponda.'}
 
 /* ---- Beneficios ---- */
 VIEWS.beneficios=function(){
   var h='<div class="ben">'+S.benef.map(function(b){return '<div class="b">'+(ICON[b.icono]||ICON.shield)+'<h4>'+esc(b.titulo)+'</h4><p>'+esc(b.descripcion||'')+'</p></div>'}).join('')+'</div>';
   var c=activeContrato();
-  if(c){var p=c.plan;h+='<div class="card" style="margin-top:16px"><h3>Con tu plan '+esc(p.nombre)+'</h3><div class="kv"><div><span>Dcto. mano de obra</span><b>'+p.dcto_mano_obra_pct+'%</b></div><div><span>Dcto. repuestos</span><b>'+p.dcto_repuestos_pct+'%</b></div><div><span>Respuesta</span><b>'+(p.respuesta_horas?'hasta '+p.respuesta_horas+' h':'—')+'</b></div><div><span>Grúa incluida</span><b>'+p.cupo_grua_anio+' al año</b></div><div><span>Asistencia en ruta</span><b>'+p.cupo_asistencia_anio+' al año</b></div></div></div>'}
+  if(c){var p=c.plan;h+='<div class="card" style="margin-top:16px"><h3>Con tu plan '+esc(p.nombre)+'</h3><div class="kv"><div><span>Dcto. en reparaciones</span><b>'+p.dcto_mano_obra_pct+'%</b></div><div><span>Respuesta</span><b>'+(p.respuesta_horas?'hasta '+p.respuesta_horas+' h':'—')+'</b></div><div><span>Grúa incluida</span><b>'+p.cupo_grua_anio+' al año</b></div><div><span>Asistencia en ruta</span><b>'+p.cupo_asistencia_anio+' al año</b></div></div></div>'}
   return h};
 
 /* ---- Usuarios ---- */

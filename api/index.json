@@ -1,5 +1,5 @@
 {
- "generado": "2026-10-20T13:07:58.609Z",
+ "generado": "2026-10-21T20:27:49.436Z",
  "cotizadores": [
   {
    "cotizador": "kits-mantencion-auto",
@@ -11,7 +11,7 @@
    "cotizador": "kits-mantencion-camion",
    "url": "https://angelperuga-maker.github.io/serviruta/api/kits-mantencion-camion.json",
    "fuente": "https://angelperuga-maker.github.io/serviruta/kits-mantencion-motor-camion.html",
-   "registros": 29
+   "registros": 34
   },
   {
    "cotizador": "kit-embrague-auto",

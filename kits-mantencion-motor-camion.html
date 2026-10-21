@@ -160,6 +160,22 @@ fbq('track', 'PageView');
         <div class="marca-nombre">Iveco</div>
         <div class="marca-modelos">Stralis · Trakker · Daily</div>
       </div>
+      <div class="marca-btn" data-marca="hino"><div class="marca-icon" style="width:50px;height:50px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;box-shadow:0 4px 12px rgba(0,0,0,0.5);border:2px solid #E2231A;font-family:Syne,sans-serif;font-weight:800;font-size:15px;color:#111">HI</div>
+        <div class="marca-nombre">Hino</div>
+        <div class="marca-modelos">300 · 500</div>
+      </div>
+      <div class="marca-btn" data-marca="isuzu"><div class="marca-icon" style="width:50px;height:50px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;box-shadow:0 4px 12px rgba(0,0,0,0.5);border:2px solid #E2231A;font-family:Syne,sans-serif;font-weight:800;font-size:15px;color:#111">CH</div>
+        <div class="marca-nombre">Chevrolet / Isuzu</div>
+        <div class="marca-modelos">NKR · NPR · NQR</div>
+      </div>
+      <div class="marca-btn" data-marca="fuso"><div class="marca-icon" style="width:50px;height:50px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;box-shadow:0 4px 12px rgba(0,0,0,0.5);border:2px solid #E2231A;font-family:Syne,sans-serif;font-weight:800;font-size:15px;color:#111">MI</div>
+        <div class="marca-nombre">Mitsubishi Fuso</div>
+        <div class="marca-modelos">Canter</div>
+      </div>
+      <div class="marca-btn" data-marca="hyundai"><div class="marca-icon" style="width:50px;height:50px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;box-shadow:0 4px 12px rgba(0,0,0,0.5);border:2px solid #E2231A;font-family:Syne,sans-serif;font-weight:800;font-size:15px;color:#111">HY</div>
+        <div class="marca-nombre">Hyundai</div>
+        <div class="marca-modelos">HD65 · HD72 · HD78</div>
+      </div>
       <div class="marca-btn" data-marca="man"><div class="marca-icon" style="width:50px;height:50px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;box-shadow:0 4px 12px rgba(0,0,0,0.5);border:2px solid #E40521;overflow:hidden;padding:5px"><img src="https://www.carlogos.org/car-logos/man-logo.png" alt="MAN" style="max-width:100%;max-height:100%;object-fit:contain" onerror="this.parentElement.style.background='#E40521';this.parentElement.style.color='#fff';this.parentElement.style.fontFamily='Syne,sans-serif';this.parentElement.style.fontWeight='800';this.parentElement.style.fontSize='18px';this.parentElement.innerHTML='M'"></div>
         <div class="marca-nombre">MAN</div>
         <div class="marca-modelos">TGA · TGS · TGX</div>
@@ -284,7 +300,32 @@ var DATA={
       {id:'cursor8',nombre:'Iveco Stralis 380',motor:'Cursor 8 · 7.8L',capAceite:26,horas:3.5},
       {id:'cursor10',nombre:'Iveco Stralis 450 · Trakker',motor:'Cursor 10 · 10.3L',capAceite:32,horas:4},
       {id:'cursor13',nombre:'Iveco Stralis Hi-Way 500',motor:'Cursor 13 · 12.9L',capAceite:38,horas:4},
-      {id:'daily',nombre:'Iveco Daily',motor:'F1A/F1C · 3L',capAceite:7,horas:1.5}
+      {id:'daily',nombre:'Iveco Daily',motor:'F1A/F1C · 3L',capAceite:7,horas:1.5,filtros:'Aceite MANN W 940/69 (F1C 3.0L) · W 914/28 (F1A 2.3L) · Combustible PU 7004 z · Aire C 40002 (F1C)'}
+    ]
+  },
+  hino:{
+    nombre:'Hino',
+    modelos:[
+      {id:'hino-n04c',nombre:'Hino 300 · 515 · 616 · 816 · 917',motor:'N04C · 4 cil · 4.0L',capAceite:9.5,horas:1.5,capEstimada:true,filtros:'Sin referencia de filtro de aceite en catálogo MANN: confirmar con el proveedor'}
+    ]
+  },
+  isuzu:{
+    nombre:'Chevrolet / Isuzu',
+    modelos:[
+      {id:'isuzu-4jj1',nombre:'Isuzu NKR · NMR · NPR 71x',motor:'4JJ1 / 4JZ1 · 4 cil · 3.0L',capAceite:6.5,horas:1.5,capEstimada:true,filtros:'Aceite MANN HU 7074 x (4JJ1) · WK 940/11 x (4JZ1) · Urea U 5001 KIT'},
+      {id:'isuzu-4hk1',nombre:'Isuzu NPR 81x · NQR 919 · Forward',motor:'4HK1 · 4 cil · 5.2L',capAceite:11.5,horas:2,capEstimada:true,filtros:'Aceite MANN W 1228 · Ventilación cárter LC 8003 x · Urea U 5001 KIT'}
+    ]
+  },
+  fuso:{
+    nombre:'Mitsubishi Fuso',
+    modelos:[
+      {id:'fuso-4p10',nombre:'Fuso Canter 515 · 615 · 718',motor:'4P10 · 4 cil · 3.0L',capAceite:7,horas:1.5,capEstimada:true,filtros:'Aceite MANN HU 7022 z KIT · Combustible PU 7004 z'}
+    ]
+  },
+  hyundai:{
+    nombre:'Hyundai',
+    modelos:[
+      {id:'hyundai-hd',nombre:'Hyundai HD65 · HD72 · HD78',motor:'D4DD / D4DB · 4 cil · 3.9L',capAceite:8.5,horas:2,capEstimada:true,filtros:'Aceite MANN W 10 703'}
     ]
   },
   man:{
@@ -442,7 +483,7 @@ function renderKits(){
   var sub=document.getElementById('kit-sub')
   
   titulo.textContent='Kits para '+DATA[marcaSeleccionada].nombre+' '+modeloSeleccionado.nombre.split(' ').slice(1).join(' ')
-  sub.textContent='Motor '+modeloSeleccionado.motor+' · Capacidad aceite: '+modeloSeleccionado.capAceite+' litros · Tiempo estimado servicio: '+modeloSeleccionado.horas+' horas'
+  +(modeloSeleccionado.capEstimada?' · Capacidad de aceite estimada: se confirma al agendar':'')+(modeloSeleccionado.filtros?' · Filtros: '+modeloSeleccionado.filtros:'')
   
   var kits=calcularKits(modeloSeleccionado)
   grid.innerHTML=kits.map(function(k){

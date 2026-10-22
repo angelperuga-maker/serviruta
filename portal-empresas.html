@@ -489,7 +489,7 @@ async function cqGuardar(){
     CQ.id=q.data.id;CQ.token=q.data.token;CQ.numero=q.data.numero;CQ.estado=q.data.estado;COTS=null;
     toast('Cotización N° '+CQ.numero+' guardada');render()}
   catch(e){toast('No se pudo guardar: '+e.message)}}
-async function cqCargarLista(){var r=await db.from('flota_cotizaciones').select('id,numero,token,cliente,contacto,plan_id,modo,tier,estado,total_mensual,created_at,updated_at,enviada_at').order('created_at',{ascending:false}).limit(100);COTS=r.data||[];render()}
+async function cqCargarLista(){var r=await db.from('flota_cotizaciones').select('id,numero,token,cliente,contacto,plan_id,modo,tier,dpf,estado,total_mensual,total_anual,cuota_incorporacion_clp,pre_rt_clp,vigencia_meses,validez_dias,items,created_at,updated_at,enviada_at').order('created_at',{ascending:false}).limit(100);COTS=r.data||[];render()}
 async function cqAbrir(id){
   var r=await db.from('flota_cotizaciones').select('*').eq('id',id).single();if(r.error||!r.data){toast('No se pudo abrir');return}
   var c=r.data;CQ={id:c.id,token:c.token,numero:c.numero,estado:c.estado,planId:c.plan_id||'',tier:c.tier,modo:c.modo,dpf:!!c.dpf,cliente:c.cliente||'',contacto:c.contacto||'',email:c.email||'',telefono:c.telefono||'',rut:c.rut||'',vigencia:c.vigencia_meses||12,validez:c.validez_dias||15,incorporacion:c.cuota_incorporacion_clp||'',preRt:c.pre_rt_clp!=null,preRtPrecio:c.pre_rt_clp||'',condiciones:c.condiciones||'',notas:c.notas||'',items:(c.items&&c.items.length)?c.items:[{cat:'camion_5000',modelo_id:'',qty:1}]};
@@ -513,7 +513,14 @@ function cqListaHtml(){
   COTS.forEach(function(c){var pl=S.planes.find(function(p){return p.id===c.plan_id});
     h+='<div class="row" style="flex-wrap:wrap;gap:8px;padding:10px 0;border-bottom:1px solid var(--borde);align-items:center">'+
      '<div style="flex:2 1 220px"><b>N° '+c.numero+' · '+esc(c.cliente||'Sin nombre')+'</b><div class="hint">'+esc(pl?pl.nombre:'Sin plan')+' · kit '+esc(c.tier)+' · '+(c.modo==='mensual'?'mensual':'por mantención')+' · '+new Date(c.created_at).toLocaleDateString('es-CL')+'</div></div>'+
-     '<div style="flex:1 1 120px"><b>'+clp(c.total_mensual)+'</b><div class="hint">neto / mes</div></div>'+
+     '<div style="flex:1 1 120px"><b>'+clp(c.total_mensual)+'</b><div class="hint">neto / mes'+(c.total_anual?' · '+clp(c.total_anual)+' / año':'')+'</div></div>'+
+     '<div style="flex:1 1 100%;display:flex;gap:6px;flex-wrap:wrap">'+[
+       '<span class="fchip">'+((c.items||[]).reduce(function(a,x){return a+(Number(x.qty)||0)},0))+' vehículos</span>',
+       '<span class="fchip">Vigencia '+(c.vigencia_meses||12)+' meses</span>',
+       '<span class="fchip">Validez '+(c.validez_dias||15)+' días</span>',
+       c.cuota_incorporacion_clp?'<span class="fchip">Incorporación '+clp(c.cuota_incorporacion_clp)+'/veh.</span>':'<span class="fchip" style="opacity:.5">Sin cuota de incorporación</span>',
+       c.pre_rt_clp!=null?'<span class="fchip">Pre-RT '+clp(c.pre_rt_clp)+'/veh.</span>':'<span class="fchip" style="opacity:.5">Sin pre-RT</span>',
+       c.dpf?'<span class="fchip">Módulo DPF</span>':''].join('')+'</div>'+
      '<div style="flex:0 0 auto;color:'+col[c.estado]+';font-size:13px;font-weight:600">'+EST[c.estado]+'</div>'+
      '<div style="flex:1 1 100%;display:flex;gap:6px;flex-wrap:wrap"><button class="btn sm sec" onclick="cqAbrir(\''+c.id+'\')">Abrir</button><a class="btn sm sec" href="'+esc(PROPUESTA_URL+'?t='+c.token+'&modo='+c.modo)+'" target="_blank">Propuesta / PDF</a><button class="btn ghost sm" onclick="cqDuplicar(\''+c.id+'\')">Duplicar</button>'+
      '<select class="inp" style="width:auto;padding:4px 8px;font-size:12px" onchange="cqEstado(\''+c.id+'\',this.value)">'+opts(EST,c.estado)+'</select></div></div>'});

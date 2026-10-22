@@ -88,8 +88,8 @@ function descargar(){
   var el=document.querySelector('.page'),c=D.cotizacion,b=document.getElementById('bDl');
   var nombre='Propuesta-Serviruta-'+numFmt(c)+(c.cliente?'-'+c.cliente.replace(/[^\w\-]+/g,'_'):'')+'.pdf';
   if(typeof html2pdf==='undefined'){window.print();return}
-  b.disabled=true;b.textContent='Generando…';
-  html2pdf().set({margin:[12,10,12,10],filename:nombre,image:{type:'jpeg',quality:.96},html2canvas:{scale:2,useCORS:true,backgroundColor:'#fff'},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},pagebreak:{mode:['css'],avoid:['tr','.pb','h2','.kv']}})
+  b.disabled=true;b.textContent='Generando…';window.scrollTo(0,0);
+  html2pdf().set({margin:[12,10,12,10],filename:nombre,image:{type:'jpeg',quality:.96},html2canvas:{scale:2,useCORS:true,backgroundColor:'#fff',scrollY:0,scrollX:0,windowWidth:900},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},pagebreak:{mode:['css'],avoid:['tr','.pb','h2','.kv']}})
    .from(el).save().catch(function(){window.print()}).finally(function(){b.disabled=false;b.textContent='Descargar PDF'})}
 function token(){return new URLSearchParams(location.search).get('t')||''}
 function clausulas(c,p){

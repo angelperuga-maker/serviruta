@@ -1,9 +1,9 @@
 {
- "generado": "2026-10-21T20:28:22.159Z",
+ "generado": "2026-10-22T16:41:53.888Z",
  "cotizador": "mantencion_camion",
  "fuente": "https://angelperuga-maker.github.io/serviruta/kits-mantencion-motor-camion.html",
  "moneda": "CLP",
- "total_modelos": 34,
+ "total_modelos": 37,
  "modelos": [
   {
    "marca_id": "mb",
@@ -378,6 +378,203 @@
      "destacado": false,
      "incluye": [
       "Aceite sintético Low SAPS (compatible DPF) (38L)",
+      "Set completo de filtros premium",
+      "Filtro de polen + revisión clima",
+      "Refrigerante revisado y completado si requiere",
+      "Inspección extendida (correas, mangueras, batería)",
+      "Diagnóstico con scanner incluido",
+      "Reporte técnico digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mb",
+   "marca": "Mercedes-Benz",
+   "modelo_id": "sprinter-515",
+   "modelo": "MB Sprinter 415 · 515 · 516 CDI (chasis / furgón 3,5-5 t)",
+   "motor": "OM651 · 2.1/2.2 CDI · 4 cil · DPF",
+   "capAceite": 11.5,
+   "horas": 1.7,
+   "capEstimada": true,
+   "filtros": "Aceite MB 229.51/229.52 5W-30 bajo cenizas · Filtro aceite MANN HU 718/5 x · Combustible WK 820/18 · kit de servicio trae 12 L: confirmar con manual",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 224000,
+     "desc": "Para uso urbano regular",
+     "cambio": "cada 20.000-30.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 15W40 calidad CI-4 (11.5L)",
+      "Filtro de aceite Donaldson o Fleetguard",
+      "Filtro de petróleo (combustible)",
+      "Separador de agua",
+      "Mano de obra técnico Serviruta",
+      "Inspección visual de motor incluida",
+      "Reporte escrito y eliminación residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 335000,
+     "desc": "El más solicitado · Mejor relación rendimiento/precio",
+     "cambio": "cada 30.000-40.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 15W40 CK-4 / CJ-4 (11.5L)",
+      "Filtro de aceite premium (Donaldson/Sogefi)",
+      "Filtro de petróleo + separador de agua",
+      "Filtro de aire del motor",
+      "Filtro de polen cabina",
+      "Mano de obra técnico especialista",
+      "Inspección integral + reporte fotográfico",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 456000,
+     "desc": "Mantención extendida · Para flota de alto rendimiento",
+     "cambio": "cada 40.000-60.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite sintético Low SAPS (compatible DPF) (11.5L)",
+      "Set completo de filtros premium",
+      "Filtro de polen + revisión clima",
+      "Refrigerante revisado y completado si requiere",
+      "Inspección extendida (correas, mangueras, batería)",
+      "Diagnóstico con scanner incluido",
+      "Reporte técnico digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "ford",
+   "marca": "Ford",
+   "modelo_id": "transit-350",
+   "modelo": "Ford Transit 350 · 470 chasis / furgón 2.0 EcoBlue (2019+)",
+   "motor": "2.0 EcoBlue · 4 cil · diésel · DPF",
+   "capAceite": 9.8,
+   "horas": 1.5,
+   "filtros": "Aceite Ford WSS-M2C950-A 0W-30 (ACEA C2, bajo cenizas) · 9,8 L con filtro (manual Ford)",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 205000,
+     "desc": "Para uso urbano regular",
+     "cambio": "cada 20.000-30.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 15W40 calidad CI-4 (9.8L)",
+      "Filtro de aceite Donaldson o Fleetguard",
+      "Filtro de petróleo (combustible)",
+      "Separador de agua",
+      "Mano de obra técnico Serviruta",
+      "Inspección visual de motor incluida",
+      "Reporte escrito y eliminación residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 309000,
+     "desc": "El más solicitado · Mejor relación rendimiento/precio",
+     "cambio": "cada 30.000-40.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 15W40 CK-4 / CJ-4 (9.8L)",
+      "Filtro de aceite premium (Donaldson/Sogefi)",
+      "Filtro de petróleo + separador de agua",
+      "Filtro de aire del motor",
+      "Filtro de polen cabina",
+      "Mano de obra técnico especialista",
+      "Inspección integral + reporte fotográfico",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 420000,
+     "desc": "Mantención extendida · Para flota de alto rendimiento",
+     "cambio": "cada 40.000-60.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite sintético Low SAPS (compatible DPF) (9.8L)",
+      "Set completo de filtros premium",
+      "Filtro de polen + revisión clima",
+      "Refrigerante revisado y completado si requiere",
+      "Inspección extendida (correas, mangueras, batería)",
+      "Diagnóstico con scanner incluido",
+      "Reporte técnico digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "ford",
+   "marca": "Ford",
+   "modelo_id": "transit-22",
+   "modelo": "Ford Transit 2.2 TDCi (2013-2019)",
+   "motor": "2.2 Duratorq TDCi · 4 cil · diésel",
+   "capAceite": 8,
+   "horas": 1.5,
+   "capEstimada": true,
+   "filtros": "Aceite 5W-30 ACEA A5/B5 (WSS-M2C913) · FWD ≈6,5 L · RWD ≈10 L: confirmar con manual",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 193000,
+     "desc": "Para uso urbano regular",
+     "cambio": "cada 20.000-30.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 15W40 calidad CI-4 (8L)",
+      "Filtro de aceite Donaldson o Fleetguard",
+      "Filtro de petróleo (combustible)",
+      "Separador de agua",
+      "Mano de obra técnico Serviruta",
+      "Inspección visual de motor incluida",
+      "Reporte escrito y eliminación residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 290000,
+     "desc": "El más solicitado · Mejor relación rendimiento/precio",
+     "cambio": "cada 30.000-40.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 15W40 CK-4 / CJ-4 (8L)",
+      "Filtro de aceite premium (Donaldson/Sogefi)",
+      "Filtro de petróleo + separador de agua",
+      "Filtro de aire del motor",
+      "Filtro de polen cabina",
+      "Mano de obra técnico especialista",
+      "Inspección integral + reporte fotográfico",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 391000,
+     "desc": "Mantención extendida · Para flota de alto rendimiento",
+     "cambio": "cada 40.000-60.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite sintético Low SAPS (compatible DPF) (8L)",
       "Set completo de filtros premium",
       "Filtro de polen + revisión clima",
       "Refrigerante revisado y completado si requiere",

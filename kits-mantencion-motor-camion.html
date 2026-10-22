@@ -146,7 +146,7 @@ fbq('track', 'PageView');
     <div class="marcas-grid" id="marcas">
       <div class="marca-btn" data-marca="mb"><div class="marca-icon" style="width:50px;height:50px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;box-shadow:0 4px 12px rgba(0,0,0,0.5);border:2px solid #000000;overflow:hidden;padding:5px"><img src="https://www.carlogos.org/car-logos/mercedes-benz-logo.png" alt="Mercedes-Benz" style="max-width:100%;max-height:100%;object-fit:contain" onerror="this.parentElement.style.background='#000000';this.parentElement.style.color='#fff';this.parentElement.style.fontFamily='Syne,sans-serif';this.parentElement.style.fontWeight='800';this.parentElement.style.fontSize='18px';this.parentElement.innerHTML='⭐'"></div>
         <div class="marca-nombre">Mercedes-Benz</div>
-        <div class="marca-modelos">Actros · Atego · Axor</div>
+        <div class="marca-modelos">Actros · Atego · Axor · Sprinter</div>
       </div>
       <div class="marca-btn" data-marca="scania"><div class="marca-icon" style="width:50px;height:50px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;box-shadow:0 4px 12px rgba(0,0,0,0.5);border:2px solid #012169;overflow:hidden;padding:5px"><img src="https://www.carlogos.org/car-logos/scania-logo.png" alt="Scania" style="max-width:100%;max-height:100%;object-fit:contain" onerror="this.parentElement.style.background='#012169';this.parentElement.style.color='#fff';this.parentElement.style.fontFamily='Syne,sans-serif';this.parentElement.style.fontWeight='800';this.parentElement.style.fontSize='18px';this.parentElement.innerHTML='●'"></div>
         <div class="marca-nombre">Scania</div>
@@ -187,6 +187,10 @@ fbq('track', 'PageView');
       <div class="marca-btn" data-marca="freightliner"><div class="marca-icon" style="width:50px;height:50px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;box-shadow:0 4px 12px rgba(0,0,0,0.5);border:2px solid #003478;overflow:hidden;padding:5px"><img src="https://www.carlogos.org/car-logos/freightliner-logo.png" alt="Freightliner" style="max-width:100%;max-height:100%;object-fit:contain" onerror="this.parentElement.style.background='#003478';this.parentElement.style.color='#fff';this.parentElement.style.fontFamily='Syne,sans-serif';this.parentElement.style.fontWeight='800';this.parentElement.style.fontSize='18px';this.parentElement.innerHTML='F'"></div>
         <div class="marca-nombre">Freightliner</div>
         <div class="marca-modelos">Columbia · Argosy</div>
+      </div>
+      <div class="marca-btn" data-marca="ford"><div class="marca-icon" style="width:50px;height:50px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;box-shadow:0 4px 12px rgba(0,0,0,0.5);border:2px solid #003478;overflow:hidden;padding:5px"><img src="https://www.carlogos.org/car-logos/ford-logo.png" alt="Ford" style="max-width:100%;max-height:100%;object-fit:contain" onerror="this.parentElement.style.background='#003478';this.parentElement.style.color='#fff';this.parentElement.style.fontFamily='Syne,sans-serif';this.parentElement.style.fontWeight='800';this.parentElement.style.fontSize='18px';this.parentElement.innerHTML='F'"></div>
+        <div class="marca-nombre">Ford</div>
+        <div class="marca-modelos">Transit 350 · 470 · 2.2 TDCi</div>
       </div>
       <div class="marca-btn" data-marca="otra"><div class="marca-icon" style="width:50px;height:50px;border-radius:50%;background:#55525E;color:#fff;display:flex;align-items:center;justify-content:center;margin:0 auto 6px;font-family:Syne,sans-serif;font-weight:800;font-size:18px;box-shadow:0 4px 12px rgba(0,0,0,0.4)">🔧</div>
         <div class="marca-nombre">Otra marca</div>
@@ -270,7 +274,15 @@ var DATA={
       {id:'om457la',nombre:'MB Axor 2640 · 3340',motor:'OM457LA · 6 cil · 12L',capAceite:32,horas:4},
       {id:'om501la',nombre:'MB Actros 2641 · 3346',motor:'OM501LA · V6 · 11.9L',capAceite:34,horas:4},
       {id:'om541la',nombre:'MB Actros 4144 · 4844',motor:'OM541LA · V6 · 11.9L',capAceite:34,horas:4},
-      {id:'om542la',nombre:'MB Actros 4855 · 6048',motor:'OM542LA · V8 · 15.9L',capAceite:38,horas:4.5}
+      {id:'om542la',nombre:'MB Actros 4855 · 6048',motor:'OM542LA · V8 · 15.9L',capAceite:38,horas:4.5},
+      {id:'sprinter-515',nombre:'MB Sprinter 415 · 515 · 516 CDI (chasis / furgón 3,5-5 t)',motor:'OM651 · 2.1/2.2 CDI · 4 cil · DPF',capAceite:11.5,horas:1.7,capEstimada:true,filtros:'Aceite MB 229.51/229.52 5W-30 bajo cenizas · Filtro aceite MANN HU 718/5 x · Combustible WK 820/18 · kit de servicio trae 12 L: confirmar con manual'}
+    ]
+  },
+  ford:{
+    nombre:'Ford',
+    modelos:[
+      {id:'transit-350',nombre:'Ford Transit 350 · 470 chasis / furgón 2.0 EcoBlue (2019+)',motor:'2.0 EcoBlue · 4 cil · diésel · DPF',capAceite:9.8,horas:1.5,filtros:'Aceite Ford WSS-M2C950-A 0W-30 (ACEA C2, bajo cenizas) · 9,8 L con filtro (manual Ford)'},
+      {id:'transit-22',nombre:'Ford Transit 2.2 TDCi (2013-2019)',motor:'2.2 Duratorq TDCi · 4 cil · diésel',capAceite:8,horas:1.5,capEstimada:true,filtros:'Aceite 5W-30 ACEA A5/B5 (WSS-M2C913) · FWD ≈6,5 L · RWD ≈10 L: confirmar con manual'}
     ]
   },
   scania:{

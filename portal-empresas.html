@@ -433,7 +433,8 @@ var VIEWS={};
 var CQ={planId:'',tier:'premium',modo:'mensual',dpf:false,cliente:'',items:[{cat:'camion_5000',modelo_id:'',qty:1}]};
 function cqCat(){var o={};for(var k in CATEG)if(k!=='maquinaria')o[k]=CATEG[k];return o}
 function cqSet(k,v){CQ[k]=v;render()}
-function cqItem(i,k,v){CQ.items[i][k]=k==='qty'?Math.max(1,Number(v)||1):v;if(k==='cat')CQ.items[i].modelo_id='';render()}
+var MANUAL='__manual';
+function cqItem(i,k,v){CQ.items[i][k]=k==='qty'?Math.max(1,Number(v)||1):v;if(k==='cat')CQ.items[i].modelo_id='';if(k==='modelo_id'&&v!==MANUAL){delete CQ.items[i].nombre;delete CQ.items[i].kit}render()}
 function cqAdd(){CQ.items.push({cat:'camion_5000',modelo_id:'',qty:1});render()}
 function cqDel(i){CQ.items.splice(i,1);if(!CQ.items.length)CQ.items.push({cat:'camion_5000',modelo_id:'',qty:1});render()}
 function cqCalc(){
@@ -441,9 +442,9 @@ function cqCalc(){
   var dpf=S.planes.find(function(x){return x.modalidad==='modulo'});
   var r={plan:plan,lines:[],mensual:0,anual:0,falta:false,qty:0};
   CQ.items.forEach(function(it){
-    var v={categoria:it.cat},kit=it.modelo_id?cotKit(cotTipo(v),it.modelo_id,CQ.tier):null;
+    var v={categoria:it.cat},manual=it.modelo_id===MANUAL,kit=manual?(Number(it.kit)||null):(it.modelo_id?cotKit(cotTipo(v),it.modelo_id,CQ.tier):null);
     var pr=plan?precioVeh(plan,v,kit,CQ.modo):null;
-    var mod=it.modelo_id?COT[cotTipo(v)].find(function(x){return x.modelo_id===it.modelo_id}):null;
+    var mod=manual?{modelo:(it.nombre||'Vehículo ingresado a mano')+' (manual)',manual:true}:(it.modelo_id?COT[cotTipo(v)].find(function(x){return x.modelo_id===it.modelo_id}):null);
     var portal=plan?(Number(plan.valor_portal_mensual_clp)||0):0;
     var dp=CQ.dpf&&dpf?(Number(dpf.precio_mensual_clp)||0):0;
     var vis=plan?(Number(plan.visitas_preventivas_anio)||0):0;
@@ -479,7 +480,9 @@ VIEWS.cotizador=function(){
      '<div style="flex:2 1 230px"><select class="inp" onchange="cqItem('+i+',\'modelo_id\',this.value)">'+cotOpts(cotTipo({categoria:it.cat}),it.modelo_id)+'</select></div>'+
      '<div style="flex:0 0 70px"><input class="inp" type="number" min="1" value="'+it.qty+'" onchange="cqItem('+i+',\'qty\',this.value)" aria-label="Cantidad"></div>'+
      '<div style="flex:1 1 150px;text-align:right"><b>'+(l.pr==null?'—':(CQ.modo==='mensual'?clp(l.pr)+' / mes':clp(l.pr)+' / mant.'))+'</b>'+(l.pr!=null&&l.portal?'<div class="hint">+ portal '+clp(l.portal)+'/mes</div>':'')+'</div>'+
-     '<button class="btn ghost sm" onclick="cqDel('+i+')" aria-label="Quitar">✕</button></div>'+(it.modelo_id&&l.mod&&l.mod.capEstimada?'<div class="hint">Capacidad de aceite estimada: confirmar al agendar.</div>':'')});
+     '<button class="btn ghost sm" onclick="cqDel('+i+')" aria-label="Quitar">✕</button></div>'+
+     (it.modelo_id===MANUAL?'<div class="row" style="flex-wrap:wrap;gap:8px;margin:-2px 0 8px"><div style="flex:2 1 230px"><input class="inp" value="'+esc(it.nombre||'')+'" placeholder="Marca y modelo (ej. Renault Master 2.3)" onchange="cqItem('+i+',\'nombre\',this.value)"></div><div style="flex:1 1 170px"><input class="inp" type="number" inputmode="numeric" min="0" value="'+(it.kit||'')+'" placeholder="Precio 1 mantención (CLP neto)" onchange="cqItem('+i+',\'kit\',this.value)"></div><div class="hint" style="flex:1 1 100%">Modelo fuera del cotizador: ingresa el precio neto de una mantención (kit '+CQ.tier+') y el resto se calcula igual.'+cotRefHint(cotTipo({categoria:it.cat}))+'</div></div>':'')+
+     (it.modelo_id&&l.mod&&l.mod.capEstimada?'<div class="hint">Capacidad de aceite estimada: confirmar al agendar.</div>':'')});
   h+='<button class="btn ghost sm" style="margin-top:8px" onclick="cqAdd()">+ Agregar vehículo</button></div>';
   h+='<div class="card"><div class="kv"><div><span>Vehículos</span><b>'+r.qty+'</b></div><div><span>Total mensual neto</span><b>'+clp(r.mensual)+'</b></div><div><span>Con IVA</span><b>'+clp(Math.round(r.mensual*1.19))+'</b></div><div><span>Total anual neto</span><b>'+clp(r.anual)+'</b></div></div>'+
    (r.falta?'<div class="note" style="margin-top:8px">Elige el modelo de cada vehículo para completar el precio.</div>':'')+
@@ -709,16 +712,18 @@ function normTxt(t){return String(t||'').toLowerCase().normalize('NFD').replace(
 function cotTipo(v){return (v.categoria==='camion'||v.categoria==='camion_5000')?'camion':'auto'}
 function cotMatch(v){
   var tipo=v.cotizador_tipo||cotTipo(v);
-  if(v.cotizador_modelo_id&&COT[tipo].some(function(x){return x.modelo_id===v.cotizador_modelo_id}))return v.cotizador_modelo_id;
+  if(v.cotizador_modelo_id==='manual')return MANUAL;
+  if(v.cotizador_modelo_id&&COT[tipo]&&COT[tipo].some(function(x){return x.modelo_id===v.cotizador_modelo_id}))return v.cotizador_modelo_id;
   tipo=cotTipo(v);var vm=normTxt(v.marca).trim(),toks=normTxt(v.modelo).split(' ').filter(function(x){return x.length>=2});
   var best='',bs=0;
   COT[tipo].forEach(function(m){var mm=normTxt(m.marca).trim();if(!vm||!(mm===vm||mm.indexOf(vm)>-1||vm.indexOf(mm)>-1))return;var nm=' '+normTxt(m.modelo)+' ';var sc=0;toks.forEach(function(t){if(nm.indexOf(' '+t)>-1)sc++});if(sc>bs){bs=sc;best=m.modelo_id}});
   return best}
 function cotOpts(tipo,sel){
   var by={};COT[tipo].forEach(function(m){(by[m.marca]=by[m.marca]||[]).push(m)});
-  var h='<option value="">Elegir modelo…</option>';
+  var h='<option value="">Elegir modelo…</option><option value="'+MANUAL+'"'+(sel===MANUAL?' selected':'')+'>✎ Otro modelo: ingresar a mano…</option>';
   Object.keys(by).sort().forEach(function(b){h+='<optgroup label="'+esc(b)+'">'+by[b].map(function(m){return '<option value="'+esc(m.modelo_id)+'"'+(m.modelo_id===sel?' selected':'')+'>'+esc(m.modelo)+'</option>'}).join('')+'</optgroup>'});
   return h}
+function cotRefHint(tipo){var by={};COT[tipo].forEach(function(m){m.kits.forEach(function(k){(by[k.tipo]=by[k.tipo]||[]).push(k.precio)})});var o=[];['basico','premium','plus'].forEach(function(t){var a=(by[t]||[]).sort(function(x,y){return x-y});if(a.length)o.push(t+' '+clp(a[Math.floor(a.length/2)]))});return o.length?' Referencia (mediana '+(tipo==='camion'?'camiones':'autos')+'): '+o.join(' · ')+'.':''}
 function cotKit(tipo,id,tier){var m=COT[tipo].find(function(x){return x.modelo_id===id});if(!m)return null;var k=m.kits.find(function(x){return x.tipo===tier});return k?k.precio:null}
 function precioVeh(plan,v,kit,modo){
   var vis=Number(plan.visitas_preventivas_anio)||0;if(kit==null||vis<=0)return null;
@@ -730,16 +735,17 @@ function contratoRecalc(){
   var f=document.getElementById('mform');if(!f)return;var E=f.elements;
   var plan=S.planes.find(function(x){return x.id===E.plan_id.value});if(!plan)return;
   S.veh.forEach(function(v){
-    var kit=cotKit(cotTipo(v),E['mod_'+v.id].value,E.kit_tier.value),pr=precioVeh(plan,v,kit,E.modo_cobro.value);
+    var manual=E['mod_'+v.id].value===MANUAL,kitEl=E['kit_'+v.id];if(kitEl)kitEl.style.display=manual?'':'none';
+    var kit=manual?(Number(kitEl&&kitEl.value)||null):cotKit(cotTipo(v),E['mod_'+v.id].value,E.kit_tier.value),pr=precioVeh(plan,v,kit,E.modo_cobro.value);
     E['pr_'+v.id].value=pr==null?'':pr;
-    var hint=document.getElementById('hint_'+v.id);if(hint)hint.textContent=!E['mod_'+v.id].value?'Elige el modelo para calcular el precio.':(plan.visitas_preventivas_anio>0?'Kit '+E.kit_tier.value+': '+clp(kit):'Este plan no tiene mantenciones: sin precio fijo.')})}
+    var hint=document.getElementById('hint_'+v.id);if(hint)hint.textContent=!E['mod_'+v.id].value?'Elige el modelo para calcular el precio.':manual?(kit?'Mantención manual: '+clp(kit)+' → precio calculado con el plan.':'Ingresa el precio neto de una mantención.'):(plan.visitas_preventivas_anio>0?'Kit '+E.kit_tier.value+': '+clp(kit):'Este plan no tiene mantenciones: sin precio fijo.')})}
 async function contratoModal(){
   if(!S.veh.length){toast('Primero agrega los vehículos de la empresa');return}
   await loadCot();
   var po=S.planes.filter(function(p){return p.modalidad!=='modulo'}).map(function(p){return '<option value="'+p.id+'">'+esc(p.nombre)+'</option>'}).join('');
   var rows=S.veh.map(function(v){var tipo=cotTipo(v),sel=cotMatch(v);
     return '<div class="row" style="align-items:flex-start"><label class="chk" style="flex:1 1 100%;margin:0"><input type="checkbox" name="veh_'+v.id+'" checked> <b>'+esc(vehLabel(v))+'</b> <span style="color:var(--txt3)">· '+esc(CATEG[v.categoria])+'</span></label>'+
-     '<div style="flex:1 1 220px"><select class="inp" name="mod_'+v.id+'" onchange="contratoRecalc()">'+cotOpts(tipo,sel)+'</select><div class="hint" id="hint_'+v.id+'"></div></div>'+
+     '<div style="flex:1 1 220px"><select class="inp" name="mod_'+v.id+'" onchange="contratoRecalc()">'+cotOpts(tipo,sel)+'</select><input class="inp" name="kit_'+v.id+'" type="number" inputmode="numeric" min="0" placeholder="Precio 1 mantención (CLP neto)" value="'+(v.cotizador_kit_clp||'')+'" style="display:none;margin-top:6px" oninput="contratoRecalc()"><div class="hint" id="hint_'+v.id+'"></div></div>'+
      '<div style="flex:0 0 150px"><input class="inp" name="pr_'+v.id+'" type="number" inputmode="numeric" placeholder="Precio CLP"></div></div>'}).join('');
   openModal('Nuevo contrato',
    fld('Plan','plan_id',{type:'select',options:po,onchange:'contratoRecalc()'})+
@@ -753,7 +759,8 @@ async function contratoModal(){
      var E=form.elements;var ids=S.veh.filter(function(v){return E['veh_'+v.id].checked}).map(function(v){return v.id});if(!ids.length)throw new Error('Selecciona al menos un vehículo.');
      var r=must(await db.from('flota_contratos').insert({empresa_id:S.empresaId,plan_id:f.plan_id,estado:'vigente',modo_cobro:f.modo_cobro,inicio:f.inicio,termino:f.termino,renovacion_auto:E.renov.checked,aviso_termino_dias:Number(f.aviso||30),dpf_modulo:E.dpf.checked,notas:nn(f.notas)}).select().single());
      must(await db.from('flota_contrato_vehiculos').insert(ids.map(function(id){var pr=E['pr_'+id].value;return {contrato_id:r.data.id,vehiculo_id:id,precio_mensual_clp:f.modo_cobro==='mensual'&&pr?Number(pr):null,precio_por_mantencion_clp:f.modo_cobro==='por_mantencion'&&pr?Number(pr):null}})));
-     for(var i=0;i<ids.length;i++){var v=vehById(ids[i]),m=E['mod_'+ids[i]].value;if(m&&m!==v.cotizador_modelo_id)must(await db.from('flota_vehiculos').update({cotizador_tipo:cotTipo(v),cotizador_modelo_id:m}).eq('id',ids[i]))}
+     for(var i=0;i<ids.length;i++){var v=vehById(ids[i]),m=E['mod_'+ids[i]].value;if(!m)continue;var manual=m===MANUAL,kc=manual?(Number(E['kit_'+ids[i]].value)||null):null,mid=manual?'manual':m;
+       if(mid!==v.cotizador_modelo_id||kc!==(v.cotizador_kit_clp||null))must(await db.from('flota_vehiculos').update({cotizador_tipo:cotTipo(v),cotizador_modelo_id:mid,cotizador_kit_clp:kc}).eq('id',ids[i]))}
      if(S.empresa&&S.empresa.estado!=='activa'){must(await db.from('flota_empresas').update({estado:'activa'}).eq('id',S.empresaId))}
      closeModal();toast('Contrato creado');await reload();if(S.empresa)S.empresa.estado='activa'}});
   contratoRecalc()}

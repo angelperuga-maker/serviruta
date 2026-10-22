@@ -1,9 +1,9 @@
 {
- "generado": "2026-10-21T20:28:22.159Z",
+ "generado": "2026-10-22T16:41:53.888Z",
  "cotizador": "mantencion_auto",
  "fuente": "https://angelperuga-maker.github.io/serviruta/kits-mantencion-auto.html",
  "moneda": "CLP",
- "total_modelos": 85,
+ "total_modelos": 92,
  "modelos": [
   {
    "marca_id": "toyota",
@@ -4404,6 +4404,459 @@
      "destacado": false,
      "incluye": [
       "Aceite 100% sintético Low SAPS (6.5L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "ford",
+   "marca": "Ford",
+   "modelo_id": "transit-custom",
+   "modelo": "Transit Custom 2.0 EcoBlue (2017+)",
+   "motor": "2.0 EcoBlue · 4 cil · diésel · DPF",
+   "capAceite": 9,
+   "horas": 1.5,
+   "filtros": "Aceite Ford WSS-M2C950-A 0W-30 (ACEA C2, bajo cenizas) · 8,3-9,8 L según variante",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 186000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (9L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 269000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (9L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 333000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (9L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "ford",
+   "marca": "Ford",
+   "modelo_id": "transit-22",
+   "modelo": "Transit 2.2 TDCi (2013-2019)",
+   "motor": "2.2 Duratorq TDCi · 4 cil · diésel",
+   "capAceite": 8,
+   "horas": 1.5,
+   "capEstimada": true,
+   "filtros": "Aceite 5W-30 ACEA A5/B5 (WSS-M2C913) · FWD ≈6,5 L · RWD ≈10 L: confirmar con manual",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 180000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (8L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 258000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (8L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 317000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (8L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "ford",
+   "marca": "Ford",
+   "modelo_id": "transit-20",
+   "modelo": "Transit Van · Chasis 2.0 EcoBlue (2019+)",
+   "motor": "2.0 EcoBlue · 4 cil · diésel · DPF",
+   "capAceite": 9.8,
+   "horas": 1.5,
+   "filtros": "Aceite Ford WSS-M2C950-A 0W-30 (ACEA C2, bajo cenizas) · 9,8 L con filtro (manual Ford)",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 190000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (9.8L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 277000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (9.8L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 346000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (9.8L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mercedes",
+   "marca": "Mercedes-Benz",
+   "modelo_id": "sprinter-om651",
+   "modelo": "Sprinter 311 · 313 · 315 · 415 · 515 CDI (2010-2018)",
+   "motor": "OM651 · 2.1/2.2 CDI · 4 cil · DPF",
+   "capAceite": 11.5,
+   "horas": 1.7,
+   "capEstimada": true,
+   "filtros": "Aceite MB 229.51/229.52 5W-30 bajo cenizas · kit de servicio trae 12 L: confirmar con manual",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 209000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (11.5L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 304000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (11.5L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 382000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (11.5L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mercedes",
+   "marca": "Mercedes-Benz",
+   "modelo_id": "sprinter-907",
+   "modelo": "Sprinter 314 · 316 · 416 · 516 CDI (2019+)",
+   "motor": "OM651 2.1 CDI / OM654 2.0 CDI · 4 cil · DPF + SCR",
+   "capAceite": 9.5,
+   "horas": 1.7,
+   "capEstimada": true,
+   "filtros": "Aceite MB 229.52 5W-30 bajo cenizas · AdBlue · confirmar capacidad por motor",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 197000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (9.5L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 282000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (9.5L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 350000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (9.5L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mercedes",
+   "marca": "Mercedes-Benz",
+   "modelo_id": "sprinter-v6",
+   "modelo": "Sprinter 318 · 319 · 519 CDI V6",
+   "motor": "OM642 · 3.0 V6 CDI · DPF",
+   "capAceite": 12.5,
+   "horas": 2,
+   "capEstimada": true,
+   "filtros": "Aceite MB 229.51 5W-30 bajo cenizas · confirmar capacidad con manual",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 227000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (12.5L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 327000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (12.5L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 410000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (12.5L)",
+      "Set completo de filtros premium",
+      "Aditivo limpiador inyectores",
+      "Revisión líquidos (freno, refrigerante, dirección)",
+      "Inspección extendida: correas, mangueras, batería",
+      "Diagnóstico con scanner OBD-II incluido",
+      "Reporte digital con histórico",
+      "Garantía escrita 6 meses"
+     ]
+    }
+   ]
+  },
+  {
+   "marca_id": "mercedes",
+   "marca": "Mercedes-Benz",
+   "modelo_id": "vito",
+   "modelo": "Vito 111 · 114 · 116 CDI",
+   "motor": "OM651 / OM622 · 1.6-2.1 CDI · DPF",
+   "capAceite": 8,
+   "horas": 1.5,
+   "capEstimada": true,
+   "filtros": "Aceite MB 229.51/229.52 5W-30 bajo cenizas",
+   "kits": [
+    {
+     "tipo": "basico",
+     "nombre": "Kit Básico",
+     "precio": 180000,
+     "desc": "Mantención esencial · Trayectos urbanos cortos",
+     "cambio": "cada 5.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite mineral 10W40 (8L)",
+      "Filtro de aceite Mann/Bosch",
+      "Filtro de aire",
+      "Mano de obra técnico Serviruta",
+      "Revisión visual del motor",
+      "Eliminación correcta de residuos"
+     ]
+    },
+    {
+     "tipo": "premium",
+     "nombre": "Kit Premium",
+     "precio": 258000,
+     "desc": "El más solicitado · Mejor relación calidad/precio",
+     "cambio": "cada 7.500-10.000 km",
+     "destacado": true,
+     "incluye": [
+      "Aceite semi-sintético 5W30/5W40 (8L)",
+      "Filtro de aceite premium (Mann/Mahle)",
+      "Filtro de aire",
+      "Filtro de polen cabina",
+      "Filtro de combustible (si aplica)",
+      "Mano de obra técnico especialista",
+      "Revisión 20 puntos + fotos",
+      "Garantía escrita 6 meses"
+     ]
+    },
+    {
+     "tipo": "plus",
+     "nombre": "Kit Plus",
+     "precio": 317000,
+     "desc": "Mantención larga · Para autos modernos con DPF/Turbo",
+     "cambio": "cada 10.000-15.000 km",
+     "destacado": false,
+     "incluye": [
+      "Aceite 100% sintético Low SAPS (8L)",
       "Set completo de filtros premium",
       "Aditivo limpiador inyectores",
       "Revisión líquidos (freno, refrigerante, dirección)",

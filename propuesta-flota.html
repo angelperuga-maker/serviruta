@@ -65,7 +65,7 @@ ol.cl{padding-left:20px}ol.cl li{margin:7px 0}ol.cl b{display:inline}
 </head>
 <body>
 <div class="bar" id="bar" hidden>
-  <div class="seg" id="seg"><button id="bMensual" onclick="setModo('mensual')">Cuota mensual</button><button id="bMant" onclick="setModo('por_mantencion')">Por mantención</button></div>
+  <div class="seg" id="seg"><button id="bMensual" onclick="setModo('mensual')">Cuota mensual fija</button><button id="bMant" onclick="setModo('por_mantencion')">Por evento (cada mantención)</button></div>
   <div class="sp"></div>
   <a id="bWa" href="https://wa.me/56945210814" target="_blank">WhatsApp</a>
   <button class="pri" id="bDl" onclick="descargar()">Descargar PDF</button>
@@ -120,7 +120,6 @@ function clausulas(c,p){
 function render(){
   var c=D.cotizacion,p=D.plan||{},dp=D.dpf;
   document.getElementById('bar').hidden=false;
-  document.getElementById('seg').style.display=new URLSearchParams(location.search).get('modo')?'none':'';
   document.getElementById('bMensual').className=MODO==='mensual'?'on':'';document.getElementById('bMant').className=MODO==='por_mantencion'?'on':'';
   var lineas=c.lineas||[],vis=Number(p.visitas_preventivas_anio)||0;
   var sub=0,qty=0,falta=false;

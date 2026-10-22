@@ -430,49 +430,111 @@ var VIEWS={};
 
 
 /* ---- Cotizador de flota (personal Serviruta) ---- */
-var CQ={planId:'',tier:'premium',modo:'mensual',dpf:false,cliente:'',items:[{cat:'camion_5000',modelo_id:'',qty:1}]};
+var PROPUESTA_URL='propuesta-flota.html';
+var CQ_DEF={id:null,token:null,numero:null,estado:'borrador',planId:'',tier:'premium',modo:'mensual',dpf:false,cliente:'',contacto:'',email:'',telefono:'',rut:'',vigencia:12,validez:15,condiciones:'',notas:'',items:[{cat:'camion_5000',modelo_id:'',qty:1}]};
+var CQ=JSON.parse(JSON.stringify(CQ_DEF));
+var COTS=null,CQ_TAB='editar';
 function cqCat(){var o={};for(var k in CATEG)if(k!=='maquinaria')o[k]=CATEG[k];return o}
 function cqSet(k,v){CQ[k]=v;render()}
+function cqSetQ(k,v){CQ[k]=v}
 var MANUAL='__manual';
 function cqItem(i,k,v){CQ.items[i][k]=k==='qty'?Math.max(1,Number(v)||1):v;if(k==='cat')CQ.items[i].modelo_id='';if(k==='modelo_id'&&v!==MANUAL){delete CQ.items[i].nombre;delete CQ.items[i].kit}render()}
 function cqAdd(){CQ.items.push({cat:'camion_5000',modelo_id:'',qty:1});render()}
 function cqDel(i){CQ.items.splice(i,1);if(!CQ.items.length)CQ.items.push({cat:'camion_5000',modelo_id:'',qty:1});render()}
-function cqCalc(){
+function cqNueva(){CQ=JSON.parse(JSON.stringify(CQ_DEF));CQ_TAB='editar';render()}
+function cqCalc(modo){
+  modo=modo||CQ.modo;
   var plan=S.planes.find(function(x){return x.id===CQ.planId});
   var dpf=S.planes.find(function(x){return x.modalidad==='modulo'});
-  var r={plan:plan,lines:[],mensual:0,anual:0,falta:false,qty:0};
+  var r={plan:plan,lines:[],mensual:0,anual:0,falta:false,qty:0,modo:modo};
   CQ.items.forEach(function(it){
     var v={categoria:it.cat},manual=it.modelo_id===MANUAL,kit=manual?(Number(it.kit)||null):(it.modelo_id?cotKit(cotTipo(v),it.modelo_id,CQ.tier):null);
-    var pr=plan?precioVeh(plan,v,kit,CQ.modo):null;
+    var pr=plan?precioVeh(plan,v,kit,modo):null;
     var mod=manual?{modelo:(it.nombre||'Vehículo ingresado a mano')+' (manual)',manual:true}:(it.modelo_id?COT[cotTipo(v)].find(function(x){return x.modelo_id===it.modelo_id}):null);
     var portal=plan?(Number(plan.valor_portal_mensual_clp)||0):0;
     var dp=CQ.dpf&&dpf?(Number(dpf.precio_mensual_clp)||0):0;
     var vis=plan?(Number(plan.visitas_preventivas_anio)||0):0;
-    var mes=pr==null?null:(CQ.modo==='mensual'?pr:Math.round(pr*vis/12))+portal+dp;
+    var mes=pr==null?null:(modo==='mensual'?pr:Math.round(pr*vis/12))+portal+dp;
     if(pr==null)r.falta=true;
-    r.lines.push({it:it,mod:mod,pr:pr,portal:portal,dp:dp,vis:vis,mes:mes});
+    r.lines.push({it:it,mod:mod,kit:kit,pr:pr,portal:portal,dp:dp,vis:vis,mes:mes});
     if(mes!=null){r.mensual+=mes*it.qty;r.anual+=mes*12*it.qty}
     r.qty+=it.qty});
   return r}
+function cqLink(){return CQ.token?new URL(PROPUESTA_URL+'?t='+CQ.token,location.href).href:''}
 function cqTexto(r){
-  var t='Cotización Serviruta · Mantención de flota'+(CQ.cliente?' · '+CQ.cliente:'')+'\nPlan: '+r.plan.nombre+' (kit '+CQ.tier+')\n';
-  r.lines.forEach(function(l){t+='• '+l.it.qty+' × '+(l.mod?l.mod.modelo:CATEG[l.it.cat])+': '+(l.pr==null?'por cotizar':(CQ.modo==='mensual'?clp(l.pr)+' por mes':clp(l.pr)+' por mantención ('+l.vis+' al año)')+(l.portal?' + portal '+clp(l.portal)+'/mes':''))+'\n'});
+  var t='Cotización Serviruta · Mantención de flota'+(CQ.cliente?' · '+CQ.cliente:'')+(CQ.numero?' · N° '+CQ.numero:'')+'\nPlan: '+r.plan.nombre+' (kit '+CQ.tier+')\n';
+  r.lines.forEach(function(l){t+='• '+l.it.qty+' × '+(l.mod?l.mod.modelo:CATEG[l.it.cat])+': '+(l.pr==null?'por cotizar':(r.modo==='mensual'?clp(l.pr)+' por mes':clp(l.pr)+' por mantención ('+l.vis+' al año)')+(l.portal?' + portal '+clp(l.portal)+'/mes':''))+'\n'});
   t+='Total mensual: '+clp(r.mensual)+' + IVA ('+clp(Math.round(r.mensual*1.19))+' con IVA)\n';
-  t+='Incluye servicio a domicilio. Solo mantención: reparaciones aparte con '+r.plan.dcto_mano_obra_pct+'% de descuento en mano de obra.';return t}
+  t+='Incluye servicio a domicilio. Solo mantención: reparaciones aparte con '+r.plan.dcto_mano_obra_pct+'% de descuento en mano de obra.';
+  if(CQ.token)t+='\nPropuesta completa (PDF): '+cqLink();return t}
 function cqCopiar(){var r=cqCalc();if(!r.plan||r.falta){toast('Completa plan y modelos primero');return}
   var t=cqTexto(r);if(navigator.clipboard)navigator.clipboard.writeText(t).then(function(){toast('Cotización copiada')},function(){toast('No se pudo copiar')});else toast('Tu navegador no permite copiar')}
+/* Guardar: se graban las líneas en los dos modos de cobro para que la propuesta pueda mostrar cualquiera */
+function cqPayload(){
+  var rm=cqCalc('mensual'),rp=cqCalc('por_mantencion');
+  var lineas=rm.lines.map(function(l,i){var p=rp.lines[i];return {cat:l.it.cat,categoria:CATEG[l.it.cat],modelo_id:l.it.modelo_id,modelo:l.mod?l.mod.modelo:CATEG[l.it.cat],qty:l.it.qty,kit:l.kit,visitas:l.vis,portal:l.portal,dpf:l.dp,
+    mensual:{precio:l.pr,total_mes:l.mes},por_mantencion:{precio:p.pr,total_mes:p.mes}}});
+  var r=CQ.modo==='mensual'?rm:rp;
+  return {empresa_id:S.empresaId||null,cliente:nn(CQ.cliente),contacto:nn(CQ.contacto),email:nn(CQ.email),telefono:nn(CQ.telefono),rut:nn(CQ.rut),plan_id:CQ.planId||null,tier:CQ.tier,modo:CQ.modo,dpf:!!CQ.dpf,items:CQ.items,lineas:lineas,
+    total_mensual:r.falta?null:r.mensual,total_anual:r.falta?null:r.anual,vigencia_meses:Number(CQ.vigencia)||12,validez_dias:Number(CQ.validez)||15,condiciones:nn(CQ.condiciones),notas:nn(CQ.notas),estado:CQ.estado||'borrador'}}
+async function cqGuardar(){
+  var r=cqCalc();if(!r.plan){toast('Elige un plan');return}
+  if(!CQ.cliente){toast('Indica el nombre del cliente');return}
+  try{var p=cqPayload(),q;
+    if(CQ.id)q=must(await db.from('flota_cotizaciones').update(p).eq('id',CQ.id).select().single());
+    else q=must(await db.from('flota_cotizaciones').insert(p).select().single());
+    CQ.id=q.data.id;CQ.token=q.data.token;CQ.numero=q.data.numero;CQ.estado=q.data.estado;COTS=null;
+    toast('Cotización N° '+CQ.numero+' guardada');render()}
+  catch(e){toast('No se pudo guardar: '+e.message)}}
+async function cqCargarLista(){var r=await db.from('flota_cotizaciones').select('id,numero,token,cliente,contacto,plan_id,modo,tier,estado,total_mensual,created_at,updated_at,enviada_at').order('created_at',{ascending:false}).limit(100);COTS=r.data||[];render()}
+async function cqAbrir(id){
+  var r=await db.from('flota_cotizaciones').select('*').eq('id',id).single();if(r.error||!r.data){toast('No se pudo abrir');return}
+  var c=r.data;CQ={id:c.id,token:c.token,numero:c.numero,estado:c.estado,planId:c.plan_id||'',tier:c.tier,modo:c.modo,dpf:!!c.dpf,cliente:c.cliente||'',contacto:c.contacto||'',email:c.email||'',telefono:c.telefono||'',rut:c.rut||'',vigencia:c.vigencia_meses||12,validez:c.validez_dias||15,condiciones:c.condiciones||'',notas:c.notas||'',items:(c.items&&c.items.length)?c.items:[{cat:'camion_5000',modelo_id:'',qty:1}]};
+  CQ_TAB='editar';render()}
+async function cqEstado(id,estado){var p={estado:estado};if(estado==='enviada')p.enviada_at=new Date().toISOString();var r=await db.from('flota_cotizaciones').update(p).eq('id',id);if(r.error){toast(r.error.message);return}if(CQ.id===id)CQ.estado=estado;COTS=null;toast('Estado: '+estado);render()}
+async function cqDuplicar(id){await cqAbrir(id);CQ.id=null;CQ.token=null;CQ.numero=null;CQ.estado='borrador';toast('Copia lista: guárdala como nueva cotización');render()}
+function cqEnviar(canal){
+  if(!CQ.token){toast('Guarda la cotización primero');return}
+  var link=cqLink(),modo=CQ.modo==='mensual'?'con cuota mensual fija':'con cobro por cada mantención';
+  var msg='Hola'+(CQ.contacto?' '+CQ.contacto:'')+', te envío la propuesta de Serviruta para la mantención de la flota'+(CQ.cliente?' de '+CQ.cliente:'')+' ('+modo+'). Ahí están los servicios incluidos, los valores y las cláusulas del convenio; se puede descargar en PDF desde el mismo enlace:\n'+link+'\n\nQuedo atento a tus comentarios.';
+  if(canal==='wa'){var tel=(CQ.telefono||'').replace(/\D/g,'');if(tel.length===9)tel='56'+tel;window.open('https://wa.me/'+(tel||'')+'?text='+encodeURIComponent(msg),'_blank')}
+  else if(canal==='mail'){window.open('mailto:'+encodeURIComponent(CQ.email||'')+'?subject='+encodeURIComponent('Propuesta Serviruta · Mantención de flota'+(CQ.cliente?' · '+CQ.cliente:'')+(CQ.numero?' · N° '+CQ.numero:''))+'&body='+encodeURIComponent(msg),'_self')}
+  else if(canal==='link'){if(navigator.clipboard)navigator.clipboard.writeText(link).then(function(){toast('Enlace copiado')});else toast(link)}
+  if(CQ.estado==='borrador'&&canal!=='link')cqEstado(CQ.id,'enviada')}
+function cqVerPropuesta(){if(!CQ.token){toast('Guarda la cotización primero');return}window.open(cqLink()+'&modo='+CQ.modo,'_blank')}
+function cqListaHtml(){
+  if(!COTS){cqCargarLista();return '<div class="note">Cargando cotizaciones…</div>'}
+  if(!COTS.length)return '<div class="card empty">Aún no hay cotizaciones guardadas.</div>';
+  var EST={borrador:'Borrador',enviada:'Enviada',aceptada:'Aceptada',perdida:'Perdida'},col={borrador:'var(--txt3)',enviada:'var(--amarillo)',aceptada:'#3ddc84',perdida:'var(--rojo)'};
+  var h='<div class="card">';
+  COTS.forEach(function(c){var pl=S.planes.find(function(p){return p.id===c.plan_id});
+    h+='<div class="row" style="flex-wrap:wrap;gap:8px;padding:10px 0;border-bottom:1px solid var(--borde);align-items:center">'+
+     '<div style="flex:2 1 220px"><b>N° '+c.numero+' · '+esc(c.cliente||'Sin nombre')+'</b><div class="hint">'+esc(pl?pl.nombre:'Sin plan')+' · kit '+esc(c.tier)+' · '+(c.modo==='mensual'?'mensual':'por mantención')+' · '+new Date(c.created_at).toLocaleDateString('es-CL')+'</div></div>'+
+     '<div style="flex:1 1 120px"><b>'+clp(c.total_mensual)+'</b><div class="hint">neto / mes</div></div>'+
+     '<div style="flex:0 0 auto;color:'+col[c.estado]+';font-size:13px;font-weight:600">'+EST[c.estado]+'</div>'+
+     '<div style="flex:1 1 100%;display:flex;gap:6px;flex-wrap:wrap"><button class="btn sm sec" onclick="cqAbrir(\''+c.id+'\')">Abrir</button><a class="btn sm sec" href="'+esc(PROPUESTA_URL+'?t='+c.token+'&modo='+c.modo)+'" target="_blank">Propuesta / PDF</a><button class="btn ghost sm" onclick="cqDuplicar(\''+c.id+'\')">Duplicar</button>'+
+     '<select class="inp" style="width:auto;padding:4px 8px;font-size:12px" onchange="cqEstado(\''+c.id+'\',this.value)">'+opts(EST,c.estado)+'</select></div></div>'});
+  return h+'</div>'}
 VIEWS.cotizador=function(){
   if(!isStaff())return '<div class="note">Solo personal de Serviruta.</div>';
   if(!COT){loadCot().then(function(){if(S.view==='cotizador')render()});return '<div class="note">Cargando cotizador…</div>'}
+  var h='<div class="filters" style="margin-bottom:10px"><span class="fchip clk'+(CQ_TAB==='editar'?' on':'')+'" onclick="CQ_TAB=\'editar\';render()">'+(CQ.id?'Cotización N° '+CQ.numero:'Nueva cotización')+'</span><span class="fchip clk'+(CQ_TAB==='lista'?' on':'')+'" onclick="CQ_TAB=\'lista\';render()">Guardadas</span>'+(CQ.id?'<span class="fchip clk" onclick="cqNueva()">+ Nueva</span>':'')+'</div>';
+  if(CQ_TAB==='lista')return h+cqListaHtml();
   var planes=S.planes.filter(function(p){return p.modalidad!=='modulo'});
   if(!CQ.planId||!planes.some(function(p){return p.id===CQ.planId}))CQ.planId=planes.length?planes[0].id:'';
   var r=cqCalc();
   var po=planes.map(function(p){return '<option value="'+p.id+'"'+(p.id===CQ.planId?' selected':'')+'>'+esc(p.nombre)+'</option>'}).join('');
-  var h='<div class="card"><div class="grid2">'+
-   '<label class="f"><span>Cliente (opcional)</span><input class="inp" value="'+esc(CQ.cliente)+'" onchange="cqSet(\'cliente\',this.value)" placeholder="Nombre de la empresa"></label>'+
+  h+='<div class="card"><div class="grid2">'+
+   '<label class="f"><span>Cliente / empresa</span><input class="inp" value="'+esc(CQ.cliente)+'" onchange="cqSetQ(\'cliente\',this.value)" placeholder="Nombre de la empresa"></label>'+
+   '<label class="f"><span>RUT (opcional)</span><input class="inp" value="'+esc(CQ.rut)+'" onchange="cqSetQ(\'rut\',this.value)" placeholder="76.123.456-7"></label>'+
+   '<label class="f"><span>Contacto</span><input class="inp" value="'+esc(CQ.contacto)+'" onchange="cqSetQ(\'contacto\',this.value)" placeholder="Nombre de quien recibe"></label>'+
+   '<label class="f"><span>WhatsApp</span><input class="inp" value="'+esc(CQ.telefono)+'" onchange="cqSetQ(\'telefono\',this.value)" placeholder="9 1234 5678" inputmode="tel"></label>'+
+   '<label class="f"><span>Email</span><input class="inp" value="'+esc(CQ.email)+'" onchange="cqSetQ(\'email\',this.value)" placeholder="correo@empresa.cl" inputmode="email"></label>'+
    '<label class="f"><span>Plan</span><select class="inp" onchange="cqSet(\'planId\',this.value)">'+po+'</select></label>'+
    '<label class="f"><span>Kit del cotizador</span><select class="inp" onchange="cqSet(\'tier\',this.value)">'+opts({basico:'Básico',premium:'Premium',plus:'Plus'},CQ.tier)+'</select></label>'+
-   '<label class="f"><span>Modo de cobro</span><select class="inp" onchange="cqSet(\'modo\',this.value)">'+opts({mensual:'Mensual (anual ÷ 12)',por_mantencion:'Por cada mantención'},CQ.modo)+'</select></label></div>'+
+   '<label class="f"><span>Modo de cobro de la propuesta</span><select class="inp" onchange="cqSet(\'modo\',this.value)">'+opts({mensual:'Mensual (anual ÷ 12)',por_mantencion:'Por cada mantención'},CQ.modo)+'</select><div class="hint">Se guardan los dos modos: la propuesta puede mostrarse de una u otra forma.</div></label>'+
+   '<label class="f"><span>Vigencia del convenio (meses)</span><input class="inp" type="number" min="1" value="'+esc(CQ.vigencia)+'" onchange="cqSetQ(\'vigencia\',this.value)"></label>'+
+   '<label class="f"><span>Validez de la oferta (días)</span><input class="inp" type="number" min="1" value="'+esc(CQ.validez)+'" onchange="cqSetQ(\'validez\',this.value)"></label></div>'+
    '<label class="chk"><input type="checkbox" '+(CQ.dpf?'checked':'')+' onchange="cqSet(\'dpf\',this.checked)"> Incluir módulo DPF</label></div>';
   h+='<div class="card"><div style="font-weight:600;margin-bottom:8px">Vehículos de la flota</div>';
   r.lines.forEach(function(l,i){var it=l.it;
@@ -484,10 +546,16 @@ VIEWS.cotizador=function(){
      (it.modelo_id===MANUAL?'<div class="row" style="flex-wrap:wrap;gap:8px;margin:-2px 0 8px"><div style="flex:2 1 230px"><input class="inp" value="'+esc(it.nombre||'')+'" placeholder="Marca y modelo (ej. Renault Master 2.3)" onchange="cqItem('+i+',\'nombre\',this.value)"></div><div style="flex:1 1 170px"><input class="inp" type="number" inputmode="numeric" min="0" value="'+(it.kit||'')+'" placeholder="Precio 1 mantención (CLP neto)" onchange="cqItem('+i+',\'kit\',this.value)"></div><div class="hint" style="flex:1 1 100%">Modelo fuera del cotizador: ingresa el precio neto de una mantención (kit '+CQ.tier+') y el resto se calcula igual.'+cotRefHint(cotTipo({categoria:it.cat}))+'</div></div>':'')+
      (it.modelo_id&&l.mod&&l.mod.capEstimada?'<div class="hint">Capacidad de aceite estimada: confirmar al agendar.</div>':'')});
   h+='<button class="btn ghost sm" style="margin-top:8px" onclick="cqAdd()">+ Agregar vehículo</button></div>';
+  h+='<div class="card"><div style="font-weight:600;margin-bottom:8px">Condiciones particulares (opcional)</div><textarea class="inp" rows="3" placeholder="Ej. zona de cobertura específica, horario de atención en bodega, forma de pago acordada…" onchange="cqSetQ(\'condiciones\',this.value)">'+esc(CQ.condiciones)+'</textarea><div class="hint">Se agregan al final de las cláusulas generales del convenio en la propuesta.</div>'+
+   '<textarea class="inp" rows="2" style="margin-top:8px" placeholder="Notas internas (no salen en la propuesta)" onchange="cqSetQ(\'notas\',this.value)">'+esc(CQ.notas)+'</textarea></div>';
+  var EST={borrador:'Borrador',enviada:'Enviada',aceptada:'Aceptada',perdida:'Perdida'};
   h+='<div class="card"><div class="kv"><div><span>Vehículos</span><b>'+r.qty+'</b></div><div><span>Total mensual neto</span><b>'+clp(r.mensual)+'</b></div><div><span>Con IVA</span><b>'+clp(Math.round(r.mensual*1.19))+'</b></div><div><span>Total anual neto</span><b>'+clp(r.anual)+'</b></div></div>'+
    (r.falta?'<div class="note" style="margin-top:8px">Elige el modelo de cada vehículo para completar el precio.</div>':'')+
    (r.plan&&r.plan.borrador?'<div class="note" style="margin-top:8px">Este plan está en borrador: los valores son referenciales.</div>':'')+
-   '<div style="margin-top:10px"><button class="btn" onclick="cqCopiar()">Copiar cotización para WhatsApp</button></div></div>';
+   '<div class="toolbar" style="margin-top:10px;flex-wrap:wrap;gap:6px"><button class="btn" onclick="cqGuardar()">'+(CQ.id?'Guardar cambios':'Guardar cotización')+'</button>'+
+   (CQ.id?'<button class="btn sec" onclick="cqVerPropuesta()">Ver propuesta / PDF</button><button class="btn sec" onclick="cqEnviar(\'wa\')">Enviar por WhatsApp</button><button class="btn sec" onclick="cqEnviar(\'mail\')">Enviar por email</button><button class="btn ghost" onclick="cqEnviar(\'link\')">Copiar enlace</button>':'')+
+   '<button class="btn ghost" onclick="cqCopiar()">Copiar resumen</button></div>'+
+   (CQ.id?'<div class="row" style="margin-top:10px;align-items:center;gap:8px"><span class="hint">Estado:</span><select class="inp" style="width:auto;padding:4px 8px" onchange="cqEstado(\''+CQ.id+'\',this.value)">'+opts(EST,CQ.estado)+'</select><span class="hint">La propuesta se abre sin clave desde el enlace y el cliente la descarga en PDF con "Imprimir".</span></div>':'<div class="hint" style="margin-top:8px">Guarda la cotización para generar la propuesta y poder enviarla.</div>')+'</div>';
   return h};
 
 /* ---- Empresas (solo personal Serviruta) ---- */

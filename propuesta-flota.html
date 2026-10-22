@@ -6,7 +6,8 @@
 <meta name="robots" content="noindex,nofollow">
 <title>Propuesta de convenio · Serviruta Empresas</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{--rojo:#E8210A;--ink:#111;--ink2:#444;--ink3:#777;--line:#ddd;--bg:#f3f1ec;--paper:#fff}
@@ -55,10 +56,6 @@ ol.cl{padding-left:20px}ol.cl li{margin:7px 0}ol.cl b{display:inline}
 .pb,tr,h2,.kv{page-break-inside:avoid;break-inside:avoid}
 h2{page-break-after:avoid;break-after:avoid}
 @media (max-width:600px){.page{padding:22px 18px;margin:0}.grid,.cols,.firma{grid-template-columns:1fr}.meta{text-align:left}}
-.pdfwrap{position:absolute;left:0;top:0;width:794px;background:#fff;z-index:-1;overflow:hidden}
-.pdfwrap .page{width:794px;max-width:none;margin:0;box-shadow:none;padding:30px 40px}
-.pdfwrap .grid,.pdfwrap .cols,.pdfwrap .firma{grid-template-columns:1fr 1fr}
-.pdfwrap .meta{text-align:right}
 @media print{
   @page{size:A4;margin:14mm 12mm}
   body{background:#fff;font-size:12.5px}
@@ -89,17 +86,81 @@ function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){retur
 function clp(n){return n==null||n===''?'—':'$'+Math.round(Number(n)).toLocaleString('es-CL')}
 function fecha(d){return new Date(d).toLocaleDateString('es-CL',{day:'2-digit',month:'long',year:'numeric',timeZone:'America/Santiago'})}
 function setModo(m){MODO=m;render()}
+function incluye(c,p,dp){var incl=(p.incluye||[]).slice();incl.push('Portal de empresa con documentos, alertas, cronograma e historial');incl.push('Servicio a domicilio en la base del Cliente, sin trasladar el vehículo');
+  if(c.pre_rt_clp!=null)incl.push('Revisión previa a la revisión técnica: 1 al año por vehículo, programada desde la alerta de vencimiento del portal');
+  if(c.dpf&&dp)incl=incl.concat((dp.incluye||[]).map(function(x){return 'Módulo DPF: '+x}));return incl}
+function excluye(p){return (p.excluye&&p.excluye.length)?p.excluye:['Repuestos y reparaciones correctivas (se cotizan aparte, con descuento)','Daños por accidente, negligencia o uso indebido','Componentes mayores: motor, caja, diferencial']}
+function sinHtml(t){return String(t||'').replace(/<br\s*\/?>/g,'\n').replace(/<[^>]+>/g,'').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;/g,"'")}
+/* PDF generado con jsPDF (texto real, independiente de la pantalla o del celular) */
 function descargar(){
-  var src=document.querySelector('.page'),c=D.cotizacion,b=document.getElementById('bDl');
-  var nombre='Propuesta-Serviruta-'+numFmt(c)+(c.cliente?'-'+c.cliente.replace(/[^\w\-]+/g,'_'):'')+'.pdf';
-  if(typeof html2pdf==='undefined'){window.print();return}
+  var c=D.cotizacion,p=D.plan||{},dp=D.dpf,b=document.getElementById('bDl');
+  if(!window.jspdf){window.print();return}
   b.disabled=true;b.textContent='Generando…';
-  /* Se renderiza una copia a ancho fijo A4 en la esquina 0,0 del documento: así el celular no corre ni corta la captura */
-  var wrap=document.createElement('div');wrap.className='pdfwrap';wrap.appendChild(src.cloneNode(true));document.body.appendChild(wrap);
-  var el=wrap.firstChild;
-  setTimeout(function(){
-  html2pdf().set({margin:[10,0,10,0],filename:nombre,image:{type:'jpeg',quality:.96},html2canvas:{scale:2,useCORS:true,backgroundColor:'#fff',scrollY:0,scrollX:0,x:0,y:0,width:794,height:el.scrollHeight,windowWidth:794,windowHeight:el.scrollHeight},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},pagebreak:{mode:['css'],avoid:['tr','.pb','h2','.kv']}})
-   .from(el).save().catch(function(){window.print()}).finally(function(){wrap.remove();b.disabled=false;b.textContent='Descargar PDF'})},200)}
+  try{
+  var J=window.jspdf.jsPDF,doc=new J({unit:'mm',format:'a4'}),W=210,M=15,CW=W-2*M,y=M,ROJO=[232,33,10],INK=[17,17,17],INK2=[68,68,68],INK3=[120,120,120],LINE=[221,221,221];
+  var vis=Number(p.visitas_preventivas_anio)||0,lineas=c.lineas||[],emitida=c.enviada_at||c.updated_at||c.created_at,venc=new Date(emitida);venc.setDate(venc.getDate()+(c.validez_dias||15));
+  var inc=Number(c.cuota_incorporacion_clp)||0,preRt=Number(c.pre_rt_clp)||0,EV=MODO==='por_mantencion';
+  function pageBreak(need){if(y+need>297-18){doc.addPage();y=M}}
+  function txt(t,x,yy,o){o=o||{};doc.setFont('helvetica',o.b?'bold':'normal');doc.setFontSize(o.s||9.5);doc.setTextColor.apply(doc,o.c||INK);doc.text(String(t),x,yy,{align:o.al||'left'})}
+  function para(t,x,w,o){o=o||{};doc.setFont('helvetica',o.b?'bold':'normal');doc.setFontSize(o.s||9.5);doc.setTextColor.apply(doc,o.c||INK);var lines=doc.splitTextToSize(String(t),w),lh=(o.s||9.5)*0.42;
+    lines.forEach(function(l){pageBreak(lh);doc.text(l,x,y);y+=lh});return lines.length}
+  function h2(t){pageBreak(14);y+=6;txt(t.toUpperCase(),M,y,{b:true,s:9.5,c:ROJO});y+=5}
+  function bullets(items,x,w,yy){var yy0=yy;doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor.apply(doc,INK);
+    items.forEach(function(it){var ls=doc.splitTextToSize(it,w-4);doc.text('•',x,yy);ls.forEach(function(l){doc.text(l,x+4,yy);yy+=3.9});yy+=0.6});return yy}
+  /* Encabezado */
+  txt('SERVI',M,y+6,{b:true,s:17});var wS=doc.getTextWidth('SERVI');txt('RUTA',M+wS,y+6,{b:true,s:17,c:ROJO});
+  txt('EMPRESAS · MANTENCIÓN DE FLOTAS A DOMICILIO',M,y+10.5,{s:7,c:INK3});
+  txt('Propuesta',W-M,y+2,{s:8,c:INK2,al:'right'});txt(numFmt(c),W-M,y+7,{b:true,s:12,al:'right'});
+  txt('Emitida el '+fecha(emitida),W-M,y+11.5,{s:8,c:INK2,al:'right'});txt('Válida hasta el '+fecha(venc),W-M,y+15.5,{s:8,c:INK2,al:'right'});
+  y+=19;doc.setDrawColor.apply(doc,ROJO);doc.setLineWidth(0.8);doc.line(M,y,W-M,y);y+=8;
+  txt('Propuesta de convenio de mantención de flota',M,y,{b:true,s:15});y+=5.5;
+  txt((MODALIDAD[p.modalidad]||'')+(p.nivel&&p.nivel!=='n/a'?' · '+p.nivel:'')+' · '+(MODO==='mensual'?'cobro: cuota mensual por vehículo':'cobro: por cada mantención ejecutada'),M,y,{s:9,c:INK2});y+=7;
+  var kv=[['CLIENTE',c.cliente||'—'],['RUT',c.rut||'—'],['CONTACTO',c.contacto||'—'],['CORREO / WHATSAPP',[c.email,c.telefono].filter(Boolean).join(' · ')||'—']];
+  kv.forEach(function(k,i){var x=M+(i%2)*(CW/2),yy=y+Math.floor(i/2)*9;txt(k[0],x,yy,{s:6.5,c:INK3});txt(k[1],x,yy+4,{s:9.5})});y+=18;
+  /* 1. Plan */
+  h2('1. El plan');
+  doc.setDrawColor.apply(doc,LINE);doc.setLineWidth(0.3);var yBox=y;y+=5;
+  txt(p.nombre||'Plan por definir',M+4,y,{b:true,s:12});y+=5;
+  if(p.descripcion){doc.setFontSize(9);var dl=doc.splitTextToSize(p.descripcion,CW-8);dl.forEach(function(l){txt(l,M+4,y,{s:9,c:INK2});y+=4})}
+  var chips=[];if(vis)chips.push(vis+' mantenciones / año');chips.push(TIER[c.tier]||c.tier);chips.push(p.cupo_grua_anio?'Grúa: '+p.cupo_grua_anio+' / año':'Grúa por evento');if(p.cupo_asistencia_anio)chips.push('Asistencia: '+p.cupo_asistencia_anio+' / año');if(p.respuesta_horas)chips.push('Respuesta máx. '+p.respuesta_horas+' h');if(p.dcto_mano_obra_pct)chips.push(p.dcto_mano_obra_pct+'% dcto. mano de obra');if(c.dpf)chips.push('Módulo DPF');if(c.pre_rt_clp!=null)chips.push('Pre-revisión técnica');
+  y+=1.5;var cl=doc.splitTextToSize(chips.join('   ·   '),CW-8);cl.forEach(function(l){txt(l,M+4,y,{s:8.5,c:INK2});y+=4});y+=2;
+  doc.roundedRect(M,yBox,CW,y-yBox,2,2);y+=2;
+  /* 2. Incluye / no incluye */
+  h2('2. Qué incluye el convenio');var yT=y;var colW=CW/2-4;
+  var y1=bullets(incluye(c,p,dp),M,colW,y);
+  txt('QUÉ NO INCLUYE',M+CW/2+4,yT-5,{b:true,s:9.5,c:ROJO});
+  var y2=bullets(excluye(p),M+CW/2+4,colW,yT);y=Math.max(y1,y2)+2;
+  /* 3. Tabla */
+  h2('3. Vehículos y valores');
+  var qty=0,sub=0,body=lineas.map(function(l){var v=Number(l.visitas)||vis,mu=(l.por_mantencion||{}).precio,cm=(l.mensual||{}).total_mes;qty+=l.qty;if(cm!=null)sub+=cm*l.qty;
+    return [l.categoria,l.modelo+'\n'+v+' mantenciones al año',String(l.qty),(mu==null?'—':clp(mu))+' / mantención',cm==null?'por cotizar':clp(cm)+' / mes']});
+  var iva=Math.round(sub*0.19);
+  var fr=function(l,v,big){return [{content:l,colSpan:4,styles:{halign:'right',fontStyle:big?'bold':'normal',fontSize:big?11:9}},{content:v,styles:{halign:'right',fontStyle:'bold',fontSize:big?11:9}}]};
+  var foot=[fr('Subtotal mensual neto ('+qty+' vehículo'+(qty===1?'':'s')+')',clp(sub)),fr('IVA 19%',clp(iva)),fr('Total mensual',clp(sub+iva),true)];
+  if(inc)foot.push(fr('Cuota de incorporación · pago único al inicio ('+clp(inc)+' x '+qty+', neto)',clp(inc*qty)));
+  doc.autoTable({startY:y,margin:{left:M,right:M},head:[['Categoría','Modelo','Cant.','Valor por mantención','Cuota mensual']],body:body,foot:foot,theme:'plain',
+    styles:{font:'helvetica',fontSize:8.5,textColor:INK,cellPadding:2,lineColor:LINE,lineWidth:{bottom:0.2},valign:'top'},
+    headStyles:{fontSize:7,textColor:INK3,fontStyle:'bold',lineWidth:{bottom:0.2}},
+    footStyles:{fontSize:9,fontStyle:'bold',textColor:INK,lineWidth:0},
+    columnStyles:{0:{cellWidth:38},1:{cellWidth:62},2:{cellWidth:12,halign:'right'},3:{cellWidth:34,halign:'right'},4:{cellWidth:34,halign:'right'}},
+    didParseCell:function(d){if(d.section==='body'&&d.column.index===4)d.cell.styles.fontStyle='bold';if(d.section==='foot'&&d.row.index===2)d.cell.styles.lineWidth={top:0.5}}});
+  y=doc.lastAutoTable.finalY+4;
+  para('La cuota mensual por vehículo cubre las mantenciones del año, el servicio a domicilio, el portal, los cupos del plan y los beneficios'+(c.dpf?', más el módulo DPF':'')+(preRt?' y la revisión previa a la revisión técnica':'')+'. El valor por mantención es lo que cuesta cada mantención por separado'+(EV?', que es la forma de cobro convenida en esta propuesta (se factura al ejecutarla, más el portal mensual)':', como referencia')+'. Repuestos y reparaciones se cotizan y aprueban antes de ejecutarse.',M,CW,{s:8,c:INK2});
+  if(lineas.some(function(l){return (l.mensual||{}).total_mes==null}))para('Algunos vehículos quedan "por cotizar": se confirma su valor tras la primera visita de diagnóstico.',M,CW,{s:8,c:INK2});
+  /* 4. Cláusulas */
+  h2('4. Cláusulas del convenio');
+  clausulas(c,p).forEach(function(x,i){var lbl=(i+1)+'. '+x[0]+'. ',body2=sinHtml(x[1]);pageBreak(10);
+    doc.setFont('helvetica','bold');doc.setFontSize(9.5);var lw=doc.getTextWidth(lbl);doc.setFont('helvetica','normal');
+    var first=doc.splitTextToSize(body2,CW-lw)[0]||'';doc.setFont('helvetica','bold');doc.setTextColor.apply(doc,INK);doc.text(lbl,M,y);doc.setFont('helvetica','normal');doc.text(first,M+lw,y);y+=4;
+    var rest=body2.slice(first.length).trim();if(rest)para(rest,M,CW,{s:9.5});y+=2});
+  /* Firmas y pie */
+  pageBreak(30);y+=14;doc.setDrawColor.apply(doc,INK);doc.setLineWidth(0.3);doc.line(M,y,M+CW/2-8,y);doc.line(M+CW/2+8,y,W-M,y);
+  txt('Por el Cliente',M,y+4,{s:8,c:INK2});txt('Nombre · RUT · Fecha',M,y+8,{s:8,c:INK2});txt('Por Serviruta SpA',M+CW/2+8,y+4,{s:8,c:INK2});txt('Nombre · Fecha',M+CW/2+8,y+8,{s:8,c:INK2});
+  var n=doc.getNumberOfPages();for(var i=1;i<=n;i++){doc.setPage(i);doc.setDrawColor.apply(doc,LINE);doc.setLineWidth(0.3);doc.line(M,286,W-M,286);
+    txt('Serviruta · Mecánica móvil para flotas · Santiago, Chile',M,290,{s:7.5,c:INK3});txt('+56 9 4521 0814 · contacto@serviruta.cl · serviruta.cl   ·   '+i+' / '+n,W-M,290,{s:7.5,c:INK3,al:'right'})}
+  doc.save('Propuesta-Serviruta-'+numFmt(c)+(c.cliente?'-'+c.cliente.trim().replace(/[^\w\-]+/g,'_'):'')+'.pdf');
+  }catch(e){console.error(e);alert('No se pudo generar el PDF: '+e.message);window.print()}
+  finally{b.disabled=false;b.textContent='Descargar PDF'}}
 function token(){return new URLSearchParams(location.search).get('t')||''}
 function clausulas(c,p){
   var vis=Number(p.visitas_preventivas_anio)||0,grua=Number(p.cupo_grua_anio)||0,asis=Number(p.cupo_asistencia_anio)||0,neu=Number(p.cupo_neumaticos_mes)||0;
@@ -143,9 +204,7 @@ function render(){
   var foot='<tr><td colspan="4" class="r">Subtotal mensual neto ('+qty+' vehículo'+(qty===1?'':'s')+')</td><td class="r">'+clp(sub)+'</td></tr><tr><td colspan="4" class="r">IVA 19%</td><td class="r">'+clp(iva)+'</td></tr><tr class="tot"><td colspan="4" class="r">Total mensual</td><td class="r">'+clp(sub+iva)+'</td></tr>';
   var COLS=5;
   var emitida=c.enviada_at||c.updated_at||c.created_at,venc=new Date(emitida);venc.setDate(venc.getDate()+(c.validez_dias||15));
-  var incl=(p.incluye||[]).slice();incl.push('Portal de empresa con documentos, alertas, cronograma e historial');incl.push('Servicio a domicilio en la base del Cliente, sin trasladar el vehículo');
-  if(c.pre_rt_clp!=null)incl.push('Revisión previa a la revisión técnica: 1 al año por vehículo, programada desde la alerta de vencimiento del portal');
-  if(c.dpf&&dp)incl=incl.concat((dp.incluye||[]).map(function(x){return 'Módulo DPF: '+x}));
+  var incl=incluye(c,p,dp);
   var h='<div class="page">'+
    '<div class="head"><div><div class="brand">SERVI<span>RUTA</span><small>Empresas · Mantención de flotas a domicilio</small></div></div>'+
    '<div class="meta">Propuesta<b>'+numFmt(c)+'</b>Emitida el '+fecha(emitida)+'<br>Válida hasta el '+fecha(venc)+'</div></div>'+

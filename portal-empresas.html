@@ -491,7 +491,13 @@ function cqCopiar(){var r=cqCalc();if(!r.plan||r.falta){toast('Completa plan y m
 /* Guardar: se graban las líneas en los dos modos de cobro para que la propuesta pueda mostrar cualquiera */
 function cqPayload(){
   var rm=cqCalc('mensual'),rp=cqCalc('por_mantencion');
-  var lineas=rm.lines.map(function(l,i){var p=rp.lines[i];return {cat:l.it.cat,categoria:CATEG[l.it.cat],modelo_id:l.it.modelo_id,modelo:l.mod?l.mod.modelo:CATEG[l.it.cat],qty:l.it.qty,kit:l.kit,visitas:l.vis,portal:l.portal,dpf:l.dp,pre_rt_mes:l.prt,
+  var mg=1+(CFG.margen_objetivo_pct||0)/100,r1=function(x){return Math.round(x/1000)*1000};
+  var lineas=rm.lines.map(function(l,i){var p=rp.lines[i],plan=rm.plan||{};
+    var grua=(l.it.cat==='camion'?CFG.costo_grua_sobre_5000:CFG.costo_grua_hasta_5000)||0;
+    var cupos=((Number(plan.cupo_grua_anio)||0)*grua+(Number(plan.cupo_asistencia_anio)||0)*(CFG.costo_asistencia_ruta||0))*mg;
+    var mantUnit=l.kit==null?null:r1(l.kit*mg+(CFG.cargo_domicilio_visita||0));
+    var cuotaFija=r1(l.portal+l.dp+(CQ.preRt?(Number(CQ.preRtPrecio)||0)/12:0)+cupos/12);
+    return {cat:l.it.cat,categoria:CATEG[l.it.cat],modelo_id:l.it.modelo_id,modelo:l.mod?l.mod.modelo:CATEG[l.it.cat],qty:l.it.qty,kit:l.kit,visitas:l.vis,portal:l.portal,dpf:l.dp,pre_rt_mes:l.prt,mant_unit:mantUnit,cuota_fija:cuotaFija,cupos_mes:r1(cupos/12),
     mensual:{precio:l.pr,total_mes:l.mes},por_mantencion:{precio:p.pr,total_mes:p.mes}}});
   var r=CQ.modo==='mensual'?rm:rp;
   return {empresa_id:S.empresaId||null,cliente:nn(CQ.cliente),contacto:nn(CQ.contacto),email:nn(CQ.email),telefono:nn(CQ.telefono),rut:nn(CQ.rut),plan_id:CQ.planId||null,tier:CQ.tier,modo:CQ.modo,dpf:!!CQ.dpf,items:CQ.items,lineas:lineas,

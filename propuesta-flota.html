@@ -6,6 +6,7 @@
 <meta name="robots" content="noindex,nofollow">
 <title>Propuesta de convenio · Serviruta Empresas</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{--rojo:#E8210A;--ink:#111;--ink2:#444;--ink3:#777;--line:#ddd;--bg:#f3f1ec;--paper:#fff}
@@ -64,10 +65,10 @@ ol.cl{padding-left:20px}ol.cl li{margin:7px 0}ol.cl b{display:inline}
 </head>
 <body>
 <div class="bar" id="bar" hidden>
-  <div class="seg"><button id="bMensual" onclick="setModo('mensual')">Cuota mensual</button><button id="bMant" onclick="setModo('por_mantencion')">Por mantención</button></div>
+  <div class="seg" id="seg"><button id="bMensual" onclick="setModo('mensual')">Cuota mensual</button><button id="bMant" onclick="setModo('por_mantencion')">Por mantención</button></div>
   <div class="sp"></div>
-  <a id="bWa" href="https://wa.me/56945210814" target="_blank">Consultar por WhatsApp</a>
-  <button class="pri" onclick="window.print()">Descargar PDF / Imprimir</button>
+  <a id="bWa" href="https://wa.me/56945210814" target="_blank">WhatsApp</a>
+  <button class="pri" id="bDl" onclick="descargar()">Descargar PDF</button>
 </div>
 <div id="root" class="err">Cargando propuesta…</div>
 <script>
@@ -80,7 +81,14 @@ var D=null,MODO='mensual';
 function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function clp(n){return n==null||n===''?'—':'$'+Math.round(Number(n)).toLocaleString('es-CL')}
 function fecha(d){return new Date(d).toLocaleDateString('es-CL',{day:'2-digit',month:'long',year:'numeric',timeZone:'America/Santiago'})}
-function setModo(m){MODO=m;render();history.replaceState(null,'',location.pathname+'?t='+encodeURIComponent(token())+'&modo='+m)}
+function setModo(m){MODO=m;render()}
+function descargar(){
+  var el=document.querySelector('.page'),c=D.cotizacion,b=document.getElementById('bDl');
+  var nombre='Propuesta-Serviruta-N'+(c.numero||'')+(c.cliente?'-'+c.cliente.replace(/[^\w\-]+/g,'_'):'')+'.pdf';
+  if(typeof html2pdf==='undefined'){window.print();return}
+  b.disabled=true;b.textContent='Generando…';
+  html2pdf().set({margin:[12,10,12,10],filename:nombre,image:{type:'jpeg',quality:.96},html2canvas:{scale:2,useCORS:true,backgroundColor:'#fff'},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},pagebreak:{mode:['css','legacy'],avoid:['tr','.pb','li']}})
+   .from(el).save().catch(function(){window.print()}).finally(function(){b.disabled=false;b.textContent='Descargar PDF'})}
 function token(){return new URLSearchParams(location.search).get('t')||''}
 function clausulas(c,p){
   var vis=Number(p.visitas_preventivas_anio)||0,grua=Number(p.cupo_grua_anio)||0,asis=Number(p.cupo_asistencia_anio)||0,neu=Number(p.cupo_neumaticos_mes)||0;
@@ -111,6 +119,7 @@ function clausulas(c,p){
 function render(){
   var c=D.cotizacion,p=D.plan||{},dp=D.dpf;
   document.getElementById('bar').hidden=false;
+  document.getElementById('seg').style.display=new URLSearchParams(location.search).get('modo')?'none':'';
   document.getElementById('bMensual').className=MODO==='mensual'?'on':'';document.getElementById('bMant').className=MODO==='por_mantencion'?'on':'';
   var lineas=c.lineas||[],vis=Number(p.visitas_preventivas_anio)||0;
   var sub=0,qty=0,falta=false;

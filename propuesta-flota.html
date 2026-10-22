@@ -45,6 +45,7 @@ th{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--ink3)
 td.r,th.r{text-align:right;white-space:nowrap}
 tfoot td{font-weight:600}
 tfoot tr.tot td{font-size:16px;border-top:2px solid var(--ink);border-bottom:0}
+th.hi,td.hi{background:#fff4f2}
 .note{font-size:12px;color:var(--ink2);margin-top:6px}
 ol.cl{padding-left:20px}ol.cl li{margin:7px 0}ol.cl b{display:inline}
 .firma{display:grid;grid-template-columns:1fr 1fr;gap:30px;margin-top:40px}
@@ -124,30 +125,16 @@ function render(){
   document.getElementById('bMensual').className=MODO==='mensual'?'on':'';document.getElementById('bMant').className=MODO==='por_mantencion'?'on':'';
   var lineas=c.lineas||[],vis=Number(p.visitas_preventivas_anio)||0;
   var sub=0,qty=0,falta=false;
-  var inc=Number(c.cuota_incorporacion_clp)||0,preRt=Number(c.pre_rt_clp)||0,meses=c.vigencia_meses||12;
-  var rows='',foot='',tablaHead='';
-  if(MODO==='mensual'){
-    rows=lineas.map(function(l){var m=l.mensual||{},tot=m.total_mes;if(tot==null)falta=true;else sub+=tot*l.qty;qty+=l.qty;
-      var extra=[l.portal?'portal '+clp(l.portal)+'/mes':'',l.dpf?'DPF '+clp(l.dpf)+'/mes':'',l.pre_rt_mes?'pre-RT '+clp(l.pre_rt_mes)+'/mes':''].filter(Boolean).join(' · ');
-      return '<tr><td>'+esc(l.categoria)+'</td><td>'+esc(l.modelo)+'</td><td class="r">'+l.qty+'</td><td class="r">'+clp(m.precio)+' / mes'+(extra?'<div class="note">+ '+extra+'</div>':'')+'</td><td class="r"><b>'+(tot==null?'por cotizar':clp(tot*l.qty))+'</b></td></tr>'}).join('');
-    var iva=Math.round(sub*0.19);
-    tablaHead='<tr><th>Categoría</th><th>Modelo</th><th class="r">Cant.</th><th class="r">Valor unitario neto</th><th class="r">Total / mes</th></tr>';
-    foot='<tr><td colspan="4" class="r">Subtotal mensual neto ('+qty+' vehículo'+(qty===1?'':'s')+')</td><td class="r">'+clp(sub)+'</td></tr><tr><td colspan="4" class="r">IVA 19%</td><td class="r">'+clp(iva)+'</td></tr><tr class="tot"><td colspan="4" class="r">Total mensual</td><td class="r">'+clp(sub+iva)+'</td></tr><tr><td colspan="4" class="r">Total anual neto ('+meses+' meses)</td><td class="r">'+clp(sub*meses)+'</td></tr>';
-  }else{
-    /* Por evento: lo que manda es el valor de cada mantención; el total anual es la suma exacta y el mensual es solo referencia */
-    var mant=0,fijo=0,evPre=0;
-    rows=lineas.map(function(l){var m=l.por_mantencion||{},pr=m.precio,v=Number(l.visitas)||vis;qty+=l.qty;if(pr==null)falta=true;else mant+=pr*v*l.qty;
-      fijo+=((Number(l.portal)||0)+(Number(l.dpf)||0))*l.qty;if(preRt)evPre+=preRt*l.qty;
-      var extra=[l.portal?'portal '+clp(l.portal)+'/mes':'',l.dpf?'DPF '+clp(l.dpf)+'/mes':''].filter(Boolean).join(' · ');
-      return '<tr><td>'+esc(l.categoria)+'</td><td>'+esc(l.modelo)+'</td><td class="r">'+l.qty+'</td><td class="r">'+(pr==null?'por cotizar':clp(pr))+'<div class="note">'+v+' al año'+(extra?' · + '+extra:'')+'</div></td><td class="r"><b>'+(pr==null?'por cotizar':clp(pr*v*l.qty))+'</b></td></tr>'}).join('');
-    var anual=mant+fijo*12+evPre,ivaA=Math.round(anual*0.19);sub=Math.round(anual/12);
-    tablaHead='<tr><th>Categoría</th><th>Modelo</th><th class="r">Cant.</th><th class="r">Valor por mantención (neto)</th><th class="r">Mantenciones del año</th></tr>';
-    foot='<tr><td colspan="4" class="r">Mantenciones del año ('+qty+' vehículo'+(qty===1?'':'s')+')</td><td class="r">'+clp(mant)+'</td></tr>'+
-     (fijo?'<tr><td colspan="4" class="r">Portal'+(lineas.some(function(l){return l.dpf})?' y módulo DPF':'')+' · '+clp(fijo)+' / mes × 12</td><td class="r">'+clp(fijo*12)+'</td></tr>':'')+
-     (evPre?'<tr><td colspan="4" class="r">Revisión previa a la revisión técnica · '+clp(preRt)+' × '+qty+' (1 al año, se factura al ejecutarla)</td><td class="r">'+clp(evPre)+'</td></tr>':'')+
-     '<tr><td colspan="4" class="r">Total anual neto</td><td class="r">'+clp(anual)+'</td></tr><tr><td colspan="4" class="r">IVA 19%</td><td class="r">'+clp(ivaA)+'</td></tr><tr class="tot"><td colspan="4" class="r">Total anual</td><td class="r">'+clp(anual+ivaA)+'</td></tr>'+
-     '<tr><td colspan="4" class="r">Equivalente mensual referencial (anual ÷ 12, neto)</td><td class="r">'+clp(sub)+'</td></tr>';
-  }
+  var inc=Number(c.cuota_incorporacion_clp)||0,preRt=Number(c.pre_rt_clp)||0,meses=c.vigencia_meses||12,fijo=0;
+  /* Una sola tabla con los dos valores por vehículo: lo que vale cada mantención y la cuota mensual. Sin totales por línea. */
+  var tablaHead='<tr><th>Categoría</th><th>Modelo</th><th class="r">Cant.</th><th class="r'+(MODO==='por_mantencion'?' hi':'')+'">Valor por mantención<div class="note">neto · se factura al ejecutarla</div></th><th class="r'+(MODO==='mensual'?' hi':'')+'">Cuota mensual por vehículo<div class="note">neto · todo incluido</div></th></tr>';
+  var rows=lineas.map(function(l){var pm=(l.por_mantencion||{}).precio,cm=(l.mensual||{}).total_mes,v=Number(l.visitas)||vis;qty+=l.qty;if(pm==null||cm==null)falta=true;else sub+=cm*l.qty;
+    fijo+=((Number(l.portal)||0)+(Number(l.dpf)||0))*l.qty;
+    var extra=[l.portal?'portal '+clp(l.portal)+'/mes':'',l.dpf?'DPF '+clp(l.dpf)+'/mes':'',l.pre_rt_mes?'pre-RT '+clp(l.pre_rt_mes)+'/mes':''].filter(Boolean).join(' · ');
+    return '<tr><td>'+esc(l.categoria)+'</td><td>'+esc(l.modelo)+'</td><td class="r">'+l.qty+'</td><td class="r'+(MODO==='por_mantencion'?' hi':'')+'">'+(pm==null?'por cotizar':'<b>'+clp(pm)+'</b>')+'<div class="note">'+v+' al año</div></td><td class="r'+(MODO==='mensual'?' hi':'')+'">'+(cm==null?'por cotizar':'<b>'+clp(cm)+'</b>')+(extra?'<div class="note">incluye '+extra+'</div>':'')+'</td></tr>'}).join('');
+  var foot=MODO==='mensual'
+    ?'<tr><td colspan="4" class="r">Cuota mensual neta de la flota ('+qty+' vehículo'+(qty===1?'':'s')+')</td><td class="r">'+clp(sub)+'</td></tr><tr class="tot"><td colspan="4" class="r">Cuota mensual con IVA</td><td class="r">'+clp(Math.round(sub*1.19))+'</td></tr>'
+    :'<tr><td colspan="3" class="r">Cada mantención se factura al valor indicado cuando se ejecuta</td><td class="r">+ IVA</td><td class="r">'+(fijo?'portal'+(lineas.some(function(l){return l.dpf})?' y DPF':'')+' '+clp(fijo)+' / mes + IVA':'—')+'</td></tr>'+(preRt?'<tr><td colspan="4" class="r">Revisión previa a la revisión técnica (1 al año por vehículo, al ejecutarla)</td><td class="r">'+clp(preRt)+' + IVA</td></tr>':'');
   var emitida=c.enviada_at||c.updated_at||c.created_at,venc=new Date(emitida);venc.setDate(venc.getDate()+(c.validez_dias||15));
   var incl=(p.incluye||[]).slice();incl.push('Portal de empresa con documentos, alertas, cronograma e historial');incl.push('Servicio a domicilio en la base del Cliente, sin trasladar el vehículo');
   if(c.pre_rt_clp!=null)incl.push('Revisión previa a la revisión técnica: 1 al año por vehículo, programada desde la alerta de vencimiento del portal');
@@ -163,7 +150,7 @@ function render(){
    '<div><h2>Qué no incluye</h2><ul>'+((p.excluye&&p.excluye.length)?p.excluye:['Repuestos y reparaciones correctivas (se cotizan aparte, con descuento)','Daños por accidente, negligencia o uso indebido','Componentes mayores: motor, caja, diferencial']).map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul></div></div>'+
    '<h2>3. Vehículos y valores</h2><table><thead>'+tablaHead+'</thead><tbody>'+rows+'</tbody><tfoot>'+foot+
    (inc?'<tr><td colspan="4" class="r">Cuota de incorporación · pago único al inicio ('+clp(inc)+' × '+qty+' vehículo'+(qty===1?'':'s')+', neto)</td><td class="r">'+clp(inc*qty)+'</td></tr>':'')+'</tfoot></table>'+
-   (MODO==='por_mantencion'?'<div class="note">En esta modalidad se factura cada mantención al valor indicado cuando se ejecuta'+(fijo?', más el cargo mensual del portal'+(c.dpf?' y módulo DPF':''):'')+'. El total anual corresponde a las mantenciones programadas del año; el equivalente mensual es solo una referencia.</div>':'<div class="note">La cuota mensual cubre las mantenciones del año, los cupos del plan, el servicio a domicilio y el portal'+(c.dpf?' y el módulo DPF':'')+'. Repuestos y reparaciones se cotizan y aprueban antes de ejecutarse.</div>')+
+   (MODO==='por_mantencion'?'<div class="note">Modalidad por evento: sin cuota fija de mantención; cada mantención se factura cuando se ejecuta'+(fijo?', y el portal'+(c.dpf?' con módulo DPF':'')+' se factura mensualmente':'')+'. La columna "cuota mensual" muestra, como comparación, lo que costaría el mismo vehículo con cuota fija.</div>':'<div class="note">La cuota mensual cubre las mantenciones del año, los cupos del plan, el servicio a domicilio y el portal'+(c.dpf?' y el módulo DPF':'')+'. La columna "valor por mantención" muestra, como comparación, lo que costaría cada mantención sin cuota fija. Repuestos y reparaciones se cotizan y aprueban antes de ejecutarse.</div>')+
    (c.pre_rt_clp!=null&&MODO==='por_mantencion'?'<div class="note">Revisión previa a la revisión técnica: '+clp(c.pre_rt_clp)+' neto por vehículo, se factura al ejecutarla (1 al año).</div>':'')+
    (falta?'<div class="note"><b>Algunos vehículos quedan "por cotizar":</b> se confirma su valor tras la primera visita de diagnóstico.</div>':'')+
    '<h2>4. Cláusulas del convenio</h2><ol class="cl">'+clausulas(c,p).map(function(x){return '<li><b>'+x[0]+'.</b> '+x[1]+'</li>'}).join('')+'</ol>'+

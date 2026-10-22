@@ -55,12 +55,10 @@ ol.cl{padding-left:20px}ol.cl li{margin:7px 0}ol.cl b{display:inline}
 .pb,tr,h2,.kv{page-break-inside:avoid;break-inside:avoid}
 h2{page-break-after:avoid;break-after:avoid}
 @media (max-width:600px){.page{padding:22px 18px;margin:0}.grid,.cols,.firma{grid-template-columns:1fr}.meta{text-align:left}}
-body.pdf{background:#fff}
-body.pdf .bar{display:none}
-body.pdf .page{width:794px;max-width:none;margin:0;box-shadow:none;padding:30px 40px}
-body.pdf .grid,body.pdf .cols{grid-template-columns:1fr 1fr}
-body.pdf .firma{grid-template-columns:1fr 1fr}
-body.pdf .meta{text-align:right}
+.pdfwrap{position:absolute;left:0;top:0;width:794px;background:#fff;z-index:-1;overflow:hidden}
+.pdfwrap .page{width:794px;max-width:none;margin:0;box-shadow:none;padding:30px 40px}
+.pdfwrap .grid,.pdfwrap .cols,.pdfwrap .firma{grid-template-columns:1fr 1fr}
+.pdfwrap .meta{text-align:right}
 @media print{
   @page{size:A4;margin:14mm 12mm}
   body{background:#fff;font-size:12.5px}
@@ -92,14 +90,16 @@ function clp(n){return n==null||n===''?'—':'$'+Math.round(Number(n)).toLocaleS
 function fecha(d){return new Date(d).toLocaleDateString('es-CL',{day:'2-digit',month:'long',year:'numeric',timeZone:'America/Santiago'})}
 function setModo(m){MODO=m;render()}
 function descargar(){
-  var el=document.querySelector('.page'),c=D.cotizacion,b=document.getElementById('bDl');
+  var src=document.querySelector('.page'),c=D.cotizacion,b=document.getElementById('bDl');
   var nombre='Propuesta-Serviruta-'+numFmt(c)+(c.cliente?'-'+c.cliente.replace(/[^\w\-]+/g,'_'):'')+'.pdf';
   if(typeof html2pdf==='undefined'){window.print();return}
-  b.disabled=true;b.textContent='Generando…';window.scrollTo(0,0);document.body.classList.add('pdf');
-  var vp=document.querySelector('meta[name=viewport]'),vp0=vp.getAttribute('content');vp.setAttribute('content','width=794');
+  b.disabled=true;b.textContent='Generando…';
+  /* Se renderiza una copia a ancho fijo A4 en la esquina 0,0 del documento: así el celular no corre ni corta la captura */
+  var wrap=document.createElement('div');wrap.className='pdfwrap';wrap.appendChild(src.cloneNode(true));document.body.appendChild(wrap);
+  var el=wrap.firstChild;
   setTimeout(function(){
-  html2pdf().set({margin:[10,0,10,0],filename:nombre,image:{type:'jpeg',quality:.96},html2canvas:{scale:2,useCORS:true,backgroundColor:'#fff',scrollY:0,scrollX:0,x:0,y:0,width:794,windowWidth:794},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},pagebreak:{mode:['css'],avoid:['tr','.pb','h2','.kv']}})
-   .from(el).save().catch(function(){window.print()}).finally(function(){document.body.classList.remove('pdf');vp.setAttribute('content',vp0);b.disabled=false;b.textContent='Descargar PDF'})},150)}
+  html2pdf().set({margin:[10,0,10,0],filename:nombre,image:{type:'jpeg',quality:.96},html2canvas:{scale:2,useCORS:true,backgroundColor:'#fff',scrollY:0,scrollX:0,x:0,y:0,width:794,height:el.scrollHeight,windowWidth:794,windowHeight:el.scrollHeight},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},pagebreak:{mode:['css'],avoid:['tr','.pb','h2','.kv']}})
+   .from(el).save().catch(function(){window.print()}).finally(function(){wrap.remove();b.disabled=false;b.textContent='Descargar PDF'})},200)}
 function token(){return new URLSearchParams(location.search).get('t')||''}
 function clausulas(c,p){
   var vis=Number(p.visitas_preventivas_anio)||0,grua=Number(p.cupo_grua_anio)||0,asis=Number(p.cupo_asistencia_anio)||0,neu=Number(p.cupo_neumaticos_mes)||0;

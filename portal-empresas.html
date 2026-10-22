@@ -439,7 +439,14 @@ function cqCat(){var o={};for(var k in CATEG)if(k!=='maquinaria')o[k]=CATEG[k];r
 function cqSet(k,v){CQ[k]=v;render()}
 function cqSetQ(k,v){CQ[k]=v}
 var MANUAL='__manual';
-function cqItem(i,k,v){CQ.items[i][k]=k==='qty'?Math.max(1,Number(v)||1):v;if(k==='cat')CQ.items[i].modelo_id='';if(k==='modelo_id'&&v!==MANUAL){delete CQ.items[i].nombre;delete CQ.items[i].kit}render()}
+/* Misma fórmula de kits-mantencion-auto.html y kits-mantencion-motor-camion.html, para modelos fuera de la lista */
+function kitManual(tipo,cap,horas,tier){cap=Number(cap)||0;if(!cap)return null;var r=function(x){return Math.round(x/1000)*1000};
+  if(tipo==='camion'){horas=Number(horas)||2;var fb=cap<=20?55000:(cap<=30?75000:95000),fc=fb+45000,mo=horas*25000;
+    return r(({basico:cap*4500+fb+mo,premium:cap*7000+fc+mo,plus:cap*11000+fc+mo+35000})[tier]*1.5)}
+  horas=Number(horas)||1.3;var g=cap>5,fb2=g?(cap>6.5?52000:38000):26000,fc2=fb2+22000,mo2=Math.round(horas*30000);
+  return r(({basico:cap*4500+fb2+mo2,premium:cap*8000+fc2+mo2+8000,plus:cap*12000+fc2+mo2+20000})[tier]*1.35)}
+function cqManualKit(it){var tipo=cotTipo({categoria:it.cat});return Number(it.kit)||kitManual(tipo,it.litros,it.horas,CQ.tier)}
+function cqItem(i,k,v){CQ.items[i][k]=k==='qty'?Math.max(1,Number(v)||1):v;if(k==='cat')CQ.items[i].modelo_id='';if(k==='modelo_id'&&v!==MANUAL){delete CQ.items[i].nombre;delete CQ.items[i].kit;delete CQ.items[i].litros;delete CQ.items[i].horas}render()}
 function cqAdd(){CQ.items.push({cat:'camion_5000',modelo_id:'',qty:1});render()}
 function cqDel(i){CQ.items.splice(i,1);if(!CQ.items.length)CQ.items.push({cat:'camion_5000',modelo_id:'',qty:1});render()}
 function cqNueva(){CQ=JSON.parse(JSON.stringify(CQ_DEF));CQ_TAB='editar';render()}
@@ -449,7 +456,7 @@ function cqCalc(modo){
   var dpf=S.planes.find(function(x){return x.modalidad==='modulo'});
   var r={plan:plan,lines:[],mensual:0,anual:0,falta:false,qty:0,modo:modo,incorp:Number(CQ.incorporacion)||0};
   CQ.items.forEach(function(it){
-    var v={categoria:it.cat},manual=it.modelo_id===MANUAL,kit=manual?(Number(it.kit)||null):(it.modelo_id?cotKit(cotTipo(v),it.modelo_id,CQ.tier):null);
+    var v={categoria:it.cat},manual=it.modelo_id===MANUAL,kit=manual?(cqManualKit(it)||null):(it.modelo_id?cotKit(cotTipo(v),it.modelo_id,CQ.tier):null);
     var pr=plan?precioVeh(plan,v,kit,modo):null;
     var mod=manual?{modelo:(it.nombre||'Vehículo ingresado a mano')+' (manual)',manual:true}:(it.modelo_id?COT[cotTipo(v)].find(function(x){return x.modelo_id===it.modelo_id}):null);
     var portal=plan?(Number(plan.valor_portal_mensual_clp)||0):0;
@@ -555,11 +562,15 @@ VIEWS.cotizador=function(){
   h+='<div class="card"><div style="font-weight:600;margin-bottom:8px">Vehículos de la flota</div>';
   r.lines.forEach(function(l,i){var it=l.it;
     h+='<div class="row" style="align-items:flex-start;flex-wrap:wrap;gap:8px"><div style="flex:1 1 170px"><select class="inp" onchange="cqItem('+i+',\'cat\',this.value)">'+opts(cqCat(),it.cat)+'</select></div>'+
-     '<div style="flex:2 1 230px"><select class="inp" onchange="cqItem('+i+',\'modelo_id\',this.value)">'+cotOpts(cotTipo({categoria:it.cat}),it.modelo_id)+'</select></div>'+
+     '<div style="flex:2 1 230px;display:flex;gap:6px"><select class="inp" onchange="cqItem('+i+',\'modelo_id\',this.value)">'+cotOpts(cotTipo({categoria:it.cat}),it.modelo_id)+'</select>'+(it.modelo_id===MANUAL?'':'<button type="button" class="btn sm sec" style="white-space:nowrap" onclick="cqItem('+i+',\'modelo_id\',MANUAL)" title="El modelo no está en la lista">✎ A mano</button>')+'</div>'+
      '<div style="flex:0 0 70px"><input class="inp" type="number" min="1" value="'+it.qty+'" onchange="cqItem('+i+',\'qty\',this.value)" aria-label="Cantidad"></div>'+
      '<div style="flex:1 1 150px;text-align:right"><b>'+(l.pr==null?'—':(CQ.modo==='mensual'?clp(l.pr)+' / mes':clp(l.pr)+' / mant.'))+'</b>'+(l.pr!=null&&(l.portal||l.prt)?'<div class="hint">'+(l.portal?'+ portal '+clp(l.portal)+'/mes':'')+(l.prt?' + pre-RT '+clp(l.prt)+'/mes':'')+'</div>':'')+'</div>'+
      '<button class="btn ghost sm" onclick="cqDel('+i+')" aria-label="Quitar">✕</button></div>'+
-     (it.modelo_id===MANUAL?'<div class="row" style="flex-wrap:wrap;gap:8px;margin:-2px 0 8px"><div style="flex:2 1 230px"><input class="inp" value="'+esc(it.nombre||'')+'" placeholder="Marca y modelo (ej. Renault Master 2.3)" onchange="cqItem('+i+',\'nombre\',this.value)"></div><div style="flex:1 1 170px"><input class="inp" type="number" inputmode="numeric" min="0" value="'+(it.kit||'')+'" placeholder="Precio 1 mantención (CLP neto)" onchange="cqItem('+i+',\'kit\',this.value)"></div><div class="hint" style="flex:1 1 100%">Modelo fuera del cotizador: ingresa el precio neto de una mantención (kit '+CQ.tier+') y el resto se calcula igual.'+cotRefHint(cotTipo({categoria:it.cat}))+'</div></div>':'')+
+     (it.modelo_id===MANUAL?'<div class="row" style="flex-wrap:wrap;gap:8px;margin:-2px 0 8px;padding:10px;border:1px dashed var(--borde);border-radius:10px"><div style="flex:2 1 230px"><input class="inp" value="'+esc(it.nombre||'')+'" placeholder="Marca y modelo (ej. Renault Master 2.3)" onchange="cqItem('+i+',\'nombre\',this.value)"></div>'+
+      '<div style="flex:1 1 120px"><input class="inp" type="number" inputmode="decimal" step="0.1" min="0" value="'+(it.litros||'')+'" placeholder="Litros de aceite" onchange="cqItem('+i+',\'litros\',this.value)"></div>'+
+      '<div style="flex:1 1 110px"><input class="inp" type="number" inputmode="decimal" step="0.1" min="0" value="'+(it.horas||'')+'" placeholder="Horas (opc.)" onchange="cqItem('+i+',\'horas\',this.value)"></div>'+
+      '<div style="flex:1 1 170px"><input class="inp" type="number" inputmode="numeric" min="0" value="'+(it.kit||'')+'" placeholder="Precio 1 mantención (CLP neto)" onchange="cqItem('+i+',\'kit\',this.value)"></div>'+
+      '<div class="hint" style="flex:1 1 100%">'+(l.kit?'Kit '+CQ.tier+': <b>'+clp(l.kit)+'</b>'+(Number(it.kit)?' (precio ingresado)':' (calculado con la fórmula del cotizador: litros, horas y filtros)'):'Pon los litros de aceite del motor y el precio del kit '+CQ.tier+' se calcula solo con la fórmula del cotizador, o escribe el precio directo.')+cotRefHint(cotTipo({categoria:it.cat}))+'</div></div>':'')+
      (it.modelo_id&&l.mod&&l.mod.capEstimada?'<div class="hint">Capacidad de aceite estimada: confirmar al agendar.</div>':'')});
   h+='<button class="btn ghost sm" style="margin-top:8px" onclick="cqAdd()">+ Agregar vehículo</button></div>';
   h+='<div class="card"><div style="font-weight:600;margin-bottom:8px">Condiciones particulares (opcional)</div><textarea class="inp" rows="3" placeholder="Ej. zona de cobertura específica, horario de atención en bodega, forma de pago acordada…" onchange="cqSetQ(\'condiciones\',this.value)">'+esc(CQ.condiciones)+'</textarea><div class="hint">Se agregan al final de las cláusulas generales del convenio en la propuesta.</div>'+

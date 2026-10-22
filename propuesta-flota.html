@@ -78,13 +78,14 @@ var db=supabase.createClient(SB,SK);
 var MODALIDAD={mantencion:'Plan Mantención',mantencion_cobertura:'Plan Mantención + Cobertura',demanda:'Por demanda',modulo:'Módulo adicional'};
 var TIER={basico:'Kit Básico',premium:'Kit Premium',plus:'Kit Plus'};
 var D=null,MODO='mensual';
+function numFmt(c){if(c.numero==null)return '—';return 'PE-'+new Date(c.created_at).getFullYear()+'-'+String(c.numero).padStart(3,'0')}
 function esc(v){return String(v==null?'':v).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function clp(n){return n==null||n===''?'—':'$'+Math.round(Number(n)).toLocaleString('es-CL')}
 function fecha(d){return new Date(d).toLocaleDateString('es-CL',{day:'2-digit',month:'long',year:'numeric',timeZone:'America/Santiago'})}
 function setModo(m){MODO=m;render()}
 function descargar(){
   var el=document.querySelector('.page'),c=D.cotizacion,b=document.getElementById('bDl');
-  var nombre='Propuesta-Serviruta-N'+(c.numero||'')+(c.cliente?'-'+c.cliente.replace(/[^\w\-]+/g,'_'):'')+'.pdf';
+  var nombre='Propuesta-Serviruta-'+numFmt(c)+(c.cliente?'-'+c.cliente.replace(/[^\w\-]+/g,'_'):'')+'.pdf';
   if(typeof html2pdf==='undefined'){window.print();return}
   b.disabled=true;b.textContent='Generando…';
   html2pdf().set({margin:[12,10,12,10],filename:nombre,image:{type:'jpeg',quality:.96},html2canvas:{scale:2,useCORS:true,backgroundColor:'#fff'},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},pagebreak:{mode:['css','legacy'],avoid:['tr','.pb','li']}})
@@ -134,7 +135,7 @@ function render(){
   if(c.dpf&&dp)incl=incl.concat((dp.incluye||[]).map(function(x){return 'Módulo DPF: '+x}));
   var h='<div class="page">'+
    '<div class="head"><div><div class="brand">SERVI<span>RUTA</span><small>Empresas · Mantención de flotas a domicilio</small></div></div>'+
-   '<div class="meta">Propuesta N°<b>'+(c.numero||'—')+'</b>Emitida el '+fecha(emitida)+'<br>Válida hasta el '+fecha(venc)+'</div></div>'+
+   '<div class="meta">Propuesta<b>'+numFmt(c)+'</b>Emitida el '+fecha(emitida)+'<br>Válida hasta el '+fecha(venc)+'</div></div>'+
    '<h1>Propuesta de convenio de mantención de flota</h1><div class="sub">'+esc(MODALIDAD[p.modalidad]||'')+(p.nivel&&p.nivel!=='n/a'?' · '+esc(p.nivel):'')+' · '+(MODO==='mensual'?'cuota mensual fija por vehículo':'cobro por cada mantención ejecutada')+'</div>'+
    '<div class="grid"><div class="kv"><span>Cliente</span>'+esc(c.cliente||'—')+'</div><div class="kv"><span>RUT</span>'+esc(c.rut||'—')+'</div><div class="kv"><span>Contacto</span>'+esc(c.contacto||'—')+'</div><div class="kv"><span>Correo / WhatsApp</span>'+esc([c.email,c.telefono].filter(Boolean).join(' · ')||'—')+'</div></div>'+
    '<h2>1. El plan</h2><div class="box plan pb"><div class="n"><h3>'+esc(p.nombre||'Plan por definir')+'</h3><p>'+esc(p.descripcion||'')+'</p>'+
@@ -151,8 +152,8 @@ function render(){
    '<div class="firma pb"><div>Por el Cliente<br>Nombre · RUT · Fecha</div><div>Por Serviruta SpA<br>Nombre · Fecha</div></div>'+
    '<div class="foot"><div>Serviruta · Mecánica móvil para flotas · Santiago, Chile</div><div>+56 9 4521 0814 · contacto@serviruta.cl · serviruta.cl</div></div></div>';
   document.getElementById('root').className='';document.getElementById('root').innerHTML=h;
-  document.title='Propuesta Serviruta N° '+(c.numero||'')+(c.cliente?' · '+c.cliente:'');
-  var wa=document.getElementById('bWa');wa.href='https://wa.me/56945210814?text='+encodeURIComponent('Hola, tengo una consulta sobre la propuesta N° '+(c.numero||'')+(c.cliente?' de '+c.cliente:''))}
+  document.title='Propuesta Serviruta '+numFmt(c)+(c.cliente?' · '+c.cliente:'');
+  var wa=document.getElementById('bWa');wa.href='https://wa.me/56945210814?text='+encodeURIComponent('Hola, tengo una consulta sobre la propuesta '+numFmt(c)+(c.cliente?' de '+c.cliente:''))}
 (async function(){
   var t=token();if(!t){document.getElementById('root').textContent='Falta el enlace de la propuesta.';return}
   var r=await db.rpc('flota_cotizacion_publica',{p_token:t});

@@ -51,7 +51,8 @@ ol.cl{padding-left:20px}ol.cl li{margin:7px 0}ol.cl b{display:inline}
 .firma div{border-top:1px solid var(--ink);padding-top:6px;font-size:12px;color:var(--ink2)}
 .foot{margin-top:28px;padding-top:12px;border-top:1px solid var(--line);font-size:12px;color:var(--ink3);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
 .err{max-width:860px;margin:40px auto;background:#fff;padding:30px;border-radius:12px;text-align:center;color:var(--ink2)}
-.pb{page-break-inside:avoid}
+.pb,tr,h2,.kv{page-break-inside:avoid;break-inside:avoid}
+h2{page-break-after:avoid;break-after:avoid}
 @media (max-width:600px){.page{padding:22px 18px;margin:0}.grid,.cols,.firma{grid-template-columns:1fr}.meta{text-align:left}}
 @media print{
   @page{size:A4;margin:14mm 12mm}
@@ -88,7 +89,7 @@ function descargar(){
   var nombre='Propuesta-Serviruta-'+numFmt(c)+(c.cliente?'-'+c.cliente.replace(/[^\w\-]+/g,'_'):'')+'.pdf';
   if(typeof html2pdf==='undefined'){window.print();return}
   b.disabled=true;b.textContent='Generando…';
-  html2pdf().set({margin:[12,10,12,10],filename:nombre,image:{type:'jpeg',quality:.96},html2canvas:{scale:2,useCORS:true,backgroundColor:'#fff'},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},pagebreak:{mode:['css','legacy'],avoid:['tr','.pb','li']}})
+  html2pdf().set({margin:[12,10,12,10],filename:nombre,image:{type:'jpeg',quality:.96},html2canvas:{scale:2,useCORS:true,backgroundColor:'#fff'},jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},pagebreak:{mode:['css'],avoid:['tr','.pb','h2','.kv']}})
    .from(el).save().catch(function(){window.print()}).finally(function(){b.disabled=false;b.textContent='Descargar PDF'})}
 function token(){return new URLSearchParams(location.search).get('t')||''}
 function clausulas(c,p){
@@ -139,15 +140,15 @@ function render(){
    '<div class="grid"><div class="kv"><span>Cliente</span>'+esc(c.cliente||'—')+'</div><div class="kv"><span>RUT</span>'+esc(c.rut||'—')+'</div><div class="kv"><span>Contacto</span>'+esc(c.contacto||'—')+'</div><div class="kv"><span>Correo / WhatsApp</span>'+esc([c.email,c.telefono].filter(Boolean).join(' · ')||'—')+'</div></div>'+
    '<h2>1. El plan</h2><div class="box plan pb"><div class="n"><h3>'+esc(p.nombre||'Plan por definir')+'</h3><p>'+esc(p.descripcion||'')+'</p>'+
    '<div class="chips">'+(vis?'<span class="chip">'+vis+' mantenciones / año</span>':'')+'<span class="chip">'+esc(TIER[c.tier]||c.tier)+'</span>'+(p.cupo_grua_anio?'<span class="chip">Grúa: '+p.cupo_grua_anio+' / año</span>':'<span class="chip">Grúa por evento</span>')+(p.cupo_asistencia_anio?'<span class="chip">Asistencia: '+p.cupo_asistencia_anio+' / año</span>':'')+(p.respuesta_horas?'<span class="chip">Respuesta ≤ '+p.respuesta_horas+' h</span>':'')+(p.dcto_mano_obra_pct?'<span class="chip">'+p.dcto_mano_obra_pct+'% dcto. mano de obra</span>':'')+(c.dpf?'<span class="chip">Módulo DPF</span>':'')+(c.pre_rt_clp!=null?'<span class="chip">Pre-revisión técnica</span>':'')+'</div></div></div>'+
-   '<div class="cols pb"><div><h2>2. Qué incluye el convenio</h2><ul>'+incl.map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul></div>'+
+   '<div class="cols"><div><h2>2. Qué incluye el convenio</h2><ul>'+incl.map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul></div>'+
    '<div><h2>Qué no incluye</h2><ul>'+((p.excluye&&p.excluye.length)?p.excluye:['Repuestos y reparaciones correctivas (se cotizan aparte, con descuento)','Daños por accidente, negligencia o uso indebido','Componentes mayores: motor, caja, diferencial']).map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul></div></div>'+
-   '<h2>3. Vehículos y valores</h2><table class="pb"><thead><tr><th>Categoría</th><th>Modelo</th><th class="r">Cant.</th><th class="r">Valor unitario neto</th><th class="r">'+(MODO==='mensual'?'Total / mes':'Equivalente / mes')+'</th></tr></thead><tbody>'+rows+'</tbody>'+
+   '<h2>3. Vehículos y valores</h2><table><thead><tr><th>Categoría</th><th>Modelo</th><th class="r">Cant.</th><th class="r">Valor unitario neto</th><th class="r">'+(MODO==='mensual'?'Total / mes':'Equivalente / mes')+'</th></tr></thead><tbody>'+rows+'</tbody>'+
    '<tfoot><tr><td colspan="4" class="r">Subtotal mensual neto ('+qty+' vehículo'+(qty===1?'':'s')+')</td><td class="r">'+clp(sub)+'</td></tr><tr><td colspan="4" class="r">IVA 19%</td><td class="r">'+clp(iva)+'</td></tr><tr class="tot"><td colspan="4" class="r">Total mensual</td><td class="r">'+clp(sub+iva)+'</td></tr><tr><td colspan="4" class="r">Total anual neto ('+(c.vigencia_meses||12)+' meses)</td><td class="r">'+clp(sub*(c.vigencia_meses||12))+'</td></tr>'+
    (inc?'<tr><td colspan="4" class="r">Cuota de incorporación · pago único al inicio ('+clp(inc)+' × '+qty+' vehículo'+(qty===1?'':'s')+', neto)</td><td class="r">'+clp(inc*qty)+'</td></tr>':'')+'</tfoot></table>'+
    (MODO==='por_mantencion'?'<div class="note">En esta modalidad se factura cada mantención al valor indicado cuando se ejecuta, más el cargo mensual del portal. El "equivalente / mes" es solo referencial: valor de las mantenciones del año dividido en 12, más portal'+(c.dpf?' y módulo DPF':'')+'.</div>':'<div class="note">La cuota mensual cubre las mantenciones del año, los cupos del plan, el servicio a domicilio y el portal'+(c.dpf?' y el módulo DPF':'')+'. Repuestos y reparaciones se cotizan y aprueban antes de ejecutarse.</div>')+
    (c.pre_rt_clp!=null&&MODO==='por_mantencion'?'<div class="note">Revisión previa a la revisión técnica: '+clp(c.pre_rt_clp)+' neto por vehículo, se factura al ejecutarla (1 al año).</div>':'')+
    (falta?'<div class="note"><b>Algunos vehículos quedan "por cotizar":</b> se confirma su valor tras la primera visita de diagnóstico.</div>':'')+
-   '<h2>4. Cláusulas del convenio</h2><ol class="cl">'+clausulas(c,p).map(function(x){return '<li class="pb"><b>'+x[0]+'.</b> '+x[1]+'</li>'}).join('')+'</ol>'+
+   '<h2>4. Cláusulas del convenio</h2><ol class="cl">'+clausulas(c,p).map(function(x){return '<li><b>'+x[0]+'.</b> '+x[1]+'</li>'}).join('')+'</ol>'+
    '<div class="firma pb"><div>Por el Cliente<br>Nombre · RUT · Fecha</div><div>Por Serviruta SpA<br>Nombre · Fecha</div></div>'+
    '<div class="foot"><div>Serviruta · Mecánica móvil para flotas · Santiago, Chile</div><div>+56 9 4521 0814 · contacto@serviruta.cl · serviruta.cl</div></div></div>';
   document.getElementById('root').className='';document.getElementById('root').innerHTML=h;

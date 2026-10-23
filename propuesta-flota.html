@@ -55,7 +55,18 @@ ol.cl{padding-left:20px}ol.cl li{margin:7px 0}ol.cl b{display:inline}
 .err{max-width:860px;margin:40px auto;background:#fff;padding:30px;border-radius:12px;text-align:center;color:var(--ink2)}
 .pb,tr,h2,.kv{page-break-inside:avoid;break-inside:avoid}
 h2{page-break-after:avoid;break-after:avoid}
-@media (max-width:600px){.page{padding:22px 18px;margin:0}.grid,.cols,.firma{grid-template-columns:1fr}.meta{text-align:left}}
+@media (max-width:600px){.page{padding:22px 16px;margin:0}.grid,.cols,.firma{grid-template-columns:1fr}.meta{text-align:left}
+  table,thead,tbody,tfoot,tr,th,td{display:block}thead{display:none}
+  tbody tr{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:10px 0}
+  tbody td{border:0;padding:2px 0;text-align:left}tbody td.r{text-align:left}
+  tbody td:nth-child(1){font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--ink3)}
+  tbody td:nth-child(2){font-weight:600;font-size:15px}
+  tbody td:nth-child(3):before{content:"Cantidad: ";color:var(--ink3)}
+  tbody td:nth-child(4):before{content:"Valor por mantención: ";color:var(--ink3)}
+  tbody td:nth-child(5){margin-top:4px;font-size:15px}tbody td:nth-child(5):before{content:"Cuota mensual: ";color:var(--ink3);font-weight:400;font-size:13px}
+  tfoot tr{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid var(--line)}tfoot td{border:0;padding:0}tfoot td[colspan]{flex:1;text-align:left!important}
+  tfoot tr.tot{border-top:2px solid var(--ink);border-bottom:0;padding-top:8px}
+  .bar{padding:8px 12px}.bar .sp{font-size:12px}}
 @media print{
   @page{size:A4;margin:14mm 12mm}
   body{background:#fff;font-size:12.5px}

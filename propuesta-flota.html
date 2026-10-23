@@ -68,8 +68,7 @@ h2{page-break-after:avoid;break-after:avoid}
 </head>
 <body>
 <div class="bar" id="bar" hidden>
-  <div class="seg" id="seg" hidden><button id="bMensual" onclick="setModo('por_mantencion')">Cuota fija + mantención por evento</button><button id="bMant" onclick="setModo('mensual')">Todo incluido en una cuota</button></div>
-  <div class="sp"></div>
+  <div class="sp" style="font:600 13px 'DM Sans',sans-serif;color:#aaa">Propuesta Serviruta Empresas</div>
   <a id="bWa" href="https://wa.me/56945210814" target="_blank">WhatsApp</a>
   <button class="pri" id="bDl" onclick="descargar()">Descargar PDF</button>
 </div>
@@ -191,7 +190,6 @@ function clausulas(c,p){
 function render(){
   var c=D.cotizacion,p=D.plan||{},dp=D.dpf;
   document.getElementById('bar').hidden=false;
-  document.getElementById('bMensual').className=MODO==='por_mantencion'?'on':'';document.getElementById('bMant').className=MODO==='mensual'?'on':'';
   var lineas=c.lineas||[],vis=Number(p.visitas_preventivas_anio)||0;
   var sub=0,qty=0,falta=false;
   var inc=Number(c.cuota_incorporacion_clp)||0,preRt=Number(c.pre_rt_clp)||0,meses=c.vigencia_meses||12,EV=MODO==='por_mantencion';

@@ -1,0 +1,2 @@
+marca;modelo;motor;anios;generacion;anio_desde;anio_hasta;combustible;cilindrada;codigo_motor;sae;normas;capacidad_con_filtro;capacidad_sin_filtro;intervalo_km;filtro_aceite_marca;filtro_aceite_codigo;filtro_aire_marca;filtro_aire_codigo;filtro_habitaculo_marca;filtro_habitaculo_codigo;filtro_combustible_marca;filtro_combustible_codigo;fuente;url;consultado_at;estado;notas
+Chevrolet;Sail;1.5;2016-2022;;2016;2022;bencina;1.5;;;;;;;;;;;;;;;;;2026-10-24;needs_review;ejemplo — completar solo con datos de fuente técnica

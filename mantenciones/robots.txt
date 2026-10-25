@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /mantenciones/admin.html
+Sitemap: https://angelperuga-maker.github.io/serviruta/mantenciones/sitemap.xml

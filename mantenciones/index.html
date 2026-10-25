@@ -215,10 +215,11 @@ function fuel(r){return (r.pack_tipo==='diesel'||/diésel|diesel|hdi|di-d|tdi|cr
 
 // cascada
 $('#fMarca').onchange=()=>{$('#fTexto').value='';const s=$('#fModelo');s.innerHTML='<option value="">Todos</option>';const ms=[...new Set(modelos().filter(r=>r.marca===$('#fMarca').value).map(r=>r.modelo))].sort();ms.forEach(m=>s.insertAdjacentHTML('beforeend',`<option>${m}</option>`));s.disabled=!ms.length;$('#fAnio').disabled=!ms.length;$('#fMotor').disabled=true;fillAnios();renderAll();};
-$('#fModelo').onchange=()=>{fillAnios();const s=$('#fMotor');s.innerHTML='<option value="">Todos</option>';const list=modelos().filter(r=>r.marca===$('#fMarca').value&&r.modelo===$('#fModelo').value);[...new Set(list.map(r=>r.motor).filter(Boolean))].forEach(m=>s.insertAdjacentHTML('beforeend',`<option>${m}</option>`));s.disabled=list.length<2;renderAll();};
+$('#fModelo').onchange=()=>{fillAnios();const s=$('#fMotor');s.innerHTML='<option value="">Todos</option>';const list=modelos().filter(r=>r.marca===$('#fMarca').value&&r.modelo===$('#fModelo').value);[...new Set(list.map(r=>r.motor).filter(Boolean))].forEach(m=>s.insertAdjacentHTML('beforeend',`<option>${m}</option>`));s.disabled=list.length<2;renderAll();if($('#fModelo').value)goResults();};
 $('#fAnio').onchange=$('#fMotor').onchange=()=>renderAll();
 function fillAnios(){const s=$('#fAnio');s.innerHTML='<option value="">Todos</option>';const y=new Date().getFullYear();for(let a=y+1;a>=2005;a--)s.insertAdjacentHTML('beforeend',`<option>${a}</option>`);}
-$('#btnBuscar').onclick=()=>{renderAll(true);document.getElementById('packs').scrollIntoView({behavior:'smooth'});};
+function goResults(){const el=document.getElementById('packs');const y=el.getBoundingClientRect().top+window.pageYOffset-64;try{window.scrollTo({top:y,behavior:'smooth'});}catch(e){window.scrollTo(0,y);}setTimeout(()=>{if(Math.abs(window.pageYOffset-y)>40)window.scrollTo(0,y);},400);}
+$('#btnBuscar').onclick=()=>{renderAll(true);goResults();};
 $('#fTexto').addEventListener('input',()=>{if($('#fTexto').value.trim()){$('#fMarca').value='';['#fModelo','#fAnio','#fMotor'].forEach(s=>{$(s).innerHTML='<option value="">—</option>';$(s).disabled=true;});}renderAll();});['#fSeg','#fComb'].forEach(s=>$(s).onchange=()=>renderAll());
 
 function renderAll(fromBtn){
@@ -228,6 +229,7 @@ function renderAll(fromBtn){
   const sel=ma||mo||q;
   $('#resTitulo').textContent=sel?`Packs para ${[ma,mo,an||'',mt].filter(Boolean).join(' ')||q}`:'Packs de mantención';
   $('#resSub').textContent=list.length?`${list.length} ${list.length===1?'modelo':'modelos'}. Precios con IVA, válidos en la cobertura indicada.`:'';
+  $('#btnBuscar').textContent=sel?(list.length?`Ver ${list.length} ${list.length===1?'pack':'packs'} ↓`:'Sin pack publicado · cotizar ↓'):'Ver packs compatibles';
   if(fromBtn)track('vehicle_search',{marca:ma,modelo:mo,anio:an,motor:mt,texto:q,resultados:list.length});
   const box=$('#resultados');
   if(!list.length){box.innerHTML=`<div class="card" style="grid-column:1/-1"><h3>Aún no tenemos un pack publicado para ese vehículo</h3><p class="muted">Igual lo atendemos: cuéntanos marca, modelo, año y motor y te cotizamos con la especificación correcta.</p><div><button class="btn btn-amber" type="button" data-otro>Solicitar cotización</button></div></div>`;return;}

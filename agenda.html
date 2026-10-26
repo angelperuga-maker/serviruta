@@ -422,7 +422,7 @@ async function cargarTecnicos(){
   var r = await sbReq('GET', 'tecnicos?activo=eq.true&select=nombre,telefono&order=nombre.asc')
   TECNICOS = r.ok ? await r.json() : []
   if(TECNICOS.length === 0){
-    TECNICOS = [{nombre:'Robert Olivos',telefono:''},{nombre:'Reynaldo Aguas Bertel',telefono:'+56935287199'},{nombre:'Kiven Henz',telefono:'+56964880196'},{nombre:'Giovanino Perugini',telefono:'+56933592097'}]
+    TECNICOS = [{nombre:'Robert Olivos',telefono:'+56921857705'},{nombre:'Reynaldo Aguas Bertel',telefono:'+56935287199'},{nombre:'Kiven Henz',telefono:'+56964880196'},{nombre:'Giovanino Perugini',telefono:'+56933592097'}]
   }
   var filter = document.getElementById('tec-filter')
   var html = '<button class="chip-tec active" data-tec="todos" onclick="filtrarTecnico(\'todos\')">👥 Todos</button>'

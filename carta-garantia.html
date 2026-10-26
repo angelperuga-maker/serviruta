@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta · Carta de Servicio y Garantía</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--negro:#080808;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--txt3:#55525E;--verde:#22C55E;--amarillo:#F5C518;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#1a1a1f;color:var(--txt);font-family:"DM Sans",sans-serif;padding:20px 0;min-height:100vh;}
+.print-wrap{max-width:780px;margin:0 auto;padding:0 14px;}
+.cert{background:#fff;color:#1a1a1a;border-radius:8px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.4);position:relative;padding:46px 48px 36px;}
+.cert::before{content:"";position:absolute;inset:12px;border:2px solid var(--rojo);border-radius:4px;pointer-events:none;}
+.cert::after{content:"";position:absolute;inset:16px;border:1px solid rgba(232,33,10,0.3);border-radius:3px;pointer-events:none;}
+.cert-content{position:relative;z-index:1;}
+.sello-agua{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-25deg);font-family:"Syne",sans-serif;font-weight:900;font-size:90px;color:rgba(232,33,10,0.04);pointer-events:none;white-space:nowrap;z-index:0;}
+.cert-cab{text-align:center;margin-bottom:18px;}
+.cert-logo{font-family:"Syne",sans-serif;font-weight:900;font-size:30px;letter-spacing:4px;color:#080808;}
+.cert-logo span{color:var(--rojo);}
+.cert-tagline{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#888;margin-top:2px;}
+.cert-titulo{text-align:center;margin:14px 0 18px;}
+.cert-eyebrow{display:inline-block;background:var(--rojo);color:#fff;padding:5px 16px;border-radius:20px;font-family:"Syne",sans-serif;font-weight:800;font-size:10px;letter-spacing:3px;text-transform:uppercase;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+.cert-h1{font-family:"Syne",sans-serif;font-weight:900;font-size:32px;margin-top:10px;line-height:1.05;}
+.cert-h1 .rojo{color:var(--rojo);}
+.cert-num{font-size:11px;color:#888;margin-top:6px;letter-spacing:1px;}
+.declaracion{font-size:13px;line-height:1.6;color:#333;text-align:center;margin:0 10px 16px;}
+.declaracion b{color:#080808;}
+.datos-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;background:#f6f6f6;border-radius:8px;padding:16px;margin-bottom:16px;}
+.dato-lbl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#888;}
+.dato-val{font-size:13px;font-weight:600;color:#111;margin-top:2px;}
+.dato-val.patente{font-family:"Syne",sans-serif;font-weight:900;letter-spacing:2px;}
+table.items{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:14px;}
+table.items th{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#888;text-align:left;padding:6px 8px;border-bottom:1px solid #ddd;}
+table.items td{padding:7px 8px;border-bottom:1px solid #eee;vertical-align:top;}
+table.items td.n,table.items th.n{text-align:right;white-space:nowrap;}
+table.items tr.tot td{border-bottom:none;font-weight:700;padding-top:8px;}
+table.items tr.tot.gran td{font-family:"Syne",sans-serif;font-size:14px;color:#080808;}
+.garantia-box{border:2px solid var(--rojo);border-radius:8px;padding:16px 18px;margin:0 0 14px;position:relative;}
+.garantia-sello{position:absolute;top:-10px;left:16px;background:#fff;color:var(--rojo);font-family:"Syne",sans-serif;font-weight:900;font-size:10px;letter-spacing:3px;padding:0 8px;}
+.garantia-titulo{font-family:"Syne",sans-serif;font-weight:800;font-size:15px;color:#080808;margin-bottom:6px;}
+.garantia-texto{font-size:12px;line-height:1.55;color:#333;}
+.garantia-texto b{color:#080808;}
+.vigencia{background:#080808;color:#fff;border-radius:8px;padding:14px 18px;margin:0 0 14px;display:flex;align-items:center;justify-content:space-between;gap:12px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+.vig-lbl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#aaa;}
+.vig-fecha{font-family:"Syne",sans-serif;font-weight:900;font-size:18px;color:var(--amarillo);}
+.vig-detalle{font-size:11px;color:#bbb;margin-top:2px;}
+.beneficio{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;background:#fff7e6;border:1px dashed #e0b84a;border-radius:8px;padding:14px 16px;margin-bottom:14px;}
+.beneficio-h{font-family:"Syne",sans-serif;font-weight:800;font-size:13px;color:#080808;}
+.beneficio-t{font-size:11.5px;color:#444;line-height:1.5;margin-top:3px;}
+.beneficio-pct{font-family:"Syne",sans-serif;font-weight:900;font-size:30px;color:var(--rojo);line-height:1;}
+.protocolo{font-size:10.5px;line-height:1.55;color:#555;margin-bottom:14px;}
+.protocolo-h{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#888;margin-bottom:4px;}
+.pie{display:grid;grid-template-columns:1fr auto auto;gap:18px;align-items:end;border-top:1px solid #ddd;padding-top:14px;}
+.pie-info{font-size:10px;color:#777;line-height:1.5;}
+.qr-box{text-align:center;}
+.qr-img{background:#fff;padding:4px;border:1px solid #ddd;border-radius:4px;display:inline-block;}
+.qr-img img{display:block;width:84px;height:84px;}
+.qr-lbl{font-size:8px;color:#999;margin-top:3px;letter-spacing:1px;text-transform:uppercase;}
+.qr-box.resena .qr-img{border-color:#e0b84a;}
+.qr-box.resena .qr-lbl{color:#b8860b;font-weight:600;}
+.acciones{max-width:780px;margin:18px auto 0;padding:0 14px;display:flex;gap:8px;flex-wrap:wrap;}
+.btn-act{flex:1;min-width:130px;padding:12px;border-radius:8px;font-family:"Syne",sans-serif;font-weight:800;font-size:12px;border:none;cursor:pointer;text-decoration:none;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px;}
+.btn-print{background:var(--rojo);color:#fff;}
+.btn-wa{background:#25D366;color:#000;}
+.btn-back{background:var(--c3);color:var(--txt);border:1px solid var(--borde);}
+.loading{text-align:center;padding:60px 20px;color:var(--txt2);}
+.loading-spin{width:40px;height:40px;border:3px solid var(--c3);border-top-color:var(--rojo);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 16px;}
+@keyframes spin{to{transform:rotate(360deg);}}
+@media print{
+  body{background:#fff !important;padding:0 !important;}
+  .acciones,.no-print{display:none !important;}
+  .print-wrap{max-width:100%;padding:0;}
+  .cert{box-shadow:none !important;border-radius:0;padding:28px 30px;page-break-inside:avoid;}
+  .vigencia{background:#080808 !important;}
+  .beneficio{background:#fff7e6 !important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+}
+@media(max-width:640px){
+  .cert{padding:30px 20px;}
+  .cert-h1{font-size:26px;}
+  .datos-grid{grid-template-columns:1fr 1fr;gap:10px;padding:14px;}
+  .pie{grid-template-columns:1fr;}
+  .pie .qr-box{text-align:left;}
+  .beneficio{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="print-wrap">
+  <div id="contenido">
+    <div class="loading"><div class="loading-spin"></div><div>Generando carta de garantía...</div></div>
+  </div>
+</div>
+
+<div class="acciones no-print" id="acciones" style="display:none">
+  <a href="#" class="btn-act btn-back" onclick="history.back();return false">← Volver</a>
+  <button class="btn-act btn-print" onclick="window.print()">🖨️ Imprimir / Guardar PDF</button>
+  <a class="btn-act btn-wa" id="btn-wa-share" target="_blank">💬 Enviar al cliente</a>
+</div>
+
+<script>
+var SB='https://bqlgfmqcefledqyodkii.supabase.co'
+var SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+var db=null
+function getDB(){if(!db)db=supabase.createClient(SB,SK);return db}
+function getParam(k){return new URLSearchParams(location.search).get(k)}
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function clp(n){return '$ '+Math.round(Number(n)||0).toLocaleString('es-CL')}
+function fechaCL(iso){if(!iso)return '—';var p=String(iso).slice(0,10).split('-');return p[2]+'-'+p[1]+'-'+p[0]}
+function fechaLarga(iso){try{return new Date(String(iso).slice(0,10)+'T12:00:00').toLocaleDateString('es-CL',{day:'numeric',month:'long',year:'numeric'})}catch(e){return fechaCL(iso)}}
+function numCarta(c){return 'CG-'+(c.numero!=null?String(c.numero).padStart(4,'0'):String(c.id).replace(/-/g,'').slice(-6).toUpperCase())}
+function genQR(text){try{var qr=qrcode(0,'M');qr.addData(text);qr.make();return qr.createImgTag(4,4)}catch(e){return ''}}
+
+async function cargar(){
+  var id=getParam('id')
+  if(!id){document.getElementById('contenido').innerHTML='<div class="loading"><div style="color:var(--rojo);font-size:14px;margin-bottom:8px">⚠ ID requerido</div><div style="font-size:12px;color:var(--txt3)">URL: ?id=[uuid de cartas_garantia]</div></div>';return}
+  var r=await getDB().from('cartas_garantia').select('*').eq('id',id).maybeSingle()
+  if(!r.data){document.getElementById('contenido').innerHTML='<div class="loading"><div style="color:var(--rojo)">⚠ Carta no encontrada</div></div>';return}
+  var cfg=await getDB().from('config_sistema').select('clave,valor').in('clave',['google_review_url'])
+  var reviewUrl=''
+  ;(cfg.data||[]).forEach(function(x){if(x.clave==='google_review_url')reviewUrl=(x.valor||'').trim()})
+  render(r.data,reviewUrl)
+}
+
+function render(c,reviewUrl){
+  var items=Array.isArray(c.items)?c.items:[]
+  var km=c.garantia_km?' o '+Number(c.garantia_km).toLocaleString('es-CL')+' km':''
+  var html='<div class="cert"><div class="sello-agua">SERVIRUTA</div><div class="cert-content">'
+  html+='<div class="cert-cab"><div class="cert-logo">SERVI<span>RUTA</span></div><div class="cert-tagline">Mecánica móvil profesional</div></div>'
+  html+='<div class="cert-titulo"><div class="cert-eyebrow">Carta de servicio y garantía</div>'+
+    '<div class="cert-h1">Certificado de <span class="rojo">Garantía</span></div>'+
+    '<div class="cert-num">N° '+esc(numCarta(c))+' · Presupuesto N° '+esc(c.numero!=null?c.numero:'s/n')+'</div></div>'
+  html+='<div class="declaracion">Serviruta certifica que el servicio detallado a continuación fue ejecutado a favor de <b>'+esc(c.cliente||'el cliente')+'</b>'+
+    ' sobre el vehículo <b>'+esc(c.vehiculo||'—')+'</b>'+(c.patente?' patente <b>'+esc(c.patente)+'</b>':'')+', con fecha '+esc(fechaLarga(c.fecha_servicio))+', y que queda amparado por la garantía que se indica.</div>'
+  html+='<div class="datos-grid">'+
+    '<div><div class="dato-lbl">Cliente</div><div class="dato-val">'+esc(c.cliente||'—')+'</div></div>'+
+    '<div><div class="dato-lbl">Teléfono</div><div class="dato-val">'+esc(c.telefono||'—')+'</div></div>'+
+    '<div><div class="dato-lbl">Patente</div><div class="dato-val patente">'+esc(c.patente||'—')+'</div></div>'+
+    '<div><div class="dato-lbl">Vehículo</div><div class="dato-val">'+esc(c.vehiculo||'—')+'</div></div>'+
+    '<div><div class="dato-lbl">Fecha del servicio</div><div class="dato-val">'+esc(fechaCL(c.fecha_servicio))+'</div></div>'+
+    '<div><div class="dato-lbl">Técnico</div><div class="dato-val">'+esc(c.tecnico||'Técnico Serviruta')+'</div></div>'+
+  '</div>'
+  html+='<table class="items"><thead><tr><th class="n">Cant.</th><th>Detalle del servicio</th><th class="n">Valor</th></tr></thead><tbody>'
+  items.forEach(function(i){html+='<tr><td class="n">'+esc(i.cant||1)+'</td><td>'+esc(i.desc||'Servicio')+'</td><td class="n">'+clp((i.cant||1)*(i.valor||0))+'</td></tr>'})
+  if(!items.length)html+='<tr><td colspan="3" style="color:#888">Servicio según presupuesto N° '+esc(c.numero)+'</td></tr>'
+  html+='<tr class="tot"><td></td><td class="n">Neto</td><td class="n">'+clp(c.subtotal)+'</td></tr>'+
+    '<tr class="tot"><td></td><td class="n">IVA</td><td class="n">'+clp(c.iva)+'</td></tr>'+
+    '<tr class="tot gran"><td></td><td class="n">Total pagado</td><td class="n">'+clp(c.total)+'</td></tr></tbody></table>'
+  html+='<div class="garantia-box"><div class="garantia-sello">GARANTÍA</div>'+
+    '<div class="garantia-titulo">'+esc(c.garantia_titulo||('GARANTÍA: '+c.garantia_meses+' MESES'))+'</div>'+
+    '<div class="garantia-texto"><b>Cubre:</b> '+esc(c.garantia_cubre||'fallas atribuibles al trabajo ejecutado o a los componentes instalados por Serviruta.')+'<br><br>'+
+    '<b>No cubre:</b> '+esc(c.garantia_no_cubre||'fallas ajenas al trabajo realizado, desgaste normal ni intervenciones de terceros.')+'</div></div>'
+  html+='<div class="vigencia"><div><div class="vig-lbl">Vigencia de la garantía</div><div class="vig-detalle">'+esc(c.garantia_meses)+' meses'+esc(km)+' desde la fecha del servicio</div></div>'+
+    '<div style="text-align:right"><div class="vig-fecha">Hasta '+esc(fechaCL(c.garantia_hasta))+'</div></div></div>'
+  html+='<div class="beneficio"><div><div class="beneficio-h">Beneficio para tu próximo servicio</div>'+
+    '<div class="beneficio-t">'+esc(c.descuento_pct||20)+'% de descuento en la mano de obra de tu próximo servicio con Serviruta, válido hasta el '+esc(fechaCL(c.descuento_hasta))+'. Menciona el N° de esta carta al agendar.</div></div>'+
+    '<div class="beneficio-pct">'+esc(c.descuento_pct||20)+'%</div></div>'
+  html+='<div class="protocolo"><div class="protocolo-h">Cómo hacer efectiva la garantía</div>'+
+    'Las garantías se solicitan y coordinan siempre con la oficina de Serviruta por WhatsApp <b>+56 9 4521 0814</b>, indicando el número de presupuesto. Los presupuestos, horarios, pagos de repuestos y mano de obra se gestionan únicamente con la empresa; un servicio pagado fuera de la empresa o coordinado directamente con un técnico no tiene garantía de ningún tipo. '+
+    'Este certificado se rige por la Ley del Consumidor N° 19.496 y constituye un compromiso voluntario de Serviruta más allá de las obligaciones legales aplicables.</div>'
+  html+='<div class="pie"><div class="pie-info"><div><b>Serviruta</b> · Mecánica móvil profesional · Región Metropolitana</div>'+
+    '<div>WhatsApp +56 9 4521 0814 · contacto@serviruta.cl · serviruta.cl</div>'+
+    '<div style="margin-top:6px">Emitida el '+esc(fechaCL(c.emitida_at||c.fecha_servicio))+'. Documento original en formato digital.</div></div>'
+  if(reviewUrl){html+='<div class="qr-box resena"><div class="qr-img">'+genQR(reviewUrl)+'</div><div class="qr-lbl">⭐ Califícanos en Google</div></div>'}
+  html+='<div class="qr-box"><div class="qr-img">'+genQR(location.href)+'</div><div class="qr-lbl">Carta digital</div></div></div>'
+  html+='</div></div>'
+  document.getElementById('contenido').innerHTML=html
+  document.getElementById('acciones').style.display='flex'
+
+  var nom=(c.cliente||'').split(' ')[0]
+  var msg='Hola '+nom+' 👋 Gracias por preferir Serviruta.\n\nAdjuntamos tu Certificado de Servicio y Garantía del presupuesto N° '+(c.numero!=null?c.numero:'')+':\n'+location.href+
+    '\n\n🛡️ Garantía de '+c.garantia_meses+' meses'+km+', hasta el '+fechaCL(c.garantia_hasta)+'.\n🎁 '+(c.descuento_pct||20)+'% de descuento en la mano de obra de tu próximo servicio, válido hasta el '+fechaCL(c.descuento_hasta)+'.'+
+    (reviewUrl?'\n\n⭐ Si quedaste conforme, nos ayuda mucho una reseña en Google (30 segundos):\n'+reviewUrl:'')+
+    '\n\nLas garantías se solicitan siempre por este WhatsApp de la oficina, indicando el número de presupuesto. Cualquier cosa nos escribes 🙌'
+  var tel=(c.telefono||'').replace(/[^0-9]/g,'')
+  if(tel&&!tel.startsWith('56'))tel=(tel.length===8?'569':'56')+tel
+  document.getElementById('btn-wa-share').href=tel?'https://wa.me/'+tel+'?text='+encodeURIComponent(msg):'https://wa.me/?text='+encodeURIComponent(msg)
+  document.title='Carta de garantía · '+(c.patente||c.cliente||'')
+}
+cargar()
+</script>
+</body>
+</html>

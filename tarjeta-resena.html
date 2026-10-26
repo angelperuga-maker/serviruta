@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta · Tarjeta de reseña Google</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--c3:#1E1E22;--borde:#2C2C32;--txt:#F0EDE6;--txt2:#9996A0;--amarillo:#F5C518;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:#1a1a1f;color:var(--txt);font-family:"DM Sans",sans-serif;padding:20px 14px;min-height:100vh;}
+.intro{max-width:760px;margin:0 auto 16px;font-size:13px;color:var(--txt2);line-height:1.5;}
+.intro b{color:var(--txt);}
+.hoja{max-width:760px;margin:0 auto;background:#fff;border-radius:8px;padding:14px;display:grid;grid-template-columns:1fr 1fr;gap:12px;box-shadow:0 8px 40px rgba(0,0,0,0.4);}
+.tarjeta{border:2px solid var(--rojo);border-radius:10px;padding:16px 14px;color:#1a1a1a;display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:center;page-break-inside:avoid;min-height:150px;}
+.tarjeta .qr img{display:block;width:118px;height:118px;}
+.logo{font-family:"Syne",sans-serif;font-weight:900;font-size:17px;letter-spacing:3px;color:#080808;}
+.logo span{color:var(--rojo);}
+.t1{font-family:"Syne",sans-serif;font-weight:800;font-size:15px;color:#080808;margin-top:6px;line-height:1.15;}
+.t2{font-size:11px;color:#444;margin-top:5px;line-height:1.45;}
+.t3{font-size:10px;color:#888;margin-top:6px;}
+.stars{color:var(--amarillo);font-size:14px;letter-spacing:1px;}
+.acciones{max-width:760px;margin:16px auto 0;display:flex;gap:8px;flex-wrap:wrap;}
+.btn-act{flex:1;min-width:130px;padding:12px;border-radius:8px;font-family:"Syne",sans-serif;font-weight:800;font-size:12px;border:none;cursor:pointer;text-decoration:none;text-align:center;color:#fff;background:var(--rojo);}
+.btn-back{background:var(--c3);color:var(--txt);border:1px solid var(--borde);}
+.link{max-width:760px;margin:10px auto 0;font-size:11px;color:var(--txt2);word-break:break-all;}
+@media print{
+  body{background:#fff !important;padding:0 !important;}
+  .intro,.acciones,.link{display:none !important;}
+  .hoja{box-shadow:none;border-radius:0;max-width:100%;padding:0;gap:10px;}
+  .tarjeta{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+}
+@media(max-width:600px){.hoja{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="intro"><b>Tarjeta de reseña para dejar en el vehículo.</b> Se imprimen 8 por hoja carta; el QR abre directo el cuadro para escribir la reseña en la ficha de Google de Serviruta. Entregar solo cuando el cliente quedó conforme.</div>
+<div class="hoja" id="hoja"></div>
+<div class="link" id="link"></div>
+<div class="acciones no-print">
+  <a href="#" class="btn-act btn-back" onclick="history.back();return false">← Volver</a>
+  <button class="btn-act" onclick="window.print()">🖨️ Imprimir hoja (8 tarjetas)</button>
+</div>
+<script>
+var SB='https://bqlgfmqcefledqyodkii.supabase.co'
+var SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+function genQR(text){try{var qr=qrcode(0,'M');qr.addData(text);qr.make();return qr.createImgTag(3,2)}catch(e){return ''}}
+async function cargar(){
+  var db=supabase.createClient(SB,SK)
+  var r=await db.from('config_sistema').select('valor').eq('clave','google_review_url').maybeSingle()
+  var url=(r.data&&r.data.valor||'').trim()
+  if(!url){document.getElementById('hoja').innerHTML='<div style="color:#E8210A;padding:20px;grid-column:1/-1">⚠ Falta config_sistema.google_review_url</div>';return}
+  var t='<div class="tarjeta"><div class="qr">'+genQR(url)+'</div><div>'+
+    '<div class="logo">SERVI<span>RUTA</span></div>'+
+    '<div class="t1">¿Quedaste conforme?<br>Cuéntaselo a Google</div>'+
+    '<div class="t2">Escanea el código y déjanos tu reseña. Toma 30 segundos y nos ayuda a llegar a más personas.</div>'+
+    '<div class="stars">★★★★★</div>'+
+    '<div class="t3">WhatsApp +56 9 4521 0814 · serviruta.cl</div></div></div>'
+  var h='';for(var i=0;i<8;i++)h+=t
+  document.getElementById('hoja').innerHTML=h
+  document.getElementById('link').textContent='Link de reseña: '+url
+}
+cargar()
+</script>
+</body>
+</html>

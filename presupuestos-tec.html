@@ -337,10 +337,9 @@ async function tCargarAgendas(){
   const sel = document.getElementById('t-agenda'); if(!sel || !nombre) return
   const d = new Date(), ayer = new Date(d), man = new Date(d); ayer.setDate(d.getDate()-1); man.setDate(d.getDate()+1)
   const iso = x => x.toISOString().slice(0,10)
-  const r = await getSB().from('agenda').select('id,fecha,hora,cliente,telefono,servicio,vehiculo,patente,estado,presupuesto_id,tecnico')
+  const r = await getSB().from('agenda').select('id,fecha,hora,cliente,telefono,servicio,vehiculo,patente,estado,presupuesto_id,tecnico').eq('tecnico', nombre)
     .gte('fecha', iso(ayer)).lte('fecha', iso(man)).not('estado','in','("cancelado","cerrada")').order('fecha').order('hora')
-  const prim = _norm(nombre).split(' ')[0]
-  agendasTec = (r.data||[]).filter(a => _norm(a.tecnico) === _norm(nombre) || _norm(a.tecnico).split(' ')[0] === prim)
+  agendasTec = (r.data||[]).filter(a => _norm(a.tecnico) === _norm(nombre))
   agendasTec.forEach(a => {
     const o = document.createElement('option'); o.value = a.id
     o.textContent = a.fecha.slice(5) + ' ' + (a.hora||'').slice(0,5) + ' · ' + (a.cliente||'?') + ' · ' + (a.servicio||'') + (a.presupuesto_id ? ' (ya tiene ppto)' : '')

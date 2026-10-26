@@ -440,7 +440,10 @@ async function cargarTecnicos(){
 }
 
 async function cargarEventos(){
-  var r = await sbReq('GET', 'agenda?select=*&order=fecha.asc,hora.asc')
+  var _esTec = localStorage.getItem('sv_user_rol') === 'tecnico'
+  var _miNom = localStorage.getItem('sv_user_nombre') || ''
+  if(_esTec && !_miNom){ EVENTOS = []; return }
+  var r = await sbReq('GET', 'agenda?select=*&order=fecha.asc,hora.asc' + (_esTec ? '&tecnico=eq.' + encodeURIComponent(_miNom) : ''))
   EVENTOS = r.ok ? await r.json() : []
   // ROL TÉCNICO: solo ve SUS servicios (coincidencia EXACTA, sin tildes/mayúsculas; cierra por defecto)
   if(localStorage.getItem('sv_user_rol') === 'tecnico'){

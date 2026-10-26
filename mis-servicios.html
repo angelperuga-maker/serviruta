@@ -74,7 +74,8 @@ function getDB(){if(!db)db=supabase.createClient(SB,SK);return db;}
 
 async function load(){
   var q=getDB().from('presupuestos').select('*').order('created_at',{ascending:false})
-  if(nombre)q=q.eq('tecnico',nombre)
+  if(!nombre) return
+  q=q.eq('tecnico',nombre)
   var r=await q
   var todos=r.data||[]
   var activos=todos.filter(function(s){return s.estado_servicio==='ejecucion'||s.estado_servicio==='aprobado'})

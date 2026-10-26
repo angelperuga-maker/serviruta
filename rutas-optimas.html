@@ -243,7 +243,13 @@ async function cargarServicios(){
     fecha = fmtISO(new Date())
     document.getElementById('fecha').value = fecha
   }
-  var r = await sbReq('GET', 'agenda?fecha=eq.'+fecha+'&estado=in.(solicitada,agendado,confirmado,en-ruta,completado)&select=*&order=hora.asc')
+  var _tecQ = ''
+  if(localStorage.getItem('sv_user_rol') === 'tecnico'){
+    var _mn = localStorage.getItem('sv_user_nombre')||''
+    if(!_mn){ SERVICIOS = []; return }
+    _tecQ = '&tecnico=eq.'+encodeURIComponent(_mn)
+  }
+  var r = await sbReq('GET', 'agenda?fecha=eq.'+fecha+'&estado=in.(solicitada,agendado,confirmado,en-ruta,completado)'+_tecQ+'&select=*&order=hora.asc')
   SERVICIOS = r.ok ? await r.json() : []
   // ROL TÉCNICO: solo sus servicios (coincidencia exacta, fail-closed)
   if(localStorage.getItem('sv_user_rol') === 'tecnico'){

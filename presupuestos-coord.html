@@ -218,7 +218,9 @@ var db=null,todos=[],pptoActual=null,tabActual=0,tecFiltro='todos',coordItemId=0
 function getDB(){if(!db)db=supabase.createClient(SB_URL,SB_KEY);return db;}
 
 async function load(){
-  var r=await getDB().from('presupuestos').select('*').order('created_at',{ascending:false})
+  var q=getDB().from('presupuestos').select('*').order('created_at',{ascending:false})
+  if(esRolTecnico()){ var _mn=localStorage.getItem('sv_user_nombre')||''; if(!_mn){ todos=[]; renderTab(tabActual); return } q=q.eq('tecnico',_mn) }
+  var r=await q
   // ═══ ROL TÉCNICO: solo ve SUS presupuestos ═══
   if(r.data && esRolTecnico()){
     var _n=function(x){return (x||'').toString().normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/\s+/g,' ').trim()}

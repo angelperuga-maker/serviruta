@@ -191,6 +191,11 @@ async function cargar(){
   else if(FILTRO==='hoy') query+='&fecha=eq.'+hoyISO()
   else if(FILTRO==='todos') query+='&fecha=gte.'+hoyISO()
   
+  if(localStorage.getItem('sv_user_rol') === 'tecnico'){
+    var _mn=localStorage.getItem('sv_user_nombre')||''
+    if(!_mn){ SERVICIOS=[]; render(); return }
+    query+='&tecnico=eq.'+encodeURIComponent(_mn)
+  }
   SERVICIOS=await sbGet(query)
   // ROL TÉCNICO: solo ve SUS servicios (coincidencia exacta, sin tildes; fail-closed)
   if(localStorage.getItem('sv_user_rol') === 'tecnico'){

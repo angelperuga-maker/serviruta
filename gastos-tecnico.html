@@ -146,7 +146,8 @@ function getDB(){if(!db)db=supabase.createClient(SB,SK);return db;}
 
 async function load(){
   var q=getDB().from('gastos').select('*').order('fecha',{ascending:false})
-  if(nombre)q=q.eq('tecnico',nombre)
+  if(!nombre) return
+  q=q.eq('tecnico',nombre)
   var r=await q
   gastos=r.data||[]
   var mes=new Date().getFullYear()+'-'+String(new Date().getMonth()+1).padStart(2,'0')
@@ -186,7 +187,8 @@ async function openModal(){
   var sel=document.getElementById('g-ppto')
   sel.innerHTML='<option value="">-- Gasto general (sin ppto) --</option>'
   var query=getDB().from('presupuestos').select('id,numero,cliente,vehiculo,estado_servicio').order('created_at',{ascending:false}).limit(50)
-  if(nombre) query=query.eq('tecnico',nombre)
+  if(!nombre) return
+  query=query.eq('tecnico',nombre)
   var r=await query
   var pptos=r.data||[]
 

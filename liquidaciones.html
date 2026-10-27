@@ -264,7 +264,7 @@ function renderLiquidacion(){
     h+=`<div class="card"><h3>${esc(e.nombre)} <button class="sm ghost" onclick="abrirSueldo('${e.id}')">✎ sueldo base</button></h3>
       <div class="muted" style="margin-bottom:6px">${l.trabajos} trabajos · ${l.visitas} visitas · ${fmt(l.cobrado)} cobrado${l.tasa_aprobacion!=null?` · aprobación ${l.tasa_aprobacion}%`:''}</div>
       ${r('Sueldo base',l.sueldo_base)}
-      ${r('Comisión por servicios ('+(l.tramo_pct||0)+'%)',l.comision_bruta,'pos')}
+      ${r(e.comision_pct_fija!=null?'Comisión fija '+e.comision_pct_fija+'% sobre venta neta':'Comisión por servicios ('+(l.tramo_pct||0)+'%)',l.comision_bruta,'pos')}
       ${r('Ajuste por aprobación de presupuestos',l.ajuste_aprobacion,l.ajuste_aprobacion<0?'neg':'pos',true)}
       ${r('Castigo rechazos injustificados',-l.castigo_rechazos,'neg',true)}
       ${r('Castigo inasistencias',-l.castigo_inasistencias,'neg',true)}

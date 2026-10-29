@@ -153,6 +153,10 @@ fbq('track', 'PageView');
     <div class="sec">Visita de origen</div>
     <div id="det-agenda" style="font-size:12px;color:var(--txt2);margin-bottom:8px">—</div>
     <select class="inp" id="det-agenda-sel" style="margin-bottom:6px;display:none"><option value="">— elegir agenda —</option></select>
+    <div id="det-agenda-buscar" style="display:none;margin-bottom:6px">
+      <input class="inp" id="det-agenda-q" placeholder="Buscar agenda por nombre, teléfono o patente…" style="margin-bottom:6px" onkeydown="if(event.key==='Enter'){event.preventDefault();buscarAgendaManual()}">
+      <button class="btn btn-sec" onclick="buscarAgendaManual()" style="margin-bottom:6px">🔎 Buscar</button>
+    </div>
     <button class="btn btn-sec" id="det-agenda-btn" onclick="enlazarAgendaDetalle()" style="margin-bottom:12px">🔗 Enlazar agenda</button>
     <div class="sec">Cobro</div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
@@ -671,34 +675,92 @@ async function marcarPagado(){
 // ---- Enlace agenda ↔ presupuesto (Etapa A) ----
 function tel9(t){return (t||'').replace(/\D/g,'').slice(-9)}
 function fmtFecha(f){try{var d=new Date(f+'T12:00:00');return d.toLocaleDateString('es-CL',{weekday:'short',day:'numeric',month:'short'})}catch(e){return f}}
-async function agendasDeTelefono(tel,fechaRef){
-  var t9=tel9(tel); if(t9.length<9)return []
-  var base=fechaRef?new Date(fechaRef):new Date()
-  var d1=new Date(base);d1.setDate(d1.getDate()-3);var d2=new Date(base);d2.setDate(d2.getDate()+3)
-  var iso=function(d){return d.toISOString().slice(0,10)}
-  var r=await getDB().from('agenda').select('id,fecha,hora,servicio,tecnico,estado,presupuesto_id').ilike('telefono','%'+t9).gte('fecha',iso(d1)).lte('fecha',iso(d2)).order('fecha',{ascending:false})
-  return r.data||[]
+function norm(t){return (t||'').replace(/\D/g,'')}
+function tel9v(t){var d=norm(t);return d.length>=8?d.slice(-9):''}
+function pat(t){return (t||'').replace(/[^A-Za-z0-9]/g,'').toUpperCase()}
+function diasEntre(a,b){return Math.abs((new Date(a+'T12:00:00')-new Date(b))/86400000)}
+
+// Candidatas por teléfono, patente y nombre del cliente en una ventana amplia.
+// Antes sólo se buscaba por teléfono exacto a ±3 días, que dejaba fuera la mayoría de los casos.
+async function agendasCandidatas(ppto){
+  var ref = ppto.created_at ? new Date(ppto.created_at) : new Date()
+  var iso = function(d){return d.toISOString().slice(0,10)}
+  var d1 = new Date(ref); d1.setDate(d1.getDate()-30)
+  var d2 = new Date(ref); d2.setDate(d2.getDate()+30)
+  var cols = 'id,fecha,hora,servicio,tecnico,estado,presupuesto_id,cliente,telefono,patente'
+  var consultas = [], motivos = {}
+
+  var t9 = tel9v(ppto.telefono)
+  if(t9) consultas.push(['tel', getDB().from('agenda').select(cols).ilike('telefono','%'+t9)])
+
+  var pt = pat(ppto.patente)
+  if(pt.length >= 5) consultas.push(['patente', getDB().from('agenda').select(cols).ilike('patente','%'+pt+'%')])
+
+  var nom = (ppto.cliente||'').trim().split(/\s+/)[0]
+  if(nom.length >= 3) consultas.push(['nombre', getDB().from('agenda').select(cols)
+      .ilike('cliente','%'+nom+'%').gte('fecha',iso(d1)).lte('fecha',iso(d2))])
+
+  var res = await Promise.all(consultas.map(function(c){return c[1]}))
+  var mapa = {}
+  res.forEach(function(r,i){
+    var motivo = consultas[i][0]
+    ;(r.data||[]).forEach(function(a){
+      if(!mapa[a.id]){ mapa[a.id]=a; motivos[a.id]=[] }
+      if(motivos[a.id].indexOf(motivo)<0) motivos[a.id].push(motivo)
+    })
+  })
+  var lista = Object.keys(mapa).map(function(id){ var a=mapa[id]; a._motivos=motivos[id]; return a })
+  var peso = function(a){ return (a._motivos.indexOf('tel')>=0?0:a._motivos.indexOf('patente')>=0?1:2) }
+  lista.sort(function(a,b){
+    if(peso(a)!==peso(b)) return peso(a)-peso(b)
+    return diasEntre(a.fecha,ref) - diasEntre(b.fecha,ref)
+  })
+  return lista
 }
-function opcionAgenda(a){return fmtFecha(a.fecha)+' '+(a.hora||'').slice(0,5)+' · '+(a.servicio||'servicio')+' · '+(a.tecnico||'?')+' · '+(a.estado||'')+(a.presupuesto_id?' (ya tiene ppto)':'')}
+
+function opcionAgenda(a){
+  var m = a._motivos ? ' [' + a._motivos.join('+') + ']' : ''
+  return fmtFecha(a.fecha)+' '+(a.hora||'').slice(0,5)+' · '+(a.servicio||'servicio')+' · '+(a.tecnico||'?')+' · '+(a.estado||'')+m+(a.presupuesto_id?' (ya tiene ppto)':'')
+}
+function pintarOpciones(selEl, ags){
+  selEl.innerHTML='<option value="">— elegir agenda —</option>'
+  ags.forEach(function(a){var o=document.createElement('option');o.value=a.id;o.textContent=opcionAgenda(a);selEl.appendChild(o)})
+  selEl.style.display = ags.length ? 'block' : 'none'
+}
 async function cargarAgendasNuevo(){
   var sel=document.getElementById('n-agenda');sel.innerHTML='<option value="">— sin enlazar (se avisará al pagar) —</option>'
-  var ags=await agendasDeTelefono(document.getElementById('n-tel').value)
+  var ags=await agendasCandidatas({telefono:document.getElementById('n-tel').value,cliente:document.getElementById('n-cliente').value})
   ags.forEach(function(a){var o=document.createElement('option');o.value=a.id;o.textContent=opcionAgenda(a);sel.appendChild(o)})
   if(ags.length===1&&!ags[0].presupuesto_id)sel.value=ags[0].id
 }
 async function renderAgendaDetalle(){
   var el=document.getElementById('det-agenda'),selEl=document.getElementById('det-agenda-sel'),btn=document.getElementById('det-agenda-btn')
-  selEl.style.display='none';selEl.innerHTML='<option value="">— elegir agenda —</option>'
+  var buscar=document.getElementById('det-agenda-buscar')
+  selEl.style.display='none';selEl.innerHTML='<option value="">— elegir agenda —</option>';buscar.style.display='none'
   if(pptoActual.agenda_id){
     var r=await getDB().from('agenda').select('id,fecha,hora,servicio,tecnico,estado').eq('id',pptoActual.agenda_id).single()
     if(r.data){el.innerHTML='✅ '+opcionAgenda(r.data)+' · <a href="agenda.html" style="color:var(--rojo)">ver agenda</a>';btn.style.display='none';return}
   }
-  el.innerHTML='⚠️ Sin visita enlazada'+(pptoActual.enlace_origen?'':'')
-  btn.style.display='block'
-  var ags=await agendasDeTelefono(pptoActual.telefono,pptoActual.created_at)
-  ags.forEach(function(a){var o=document.createElement('option');o.value=a.id;o.textContent=opcionAgenda(a);selEl.appendChild(o)})
-  if(ags.length){selEl.style.display='block'}else{el.innerHTML+=' · no hay agendas de este teléfono a ±3 días'}
+  el.innerHTML='⚠️ Sin visita enlazada'
+  btn.style.display='block'; buscar.style.display='block'
+  var ags=await agendasCandidatas(pptoActual)
+  pintarOpciones(selEl, ags)
+  if(!ags.length) el.innerHTML+=' · sin coincidencias automáticas, búscala abajo'
 }
+async function buscarAgendaManual(){
+  var q=(document.getElementById('det-agenda-q').value||'').trim()
+  if(q.length<3){toast('Escribe al menos 3 caracteres');return}
+  var cols='id,fecha,hora,servicio,tecnico,estado,presupuesto_id,cliente,telefono,patente'
+  var d=norm(q), pt=pat(q), filtros=['cliente.ilike.%'+q+'%']
+  if(d.length>=6) filtros.push('telefono.ilike.%'+d+'%')
+  if(pt.length>=5) filtros.push('patente.ilike.%'+pt+'%')
+  var r=await getDB().from('agenda').select(cols).or(filtros.join(',')).order('fecha',{ascending:false}).limit(50)
+  if(r.error){toast('Error: '+r.error.message);return}
+  var ags=(r.data||[]).map(function(a){a._motivos=['búsqueda'];return a})
+  pintarOpciones(document.getElementById('det-agenda-sel'), ags)
+  toast(ags.length?ags.length+' agenda(s) encontrada(s)':'Sin resultados', ags.length?'ok':'')
+}
+
 async function enlazarAgendaDetalle(){
   var id=document.getElementById('det-agenda-sel').value
   if(!id){toast('Elige una agenda de la lista');return}

@@ -147,6 +147,7 @@
   <div class="field"><label>Teléfono</label><input id="tTel" placeholder="+569..."></div>
   <div class="field"><label>Sueldo base mensual</label><input type="number" id="tSueldo"></div>
   <div class="field"><label>Comisión fija (% sobre venta neta sin IVA)</label><input type="number" id="tPct" step="0.5" placeholder="vacío = escalera por tramos"></div>
+  <div class="field"><label>Frecuencia de pago</label><select id="tFrec"><option value="mensual">Mensual</option><option value="semanal">Semanal</option></select></div>
   <div class="field"><label>Fecha de ingreso</label><input type="date" id="tFecha"></div>
   <div class="modal-actions"><button class="ghost" onclick="closeModal('mTec')">Cancelar</button><button class="blue" onclick="guardarTecnico()">Guardar</button></div>
 </div></div>
@@ -275,7 +276,8 @@ function renderResumen(){
   const porMedio={}; t.cob.forEach(p=>{ const k=p.medio_pago||'sin dato'; porMedio[k]=(porMedio[k]||0)+(p.monto_cobrado||p.total||0); });
   const porTipo={}; t.gastos.forEach(g=>{ porTipo[g.tipo||'Otros']=(porTipo[g.tipo||'Otros']||0)+(g.monto||0); });
   let h='<div class="grid2">';
-  h+=`<div class="card"><h3>Ventas cobradas por técnico</h3><table><tbody>${Object.entries(porTec).sort((a,b)=>b[1].m-a[1].m).map(([n,x])=>`<tr><td>${esc(n)}</td><td class="muted">${x.n} trabajos</td><td class="num pos">${fmt(x.m)}</td></tr>`).join('')||'<tr><td class="muted">Sin cobros en el período</td></tr>'}</tbody></table></div>`;
+  const tkEmp=t.nCob?t.cobrado/t.nCob:0;
+  h+=`<div class="card"><h3>Ventas cobradas por técnico <span class="tag">ticket prom. empresa ${fmt(tkEmp)}</span></h3><table><thead><tr><th>Técnico</th><th class="num">Trabajos</th><th class="num">Ticket prom.</th><th class="num">Cobrado</th></tr></thead><tbody>${Object.entries(porTec).sort((a,b)=>b[1].m-a[1].m).map(([n,x])=>{ const tk=x.n?x.m/x.n:0; return `<tr><td>${esc(n)}</td><td class="num muted">${x.n}</td><td class="num ${tk>=tkEmp?'pos':'warn'}" title="${tk>=tkEmp?'sobre':'bajo'} el promedio de la empresa">${fmt(tk)}</td><td class="num pos">${fmt(x.m)}</td></tr>`; }).join('')||'<tr><td class="muted">Sin cobros en el período</td></tr>'}</tbody></table></div>`;
   h+=`<div class="card"><h3>Cobros por medio de pago</h3><table><tbody>${Object.entries(porMedio).sort((a,b)=>b[1]-a[1]).map(([k,m])=>`<tr><td>${esc(k)}</td><td class="num">${fmt(m)}</td></tr>`).join('')||'<tr><td class="muted">—</td></tr>'}</tbody></table></div>`;
   h+=`<div class="card"><h3>Compras y gastos por tipo</h3><table><tbody>${Object.entries(porTipo).sort((a,b)=>b[1]-a[1]).map(([k,m])=>`<tr><td>${esc(k)}</td><td class="num">${fmt(m)}</td></tr>`).join('')||'<tr><td class="muted">Sin gastos registrados en el período</td></tr>'}</tbody></table></div>`;
   h+=`<div class="card"><h3>Remuneraciones del mes</h3><table><tbody>${t.liq.map(l=>`<tr><td>${esc(l.nombre)}</td><td class="muted">${l.trabajos} trab.</td><td class="num">${fmt(l.comision_neta)}</td><td class="num"><b>${fmt(l.haberes)}</b></td></tr>`).join('')||'<tr><td class="muted">—</td></tr>'}</tbody></table><div class="muted" style="margin-top:6px">comisión neta · total haberes</div></div>`;
@@ -353,13 +355,14 @@ async function borrarGasto(id){ if(!confirm('¿Eliminar este registro?')) return
 /* ---------- COMISIONES Y SUELDOS ---------- */
 function renderLiquidacion(){
   const f=empSel(); const emps=D.emp.filter(e=>e.cargo==='tecnico'&&(!f||e.id===f));
-  let h='<div class="hint">Cálculo en tiempo real: sueldo base + comisión por trabajos cobrados (según reglas) + bonos − anticipos − descuentos − pagos. Cambia el sueldo base en la pestaña <b>Equipo</b> y los porcentajes en <b>Reglas de comisión</b>.</div><div class="grid2">';
+  let h='<div class="hint">Cálculo en tiempo real: sueldo base + comisión por trabajos cobrados (según reglas) + bonos − anticipos − descuentos − pagos. Cambia el sueldo base y la <b>frecuencia de pago</b> (mensual o semanal) en la pestaña <b>Equipo</b> y los porcentajes en <b>Reglas de comisión</b>. Los técnicos con pago semanal muestran el desglose por semanas con botón "Pagar semana".</div><div class="grid2">';
   for(const e of emps){
     const l=D.liq.find(x=>x.empleado_id===e.id)||{sueldo_base:e.sueldo_base,comision_bruta:0,ajuste_aprobacion:0,castigo_rechazos:0,castigo_inasistencias:0,castigo_atrasos:0,castigo_incidencias:0,comision_neta:0,bonos:0,anticipos:0,desc_herramientas:0,desc_otros:0,pagos:0,haberes:e.sueldo_base,saldo_por_pagar:e.sueldo_base,trabajos:0,visitas:0,cobrado:0};
     const movs=D.movs.filter(m=>m.empleado_id===e.id); const det=D.det.filter(d=>d.empleado_id===e.id);
     const r=(lbl,val,cls,hide)=> (hide&&!val)?'':`<div class="row"><span class="label">${lbl}</span><span class="${cls||''}">${val<0?'-':''}${fmt(Math.abs(val))}</span></div>`;
-    h+=`<div class="card"><h3>${esc(e.nombre)} <span class="tag">${l.trabajos} trabajos · ${l.visitas} visitas</span></h3>
-      <div class="muted" style="margin-bottom:6px">${fmt(l.cobrado)} cobrado${l.tasa_aprobacion!=null?` · aprobación ${l.tasa_aprobacion}%`:''}${l.llave_abierta===false?' · <span class="tag off">llave cerrada</span>':''}</div>
+    const tk=l.ticket_promedio!=null?l.ticket_promedio:(l.trabajos?l.cobrado/l.trabajos:0); const semanal=e.frecuencia_pago==='semanal';
+    h+=`<div class="card"><h3>${esc(e.nombre)} <span class="tag">${l.trabajos} trabajos · ${l.visitas} visitas</span> <span class="tag ${semanal?'ok':''}" title="Frecuencia de pago (se cambia en Equipo)">pago ${semanal?'semanal':'mensual'}</span></h3>
+      <div class="muted" style="margin-bottom:6px">${fmt(l.cobrado)} cobrado · <b>ticket promedio ${fmt(tk)}</b>${l.tasa_aprobacion!=null?` · aprobación ${l.tasa_aprobacion}%`:''}${l.llave_abierta===false?' · <span class="tag off">llave cerrada</span>':''}</div>
       ${r('Sueldo base',l.sueldo_base)}
       ${r(e.comision_pct_fija!=null?'Comisión fija '+e.comision_pct_fija+'% sobre venta neta':'Comisión por servicios (escalera)',l.comision_bruta,'pos')}
       ${r('Ajuste por aprobación',l.ajuste_aprobacion,l.ajuste_aprobacion<0?'neg':'pos',true)}
@@ -376,6 +379,14 @@ function renderLiquidacion(){
       ${r('Pagado',-l.pagos,'',true)}
       <div class="row total"><span class="label">Saldo por pagar</span><span class="${l.saldo_por_pagar>=0?'pos':'neg'}">${fmt(l.saldo_por_pagar)}</span></div>
       <div class="acts"><button class="sm" onclick="abrirMov('${e.id}','anticipo')">+ Anticipo</button><button class="sm" onclick="abrirMov('${e.id}','bono')">+ Bono</button><button class="sm" onclick="abrirMov('${e.id}','descuento')">+ Descuento</button><button class="sm primary" onclick="abrirMov('${e.id}','pago')">Pagar</button></div>`;
+    if(semanal){ const sem=semanasPeriodo(); const dias=diasPeriodo(); let tot=0,pag=0;
+      h+=`<details open><summary>Pago semanal · ${sem.length} semanas</summary><div class="muted" style="margin:4px 0">Base prorrateada por días del mes + comisión bruta de los trabajos cobrados en la semana − pagos y anticipos registrados esa semana. Los castigos y descuentos del mes se ajustan en la última semana.</div><div class="tbl"><table style="margin-top:6px"><thead><tr><th>Semana</th><th class="num">Trab.</th><th class="num">Base</th><th class="num">Comisión</th><th class="num">Total</th><th class="num">Pagado</th><th class="num">Saldo</th><th></th></tr></thead><tbody>`;
+      sem.forEach((s,i)=>{ const dd=det.filter(d=>!d.es_visita&&d.fecha>=s.ini&&d.fecha<=s.fin); const com=dd.reduce((a,d)=>a+(d.comision||0),0); const base=Math.round((l.sueldo_base||0)*s.dias/dias);
+        let total=base+com; if(i===sem.length-1) total+= (l.comision_neta-l.comision_bruta)+(l.bonos||0)-(l.desc_herramientas||0)-(l.desc_otros||0);
+        const pg=movs.filter(m=>(m.tipo==='pago'||m.tipo==='anticipo')&&m.fecha>=s.ini&&m.fecha<=s.fin).reduce((a,m)=>a+(m.monto||0),0); const saldo=total-pg; tot+=total; pag+=pg;
+        const actual=hoy()>=s.ini&&hoy()<=s.fin;
+        h+=`<tr${actual?' style="background:rgba(59,130,246,.06)"':''}><td>${s.ini.slice(8)}–${s.fin.slice(8)}${actual?' <span class="tag ok">actual</span>':''}</td><td class="num muted">${dd.length}</td><td class="num">${fmt(base)}</td><td class="num pos">${fmt(com)}</td><td class="num"><b>${fmt(total)}</b></td><td class="num muted">${fmt(pg)}</td><td class="num ${saldo>0?'warn':'pos'}">${fmt(saldo)}</td><td>${saldo>0&&hoy()>=s.ini?`<button class="sm primary" onclick="abrirMov('${e.id}','pago',${saldo},'${s.fin}')">Pagar semana</button>`:''}</td></tr>`; });
+      h+=`<tr class="total"><td colspan="4"><b>Mes</b></td><td class="num"><b>${fmt(tot)}</b></td><td class="num">${fmt(pag)}</td><td class="num">${fmt(tot-pag)}</td><td></td></tr></tbody></table></div></details>`; }
     if(det.length){ h+=`<details><summary>${det.length} servicios valorizados</summary><div class="tbl"><table style="margin-top:6px"><thead><tr><th>Fecha</th><th>#</th><th>Cliente</th><th>Tipo</th><th class="num">Total</th><th class="num">%</th><th class="num">Comisión</th></tr></thead><tbody>`;
       for(const d of det) h+=`<tr><td>${d.fecha}</td><td>${d.numero||''}</td><td>${esc(d.cliente||'')}<div class="muted">${esc(d.vehiculo||'')} ${esc(resumenItems(d.items))}</div></td><td>${d.es_visita?'<span class="tag visita">visita</span>':(d.tipo_servicio?`<span class="tag tipo">${esc(d.tipo_servicio)}</span>`:`<span class="muted">escalera N°${d.n}</span>`)}</td><td class="num">${fmt(d.total)}</td><td class="num">${d.pct}%${d.fuera_horario?' <span class="tag fuera">FH</span>':''}</td><td class="num ${d.comision?'pos':''}">${fmt(d.comision)}</td></tr>`;
       h+='</tbody></table></div></details>'; }
@@ -387,11 +398,17 @@ function renderLiquidacion(){
   if(!emps.length) h+='<div class="empty">No hay técnicos activos. Agrega uno en la pestaña Equipo.</div>';
   return h+'</div>';
 }
-function abrirMov(empId,tipo){ movEmp=empId; const e=D.emp.find(x=>x.id===empId);
+function diasPeriodo(){ return new Date(+periodo.slice(0,4), +periodo.slice(5,7), 0).getDate(); }
+function semanasPeriodo(){ // semanas lunes–domingo recortadas al mes
+  const y=+periodo.slice(0,4), m=+periodo.slice(5,7), n=diasPeriodo(), out=[]; const iso=d=>`${periodo}-${String(d).padStart(2,'0')}`;
+  let ini=1; while(ini<=n){ const dow=(new Date(y,m-1,ini).getDay()+6)%7; const fin=Math.min(n, ini+(6-dow)); out.push({ini:iso(ini),fin:iso(fin),dias:fin-ini+1}); ini=fin+1; }
+  return out;
+}
+function abrirMov(empId,tipo,monto,fecha){ movEmp=empId; const e=D.emp.find(x=>x.id===empId);
   document.getElementById('movTitulo').textContent=(tipo==='pago'?'Registrar pago a ':'Registrar movimiento · ')+(e?e.nombre:'');
-  document.getElementById('mTipo').value=tipo; document.getElementById('mMonto').value=''; document.getElementById('mNotas').value=''; document.getElementById('mFecha').value=hoy(); document.getElementById('mCat').value='otro';
+  document.getElementById('mTipo').value=tipo; document.getElementById('mMonto').value=monto||''; document.getElementById('mNotas').value=fecha?'Pago semana al '+fecha:''; document.getElementById('mFecha').value=fecha&&fecha<hoy()?fecha:hoy(); document.getElementById('mCat').value='otro';
   const hs=document.getElementById('mHerr'); hs.innerHTML='<option value="">— sin vincular —</option>'+D.herr.filter(h=>h.tecnico_id===e?.tecnico_id).map(h=>`<option value="${h.id}" data-v="${h.valor||0}">${esc(h.nombre)} (${fmt(h.valor)})</option>`).join('');
-  if(tipo==='pago'){ const l=D.liq.find(x=>x.empleado_id===empId); if(l&&l.saldo_por_pagar>0) document.getElementById('mMonto').value=l.saldo_por_pagar; }
+  if(tipo==='pago'&&!monto){ const l=D.liq.find(x=>x.empleado_id===empId); if(l&&l.saldo_por_pagar>0) document.getElementById('mMonto').value=l.saldo_por_pagar; }
   movTipoChange(); openModal('mMov'); }
 function movTipoChange(){ const t=document.getElementById('mTipo').value; document.getElementById('fCat').style.display=t==='descuento'?'':'none'; movCatChange(); }
 function movCatChange(){ const t=document.getElementById('mTipo').value, c=document.getElementById('mCat').value; document.getElementById('fHerr').style.display=(t==='descuento'&&c==='herramienta')?'':'none'; }
@@ -438,9 +455,9 @@ function renderEquipo(){
   const act=D.empTodos.filter(e=>e.cargo==='tecnico'&&e.activo); const inact=D.empTodos.filter(e=>e.cargo==='tecnico'&&!e.activo&&e.tecnico_id);
   let h=`<div class="card"><h3>Técnicos activos (${act.length}) <button class="sm blue" onclick="abrirTec()">+ Agregar técnico</button></h3>
     <div class="muted" style="margin-bottom:8px">El sueldo base y la comisión se editan aquí y aplican de inmediato a la liquidación del mes. <b>Comisión fija</b>: % plano sobre la venta neta (sin IVA) de cada trabajo cobrado, según contrato; déjala vacía para usar la escalera por tramos de <b>Reglas de comisión</b>. <b>Com. desde</b>: los trabajos pagados antes de esa fecha se liquidan con la escalera (sirve para cambiar de acuerdo sin recalcular el pasado). "Quitar" lo saca del equipo (no borra su historial; se puede reincorporar).</div>
-    <div class="tbl"><table><thead><tr><th>Nombre</th><th>Teléfono</th><th class="num">Sueldo base</th><th class="num">Comisión</th><th>Com. desde</th><th>Ingreso</th><th>Vínculo sistema</th><th></th></tr></thead><tbody>`;
-  for(const e of act){ const t=D.tecs.find(x=>x.id===e.tecnico_id);
-    h+=`<tr><td><b>${esc(e.nombre)}</b></td><td class="muted">${esc(e.telefono||'')}</td><td class="num"><input type="number" value="${e.sueldo_base||0}" style="width:130px;text-align:right" onchange="guardarSueldo('${e.id}',this.value)"></td><td class="num"><input type="number" step="0.5" value="${e.comision_pct_fija??''}" placeholder="escalera" title="% fijo sobre venta neta sin IVA; vacío = escalera por tramos" style="width:80px;text-align:right" onchange="guardarComision('${e.id}',this.value)">${e.comision_pct_fija!=null?' <span class="tag ok">fijo</span>':' <span class="tag">tramos</span>'}</td><td><input type="date" value="${e.comision_fija_desde||''}" title="Trabajos pagados antes de esta fecha se liquidan con la escalera" onchange="guardarComDesde('${e.id}',this.value)"></td><td class="muted">${e.fecha_ingreso||''}</td><td>${t?`<span class="tag ok">${esc(t.nombre)}</span>`:'<span class="tag off">sin vincular</span>'}</td><td><button class="sm ghost" onclick="quitarTec('${e.id}')">Quitar</button></td></tr>`; }
+    <div class="tbl"><table><thead><tr><th>Nombre</th><th>Teléfono</th><th class="num">Sueldo base</th><th class="num">Comisión</th><th>Com. desde</th><th>Pago</th><th class="num" title="Cobrado ÷ trabajos cobrados en el período seleccionado">Ticket prom.</th><th>Ingreso</th><th>Vínculo sistema</th><th></th></tr></thead><tbody>`;
+  for(const e of act){ const t=D.tecs.find(x=>x.id===e.tecnico_id); const l=D.liq.find(x=>x.empleado_id===e.id); const tk=l?(l.ticket_promedio!=null?l.ticket_promedio:(l.trabajos?l.cobrado/l.trabajos:0)):0;
+    h+=`<tr><td><b>${esc(e.nombre)}</b></td><td class="muted">${esc(e.telefono||'')}</td><td class="num"><input type="number" value="${e.sueldo_base||0}" style="width:130px;text-align:right" onchange="guardarSueldo('${e.id}',this.value)"></td><td class="num"><input type="number" step="0.5" value="${e.comision_pct_fija??''}" placeholder="escalera" title="% fijo sobre venta neta sin IVA; vacío = escalera por tramos" style="width:80px;text-align:right" onchange="guardarComision('${e.id}',this.value)">${e.comision_pct_fija!=null?' <span class="tag ok">fijo</span>':' <span class="tag">tramos</span>'}</td><td><input type="date" value="${e.comision_fija_desde||''}" title="Trabajos pagados antes de esta fecha se liquidan con la escalera" onchange="guardarComDesde('${e.id}',this.value)"></td><td><select onchange="guardarFrecuencia('${e.id}',this.value)" title="Frecuencia de pago: mensual o semanal (muestra el desglose por semanas en Comisiones y sueldos)"><option value="mensual" ${e.frecuencia_pago!=='semanal'?'selected':''}>Mensual</option><option value="semanal" ${e.frecuencia_pago==='semanal'?'selected':''}>Semanal</option></select></td><td class="num">${l&&l.trabajos?`<b>${fmt(tk)}</b><div class="muted">${l.trabajos} trab.</div>`:'<span class="muted">—</span>'}</td><td class="muted">${e.fecha_ingreso||''}</td><td>${t?`<span class="tag ok">${esc(t.nombre)}</span>`:'<span class="tag off">sin vincular</span>'}</td><td><button class="sm ghost" onclick="quitarTec('${e.id}')">Quitar</button></td></tr>`; }
   h+='</tbody></table></div></div>';
   // dedupe inactivos por tecnico_id
   const seen=new Set(); const inactU=inact.filter(e=>{ if(seen.has(e.tecnico_id)||act.some(a=>a.tecnico_id===e.tecnico_id)) return false; seen.add(e.tecnico_id); return true; });
@@ -452,7 +469,7 @@ function renderEquipo(){
 function abrirTec(){
   const usados=new Set(D.emp.filter(e=>e.cargo==='tecnico').map(e=>e.tecnico_id));
   document.getElementById('tSel').innerHTML='<option value="">— nuevo, no está en la lista —</option>'+D.tecs.filter(t=>!usados.has(t.id)).map(t=>`<option value="${t.id}" data-n="${esc(t.nombre)}" data-tel="${esc(t.telefono||'')}">${esc(t.nombre)}${t.activo?'':' (inactivo)'}</option>`).join('');
-  document.getElementById('tNombre').value=''; document.getElementById('tTel').value=''; document.getElementById('tFecha').value=hoy();
+  document.getElementById('tNombre').value=''; document.getElementById('tTel').value=''; document.getElementById('tFecha').value=hoy(); document.getElementById('tFrec').value='mensual';
   const ref=D.params.find(p=>p.clave==='sueldo_base_ref'); document.getElementById('tSueldo').value=ref?ref.valor:''; const refP=D.params.find(p=>p.clave==='comision_fija_ref'); document.getElementById('tPct').value=refP?refP.valor:'';
   openModal('mTec');
 }
@@ -463,12 +480,13 @@ async function guardarTecnico(){
   if(!tecnico_id){ const {data,error}=await sb.from('tecnicos').insert({nombre,telefono,activo:true}).select('id').single(); if(error) return toast('Error creando técnico: '+error.message); tecnico_id=data.id; }
   // si existe registro inactivo para ese tecnico_id, reactivar en vez de duplicar
   const prev=D.empTodos.find(e=>e.tecnico_id===tecnico_id&&e.cargo==='tecnico');
-  const payload={nombre,cargo:'tecnico',telefono,sueldo_base:parseInt(document.getElementById('tSueldo').value||0),comision_pct_fija:(document.getElementById('tPct').value===''?null:parseFloat(document.getElementById('tPct').value)),comision_fija_desde:document.getElementById('tFecha').value||null,fecha_ingreso:document.getElementById('tFecha').value||null,activo:true,tecnico_id};
+  const payload={nombre,cargo:'tecnico',telefono,frecuencia_pago:document.getElementById('tFrec').value||'mensual',sueldo_base:parseInt(document.getElementById('tSueldo').value||0),comision_pct_fija:(document.getElementById('tPct').value===''?null:parseFloat(document.getElementById('tPct').value)),comision_fija_desde:document.getElementById('tFecha').value||null,fecha_ingreso:document.getElementById('tFecha').value||null,activo:true,tecnico_id};
   const q=prev?sb.from('empleados_rrhh').update(payload).eq('id',prev.id):sb.from('empleados_rrhh').insert(payload);
   const {error}=await q; if(error) return toast('Error: '+error.message);
   await sb.from('tecnicos').update({activo:true}).eq('id',tecnico_id);
   closeModal('mTec'); toast('Técnico agregado'); cargar();
 }
+async function guardarFrecuencia(id,v){ const {error}=await sb.from('empleados_rrhh').update({frecuencia_pago:v==='semanal'?'semanal':'mensual'}).eq('id',id); if(error) return toast('Error: '+error.message); toast('Pago '+v); cargar(); }
 async function guardarSueldo(id,v){ const {error}=await sb.from('empleados_rrhh').update({sueldo_base:parseInt(v||0)}).eq('id',id); if(error) return toast('Error: '+error.message); toast('Sueldo base actualizado'); cargar(); }
 async function guardarComDesde(id,v){ const {error}=await sb.from('empleados_rrhh').update({comision_fija_desde:v||null}).eq('id',id); if(error) return toast('Error: '+error.message); toast('Vigencia de comisión guardada'); cargar(); }
 async function guardarComision(id,v){ const pct=(v===''||v==null)?null:parseFloat(v); if(pct!=null&&(isNaN(pct)||pct<0||pct>100)) return toast('Porcentaje inválido'); const {error}=await sb.from('empleados_rrhh').update({comision_pct_fija:pct}).eq('id',id); if(error) return toast('Error: '+error.message); toast(pct==null?'Comisión: escalera por tramos':'Comisión fija '+pct+'% sobre neto'); cargar(); }

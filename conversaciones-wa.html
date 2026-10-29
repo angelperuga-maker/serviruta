@@ -329,7 +329,9 @@ async function cargar(){
   var lista = document.getElementById('lista')
   lista.innerHTML = '<div class="loader">Cargando...</div>'
   
-  TODAS = await sbGet('conversaciones_wa?select=*&order=ultima_actividad.desc')
+  // lista liviana: NO traer 'mensajes' (jsonb grande) ni filas antiguas — el historial se carga al abrir la conversación
+  TODAS = await sbGet('conversaciones_wa?select=id,telefono,nombre,origen,canal,categoria,estado,agente_actual,handoff_humano,ultima_actividad,cliente_id&order=ultima_actividad.desc&limit=400')
+  TODAS.forEach(function(c){ if(CACHE_MSGS[c.id]) c.mensajes = CACHE_MSGS[c.id] })
   
   var activas = TODAS.filter(function(c){return !c.handoff_humano}).length
   var handoff = TODAS.filter(function(c){return c.handoff_humano}).length
@@ -423,7 +425,8 @@ function renderLista(){
   filtradas.forEach(function(c){
     var msgs = c.mensajes || []
     var ultimoMsg = msgs.length > 0 ? msgs[msgs.length-1] : null
-    var preview = ultimoMsg ? (ultimoMsg.content || '').substring(0, 60) : 'Sin mensajes'
+    var preview = ultimoMsg ? (ultimoMsg.content || '').substring(0, 60)
+                : (c.ultimo_mensaje ? String(c.ultimo_mensaje).substring(0, 60) : 'Abrir para ver el historial')
     var agente = c.handoff_humano ? 'humano' : (c.agente_actual || 'rita')
     var isCliente = c.cliente_id ? true : false
     
@@ -477,19 +480,30 @@ function seleccionar(id){
   if(!conv) return
   renderLista()
   renderDetalle(conv)
+  if(!conv.mensajes){ cargarHistorial(conv) }
   if(window.innerWidth <= 900){ document.getElementById('detalle-wrap').scrollIntoView({behavior:'smooth', block:'start'}) }
+}
+
+var CACHE_MSGS = {}
+async function cargarHistorial(conv){
+  var r = await sbGet('conversaciones_wa?id=eq.' + conv.id + '&select=mensajes')
+  conv.mensajes = (r && r[0] && r[0].mensajes) || []
+  CACHE_MSGS[conv.id] = conv.mensajes
+  if(SELECTED_ID === conv.id){ renderDetalle(conv); renderLista() }
 }
 
 function renderDetalle(conv){
   var wrap = document.getElementById('detalle-wrap')
   var msgs = conv.mensajes || []
+  var cargando = !conv.mensajes
+  var nMsgs = conv.mensajes ? msgs.length : (conv.n_mensajes != null ? conv.n_mensajes : '…')
   var agente = conv.handoff_humano ? 'humano' : (conv.agente_actual || 'rita')
   
   var html = ''
   html += '<div class="detalle-head">'
   html += '<div class="detalle-info">'
   html += '<div class="detalle-nombre">' + (conv.nombre || 'Sin nombre') + ' <span class="badge ' + agente + '" style="margin-left:8px">' + agente.toUpperCase() + '</span></div>'
-  html += '<div class="detalle-tel">+' + conv.telefono + ' · ' + msgs.length + ' mensajes · Última actividad ' + fmtHoraCompleta(conv.ultima_actividad) + '</div>'
+  html += '<div class="detalle-tel">+' + conv.telefono + ' · ' + nMsgs + ' mensajes · Última actividad ' + fmtHoraCompleta(conv.ultima_actividad) + '</div>'
   html += '</div>'
   html += '<div class="acciones">'
   if(conv.handoff_humano){
@@ -504,7 +518,7 @@ function renderDetalle(conv){
   
   html += '<div class="mensajes" id="mensajes">'
   if(msgs.length === 0){
-    html += '<div style="text-align:center;color:var(--t3);font-style:italic;padding:40px">Sin mensajes en el historial</div>'
+    html += '<div style="text-align:center;color:var(--t3);font-style:italic;padding:40px">' + (cargando ? 'Cargando historial…' : 'Sin mensajes en el historial') + '</div>'
   } else {
     msgs.forEach(function(m){
       var role = m.role || 'assistant'
@@ -642,7 +656,8 @@ function abrirWA(tel){
 renderChips()
 cargar()
 // Auto-refresh cada 30 segundos
-setInterval(cargar, 30000)
+setInterval(function(){ if(!document.hidden) cargar() }, 60000)
+document.addEventListener('visibilitychange', function(){ if(!document.hidden) cargar() })
 
 // Auto-abrir conversación si hay parámetro ?tel=
 async function autoAbrirTel(){

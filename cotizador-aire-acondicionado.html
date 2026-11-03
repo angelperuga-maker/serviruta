@@ -156,6 +156,20 @@
   #srt-aa .aa-serv .aa-val{width:100%;text-align:left;padding-left:33px}
   #srt-aa .aa-serv .aa-val i{text-align:left;display:inline;margin-left:6px}
 }
+
+/* ===== estética tienda Serviruta (blanco + ámbar + Inter), solo dentro del bloque ===== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+#srt-aa{--tinta:#0A0A0A;--acero:#4D4D4D;--humo:#E5E5E5;--papel:#FFFFFF;--frio:#0A0A0A;--frio-claro:#E0A400;--cinta:#E0A400;
+  font-family:'Inter',system-ui,-apple-system,sans-serif!important;border-radius:12px;overflow:hidden}
+#srt-aa h1,#srt-aa h2,#srt-aa b,#srt-aa .aa-pista,#srt-aa .aa-total,#srt-aa .aa-num,#srt-aa .aa-paso-t{font-family:'Inter',system-ui,sans-serif!important;letter-spacing:-.01em}
+#srt-aa .aa-cinta{border-bottom:0}
+#srt-aa .sr-comprar{display:flex;align-items:center;justify-content:center;gap:8px;margin:16px 0 0;padding:14px 16px;border-radius:8px;background:#E0A400;color:#0A0A0A!important;font:700 16px/1 'Inter',sans-serif;text-decoration:none}
+#srt-aa .sr-comprar:hover{background:#F2B705}
+#srt-aa .sr-comprar small{font-weight:500;font-size:13px;opacity:.75}
+#srt-aa .sr-pago{margin:6px 0 10px;text-align:center;font:500 12px/1.4 'Inter',sans-serif;color:#8A8A8A}
+#srt-aa .aa-cab h1 em,#srt-aa .aa-res-veh{color:#E0A400!important}
+#srt-aa .aa-serv[aria-pressed="true"],#srt-aa .aa-gas[aria-pressed="true"]{border-color:#E0A400!important;background:#FFF8E5!important;box-shadow:inset 3px 0 0 #E0A400!important}
+#srt-aa .aa-sello{color:#F2B705!important;border-color:#E0A400!important}
 </style>
 
 <div class="aa-cinta"><div class="aa-pista" id="aaCinta"></div></div>
@@ -228,7 +242,7 @@
    ============================================================ */
 var CONFIG = {
 
-  telefono: "56900000000",
+  telefono: "56945210814",
 
   cinta: [
     "Recarga con máquina de vacío, no con latas",
@@ -497,6 +511,8 @@ function calcula(){
 
   estado.total = total; estado.hayDesde = hayDesde;
   res.classList.add("activo");
+  window.SR_AA = { estado: estado, servicio: servicio };  /* lo usa sr/tienda.js para el botón Comprar */
+  document.dispatchEvent(new CustomEvent('sr:aa-calcula'));
 
   evento("cotizador_aa_resultado", {
     aa_marca:estado.marca, aa_modelo:estado.modelo, aa_ano:estado.ano,
@@ -527,4 +543,7 @@ $("aaWsp").addEventListener("click", function(){
 
 evento("cotizador_aa_inicio", { aa_version:"aire-v1" });
 })();
-</script>
+</script><!-- Compra online en la tienda Serviruta (Shopify) -->
+<script src="https://angelperuga-maker.github.io/serviruta/sr/map/cotizador-aire-acondicionado.js"></script>
+<script src="https://angelperuga-maker.github.io/serviruta/sr/tienda.js" data-cotizador="cotizador-aire-acondicionado.html"></script>
+

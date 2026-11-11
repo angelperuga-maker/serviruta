@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+<title>Informe de servicio · Serviruta</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0A0A0D;--s1:#111114;--s2:#16161B;--s3:#1C1C23;--line:#26262E;--rojo:#E8210A;--verde:#22C55E;--amarillo:#F5C518;--azul:#60A5FA;--dorado:#D4AF37;--t1:#F6F4EF;--t2:#C7C5BF;--t3:#8B8990;--display:'Syne',sans-serif;--body:'DM Sans',sans-serif;--mono:'JetBrains Mono',monospace}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--t2);font-family:var(--body);font-size:14px;line-height:1.4;min-height:100vh;padding-bottom:140px}
+button,input,textarea,select{border:none;background:none;color:inherit;font-family:inherit;font-size:14px}
+input,textarea,select{background:var(--s2);border:1px solid var(--line);border-radius:8px;padding:10px 12px;color:var(--t1);width:100%}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--rojo)}
+textarea{min-height:70px;resize:vertical}
+.bar{position:sticky;top:0;z-index:50;background:rgba(10,10,13,.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--line);padding:12px 16px;display:flex;align-items:center;gap:10px}
+.back{font-family:var(--mono);font-size:10px;color:var(--t3);padding:6px 10px;border:1px solid var(--line);border-radius:6px;text-decoration:none}
+.sigil{width:32px;height:32px;background:var(--rojo);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:13px;color:#fff}
+.title{font-family:var(--display);font-weight:800;font-size:14px;color:var(--t1);flex:1;line-height:1.1}
+.title small{display:block;font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:.1em;margin-top:2px}
+.shell{padding:14px;max-width:720px;margin:0 auto}
+.card{background:var(--s1);border:1px solid var(--line);border-radius:12px;padding:16px;margin-bottom:14px}
+.ct{font-family:var(--display);font-weight:800;font-size:13px;color:var(--t1);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.ct::before{content:"";width:3px;height:14px;background:var(--rojo);border-radius:2px}
+.ct .n{margin-left:auto;font-family:var(--mono);font-size:10px;color:var(--t3)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.grid .full{grid-column:1/-1}
+label{display:block;font-family:var(--mono);font-size:10px;color:var(--t3);letter-spacing:.08em;text-transform:uppercase;font-weight:700;margin:8px 0 4px}
+.hint{font-size:11px;color:var(--t3);margin-top:4px}
+.row{display:flex;gap:8px}
+.btn{padding:11px 14px;border-radius:10px;font-family:var(--display);font-weight:800;font-size:12px;cursor:pointer;border:1px solid var(--line);background:var(--s2);color:var(--t1)}
+.btn.rojo{background:var(--rojo);border-color:var(--rojo);color:#fff}
+.btn.verde{background:var(--verde);border-color:var(--verde);color:#000}
+.trab{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.trab:last-child{border-bottom:none}
+.chk{width:26px;height:26px;border-radius:7px;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;font-weight:900;color:#000}
+.trab.on .chk{background:var(--verde);border-color:var(--verde)}
+.trab .nm{font-weight:700;color:var(--t1);flex:1}
+.trab input{flex:1.3;padding:8px 10px;font-size:13px}
+.pt{background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:8px}
+.pt.ok{border-left:4px solid var(--verde)}.pt.atencion{border-left:4px solid var(--amarillo)}.pt.urgente{border-left:4px solid var(--rojo)}
+.pt-h{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.pt-h .nm{font-weight:700;color:var(--t1);flex:1}
+.est{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.est button{padding:9px 4px;border:2px solid var(--line);border-radius:8px;font-family:var(--display);font-weight:800;font-size:11px;cursor:pointer;background:var(--s3)}
+.est button.ok.a{background:var(--verde);border-color:var(--verde);color:#000}
+.est button.atencion.a{background:var(--amarillo);border-color:var(--amarillo);color:#000}
+.est button.urgente.a{background:var(--rojo);border-color:var(--rojo);color:#fff}
+.pt .nota{margin-top:8px;padding:8px 10px;font-size:13px}
+.res{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}
+.res b{display:block;font-family:var(--display);font-size:22px}
+.res span{font-family:var(--mono);font-size:9px;color:var(--t3);text-transform:uppercase}
+.foot{position:fixed;bottom:0;left:0;right:0;background:rgba(10,10,13,.97);border-top:1px solid var(--line);padding:12px 14px;display:flex;gap:8px;z-index:60}
+.foot .btn{flex:1;padding:14px}
+.toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:var(--s3);border:1px solid var(--line);color:var(--t1);padding:10px 16px;border-radius:10px;font-size:13px;z-index:99;display:none;max-width:90%}
+.ok-box{text-align:center;padding:26px 16px}
+.ok-box h2{font-family:var(--display);color:var(--t1);font-size:20px;margin:10px 0}
+.ok-box a{color:var(--azul);word-break:break-all}
+</style>
+</head>
+<body>
+<div class="bar">
+  <a class="back" href="menu-tecnico.html">← MENÚ</a>
+  <div class="sigil">SR</div>
+  <div class="title">Informe de servicio<small>SE ENVÍA SOLO AL CLIENTE AL FINALIZAR</small></div>
+</div>
+
+<div class="shell" id="app">
+  <div class="card">
+    <div class="ct">1 · Servicio y cliente</div>
+    <label>N° de presupuesto (carga los datos y vincula la garantía)</label>
+    <div class="row"><input id="ppto" inputmode="numeric" placeholder="Ej: 1234"><button class="btn" onclick="cargarPpto()">Cargar</button></div>
+    <div class="grid">
+      <div class="full"><label>Cliente</label><input id="cliente"></div>
+      <div><label>Teléfono WhatsApp</label><input id="telefono" inputmode="tel" placeholder="9 1234 5678"></div>
+      <div><label>Técnico</label><input id="tecnico"></div>
+      <div><label>Vehículo</label><input id="vehiculo" placeholder="Dodge RAM 2500 6.7"></div>
+      <div><label>Patente</label><input id="patente" oninput="this.value=this.value.toUpperCase();sugerirDocs(false)"></div>
+      <div><label>Kilometraje actual</label><input id="km" inputmode="numeric" oninput="sugerirProx(false)"></div>
+      <div><label>Fecha</label><input id="fecha" type="date"></div>
+      <div class="full"><label>Servicio</label><input id="servicio" value="Mantención: cambio de aceite y filtros"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="ct">2 · Trabajos realizados <span class="n">toca para marcar · detalle opcional</span></div>
+    <div id="trabajos"></div>
+    <div class="row" style="margin-top:10px"><input id="otroTrab" placeholder="Otro trabajo realizado"><button class="btn" onclick="agregarTrab()">+</button></div>
+  </div>
+
+  <div class="card">
+    <div class="ct">3 · Revisión del vehículo</div>
+    <div class="res" style="margin-bottom:12px">
+      <div><b id="cOk" style="color:var(--verde)">0</b><span>Bien</span></div>
+      <div><b id="cAt" style="color:var(--amarillo)">0</b><span>Vigilar</span></div>
+      <div><b id="cUr" style="color:var(--rojo)">0</b><span>Urgente</span></div>
+    </div>
+    <div id="checklist"></div>
+  </div>
+
+  <div class="card">
+    <div class="ct">4 · Recomendaciones del técnico</div>
+    <textarea id="recomendaciones" placeholder="Ej: Pastillas delanteras al 30%, cambiar en la próxima mantención."></textarea>
+  </div>
+
+  <div class="card">
+    <div class="ct">5 · Próxima mantención</div>
+    <div class="grid">
+      <div><label>Al llegar a (km)</label><input id="proxKm" inputmode="numeric"></div>
+      <div><label>O en la fecha</label><input id="proxFecha" type="date"></div>
+    </div>
+    <div class="hint">Sugerido: +10.000 km o 6 meses. Ajusta según el aceite y el uso (cerro o tierra: acorta).</div>
+  </div>
+
+  <div class="card">
+    <div class="ct">6 · Documentos del vehículo <span class="n">le avisamos antes de que venzan</span></div>
+    <div class="grid">
+      <div><label>Revisión técnica vence</label><input id="rt" type="date"></div>
+      <div><label>Permiso circulación</label><input id="permiso" type="date"></div>
+      <div><label>SOAP vence</label><input id="soap" type="date"></div>
+      <div><label>Licencia conducir</label><input id="licencia" type="date"></div>
+    </div>
+    <div class="hint" id="docHint">Revísalos en la guantera. Las fechas sugeridas (por patente y calendario anual) se deben confirmar con el documento.</div>
+  </div>
+</div>
+
+<div class="foot" id="foot">
+  <button class="btn" onclick="guardar(false)">Guardar borrador</button>
+  <button class="btn rojo" onclick="guardar(true)">Finalizar y enviar</button>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+var PORTAL=location.href.replace(/[^/]*$/,'')
+
+var TRABAJOS=[
+  {item:'Cambio de aceite de motor',ph:'Marca, viscosidad y litros'},
+  {item:'Filtro de aceite',ph:'Marca / código'},
+  {item:'Filtro de aire',ph:'Marca / código'},
+  {item:'Filtro de combustible',ph:'Marca / código'},
+  {item:'Filtro separador de agua',ph:'Si aplica (diésel)'},
+  {item:'Filtro de cabina (polen)',ph:'Marca / código'},
+  {item:'Reseteo indicador de mantención',ph:''}
+]
+var PUNTOS=[
+  ['🧊','Refrigerante (nivel y estado)'],['🛑','Líquido de frenos'],['🔄','Líquido de dirección / transmisión'],
+  ['🔋','Batería y bornes'],['⚙️','Correas'],['🧵','Mangueras y abrazaderas'],['💧','Fugas de aceite o fluidos'],
+  ['🛞','Frenos (pastillas y discos)'],['🚗','Neumáticos y presión'],['🔩','Suspensión y amortiguadores'],
+  ['🧭','Tren delantero y bujes'],['💡','Luces'],['🌧️','Plumillas y limpiaparabrisas'],['💨','Escape'],['📟','Testigos del tablero / scanner']
+]
+var trab=TRABAJOS.map(function(t){return {item:t.item,ph:t.ph,on:false,detalle:''}})
+var check=PUNTOS.map(function(p,i){return {id:'p'+i,icono:p[0],nombre:p[1],estado:'',nota:''}})
+var informeId=null, presupuestoId=null, pptoNum=null, tocadoProx=false, tocadoDocs=false
+
+function $(id){return document.getElementById(id)}
+function toast(t,ms){var e=$('toast');e.textContent=t;e.style.display='block';clearTimeout(e._t);e._t=setTimeout(function(){e.style.display='none'},ms||2600)}
+function iso(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function esc(s){return String(s||'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+async function sb(path,opt){
+  opt=opt||{}
+  var r=await fetch(SB_URL+'/rest/v1/'+path,{method:opt.method||'GET',headers:Object.assign({'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'},opt.headers||{}),body:opt.body?JSON.stringify(opt.body):undefined})
+  var t=await r.text(); if(!r.ok) throw new Error(t.slice(0,200)); return t?JSON.parse(t):null
+}
+
+function pintarTrab(){
+  $('trabajos').innerHTML=trab.map(function(t,i){
+    return '<div class="trab'+(t.on?' on':'')+'"><div class="chk" onclick="tgl('+i+')">'+(t.on?'✓':'')+'</div><div class="nm" onclick="tgl('+i+')">'+esc(t.item)+'</div>'+
+      (t.ph!==''?'<input placeholder="'+esc(t.ph)+'" value="'+esc(t.detalle)+'" oninput="trab['+i+'].detalle=this.value">':'')+'</div>'
+  }).join('')
+}
+function tgl(i){trab[i].on=!trab[i].on;pintarTrab()}
+function agregarTrab(){var v=$('otroTrab').value.trim();if(!v)return;trab.push({item:v,ph:'Detalle',on:true,detalle:''});$('otroTrab').value='';pintarTrab()}
+
+function pintarCheck(){
+  $('checklist').innerHTML=check.map(function(c,i){
+    return '<div class="pt '+c.estado+'"><div class="pt-h"><span>'+c.icono+'</span><div class="nm">'+esc(c.nombre)+'</div></div>'+
+      '<div class="est">'+[['ok','BIEN'],['atencion','VIGILAR'],['urgente','URGENTE']].map(function(b){return '<button class="'+b[0]+(c.estado===b[0]?' a':'')+'" onclick="setEst('+i+',\''+b[0]+'\')">'+b[1]+'</button>'}).join('')+'</div>'+
+      (c.estado==='atencion'||c.estado==='urgente'?'<input class="nota" placeholder="¿Qué encontraste?" value="'+esc(c.nota)+'" oninput="check['+i+'].nota=this.value">':'')+'</div>'
+  }).join('')
+  $('cOk').textContent=check.filter(function(c){return c.estado==='ok'}).length
+  $('cAt').textContent=check.filter(function(c){return c.estado==='atencion'}).length
+  $('cUr').textContent=check.filter(function(c){return c.estado==='urgente'}).length
+}
+function setEst(i,e){check[i].estado=check[i].estado===e?'':e;pintarCheck()}
+
+function sugerirProx(force){
+  if(tocadoProx&&!force)return
+  var km=parseInt(($('km').value||'').replace(/\D/g,''))
+  if(km) $('proxKm').value=km+10000
+  var d=new Date($('fecha').value+'T12:00:00'); d.setMonth(d.getMonth()+6); $('proxFecha').value=iso(d)
+}
+// Calendario RT vehículos livianos por último dígito de la patente (confirmar con el certificado)
+var RT_MES={9:0,0:1,1:3,2:4,3:5,4:6,5:7,6:8,7:9,8:10}
+function finMes(y,m){return iso(new Date(y,m+1,0))}
+function sugerirDocs(force){
+  if(tocadoDocs&&!force)return
+  var hoy=new Date(), y=hoy.getFullYear()
+  var mar=new Date(y,2,31); var marIso=iso(mar<hoy?new Date(y+1,2,31):mar)
+  if(!$('permiso').value||force) $('permiso').value=marIso
+  if(!$('soap').value||force) $('soap').value=marIso
+  var m=($('patente').value||'').match(/(\d)\D*$/)
+  if(m){var mes=RT_MES[m[1]];var f=new Date(y,mes+1,0);if(f<hoy)f=new Date(y+1,mes+1,0);$('rt').value=iso(f)}
+}
+['rt','permiso','soap'].forEach(function(id){$(id).addEventListener('change',function(){tocadoDocs=true})})
+;['proxKm','proxFecha'].forEach(function(id){$(id).addEventListener('change',function(){tocadoProx=true})})
+
+async function cargarPpto(){
+  var n=parseInt($('ppto').value); if(!n){toast('Escribe el N° de presupuesto');return}
+  try{
+    var r=await sb('presupuestos?numero=eq.'+n+'&select=id,numero,cliente,telefono,email,vehiculo,auto,patente,tecnico&limit=1')
+    if(!r||!r[0]){toast('No encontré el presupuesto '+n);return}
+    var p=r[0]; presupuestoId=p.id; pptoNum=p.numero
+    $('cliente').value=p.cliente||''; $('telefono').value=p.telefono||''; $('vehiculo').value=p.vehiculo||p.auto||''
+    $('patente').value=(p.patente||'').toUpperCase(); if(p.tecnico) $('tecnico').value=p.tecnico
+    sugerirDocs(false)
+    var ex=await sb('informes_servicio?presupuesto_id=eq.'+p.id+'&select=*&order=created_at.desc&limit=1')
+    if(ex&&ex[0]) cargarInforme(ex[0])
+    toast('Presupuesto '+n+' cargado ✓')
+  }catch(e){toast('Error: '+e.message,4000)}
+}
+function cargarInforme(i){
+  informeId=i.id
+  ;['cliente','telefono','vehiculo','patente','tecnico','servicio','recomendaciones','fecha'].forEach(function(k){if(i[k]!=null)$(k).value=i[k]})
+  if(i.km)$('km').value=i.km
+  $('proxKm').value=i.proxima_mantencion_km||''; $('proxFecha').value=i.proxima_mantencion_fecha||''
+  $('rt').value=i.rt_vence||''; $('permiso').value=i.permiso_vence||''; $('soap').value=i.soap_vence||''; $('licencia').value=i.licencia_vence||''
+  tocadoProx=tocadoDocs=true
+  ;(i.trabajos||[]).forEach(function(t){var x=trab.find(function(y){return y.item===t.item});if(x){x.on=true;x.detalle=t.detalle||''}else trab.push({item:t.item,ph:'Detalle',on:true,detalle:t.detalle||''})})
+  ;(i.checklist||[]).forEach(function(c){var x=check.find(function(y){return y.nombre===c.nombre});if(x){x.estado=c.estado||'';x.nota=c.nota||''}})
+  pintarTrab();pintarCheck()
+  if(i.estado==='finalizado') toast('Este informe ya fue finalizado y enviado',3500)
+}
+
+async function guardar(finalizar){
+  var tel=($('telefono').value||'').replace(/\D/g,'')
+  if(!$('cliente').value.trim()){toast('Falta el nombre del cliente');return}
+  if(finalizar){
+    if(tel.length<8){toast('Falta un teléfono válido para enviarle el informe');return}
+    if(!trab.some(function(t){return t.on})){toast('Marca al menos un trabajo realizado');return}
+    var sin=check.filter(function(c){return !c.estado}).length
+    if(sin&&!confirm(sin+' puntos sin revisar. ¿Finalizar igual? (no aparecerán en el informe)'))return
+    if(!confirm('Se enviará el informe por WhatsApp a '+$('cliente').value+'. ¿Confirmas?'))return
+  }
+  var num=function(id){var v=parseInt(($(id).value||'').replace(/\D/g,''));return isNaN(v)?null:v}
+  var d=function(id){return $(id).value||null}
+  var data={
+    presupuesto_id:presupuestoId, presupuesto_numero:pptoNum,
+    cliente:$('cliente').value.trim(), telefono:$('telefono').value.trim(), vehiculo:$('vehiculo').value.trim(),
+    patente:$('patente').value.trim().toUpperCase()||null, km:num('km'), tecnico:$('tecnico').value.trim(),
+    fecha:d('fecha'), servicio:$('servicio').value.trim(),
+    trabajos:trab.filter(function(t){return t.on}).map(function(t){return {item:t.item,detalle:t.detalle}}),
+    checklist:check.filter(function(c){return c.estado}).map(function(c){return {nombre:c.nombre,icono:c.icono,estado:c.estado,nota:c.nota}}),
+    recomendaciones:$('recomendaciones').value.trim()||null,
+    proxima_mantencion_km:num('proxKm'), proxima_mantencion_fecha:d('proxFecha'),
+    rt_vence:d('rt'), permiso_vence:d('permiso'), soap_vence:d('soap'), licencia_vence:d('licencia')
+  }
+  if(finalizar) data.estado='finalizado'
+  try{
+    var r
+    if(informeId) r=await sb('informes_servicio?id=eq.'+informeId,{method:'PATCH',headers:{'Prefer':'return=representation'},body:data})
+    else r=await sb('informes_servicio',{method:'POST',headers:{'Prefer':'return=representation'},body:data})
+    informeId=r[0].id
+    if(finalizar) listo(r[0]); else toast('Borrador guardado ✓')
+  }catch(e){toast('Error al guardar: '+e.message,5000)}
+}
+function listo(i){
+  var link=PORTAL+'informe.html?t='+i.token
+  $('foot').style.display='none'
+  $('app').innerHTML='<div class="card ok-box"><div style="font-size:44px">✅</div><h2>Informe enviado</h2>'+
+    '<p>Le llega por WhatsApp a <b>'+esc(i.cliente)+'</b> en unos segundos, con la garantía (si el presupuesto está pagado) y los recordatorios de sus documentos.</p>'+
+    '<p style="margin-top:14px"><a href="'+link+'" target="_blank">Ver informe del cliente</a></p>'+
+    '<p style="margin-top:20px"><a class="btn" href="informe-servicio.html" style="text-decoration:none;color:var(--t1)">Nuevo informe</a></p></div>'
+}
+
+$('fecha').value=iso(new Date())
+try{var u=JSON.parse(localStorage.getItem('tecnico')||localStorage.getItem('sr_tecnico')||'null');if(u&&(u.nombre||u.name))$('tecnico').value=u.nombre||u.name}catch(e){}
+var qp=new URLSearchParams(location.search); if(qp.get('ppto')){$('ppto').value=qp.get('ppto');cargarPpto()}
+pintarTrab();pintarCheck();sugerirProx(true);sugerirDocs(true)
+</script>
+</body>
+</html>

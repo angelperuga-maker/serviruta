@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Serviruta · Informe de servicio</title>
+<meta name="robots" content="noindex">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800;900&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--rojo:#E8210A;--verde:#16A34A;--amarillo:#D9A400;--gris:#6B6B73}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#1a1a1f;font-family:"DM Sans",sans-serif;color:#1a1a1a;padding:18px 0 40px;min-height:100vh}
+.wrap{max-width:760px;margin:0 auto;padding:0 12px}
+.doc{background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,.4)}
+.top{background:#0A0A0D;color:#fff;padding:22px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:4px solid var(--rojo)}
+.logo{font-family:Syne;font-weight:900;font-size:24px;letter-spacing:3px}.logo span{color:var(--rojo)}
+.tag{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#aaa;margin-top:2px}
+.top .h{text-align:right;font-family:Syne;font-weight:800;font-size:13px}.top .h small{display:block;font-family:"DM Sans";font-weight:500;color:#aaa;font-size:11px;margin-top:3px}
+.body{padding:22px 24px}
+h2{font-family:Syne;font-weight:800;font-size:15px;margin:22px 0 10px;display:flex;align-items:center;gap:8px}
+h2::before{content:"";width:4px;height:16px;background:var(--rojo);border-radius:2px}
+h2:first-child{margin-top:0}
+.datos{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;background:#f5f5f6;border-radius:8px;padding:14px}
+.lbl{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gris)}
+.val{font-size:14px;font-weight:600;margin-top:2px}
+.pat{font-family:Syne;font-weight:900;letter-spacing:2px}
+.resumen{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:6px}
+.resumen div{border-radius:8px;padding:12px;text-align:center;border:1px solid #eee}
+.resumen b{display:block;font-family:Syne;font-size:26px;line-height:1}
+.resumen span{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--gris)}
+ul.trab{list-style:none}
+ul.trab li{padding:9px 0;border-bottom:1px solid #eee;display:flex;gap:10px;font-size:14px}
+ul.trab li::before{content:"✓";color:var(--verde);font-weight:900}
+ul.trab small{color:var(--gris);display:block}
+.pt{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid #eee;font-size:14px}
+.dot{width:12px;height:12px;border-radius:50%;margin-top:4px;flex-shrink:0}
+.pt .n{flex:1}.pt small{display:block;color:#444;margin-top:2px}
+.pill{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:20px;white-space:nowrap}
+.ok .dot{background:var(--verde)}.ok .pill{background:#DCFCE7;color:var(--verde)}
+.atencion .dot{background:var(--amarillo)}.atencion .pill{background:#FEF3C7;color:#92400E}
+.urgente .dot{background:var(--rojo)}.urgente .pill{background:#FEE2E2;color:#B91C1C}
+.reco{background:#FFF7ED;border-left:4px solid #FB923C;border-radius:6px;padding:12px 14px;font-size:14px;line-height:1.5;white-space:pre-wrap}
+.prox{display:flex;gap:12px;align-items:center;background:#0A0A0D;color:#fff;border-radius:8px;padding:14px 16px}
+.prox .big{font-family:Syne;font-weight:900;font-size:20px}
+.docs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dc{border:1px solid #eee;border-radius:8px;padding:12px}
+.dc .d{font-weight:700;margin-top:3px}.dc .r{font-size:11px;margin-top:3px;font-weight:600}
+.vence-pronto{border-color:#FCD34D;background:#FFFBEB}.vencido{border-color:#FCA5A5;background:#FEF2F2}
+.gar{border:2px solid var(--rojo);border-radius:10px;padding:14px 16px;display:flex;gap:14px;align-items:center}
+.gar a{color:var(--rojo);font-weight:700}
+.aviso{font-size:12px;color:var(--gris);margin-top:8px}
+.foot{padding:16px 24px;background:#f5f5f6;font-size:11px;color:var(--gris);text-align:center;line-height:1.5}
+.acciones{display:flex;gap:10px;margin:16px 0 0;flex-wrap:wrap}
+.acciones a,.acciones button{flex:1;min-width:150px;text-align:center;padding:14px;border-radius:10px;font-family:Syne;font-weight:800;font-size:13px;text-decoration:none;border:none;cursor:pointer}
+.wa{background:#22C55E;color:#000}.pr{background:#2a2a30;color:#fff}
+.msg{color:#fff;text-align:center;padding:60px 20px;font-family:Syne}
+@media(max-width:560px){.datos{grid-template-columns:1fr 1fr}.docs{grid-template-columns:1fr}.top{flex-direction:column;align-items:flex-start}.top .h{text-align:left}}
+@media print{body{background:#fff;padding:0}.doc{box-shadow:none;border-radius:0}.acciones{display:none}.top{-webkit-print-color-adjust:exact;print-color-adjust:exact}.prox,.dot,.pill,.reco{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"><div class="msg">Cargando informe…</div></div>
+<script>
+var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
+var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
+var WA='56985079392'
+var EST={ok:'Bien',atencion:'Vigilar',urgente:'Urgente'}
+
+function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function fl(iso){if(!iso)return '—';return new Date(iso+'T12:00:00').toLocaleDateString('es-CL',{day:'numeric',month:'long',year:'numeric'})}
+function dias(iso){var h=new Date();h.setHours(12,0,0,0);return Math.round((new Date(iso+'T12:00:00')-h)/864e5)}
+function kms(n){return n?Number(n).toLocaleString('es-CL')+' km':'—'}
+
+function doc(nombre,iso){
+  if(!iso) return ''
+  var d=dias(iso), cls=d<0?'vencido':(d<=30?'vence-pronto':''), txt=d<0?'Vencido hace '+(-d)+' días':(d===0?'Vence hoy':'Faltan '+d+' días')
+  return '<div class="dc '+cls+'"><div class="lbl">'+nombre+'</div><div class="d">'+fl(iso)+'</div><div class="r">'+txt+'</div></div>'
+}
+
+function render(i){
+  var ch=i.checklist||[], cnt=function(e){return ch.filter(function(c){return c.estado===e}).length}
+  var orden={urgente:0,atencion:1,ok:2}
+  ch=ch.slice().sort(function(a,b){return orden[a.estado]-orden[b.estado]})
+  var h='<div class="doc"><div class="top"><div><div class="logo">SERVI<span>RUTA</span></div><div class="tag">Mecánica móvil profesional</div></div>'+
+    '<div class="h">INFORME DE SERVICIO<small>'+fl(i.fecha)+(i.presupuesto_numero?' · Presupuesto N° '+i.presupuesto_numero:'')+'</small></div></div><div class="body">'
+  h+='<h2>Vehículo</h2><div class="datos">'+
+    '<div><div class="lbl">Cliente</div><div class="val">'+esc(i.cliente)+'</div></div>'+
+    '<div><div class="lbl">Vehículo</div><div class="val">'+esc(i.vehiculo||'—')+'</div></div>'+
+    '<div><div class="lbl">Patente</div><div class="val pat">'+esc(i.patente||'—')+'</div></div>'+
+    '<div><div class="lbl">Kilometraje</div><div class="val">'+kms(i.km)+'</div></div>'+
+    '<div><div class="lbl">Técnico</div><div class="val">'+esc(i.tecnico||'—')+'</div></div>'+
+    '<div><div class="lbl">Servicio</div><div class="val">'+esc(i.servicio||'—')+'</div></div></div>'
+  if((i.trabajos||[]).length){
+    h+='<h2>Trabajos realizados</h2><ul class="trab">'+i.trabajos.map(function(t){return '<li><div>'+esc(t.item)+(t.detalle?'<small>'+esc(t.detalle)+'</small>':'')+'</div></li>'}).join('')+'</ul>'
+  }
+  if(ch.length){
+    h+='<h2>Revisión del vehículo ('+ch.length+' puntos)</h2><div class="resumen">'+
+      '<div><b style="color:var(--verde)">'+cnt('ok')+'</b><span>Bien</span></div>'+
+      '<div><b style="color:var(--amarillo)">'+cnt('atencion')+'</b><span>Vigilar</span></div>'+
+      '<div><b style="color:var(--rojo)">'+cnt('urgente')+'</b><span>Urgente</span></div></div>'+
+      ch.map(function(c){return '<div class="pt '+c.estado+'"><div class="dot"></div><div class="n">'+esc(c.nombre)+(c.nota?'<small>'+esc(c.nota)+'</small>':'')+'</div><span class="pill">'+EST[c.estado]+'</span></div>'}).join('')
+  }
+  if(i.recomendaciones) h+='<h2>Recomendaciones del técnico</h2><div class="reco">'+esc(i.recomendaciones)+'</div>'
+  if(i.proxima_mantencion_km||i.proxima_mantencion_fecha){
+    h+='<h2>Próxima mantención</h2><div class="prox"><div style="font-size:28px">🔧</div><div><div class="big">'+
+      (i.proxima_mantencion_km?kms(i.proxima_mantencion_km):'')+(i.proxima_mantencion_km&&i.proxima_mantencion_fecha?' o ':'')+(i.proxima_mantencion_fecha?fl(i.proxima_mantencion_fecha):'')+
+      '</div><div style="font-size:12px;color:#bbb">lo que ocurra primero · te avisaremos por WhatsApp</div></div></div>'
+  }
+  var docs=doc('Revisión técnica',i.rt_vence)+doc('Permiso de circulación',i.permiso_vence)+doc('SOAP',i.soap_vence)+doc('Licencia de conducir',i.licencia_vence)
+  if(docs) h+='<h2>Documentos del vehículo</h2><div class="docs">'+docs+'</div><div class="aviso">Te enviaremos un recordatorio por WhatsApp antes de cada vencimiento.</div>'
+  if(i.carta_id){
+    h+='<h2>Garantía</h2><div class="gar"><div style="font-size:30px">🛡️</div><div>Servicio con garantía'+(i.garantia_hasta?' hasta el <b>'+fl(i.garantia_hasta)+'</b>':'')+'.<br>'+
+      (i.descuento_pct?'Tienes un <b>'+i.descuento_pct+'% de descuento</b> en mano de obra para tu próximo servicio'+(i.descuento_hasta?' (válido hasta el '+fl(i.descuento_hasta)+')':'')+'.<br>':'')+
+      '<a href="carta-garantia.html?id='+encodeURIComponent(i.carta_id)+'">Ver certificado de garantía →</a></div></div>'
+  }
+  h+='</div><div class="foot">Serviruta · Mecánica a domicilio para autos, camionetas y camiones · serviruta.cl<br>Este informe refleja el estado observado en la fecha del servicio.</div></div>'
+  var txt=encodeURIComponent('Hola, quiero agendar un servicio para mi '+(i.vehiculo||'vehículo')+(i.patente?' ('+i.patente+')':'')+'. Vengo del informe de servicio.')
+  h+='<div class="acciones"><a class="wa" href="https://wa.me/'+WA+'?text='+txt+'">Agendar por WhatsApp</a><button class="pr" onclick="window.print()">Descargar / imprimir PDF</button></div>'
+  document.getElementById('app').innerHTML=h
+  document.title='Informe '+(i.patente||'')+' · Serviruta'
+}
+
+;(async function(){
+  var t=new URLSearchParams(location.search).get('t')
+  if(!t){document.getElementById('app').innerHTML='<div class="msg">Enlace incompleto.</div>';return}
+  try{
+    var r=await fetch(SB_URL+'/rest/v1/rpc/informe_publico',{method:'POST',headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'},body:JSON.stringify({p_token:t})})
+    var i=await r.json()
+    if(!r.ok||!i){document.getElementById('app').innerHTML='<div class="msg">No encontramos este informe.</div>';return}
+    render(i)
+  }catch(e){document.getElementById('app').innerHTML='<div class="msg">No se pudo cargar el informe. Intenta de nuevo.</div>'}
+})()
+</script>
+</body>
+</html>

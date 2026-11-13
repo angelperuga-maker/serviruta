@@ -275,7 +275,7 @@ function listo(i){
 }
 
 $('fecha').value=iso(new Date())
-try{var u=JSON.parse(localStorage.getItem('tecnico')||localStorage.getItem('sr_tecnico')||'null');if(u&&(u.nombre||u.name))$('tecnico').value=u.nombre||u.name}catch(e){}
+try{var u=localStorage.getItem('sv_user_nombre')||sessionStorage.getItem('tecnico_nombre');if(u)$('tecnico').value=u}catch(e){}
 var qp=new URLSearchParams(location.search); if(qp.get('ppto')){$('ppto').value=qp.get('ppto');cargarPpto()}
 pintarTrab();pintarCheck();sugerirProx(true);sugerirDocs(true)
 </script>

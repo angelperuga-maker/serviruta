@@ -138,7 +138,7 @@ body{background:var(--negro);color:var(--txt);font-family:"DM Sans",sans-serif;m
 var SB='https://bqlgfmqcefledqyodkii.supabase.co'
 var SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
 var db=null,gastos=[],fotoBase64=''
-var nombre=sessionStorage.getItem('tecnico_nombre')||''
+var nombre=sessionStorage.getItem('tecnico_nombre')||localStorage.getItem('sv_user_nombre')||''
 var TIPO_ICONS={'Materiales':'🔩','Combustible':'⛽','Herramientas':'🔧','Otros':'📦'}
 var TIPO_COLORS={'Materiales':'#60A5FA','Combustible':'#FB923C','Herramientas':'#F5C518','Otros':'#9996A0'}
 

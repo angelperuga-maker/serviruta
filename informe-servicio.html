@@ -278,7 +278,7 @@ async function guardar(finalizar){
     if(!trab.some(function(t){return t.on})){toast('Marca al menos un trabajo realizado');return}
     var sin=check.filter(function(c){return !c.estado}).length
     if(sin&&!confirm(sin+' puntos sin revisar. ¿Finalizar igual? (no aparecerán en el informe)'))return
-    if(!confirm('Se enviará el informe por WhatsApp a '+$('cliente').value+'. ¿Confirmas?'))return
+    if(!confirm('Se enviará el informe en PDF por WhatsApp a '+$('cliente').value+'. ¿Confirmas?'))return
   }
   var num=function(id){var v=parseInt(($(id).value||'').replace(/\D/g,''));return isNaN(v)?null:v}
   var d=function(id){return $(id).value||null}
@@ -308,7 +308,7 @@ function listo(i){
   var link=PORTAL+'informe.html?t='+i.token
   $('foot').style.display='none'
   $('app').innerHTML='<div class="card ok-box"><div style="font-size:44px">✅</div><h2>Informe enviado</h2>'+
-    '<p>Le llega por WhatsApp a <b>'+esc(i.cliente)+'</b> en unos segundos, con la garantía (si el presupuesto está pagado) y los recordatorios de sus documentos.</p>'+
+    '<p>Le llega en PDF por WhatsApp a <b>'+esc(i.cliente)+'</b> en unos segundos, con la garantía (si el presupuesto está pagado) y los recordatorios de sus documentos.</p>'+
     '<p style="margin-top:14px"><a href="'+link+'" target="_blank">Ver informe del cliente</a></p>'+
     '<p style="margin-top:20px"><a class="btn" href="informe-servicio.html" style="text-decoration:none;color:var(--t1)">Nuevo informe</a></p></div>'
 }

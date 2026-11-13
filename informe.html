@@ -65,6 +65,7 @@ var SB_URL='https://bqlgfmqcefledqyodkii.supabase.co'
 var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJxbGdmbXFjZWZsZWRxeW9ka2lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1OTAxMjUsImV4cCI6MjA5NTE2NjEyNX0.m_XyXsZ84niHcHrKNgHSDSS8DxpR7vnHhMfQJk7yM_s'
 var WA='56985079392'
 var EST={ok:'Bien',atencion:'Vigilar',urgente:'Urgente'}
+var TOKEN=''
 
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function fl(iso){if(!iso)return '—';return new Date(iso+'T12:00:00').toLocaleDateString('es-CL',{day:'numeric',month:'long',year:'numeric'})}
@@ -130,13 +131,14 @@ function render(i){
   }
   h+='</div><div class="foot">Serviruta · Mecánica a domicilio para autos, camionetas y camiones · serviruta.cl<br>Este informe refleja el estado observado en la fecha del servicio.</div></div>'
   var txt=encodeURIComponent('Hola, quiero agendar un servicio para mi '+(i.vehiculo||'vehículo')+(i.patente?' ('+i.patente+')':'')+'. Vengo del informe de servicio.')
-  h+='<div class="acciones"><a class="wa" href="https://wa.me/'+WA+'?text='+txt+'">Agendar por WhatsApp</a><button class="pr" onclick="window.print()">Descargar / imprimir PDF</button></div>'
+  h+='<div class="acciones"><a class="wa" href="https://wa.me/'+WA+'?text='+txt+'">Agendar por WhatsApp</a><a class="pr" href="'+SB_URL+'/functions/v1/informe-cliente?pdf='+encodeURIComponent(TOKEN)+'" target="_blank" rel="noopener">Descargar PDF</a></div>'
   document.getElementById('app').innerHTML=h
   document.title='Informe '+(i.patente||'')+' · Serviruta'
 }
 
 ;(async function(){
   var t=new URLSearchParams(location.search).get('t')
+  TOKEN=t||''
   if(!t){document.getElementById('app').innerHTML='<div class="msg">Enlace incompleto.</div>';return}
   try{
     var r=await fetch(SB_URL+'/rest/v1/rpc/informe_publico',{method:'POST',headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'},body:JSON.stringify({p_token:t})})

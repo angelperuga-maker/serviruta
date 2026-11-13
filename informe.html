@@ -80,12 +80,12 @@ function doc(nombre,iso){
 function render(i){
   var ch=i.checklist||[], cnt=function(e){return ch.filter(function(c){return c.estado===e}).length}
   var orden={urgente:0,atencion:1,ok:2}
-  ch=ch.slice().sort(function(a,b){return orden[a.estado]-orden[b.estado]})
+  if(!ch.some(function(c){return c.grupo})) ch=ch.slice().sort(function(a,b){return orden[a.estado]-orden[b.estado]})
   var h='<div class="doc"><div class="top"><div><div class="logo">SERVI<span>RUTA</span></div><div class="tag">Mecánica móvil profesional</div></div>'+
     '<div class="h">INFORME DE SERVICIO<small>'+fl(i.fecha)+(i.presupuesto_numero?' · Presupuesto N° '+i.presupuesto_numero:'')+'</small></div></div><div class="body">'
   h+='<h2>Vehículo</h2><div class="datos">'+
-    '<div><div class="lbl">Cliente</div><div class="val">'+esc(i.cliente)+'</div></div>'+
-    '<div><div class="lbl">Vehículo</div><div class="val">'+esc(i.vehiculo||'—')+'</div></div>'+
+    '<div><div class="lbl">Cliente</div><div class="val">'+esc(i.cliente)+(i.comuna?'<div style="font-size:12px;color:#6B6B73">'+esc(i.comuna)+'</div>':'')+'</div></div>'+
+    '<div><div class="lbl">Vehículo</div><div class="val">'+esc((i.vehiculo||'—')+(i.anio?' '+i.anio:''))+(i.motor?'<div style="font-size:12px;color:#6B6B73">'+esc(i.motor)+'</div>':'')+'</div></div>'+
     '<div><div class="lbl">Patente</div><div class="val pat">'+esc(i.patente||'—')+'</div></div>'+
     '<div><div class="lbl">Kilometraje</div><div class="val">'+kms(i.km)+'</div></div>'+
     '<div><div class="lbl">Técnico</div><div class="val">'+esc(i.tecnico||'—')+'</div></div>'+
@@ -94,11 +94,13 @@ function render(i){
     h+='<h2>Trabajos realizados</h2><ul class="trab">'+i.trabajos.map(function(t){return '<li><div>'+esc(t.item)+(t.detalle?'<small>'+esc(t.detalle)+'</small>':'')+'</div></li>'}).join('')+'</ul>'
   }
   if(ch.length){
-    h+='<h2>Revisión del vehículo ('+ch.length+' puntos)</h2><div class="resumen">'+
+    var gAct=''
+    h+='<h2>Revisión de '+ch.length+' puntos críticos</h2><div class="resumen">'+
       '<div><b style="color:var(--verde)">'+cnt('ok')+'</b><span>Bien</span></div>'+
       '<div><b style="color:var(--amarillo)">'+cnt('atencion')+'</b><span>Vigilar</span></div>'+
       '<div><b style="color:var(--rojo)">'+cnt('urgente')+'</b><span>Urgente</span></div></div>'+
-      ch.map(function(c){return '<div class="pt '+c.estado+'"><div class="dot"></div><div class="n">'+esc(c.nombre)+(c.nota?'<small>'+esc(c.nota)+'</small>':'')+'</div><span class="pill">'+EST[c.estado]+'</span></div>'}).join('')
+      ch.map(function(c,k){var t='';if(c.grupo&&c.grupo!==gAct){gAct=c.grupo;t='<div class="lbl" style="margin:14px 0 2px;font-weight:700">'+esc(c.grupo)+'</div>'}
+        return t+'<div class="pt '+c.estado+'"><div class="dot"></div><div class="n">'+(c.grupo?(k+1)+'. ':'')+esc(c.nombre)+(c.med?' <b>· '+esc(c.med)+' '+esc(c.u||'')+'</b>':'')+(c.nota?'<small>'+esc(c.nota)+'</small>':'')+'</div><span class="pill">'+EST[c.estado]+'</span></div>'}).join('')
   }
   if(i.recomendaciones) h+='<h2>Recomendaciones del técnico</h2><div class="reco">'+esc(i.recomendaciones)+'</div>'
   if(i.proxima_mantencion_km||i.proxima_mantencion_fecha){

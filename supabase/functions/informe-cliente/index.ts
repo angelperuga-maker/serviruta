@@ -1,8 +1,10 @@
-// informe-cliente v2
+// informe-cliente v3
 // action=enviar {informe_id}: arma recordatorios, genera el informe en PDF y lo envía al cliente por WhatsApp
 //   como documento (con la garantía y los recordatorios en el mensaje). Si el documento falla, envía el link.
 // action=recordatorios: (cron diario) envía los avisos que tocan hoy, agrupados por teléfono.
 // GET ?pdf=<token>: descarga el PDF del informe finalizado.
+// v3: fotos en el PDF; primero va el mensaje de texto y después el PDF como documento aparte;
+//     se consulta el estado de entrega del documento y el envío corre en segundo plano.
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { informePdf } from "./pdf.ts"
 
@@ -34,6 +36,13 @@ async function whapi(endpoint: string, payload: unknown) {
   } catch (e) { return { error: String(e) } }
 }
 const sendWA = (to: string, body: string) => whapi("text", { to, body })
+async function estadoWA(id: string) {
+  try {
+    const r = await fetch(`${WHAPI_URL}/messages/${encodeURIComponent(id)}`, { headers: { Authorization: `Bearer ${WHAPI_TOKEN}` } })
+    const j = await r.json()
+    return String(j?.status || j?.error?.message || "desconocido")
+  } catch (e) { return "error: " + String(e) }
+}
 async function logWA(tel: string, nombre: string, mensaje: string, extra: any) {
   await sb("whatsapp_log", { method: "POST", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ tipo: "enviado", telefono: tel, nombre, mensaje, raw_payload: extra }) })
 }
@@ -115,34 +124,37 @@ async function enviarInforme(id: string, forzar = false) {
   const atn = ch.filter((c: any) => c.estado === "atencion").length
 
   let msg = `Hola ${primer(inf.cliente)} 👋 Gracias por confiar en *Serviruta*.\n\n` +
-    `Te enviamos en PDF el *informe de tu mantención*${inf.vehiculo ? ` (${inf.vehiculo}${inf.patente ? " · " + inf.patente.toUpperCase() : ""})` : ""}: el servicio realizado, la revisión de ${ch.length || 25} puntos críticos y nuestras recomendaciones.\n`
+    `Te enviamos el *informe de tu mantención*${inf.vehiculo ? ` (${inf.vehiculo}${inf.patente ? " · " + inf.patente.toUpperCase() : ""})` : ""}: el servicio realizado, la revisión de ${ch.length || 25} puntos críticos y nuestras recomendaciones.\n`
   if (urg || atn) msg += `\n⚠️ Encontramos ${urg ? `*${urg} punto${urg > 1 ? "s" : ""} urgente${urg > 1 ? "s" : ""}*` : ""}${urg && atn ? " y " : ""}${atn ? `${atn} para vigilar` : ""}. Está todo detallado en el informe.\n`
   if (carta) {
     const km = carta.garantia_km ? ` o ${Number(carta.garantia_km).toLocaleString("es-CL")} km` : ""
     msg += `\n🛡️ *Certificado de garantía* (${carta.garantia_meses} meses${km}):\n${PORTAL_URL}/carta-garantia.html?id=${carta.id}\n`
   }
   if (recs.length) msg += `\n📅 Además *te avisaremos antes de que venzan*:\n` + recs.map((x) => `• ${NOMBRE[x.tipo].replace(/^\S+ /, "")}: ${fechaLarga(x.vence)}`).join("\n") + "\n"
-  msg += `\nTambién puedes verlo en línea:\n${link}\n\nCualquier duda, respóndenos por aquí 🙌`
+  msg += `\nVer el informe en línea:\n${link}\n\n📎 En el siguiente mensaje va el informe en PDF.\n\nCualquier duda, respóndenos por aquí 🙌`
 
-  let pdfOk = false, wa: any = null, pdfErr = ""
+  // 1) Mensaje de texto: es lo que siempre llega. 2) El PDF como documento aparte, con texto corto.
+  let pdfOk = false, wa: any = null, waDoc: any = null, pdfErr = "", entrega = ""
   if (tel) {
+    wa = await sendWA(tel, msg)
+    await sleep(1200)
     try {
       const bytes = await informePdf(inf, carta, PORTAL_URL)
       const filename = nombrePdf(inf)
-      wa = await whapi("document", { to: tel, media: `data:application/pdf;name=${filename};base64,${b64(bytes)}`, filename, caption: msg })
-      pdfOk = !!(wa && (wa.sent || wa.message) && !wa.error)
-      if (!pdfOk) pdfErr = JSON.stringify(wa).slice(0, 300)
+      waDoc = await whapi("document", { to: tel, media: `data:application/pdf;name=${filename};base64,${b64(bytes)}`, filename, mime_type: "application/pdf", caption: `Informe de mantención${inf.patente ? " · " + inf.patente.toUpperCase() : ""} · Serviruta` })
+      pdfOk = !!(waDoc && (waDoc.sent || waDoc.message) && !waDoc.error)
+      if (!pdfOk) pdfErr = JSON.stringify(waDoc).slice(0, 300)
+      else if (waDoc.message?.id) { await sleep(6000); entrega = await estadoWA(waDoc.message.id); if (entrega === "failed") { pdfOk = false; pdfErr = "WhatsApp rechazó el documento" } }
     } catch (e) { pdfErr = String(e); console.error("pdf err", e) }
-    // Respaldo: si el documento no salió, el cliente igual recibe el informe por link.
-    if (!pdfOk) wa = await sendWA(tel, msg)
-    await logWA(tel, inf.cliente, msg, { tipo_notif: "informe_servicio_cliente", informe_id: inf.id, carta_id: carta?.id || null, pdf: pdfOk, pdf_error: pdfErr || null, wa })
+    const docLog = waDoc ? { sent: waDoc.sent, id: waDoc.message?.id, status: waDoc.message?.status, error: waDoc.error } : null
+    await logWA(tel, inf.cliente, msg, { tipo_notif: "informe_servicio_cliente", informe_id: inf.id, carta_id: carta?.id || null, pdf: pdfOk, pdf_entrega: entrega || null, pdf_error: pdfErr || null, wa_doc: docLog, wa })
   }
   await sb(`informes_servicio?id=eq.${inf.id}`, { method: "PATCH", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ enviado_cliente_at: new Date().toISOString() }) })
   if (carta && tel && !carta.enviada_cliente_at) await sb(`cartas_garantia?id=eq.${carta.id}`, { method: "PATCH", headers: { Prefer: "return=minimal" }, body: JSON.stringify({ enviada_cliente_at: new Date().toISOString() }) })
 
-  const aviso = `📄 *Informe enviado al cliente*${tel ? (pdfOk ? " (PDF)" : " (⚠️ el PDF falló, se envió el link)") : ""}\n${inf.cliente || "—"} · ${inf.vehiculo || ""} ${inf.patente ? "· " + inf.patente.toUpperCase() : ""}\nTécnico: ${inf.tecnico || "—"}\nUrgentes: ${urg} · Vigilar: ${atn}\nRecordatorios creados: ${recs.length}${carta ? "\nCarta de garantía incluida ✅" : "\nSin carta (presupuesto no pagado o sin vincular)"}${tel ? "" : "\n⚠️ SIN TELÉFONO: no se envió al cliente"}\n${link}`
+  const aviso = `📄 *Informe enviado al cliente*${tel ? (pdfOk ? ` (PDF: ${entrega || "enviado"})` : " (⚠️ el PDF falló, se envió solo el link)") : ""}\n${inf.cliente || "—"} · ${inf.vehiculo || ""} ${inf.patente ? "· " + inf.patente.toUpperCase() : ""}\nTécnico: ${inf.tecnico || "—"}\nUrgentes: ${urg} · Vigilar: ${atn}\nRecordatorios creados: ${recs.length}${carta ? "\nCarta de garantía incluida ✅" : "\nSin carta (presupuesto no pagado o sin vincular)"}${tel ? "" : "\n⚠️ SIN TELÉFONO: no se envió al cliente"}\n${link}`
   for (const a of ADMINS) { await sendWA(a.telefono, aviso); await sleep(800) }
-  return { ok: true, enviado: !!tel, pdf: pdfOk, pdf_error: pdfErr || null, carta: !!carta, recordatorios: recs.length, link }
+  return { ok: true, enviado: !!tel, pdf: pdfOk, pdf_entrega: entrega || null, pdf_error: pdfErr || null, carta: !!carta, recordatorios: recs.length, link }
 }
 
 function textoAviso(x: any) {
@@ -187,6 +199,8 @@ async function descargarPdf(token: string) {
   return new Response(bytes, { headers: { ...CORS, "Content-Type": "application/pdf", "Content-Disposition": `inline; filename="${nombrePdf(inf)}"`, "Cache-Control": "no-store" } })
 }
 
+declare const EdgeRuntime: any
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: CORS })
   const url = new URL(req.url)
@@ -194,13 +208,17 @@ serve(async (req) => {
     if (req.method === "GET") {
       if (url.searchParams.get("pdf")) return await descargarPdf(url.searchParams.get("pdf")!)
       if (url.searchParams.get("action") === "recordatorios") return J(await enviarRecordatorios(url.searchParams.get("dry_run") === "true"))
-      return J({ status: "ok", service: "informe-cliente", version: 2, has_whapi: WHAPI_TOKEN.length > 0 })
+      return J({ status: "ok", service: "informe-cliente", version: 3, has_whapi: WHAPI_TOKEN.length > 0 })
     }
     const body = await req.json().catch(() => ({}))
     const action = body.action || url.searchParams.get("action") || "enviar"
     if (action === "recordatorios") return J(await enviarRecordatorios(body.dry_run === true))
     if (!body.informe_id) return J({ ok: false, error: "falta informe_id" }, 400)
-    return J(await enviarInforme(String(body.informe_id), body.forzar === true))
+    if (body.esperar === true) return J(await enviarInforme(String(body.informe_id), body.forzar === true))
+    // Segundo plano: el disparador de la base solo espera 5 s y el PDF con fotos tarda más.
+    const tarea = enviarInforme(String(body.informe_id), body.forzar === true).catch((e) => console.error("bg err", e))
+    try { if (typeof EdgeRuntime !== "undefined" && EdgeRuntime.waitUntil) EdgeRuntime.waitUntil(tarea) } catch (_e) { await tarea }
+    return J({ ok: true, en_proceso: true })
   } catch (e) {
     console.error(e); return J({ ok: false, error: String(e) }, 500)
   }

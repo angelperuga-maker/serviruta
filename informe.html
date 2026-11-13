@@ -116,6 +116,8 @@ function render(i){
       (b.cca_nominal!=null?'<div><div class="lbl">Arranque nominal</div><div class="val">'+b.cca_nominal+' CCA</div></div>':'')+
       '</div>'+((b.resultado==='reemplazar'||b.resultado==='reemplazar_pronto')?'<div style="font-size:13px;margin-top:10px">Te la cambiamos a domicilio, con instalación incluida. Escríbenos por WhatsApp.</div>':'')+'</div>'
   }
+  var fts=(i.fotos||[]).filter(function(x){return x&&x.url})
+  if(fts.length) h+='<h2>Registro fotográfico</h2><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px">'+fts.map(function(x){return '<a href="'+esc(x.url)+'" target="_blank" rel="noopener" style="text-decoration:none;color:#6B6B73;font-size:11px"><img src="'+esc(x.url)+'" loading="lazy" style="width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:8px;display:block"><div style="margin-top:3px">'+esc(x.punto||'Servicio')+'</div></a>'}).join('')+'</div>'
   if(i.recomendaciones) h+='<h2>Recomendaciones del técnico</h2><div class="reco">'+esc(i.recomendaciones)+'</div>'
   if(i.proxima_mantencion_km||i.proxima_mantencion_fecha){
     h+='<h2>Próxima mantención</h2><div class="prox"><div style="font-size:28px">🔧</div><div><div class="big">'+

@@ -21,7 +21,13 @@ function fecha(iso) {
 }
 const km = (n) => n ? Number(n).toLocaleString("es-CL") + " km" : ""
 
-export async function informePdf(inf, carta, portal) {
+async function traerFoto(url) {
+  const r = await fetch(url)
+  if (!r.ok) throw new Error("foto " + r.status)
+  return new Uint8Array(await r.arrayBuffer())
+}
+
+export async function informePdf(inf, carta, portal, leerFoto = traerFoto) {
   const pdf = await PDFDocument.create()
   const f = await pdf.embedFont(StandardFonts.Helvetica), fb = await pdf.embedFont(StandardFonts.HelveticaBold)
   let page, y
@@ -147,6 +153,34 @@ export async function informePdf(inf, carta, portal) {
     sec("Documentos del vehículo")
     pares(docs.map((d) => [d[0] + " vence", fecha(d[1])]))
     para("Te enviaremos un recordatorio por WhatsApp antes de cada vencimiento.", 8.5, f, GRIS)
+  }
+
+  const fotos = (inf.fotos || []).filter((x) => x && x.url).slice(0, 12)
+  if (fotos.length) {
+    const imgs = []
+    for (const ft of fotos) {
+      try {
+        const bytes = await leerFoto(ft.url)
+        const png = bytes[0] === 0x89 && bytes[1] === 0x50
+        imgs.push({ img: png ? await pdf.embedPng(bytes) : await pdf.embedJpg(bytes), punto: ft.punto })
+      } catch (_e) { /* una foto que no carga no bota el informe */ }
+    }
+    if (imgs.length) {
+      sec("Registro fotográfico")
+      const GAP = 9, FW = (W - 2 * M - 2 * GAP) / 3, FH = FW * 0.75
+      for (let i = 0; i < imgs.length; i += 3) {
+        need(FH + 22)
+        imgs.slice(i, i + 3).forEach((it, k) => {
+          const x = M + k * (FW + GAP), sc = Math.min(FW / it.img.width, FH / it.img.height)
+          const w = it.img.width * sc, h = it.img.height * sc
+          page.drawRectangle({ x, y: y - FH, width: FW, height: FH, color: CLARO })
+          page.drawImage(it.img, { x: x + (FW - w) / 2, y: y - FH + (FH - h) / 2, width: w, height: h })
+          const cap = wrap(it.punto || "Servicio", 7.5, f, FW)[0]
+          page.drawText(cap, { x, y: y - FH - 10, size: 7.5, font: f, color: GRIS })
+        })
+        y -= FH + 22
+      }
+    }
   }
 
   if (carta) {

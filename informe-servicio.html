@@ -52,6 +52,12 @@ label{display:block;font-family:var(--mono);font-size:10px;color:var(--t3);lette
 .res span{font-family:var(--mono);font-size:9px;color:var(--t3);text-transform:uppercase}
 .foot{position:fixed;bottom:0;left:0;right:0;background:rgba(10,10,13,.97);border-top:1px solid var(--line);padding:12px 14px;display:flex;gap:8px;z-index:60}
 .foot .btn{flex:1;padding:14px}
+.fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.fth{position:relative;border-radius:8px;overflow:hidden;background:var(--s3);aspect-ratio:4/3}
+.fth img{width:100%;height:100%;object-fit:cover;display:block}
+.fth span{position:absolute;left:0;right:0;bottom:0;background:rgba(0,0,0,.65);color:#fff;font-size:10px;padding:3px 5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fth button{position:absolute;top:4px;right:4px;width:24px;height:24px;border-radius:50%;background:rgba(0,0,0,.7);color:#fff;font-weight:900;cursor:pointer}
+.cam{flex:0 0 auto;padding:6px 9px;border:1px solid var(--line);border-radius:8px;background:var(--s3);font-size:15px;cursor:pointer}
 .toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:var(--s3);border:1px solid var(--line);color:var(--t1);padding:10px 16px;border-radius:10px;font-size:13px;z-index:99;display:none;max-width:90%}
 .ok-box{text-align:center;padding:26px 16px}
 .ok-box h2{font-family:var(--display);color:var(--t1);font-size:20px;margin:10px 0}
@@ -113,6 +119,14 @@ label{display:block;font-family:var(--mono);font-size:10px;color:var(--t3);lette
     <div class="hint" id="bPct"></div>
     <label>Resultado del analizador</label>
     <div class="est" id="bRes" style="grid-template-columns:1fr 1fr"></div>
+  </div>
+
+  <div class="card">
+    <div class="ct">+ Fotos del servicio <span class="n" id="fCnt">0 / 12</span></div>
+    <button class="btn" style="width:100%" onclick="pedirFoto('')">📷 Agregar foto</button>
+    <div class="hint">También puedes sacar la foto desde cada punto con el botón 📷. Van en el informe y en el PDF del cliente.</div>
+    <div class="fgrid" id="fotos"></div>
+    <input type="file" id="fInput" accept="image/*" capture="environment" style="display:none" onchange="subirFoto(this)">
   </div>
 
   <div class="card">
@@ -196,7 +210,7 @@ function pintarCheck(){
   $('checklist').innerHTML=check.map(function(c,i){
     var h=''
     if(c.grupo!==g){g=c.grupo;h+='<div class="ct" style="margin:14px 0 8px">'+esc(g)+'</div>'}
-    h+='<div class="pt '+c.estado+'"><div class="pt-h"><span style="color:var(--t3);font-size:11px;min-width:18px">'+(i+1)+'</span><div class="nm">'+esc(c.nombre)+'<div class="hint" style="margin:0;font-weight:400">'+esc(c.desc)+'</div></div></div>'+
+    h+='<div class="pt '+c.estado+'"><div class="pt-h"><span style="color:var(--t3);font-size:11px;min-width:18px">'+(i+1)+'</span><div class="nm">'+esc(c.nombre)+'<div class="hint" style="margin:0;font-weight:400">'+esc(c.desc)+'</div></div><button class="cam" onclick="pedirFoto(check['+i+'].nombre)">📷'+(fotos.filter(function(x){return x.punto===c.nombre}).length||'')+'</button></div>'+
       '<div class="est">'+[['ok','BIEN'],['atencion','VIGILAR'],['urgente','URGENTE']].map(function(b){return '<button class="'+b[0]+(c.estado===b[0]?' a':'')+'" onclick="setEst('+i+',\''+b[0]+'\')">'+b[1]+'</button>'}).join('')+'</div>'
     var malo=c.estado==='atencion'||c.estado==='urgente'
     if(c.u||malo) h+='<div class="row" style="margin-top:8px">'+(c.u?'<input style="flex:0 0 120px;padding:8px 10px;font-size:13px" inputmode="decimal" placeholder="Medición '+c.u+'" value="'+esc(c.med)+'" oninput="check['+i+'].med=this.value">':'')+
@@ -206,6 +220,40 @@ function pintarCheck(){
   var n=function(e){return check.filter(function(c){return c.estado===e}).length}, t=check.filter(function(c){return c.estado}).length
   $('cOk').textContent=n('ok'); $('cAt').textContent=n('atencion'); $('cUr').textContent=n('urgente')
   $('cTot').textContent=t+' / '+check.length; $('rapido').style.display=t===check.length?'none':'block'
+}
+var fotos=[], fotoPunto='', MAXF=12
+function pintarFotos(){
+  $('fotos').innerHTML=fotos.map(function(x,i){return '<div class="fth"><img src="'+esc(x.url)+'"><span>'+esc(x.punto||'Servicio')+'</span><button onclick="fotos.splice('+i+',1);pintarFotos();pintarCheck()">×</button></div>'}).join('')
+  $('fCnt').textContent=fotos.length+' / '+MAXF
+}
+function pedirFoto(punto){
+  if(fotos.length>=MAXF){toast('Máximo '+MAXF+' fotos por informe');return}
+  fotoPunto=punto||''; $('fInput').value=''; $('fInput').click()
+}
+function comprimir(file){
+  return new Promise(function(ok,err){
+    var img=new Image(), u=URL.createObjectURL(file)
+    img.onload=function(){
+      var m=1280, k=Math.min(1,m/Math.max(img.width,img.height)), c=document.createElement('canvas')
+      c.width=Math.round(img.width*k); c.height=Math.round(img.height*k)
+      c.getContext('2d').drawImage(img,0,0,c.width,c.height); URL.revokeObjectURL(u)
+      c.toBlob(function(b){b?ok(b):err(new Error('no se pudo procesar la foto'))},'image/jpeg',0.72)
+    }
+    img.onerror=function(){err(new Error('archivo de imagen no válido'))}
+    img.src=u
+  })
+}
+async function subirFoto(inp){
+  var f=inp.files&&inp.files[0]; if(!f)return
+  toast('Subiendo foto…',15000)
+  try{
+    var blob=await comprimir(f)
+    var path='informes/'+new Date().toISOString().slice(0,10)+'/'+Date.now()+'-'+Math.random().toString(36).slice(2,8)+'.jpg'
+    var r=await fetch(SB_URL+'/storage/v1/object/inspecciones/'+path,{method:'POST',headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'image/jpeg'},body:blob})
+    if(!r.ok) throw new Error((await r.text()).slice(0,120))
+    fotos.push({url:SB_URL+'/storage/v1/object/public/inspecciones/'+path,punto:fotoPunto})
+    pintarFotos();pintarCheck();toast('Foto agregada ✓')
+  }catch(e){toast('No se pudo subir la foto: '+e.message,5000)}
 }
 var BAT_RES=[['buena','BUENA','ok'],['recargar','RECARGAR Y REMEDIR','atencion'],['reemplazar_pronto','REEMPLAZAR PRONTO','atencion'],['reemplazar','REEMPLAZAR','urgente']], batRes=''
 function pintarBat(){
@@ -266,7 +314,8 @@ function cargarInforme(i){
   ;(i.trabajos||[]).forEach(function(t){var x=trab.find(function(y){return y.item===t.item});if(x){x.on=true;x.detalle=t.detalle||''}else trab.push({item:t.item,ph:'Detalle',on:true,detalle:t.detalle||''})})
   ;(i.checklist||[]).forEach(function(c){var x=check.find(function(y){return y.nombre===c.nombre});if(x){x.estado=c.estado||'';x.nota=c.nota||'';x.med=c.med||''}})
   if(i.bateria){var b=i.bateria;$('bV').value=b.voltaje==null?'':b.voltaje;$('bSoh').value=b.soh==null?'':b.soh;$('bNom').value=b.cca_nominal==null?'':b.cca_nominal;$('bMed').value=b.cca_medido==null?'':b.cca_medido;batRes=b.resultado||''}
-  pintarTrab();pintarCheck();pintarBat()
+  fotos=(i.fotos||[]).slice()
+  pintarTrab();pintarCheck();pintarBat();pintarFotos()
   if(i.estado==='finalizado') toast('Este informe ya fue finalizado y enviado',3500)
 }
 
@@ -290,7 +339,7 @@ async function guardar(finalizar){
     fecha:d('fecha'), servicio:$('servicio').value.trim(),
     trabajos:trab.filter(function(t){return t.on}).map(function(t){return {item:t.item,detalle:t.detalle}}),
     checklist:check.filter(function(c){return c.estado}).map(function(c){return {grupo:c.grupo,nombre:c.nombre,estado:c.estado,nota:c.nota,med:c.med,u:c.u}}),
-    bateria:batData(),
+    bateria:batData(), fotos:fotos.map(function(x){return {url:x.url,punto:x.punto}}),
     recomendaciones:$('recomendaciones').value.trim()||null,
     proxima_mantencion_km:num('proxKm'), proxima_mantencion_fecha:d('proxFecha'),
     rt_vence:d('rt'), permiso_vence:d('permiso'), soap_vence:d('soap'), licencia_vence:d('licencia')

@@ -103,6 +103,19 @@ label{display:block;font-family:var(--mono);font-size:10px;color:var(--t3);lette
   </div>
 
   <div class="card">
+    <div class="ct">+ Test de batería con analizador <span class="n">opcional</span></div>
+    <div class="grid">
+      <div><label>Voltaje (V)</label><input id="bV" inputmode="decimal" placeholder="12.6"></div>
+      <div><label>Salud SOH (%)</label><input id="bSoh" inputmode="numeric" placeholder="85"></div>
+      <div><label>CCA nominal (etiqueta)</label><input id="bNom" inputmode="numeric" placeholder="600" oninput="pintarBat()"></div>
+      <div><label>CCA medido</label><input id="bMed" inputmode="numeric" placeholder="520" oninput="pintarBat()"></div>
+    </div>
+    <div class="hint" id="bPct"></div>
+    <label>Resultado del analizador</label>
+    <div class="est" id="bRes" style="grid-template-columns:1fr 1fr"></div>
+  </div>
+
+  <div class="card">
     <div class="ct">4 · Recomendaciones del técnico</div>
     <textarea id="recomendaciones" placeholder="Ej: Pastillas delanteras al 30%, cambiar en la próxima mantención."></textarea>
   </div>
@@ -153,7 +166,7 @@ var GRUPOS=[
  ['Admisión, correas y escape',[['Correas','Grietas, tensión y ruido'],['Mangueras y abrazaderas','Hinchadas, resecas o sueltas'],['Filtro de aire','Estado y sello de la caja'],['Filtro de combustible','Estado y agua en el separador'],['Escape','Fugas, soportes y humo']]],
  ['Frenos y ruedas',[['Pastillas de freno','Espesor restante','%'],['Discos o tambores','Desgaste, rayas y vibración'],['Freno de mano','Recorrido y sujeción'],['Neumáticos','Desgaste, cortes y antigüedad','mm'],['Presión y rueda de repuesto','Presión de las 5 ruedas','psi']]],
  ['Suspensión y dirección',[['Amortiguadores','Fugas y rebote'],['Bujes, rótulas y terminales','Juego, goma cortada y juego en el volante'],['Homocinéticas, cardán y fuelles','Fuelles rotos, ruidos al girar'],['Rodamientos de rueda','Ruido y juego']]],
- ['Eléctrico, confort y seguridad',[['Batería','Voltaje y estado de bornes','V'],['Sistema de carga','Voltaje con motor en marcha','V'],['Luces','Bajas, altas, freno, viraje y retroceso'],['Plumillas y lavaparabrisas','Barrido y nivel de agua'],['Aire acondicionado','Enfría, olor, ruido del compresor y filtro de cabina','°C'],['Tablero y scanner','Testigos encendidos y códigos de falla']]]
+ ['Eléctrico, confort y seguridad',[['Batería','Bornes, fijación y voltaje','V'],['Sistema de carga','Voltaje con motor en marcha','V'],['Luces','Bajas, altas, freno, viraje y retroceso'],['Plumillas y lavaparabrisas','Barrido y nivel de agua'],['Aire acondicionado','Enfría, olor, ruido del compresor y filtro de cabina','°C'],['Tablero y scanner','Testigos encendidos y códigos de falla']]]
 ]
 var trab=TRABAJOS.map(function(t){return {item:t.item,ph:t.ph,on:false,detalle:''}})
 var check=[];GRUPOS.forEach(function(g){g[1].forEach(function(p){check.push({grupo:g[0],nombre:p[0],desc:p[1],u:p[2]||'',estado:'',nota:'',med:''})})})
@@ -193,6 +206,17 @@ function pintarCheck(){
   var n=function(e){return check.filter(function(c){return c.estado===e}).length}, t=check.filter(function(c){return c.estado}).length
   $('cOk').textContent=n('ok'); $('cAt').textContent=n('atencion'); $('cUr').textContent=n('urgente')
   $('cTot').textContent=t+' / '+check.length; $('rapido').style.display=t===check.length?'none':'block'
+}
+var BAT_RES=[['buena','BUENA','ok'],['recargar','RECARGAR Y REMEDIR','atencion'],['reemplazar_pronto','REEMPLAZAR PRONTO','atencion'],['reemplazar','REEMPLAZAR','urgente']], batRes=''
+function pintarBat(){
+  $('bRes').innerHTML=BAT_RES.map(function(b){return '<button class="'+b[2]+(batRes===b[0]?' a':'')+'" onclick="batRes=batRes===\''+b[0]+'\'?\'\':\''+b[0]+'\';pintarBat()">'+b[1]+'</button>'}).join('')
+  var n=parseFloat($('bNom').value),m=parseFloat($('bMed').value)
+  $('bPct').textContent=(n>0&&m>0)?'Entrega el '+Math.round(m/n*100)+'% de su capacidad de arranque nominal.':''
+}
+function batData(){
+  var f=function(id){var v=parseFloat(($(id).value||'').replace(',','.'));return isNaN(v)?null:v}
+  var b={voltaje:f('bV'),soh:f('bSoh'),cca_nominal:f('bNom'),cca_medido:f('bMed'),resultado:batRes||null}
+  return (b.voltaje===null&&b.soh===null&&b.cca_medido===null&&!b.resultado)?null:b
 }
 function todosBien(){check.forEach(function(c){if(!c.estado)c.estado='ok'});pintarCheck()}
 function setEst(i,e){check[i].estado=check[i].estado===e?'':e;pintarCheck()}
@@ -241,7 +265,8 @@ function cargarInforme(i){
   tocadoProx=tocadoDocs=true
   ;(i.trabajos||[]).forEach(function(t){var x=trab.find(function(y){return y.item===t.item});if(x){x.on=true;x.detalle=t.detalle||''}else trab.push({item:t.item,ph:'Detalle',on:true,detalle:t.detalle||''})})
   ;(i.checklist||[]).forEach(function(c){var x=check.find(function(y){return y.nombre===c.nombre});if(x){x.estado=c.estado||'';x.nota=c.nota||'';x.med=c.med||''}})
-  pintarTrab();pintarCheck()
+  if(i.bateria){var b=i.bateria;$('bV').value=b.voltaje==null?'':b.voltaje;$('bSoh').value=b.soh==null?'':b.soh;$('bNom').value=b.cca_nominal==null?'':b.cca_nominal;$('bMed').value=b.cca_medido==null?'':b.cca_medido;batRes=b.resultado||''}
+  pintarTrab();pintarCheck();pintarBat()
   if(i.estado==='finalizado') toast('Este informe ya fue finalizado y enviado',3500)
 }
 
@@ -265,6 +290,7 @@ async function guardar(finalizar){
     fecha:d('fecha'), servicio:$('servicio').value.trim(),
     trabajos:trab.filter(function(t){return t.on}).map(function(t){return {item:t.item,detalle:t.detalle}}),
     checklist:check.filter(function(c){return c.estado}).map(function(c){return {grupo:c.grupo,nombre:c.nombre,estado:c.estado,nota:c.nota,med:c.med,u:c.u}}),
+    bateria:batData(),
     recomendaciones:$('recomendaciones').value.trim()||null,
     proxima_mantencion_km:num('proxKm'), proxima_mantencion_fecha:d('proxFecha'),
     rt_vence:d('rt'), permiso_vence:d('permiso'), soap_vence:d('soap'), licencia_vence:d('licencia')
@@ -290,7 +316,7 @@ function listo(i){
 $('fecha').value=iso(new Date())
 try{var u=localStorage.getItem('sv_user_nombre')||sessionStorage.getItem('tecnico_nombre');if(u)$('tecnico').value=u}catch(e){}
 var qp=new URLSearchParams(location.search); if(qp.get('ppto')){$('ppto').value=qp.get('ppto');cargarPpto()}
-pintarTrab();pintarCheck();sugerirProx(true);sugerirDocs(true)
+pintarTrab();pintarCheck();pintarBat();sugerirProx(true);sugerirDocs(true)
 </script>
 </body>
 </html>

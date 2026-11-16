@@ -1,0 +1,41 @@
+/* Serviruta · capa visual "tienda" (misma estética que la tienda online Shopify)
+   Blanco + ámbar #E0A400 + negro, tipografía Inter, logo SERVIRUTA.cl.
+   Se carga DESPUÉS del <style> de cada cotizador y solo redefine variables y algunos componentes. */
+:root{
+  --negro:#ffffff; --c1:#ffffff; --c2:#F7F7F5; --c3:#EFEEEA; --borde:#E5E5E5;
+  --txt:#0A0A0A; --txt2:#4D4D4D; --txt3:#8A8A8A;
+  --rojo:#E0A400; --rojo-l:#F2B705; --amarillo:#B88600; --naranja:#C47A00;
+  --sr-ambar:#E0A400; --sr-ambar-osc:#B88600; --sr-tinta:#0A0A0A; --sr-wa:#25D366;
+}
+html,body{background:#fff!important;color:var(--txt)}
+body,button,input,select,textarea,a,div,span,p,li,h1,h2,h3,h4,h5{font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif!important}
+h1,h2,h3,.kit-nombre,.kit-precio,.section-title,[class*="titulo"]{letter-spacing:-.02em}
+/* header como la tienda: blanco, logo, línea fina */
+header,.header,nav.nav,.topbar{background:#fff!important;border-bottom:1px solid var(--borde)!important;box-shadow:none!important}
+a.logo{font-size:0!important;line-height:0;display:inline-flex;align-items:center}
+a.logo img.sr-logo{height:34px;width:auto}
+a.logo span{display:none}
+/* barra superior de ofertas igual a la tienda */
+.sr-anuncio{background:var(--sr-ambar);color:#0A0A0A;text-align:center;font:600 13px/1.4 'Inter',sans-serif;padding:9px 16px}
+/* acentos: lo que era rojo pasa a ámbar; botones ámbar con texto negro */
+.kit-card.destacado{border-color:var(--sr-ambar)!important;box-shadow:0 10px 30px -18px rgba(224,164,0,.6)}
+.kit-badge{background:var(--sr-ambar)!important;color:#0A0A0A!important}
+.kit-precio,.kit-precio .curr{color:var(--sr-tinta)!important}
+.kit-card{background:#fff!important;border:1px solid var(--borde)!important;border-radius:12px!important}
+.kit-features li{color:var(--txt2)!important}
+.btn-primary,.btn-rojo,.tab.active,.tipo-btn.active,[class*="btn"][class*="active"],.cta-primary{background:var(--sr-ambar)!important;border-color:var(--sr-ambar)!important;color:#0A0A0A!important}
+/* WhatsApp sigue verde (canal de contacto) */
+.kit-cta,a[href*="wa.me"].btn,.wa-float,.float-wa{background:var(--sr-wa)!important;color:#06120a!important;border-color:var(--sr-wa)!important}
+/* botón Comprar (tienda Shopify) */
+.sr-comprar{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:14px;padding:13px 16px;border-radius:8px;
+  background:var(--sr-ambar);color:#0A0A0A!important;font:700 15px/1 'Inter',sans-serif;text-decoration:none;border:0;cursor:pointer;width:100%}
+.sr-comprar:hover{background:#F2B705}
+.sr-comprar small{font-weight:500;font-size:12px;opacity:.75}
+.sr-comprar + .kit-cta{margin-top:8px!important;background:transparent!important;color:#128C3E!important;border:1px solid #9EE2B6!important}
+.sr-pago{margin-top:6px;text-align:center;font:500 11.5px/1.4 'Inter',sans-serif;color:var(--txt3)}
+/* tintes rojos escritos a mano en los cotizadores → ámbar */
+.hero{background:radial-gradient(circle at 50% 0%,rgba(224,164,0,.08) 0%,transparent 60%)!important}
+.hero-eyebrow{background:rgba(224,164,0,.12)!important;border-color:rgba(224,164,0,.45)!important;color:#7A5A00!important}
+.marca-btn.active,.modelo-btn.active{border-color:var(--sr-ambar)!important;background:rgba(224,164,0,.10)!important}
+.kit-card.destacado{background:#fff!important}
+.sr-pago + .kit-cta{margin-top:8px!important;background:#fff!important;color:#128C3E!important;border:1px solid #9EE2B6!important}

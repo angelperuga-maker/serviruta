@@ -197,7 +197,12 @@ async function cargarTaller(){
   S.config=cfg; S.equipo=eq||[];
 }
 
+let INICIANDO=false;
 async function iniciar(){
+  if(INICIANDO) return; INICIANDO=true;
+  try { await iniciarSesion(); } finally { INICIANDO=false; }
+}
+async function iniciarSesion(){
   const {data:{session}} = await sb.auth.getSession();
   S.user = session?.user || null;
   if(!S.user) return render();
@@ -216,7 +221,8 @@ async function iniciar(){
   render();
   if(DESDE_INVITACION) pedirClaveNueva();
 }
-sb.auth.onAuthStateChange((ev)=>{ if(ev==='SIGNED_IN' && !S.user) iniciar(); });
+// No llamar a Supabase dentro del aviso de sesión (se traba): se difiere un instante
+sb.auth.onAuthStateChange((ev)=>{ if(ev==='SIGNED_IN' && !S.user && !INICIANDO) setTimeout(iniciar,0); });
 
 /* ───── buscador de clientes reutilizable ───── */
 async function elegirCliente(onPick){

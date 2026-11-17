@@ -58,6 +58,41 @@ label{display:block;font-size:12px;font-weight:600;color:var(--soft);margin:8px 
 .check button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:5px 8px;font-size:12px;font-weight:600;cursor:pointer}
 .check button.on-bien{background:var(--okBg);color:var(--ok)}.check button.on-cambiar{background:var(--badBg);color:var(--bad)}.check button.on-revisar{background:var(--warnBg);color:var(--warn)}
 .thumbs{display:flex;gap:8px;flex-wrap:wrap}.thumbs img{width:90px;height:90px;object-fit:cover;border-radius:8px}
+.wa-app{display:grid;grid-template-columns:320px 1fr;height:calc(100vh - 110px);min-height:480px;border-radius:12px;overflow:hidden;border:1px solid #D1D7DB;background:#fff}
+.wa-app.solo{grid-template-columns:1fr}
+.wa-list{border-right:1px solid #E9EDEF;display:flex;flex-direction:column;min-height:0}
+.wa-list .wa-top{background:#F0F2F5;padding:10px 12px}
+.wa-list .wa-top input{background:#fff;border:0;border-radius:8px;padding:8px 12px}
+.wa-items{overflow:auto;flex:1}
+.wa-item{display:flex;gap:12px;padding:10px 14px;cursor:pointer;border-bottom:1px solid #F0F2F5;align-items:center}
+.wa-item:hover,.wa-item.on{background:#F0F2F5}
+.wa-item .t{flex:1;min-width:0}.wa-item .t b{display:block;font-weight:500;color:#111B21}
+.wa-item .t span{display:block;color:#667781;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.wa-av{width:42px;height:42px;border-radius:50%;background:#DFE5E7;color:#54656F;display:flex;align-items:center;justify-content:center;font-weight:700;flex:none}
+.wa-av.claude{background:#F26B1D;color:#1A1208}
+.wa-chat{display:flex;flex-direction:column;min-height:0;background:#EFEAE2}
+.wa-head{background:#F0F2F5;padding:10px 16px;display:flex;align-items:center;gap:12px;border-bottom:1px solid #E9EDEF}
+.wa-head .t{flex:1}.wa-head .t b{display:block;font-weight:500}.wa-head .t span{font-size:13px;color:#667781}
+.wa-body{flex:1;overflow:auto;padding:16px 6%;display:flex;flex-direction:column;gap:4px;background-color:#EFEAE2;background-image:radial-gradient(#E2DAD0 1px,transparent 1px);background-size:18px 18px}
+.wa-b{max-width:72%;padding:6px 9px 8px;border-radius:8px;font-size:14.2px;line-height:1.38;color:#111B21;box-shadow:0 1px .5px rgba(11,20,26,.13);white-space:pre-wrap;word-wrap:break-word;position:relative}
+.wa-b.in{background:#fff;align-self:flex-start;border-top-left-radius:0}
+.wa-b.out{background:#D9FDD3;align-self:flex-end;border-top-right-radius:0}
+.wa-b.sys{align-self:center;background:#FFEECD;font-size:12.5px;border-radius:8px}
+.wa-b .h{float:right;font-size:11px;color:#667781;margin:8px 0 -4px 10px}
+.wa-b .who{display:block;font-size:12.5px;font-weight:600;color:#B0470B;margin-bottom:2px}
+.wa-day{align-self:center;background:#fff;color:#54656F;font-size:12px;padding:4px 10px;border-radius:7px;margin:8px 0;box-shadow:0 1px .5px rgba(11,20,26,.13)}
+.wa-foot{background:#F0F2F5;padding:8px 12px;display:flex;gap:8px;align-items:flex-end}
+.wa-foot textarea{border:0;border-radius:8px;padding:10px 12px;resize:none;max-height:120px;font-size:15px}
+.wa-send{width:44px;height:44px;border-radius:50%;border:0;background:#00A884;color:#fff;font-size:18px;cursor:pointer;flex:none}
+.wa-send:disabled{opacity:.5}
+.chips{display:flex;gap:6px;flex-wrap:wrap;padding:6px 12px 0;background:#F0F2F5}
+.chips button{border:1px solid #D1D7DB;background:#fff;border-radius:16px;padding:5px 10px;font-size:12.5px;cursor:pointer;color:#111B21}
+.typing{align-self:flex-start;background:#fff;border-radius:8px;padding:10px 14px;display:flex;gap:4px}
+.typing i{width:6px;height:6px;border-radius:50%;background:#8696A0;animation:bl 1s infinite}.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+@keyframes bl{0%,100%{opacity:.3}50%{opacity:1}}
+.ag{display:flex;gap:12px;align-items:flex-start}
+.sw{position:relative;width:40px;height:22px;flex:none}.sw input{display:none}.sw span{position:absolute;inset:0;background:#C9CFD8;border-radius:22px;cursor:pointer;transition:.2s}.sw span:before{content:'';position:absolute;width:16px;height:16px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s}.sw input:checked+span{background:#00A884}.sw input:checked+span:before{transform:translateX(18px)}
+@media(max-width:800px){.wa-app{grid-template-columns:1fr;height:calc(100vh - 150px)}.wa-app .wa-list{display:none}.wa-app.lista .wa-list{display:flex}.wa-app.lista .wa-chat{display:none}}
 @media(max-width:800px){.app{flex-direction:column}nav{width:auto;height:auto;position:static;display:flex;overflow-x:auto;gap:4px;align-items:center}nav .brand,nav .who{display:none}nav a{white-space:nowrap}main{padding:14px}.g2,.g3,.g4,.cols{grid-template-columns:1fr}}
 </style>
 </head>
@@ -99,13 +134,13 @@ function modal(html, onMount){
 
 /* ───── navegación ───── */
 const MENU = {
-  dueno:     ['hoy','clientes','agenda','presupuestos','ordenes','catalogo','whatsapp','anuncios','equipo','config'],
-  recepcion: ['hoy','clientes','agenda','presupuestos','ordenes','catalogo','whatsapp'],
-  admin:     ['hoy','ordenes','anuncios','equipo'],
-  mecanico:  ['mecanico'],
-  staff:     ['hoy','clientes','agenda','presupuestos','ordenes','catalogo','whatsapp','anuncios','equipo','config','talleres']
+  dueno:     ['hoy','asistente','agentes','clientes','agenda','presupuestos','ordenes','catalogo','whatsapp','anuncios','equipo','config'],
+  recepcion: ['hoy','asistente','agentes','clientes','agenda','presupuestos','ordenes','catalogo','whatsapp'],
+  admin:     ['hoy','asistente','ordenes','anuncios','equipo'],
+  mecanico:  ['mecanico','asistente'],
+  staff:     ['hoy','agentes','clientes','agenda','presupuestos','ordenes','catalogo','whatsapp','anuncios','equipo','config','talleres']
 };
-const TITULOS = {hoy:'Hoy',clientes:'Clientes',agenda:'Agenda',presupuestos:'Presupuestos',ordenes:'Órdenes de trabajo',catalogo:'Servicios y packs',whatsapp:'WhatsApp',anuncios:'Anuncios',equipo:'Equipo',config:'Configuración',mecanico:'Mis trabajos',talleres:'Talleres'};
+const TITULOS = {asistente:'Asistente',agentes:'Agentes',hoy:'Hoy',clientes:'Clientes',agenda:'Agenda',presupuestos:'Presupuestos',ordenes:'Órdenes de trabajo',catalogo:'Servicios y packs',whatsapp:'WhatsApp',anuncios:'Anuncios',equipo:'Equipo',config:'Configuración',mecanico:'Mis trabajos',talleres:'Talleres'};
 
 function ir(view, param=null){ S.view=view; S.param=param; location.hash=view+(param?'/'+param:''); render(); }
 window.addEventListener('hashchange',()=>{ if(location.hash.includes('=')) return; const [v,p]=location.hash.slice(1).split('/'); if(v && (v!==S.view || (p||null)!==S.param)){ S.view=v; S.param=p||null; render(); }});
@@ -239,6 +274,13 @@ VIEWS.hoy = async main=>{
     <div class="card"><h2 style="margin-bottom:8px">Pendientes</h2>${(pend||[]).map(c=>`<div class="mini click" style="cursor:pointer" data-c="${c.id}"><b>${esc(c.nombre)}</b> <span class="pill">${c.etapa}</span><br><span class="muted">${esc(c.proxima_accion||'Sin próxima acción')} ${c.proxima_accion_fecha?'· '+fecha(c.proxima_accion_fecha+'T12:00'):''}</span></div>`).join('')||'<p class="muted">Nada pendiente.</p>'}</div>
   </div>`;
   main.querySelectorAll('[data-c]').forEach(el=>el.onclick=()=>ir('clientes',el.dataset.c));
+  if(puede('dueno','admin','recepcion','staff')){
+    const {data:inf}=await sb.from('agente_ejecuciones').select('*').eq('taller_id',tid()).eq('agente','informe_diario').order('creado_at',{ascending:false}).limit(1).maybeSingle();
+    const {count:pend}=await sb.from('agente_tareas').select('id',{count:'exact',head:true}).eq('taller_id',tid()).eq('estado','pendiente');
+    const d=document.createElement('div'); d.className='card'; d.style.marginTop='12px';
+    d.innerHTML=`<div class="top" style="margin:0 0 6px"><h2>📊 Informe del día</h2><a href="#agentes" class="btn ghost sm">Agentes${pend?` · ${pend} mensajes por enviar`:''}</a></div>${inf?`<div style="white-space:pre-wrap">${md(inf.resumen)}</div><p class="muted">${fecha(inf.creado_at)} ${hora(inf.creado_at)}</p>`:'<p class="muted">Todavía no hay informe. Sale cada mañana a las 8:00.</p>'}`;
+    main.insertBefore(d, main.children[2]);
+  }
 };
 
 VIEWS.clientes = async main=>{
@@ -545,27 +587,125 @@ VIEWS.catalogo = async main=>{
   main.querySelectorAll('[data-ed]').forEach(b=>b.onclick=()=>form((data||[]).find(c=>c.id===b.dataset.ed)));
 };
 
-/* WhatsApp */
+/* WhatsApp (estilo WhatsApp Web) */
+const ini = t => String(t||'?').trim().split(/\s+/).slice(0,2).map(x=>x[0]).join('').toUpperCase();
+const md = t => esc(t).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/(^|\s)\*(\S[^*]*?)\*(?=\s|$|[.,;:!?])/g,'$1<b>$2</b>');
+function diaLabel(d){ const f=new Intl.DateTimeFormat('en-CA',{timeZone:'America/Santiago'}).format(new Date(d)); if(f===hoyLocal()) return 'Hoy'; return new Date(d).toLocaleDateString('es-CL',{weekday:'long',day:'numeric',month:'long',timeZone:'America/Santiago'}); }
+function burbujas(lista, ladoOut, quien){
+  let html='', dia='';
+  for(const m of lista){ const d=diaLabel(m.creado_at); if(d!==dia){ dia=d; html+=`<div class="wa-day">${d}</div>`; }
+    const sys=m.autor==='sistema';
+    html+=`<div class="wa-b ${sys?'sys':ladoOut(m)?'out':'in'}">${quien?quien(m):''}${md(m.texto)}${sys?'':`<span class="h">${hora(m.creado_at)}</span>`}</div>`; }
+  return html;
+}
+
 VIEWS.whatsapp = async main=>{
   const {data:convs}=await sb.from('conversaciones').select('*,clientes(nombre)').eq('taller_id',tid()).order('ultimo_mensaje_at',{ascending:false}).limit(100);
-  const sel = S.param || convs?.[0]?.id;
-  let msgs=[]; const conv=(convs||[]).find(c=>c.id===sel);
-  if(conv){ const {data}=await sb.from('mensajes').select('*').eq('conversacion_id',conv.id).order('creado_at').limit(300); msgs=data||[]; }
+  const sel = S.param; const conv=(convs||[]).find(c=>c.id===sel);
+  let msgs=[]; if(conv){ const {data}=await sb.from('mensajes').select('*').eq('conversacion_id',conv.id).order('creado_at').limit(400); msgs=data||[]; }
   main.innerHTML=`<div class="top"><h1>WhatsApp</h1><span class="pill ${S.config?.bot_activo?'p-ok':'p-warn'}">Bot ${S.config?.bot_activo?'activo':'apagado'}</span></div>
-  <div class="grid" style="grid-template-columns:280px 1fr">
-    <div class="card" style="max-height:70vh;overflow:auto">${(convs||[]).map(c=>`<div class="mini click" style="cursor:pointer;${c.id===sel?'border-color:var(--acc)':''}" data-c="${c.id}"><b>${esc(c.clientes?.nombre||c.telefono)}</b> <span class="pill ${c.modo==='humano'?'p-warn':''}">${c.modo}</span><br><span class="muted">${fecha(c.ultimo_mensaje_at)} ${hora(c.ultimo_mensaje_at)}</span></div>`).join('')||'<p class="muted">Sin conversaciones todavía.</p>'}</div>
-    <div>${conv?`<div class="card"><div class="top" style="margin:0 0 8px"><div><b>${esc(conv.clientes?.nombre||conv.telefono)}</b> <span class="muted">${esc(conv.telefono)}</span> ${conv.cliente_id?`· <a href="#clientes/${conv.cliente_id}">ficha</a>`:''}</div>
-      <button class="btn ghost sm" id="modo">${conv.modo==='bot'?'Tomar la conversación':'Devolver al bot'}</button></div>
-      <div class="msgs" id="msgs">${msgs.map(m=>`<div class="m ${m.autor==='sistema'?'sys':m.direccion==='entrante'?'in':'out'}">${esc(m.texto)}<small>${m.autor} · ${hora(m.creado_at)}</small></div>`).join('')}</div>
-      <div class="row" style="margin-top:8px"><input id="txt" placeholder="Responder como persona del taller"><button class="btn acc" id="send">Enviar</button></div></div>`:''}</div>
+  <div class="wa-app ${conv?'':'lista'}">
+    <div class="wa-list"><div class="wa-top"><input id="buscaConv" placeholder="Buscar un chat"></div><div class="wa-items" id="convs"></div></div>
+    <div class="wa-chat">${conv?`
+      <div class="wa-head"><a href="#whatsapp" class="btn ghost sm" style="display:none" id="volver">←</a><div class="wa-av">${esc(ini(conv.clientes?.nombre||conv.telefono))}</div>
+        <div class="t"><b>${esc(conv.clientes?.nombre||conv.telefono)}</b><span>+${esc(conv.telefono)} · ${conv.modo==='bot'?'atiende el bot':'atiende una persona'}${conv.cliente_id?` · <a href="#clientes/${conv.cliente_id}">ver ficha</a>`:''}</span></div>
+        <button class="btn ghost sm" id="modo">${conv.modo==='bot'?'Tomar la conversación':'Devolver al bot'}</button></div>
+      <div class="wa-body" id="msgs">${burbujas(msgs, m=>m.direccion==='saliente', m=>m.direccion==='saliente'&&m.autor==='bot'?'<span class="who">Bot</span>':'')}</div>
+      <div class="wa-foot"><textarea id="txt" rows="1" placeholder="Escribe un mensaje"></textarea><button class="wa-send" id="send" title="Enviar">➤</button></div>`
+      :`<div class="wa-body" style="align-items:center;justify-content:center"><p class="muted">Elige una conversación.</p></div>`}</div>
   </div>`;
-  main.querySelectorAll('[data-c]').forEach(el=>el.onclick=()=>ir('whatsapp',el.dataset.c));
+  const pintarLista=()=>{ const q=($('#buscaConv').value||'').toLowerCase();
+    $('#convs').innerHTML=(convs||[]).filter(c=>!q||((c.clientes?.nombre||'')+c.telefono).toLowerCase().includes(q)).map(c=>`<div class="wa-item ${c.id===sel?'on':''}" data-c="${c.id}"><div class="wa-av">${esc(ini(c.clientes?.nombre||c.telefono))}</div><div class="t"><b>${esc(c.clientes?.nombre||c.telefono)}</b><span>${c.modo==='humano'?'👤 atiende una persona':'🤖 atiende el bot'}</span></div><span class="muted" style="font-size:12px">${diaLabel(c.ultimo_mensaje_at)==='Hoy'?hora(c.ultimo_mensaje_at):fecha(c.ultimo_mensaje_at)}</span></div>`).join('')||'<p class="muted" style="padding:14px">Sin conversaciones todavía.</p>';
+    main.querySelectorAll('[data-c]').forEach(el=>el.onclick=()=>ir('whatsapp',el.dataset.c)); };
+  $('#buscaConv').oninput=pintarLista; pintarLista();
   if(!conv) return;
+  if(innerWidth<800) $('#volver').style.display='inline-block';
   const box=$('#msgs'); box.scrollTop=box.scrollHeight;
   $('#modo').onclick=async()=>{ const {error}=await sb.from('conversaciones').update({modo:conv.modo==='bot'?'humano':'bot',tomada_por:conv.modo==='bot'?S.user.id:null}).eq('id',conv.id); if(!falla(error)) render(); };
-  $('#send').onclick=async()=>{ const texto=$('#txt').value.trim(); if(!texto) return;
+  const enviar=async()=>{ const texto=$('#txt').value.trim(); if(!texto) return; $('#send').disabled=true;
     const {data,error}=await sb.functions.invoke('enviar-whatsapp',{body:{conversacion_id:conv.id,texto}});
-    if(falla(error||data?.error)) return; render(); };
+    $('#send').disabled=false; if(falla(error||data?.error)) return; render(); };
+  $('#send').onclick=enviar; $('#txt').onkeydown=e=>{ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); enviar(); } };
+};
+
+/* Asistente (Claude, con la cara de WhatsApp) */
+const SUGERENCIAS = {
+  dueno:['¿Cuánto facturamos esta semana?','¿Qué órdenes llevan más de 3 días?','¿Por qué no se cerraron los presupuestos?','¿A quién hay que llamar hoy?'],
+  admin:['¿Cuánto lleva de comisión cada uno este mes?','¿Qué órdenes están listas para cobrar?','¿Cuánto facturamos esta semana?'],
+  recepcion:['¿Qué horas tenemos hoy?','¿A quién hay que llamar hoy?','¿Qué presupuestos están enviados sin respuesta?'],
+  mecanico:['¿Qué trabajos tengo hoy?','Código P0300, ¿qué reviso primero?','¿Cuánto llevo de comisión este mes?']
+};
+VIEWS.asistente = async main=>{
+  if(!S.perfil){ main.innerHTML='<div class="card">El asistente es para las personas de un taller. Como ImplementIA, pruébalo entrando con un usuario del taller.</div>'; return; }
+  const {data:hist}=await sb.from('asistente_mensajes').select('*').eq('user_id',S.user.id).order('creado_at').limit(200);
+  let msgs=hist||[];
+  main.innerHTML=`<div class="wa-app solo"><div class="wa-chat">
+    <div class="wa-head"><div class="wa-av claude">C</div><div class="t"><b>Claude · asistente de ${esc(S.taller?.nombre||'')}</b><span>Responde con los datos del taller que tú puedes ver</span></div>
+      <button class="btn ghost sm" id="limpiar">Vaciar chat</button></div>
+    <div class="wa-body" id="msgs"></div>
+    <div class="chips" id="chips"></div>
+    <div class="wa-foot"><textarea id="txt" rows="1" placeholder="Pregúntale algo a Claude"></textarea><button class="wa-send" id="send" title="Enviar">➤</button></div>
+  </div></div>`;
+  const pintar=(escribiendo=false)=>{ const box=$('#msgs');
+    box.innerHTML = (msgs.length?'':`<div class="wa-b sys">Hola ${esc(S.perfil.nombre.split(' ')[0])}. Pregúntame por clientes, agenda, órdenes, presupuestos o${S.perfil.rol==='mecanico'?' un código de falla':' cómo va la semana'}.</div>`)
+      + burbujas(msgs.map(m=>({...m,autor:m.rol})), m=>m.rol==='user') + (escribiendo?'<div class="typing"><i></i><i></i><i></i></div>':'');
+    box.scrollTop=box.scrollHeight; };
+  $('#chips').innerHTML=(SUGERENCIAS[S.perfil.rol]||[]).map(q=>`<button>${esc(q)}</button>`).join('');
+  $('#chips').querySelectorAll('button').forEach(b=>b.onclick=()=>{ $('#txt').value=b.textContent; enviar(); });
+  const enviar=async()=>{ const texto=$('#txt').value.trim(); if(!texto) return; $('#txt').value=''; $('#send').disabled=true;
+    msgs.push({rol:'user',texto,creado_at:new Date().toISOString()}); pintar(true);
+    const {data,error}=await sb.functions.invoke('asistente',{body:{texto}});
+    let r=data?.respuesta; if(error||data?.error){ let m=data?.error; try{ m = m || (await error.context.json()).error; }catch(e){} r='⚠️ '+(m||'No pude responder. Intenta de nuevo.'); }
+    msgs.push({rol:'assistant',texto:r,creado_at:new Date().toISOString()}); $('#send').disabled=false; pintar(); };
+  $('#send').onclick=enviar; $('#txt').onkeydown=e=>{ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); enviar(); } };
+  $('#limpiar').onclick=async()=>{ const {error}=await sb.from('asistente_mensajes').delete().eq('user_id',S.user.id); if(!falla(error)){ msgs=[]; pintar(); } };
+  pintar();
+};
+
+/* Agentes automáticos */
+const AGENTES_INFO = {
+  seguimiento:{n:'Seguimiento de clientes',d:'Cada mañana revisa a quién toca contactar (presupuestos sin respuesta, clientes con próxima acción vencida) y deja el mensaje de WhatsApp escrito para enviarlo con un toque.'},
+  informe_diario:{n:'Informe diario',d:'Resume lo que pasó ayer y lo que viene hoy: facturado, presupuestos, horas sin mecánico y órdenes atrasadas.'},
+  revision_datos:{n:'Revisión de datos',d:'Avisa qué está quedando suelto: clientes sin próxima acción, órdenes con más de 7 días, presupuestos en borrador y horas sin mecánico.'}
+};
+VIEWS.agentes = async main=>{
+  const [{data:cfg},{data:ejec},{data:tareas}] = await Promise.all([
+    sb.from('agentes_config').select('*').eq('taller_id',tid()),
+    sb.from('agente_ejecuciones').select('*').eq('taller_id',tid()).order('creado_at',{ascending:false}).limit(30),
+    sb.from('agente_tareas').select('*,clientes(nombre,telefono)').eq('taller_id',tid()).eq('estado','pendiente').order('creado_at')
+  ]);
+  const edita=puede('dueno','staff');
+  main.innerHTML=`<div class="top"><h1>Agentes</h1>${edita?'<button class="btn acc" id="todos">Ejecutar todos ahora</button>':''}</div>
+  <p class="muted" style="margin-top:-8px">Corren solos todos los días a las 8:00. Ningún agente le escribe a un cliente sin que una persona apriete enviar.</p>
+  <div class="grid g3">${Object.entries(AGENTES_INFO).map(([k,a])=>{ const c=(cfg||[]).find(x=>x.agente===k); const u=(ejec||[]).find(e=>e.agente===k);
+    return `<div class="card"><div class="ag"><div class="wa-av claude" style="width:36px;height:36px">${k==='seguimiento'?'💬':k==='informe_diario'?'📊':'🔎'}</div><div style="flex:1"><h3>${a.n}</h3></div>
+      <label class="sw"><input type="checkbox" data-sw="${k}" ${c?.activo?'checked':''} ${edita?'':'disabled'}><span></span></label></div>
+      <p class="muted">${a.d}</p>
+      <div class="mini" style="background:#F7F5F0"><span class="muted">${u?`Última vez: ${fecha(u.creado_at)} ${hora(u.creado_at)}`:'Todavía no ha corrido'}</span>${u?`<div style="white-space:pre-wrap;margin-top:4px">${md(u.resumen)}</div>`:''}</div>
+      ${edita?`<button class="btn ghost sm" data-run="${k}">Ejecutar ahora</button>`:''}</div>`; }).join('')}</div>
+  <div class="card"><h2>Mensajes listos para enviar <span class="pill">${(tareas||[]).length}</span></h2>
+   ${(tareas||[]).map(t=>`<div class="mini"><b>${esc(t.titulo)}</b> <span class="muted">${esc(t.clientes?.telefono||'')}</span>
+     <textarea data-tx="${t.id}" rows="3" style="margin:6px 0">${esc(t.texto)}</textarea>
+     <div class="row"><button class="btn acc sm" data-env="${t.id}">Enviar por WhatsApp</button><button class="btn ghost sm" data-des="${t.id}">Descartar</button><a class="muted" href="#clientes/${t.cliente_id}" style="flex:1;text-align:right">ver ficha</a></div></div>`).join('')||'<p class="muted">No hay mensajes pendientes.</p>'}</div>
+  <div class="card"><h2>Historial</h2>${(ejec||[]).map(e=>`<div class="mini"><span class="pill">${esc(AGENTES_INFO[e.agente]?.n||e.agente)}</span> <span class="muted">${fecha(e.creado_at)} ${hora(e.creado_at)}</span><div style="white-space:pre-wrap;margin-top:4px">${md(e.resumen)}</div></div>`).join('')||'<p class="muted">Sin ejecuciones todavía.</p>'}</div>`;
+  const correr=async(agente,btn)=>{ btn.disabled=true; btn.textContent='Ejecutando…';
+    const {data,error}=await sb.functions.invoke('agentes-diarios',{body:{taller_id:tid(),agente}});
+    if(!falla(error||data?.error)) toast('Listo'); render(); };
+  const t=$('#todos'); if(t) t.onclick=()=>correr(undefined,t);
+  main.querySelectorAll('[data-run]').forEach(b=>b.onclick=()=>correr(b.dataset.run,b));
+  main.querySelectorAll('[data-sw]').forEach(i=>i.onchange=async()=>{ const {error}=await sb.from('agentes_config').update({activo:i.checked}).eq('taller_id',tid()).eq('agente',i.dataset.sw); if(!falla(error)) toast(i.checked?'Agente activado':'Agente pausado'); });
+  main.querySelectorAll('[data-des]').forEach(b=>b.onclick=async()=>{ const {error}=await sb.from('agente_tareas').update({estado:'descartado',resuelto_por:S.user.id}).eq('id',b.dataset.des); if(!falla(error)) render(); });
+  main.querySelectorAll('[data-env]').forEach(b=>b.onclick=async()=>{
+    const t=(tareas||[]).find(x=>x.id===b.dataset.env); const texto=main.querySelector(`[data-tx="${t.id}"]`).value;
+    window.open(wa(t.clientes?.telefono,texto),'_blank');
+    await sb.from('agente_tareas').update({estado:'enviado',texto,resuelto_por:S.user.id}).eq('id',t.id);
+    await sb.from('actividades').insert({taller_id:tid(),cliente_id:t.cliente_id,tipo:'seguimiento',nota:texto,autor:S.user.id});
+    // próxima fecha según la cadencia del taller (1, 3, 7, 30, 90 días)
+    const {count}=await sb.from('actividades').select('id',{count:'exact',head:true}).eq('cliente_id',t.cliente_id).eq('tipo','seguimiento');
+    const dias=S.config?.seguimiento_dias||[1,3,7,30,90];
+    if(count < dias.length){ const d=new Date(hoyLocal()+'T12:00:00Z'); d.setUTCDate(d.getUTCDate()+(dias[count]-dias[count-1])); await sb.from('clientes').update({proxima_accion:'Seguimiento '+(count+1),proxima_accion_fecha:d.toISOString().slice(0,10)}).eq('id',t.cliente_id); }
+    else await sb.from('clientes').update({etapa:'dormido',proxima_accion:null,proxima_accion_fecha:null}).eq('id',t.cliente_id);
+    toast('Marcado como enviado'); render(); });
 };
 
 /* Anuncios */

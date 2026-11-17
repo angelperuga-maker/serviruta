@@ -65,6 +65,7 @@ label{display:block;font-size:12px;font-weight:600;color:var(--soft);margin:8px 
 <div id="root"></div>
 <script>
 const C = window.IMPL_CONFIG;
+const DESDE_INVITACION = /type=(invite|recovery)/.test(location.hash + location.search);
 const sb = supabase.createClient(C.SUPABASE_URL, C.SUPABASE_ANON_KEY);
 const S = { user:null, perfil:null, staff:false, taller:null, talleres:[], config:null, equipo:[], view:'hoy', param:null };
 
@@ -107,7 +108,7 @@ const MENU = {
 const TITULOS = {hoy:'Hoy',clientes:'Clientes',agenda:'Agenda',presupuestos:'Presupuestos',ordenes:'Órdenes de trabajo',catalogo:'Servicios y packs',whatsapp:'WhatsApp',anuncios:'Anuncios',equipo:'Equipo',config:'Configuración',mecanico:'Mis trabajos',talleres:'Talleres'};
 
 function ir(view, param=null){ S.view=view; S.param=param; location.hash=view+(param?'/'+param:''); render(); }
-window.addEventListener('hashchange',()=>{ const [v,p]=location.hash.slice(1).split('/'); if(v && (v!==S.view || (p||null)!==S.param)){ S.view=v; S.param=p||null; render(); }});
+window.addEventListener('hashchange',()=>{ if(location.hash.includes('=')) return; const [v,p]=location.hash.slice(1).split('/'); if(v && (v!==S.view || (p||null)!==S.param)){ S.view=v; S.param=p||null; render(); }});
 
 function shell(){
   const items = MENU[rol()] || [];
@@ -175,9 +176,10 @@ async function iniciar(){
   let guardado=null; try{guardado=localStorage.getItem('impl_taller')}catch(e){}
   S.taller = S.staff ? (S.talleres.find(t=>t.id===guardado)||S.talleres[0]||null) : S.talleres.find(t=>t.id===perfil?.taller_id)||null;
   if(S.taller) await cargarTaller();
-  const [v,p]=location.hash.slice(1).split('/'); if(v){ S.view=v; S.param=p||null; }
+  if(location.hash.includes('=')) history.replaceState(null,'',location.pathname);
+  else { const [v,p]=location.hash.slice(1).split('/'); if(v){ S.view=v; S.param=p||null; } }
   render();
-  if(/type=(invite|recovery)/.test(location.href)) pedirClaveNueva();
+  if(DESDE_INVITACION) pedirClaveNueva();
 }
 sb.auth.onAuthStateChange((ev)=>{ if(ev==='SIGNED_IN' && !S.user) iniciar(); });
 

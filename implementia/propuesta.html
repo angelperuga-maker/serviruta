@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Propuesta · ImplementIA</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#161B22">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="../implementia-taller/config.js"></script>
+<style>
+:root{--dark:#161B22;--light:#F5F3EE;--line:#E3DED3;--ink:#1E242C;--soft:#5A6472;--acc:#F26B1D;--accD:#B0470B;--ok:#1F7A4D;--okBg:#E3F2EA;--bad:#A3302A}
+*{box-sizing:border-box}body{margin:0;background:var(--light);color:var(--ink);font:16px/1.55 Inter,system-ui,Arial,sans-serif}
+header{background:var(--dark);color:#fff;padding:34px 20px 70px}
+.wrap{max-width:760px;margin:0 auto}
+.brand{font-weight:800;font-size:18px}.brand span{color:var(--acc)}
+header h1{font-size:30px;line-height:1.15;margin:22px 0 6px;letter-spacing:-.5px}header p{color:#AEB5BF;margin:0}
+.box{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px;margin:0 0 16px}
+.precio{margin-top:-50px;box-shadow:0 10px 30px rgba(0,0,0,.08)}
+.plan{font-size:13px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--accD)}
+.cifras{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px}
+.cifras div{background:var(--light);border-radius:14px;padding:14px}.cifras b{display:block;font-size:26px;font-weight:800;letter-spacing:-.5px}.cifras span{font-size:13px;color:var(--soft)}
+.md h2{font-size:19px;margin:22px 0 8px}.md h2:first-child{margin-top:0}.md ul,.md ol{padding-left:22px}.md li{margin:4px 0}
+.oferta{background:#FDE6D7;border-radius:14px;padding:14px;font-weight:600;color:#6B2C06}
+label{display:block;font-size:13px;font-weight:600;color:var(--soft);margin:12px 0 4px}
+input,textarea{width:100%;border:1px solid var(--line);border-radius:12px;padding:12px;font:inherit}
+.btn{border:0;border-radius:12px;padding:14px 20px;font:inherit;font-weight:700;cursor:pointer;background:var(--acc);color:#1A1208;width:100%;margin-top:14px}
+.btn.ghost{background:transparent;color:var(--soft);font-weight:600;width:auto;padding:10px 0;text-decoration:underline}
+.estado{text-align:center;padding:30px 20px}.estado b{font-size:22px;display:block;margin-bottom:6px}
+.tiny{font-size:13px;color:var(--soft)}
+footer{text-align:center;color:var(--soft);font-size:13px;padding:10px 20px 40px}
+@media(max-width:560px){header h1{font-size:25px}.cifras{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="app"><header><div class="wrap"><div class="brand">Implement<span>IA</span></div><h1>Cargando propuesta…</h1></div></header></div>
+<script>
+const C = window.IMPL_CONFIG;
+const API = C.SUPABASE_URL + '/functions/v1/ver-propuesta';
+const T = new URLSearchParams(location.search).get('t') || '';
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const peso = n => '$' + Math.round(n || 0).toLocaleString('es-CL');
+function md(s) {
+  const out = []; let list = null; const inline = t => esc(t).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+  for (const raw of String(s || '').split('\n')) {
+    const l = raw.trim(); const li = l.match(/^(?:[-•*]|\d+\.)\s+(.*)/);
+    if (li) { if (!list) { list = /^\d/.test(l) ? 'ol' : 'ul'; out.push(`<${list}>`); } out.push(`<li>${inline(li[1])}</li>`); continue; }
+    if (list) { out.push(`</${list}>`); list = null; } if (!l) continue;
+    out.push(l.startsWith('#') ? `<h2>${inline(l.replace(/^#+\s*/, ''))}</h2>` : `<p>${inline(l)}</p>`);
+  }
+  if (list) out.push(`</${list}>`); return `<div class="md">${out.join('')}</div>`;
+}
+async function api(method, body) {
+  const r = await fetch(method === 'GET' ? `${API}?t=${encodeURIComponent(T)}` : API, {
+    method, headers: { 'Content-Type': 'application/json', apikey: C.SUPABASE_ANON_KEY }, body: body ? JSON.stringify(body) : undefined,
+  });
+  const d = await r.json().catch(() => ({})); if (!r.ok) throw new Error(d.error || 'Error'); return d;
+}
+function pintar(p) {
+  const taller = p.prospectos?.nombre || 'tu taller';
+  const fin = p.estado === 'aceptada' || p.estado === 'rechazada';
+  document.title = `Propuesta para ${taller} · ${p.empresa}`;
+  document.getElementById('app').innerHTML = `
+  <header><div class="wrap"><div class="brand">Implement<span>IA</span></div>
+   <h1>Propuesta para ${esc(taller)}</h1><p>${p.prospectos?.contacto_nombre ? esc(p.prospectos.contacto_nombre) + ' · ' : ''}${new Date(p.creado_at).toLocaleDateString('es-CL', { day: 'numeric', month: 'long', year: 'numeric' })}</p></div></header>
+  <div class="wrap" style="padding:0 14px">
+   <div class="box precio"><div class="plan">Plan ${esc(p.planes?.nombre)}</div><div class="tiny" style="margin-top:4px">${esc(p.planes?.resumen || '')}</div>
+    <div class="cifras"><div><span>Implementación (una vez)</span><b>${peso(p.implementacion)}</b><span>${p.descuento_pct > 0 ? `antes ${peso(p.planes?.implementacion)} · ` : ''}${p.cuotas > 1 ? `${p.cuotas} cuotas de ${peso(p.implementacion / p.cuotas)}` : 'pago único'}</span></div>
+    <div><span>Mensualidad</span><b>${peso(p.mensual)}</b><span>por taller</span></div></div>
+    <div class="tiny" style="margin-top:10px">Valores más IVA.</div></div>
+   <div class="box">${md(p.contenido)}</div>
+   ${p.oferta ? `<div class="box oferta">${esc(p.oferta)}</div>` : ''}
+   <div class="box" id="decision">${fin ? estadoFinal(p.estado) : `
+    <h2 style="margin:0 0 4px;font-size:20px">¿Partimos?</h2><p class="tiny" style="margin:0">Al aceptar, ${esc(p.vendedor)} te contacta para agendar la reunión de inicio.</p>
+    <label>Nombre de quien acepta</label><input id="n" autocomplete="name"><label>RUT de la empresa o persona</label><input id="r" placeholder="12.345.678-9">
+    <button class="btn" id="ok">Acepto la propuesta</button>
+    <button class="btn ghost" id="no">No por ahora</button><div id="m" class="tiny"></div>`}</div>
+  </div><footer>${esc(p.empresa)} · implementia.cl${p.wa_numero ? ` · WhatsApp ${esc(p.wa_numero)}` : ''}</footer>`;
+  if (fin) return;
+  document.getElementById('ok').onclick = async e => {
+    const nombre = document.getElementById('n').value.trim(), rut = document.getElementById('r').value.trim();
+    if (nombre.length < 3 || rut.length < 7) { document.getElementById('m').textContent = 'Completa tu nombre y RUT.'; return; }
+    e.target.disabled = true; e.target.textContent = 'Enviando…';
+    try { await api('POST', { t: T, accion: 'aceptar', nombre, rut }); document.getElementById('decision').innerHTML = estadoFinal('aceptada'); }
+    catch (err) { document.getElementById('m').textContent = err.message; e.target.disabled = false; e.target.textContent = 'Acepto la propuesta'; }
+  };
+  document.getElementById('no').onclick = () => {
+    document.getElementById('decision').innerHTML = `<h2 style="margin:0 0 8px;font-size:20px">Cuéntanos por qué</h2><textarea id="mo" rows="3" placeholder="Precio, momento, otra solución…"></textarea><button class="btn" id="env">Enviar</button>`;
+    document.getElementById('env').onclick = async () => { await api('POST', { t: T, accion: 'rechazar', motivo: document.getElementById('mo').value }); document.getElementById('decision').innerHTML = estadoFinal('rechazada'); };
+  };
+}
+const estadoFinal = e => e === 'aceptada'
+  ? `<div class="estado"><b style="color:var(--ok)">¡Propuesta aceptada!</b>Gracias. Te escribimos hoy mismo para agendar la reunión de inicio.</div>`
+  : `<div class="estado"><b>Gracias por responder</b>Quedamos atentos si más adelante quieres retomarlo.</div>`;
+api('GET').then(pintar).catch(e => { document.getElementById('app').innerHTML = `<header><div class="wrap"><div class="brand">Implement<span>IA</span></div><h1>${esc(e.message)}</h1><p>Revisa el link o escríbenos.</p></div></header>`; });
+</script>
+</body>
+</html>

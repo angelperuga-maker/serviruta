@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ImplementIA · Central</title>
+<meta name="theme-color" content="#161B22">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../implementia-taller/config.js"></script>
+<style>
+:root{--dark:#161B22;--dark2:#222933;--light:#F5F3EE;--line:#E3DED3;--ink:#1E242C;--soft:#5A6472;--acc:#F26B1D;--accD:#B0470B;--ok:#1F7A4D;--okBg:#E3F2EA;--warn:#9A5B00;--warnBg:#FBEFD9;--bad:#A3302A;--badBg:#F8E3E1;--blue:#1F4E8C;--blueBg:#E2EBF7}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--light);color:var(--ink);font:15px/1.45 Inter,system-ui,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+h1,h2,h3{margin:0;line-height:1.2}h1{font-size:22px}h2{font-size:17px}h3{font-size:14px}
+a{color:var(--accD)}
+.app{display:flex;min-height:100vh}
+nav.side{width:224px;background:var(--dark);color:var(--light);padding:18px 12px;flex:none;position:sticky;top:0;height:100vh;overflow:auto}
+.brand{font-weight:800;font-size:19px;padding:0 8px 16px;letter-spacing:-.3px}.brand span{color:var(--acc)}.brand small{display:block;font-weight:500;font-size:11px;color:#9AA3AF;letter-spacing:.6px;text-transform:uppercase;margin-top:2px}
+nav.side a{display:flex;align-items:center;gap:10px;color:#C9CED6;text-decoration:none;padding:9px 10px;border-radius:9px;font-weight:500;margin-bottom:2px}
+nav.side a.on,nav.side a:hover{background:var(--dark2);color:#fff}
+nav.side a .n{margin-left:auto;background:var(--acc);color:#1A1208;font-size:11px;font-weight:800;border-radius:999px;padding:1px 7px}
+main{flex:1;min-width:0;padding:22px 26px 90px;max-width:1180px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px}
+.grid{display:grid;gap:12px}.g2{grid-template-columns:repeat(2,minmax(0,1fr))}.g3{grid-template-columns:repeat(3,minmax(0,1fr))}.g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.kpi{background:var(--dark);color:var(--light);border-radius:14px;padding:13px 14px}
+.kpi b{display:block;font-size:22px;font-weight:800;margin-top:2px}.kpi span{font-size:12px;color:#AEB5BF}
+.meta{background:linear-gradient(135deg,#161B22,#2A2F38);color:#fff;border-radius:16px;padding:18px}
+.meta .big{font-size:38px;font-weight:800;letter-spacing:-1px}.meta .big small{font-size:18px;color:#AEB5BF;font-weight:600}
+.prog{height:10px;background:#3A424E;border-radius:99px;overflow:hidden;margin:10px 0 6px}.prog div{height:100%;background:var(--acc);border-radius:99px}
+.bar{height:22px;background:#EFEBE3;border-radius:7px;overflow:hidden;flex:1;position:relative}.bar div{height:100%;background:var(--acc);border-radius:7px;min-width:2px}
+.frow{display:flex;align-items:center;gap:10px;margin:6px 0;font-size:13px}.frow .l{width:96px;color:var(--soft);font-weight:600}.frow .v{width:34px;text-align:right;font-weight:700}
+.btn{text-decoration:none;display:inline-block;border:0;border-radius:10px;padding:9px 14px;font-weight:600;cursor:pointer;background:var(--dark);color:var(--light);font:inherit;font-weight:600;white-space:nowrap}
+.btn.acc{background:var(--acc);color:#1A1208}.btn.ghost{background:#fff;border:1px solid var(--line);color:var(--ink)}.btn.ok{background:var(--ok);color:#fff}.btn.bad{background:#fff;border:1px solid #E7C3BF;color:var(--bad)}
+.btn.sm{padding:6px 10px;font-size:13px;border-radius:8px}.btn:disabled{opacity:.5;cursor:default}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.sp{flex:1}
+input,select,textarea{border:1px solid var(--line);border-radius:10px;padding:9px 11px;background:#fff;width:100%;font:inherit;color:var(--ink)}
+textarea{min-height:90px;resize:vertical}
+label{display:block;font-size:12px;font-weight:600;color:var(--soft);margin:10px 0 4px}
+.pill{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.3px;padding:3px 8px;border-radius:999px;background:#ECE8E0;color:var(--soft);text-transform:uppercase;white-space:nowrap}
+.p-ok{background:var(--okBg);color:var(--ok)}.p-warn{background:var(--warnBg);color:var(--warn)}.p-bad{background:var(--badBg);color:var(--bad)}.p-dark{background:var(--dark);color:var(--light)}.p-acc{background:#FDE6D7;color:var(--accD)}.p-blue{background:var(--blueBg);color:var(--blue)}
+.muted{color:var(--soft);font-size:13px}.tiny{font-size:12px;color:var(--soft)}
+.list .it{display:flex;gap:12px;align-items:center;padding:11px 4px;border-bottom:1px solid var(--line);cursor:pointer}.list .it:last-child{border-bottom:0}
+.score{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-weight:800;flex:none;background:#EFEBE3}
+.score.hi{background:#FDE6D7;color:var(--accD)}.score.mid{background:var(--warnBg);color:var(--warn)}
+.it .t{font-weight:600}.it .s{font-size:12.5px;color:var(--soft)}
+.kanban{display:flex;gap:10px;overflow-x:auto;padding-bottom:10px;scroll-snap-type:x mandatory}
+.col{min-width:230px;flex:1;background:#EDE9E1;border-radius:12px;padding:10px;scroll-snap-align:start}
+.col h3{font-size:12px;color:var(--soft);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;display:flex;justify-content:space-between}
+.mini{background:#fff;border-radius:10px;padding:9px 10px;margin-bottom:7px;border:1px solid var(--line);cursor:pointer;font-size:13.5px}
+.msg{border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px;background:#fff}
+.msg .hd{display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
+.chat{display:flex;flex-direction:column;gap:6px;max-height:420px;overflow:auto;padding:8px;background:#EFEAE2;border-radius:12px}
+.bub{max-width:82%;padding:8px 10px;border-radius:12px;font-size:14px;white-space:pre-wrap;word-wrap:break-word}
+.bub.in{background:#fff;align-self:flex-start;border-top-left-radius:3px}.bub.out{background:#DCF5D0;align-self:flex-end;border-top-right-radius:3px}
+.bub.draft{background:#FFF4E5;border:1px dashed #E8B27A;align-self:flex-end}.bub.note{background:#E8E4DC;align-self:center;font-size:12.5px;color:var(--soft)}
+.bub small{display:block;font-size:11px;color:#7A828D;margin-top:3px}
+.modal{position:fixed;inset:0;background:rgba(22,27,34,.55);z-index:50;display:flex;align-items:flex-start;justify-content:center;padding:30px 12px;overflow:auto}
+.sheet{background:var(--light);border-radius:18px;width:100%;max-width:820px;padding:18px;position:relative}
+.x{position:absolute;right:12px;top:12px;border:0;background:#fff;border:1px solid var(--line);border-radius:10px;width:36px;height:36px;font-size:18px;cursor:pointer}
+.toast{position:fixed;bottom:84px;left:50%;transform:translateX(-50%);background:var(--dark);color:#fff;padding:11px 16px;border-radius:12px;z-index:90;max-width:92vw;font-size:14px;box-shadow:0 6px 20px rgba(0,0,0,.2)}
+.login{max-width:380px;margin:12vh auto;padding:0 16px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}.chip{border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 11px;font-size:13px;cursor:pointer;user-select:none}.chip.on{background:var(--dark);color:#fff;border-color:var(--dark)}
+.check{display:flex;gap:10px;align-items:center;padding:9px 2px;border-bottom:1px solid var(--line);cursor:pointer}.check input{width:20px;height:20px;flex:none}
+.check.done span{color:var(--soft);text-decoration:line-through}
+.md h2{font-size:16px;margin:16px 0 6px}.md p{margin:6px 0}.md ul,.md ol{margin:6px 0;padding-left:20px}
+pre.g{white-space:pre-wrap;font:inherit;font-size:14px;margin:0;background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px}
+.empty{padding:26px;text-align:center;color:var(--soft)}
+nav.tabs{display:none}
+.drawer a{display:block;padding:13px 6px;border-bottom:1px solid var(--line);text-decoration:none;color:var(--ink);font-weight:600}
+@media (max-width:860px){
+  nav.side{display:none}
+  main{padding:14px 12px 96px}
+  .g4{grid-template-columns:repeat(2,minmax(0,1fr))}.g3,.g2{grid-template-columns:1fr}
+  nav.tabs{display:flex;position:fixed;bottom:0;left:0;right:0;background:var(--dark);z-index:40;padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
+  nav.tabs a{flex:1;text-align:center;color:#AEB5BF;text-decoration:none;font-size:11px;font-weight:600;padding:4px 0;position:relative}
+  nav.tabs a i{display:block;font-style:normal;font-size:20px;line-height:1.2}
+  nav.tabs a.on{color:#fff}nav.tabs a .n{position:absolute;top:0;left:55%;background:var(--acc);color:#1A1208;font-size:10px;font-weight:800;border-radius:99px;padding:0 5px}
+  .modal{padding:0}.sheet{border-radius:0;min-height:100vh;padding:14px 12px 40px}
+  h1{font-size:20px}
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+const C = window.IMPL_CONFIG;
+const sb = supabase.createClient(C.SUPABASE_URL, C.SUPABASE_ANON_KEY);
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const peso = n => '$' + Math.round(n || 0).toLocaleString('es-CL');
+const fecha = d => d ? new Date(d).toLocaleString('es-CL', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
+const dia = d => d ? new Date(d).toLocaleDateString('es-CL', { day: 'numeric', month: 'short' }) : '';
+const hace = d => { if (!d) return ''; const m = Math.round((Date.now() - new Date(d)) / 60000); if (m < 60) return `hace ${m} min`; const h = Math.round(m / 60); if (h < 24) return `hace ${h} h`; return `hace ${Math.round(h / 24)} d`; };
+const ESTADOS = { nuevo: 'Nuevo', investigado: 'Investigado', contactado: 'Contactado', respondio: 'Respondió', demo: 'Demo', propuesta: 'Propuesta', cliente: 'Cliente', descartado: 'Descartado' };
+const PILL_ESTADO = { nuevo: '', investigado: 'p-blue', contactado: 'p-warn', respondio: 'p-acc', demo: 'p-acc', propuesta: 'p-dark', cliente: 'p-ok', descartado: 'p-bad' };
+const AGENTES = { contacto: 'Contacto', seguimiento: 'Seguimiento', recordatorio: 'Recordatorio', propuesta: 'Propuesta', implementador: 'Implementador' };
+const CANAL = { whatsapp: 'WhatsApp', email: 'Email', linkedin: 'LinkedIn', llamada: 'Llamada', nota: 'Nota' };
+const COMUNAS = ["Santiago","Providencia","Ñuñoa","Las Condes","Vitacura","Lo Barnechea","La Reina","Peñalolén","Macul","La Florida","Puente Alto","San Joaquín","San Miguel","La Cisterna","El Bosque","San Bernardo","La Granja","La Pintana","San Ramón","Lo Espejo","Pedro Aguirre Cerda","Estación Central","Cerrillos","Maipú","Pudahuel","Lo Prado","Quinta Normal","Cerro Navia","Renca","Quilicura","Conchalí","Huechuraba","Independencia","Recoleta"];
+let CFG = null, PLANES = [], VISTA = 'inicio';
+
+function toast(t, ms = 3200) { const d = document.createElement('div'); d.className = 'toast'; d.textContent = t; document.body.appendChild(d); setTimeout(() => d.remove(), ms); }
+async function q(p) { const { data, error, count } = await p; if (error) { toast('Error: ' + error.message); throw error; } return count != null && data == null ? count : data; }
+async function fn(name, body, btn) {
+  if (btn) { btn.disabled = true; btn.dataset.t = btn.textContent; btn.textContent = 'Trabajando…'; }
+  try {
+    const { data, error } = await sb.functions.invoke(name, { body });
+    if (error) { let m = error.message; try { m = (await error.context.json()).error || m; } catch { } throw new Error(m); }
+    return data;
+  } catch (e) { toast(e.message, 5000); throw e; }
+  finally { if (btn) { btn.disabled = false; btn.textContent = btn.dataset.t; } }
+}
+function md(s) {
+  const out = []; let list = null;
+  const inline = t => esc(t).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+  for (const raw of String(s || '').split('\n')) {
+    const l = raw.trim();
+    const li = l.match(/^(?:[-•*]|\d+\.)\s+(.*)/);
+    if (li) { if (!list) { list = /^\d/.test(l) ? 'ol' : 'ul'; out.push(`<${list}>`); } out.push(`<li>${inline(li[1])}</li>`); continue; }
+    if (list) { out.push(`</${list}>`); list = null; }
+    if (!l) continue;
+    if (l.startsWith('## ')) out.push(`<h2>${inline(l.slice(3))}</h2>`);
+    else if (l.startsWith('# ')) out.push(`<h2>${inline(l.slice(2))}</h2>`);
+    else out.push(`<p>${inline(l)}</p>`);
+  }
+  if (list) out.push(`</${list}>`);
+  return `<div class="md">${out.join('')}</div>`;
+}
+const waLink = (dig, texto) => `https://wa.me/${dig}${texto ? '?text=' + encodeURIComponent(texto) : ''}`;
+const scoreCls = n => n >= 75 ? 'hi' : n >= 50 ? 'mid' : '';
+
+// ───────────────────────── Login ─────────────────────────
+function login(msg = '') {
+  $('#root').innerHTML = `<div class="login"><h1 style="font-size:28px">Implement<span style="color:var(--acc)">IA</span></h1>
+  <p class="muted" style="margin:6px 0 18px">Central comercial y de clientes. Solo equipo ImplementIA.</p>
+  <div class="card"><label>Correo</label><input id="em" type="email" autocomplete="email">
+  <label>Contraseña</label><input id="pw" type="password" autocomplete="current-password">
+  <div class="row" style="margin-top:14px"><button class="btn acc" id="go">Entrar</button><button class="btn ghost" id="link">Enviarme un link</button></div>
+  <p class="muted" id="msg" style="margin-bottom:0">${esc(msg)}</p></div></div>`;
+  $('#go').onclick = async () => { const { error } = await sb.auth.signInWithPassword({ email: $('#em').value.trim(), password: $('#pw').value }); if (error) $('#msg').textContent = 'No se pudo entrar: ' + error.message; else iniciar(); };
+  $('#pw').onkeydown = e => { if (e.key === 'Enter') $('#go').click(); };
+  $('#link').onclick = async () => { const { error } = await sb.auth.signInWithOtp({ email: $('#em').value.trim(), options: { shouldCreateUser: false, emailRedirectTo: location.origin + location.pathname } }); $('#msg').textContent = error ? 'Error: ' + error.message : 'Revisa tu correo y abre el link.'; };
+}
+
+async function iniciar() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) return login();
+  const { data: staff } = await sb.rpc('es_staff');
+  if (!staff) { await sb.auth.signOut(); return login('Tu usuario no es del equipo ImplementIA.'); }
+  [CFG, PLANES] = await Promise.all([q(sb.from('ventas_config').select('*').eq('id', 1).single()), q(sb.from('planes').select('*').order('orden'))]);
+  marco();
+  ir(location.hash.slice(1) || 'inicio');
+}
+
+const MENU = [
+  ['inicio', '◉', 'Inicio'], ['bandeja', '✉', 'Bandeja'], ['prospectos', '⌕', 'Prospectos'], ['embudo', '▥', 'Embudo'],
+  ['conversaciones', '☏', 'Conversaciones'], ['demos', '▶', 'Demos'], ['propuestas', '✎', 'Propuestas'], ['clientes', '★', 'Clientes'],
+  ['agentes', '⚙', 'Agentes'], ['ajustes', '☰', 'Ajustes'],
+];
+function marco() {
+  $('#root').innerHTML = `<div class="app">
+   <nav class="side"><div class="brand">Implement<span>IA</span><small>Central</small></div>
+    ${MENU.map(([k, i, t]) => `<a href="#${k}" data-v="${k}"><span>${i}</span>${t}${k === 'bandeja' ? '<span class="n" id="nb1" hidden></span>' : ''}</a>`).join('')}
+    <a href="../implementia-taller/" style="margin-top:14px">↗ App de talleres</a>
+    <a href="#" id="salir">Salir</a></nav>
+   <main id="main"></main>
+   <nav class="tabs">${[['inicio', '◉', 'Inicio'], ['bandeja', '✉', 'Bandeja'], ['prospectos', '⌕', 'Prospectos'], ['demos', '▶', 'Demos'], ['menu', '☰', 'Más']]
+      .map(([k, i, t]) => `<a href="#${k}" data-v="${k}"><i>${i}</i>${t}${k === 'bandeja' ? '<span class="n" id="nb2" hidden></span>' : ''}</a>`).join('')}</nav></div>`;
+  $('#salir').onclick = async e => { e.preventDefault(); await sb.auth.signOut(); login(); };
+  contarBandeja();
+}
+async function contarBandeja() {
+  const { count } = await sb.from('prospecto_mensajes').select('id', { count: 'exact', head: true }).in('estado', ['borrador', 'error']);
+  for (const id of ['nb1', 'nb2']) { const el = $('#' + id); if (el) { el.hidden = !count; el.textContent = count; } }
+}
+window.addEventListener('hashchange', () => ir(location.hash.slice(1) || 'inicio'));
+function ir(v) {
+  VISTA = v;
+  $$('nav a[data-v]').forEach(a => a.classList.toggle('on', a.dataset.v === v));
+  const m = $('#main'); if (!m) return;
+  m.innerHTML = '<div class="empty">Cargando…</div>';
+  (VISTAS[v] || VISTAS.inicio)(m).catch(e => { console.error(e); m.innerHTML = `<div class="card">No se pudo cargar: ${esc(e.message)}</div>`; });
+  window.scrollTo(0, 0);
+}
+
+// ───────────────────────── Vistas ─────────────────────────
+const VISTAS = {};
+
+VISTAS.inicio = async m => {
+  const [clientes, embudo, log, borr, demos, resp] = await Promise.all([
+    q(sb.from('v_clientes').select('*')),
+    q(sb.from('v_embudo').select('*')),
+    q(sb.from('agente_comercial_log').select('*').order('creado_at', { ascending: false }).limit(8)),
+    q(sb.from('prospecto_mensajes').select('id', { count: 'exact', head: true }).in('estado', ['borrador', 'error'])),
+    q(sb.from('demos').select('id,inicio,estado,prospecto_id,prospectos(nombre,comuna)').eq('estado', 'agendada').gte('inicio', new Date(Date.now() - 3600e3).toISOString()).order('inicio').limit(5)),
+    q(sb.from('prospectos').select('id,nombre,comuna,ultimo_contacto,bot_pausado,proximo_paso').eq('estado', 'respondio').order('ultimo_contacto', { ascending: false }).limit(5)),
+  ]);
+  const activos = clientes.filter(c => c.estado_cliente !== 'baja');
+  const mrr = activos.reduce((s, c) => s + (c.mensual || 0), 0);
+  const impl = activos.reduce((s, c) => s + (c.implementacion || 0), 0);
+  const meta = CFG.meta_clientes, faltan = Math.max(0, meta - activos.length);
+  const dias = Math.max(1, Math.ceil((new Date(CFG.meta_fecha + 'T23:59:00') - Date.now()) / 864e5));
+  const ritmo = (faltan / (dias / 7)).toFixed(1);
+  const E = Object.fromEntries(embudo.map(e => [e.estado, e.n]));
+  const orden = ['nuevo', 'investigado', 'contactado', 'respondio', 'demo', 'propuesta', 'cliente'];
+  // acumulado: cuántos llegaron al menos a esa etapa
+  const acum = {}; let s = 0; for (const k of [...orden].reverse()) { s += E[k] || 0; acum[k] = s; }
+  const max = Math.max(1, acum.nuevo);
+  m.innerHTML = `
+  <div class="top"><div><h1>Hola ${esc(CFG.vendedor_nombre)}</h1><div class="muted">${new Date().toLocaleDateString('es-CL', { weekday: 'long', day: 'numeric', month: 'long' })}</div></div>
+   <button class="btn acc" id="correr">Correr agentes ahora</button></div>
+  <div class="meta"><div class="row"><div><div class="tiny" style="color:#AEB5BF;text-transform:uppercase;letter-spacing:.6px;font-weight:700">Meta de clientes</div>
+   <div class="big">${activos.length}<small> / ${meta}</small></div></div><div class="sp"></div>
+   <div style="text-align:right"><div style="font-size:22px;font-weight:800">${dias} días</div><div class="tiny" style="color:#AEB5BF">al ${new Date(CFG.meta_fecha + 'T12:00').toLocaleDateString('es-CL', { day: 'numeric', month: 'long' })}</div></div></div>
+   <div class="prog"><div style="width:${Math.min(100, activos.length / meta * 100)}%"></div></div>
+   <div class="tiny" style="color:#C9CED6">${faltan ? `Faltan ${faltan}: necesitas cerrar <b style="color:#fff">${ritmo} por semana</b>.` : '¡Meta cumplida!'}</div></div>
+  <div class="grid g4" style="margin:12px 0">
+   <div class="kpi"><span>Ingreso mensual (MRR)</span><b>${peso(mrr)}</b></div>
+   <div class="kpi"><span>Implementaciones vendidas</span><b>${peso(impl)}</b></div>
+   <div class="kpi"><span>Por aprobar</span><b>${borr}</b></div>
+   <div class="kpi"><span>Demos agendadas</span><b>${demos.length}</b></div></div>
+  <div class="grid g2">
+   <div class="card"><h2 style="margin-bottom:8px">Embudo</h2>
+    ${orden.map(k => `<div class="frow"><div class="l">${ESTADOS[k]}</div><div class="bar"><div style="width:${acum[k] / max * 100}%"></div></div><div class="v">${acum[k]}</div></div>`).join('')}
+    <div class="tiny" style="margin-top:6px">Cuántos llegaron al menos a cada etapa. Descartados: ${E.descartado || 0}.</div></div>
+   <div class="card"><h2 style="margin-bottom:6px">Hoy</h2>
+    ${borr ? `<div class="it" style="display:flex;gap:10px;align-items:center;padding:8px 0"><span class="pill p-acc">${borr}</span><span class="sp">mensajes esperando tu aprobación</span><a class="btn sm" href="#bandeja">Revisar</a></div>` : ''}
+    <h3 style="margin:10px 0 4px">Respondieron</h3>
+    ${resp.length ? `<div class="list">${resp.map(p => `<div class="it" data-p="${p.id}"><div class="sp"><div class="t">${esc(p.nombre)}</div><div class="s">${esc(p.comuna || '')} · ${hace(p.ultimo_contacto)}${p.bot_pausado ? ' · <b style="color:var(--bad)">te toca responder</b>' : ''}</div></div><span>›</span></div>`).join('')}</div>` : '<div class="tiny">Nadie por ahora.</div>'}
+    <h3 style="margin:12px 0 4px">Próximas demos</h3>
+    ${demos.length ? `<div class="list">${demos.map(d => `<div class="it" data-p="${d.prospecto_id}"><div class="sp"><div class="t">${esc(d.prospectos?.nombre)}</div><div class="s">${fecha(d.inicio)}</div></div><span>›</span></div>`).join('')}</div>` : '<div class="tiny">Sin demos agendadas.</div>'}
+   </div></div>
+  <div class="card"><div class="row"><h2>Lo que hicieron los agentes</h2><div class="sp"></div><a href="#agentes" class="tiny">Ver todo</a></div>
+   ${log.length ? `<div class="list">${log.map(l => `<div class="it" style="cursor:default"><span class="pill">${esc(l.agente)}</span><div class="sp s" style="color:var(--ink)">${esc(l.resumen)}</div><span class="tiny">${hace(l.creado_at)}</span></div>`).join('')}</div>` : '<div class="tiny">Todavía no corren.</div>'}</div>`;
+  $$('[data-p]', m).forEach(e => e.onclick = () => ficha(e.dataset.p));
+  $('#correr').onclick = async e => { const r = await fn('comercial', { accion: 'diario' }, e.target); toast(r.resumen, 6000); ir('inicio'); contarBandeja(); };
+};
+
+// ── Bandeja ──
+VISTAS.bandeja = async m => {
+  const msgs = await q(sb.from('prospecto_mensajes').select('*, prospectos(id,nombre,comuna,puntaje,wa_digitos,email,telefono,contacto_nombre)').in('estado', ['borrador', 'error']).order('creado_at').limit(200));
+  m.innerHTML = `<div class="top"><div><h1>Bandeja</h1><div class="muted">${msgs.length} mensajes escritos por los agentes. Revisa, ajusta y envía.</div></div>
+   <button class="btn ghost" id="gen">Generar más</button></div>
+   <div class="card tiny" style="background:#FFF8EE">Consejo: los primeros contactos mándalos con <b>Abrir en WhatsApp</b> desde tu teléfono (pocos al día) y deja <b>Enviar</b> para quienes ya te escribieron. Así cuidas el número.</div>
+   <div id="lista">${msgs.length ? '' : '<div class="empty">Bandeja al día. Los agentes dejan mensajes nuevos cada mañana.</div>'}</div>`;
+  $('#gen').onclick = async e => { const r = await fn('comercial', { accion: 'contactar' }, e.target); toast(r.resumen, 6000); ir('bandeja'); contarBandeja(); };
+  const L = $('#lista');
+  for (const x of msgs) {
+    const p = x.prospectos || {};
+    const d = document.createElement('div'); d.className = 'msg';
+    d.innerHTML = `<div class="hd"><b style="cursor:pointer" class="abrir">${esc(p.nombre)}</b><span class="tiny">${esc(p.comuna || '')}</span><div class="sp"></div>
+      <span class="pill p-blue">${CANAL[x.canal] || x.canal}</span><span class="pill">${AGENTES[x.agente] || x.agente || ''}${x.paso ? ' · paso ' + x.paso : ''}</span></div>
+      ${x.estado === 'error' ? `<div class="pill p-bad" style="text-transform:none;margin-bottom:6px;white-space:normal">${esc(x.error)}</div>` : ''}
+      ${x.canal === 'email' ? `<input class="as" value="${esc(x.asunto || '')}" placeholder="Asunto" style="margin-bottom:6px">` : ''}
+      <textarea class="tx">${esc(x.texto)}</textarea>
+      <div class="row" style="margin-top:8px">${botonesEnvio(x, p)}<div class="sp"></div><button class="btn sm bad des">Descartar</button></div>`;
+    L.appendChild(d);
+    const ta = $('.tx', d); ta.style.height = Math.max(90, ta.scrollHeight + 4) + 'px';
+    $('.abrir', d).onclick = () => ficha(p.id);
+    const quitar = () => { d.style.opacity = .4; setTimeout(() => d.remove(), 300); contarBandeja(); };
+    const texto = () => $('.tx', d).value;
+    $('.des', d).onclick = async () => { await q(sb.from('prospecto_mensajes').update({ estado: 'descartado' }).eq('id', x.id)); quitar(); };
+    const api = $('.api', d); if (api) api.onclick = async e => { await fn('comercial', { accion: 'enviar', mensaje_id: x.id, texto: texto(), modo: 'api' }, e.target); toast('Enviado'); quitar(); };
+    const man = $('.man', d); if (man) man.onclick = async e => {
+      const t = texto(), a = $('.as', d)?.value;
+      if (man.dataset.paso !== '2') {
+        if (x.canal === 'whatsapp') window.open(waLink(p.wa_digitos, t), '_blank');
+        else if (x.canal === 'email') location.href = `mailto:${p.email || ''}?subject=${encodeURIComponent(a || '')}&body=${encodeURIComponent(t)}`;
+        else if (x.canal === 'llamada') location.href = `tel:${p.telefono || ''}`;
+        man.dataset.paso = '2'; man.textContent = '✓ Ya lo envié'; man.classList.add('ok'); return;
+      }
+      await fn('comercial', { accion: 'enviar', mensaje_id: x.id, texto: t, asunto: a, modo: 'manual' }, e.target); toast('Registrado'); quitar();
+    };
+  }
+};
+function botonesEnvio(x, p) {
+  if (x.canal === 'whatsapp') return `${p.wa_digitos ? `<button class="btn sm acc man">Abrir en WhatsApp</button>` : '<span class="tiny">Sin teléfono</span>'}<button class="btn sm api">Enviar (API)</button>`;
+  if (x.canal === 'email') return `<button class="btn sm acc man">${p.email ? 'Abrir correo' : 'Sin correo: copiar'}</button>`;
+  if (x.canal === 'llamada') return `<button class="btn sm acc man">Llamar</button>`;
+  return `<button class="btn sm acc man">Marcar hecho</button>`;
+}
+
+// ── Prospectos ──
+VISTAS.prospectos = async m => {
+  m.innerHTML = `<div class="top"><div><h1>Prospectos</h1><div class="muted" id="cnt"></div></div>
+   <div class="row"><button class="btn ghost" id="nuevo">+ Agregar</button><button class="btn acc" id="buscar">Buscar talleres</button></div></div>
+   <div class="card"><div class="grid g4" style="gap:8px"><input id="f_t" placeholder="Buscar nombre o comuna"><select id="f_e"><option value="">Activos (sin descartados)</option><option value="todos">Todos</option>${Object.entries(ESTADOS).map(([k, v]) => `<option value="${k}">${v}</option>`).join('')}</select>
+   <select id="f_c"><option value="">Todas las comunas</option>${COMUNAS.map(c => `<option>${c}</option>`).join('')}</select><select id="f_p"><option value="0">Cualquier puntaje</option><option value="50" selected>50 o más</option><option value="75">75 o más</option></select></div></div>
+   <div class="card" style="padding:4px 12px"><div class="list" id="lista"></div></div>`;
+  const cargar = async () => {
+    let qq = sb.from('prospectos').select('id,nombre,comuna,puntaje,estado,rating,n_resenas,telefono,web,motivos,proximo_paso,ultimo_contacto,origen').order('puntaje', { ascending: false }).limit(300);
+    const e = $('#f_e').value, c = $('#f_c').value, t = $('#f_t').value.trim(), pmin = +$('#f_p').value;
+    if (e === '') qq = qq.neq('estado', 'descartado'); else if (e !== 'todos') qq = qq.eq('estado', e);
+    if (c) qq = qq.eq('comuna', c); if (pmin) qq = qq.gte('puntaje', pmin);
+    if (t) qq = qq.or(`nombre.ilike.%${t.replace(/[,()]/g, ' ')}%,comuna.ilike.%${t.replace(/[,()]/g, ' ')}%`);
+    const data = await q(qq);
+    $('#cnt').textContent = `${data.length} talleres${data.length === 300 ? ' (primeros 300)' : ''}`;
+    $('#lista').innerHTML = data.length ? data.map(p => `<div class="it" data-p="${p.id}"><div class="score ${scoreCls(p.puntaje)}">${p.puntaje}</div>
+      <div class="sp" style="min-width:0"><div class="t">${esc(p.nombre)}</div><div class="s">${esc(p.comuna || '')}${p.rating ? ` · ★ ${p.rating} (${p.n_resenas})` : ''}${p.web ? '' : ' · sin web'}${p.proximo_paso ? ' · ' + esc(p.proximo_paso) : ''}</div></div>
+      <span class="pill ${PILL_ESTADO[p.estado]}">${ESTADOS[p.estado]}</span></div>`).join('')
+      : `<div class="empty">No hay talleres con estos filtros.<br>Usa <b>Buscar talleres</b> para traerlos de Google Maps.</div>`;
+    $$('[data-p]', m).forEach(e => e.onclick = () => ficha(e.dataset.p));
+  };
+  ['f_e', 'f_c', 'f_p'].forEach(i => $('#' + i).onchange = cargar);
+  let tm; $('#f_t').oninput = () => { clearTimeout(tm); tm = setTimeout(cargar, 300); };
+  $('#buscar').onclick = buscarTalleres; $('#nuevo').onclick = agregarProspecto;
+  await cargar();
+};
+
+function modal(html) {
+  const d = document.createElement('div'); d.className = 'modal';
+  d.innerHTML = `<div class="sheet"><button class="x">×</button>${html}</div>`;
+  document.body.appendChild(d); document.body.style.overflow = 'hidden';
+  const cerrar = () => { d.remove(); document.body.style.overflow = ''; };
+  $('.x', d).onclick = cerrar; d.onclick = e => { if (e.target === d) cerrar(); };
+  d.cerrar = cerrar; return d;
+}
+
+function buscarTalleres() {
+  const sel = new Set();
+  const d = modal(`<h2>Buscar talleres en Google Maps</h2><p class="muted">El agente prospector trae los talleres, descarta los cerrados y les pone puntaje.</p>
+   <label>Qué buscar</label><input id="cq" value="taller mecánico">
+   <label>Comunas <a href="#" id="todas" class="tiny">(marcar todas)</a></label><div class="chips">${COMUNAS.map(c => `<span class="chip" data-c="${c}">${c}</span>`).join('')}</div>
+   <label>Resultados por comuna</label><select id="pg"><option value="1">Hasta 20</option><option value="2" selected>Hasta 40</option><option value="3">Hasta 60</option></select>
+   <div class="row" style="margin-top:14px"><button class="btn acc" id="go">Buscar</button><span class="tiny">Sin comunas marcadas busca en las 34.</span></div><div id="res" style="margin-top:12px"></div>`);
+  $$('.chip', d).forEach(c => c.onclick = () => { c.classList.toggle('on'); c.classList.contains('on') ? sel.add(c.dataset.c) : sel.delete(c.dataset.c); });
+  $('#todas', d).onclick = e => { e.preventDefault(); $$('.chip', d).forEach(c => { c.classList.add('on'); sel.add(c.dataset.c); }); };
+  $('#go', d).onclick = async e => {
+    const r = await fn('prospector', { comunas: [...sel], consulta: $('#cq', d).value, max_paginas: +$('#pg', d).value }, e.target);
+    $('#res', d).innerHTML = `<div class="card"><b>${r.encontrados} encontrados, ${r.nuevos} nuevos</b> en ${r.comunas} comunas.
+     ${(r.resumen || []).filter(x => x.error).map(x => `<div class="tiny" style="color:var(--bad)">${esc(x.comuna)}: ${esc(x.error)}</div>`).join('')}
+     <h3 style="margin:10px 0 4px">Top 10</h3>${(r.top10 || []).map(t => `<div class="tiny">${t.puntaje} · ${esc(t.nombre)} (${esc(t.comuna)})</div>`).join('')}</div>`;
+    if (VISTA === 'prospectos') ir('prospectos');
+  };
+}
+
+function agregarProspecto() {
+  const d = modal(`<h2>Agregar prospecto</h2><p class="muted">Un referido, alguien que conociste o un taller que no salió en Maps.</p>
+   <div class="grid g2"><div><label>Nombre del taller</label><input id="n"></div><div><label>Comuna</label><input id="c" list="lc"><datalist id="lc">${COMUNAS.map(c => `<option>${c}</option>`).join('')}</datalist></div>
+   <div><label>Contacto</label><input id="ct"></div><div><label>Teléfono (con +56)</label><input id="t" placeholder="+56 9 ..."></div>
+   <div><label>Correo</label><input id="e"></div><div><label>Origen</label><select id="o"><option value="referido">Referido</option><option value="red_serviruta">Red Serviruta</option><option value="evento">Evento</option><option value="linkedin">LinkedIn</option><option value="otro">Otro</option></select></div></div>
+   <label>Notas</label><textarea id="no"></textarea><div class="row" style="margin-top:12px"><button class="btn acc" id="g">Guardar</button></div>`);
+  $('#g', d).onclick = async () => {
+    const n = $('#n', d).value.trim(); if (!n) return toast('Falta el nombre');
+    const tel = $('#t', d).value.trim();
+    const r = await q(sb.from('prospectos').insert({ nombre: n, comuna: $('#c', d).value || null, contacto_nombre: $('#ct', d).value || null, telefono: tel || null, telefono_intl: tel || null, email: $('#e', d).value || null, origen: $('#o', d).value, notas: $('#no', d).value || null, tipo_google: 'car_repair' }).select('id').single());
+    d.cerrar(); toast('Agregado'); ficha(r.id); if (VISTA === 'prospectos') ir('prospectos');
+  };
+}
+
+// ── Ficha del prospecto ──
+async function ficha(id) {
+  const [p, msgs, demos, props] = await Promise.all([
+    q(sb.from('prospectos').select('*').eq('id', id).single()),
+    q(sb.from('prospecto_mensajes').select('*').eq('prospecto_id', id).neq('estado', 'descartado').order('creado_at')),
+    q(sb.from('demos').select('*').eq('prospecto_id', id).order('inicio', { ascending: false })),
+    q(sb.from('propuestas_comerciales').select('*, planes(nombre)').eq('prospecto_id', id).order('creado_at', { ascending: false })),
+  ]);
+  const d = modal(`<div class="row" style="padding-right:44px"><div class="score ${scoreCls(p.puntaje)}">${p.puntaje}</div><div class="sp"><h2>${esc(p.nombre)}</h2>
+     <div class="tiny">${esc(p.comuna || '')}${p.rating ? ` · ★ ${p.rating} (${p.n_resenas} reseñas)` : ''} · origen: ${esc(p.origen)}</div></div></div>
+   <div class="row" style="margin:12px 0"><select id="est" style="width:auto">${Object.entries(ESTADOS).map(([k, v]) => `<option value="${k}" ${k === p.estado ? 'selected' : ''}>${v}</option>`).join('')}</select>
+     ${p.wa_digitos ? `<a class="btn sm ghost" target="_blank" href="${waLink(p.wa_digitos)}">WhatsApp</a><a class="btn sm ghost" href="tel:${esc(p.telefono_intl || p.telefono)}">Llamar</a>` : ''}
+     ${p.maps_url ? `<a class="btn sm ghost" target="_blank" href="${esc(p.maps_url)}">Maps</a>` : ''}${p.web ? `<a class="btn sm ghost" target="_blank" href="${esc(p.web)}">Web</a>` : ''}
+     ${p.demo_taller_id ? `<a class="btn sm ghost" target="_blank" href="../implementia-taller/">Taller demo ↗</a>` : ''}</div>
+   <div class="chips" style="margin-bottom:10px">${(p.motivos || []).map(x => `<span class="pill">${esc(x)}</span>`).join('')}${p.bot_pausado ? '<span class="pill p-bad">Bot pausado: responde tú</span>' : ''}</div>
+   <div class="card"><div class="row"><h3>Acciones</h3></div><div class="row" style="margin-top:8px">
+     <button class="btn sm" data-a="investigar">Investigar</button>
+     <button class="btn sm" data-a="agendar">Agendar demo</button>
+     <button class="btn sm" data-a="preparar_demo">${p.demo_taller_id ? 'Rehacer guion' : 'Preparar demo'}</button>
+     <button class="btn sm acc" data-a="proponer">Crear propuesta</button>
+     <button class="btn sm ghost" data-a="bot">${p.bot_pausado ? 'Reactivar bot' : 'Pausar bot'}</button></div></div>
+   ${p.diagnostico || p.gancho ? `<div class="card"><h3>Diagnóstico</h3><pre class="g" style="border:0;padding:6px 0">${esc(p.diagnostico || '')}</pre>${p.gancho ? `<div class="tiny"><b>Gancho:</b> ${esc(p.gancho)}</div>` : ''}${p.dolor ? `<div class="tiny"><b>Dolor:</b> ${esc(p.dolor)}</div>` : ''}</div>` : ''}
+   <div class="card"><h3>Conversación</h3><div class="chat" id="chat" style="margin-top:8px">${msgs.length ? msgs.map(burbuja).join('') : '<div class="bub note">Sin mensajes todavía</div>'}</div>
+     <div class="row" style="margin-top:8px;align-items:flex-end"><textarea id="resp" placeholder="Escribe una respuesta…" style="min-height:52px;flex:1"></textarea></div>
+     <div class="row" style="margin-top:6px"><button class="btn sm acc" id="r_api">Enviar por WhatsApp</button>${p.wa_digitos ? '<button class="btn sm ghost" id="r_wa">Abrir en mi WhatsApp</button>' : ''}<button class="btn sm ghost" id="r_nota">Guardar como nota</button></div></div>
+   <div class="card"><h3>Calificación</h3><div class="grid g2">
+     ${campo('contacto_nombre', 'Contacto', p)}${campo('email', 'Correo', p)}${campo('telefono_intl', 'Teléfono WhatsApp', p)}${campo('n_mecanicos', 'Mecánicos', p, 'number')}
+     ${campo('ot_mes', 'Órdenes al mes', p, 'number')}${campo('como_agenda', 'Cómo agenda hoy', p)}${campo('dolor', 'Dolor principal', p)}${campo('proximo_paso', 'Próximo paso', p)}
+     <div><label>Plan sugerido</label><select data-f="plan_sugerido"><option value="">—</option>${PLANES.map(x => `<option value="${x.codigo}" ${x.codigo === p.plan_sugerido ? 'selected' : ''}>${x.nombre}</option>`).join('')}</select></div>
+     ${campo('instagram', 'Instagram', p)}</div>
+     <label>Notas</label><textarea data-f="notas">${esc(p.notas || '')}</textarea>
+     <div class="row" style="margin-top:10px"><button class="btn sm" id="guardar">Guardar datos</button></div></div>
+   ${demos.length ? `<div class="card"><h3>Demos</h3>${demos.map(x => `<div style="padding:8px 0;border-bottom:1px solid var(--line)"><div class="row"><b>${fecha(x.inicio)}</b><span class="pill">${esc(x.estado)}</span></div>${x.guion ? `<details style="margin-top:6px"><summary class="tiny" style="cursor:pointer">Ver guion</summary>${md(x.guion)}</details>` : '<div class="tiny">Guion en preparación…</div>'}</div>`).join('')}</div>` : ''}
+   ${props.length ? `<div class="card"><h3>Propuestas</h3>${props.map(x => `<div class="row" style="padding:8px 0;border-bottom:1px solid var(--line)"><b>${esc(x.planes?.nombre)}</b><span class="tiny">${peso(x.implementacion)} + ${peso(x.mensual)}/mes</span><span class="pill ${x.estado === 'aceptada' ? 'p-ok' : x.estado === 'rechazada' ? 'p-bad' : ''}">${x.estado}</span><div class="sp"></div><a class="btn sm ghost" target="_blank" href="propuesta.html?t=${x.token}">Abrir</a></div>`).join('')}</div>` : ''}`);
+  const chat = $('#chat', d); chat.scrollTop = chat.scrollHeight;
+  const refrescar = () => { d.cerrar(); ficha(id); };
+  $('#est', d).onchange = async e => { await q(sb.from('prospectos').update({ estado: e.target.value }).eq('id', id)); toast('Estado actualizado'); };
+  $('#guardar', d).onclick = async () => {
+    const upd = {}; $$('[data-f]', d).forEach(i => { let v = i.value.trim(); upd[i.dataset.f] = v === '' ? null : i.type === 'number' ? +v : v; });
+    if (upd.telefono_intl && !p.telefono) upd.telefono = upd.telefono_intl;
+    await q(sb.from('prospectos').update(upd).eq('id', id)); toast('Guardado');
+  };
+  $$('[data-a]', d).forEach(b => b.onclick = async e => {
+    const a = b.dataset.a;
+    if (a === 'bot') { await q(sb.from('prospectos').update({ bot_pausado: !p.bot_pausado }).eq('id', id)); return refrescar(); }
+    if (a === 'agendar') return agendarDemo(p, refrescar);
+    if (a === 'proponer') return crearPropuesta(p, refrescar);
+    const body = a === 'investigar' ? { accion: 'investigar', ids: [id] } : { accion: a, prospecto_id: id };
+    const r = await fn('comercial', body, e.target); toast(r.resumen, 5000); refrescar();
+  });
+  const texto = () => $('#resp', d).value.trim();
+  $('#r_api', d).onclick = async e => {
+    if (!texto()) return;
+    const m = await q(sb.from('prospecto_mensajes').insert({ prospecto_id: id, canal: 'whatsapp', direccion: 'saliente', autor: 'angel', texto: texto(), estado: 'borrador' }).select('id').single());
+    try { await fn('comercial', { accion: 'enviar', mensaje_id: m.id, modo: 'api' }, e.target); toast('Enviado'); refrescar(); }
+    catch { toast('No se pudo por API. Quedó en la Bandeja: usa "Abrir en WhatsApp".', 6000); contarBandeja(); }
+  };
+  const rwa = $('#r_wa', d); if (rwa) rwa.onclick = async () => {
+    if (!texto()) return; window.open(waLink(p.wa_digitos, texto()), '_blank');
+    await q(sb.from('prospecto_mensajes').insert({ prospecto_id: id, canal: 'whatsapp', direccion: 'saliente', autor: 'angel', texto: texto(), estado: 'enviado', enviado_at: new Date().toISOString() }));
+    await q(sb.from('prospectos').update({ ultimo_contacto: new Date().toISOString() }).eq('id', id)); refrescar();
+  };
+  $('#r_nota', d).onclick = async () => { if (!texto()) return; await q(sb.from('prospecto_mensajes').insert({ prospecto_id: id, canal: 'nota', direccion: 'saliente', autor: 'angel', texto: texto(), estado: 'enviado' })); refrescar(); };
+}
+const campo = (f, l, p, t = 'text') => `<div><label>${l}</label><input data-f="${f}" type="${t}" value="${esc(p[f] ?? '')}"></div>`;
+function burbuja(x) {
+  if (x.canal === 'nota') return `<div class="bub note">${esc(x.texto)}<small>${fecha(x.creado_at)}</small></div>`;
+  const cls = x.direccion === 'entrante' ? 'in' : x.estado === 'borrador' || x.estado === 'error' ? 'draft' : 'out';
+  const quien = x.direccion === 'entrante' ? 'Taller' : x.autor === 'bot' ? 'Bot' : x.autor === 'angel' ? 'Tú' : 'Agente ' + (AGENTES[x.agente] || '');
+  return `<div class="bub ${cls}">${x.asunto ? `<b>${esc(x.asunto)}</b>\n` : ''}${esc(x.texto)}<small>${quien} · ${CANAL[x.canal]} · ${x.estado === 'borrador' ? 'borrador' : x.estado === 'error' ? 'error' : fecha(x.enviado_at || x.creado_at)}</small></div>`;
+}
+
+function agendarDemo(p, despues) {
+  const man = new Date(Date.now() + 864e5); man.setHours(11, 0, 0, 0);
+  const local = new Date(man - man.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+  const d = modal(`<h2>Agendar demo · ${esc(p.nombre)}</h2><label>Fecha y hora</label><input id="f" type="datetime-local" value="${local}">
+   <label>Link de videollamada (opcional)</label><input id="l" placeholder="https://meet.google.com/...">
+   <div class="row" style="margin-top:12px"><button class="btn acc" id="g">Agendar y preparar</button></div><p class="tiny">Se crea el taller demo con sus datos y el guion de la llamada.</p>`);
+  $('#g', d).onclick = async e => {
+    const ini = new Date($('#f', d).value);
+    const dm = await q(sb.from('demos').insert({ prospecto_id: p.id, inicio: ini.toISOString(), minutos: CFG.duracion_demo_min, origen: 'manual', link_reunion: $('#l', d).value || null }).select('id').single());
+    await q(sb.from('prospectos').update({ estado: 'demo', proximo_contacto_at: null, proximo_paso: 'Demo ' + fecha(ini) }).eq('id', p.id));
+    await fn('comercial', { accion: 'preparar_demo', prospecto_id: p.id, demo_id: dm.id }, e.target);
+    toast('Demo agendada y preparada'); d.cerrar(); despues && despues();
+  };
+}
+function crearPropuesta(p, despues) {
+  const d = modal(`<h2>Propuesta · ${esc(p.nombre)}</h2><p class="muted">El agente escribe la propuesta con lo que sabemos del taller y deja el mensaje con el link en la Bandeja.</p>
+   <label>Plan</label><select id="pl">${PLANES.map(x => `<option value="${x.codigo}" ${x.codigo === p.plan_sugerido ? 'selected' : ''}>${x.nombre} · ${peso(x.implementacion)} + ${peso(x.mensual)}/mes</option>`).join('')}</select>
+   <div class="grid g2"><div><label>Descuento implementación (%)</label><input id="ds" type="number" value="${CFG.descuento_fundador_pct}"></div><div><label>Cuotas</label><input id="cu" type="number" value="${CFG.cuotas_fundador}"></div></div>
+   <div class="row" style="margin-top:12px"><button class="btn acc" id="g">Crear propuesta</button></div>`);
+  $('#g', d).onclick = async e => {
+    const r = await fn('comercial', { accion: 'proponer', prospecto_id: p.id, plan: $('#pl', d).value, descuento_pct: +$('#ds', d).value, cuotas: +$('#cu', d).value }, e.target);
+    d.cerrar(); toast('Propuesta lista. El mensaje está en la Bandeja.', 5000); contarBandeja(); despues && despues();
+  };
+}
+
+// ── Embudo ──
+VISTAS.embudo = async m => {
+  const ps = await q(sb.from('prospectos').select('id,nombre,comuna,puntaje,estado,proximo_paso').neq('estado', 'descartado').order('puntaje', { ascending: false }).limit(600));
+  const cols = ['nuevo', 'investigado', 'contactado', 'respondio', 'demo', 'propuesta', 'cliente'];
+  m.innerHTML = `<div class="top"><h1>Embudo</h1><span class="muted">${ps.length} talleres activos</span></div><div class="kanban">${cols.map(c => {
+    const xs = ps.filter(p => p.estado === c);
+    return `<div class="col"><h3><span>${ESTADOS[c]}</span><span>${xs.length}</span></h3>${xs.slice(0, 60).map(p => `<div class="mini" data-p="${p.id}"><b>${esc(p.nombre)}</b><div class="tiny">${p.puntaje} pts · ${esc(p.comuna || '')}</div>${p.proximo_paso ? `<div class="tiny">${esc(p.proximo_paso)}</div>` : ''}</div>`).join('')}${xs.length > 60 ? `<div class="tiny">+${xs.length - 60} más</div>` : ''}</div>`;
+  }).join('')}</div>`;
+  $$('[data-p]', m).forEach(e => e.onclick = () => ficha(e.dataset.p));
+};
+
+// ── Conversaciones ──
+VISTAS.conversaciones = async m => {
+  const ent = await q(sb.from('prospecto_mensajes').select('prospecto_id,texto,creado_at,prospectos(nombre,comuna,estado,bot_pausado)').eq('direccion', 'entrante').order('creado_at', { ascending: false }).limit(300));
+  const vistos = new Map(); for (const x of ent) if (!vistos.has(x.prospecto_id)) vistos.set(x.prospecto_id, x);
+  const xs = [...vistos.values()];
+  m.innerHTML = `<div class="top"><div><h1>Conversaciones</h1><div class="muted">Talleres que te escribieron. El bot vendedor responde salvo que lo pauses.</div></div></div>
+   <div class="card" style="padding:4px 12px"><div class="list">${xs.length ? xs.map(x => `<div class="it" data-p="${x.prospecto_id}"><div class="sp" style="min-width:0"><div class="t">${esc(x.prospectos?.nombre)} ${x.prospectos?.bot_pausado ? '<span class="pill p-bad">te toca</span>' : ''}</div>
+     <div class="s" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${esc(x.texto)}</div></div><span class="tiny">${hace(x.creado_at)}</span></div>`).join('') : '<div class="empty">Aún no hay conversaciones. Llegan cuando un taller responde por WhatsApp.</div>'}</div></div>`;
+  $$('[data-p]', m).forEach(e => e.onclick = () => ficha(e.dataset.p));
+};
+
+// ── Demos ──
+VISTAS.demos = async m => {
+  const ds = await q(sb.from('demos').select('*, prospectos(id,nombre,comuna,contacto_nombre,demo_taller_id)').order('inicio', { ascending: false }).limit(100));
+  const prox = ds.filter(d => d.estado === 'agendada').sort((a, b) => new Date(a.inicio) - new Date(b.inicio));
+  const pas = ds.filter(d => d.estado !== 'agendada');
+  const tarjeta = d => `<div class="card"><div class="row"><div class="sp"><b style="cursor:pointer" data-p="${d.prospecto_id}">${esc(d.prospectos?.nombre)}</b><div class="tiny">${fecha(d.inicio)} · ${d.minutos} min${d.prospectos?.contacto_nombre ? ' · ' + esc(d.prospectos.contacto_nombre) : ''}</div></div>
+     <select data-d="${d.id}" style="width:auto">${['agendada', 'realizada', 'no_asistio', 'cancelada'].map(e => `<option value="${e}" ${e === d.estado ? 'selected' : ''}>${e.replace('_', ' ')}</option>`).join('')}</select></div>
+     <div class="row" style="margin-top:8px">${d.link_reunion ? `<a class="btn sm acc" target="_blank" href="${esc(d.link_reunion)}">Entrar a la llamada</a>` : ''}
+     <a class="btn sm ghost" target="_blank" href="../implementia-taller/">Abrir taller demo ↗</a><button class="btn sm ghost" data-g="${d.prospecto_id}" data-id="${d.id}">Rehacer guion</button><button class="btn sm" data-pr="${d.prospecto_id}">Crear propuesta</button></div>
+     ${d.guion ? `<details style="margin-top:8px" ${d.estado === 'agendada' ? 'open' : ''}><summary class="tiny" style="cursor:pointer">Guion de la demo</summary>${md(d.guion)}</details>` : '<div class="tiny" style="margin-top:6px">Guion en preparación…</div>'}</div>`;
+  m.innerHTML = `<div class="top"><h1>Demos</h1><span class="muted">${prox.length} próximas</span></div>
+   ${prox.length ? prox.map(tarjeta).join('') : '<div class="card empty">Sin demos agendadas. El bot vendedor las agenda solo cuando un taller acepta.</div>'}
+   ${pas.length ? `<h2 style="margin:18px 0 10px">Anteriores</h2>${pas.map(tarjeta).join('')}` : ''}`;
+  $$('[data-p]', m).forEach(e => e.onclick = () => ficha(e.dataset.p));
+  $$('[data-d]', m).forEach(s => s.onchange = async () => { await q(sb.from('demos').update({ estado: s.value }).eq('id', s.dataset.d)); toast('Actualizada'); });
+  $$('[data-g]', m).forEach(b => b.onclick = async e => { await fn('comercial', { accion: 'preparar_demo', prospecto_id: b.dataset.g, demo_id: b.dataset.id }, e.target); ir('demos'); });
+  $$('[data-pr]', m).forEach(b => b.onclick = async () => { const p = await q(sb.from('prospectos').select('*').eq('id', b.dataset.pr).single()); crearPropuesta(p, () => ir('demos')); });
+};
+
+// ── Propuestas ──
+VISTAS.propuestas = async m => {
+  const todas = await q(sb.from('propuestas_comerciales').select('*, planes(nombre), prospectos(id,nombre,comuna)').order('creado_at', { ascending: false }).limit(150));
+  const lista = todas.filter(x => x.motivo_rechazo !== 'Reemplazada por una nueva versión');
+  const pend = lista.filter(x => ['enviada', 'vista'].includes(x.estado)).reduce((s, x) => s + x.implementacion, 0);
+  m.innerHTML = `<div class="top"><div><h1>Propuestas</h1><div class="muted">En juego: ${peso(pend)} en implementaciones</div></div></div>
+   ${lista.length ? lista.map(x => `<div class="card"><div class="row"><div class="sp"><b style="cursor:pointer" data-p="${x.prospectos?.id}">${esc(x.prospectos?.nombre)}</b>
+     <div class="tiny">${esc(x.planes?.nombre)} · ${peso(x.implementacion)}${x.cuotas > 1 ? ` en ${x.cuotas} cuotas` : ''} + ${peso(x.mensual)}/mes · ${dia(x.creado_at)}${x.vista_at ? ' · vista ' + hace(x.vista_at) : ''}</div>
+     ${x.motivo_rechazo ? `<div class="tiny" style="color:var(--bad)">${esc(x.motivo_rechazo)}</div>` : ''}${x.acepta_nombre ? `<div class="tiny" style="color:var(--ok)">Aceptada por ${esc(x.acepta_nombre)} (${esc(x.acepta_rut)})</div>` : ''}</div>
+     <span class="pill ${x.estado === 'aceptada' ? 'p-ok' : x.estado === 'rechazada' ? 'p-bad' : x.estado === 'vista' ? 'p-acc' : ''}">${x.estado}</span></div>
+     <div class="row" style="margin-top:8px"><a class="btn sm ghost" target="_blank" href="propuesta.html?t=${x.token}">Abrir</a><button class="btn sm ghost" data-c="${x.token}">Copiar link</button>
+     ${x.estado === 'aceptada' ? `<button class="btn sm" data-i="${x.id}">Iniciar implementación</button>` : ''}</div></div>`).join('') : '<div class="card empty">Todavía no hay propuestas.</div>'}`;
+  $$('[data-p]', m).forEach(e => e.onclick = () => ficha(e.dataset.p));
+  $$('[data-c]', m).forEach(b => b.onclick = async () => { const u = new URL('propuesta.html?t=' + b.dataset.c, location.href).href; try { await navigator.clipboard.writeText(u); toast('Link copiado'); } catch { prompt('Copia el link', u); } });
+  $$('[data-i]', m).forEach(b => b.onclick = async e => { const r = await fn('comercial', { accion: 'implementar', propuesta_id: b.dataset.i }, e.target); toast(r.resumen); });
+};
+
+// ── Clientes ──
+VISTAS.clientes = async m => {
+  const cs = await q(sb.from('v_clientes').select('*').order('creado_at', { ascending: false }));
+  const mrr = cs.filter(c => c.estado_cliente !== 'baja').reduce((s, c) => s + (c.mensual || 0), 0);
+  m.innerHTML = `<div class="top"><div><h1>Clientes</h1><div class="muted">${cs.length} talleres · MRR ${peso(mrr)}</div></div></div>
+   ${cs.length ? cs.map(c => `<div class="card"><div class="row"><div class="sp"><b>${esc(c.nombre)}</b><div class="tiny">${esc(c.plan_nombre)} · ${peso(c.mensual)}/mes · desde ${dia(c.inicio_contrato)}</div></div>
+     <select data-e="${c.id}" style="width:auto">${['implementando', 'activo', 'pausado', 'baja'].map(e => `<option ${e === c.estado_cliente ? 'selected' : ''}>${e}</option>`).join('')}</select></div>
+     <div class="frow"><div class="l">Implementación</div><div class="bar"><div style="width:${c.pasos_total ? c.pasos_hechos / c.pasos_total * 100 : 0}%;background:var(--ok)"></div></div><div class="v">${c.pasos_hechos}/${c.pasos_total}</div></div>
+     <div class="row"><button class="btn sm ghost" data-k="${c.id}">Checklist</button><a class="btn sm ghost" target="_blank" href="../implementia-taller/">Abrir su sistema ↗</a>${c.entrega_objetivo ? `<span class="tiny">Entrega: ${dia(c.entrega_objetivo)}</span>` : ''}</div></div>`).join('')
+      : '<div class="card empty">Aún no hay clientes. Cuando un taller acepta la propuesta, aparece aquí con su plan de implementación.</div>'}`;
+  $$('[data-e]', m).forEach(s => s.onchange = async () => { await q(sb.from('talleres').update({ estado_cliente: s.value }).eq('id', s.dataset.e)); toast('Actualizado'); ir('clientes'); });
+  $$('[data-k]', m).forEach(b => b.onclick = () => checklist(b.dataset.k));
+};
+async function checklist(tid) {
+  const im = await q(sb.from('implementaciones').select('*, talleres(nombre)').eq('taller_id', tid).single());
+  const d = modal(`<h2>Implementación · ${esc(im.talleres?.nombre)}</h2><div class="tiny">Inicio ${dia(im.inicio)} · entrega objetivo ${dia(im.entrega_objetivo)}</div>
+   <div class="card" style="margin-top:12px">${im.checklist.map((t, i) => `<label class="check ${t.hecho ? 'done' : ''}" style="margin:0"><input type="checkbox" data-i="${i}" ${t.hecho ? 'checked' : ''}><span>${esc(t.tarea)}</span></label>`).join('')}</div>
+   <label>Notas</label><textarea id="nt">${esc(im.notas || '')}</textarea><div class="row" style="margin-top:10px"><button class="btn" id="g">Guardar notas</button><button class="btn ghost" id="ent">Marcar entregada</button></div>`);
+  $$('[data-i]', d).forEach(c => c.onchange = async () => {
+    im.checklist[+c.dataset.i].hecho = c.checked; c.parentElement.classList.toggle('done', c.checked);
+    await q(sb.from('implementaciones').update({ checklist: im.checklist }).eq('id', im.id));
+  });
+  $('#g', d).onclick = async () => { await q(sb.from('implementaciones').update({ notas: $('#nt', d).value }).eq('id', im.id)); toast('Guardado'); };
+  $('#ent', d).onclick = async () => { await q(sb.from('implementaciones').update({ estado: 'entregada' }).eq('id', im.id)); await q(sb.from('talleres').update({ estado_cliente: 'activo' }).eq('id', tid)); toast('¡Entregada! Cliente activo.'); d.cerrar(); if (VISTA === 'clientes') ir('clientes'); };
+}
+
+// ── Agentes ──
+VISTAS.agentes = async m => {
+  const log = await q(sb.from('agente_comercial_log').select('*').order('creado_at', { ascending: false }).limit(60));
+  const ult = a => log.find(l => l.agente === a);
+  const A = [
+    ['prospector', '1 · Prospector', 'Trae talleres de Google Maps y les pone puntaje.', 'Buscar talleres', () => buscarTalleres()],
+    ['investigador', '2 · Investigador', `Revisa reseñas y sitio web de los mejores ${CFG.investigar_por_dia} nuevos y escribe diagnóstico y gancho.`, 'Investigar ahora', e => fn('comercial', { accion: 'investigar' }, e.target)],
+    ['contacto', '3 · Contacto', `Escribe hasta ${CFG.limite_diario_contactos} mensajes al día según la secuencia, más seguimientos y recordatorios.`, 'Escribir mensajes', e => fn('comercial', { accion: 'contactar' }, e.target)],
+    ['vendedor', '4 · Vendedor WhatsApp', CFG.wa_phone_number_id ? 'Responde, califica y agenda demos en el número de ventas.' : 'Falta conectar el número de ventas (Ajustes).', null],
+    ['demo', '5 · Preparador de demo', 'Crea el taller demo con datos del prospecto y escribe el guion.', null],
+    ['propuesta', '6 · Propuesta', 'Escribe la propuesta personalizada y la manda con link para aceptar.', null],
+    ['implementador', '7 · Implementador', 'Al aceptar: crea el taller cliente, copia el catálogo y arma el checklist.', null],
+    ['orquestador', 'Orquestador diario', 'Lunes a sábado 08:30: investiga y deja la Bandeja lista.', 'Correr todo', e => fn('comercial', { accion: 'diario' }, e.target)],
+  ];
+  m.innerHTML = `<div class="top"><h1>Agentes</h1></div><div class="grid g2">${A.map(([k, t, desc, b], i) => { const u = ult(k); return `<div class="card"><div class="row"><h3 class="sp">${t}</h3>${u ? `<span class="tiny">${hace(u.creado_at)}</span>` : ''}</div>
+    <div class="muted" style="margin:6px 0">${esc(desc)}</div>${u ? `<div class="tiny" style="margin-bottom:8px">Última: ${esc(u.resumen)}</div>` : ''}${b ? `<button class="btn sm" data-i="${i}">${b}</button>` : ''}</div>`; }).join('')}</div>
+   <div class="card"><h2 style="margin-bottom:6px">Bitácora</h2><div class="list">${log.map(l => `<div class="it" style="cursor:default"><span class="pill">${esc(l.agente)}</span><div class="sp" style="font-size:13.5px">${esc(l.resumen)}</div><span class="tiny">${fecha(l.creado_at)}</span></div>`).join('') || '<div class="empty">Sin actividad.</div>'}</div></div>`;
+  $$('[data-i]', m).forEach(b => b.onclick = async e => { const r = await A[+b.dataset.i][4](e); if (r?.resumen) { toast(r.resumen, 6000); ir('agentes'); contarBandeja(); } });
+};
+
+// ── Ajustes ──
+VISTAS.ajustes = async m => {
+  const pasos = await q(sb.from('secuencia_pasos').select('*').order('paso'));
+  const c = CFG;
+  const f = (k, l, t = 'text') => `<div><label>${l}</label><input data-k="${k}" type="${t}" value="${esc(c[k] ?? '')}"></div>`;
+  m.innerHTML = `<div class="top"><h1>Ajustes</h1></div>
+   <div class="card"><h2>Ventas</h2><div class="grid g2">${f('vendedor_nombre', 'Quién firma')}${f('empresa', 'Empresa')}${f('meta_clientes', 'Meta de clientes', 'number')}${f('meta_fecha', 'Fecha meta', 'date')}
+    ${f('limite_diario_contactos', 'Contactos nuevos por día', 'number')}${f('investigar_por_dia', 'Talleres a investigar por día', 'number')}${f('duracion_demo_min', 'Duración demo (min)', 'number')}${f('cuotas_fundador', 'Cuotas fundador', 'number')}${f('descuento_fundador_pct', 'Descuento fundador (%)', 'number')}</div>
+    <label>Oferta fundador</label><textarea data-k="oferta_fundador">${esc(c.oferta_fundador)}</textarea>
+    <label>Garantía</label><textarea data-k="garantia">${esc(c.garantia)}</textarea>
+    <label>Horario de demos (JSON)</label><textarea data-k="horario_demos" data-json="1" style="font-family:monospace;font-size:13px">${esc(JSON.stringify(c.horario_demos))}</textarea>
+    <label>Instrucciones extra para el bot vendedor</label><textarea data-k="instrucciones_extra">${esc(c.instrucciones_extra || '')}</textarea></div>
+   <div class="card"><h2>WhatsApp de ventas</h2><p class="muted">Un número de WhatsApp Business solo para ImplementIA, en la misma app de Meta que los talleres.</p><div class="grid g2">
+    ${f('wa_numero', 'Número visible (+56…)')}${f('wa_phone_number_id', 'Phone number ID (Meta)')}${f('wa_plantilla', 'Plantilla de primer contacto (nombre)')}${f('wa_plantilla_idioma', 'Idioma plantilla')}</div>
+    <label class="check" style="margin-top:8px;border:0"><input type="checkbox" data-k="bot_activo" ${c.bot_activo ? 'checked' : ''}><span>Bot vendedor activo</span></label></div>
+   <div class="row" style="margin-bottom:14px"><button class="btn acc" id="gc">Guardar ajustes</button></div>
+   <div class="card"><h2>Secuencia de contacto</h2><p class="muted">Qué hace el agente de contacto en cada paso. Se detiene apenas el taller responde.</p>
+    ${pasos.map(s => `<div style="padding:10px 0;border-bottom:1px solid var(--line)"><div class="row"><b>Paso ${s.paso}</b><span class="tiny">día</span><input data-p="${s.paso}" data-c="dia" type="number" value="${s.dia}" style="width:70px">
+     <select data-p="${s.paso}" data-c="canal" style="width:auto">${['whatsapp', 'email', 'linkedin', 'llamada'].map(x => `<option ${x === s.canal ? 'selected' : ''}>${x}</option>`).join('')}</select></div>
+     <textarea data-p="${s.paso}" data-c="objetivo" style="margin-top:6px;min-height:60px">${esc(s.objetivo)}</textarea></div>`).join('')}
+    <div class="row" style="margin-top:10px"><button class="btn" id="gs">Guardar secuencia</button></div></div>
+   <div class="card"><h2>Planes y precios</h2>${PLANES.map(p => `<div class="grid g3" style="gap:8px;padding:8px 0;border-bottom:1px solid var(--line)"><div><label>Plan</label><input data-pl="${p.codigo}" data-c="nombre" value="${esc(p.nombre)}"></div>
+     <div><label>Implementación</label><input data-pl="${p.codigo}" data-c="implementacion" type="number" value="${p.implementacion}"></div><div><label>Mensual</label><input data-pl="${p.codigo}" data-c="mensual" type="number" value="${p.mensual}"></div></div>`).join('')}
+    <div class="row" style="margin-top:10px"><button class="btn" id="gp">Guardar planes</button></div></div>
+   <div class="card"><h2>Para que todo funcione</h2><ol class="muted" style="padding-left:18px;margin:6px 0">
+    <li>En Supabase → Edge Functions → Secrets: <b>GOOGLE_PLACES_KEY</b>, <b>ANTHROPIC_API_KEY</b>, <b>WA_ACCESS_TOKEN</b>, <b>WA_VERIFY_TOKEN</b>.</li>
+    <li>Sin la llave de Anthropic los agentes funcionan con textos de plantilla.</li>
+    <li>Número de ventas: agrégalo en la app de Meta (webhook <code>whatsapp-webhook</code>) y pon su Phone number ID arriba.</li>
+    <li>Plantilla de primer contacto: créala en Meta (categoría marketing) con una variable {{1}} para el nombre.</li></ol></div>`;
+  $('#gc').onclick = async () => {
+    const upd = {};
+    for (const i of $$('[data-k]', m)) { const k = i.dataset.k; if (i.type === 'checkbox') upd[k] = i.checked; else if (i.dataset.json) { try { upd[k] = JSON.parse(i.value); } catch { return toast('El horario no es JSON válido'); } } else upd[k] = i.type === 'number' ? +i.value : (i.value.trim() || null); }
+    CFG = await q(sb.from('ventas_config').update(upd).eq('id', 1).select('*').single()); toast('Ajustes guardados');
+  };
+  $('#gs').onclick = async () => { for (const s of pasos) { const g = c2 => $(`[data-p="${s.paso}"][data-c="${c2}"]`, m).value; await q(sb.from('secuencia_pasos').update({ dia: +g('dia'), canal: g('canal'), objetivo: g('objetivo') }).eq('paso', s.paso)); } toast('Secuencia guardada'); };
+  $('#gp').onclick = async () => { for (const p of PLANES) { const g = c2 => $(`[data-pl="${p.codigo}"][data-c="${c2}"]`, m).value; await q(sb.from('planes').update({ nombre: g('nombre'), implementacion: +g('implementacion'), mensual: +g('mensual') }).eq('codigo', p.codigo)); } PLANES = await q(sb.from('planes').select('*').order('orden')); toast('Planes guardados'); };
+};
+
+// ── Menú (móvil) ──
+VISTAS.menu = async m => {
+  m.innerHTML = `<h1 style="margin-bottom:10px">Más</h1><div class="card drawer">${MENU.map(([k, i, t]) => `<a href="#${k}">${i}&nbsp;&nbsp;${t}</a>`).join('')}<a href="../implementia-taller/">↗&nbsp;&nbsp;App de talleres</a><a href="#" id="salir2">Salir</a></div>`;
+  $('#salir2').onclick = async e => { e.preventDefault(); await sb.auth.signOut(); login(); };
+};
+
+sb.auth.onAuthStateChange((ev) => { if (ev === 'SIGNED_OUT') login(); });
+iniciar();
+</script>
+</body>
+</html>

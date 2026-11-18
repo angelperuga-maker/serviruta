@@ -10,7 +10,7 @@
 <script src="../implementia-taller/config.js"></script>
 <style>
 :root{--dark:#161B22;--dark2:#222933;--light:#F5F3EE;--line:#E3DED3;--ink:#1E242C;--soft:#5A6472;--acc:#F26B1D;--accD:#B0470B;--ok:#1F7A4D;--okBg:#E3F2EA;--warn:#9A5B00;--warnBg:#FBEFD9;--bad:#A3302A;--badBg:#F8E3E1;--blue:#1F4E8C;--blueBg:#E2EBF7}
-*{box-sizing:border-box}
+*{box-sizing:border-box}input[type=checkbox]{accent-color:var(--acc)}
 html,body{margin:0;background:var(--light);color:var(--ink);font:15px/1.45 Inter,system-ui,Arial,sans-serif;-webkit-font-smoothing:antialiased}
 h1,h2,h3{margin:0;line-height:1.2}h1{font-size:22px}h2{font-size:17px}h3{font-size:14px}
 a{color:var(--accD)}
@@ -160,7 +160,7 @@ async function iniciar() {
 
 const MENU = [
   ['inicio', '◉', 'Inicio'], ['bandeja', '✉', 'Bandeja'], ['prospectos', '⌕', 'Prospectos'], ['embudo', '▥', 'Embudo'],
-  ['conversaciones', '☏', 'Conversaciones'], ['demos', '▶', 'Demos'], ['propuestas', '✎', 'Propuestas'], ['clientes', '★', 'Clientes'],
+  ['conversaciones', '☏', 'Conversaciones'], ['demos', '▶', 'Demos'], ['propuestas', '✎', 'Propuestas'], ['clientes', '★', 'Clientes'], ['anuncios', '◎', 'Anuncios'],
   ['agentes', '⚙', 'Agentes'], ['ajustes', '☰', 'Ajustes'],
 ];
 function marco() {
@@ -509,21 +509,284 @@ VISTAS.propuestas = async m => {
   $$('[data-i]', m).forEach(b => b.onclick = async e => { const r = await fn('comercial', { accion: 'implementar', propuesta_id: b.dataset.i }, e.target); toast(r.resumen); });
 };
 
-// ── Clientes ──
+// ── Clientes: panel de control de cada taller ──
+const MODULOS = [['asistente', 'Asistente IA'], ['agentes', 'Agentes'], ['clientes', 'Clientes (CRM)'], ['agenda', 'Agenda'], ['presupuestos', 'Presupuestos'], ['ordenes', 'Órdenes de trabajo'], ['catalogo', 'Servicios y packs'], ['whatsapp', 'WhatsApp'], ['anuncios', 'Anuncios'], ['equipo', 'Equipo'], ['config', 'Configuración']];
+const ROLES_T = { dueno: 'Dueño', admin: 'Administración', recepcion: 'Recepción', mecanico: 'Mecánico' };
+const AGENTES_T = { seguimiento: 'Seguimiento a clientes', informe_diario: 'Informe diario al dueño', revision_datos: 'Revisión de datos' };
+const pct = (a, b) => b ? Math.round(a / b * 100) + '%' : '—';
+const dias = d => d ? Math.floor((Date.now() - new Date(d)) / 864e5) : null;
+
+function alertas(s, extra = {}) {
+  const a = [];
+  const d = dias(s.ultima_actividad);
+  if (s.estado_cliente === 'baja') return a;
+  if (d === null) a.push(['bad', 'Todavía no usa el sistema']);
+  else if (d > 7) a.push(['bad', `Sin actividad hace ${d} días`]);
+  else if (d > 3) a.push(['warn', `Poca actividad: último movimiento hace ${d} días`]);
+  if (s.deuda_vencida > 0) a.push(['bad', `Deuda vencida ${peso(s.deuda_vencida)}`]);
+  if (!s.wa_conectado) a.push(['warn', 'WhatsApp no conectado']);
+  else if (!s.bot_activo) a.push(['warn', 'Bot de WhatsApp apagado']);
+  if (s.pedidos_pendientes > 0) a.push(['warn', `${s.pedidos_pendientes} pedido(s) de anuncios sin resolver`]);
+  if (s.campanas_activas > 0 && !s.inversion_ads_mes) a.push(['warn', 'Campañas activas sin resultados cargados este mes']);
+  if (s.ots_abiertas > 0 && !s.ventas_mes && d !== null && d < 30) a.push(['warn', 'Órdenes abiertas pero sin ventas pagadas este mes']);
+  if (extra.implAtrasada) a.push(['bad', 'Implementación atrasada']);
+  return a;
+}
+const semaforo = al => al.some(x => x[0] === 'bad') ? ['p-bad', 'En riesgo'] : al.length ? ['p-warn', 'Atención'] : ['p-ok', 'Sano'];
+
 VISTAS.clientes = async m => {
-  const cs = await q(sb.from('v_clientes').select('*').order('creado_at', { ascending: false }));
-  const mrr = cs.filter(c => c.estado_cliente !== 'baja').reduce((s, c) => s + (c.mensual || 0), 0);
-  m.innerHTML = `<div class="top"><div><h1>Clientes</h1><div class="muted">${cs.length} talleres · MRR ${peso(mrr)}</div></div></div>
-   ${cs.length ? cs.map(c => `<div class="card"><div class="row"><div class="sp"><b>${esc(c.nombre)}</b><div class="tiny">${esc(c.plan_nombre)} · ${peso(c.mensual)}/mes · desde ${dia(c.inicio_contrato)}</div></div>
-     <select data-e="${c.id}" style="width:auto">${['implementando', 'activo', 'pausado', 'baja'].map(e => `<option ${e === c.estado_cliente ? 'selected' : ''}>${e}</option>`).join('')}</select></div>
-     <div class="frow"><div class="l">Implementación</div><div class="bar"><div style="width:${c.pasos_total ? c.pasos_hechos / c.pasos_total * 100 : 0}%;background:var(--ok)"></div></div><div class="v">${c.pasos_hechos}/${c.pasos_total}</div></div>
-     <div class="row"><button class="btn sm ghost" data-k="${c.id}">Checklist</button><a class="btn sm ghost" target="_blank" href="../implementia-taller/">Abrir su sistema ↗</a>${c.entrega_objetivo ? `<span class="tiny">Entrega: ${dia(c.entrega_objetivo)}</span>` : ''}</div></div>`).join('')
-      : '<div class="card empty">Aún no hay clientes. Cuando un taller acepta la propuesta, aparece aquí con su plan de implementación.</div>'}`;
-  $$('[data-e]', m).forEach(s => s.onchange = async () => { await q(sb.from('talleres').update({ estado_cliente: s.value }).eq('id', s.dataset.e)); toast('Actualizado'); ir('clientes'); });
-  $$('[data-k]', m).forEach(b => b.onclick = () => checklist(b.dataset.k));
+  const [salud, impls] = await Promise.all([
+    q(sb.from('v_salud_talleres').select('*').order('nombre')),
+    q(sb.from('implementaciones').select('taller_id,estado,entrega_objetivo')),
+  ]);
+  const I = Object.fromEntries(impls.map(i => [i.taller_id, i]));
+  const filas = salud.map(s => { const i = I[s.id]; const al = alertas(s, { implAtrasada: i && i.estado !== 'entregada' && new Date(i.entrega_objetivo) < new Date() }); return { s, al, sem: semaforo(al) }; })
+    .sort((a, b) => (b.al.filter(x => x[0] === 'bad').length - a.al.filter(x => x[0] === 'bad').length) || (b.al.length - a.al.length));
+  const activos = salud.filter(s => s.estado_cliente !== 'baja');
+  const mrr = activos.reduce((t, s) => t + (s.mensual || 0), 0);
+  const inv = activos.reduce((t, s) => t + Number(s.inversion_ads_mes || 0), 0);
+  const ventas = activos.reduce((t, s) => t + Number(s.ventas_mes || 0), 0);
+  m.innerHTML = `<div class="top"><div><h1>Clientes</h1><div class="muted">Control de cada taller: uso, anuncios, panel, equipo y cobros.</div></div><a class="btn ghost" href="#anuncios">Ver todos los anuncios</a></div>
+   <div class="grid g4" style="margin-bottom:12px">
+    <div class="kpi"><span>Talleres activos</span><b>${activos.length}</b></div><div class="kpi"><span>MRR</span><b>${peso(mrr)}</b></div>
+    <div class="kpi"><span>Ventas de clientes (mes)</span><b>${peso(ventas)}</b></div><div class="kpi"><span>Inversión en anuncios (mes)</span><b>${peso(inv)}</b></div></div>
+   ${filas.length ? filas.map(({ s, al, sem }) => `<div class="card" data-t="${s.id}" style="cursor:pointer">
+     <div class="row"><div class="sp"><b style="font-size:16px">${esc(s.nombre)}</b><div class="tiny">${esc(PLANES.find(p => p.codigo === s.plan)?.nombre || 'Sin plan')} · ${s.mensual ? peso(s.mensual) + '/mes · ' : ''}${s.estado_cliente} · ${s.ultima_actividad ? 'activo ' + hace(s.ultima_actividad) : 'sin uso'}</div></div><span class="pill ${sem[0]}">${sem[1]}</span></div>
+     <div class="grid g4" style="gap:8px;margin-top:10px;font-size:13px">
+      <div><div class="tiny">Ventas mes</div><b>${peso(s.ventas_mes)}</b></div><div><div class="tiny">WhatsApp / agendados</div><b>${s.conversaciones_mes} / ${s.agendados_mes}</b></div>
+      <div><div class="tiny">Anuncios: inversión</div><b>${peso(s.inversion_ads_mes)}</b></div><div><div class="tiny">Costo por mensaje</div><b>${s.mensajes_ads_mes ? peso(s.inversion_ads_mes / s.mensajes_ads_mes) : '—'}</b></div></div>
+     ${al.length ? `<div class="chips" style="margin-top:10px">${al.map(x => `<span class="pill p-${x[0]}" style="text-transform:none;letter-spacing:0">${esc(x[1])}</span>`).join('')}</div>` : ''}</div>`).join('')
+      : '<div class="card empty">Aún no hay clientes.</div>'}`;
+  $$('[data-t]', m).forEach(e => e.onclick = () => panelCliente(e.dataset.t));
 };
+
+async function panelCliente(tid, tab = 'resumen') {
+  const [t, s, cfg, camp, res, ped, perf, ag, cob, im] = await Promise.all([
+    q(sb.from('talleres').select('*').eq('id', tid).single()),
+    q(sb.from('v_salud_talleres').select('*').eq('id', tid).single()),
+    q(sb.from('taller_config').select('*').eq('taller_id', tid).maybeSingle()),
+    q(sb.from('campanas').select('*').eq('taller_id', tid).order('creado_at', { ascending: false })),
+    q(sb.from('v_campanas_mes').select('*').eq('taller_id', tid)),
+    q(sb.from('pedidos_anuncios').select('*').eq('taller_id', tid).order('creado_at', { ascending: false }).limit(30)),
+    q(sb.from('perfiles').select('*').eq('taller_id', tid).order('nombre')),
+    q(sb.from('agentes_config').select('*').eq('taller_id', tid)),
+    q(sb.from('cobros').select('*').eq('taller_id', tid).order('vence', { ascending: false })),
+    q(sb.from('implementaciones').select('*').eq('taller_id', tid).maybeSingle()),
+  ]);
+  const al = alertas(s, { implAtrasada: im && im.estado !== 'entregada' && new Date(im.entrega_objetivo) < new Date() }), sem = semaforo(al);
+  const TABS = [['resumen', 'Resumen'], ['anuncios', 'Anuncios'], ['panel', 'Panel del taller'], ['equipo', 'Equipo'], ['contrato', 'Contrato y cobros']];
+  const d = modal(`<div class="row" style="padding-right:44px"><div class="sp"><h2 style="font-size:20px">${esc(t.nombre)}</h2><div class="tiny">${esc(PLANES.find(p => p.codigo === t.plan)?.nombre || 'Sin plan')} · ${t.estado_cliente}${t.comuna ? ' · ' + esc(t.comuna) : ''}</div></div><span class="pill ${sem[0]}">${sem[1]}</span></div>
+    <div class="chips" style="margin:12px 0 14px">${TABS.map(([k, l]) => `<span class="chip ${k === tab ? 'on' : ''}" data-tab="${k}">${l}</span>`).join('')}</div><div id="tb"></div>`);
+  const recargar = (k = tab) => { d.cerrar(); panelCliente(tid, k); };
+  $$('[data-tab]', d).forEach(c => c.onclick = () => recargar(c.dataset.tab));
+  const tb = $('#tb', d);
+  const abrirPanel = () => { try { localStorage.setItem('impl_taller', tid); } catch { } window.open('../implementia-taller/', '_blank'); };
+
+  if (tab === 'resumen') {
+    const atrib = res.reduce((a, c) => ({ v: a.v + Number(c.ventas), m: a.m + Number(c.monto_vendido), ag: a.ag + Number(c.agendados) }), { v: 0, m: 0, ag: 0 });
+    tb.innerHTML = `${al.length ? `<div class="card" style="background:#FFF8EE"><h3 style="margin-bottom:6px">Alertas</h3>${al.map(x => `<div class="row" style="padding:4px 0"><span class="pill p-${x[0]}">${x[0] === 'bad' ? 'urgente' : 'revisar'}</span><span>${esc(x[1])}</span></div>`).join('')}</div>` : '<div class="card" style="background:var(--okBg)"><b style="color:var(--ok)">Todo en orden con este cliente.</b></div>'}
+     <div class="grid g4">
+      <div class="kpi"><span>Ventas del mes</span><b>${peso(s.ventas_mes)}</b></div><div class="kpi"><span>Órdenes mes / abiertas</span><b>${s.ots_mes} / ${s.ots_abiertas}</b></div>
+      <div class="kpi"><span>Conversaciones WhatsApp</span><b>${s.conversaciones_mes}</b></div><div class="kpi"><span>Agendados (por bot)</span><b>${s.agendados_mes} (${s.agendados_bot_mes})</b></div>
+      <div class="kpi"><span>Presupuestos aceptados</span><b>${s.presupuestos_aceptados_mes} de ${s.presupuestos_mes}</b></div><div class="kpi"><span>Clientes nuevos</span><b>${s.clientes_nuevos_mes}</b></div>
+      <div class="kpi"><span>Inversión anuncios</span><b>${peso(s.inversion_ads_mes)}</b></div><div class="kpi"><span>Retorno anuncios</span><b>${s.inversion_ads_mes ? (atrib.m / s.inversion_ads_mes).toFixed(1) + 'x' : '—'}</b></div></div>
+     <div class="card" style="margin-top:12px"><div class="grid g3" style="font-size:14px">
+      <div><div class="tiny">Usuarios activos</div><b>${s.usuarios_activos}</b></div><div><div class="tiny">WhatsApp</div><b>${s.wa_conectado ? (s.bot_activo ? 'Conectado, bot activo' : 'Conectado, bot apagado') : 'No conectado'}</b></div>
+      <div><div class="tiny">Último movimiento</div><b>${s.ultima_actividad ? fecha(s.ultima_actividad) : '—'}</b></div>
+      <div><div class="tiny">Cierre de presupuestos</div><b>${pct(s.presupuestos_aceptados_mes, s.presupuestos_mes)}</b></div><div><div class="tiny">Ventas atribuidas a anuncios</div><b>${atrib.v} · ${peso(atrib.m)}</b></div>
+      <div><div class="tiny">Deuda vencida</div><b style="color:${s.deuda_vencida ? 'var(--bad)' : 'inherit'}">${peso(s.deuda_vencida)}</b></div></div></div>
+     <div class="row"><button class="btn acc" id="abr">Abrir su panel ↗</button>${im ? `<button class="btn ghost" id="chk">Implementación (${im.checklist.filter(x => x.hecho).length}/${im.checklist.length})</button>` : ''}</div>`;
+    $('#abr', tb).onclick = abrirPanel; const ck = $('#chk', tb); if (ck) ck.onclick = () => checklist(tid);
+  }
+
+  if (tab === 'anuncios') {
+    const R = Object.fromEntries(res.map(r => [r.campana_id, r]));
+    const tot = res.reduce((a, c) => ({ i: a.i + c.inversion, m: a.m + c.mensajes, ag: a.ag + Number(c.agendados), v: a.v + Number(c.monto_vendido) }), { i: 0, m: 0, ag: 0, v: 0 });
+    const { data: hist } = await sb.from('campana_resultados').select('*').eq('taller_id', tid).order('periodo', { ascending: false }).limit(60);
+    tb.innerHTML = `<div class="grid g4"><div class="kpi"><span>Inversión mes</span><b>${peso(tot.i)}</b></div><div class="kpi"><span>Mensajes</span><b>${tot.m}</b></div>
+      <div class="kpi"><span>Costo por mensaje</span><b>${tot.m ? peso(tot.i / tot.m) : '—'}</b></div><div class="kpi"><span>Vendido por anuncios</span><b>${peso(tot.v)}</b></div></div>
+     <div class="row" style="margin:14px 0 8px"><h2 class="sp">Campañas</h2><button class="btn sm acc" id="nc">+ Campaña</button></div>
+     ${camp.length ? camp.map(c => { const r = R[c.id] || {}; const h = (hist || []).find(x => x.campana_id === c.id && x.periodo === new Date().toISOString().slice(0, 8) + '01') || {};
+       return `<div class="card"><div class="row"><div class="sp"><b>${esc(c.nombre)}</b><div class="tiny">${esc(c.plataforma)} · ${esc(c.objetivo || 'sin objetivo')}${c.servicio ? ' · ' + esc(c.servicio) : ''}${c.presupuesto_mensual ? ' · ' + peso(c.presupuesto_mensual) + '/mes' : ''}</div></div>
+        <span class="pill ${c.estado === 'activa' ? 'p-ok' : c.estado === 'programada' ? 'p-warn' : ''}">${c.estado}</span></div>
+        <div class="grid g4" style="gap:8px;margin-top:10px;font-size:13px">
+         <div><div class="tiny">Inversión</div><b>${peso(r.inversion)}</b></div><div><div class="tiny">Mensajes · costo</div><b>${r.mensajes || 0} · ${r.mensajes ? peso(r.inversion / r.mensajes) : '—'}</b></div>
+         <div><div class="tiny">CTR</div><b>${h.impresiones ? (h.clics / h.impresiones * 100).toFixed(1) + '%' : '—'}</b></div><div><div class="tiny">Agendados · ventas</div><b>${r.agendados || 0} · ${peso(r.monto_vendido)}</b></div></div>
+        <div class="row" style="margin-top:10px"><button class="btn sm ghost" data-ec="${c.id}">Editar campaña</button><button class="btn sm" data-rc="${c.id}">Cargar resultados del mes</button>${c.link_anuncio ? `<a class="btn sm ghost" target="_blank" href="${esc(c.link_anuncio)}">Ver anuncio</a>` : ''}</div></div>`; }).join('') : '<div class="card empty">Sin campañas. Crea la primera.</div>'}
+     <h2 style="margin:16px 0 8px">Pedidos del taller</h2>
+     ${ped.length ? ped.map(p => `<div class="card"><div class="row"><span class="pill ${p.estado === 'hecho' ? 'p-ok' : p.estado === 'en_curso' ? 'p-warn' : 'p-acc'}">${p.estado.replace('_', ' ')}</span><span class="tiny">${fecha(p.creado_at)}</span></div>
+        <div style="margin:6px 0">${esc(p.texto)}</div><div class="row"><input data-pr="${p.id}" placeholder="Respuesta al taller" value="${esc(p.respuesta || '')}" style="flex:1;min-width:200px">
+        <select data-pe="${p.id}" style="width:auto">${['pendiente', 'en_curso', 'hecho'].map(e => `<option ${p.estado === e ? 'selected' : ''}>${e}</option>`).join('')}</select><button class="btn sm" data-pg="${p.id}">Guardar</button></div></div>`).join('') : '<div class="tiny">El taller no ha pedido cambios.</div>'}
+     <div class="card" style="margin-top:12px"><h3>Cuenta publicitaria</h3><div class="grid g2">
+      ${campoT('meta_cuenta_publicitaria', 'Cuenta de Meta (act_…)', t)}${campoT('google_ads_cuenta', 'Cuenta de Google Ads', t)}${campoT('presupuesto_ads_mensual', 'Presupuesto mensual del cliente', t, 'number')}${campoT('fee_gestion_ads', 'Fee de gestión ImplementIA', t, 'number')}</div>
+      <div class="row" style="margin-top:10px"><button class="btn sm" id="gcta">Guardar</button>${t.presupuesto_ads_mensual ? `<span class="tiny">Usado este mes: ${pct(tot.i, t.presupuesto_ads_mensual)}</span>` : ''}</div></div>`;
+    $('#gcta', tb).onclick = () => guardarCampos(tb, 'talleres', 'id', tid);
+    $('#nc', tb).onclick = () => editarCampana(tid, null, () => recargar('anuncios'));
+    $$('[data-ec]', tb).forEach(b => b.onclick = () => editarCampana(tid, camp.find(c => c.id === b.dataset.ec), () => recargar('anuncios')));
+    $$('[data-rc]', tb).forEach(b => b.onclick = () => cargarResultados(tid, b.dataset.rc, (hist || []).filter(x => x.campana_id === b.dataset.rc), () => recargar('anuncios')));
+    $$('[data-pg]', tb).forEach(b => b.onclick = async () => { const id = b.dataset.pg; await q(sb.from('pedidos_anuncios').update({ respuesta: $(`[data-pr="${id}"]`, tb).value || null, estado: $(`[data-pe="${id}"]`, tb).value }).eq('id', id)); toast('Pedido actualizado'); });
+  }
+
+  if (tab === 'panel') {
+    const c = cfg || {}; const mods = c.modulos;
+    const A = Object.fromEntries(ag.map(x => [x.agente, x.activo]));
+    tb.innerHTML = `<div class="card"><div class="row"><h3 class="sp">Qué ve el taller en su panel</h3><button class="btn sm acc" id="abr">Abrir su panel ↗</button></div>
+      <p class="tiny" style="margin:4px 0 8px">Desmarca lo que no corresponde a su plan. "Hoy" y la app del mecánico siempre se ven. Los roles siguen limitando lo que ve cada persona.</p>
+      <div class="grid g3" style="gap:0 12px">${MODULOS.map(([k, l]) => `<label class="check" style="margin:0"><input type="checkbox" data-mod="${k}" ${!mods || mods.includes(k) ? 'checked' : ''}><span>${l}</span></label>`).join('')}</div>
+      <div class="row" style="margin-top:10px"><button class="btn sm" id="gmod">Guardar módulos</button><button class="btn sm ghost" id="todos">Todos</button></div></div>
+     <div class="card"><h3>WhatsApp y bot</h3>
+      <label class="check" style="border:0"><input type="checkbox" data-c="bot_activo" ${c.bot_activo ? 'checked' : ''}><span>Bot de WhatsApp activo</span></label>
+      <div class="grid g2">${campoC('telefono_whatsapp', 'Número de WhatsApp del taller', c)}${campoC('wa_phone_number_id', 'Phone number ID (Meta)', c)}</div>
+      <label>Instrucciones extra para el bot</label><textarea data-c="bot_instrucciones">${esc(c.bot_instrucciones || '')}</textarea></div>
+     <div class="card"><h3>Operación</h3><div class="grid g2">
+      ${campoC('direccion', 'Dirección', c)}${campoC('cupos_por_hora', 'Autos por hora (cupos)', c, 'number')}${campoC('comision_pct_default', 'Comisión mecánicos por defecto (%)', c, 'number')}${campoC('garantia_texto', 'Garantía', c)}
+      ${campoC('descuento_postventa_pct', 'Descuento postventa (%)', c, 'number')}${campoC('aviso_vencimiento_dias', 'Avisar vencimientos con (días)', c, 'number')}
+      <div><label>Días de seguimiento (separados por coma)</label><input data-c="seguimiento_dias" data-arr="1" value="${esc((c.seguimiento_dias || []).join(', '))}"></div>
+      ${campoC('color_principal', 'Color principal', c)}${campoC('logo_url', 'URL del logo', c)}</div>
+      <label>Horario (JSON)</label><textarea data-c="horario" data-json="1" style="font-family:monospace;font-size:13px;min-height:70px">${esc(JSON.stringify(c.horario || {}))}</textarea>
+      <div class="row" style="margin-top:10px"><button class="btn" id="gcfg">Guardar configuración</button></div></div>
+     <div class="card"><h3>Agentes del taller</h3>${Object.entries(AGENTES_T).map(([k, l]) => `<label class="check" style="margin:0"><input type="checkbox" data-ag="${k}" ${A[k] ? 'checked' : ''}><span>${l}</span></label>`).join('')}</div>`;
+    $('#abr', tb).onclick = abrirPanel;
+    $('#todos', tb).onclick = () => $$('[data-mod]', tb).forEach(x => x.checked = true);
+    $('#gmod', tb).onclick = async () => { const sel = $$('[data-mod]', tb).filter(x => x.checked).map(x => x.dataset.mod); await q(sb.from('taller_config').upsert({ taller_id: tid, modulos: sel.length === MODULOS.length ? null : sel })); toast('Módulos guardados: el taller los ve al recargar'); };
+    $('#gcfg', tb).onclick = async () => {
+      const upd = { taller_id: tid };
+      for (const i of $$('[data-c]', tb)) { const k = i.dataset.c;
+        if (i.type === 'checkbox') upd[k] = i.checked;
+        else if (i.dataset.json) { try { upd[k] = JSON.parse(i.value || '{}'); } catch { return toast('El horario no es JSON válido'); } }
+        else if (i.dataset.arr) upd[k] = i.value.split(',').map(x => parseInt(x)).filter(x => !isNaN(x));
+        else upd[k] = i.value.trim() === '' ? null : i.type === 'number' ? +i.value : i.value.trim(); }
+      await q(sb.from('taller_config').upsert(upd)); toast('Configuración guardada');
+    };
+    $$('[data-ag]', tb).forEach(x => x.onchange = async () => { await q(sb.from('agentes_config').upsert({ taller_id: tid, agente: x.dataset.ag, activo: x.checked }, { onConflict: 'taller_id,agente' })); toast('Agente ' + (x.checked ? 'activado' : 'apagado')); });
+  }
+
+  if (tab === 'equipo') {
+    tb.innerHTML = `<div class="card" style="padding:4px 12px"><div class="list">${perf.length ? perf.map(p => `<div class="it" style="cursor:default;flex-wrap:wrap"><div class="sp" style="min-width:160px"><div class="t">${esc(p.nombre)}</div><div class="s">${esc(p.telefono || '')}</div></div>
+       <select data-rol="${p.id}" style="width:auto">${Object.entries(ROLES_T).map(([k, l]) => `<option value="${k}" ${k === p.rol ? 'selected' : ''}>${l}</option>`).join('')}</select>
+       <input data-com="${p.id}" type="number" value="${p.comision_pct ?? ''}" placeholder="% com." style="width:86px" title="Comisión %">
+       <label class="row tiny" style="margin:0;gap:4px"><input type="checkbox" data-act="${p.id}" ${p.activo ? 'checked' : ''} style="width:18px;height:18px">activo</label>
+       <button class="btn sm ghost" data-gp="${p.id}">Guardar</button></div>`).join('') : '<div class="empty">Sin usuarios todavía.</div>'}</div></div>
+     <div class="card"><h3>Invitar persona</h3><div class="grid g2"><div><label>Nombre</label><input id="in"></div><div><label>Correo</label><input id="ie" type="email"></div>
+      <div><label>Rol</label><select id="ir">${Object.entries(ROLES_T).map(([k, l]) => `<option value="${k}">${l}</option>`).join('')}</select></div><div><label>Teléfono</label><input id="it"></div></div>
+      <div class="row" style="margin-top:10px"><button class="btn acc" id="inv">Enviar invitación</button></div></div>`;
+    $$('[data-gp]', tb).forEach(b => b.onclick = async () => { const id = b.dataset.gp; const c = $(`[data-com="${id}"]`, tb).value;
+      await q(sb.from('perfiles').update({ rol: $(`[data-rol="${id}"]`, tb).value, comision_pct: c === '' ? null : +c, activo: $(`[data-act="${id}"]`, tb).checked }).eq('id', id)); toast('Guardado'); });
+    $('#inv', tb).onclick = async e => {
+      const body = { taller_id: tid, nombre: $('#in', tb).value.trim(), email: $('#ie', tb).value.trim(), rol: $('#ir', tb).value, telefono: $('#it', tb).value.trim() || null, redirect_to: new URL('../implementia-taller/', location.href).href };
+      if (!body.nombre || !body.email) return toast('Falta nombre o correo');
+      await fn('invitar-usuario', body, e.target); toast('Invitación enviada'); recargar('equipo');
+    };
+  }
+
+  if (tab === 'contrato') {
+    const pend = cob.filter(c => c.estado === 'pendiente').reduce((a, c) => a + c.monto, 0);
+    tb.innerHTML = `<div class="card"><h3>Ficha del cliente</h3><div class="grid g2">
+      ${campoT('nombre', 'Nombre del taller', t)}${campoT('razon_social', 'Razón social', t)}${campoT('rut', 'RUT', t)}${campoT('comuna', 'Comuna', t)}
+      ${campoT('contacto_nombre', 'Contacto', t)}${campoT('contacto_telefono', 'Teléfono contacto', t)}${campoT('contacto_email', 'Correo contacto', t)}${campoT('n_mecanicos', 'Mecánicos', t, 'number')}
+      <div><label>Plan</label><select data-t="plan"><option value="">—</option>${PLANES.map(p => `<option value="${p.codigo}" ${p.codigo === t.plan ? 'selected' : ''}>${p.nombre}</option>`).join('')}</select></div>
+      <div><label>Estado</label><select data-t="estado_cliente">${['implementando', 'activo', 'pausado', 'baja'].map(e => `<option ${e === t.estado_cliente ? 'selected' : ''}>${e}</option>`).join('')}</select></div>
+      ${campoT('implementacion', 'Implementación ($)', t, 'number')}${campoT('mensual', 'Mensualidad ($)', t, 'number')}${campoT('inicio_contrato', 'Inicio contrato', t, 'date')}${campoT('dia_cobro', 'Día de cobro (1-28)', t, 'number')}</div>
+      <label>Notas internas</label><textarea data-t="notas_internas">${esc(t.notas_internas || '')}</textarea>
+      <div class="row" style="margin-top:10px"><button class="btn" id="gfi">Guardar ficha</button>${im ? '<button class="btn ghost" id="chk">Checklist de implementación</button>' : ''}</div></div>
+     <div class="card"><div class="row"><h3 class="sp">Cobros</h3><span class="tiny">Pendiente: <b>${peso(pend)}</b></span></div>
+      <div class="row" style="margin:8px 0"><button class="btn sm" id="mens">+ Mensualidad de este mes</button><button class="btn sm ghost" id="otro">+ Otro cobro</button></div>
+      <div class="list">${cob.length ? cob.map(c => `<div class="it" style="cursor:default"><div class="sp"><div class="t">${esc(c.concepto)}${c.detalle ? ' · ' + esc(c.detalle) : ''}</div><div class="s">vence ${dia(c.vence)}${c.pagado_at ? ' · pagado ' + dia(c.pagado_at) : ''}${c.medio ? ' · ' + esc(c.medio) : ''}</div></div>
+        <b>${peso(c.monto)}</b><span class="pill ${c.estado === 'pagado' ? 'p-ok' : c.estado === 'anulado' ? '' : new Date(c.vence) < new Date() ? 'p-bad' : 'p-warn'}">${c.estado === 'pendiente' && new Date(c.vence) < new Date() ? 'vencido' : c.estado}</span>
+        ${c.estado === 'pendiente' ? `<button class="btn sm ok" data-pay="${c.id}">Pagado</button>` : ''}</div>`).join('') : '<div class="tiny" style="padding:8px 0">Sin cobros registrados.</div>'}</div></div>`;
+    $('#gfi', tb).onclick = () => guardarCampos(tb, 'talleres', 'id', tid);
+    const ck = $('#chk', tb); if (ck) ck.onclick = () => checklist(tid);
+    $('#mens', tb).onclick = async () => {
+      if (!t.mensual) return toast('Primero define la mensualidad en la ficha');
+      const hoy = new Date(); const vence = new Date(hoy.getFullYear(), hoy.getMonth(), t.dia_cobro || 5);
+      const mes = hoy.toLocaleDateString('es-CL', { month: 'long', year: 'numeric' });
+      await q(sb.from('cobros').insert({ taller_id: tid, concepto: 'mensualidad', detalle: mes, monto: t.mensual, vence: vence.toISOString().slice(0, 10) })); recargar('contrato');
+    };
+    $('#otro', tb).onclick = () => {
+      const m2 = modal(`<h2>Nuevo cobro</h2><div class="grid g2"><div><label>Concepto</label><select id="c">${['implementacion', 'cuota', 'mensualidad', 'anuncios', 'otro'].map(x => `<option>${x}</option>`).join('')}</select></div>
+        <div><label>Monto</label><input id="m" type="number"></div><div><label>Vence</label><input id="v" type="date" value="${new Date().toISOString().slice(0, 10)}"></div><div><label>Detalle</label><input id="dt" placeholder="Ej: cuota 1 de 3"></div></div>
+        <div class="row" style="margin-top:12px"><button class="btn acc" id="g">Guardar</button></div>`);
+      $('#g', m2).onclick = async () => { await q(sb.from('cobros').insert({ taller_id: tid, concepto: $('#c', m2).value, monto: +$('#m', m2).value || 0, vence: $('#v', m2).value, detalle: $('#dt', m2).value || null })); m2.cerrar(); recargar('contrato'); };
+    };
+    $$('[data-pay]', tb).forEach(b => b.onclick = async () => { const medio = prompt('Medio de pago (transferencia, tarjeta…)', 'transferencia'); if (medio === null) return; await q(sb.from('cobros').update({ estado: 'pagado', pagado_at: new Date().toISOString(), medio }).eq('id', b.dataset.pay)); recargar('contrato'); });
+  }
+}
+const campoT = (f, l, o, t = 'text') => `<div><label>${l}</label><input data-t="${f}" type="${t}" value="${esc(o[f] ?? '')}"></div>`;
+const campoC = (f, l, o, t = 'text') => `<div><label>${l}</label><input data-c="${f}" type="${t}" value="${esc(o[f] ?? '')}"></div>`;
+async function guardarCampos(el, tabla, pk, id) {
+  const upd = {}; $$('[data-t]', el).forEach(i => { const v = i.value.trim(); upd[i.dataset.t] = v === '' ? null : i.type === 'number' ? +v : v; });
+  if ('nombre' in upd && !upd.nombre) return toast('El nombre no puede quedar vacío');
+  await q(sb.from(tabla).update(upd).eq(pk, id)); toast('Guardado');
+}
+
+function editarCampana(tid, c, despues) {
+  c = c || { plataforma: 'meta', estado: 'activa' };
+  const f = (k, l, t = 'text', ph = '') => `<div><label>${l}</label><input data-k="${k}" type="${t}" value="${esc(c[k] ?? '')}" placeholder="${ph}"></div>`;
+  const d = modal(`<h2>${c.id ? 'Editar' : 'Nueva'} campaña</h2><div class="grid g2">
+    ${f('nombre', 'Nombre', 'text', 'Ej: Mantención 10.000 km — noviembre')}
+    <div><label>Plataforma</label><select data-k="plataforma">${['meta', 'google', 'otra'].map(x => `<option ${x === c.plataforma ? 'selected' : ''}>${x}</option>`).join('')}</select></div>
+    <div><label>Estado</label><select data-k="estado">${['programada', 'activa', 'pausada', 'terminada'].map(x => `<option ${x === c.estado ? 'selected' : ''}>${x}</option>`).join('')}</select></div>
+    <div><label>Objetivo</label><select data-k="objetivo">${['', 'Mensajes a WhatsApp', 'Formulario de contacto', 'Llamadas', 'Tráfico al sitio', 'Reconocimiento'].map(x => `<option ${x === (c.objetivo || '') ? 'selected' : ''}>${x}</option>`).join('')}</select></div>
+    ${f('servicio', 'Servicio que promociona', 'text', 'Ej: frenos, mantención, diagnóstico')}${f('oferta', 'Oferta o gancho', 'text', 'Ej: diagnóstico gratis con la mantención')}
+    ${f('publico', 'Público', 'text', 'Ej: hombres y mujeres 28-60, dueños de auto')}${f('zona', 'Zona', 'text', 'Ej: 5 km alrededor del taller')}
+    ${f('presupuesto_mensual', 'Presupuesto mensual ($)', 'number')}${f('inicio', 'Inicio', 'date')}${f('fin', 'Fin', 'date')}${f('id_externo', 'ID en la plataforma')}
+    ${f('creativo_url', 'Link del creativo (imagen/video)')}${f('link_anuncio', 'Link del anuncio')}</div>
+    <label>Notas</label><textarea data-k="notas">${esc(c.notas || '')}</textarea>
+    <div class="row" style="margin-top:12px"><button class="btn acc" id="g">Guardar</button></div>`);
+  $('#g', d).onclick = async () => {
+    const upd = { taller_id: tid }; $$('[data-k]', d).forEach(i => { const v = i.value.trim(); upd[i.dataset.k] = v === '' ? null : i.type === 'number' ? +v : v; });
+    if (!upd.nombre) return toast('Falta el nombre');
+    if (c.id) await q(sb.from('campanas').update(upd).eq('id', c.id)); else await q(sb.from('campanas').insert(upd));
+    d.cerrar(); toast('Campaña guardada'); despues && despues();
+  };
+}
+function cargarResultados(tid, cid, hist, despues) {
+  const per = new Date().toISOString().slice(0, 8) + '01';
+  const h = hist.find(x => x.periodo === per) || {};
+  const f = (k, l) => `<div><label>${l}</label><input data-k="${k}" type="number" value="${h[k] ?? ''}"></div>`;
+  const d = modal(`<h2>Resultados de la campaña</h2><div class="grid g2"><div><label>Mes</label><input id="per" type="month" value="${per.slice(0, 7)}"></div><div></div>
+    ${f('inversion', 'Inversión ($)')}${f('impresiones', 'Impresiones')}${f('alcance', 'Alcance')}${f('clics', 'Clics')}${f('mensajes', 'Mensajes / conversaciones')}${f('leads', 'Leads (formularios)')}</div>
+    <p class="tiny">Saca estos números del administrador de anuncios. Agendados y ventas se calculan solos desde el sistema del taller.</p>
+    ${hist.length ? `<h3 style="margin-top:12px">Meses anteriores</h3>${hist.map(x => `<div class="tiny">${x.periodo.slice(0, 7)}: ${peso(x.inversion)} · ${x.mensajes} mensajes${x.clics ? ' · ' + x.clics + ' clics' : ''}</div>`).join('')}` : ''}
+    <div class="row" style="margin-top:12px"><button class="btn acc" id="g">Guardar</button></div>`);
+  $('#g', d).onclick = async () => {
+    const row = { taller_id: tid, campana_id: cid, periodo: $('#per', d).value + '-01' };
+    $$('[data-k]', d).forEach(i => row[i.dataset.k] = i.value === '' ? (['inversion', 'mensajes'].includes(i.dataset.k) ? 0 : null) : +i.value);
+    await q(sb.from('campana_resultados').upsert(row, { onConflict: 'campana_id,periodo' })); d.cerrar(); toast('Resultados guardados'); despues && despues();
+  };
+}
+
+// ── Anuncios de todos los clientes ──
+VISTAS.anuncios = async m => {
+  const [res, camp, ped, tall] = await Promise.all([
+    q(sb.from('v_campanas_mes').select('*')),
+    q(sb.from('campanas').select('id,objetivo,servicio,presupuesto_mensual')),
+    q(sb.from('pedidos_anuncios').select('*, talleres(nombre)').neq('estado', 'hecho').order('creado_at')),
+    q(sb.from('talleres').select('id,nombre,es_demo,presupuesto_ads_mensual')),
+  ]);
+  const T = Object.fromEntries(tall.map(t => [t.id, t])); const K = Object.fromEntries(camp.map(c => [c.id, c]));
+  const reales = res.filter(r => !T[r.taller_id]?.es_demo);
+  const tot = reales.reduce((a, c) => ({ i: a.i + c.inversion, m: a.m + c.mensajes, ag: a.ag + Number(c.agendados), v: a.v + Number(c.monto_vendido) }), { i: 0, m: 0, ag: 0, v: 0 });
+  const orden = { activa: 0, programada: 1, pausada: 2, terminada: 3 };
+  reales.sort((a, b) => (orden[a.estado] - orden[b.estado]) || (b.inversion - a.inversion));
+  m.innerHTML = `<div class="top"><div><h1>Anuncios</h1><div class="muted">Todas las campañas de tus clientes, este mes.</div></div></div>
+   <div class="grid g4" style="margin-bottom:12px"><div class="kpi"><span>Inversión total</span><b>${peso(tot.i)}</b></div><div class="kpi"><span>Mensajes</span><b>${tot.m}</b></div>
+    <div class="kpi"><span>Costo por mensaje</span><b>${tot.m ? peso(tot.i / tot.m) : '—'}</b></div><div class="kpi"><span>Vendido por anuncios</span><b>${peso(tot.v)}</b></div></div>
+   ${ped.length ? `<div class="card" style="background:#FFF8EE"><h3 style="margin-bottom:6px">Pedidos pendientes de los talleres (${ped.length})</h3>${ped.map(p => `<div class="it" data-t="${p.taller_id}" data-tab="anuncios" style="display:flex;gap:10px;padding:8px 0;cursor:pointer;border-bottom:1px solid var(--line)"><span class="pill p-acc">${esc(p.talleres?.nombre)}</span><span class="sp">${esc(p.texto)}</span><span class="tiny">${hace(p.creado_at)}</span></div>`).join('')}</div>` : ''}
+   <div class="card" style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13.5px;min-width:720px"><thead><tr style="text-align:left;color:var(--soft);font-size:12px">
+    <th style="padding:8px">Taller · campaña</th><th>Estado</th><th>Inversión</th><th>Presupuesto</th><th>Mensajes</th><th>Costo/msj</th><th>Agendados</th><th>Vendido</th><th>Retorno</th></tr></thead><tbody>
+    ${reales.length ? reales.map(r => { const k = K[r.campana_id] || {}; return `<tr data-t="${r.taller_id}" data-tab="anuncios" style="border-top:1px solid var(--line);cursor:pointer">
+     <td style="padding:9px 8px"><b>${esc(T[r.taller_id]?.nombre)}</b><div class="tiny">${esc(r.nombre)} · ${r.plataforma}${k.servicio ? ' · ' + esc(k.servicio) : ''}</div></td>
+     <td><span class="pill ${r.estado === 'activa' ? 'p-ok' : r.estado === 'programada' ? 'p-warn' : ''}">${r.estado}</span></td><td>${peso(r.inversion)}</td>
+     <td>${k.presupuesto_mensual ? pct(r.inversion, k.presupuesto_mensual) : '—'}</td><td>${r.mensajes}</td><td>${r.mensajes ? peso(r.inversion / r.mensajes) : '—'}</td>
+     <td>${r.agendados}</td><td>${peso(r.monto_vendido)}</td><td><b>${r.inversion ? (r.monto_vendido / r.inversion).toFixed(1) + 'x' : '—'}</b></td></tr>`; }).join('') : '<tr><td colspan="9" class="empty">Sin campañas todavía.</td></tr>'}
+   </tbody></table></div>`;
+  $$('[data-t]', m).forEach(e => e.onclick = () => panelCliente(e.dataset.t, e.dataset.tab));
+};
+
 async function checklist(tid) {
-  const im = await q(sb.from('implementaciones').select('*, talleres(nombre)').eq('taller_id', tid).single());
+  const im = await q(sb.from('implementaciones').select('*, talleres(nombre)').eq('taller_id', tid).maybeSingle());
+  if (!im) return toast('Este cliente no tiene plan de implementación.');
   const d = modal(`<h2>Implementación · ${esc(im.talleres?.nombre)}</h2><div class="tiny">Inicio ${dia(im.inicio)} · entrega objetivo ${dia(im.entrega_objetivo)}</div>
    <div class="card" style="margin-top:12px">${im.checklist.map((t, i) => `<label class="check ${t.hecho ? 'done' : ''}" style="margin:0"><input type="checkbox" data-i="${i}" ${t.hecho ? 'checked' : ''}><span>${esc(t.tarea)}</span></label>`).join('')}</div>
    <label>Notas</label><textarea id="nt">${esc(im.notas || '')}</textarea><div class="row" style="margin-top:10px"><button class="btn" id="g">Guardar notas</button><button class="btn ghost" id="ent">Marcar entregada</button></div>`);

@@ -142,11 +142,14 @@ const MENU = {
 };
 const TITULOS = {asistente:'Asistente',agentes:'Agentes',hoy:'Hoy',clientes:'Clientes',agenda:'Agenda',presupuestos:'Presupuestos',ordenes:'Órdenes de trabajo',catalogo:'Servicios y packs',whatsapp:'WhatsApp',anuncios:'Anuncios',equipo:'Equipo',config:'Configuración',mecanico:'Mis trabajos',talleres:'Talleres'};
 
+// Módulos que ImplementIA habilita para este taller (taller_config.modulos; vacío = todos). 'hoy' y 'mecanico' siempre visibles.
+function menuVisible(){ const base=MENU[rol()]||[]; const mods=S.config?.modulos; if(S.staff||!mods||!mods.length) return base; return base.filter(v=>v==='hoy'||v==='mecanico'||mods.includes(v)); }
+
 function ir(view, param=null){ S.view=view; S.param=param; location.hash=view+(param?'/'+param:''); render(); }
 window.addEventListener('hashchange',()=>{ if(location.hash.includes('=')) return; const [v,p]=location.hash.slice(1).split('/'); if(v && (v!==S.view || (p||null)!==S.param)){ S.view=v; S.param=p||null; render(); }});
 
 function shell(){
-  const items = MENU[rol()] || [];
+  const items = menuVisible();
   $('#root').innerHTML = `<div class="app"><nav>
     <div class="brand">ImplementIA <span>Taller</span></div>
     ${items.map(v=>`<a href="#${v}" class="${S.view===v?'on':''}">${TITULOS[v]}</a>`).join('')}
@@ -161,7 +164,7 @@ function shell(){
 async function render(){
   if(!S.user) return login();
   if(!S.taller && rol()!=='staff') return sinTaller();
-  const items = MENU[rol()]||[];
+  const items = menuVisible();
   if(!items.includes(S.view)) S.view = items[0];
   if(!S.taller && S.view!=='talleres') S.view='talleres';
   shell();

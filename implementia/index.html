@@ -135,13 +135,17 @@ const scoreCls = n => n >= 75 ? 'hi' : n >= 50 ? 'mid' : '';
 function login(msg = '') {
   $('#root').innerHTML = `<div class="login"><h1 style="font-size:28px">Implement<span style="color:var(--acc)">IA</span></h1>
   <p class="muted" style="margin:6px 0 18px">Central comercial y de clientes. Solo equipo ImplementIA.</p>
-  <div class="card"><label>Correo</label><input id="em" type="email" autocomplete="email">
-  <label>Contraseña</label><input id="pw" type="password" autocomplete="current-password">
-  <div class="row" style="margin-top:14px"><button class="btn acc" id="go">Entrar</button><button class="btn ghost" id="link">Enviarme un link</button></div>
-  <p class="muted" id="msg" style="margin-bottom:0">${esc(msg)}</p></div></div>`;
-  $('#go').onclick = async () => { const { error } = await sb.auth.signInWithPassword({ email: $('#em').value.trim(), password: $('#pw').value }); if (error) $('#msg').textContent = 'No se pudo entrar: ' + error.message; else iniciar(); };
-  $('#pw').onkeydown = e => { if (e.key === 'Enter') $('#go').click(); };
-  $('#link').onclick = async () => { const { error } = await sb.auth.signInWithOtp({ email: $('#em').value.trim(), options: { shouldCreateUser: false, emailRedirectTo: location.origin + location.pathname } }); $('#msg').textContent = error ? 'Error: ' + error.message : 'Revisa tu correo y abre el link.'; };
+  <div class="card"><label>Tu correo</label><input id="em" type="email" autocomplete="email" inputmode="email" value="${esc(localStorage.getItem('impl_email') || '')}">
+  <button class="btn acc" id="link" style="width:100%;margin-top:14px;padding:13px">Entrar con mi correo</button>
+  <p class="muted" id="msg" style="margin-bottom:0">${esc(msg) || 'Te llega un link al correo. Ábrelo en este mismo teléfono y entras sin contraseña.'}</p></div></div>`;
+  $('#em').onkeydown = e => { if (e.key === 'Enter') $('#link').click(); };
+  $('#link').onclick = async e => {
+    const email = $('#em').value.trim().toLowerCase(); if (!email.includes('@')) return $('#msg').textContent = 'Escribe tu correo.';
+    e.target.disabled = true; localStorage.setItem('impl_email', email);
+    const { error } = await sb.auth.signInWithOtp({ email, options: { shouldCreateUser: false, emailRedirectTo: location.origin + location.pathname } });
+    e.target.disabled = false;
+    $('#msg').innerHTML = error ? 'No se pudo enviar: ' + esc(error.message) : `<b>Listo.</b> Revisa ${esc(email)} (también spam) y toca el link. Puedes cerrar esta pestaña.`;
+  };
 }
 
 async function iniciar() {

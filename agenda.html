@@ -43,6 +43,23 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--dorado)}
 .tec-dot{width:8px;height:8px;border-radius:50%}
 
 .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:12px 16px;background:var(--s1);border-bottom:1px solid var(--line)}
+/* Cupos por servicio (v1 23-11-2026) */
+.cupos{padding:10px 16px;background:var(--s1);border-bottom:1px solid var(--line)}
+.cupos-tit{font-family:var(--mono);font-size:9px;color:var(--t3);letter-spacing:0.12em;font-weight:700;margin-bottom:8px;display:flex;justify-content:space-between}
+.cupos-dias{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(150px,1fr);gap:8px;overflow-x:auto;padding-bottom:2px}
+.cupo-dia{background:var(--s2);border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+.cupo-dia.hoy{border-color:var(--dorado)}
+.cupo-dia-lbl{font-family:var(--display);font-weight:800;font-size:12px;color:var(--t1);margin-bottom:6px;text-transform:capitalize}
+.cupo-fila{margin-bottom:6px}
+.cupo-fila:last-child{margin-bottom:0}
+.cupo-top{display:flex;justify-content:space-between;font-family:var(--mono);font-size:9px;font-weight:700;letter-spacing:0.05em;color:var(--t2)}
+.cupo-bar{height:5px;background:var(--s3);border-radius:3px;overflow:hidden;margin:3px 0 2px}
+.cupo-bar i{display:block;height:100%;background:var(--verde);border-radius:3px}
+.cupo-fila.medio .cupo-bar i{background:var(--amarillo)}
+.cupo-fila.lleno .cupo-bar i{background:var(--rojo)}
+.cupo-fila.lleno .cupo-top b{color:var(--rojo-l)}
+.cupo-libres{font-family:var(--mono);font-size:9px;color:var(--t3)}
+.ev-badge.sobrecupo{background:rgba(232,33,10,0.25);color:var(--rojo-l)}
 .kpi{background:var(--s2);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
 .kpi-lbl{font-family:var(--mono);font-size:8px;color:var(--t3);letter-spacing:0.1em;text-transform:uppercase;font-weight:700}
 .kpi-val{font-family:var(--display);font-weight:900;font-size:20px;color:var(--t1);margin-top:2px;line-height:1}
@@ -232,6 +249,8 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--dorado)}
   <div class="kpi asig"><div class="kpi-lbl">✅ Asignados</div><div class="kpi-val" id="k-asig">0</div></div>
   <div class="kpi comp"><div class="kpi-lbl">📊 Total</div><div class="kpi-val" id="k-tot">0</div></div>
 </div>
+
+<div class="cupos" id="cupos-panel" style="display:none"></div>
 
 <div class="shell" id="contenido">
   <div class="loader">Cargando agenda...</div>
@@ -524,6 +543,7 @@ function eventoHTML(e){
   if(e.urgencia==='urgente') html += '<span class="ev-badge urg">URGENTE</span>'
   if(e.origen==='agente' && e.agente_solicitante) html += '<span class="ev-badge bot">🤖 '+e.agente_solicitante.toUpperCase()+'</span>'
   html += '<span class="ev-badge est">'+estado.toUpperCase()+'</span>'
+  if(e.sobrecupo) html += '<span class="ev-badge sobrecupo" title="'+(e.sobrecupo_motivo||'Sin cupo').replace(/"/g,'')+'">⛔ SOBRECUPO</span>'
   // NUEVO: Badge de confirmación del técnico
   if(e.tecnico && e.tecnico !== 'POR ASIGNAR'){
     if(e.confirmacion_tecnico_at){
@@ -1145,7 +1165,49 @@ function renderVistaMes(){
   document.getElementById('contenido').innerHTML = html
 }
 
+// ===== CUPOS POR SERVICIO (capacidad diaria de la empresa: tabla agenda_cupos) =====
+var CUPOS_NOMBRE = {mantencion:'Mantención', dpf:'DPF', general:'Atención general'}
+var _cuposDesde = null
+async function renderCupos(){
+  var panel = document.getElementById('cupos-panel')
+  if(!panel) return
+  if(localStorage.getItem('sv_user_rol') === 'tecnico'){ panel.style.display = 'none'; return }
+  var desde = new Date(FECHA)
+  if(VISTA === 'semana-sig'){ desde.setDate(desde.getDate() + 7) }
+  var hoy = new Date(); hoy.setHours(0,0,0,0)
+  if(desde < hoy && VISTA !== 'dia') desde = hoy
+  var desdeISO = fmtISO(desde)
+  _cuposDesde = desdeISO
+  try{
+    var r = await fetch(SB_URL + '/rest/v1/rpc/fn_cupos_disponibles', {method:'POST', headers:{'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json'}, body: JSON.stringify({p_desde: desdeISO, p_dias: 7})})
+    if(!r.ok || _cuposDesde !== desdeISO) return
+    var filas = await r.json()
+    var dias = {}
+    filas.forEach(function(f){ (dias[f.fecha] = dias[f.fecha] || {})[f.bloque] = f })
+    var html = '<div class="cupos-tit"><span>CUPOS POR SERVICIO · 7 DÍAS</span><span>usados / cupos</span></div><div class="cupos-dias">'
+    Object.keys(dias).sort().forEach(function(fecha){
+      var d = new Date(fecha + 'T00:00:00')
+      html += '<div class="cupo-dia' + (esHoy(d) ? ' hoy' : '') + '"><div class="cupo-dia-lbl">' + d.toLocaleDateString('es-CL',{weekday:'short', day:'numeric', month:'short'}) + '</div>'
+      ;['mantencion','dpf','general'].forEach(function(b){
+        var f = dias[fecha][b]; if(!f) return
+        var cap = f.capacidad || 0, us = f.usados || 0
+        var pct = cap ? Math.min(100, Math.round(us * 100 / cap)) : 100
+        var cls = us >= cap ? 'lleno' : (pct >= 50 ? 'medio' : '')
+        var libres = (f.horas_libres || [])
+        html += '<div class="cupo-fila ' + cls + '"><div class="cupo-top"><span>' + CUPOS_NOMBRE[b] + '</span><b>' + us + '/' + cap + (us > cap ? ' ⛔' : '') + '</b></div>'
+        html += '<div class="cupo-bar"><i style="width:' + pct + '%"></i></div>'
+        html += '<div class="cupo-libres">' + (libres.length ? 'Libre: ' + libres.join(' · ') : (us >= cap ? 'Completo' : 'Sin horas libres')) + '</div></div>'
+      })
+      html += '</div>'
+    })
+    html += '</div>'
+    panel.innerHTML = html
+    panel.style.display = Object.keys(dias).length ? '' : 'none'
+  }catch(e){ console.error('cupos:', e) }
+}
+
 function render(){
+  renderCupos()
   if(VISTA === 'dia') renderVistaDia()
   else if(VISTA === 'semana') renderVistaSemana()
   else if(VISTA === 'semana-sig') renderVistaSemanaSig()
@@ -1266,7 +1328,13 @@ async function guardar(){
   var r
   if(EDITANDO){r = await sbReq('PATCH', 'agenda?id=eq.' + EDITANDO, data)}
   else{data.origen = 'manual'; r = await sbReq('POST', 'agenda', data)}
-  if(r.ok){toast('✅ Guardado', 'ok'); cerrarModal(); setTimeout(cargar, 300)}
+  if(r.ok){
+    // La base marca la reserva si pasa la capacidad del día para su tipo de servicio
+    var filaG = null
+    try{ var jj = await r.json(); filaG = Array.isArray(jj) ? jj[0] : jj }catch(_e){}
+    if(filaG && filaG.sobrecupo){ alert('⛔ SOBRECUPO\n\n' + (filaG.sobrecupo_motivo || 'No había cupo para este servicio ese día') + '.\n\nQuedó guardado como excepción. Si no corresponde, cambia la fecha u hora.') }
+    toast('✅ Guardado', 'ok'); cerrarModal(); setTimeout(cargar, 300)
+  }
   else{var t = await r.text(); toast('❌ Error: ' + t.substring(0, 60), 'err')}
 }
 

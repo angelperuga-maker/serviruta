@@ -1332,8 +1332,8 @@ async function guardar(){
     // La base marca la reserva si pasa la capacidad del día para su tipo de servicio
     var filaG = null
     try{ var jj = await r.json(); filaG = Array.isArray(jj) ? jj[0] : jj }catch(_e){}
-    if(filaG && filaG.sobrecupo){ alert('⛔ SOBRECUPO\n\n' + (filaG.sobrecupo_motivo || 'No había cupo para este servicio ese día') + '.\n\nQuedó guardado como excepción. Si no corresponde, cambia la fecha u hora.') }
-    toast('✅ Guardado', 'ok'); cerrarModal(); setTimeout(cargar, 300)
+    // Sobrecupo siempre permitido: solo se informa, nunca se bloquea
+    toast(filaG && filaG.sobrecupo ? '✅ Guardado con sobrecupo (' + (filaG.sobrecupo_motivo || 'sin cupo') + ')' : '✅ Guardado', 'ok'); cerrarModal(); setTimeout(cargar, 300)
   }
   else{var t = await r.text(); toast('❌ Error: ' + t.substring(0, 60), 'err')}
 }

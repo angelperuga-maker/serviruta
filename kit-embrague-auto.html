@@ -347,30 +347,29 @@ var DATA={
 
 function calcularKits(modelo){
   if(!modelo)return []
-  // MO: 2 técnicos x horas x $25K/hora
-  // Para autos: 1 técnico + 1 ayudante (no se cobra como 2 senior)
-  // Tarifa real técnico líder $30K · ayudante $20K = $50K/hora combinado
-  // MARGEN: 50% para autos y SUV, 30% para camionetas
+  // v2 (24-11-2026) AJUSTE A PRECIO DE MERCADO: la versión anterior cobraba ~2x el mercado
+  // (MO $50K/hora + extras $80-355K + margen 30% sobre todo).
+  // MO: $18K por hora de trabajo (técnico + ayudante) · MARGEN: 15% sobre repuesto + MO + extras
   var horas=modelo.horas
   var tipo=modelo.tipo
-  var MARGEN = tipo==='camioneta' ? 1.3 : 1.3
+  var MARGEN = 1.15
   
-  var MO=horas*50000  // 2 personas x $25K promedio (técnico+ayudante)
+  var MO=horas*18000
   
-  // Extras según tipo
+  // Extras según nivel (aceite caja, retén, horquilla/bombín en los niveles altos)
   var EX_BASICO, EX_COMPLETO, EX_PLUS
   if(tipo==='auto'){
-    EX_BASICO=80000  // collarín + horquilla + aceite caja
-    EX_COMPLETO=120000  // + retén cigüeñal + sintético
-    EX_PLUS=210000  // + bombín + servo si aplica
+    EX_BASICO=15000
+    EX_COMPLETO=35000
+    EX_PLUS=70000
   }else if(tipo==='suv'){
-    EX_BASICO=100000
-    EX_COMPLETO=150000
-    EX_PLUS=265000
+    EX_BASICO=20000
+    EX_COMPLETO=45000
+    EX_PLUS=90000
   }else{ // camioneta
-    EX_BASICO=145000
-    EX_COMPLETO=205000
-    EX_PLUS=355000
+    EX_BASICO=25000
+    EX_COMPLETO=60000
+    EX_PLUS=120000
   }
 
   var DESCUENTO = modelo.topVentas ? 0.85 : 1.0  // 15% OFF en modelos top ventas

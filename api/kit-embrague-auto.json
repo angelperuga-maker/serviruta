@@ -1,5 +1,5 @@
 {
- "generado": "2026-11-16T17:22:25.063Z",
+ "generado": "2026-11-24T11:08:21.149Z",
  "cotizador": "embrague_auto",
  "fuente": "https://angelperuga-maker.github.io/serviruta/kit-embrague-auto.html",
  "moneda": "CLP",
@@ -21,7 +21,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 392000,
+     "precio": 158000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -39,7 +39,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 475000,
+     "precio": 212000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -59,7 +59,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 624000,
+     "precio": 290000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -95,7 +95,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 507000,
+     "precio": 208000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -113,7 +113,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 611000,
+     "precio": 277000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -133,7 +133,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 793000,
+     "precio": 375000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -169,7 +169,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 670000,
+     "precio": 298000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -187,7 +187,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 806000,
+     "precio": 390000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -207,7 +207,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 1047000,
+     "precio": 522000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -244,7 +244,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 757000,
+     "precio": 365000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -262,7 +262,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 912000,
+     "precio": 477000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -282,7 +282,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 1188000,
+     "precio": 633000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -318,7 +318,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 975000,
+     "precio": 485000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -336,7 +336,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 1183000,
+     "precio": 641000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -356,7 +356,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 1528000,
+     "precio": 842000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -392,7 +392,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 936000,
+     "precio": 497000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -410,7 +410,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 1131000,
+     "precio": 641000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -430,7 +430,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 1443000,
+     "precio": 836000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -467,7 +467,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 387000,
+     "precio": 153000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -485,7 +485,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 464000,
+     "precio": 202000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -505,7 +505,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 613000,
+     "precio": 281000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -541,7 +541,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 449000,
+     "precio": 175000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -559,7 +559,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 536000,
+     "precio": 229000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -579,7 +579,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 709000,
+     "precio": 319000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -615,7 +615,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 458000,
+     "precio": 183000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -633,7 +633,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 553000,
+     "precio": 244000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -653,7 +653,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 728000,
+     "precio": 336000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -689,7 +689,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 605000,
+     "precio": 259000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -707,7 +707,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 735000,
+     "precio": 345000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -727,7 +727,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 969000,
+     "precio": 471000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -764,7 +764,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 569000,
+     "precio": 253000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -782,7 +782,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 685000,
+     "precio": 331000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -802,7 +802,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 884000,
+     "precio": 439000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -838,7 +838,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 780000,
+     "precio": 350000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -856,7 +856,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 943000,
+     "precio": 465000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -876,7 +876,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 1242000,
+     "precio": 626000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -912,7 +912,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 748000,
+     "precio": 348000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -930,7 +930,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 904000,
+     "precio": 458000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -950,7 +950,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 1157000,
+     "precio": 601000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -987,7 +987,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 376000,
+     "precio": 144000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -1005,7 +1005,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 451000,
+     "precio": 191000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -1025,7 +1025,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 597000,
+     "precio": 266000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -1061,7 +1061,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 458000,
+     "precio": 183000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -1079,7 +1079,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 553000,
+     "precio": 244000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -1099,7 +1099,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 728000,
+     "precio": 336000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -1135,7 +1135,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 592000,
+     "precio": 247000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -1153,7 +1153,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 715000,
+     "precio": 328000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -1173,7 +1173,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 943000,
+     "precio": 448000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -1209,7 +1209,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 676000,
+     "precio": 304000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -1227,7 +1227,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 813000,
+     "precio": 396000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -1247,7 +1247,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 1053000,
+     "precio": 528000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -1283,7 +1283,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 761000,
+     "precio": 360000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -1301,7 +1301,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 910000,
+     "precio": 463000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -1321,7 +1321,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 1170000,
+     "precio": 613000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -1357,7 +1357,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 514000,
+     "precio": 214000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -1375,7 +1375,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 618000,
+     "precio": 283000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -1395,7 +1395,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 800000,
+     "precio": 381000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -1431,7 +1431,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 774000,
+     "precio": 344000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -1449,7 +1449,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 936000,
+     "precio": 459000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -1469,7 +1469,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 1235000,
+     "precio": 620000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -1506,7 +1506,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 378000,
+     "precio": 146000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -1524,7 +1524,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 453000,
+     "precio": 193000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -1544,7 +1544,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 597000,
+     "precio": 266000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -1581,7 +1581,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 396000,
+     "precio": 161000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -1599,7 +1599,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 481000,
+     "precio": 217000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -1619,7 +1619,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 630000,
+     "precio": 295000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -1655,7 +1655,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 507000,
+     "precio": 208000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -1673,7 +1673,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 611000,
+     "precio": 277000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -1693,7 +1693,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 793000,
+     "precio": 375000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -1729,7 +1729,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 598000,
+     "precio": 253000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -1747,7 +1747,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 722000,
+     "precio": 334000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -1767,7 +1767,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 956000,
+     "precio": 460000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -1803,7 +1803,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 520000,
+     "precio": 220000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -1821,7 +1821,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 631000,
+     "precio": 294000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -1841,7 +1841,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 819000,
+     "precio": 398000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -1877,7 +1877,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 735000,
+     "precio": 337000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -1895,7 +1895,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 878000,
+     "precio": 435000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -1915,7 +1915,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 1125000,
+     "precio": 573000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -1951,7 +1951,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 871000,
+     "precio": 412000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -1969,7 +1969,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 1053000,
+     "precio": 544000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -1989,7 +1989,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 1372000,
+     "precio": 722000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -2025,7 +2025,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 943000,
+     "precio": 457000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -2043,7 +2043,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 1131000,
+     "precio": 595000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -2063,7 +2063,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 1463000,
+     "precio": 784000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -2099,7 +2099,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 452000,
+     "precio": 178000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -2117,7 +2117,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 543000,
+     "precio": 236000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -2137,7 +2137,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 715000,
+     "precio": 324000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -2173,7 +2173,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 465000,
+     "precio": 190000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -2191,7 +2191,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 562000,
+     "precio": 252000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -2211,7 +2211,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 741000,
+     "precio": 347000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -2247,7 +2247,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 605000,
+     "precio": 259000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -2265,7 +2265,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 728000,
+     "precio": 339000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -2285,7 +2285,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 956000,
+     "precio": 460000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -2321,7 +2321,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 663000,
+     "precio": 292000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -2339,7 +2339,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 800000,
+     "precio": 384000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -2359,7 +2359,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 1040000,
+     "precio": 516000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -2395,7 +2395,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 741000,
+     "precio": 343000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -2413,7 +2413,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 891000,
+     "precio": 446000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -2433,7 +2433,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 1144000,
+     "precio": 590000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -2469,7 +2469,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 520000,
+     "precio": 220000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -2487,7 +2487,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 624000,
+     "precio": 289000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -2507,7 +2507,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 813000,
+     "precio": 392000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -2543,7 +2543,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 956000,
+     "precio": 468000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -2561,7 +2561,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 1151000,
+     "precio": 612000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -2581,7 +2581,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 1489000,
+     "precio": 807000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -2617,7 +2617,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 858000,
+     "precio": 400000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -2635,7 +2635,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 1040000,
+     "precio": 532000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -2655,7 +2655,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 1359000,
+     "precio": 711000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -2692,7 +2692,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 343000,
+     "precio": 130000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -2710,7 +2710,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 414000,
+     "precio": 174000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -2730,7 +2730,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 556000,
+     "precio": 245000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -2766,7 +2766,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 442000,
+     "precio": 169000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -2784,7 +2784,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 530000,
+     "precio": 224000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -2804,7 +2804,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 696000,
+     "precio": 307000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -2841,7 +2841,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 387000,
+     "precio": 153000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -2859,7 +2859,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 466000,
+     "precio": 204000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -2879,7 +2879,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 613000,
+     "precio": 281000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -2915,7 +2915,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 462000,
+     "precio": 186000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -2933,7 +2933,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 556000,
+     "precio": 247000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -2953,7 +2953,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 735000,
+     "precio": 342000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -2989,7 +2989,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 605000,
+     "precio": 259000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -3007,7 +3007,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 728000,
+     "precio": 339000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -3027,7 +3027,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 962000,
+     "precio": 466000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -3063,7 +3063,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 611000,
+     "precio": 265000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -3081,7 +3081,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 741000,
+     "precio": 351000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -3101,7 +3101,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 975000,
+     "precio": 477000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -3137,7 +3137,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 663000,
+     "precio": 292000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -3155,7 +3155,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 793000,
+     "precio": 378000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -3175,7 +3175,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 1034000,
+     "precio": 511000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -3211,7 +3211,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 465000,
+     "precio": 190000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -3229,7 +3229,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 566000,
+     "precio": 255000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -3249,7 +3249,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 748000,
+     "precio": 353000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -3285,7 +3285,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 520000,
+     "precio": 220000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -3303,7 +3303,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 631000,
+     "precio": 294000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -3323,7 +3323,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 819000,
+     "precio": 398000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -3359,7 +3359,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 605000,
+     "precio": 259000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -3377,7 +3377,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 735000,
+     "precio": 345000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -3397,7 +3397,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 969000,
+     "precio": 471000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -3433,7 +3433,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 689000,
+     "precio": 315000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -3451,7 +3451,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 832000,
+     "precio": 413000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -3471,7 +3471,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 1079000,
+     "precio": 551000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -3507,7 +3507,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 995000,
+     "precio": 503000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -3525,7 +3525,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 1203000,
+     "precio": 658000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -3545,7 +3545,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 1560000,
+     "precio": 871000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -3581,7 +3581,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 445000,
+     "precio": 171000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -3599,7 +3599,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 533000,
+     "precio": 227000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -3619,7 +3619,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 702000,
+     "precio": 313000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -3655,7 +3655,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 611000,
+     "precio": 265000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -3673,7 +3673,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 741000,
+     "precio": 351000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -3693,7 +3693,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 975000,
+     "precio": 477000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -3729,7 +3729,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 689000,
+     "precio": 315000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -3747,7 +3747,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 832000,
+     "precio": 413000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -3767,7 +3767,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 1079000,
+     "precio": 551000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -3804,7 +3804,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 812000,
+     "precio": 398000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -3822,7 +3822,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 978000,
+     "precio": 520000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -3842,7 +3842,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 1265000,
+     "precio": 686000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -3878,7 +3878,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 910000,
+     "precio": 474000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -3896,7 +3896,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 1099000,
+     "precio": 612000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -3916,7 +3916,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 1398000,
+     "precio": 796000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -3952,7 +3952,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 462000,
+     "precio": 186000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -3970,7 +3970,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 556000,
+     "precio": 247000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -3990,7 +3990,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 735000,
+     "precio": 342000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -4026,7 +4026,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 507000,
+     "precio": 208000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -4044,7 +4044,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 611000,
+     "precio": 277000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -4064,7 +4064,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 793000,
+     "precio": 375000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -4100,7 +4100,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 514000,
+     "precio": 214000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -4118,7 +4118,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 618000,
+     "precio": 283000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -4138,7 +4138,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 800000,
+     "precio": 381000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -4174,7 +4174,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 624000,
+     "precio": 276000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -4192,7 +4192,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 761000,
+     "precio": 368000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -4212,7 +4212,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 1001000,
+     "precio": 500000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -4248,7 +4248,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 715000,
+     "precio": 338000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -4266,7 +4266,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 865000,
+     "precio": 442000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -4286,7 +4286,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 1125000,
+     "precio": 591000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -4322,7 +4322,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 982000,
+     "precio": 491000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -4340,7 +4340,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 1190000,
+     "precio": 646000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -4360,7 +4360,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 1541000,
+     "precio": 853000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -4396,7 +4396,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 462000,
+     "precio": 186000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -4414,7 +4414,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 556000,
+     "precio": 247000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -4434,7 +4434,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 735000,
+     "precio": 342000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -4470,7 +4470,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 514000,
+     "precio": 214000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -4488,7 +4488,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 618000,
+     "precio": 283000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -4508,7 +4508,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 800000,
+     "precio": 381000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -4544,7 +4544,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 605000,
+     "precio": 259000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -4562,7 +4562,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 735000,
+     "precio": 345000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -4582,7 +4582,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 969000,
+     "precio": 471000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -4618,7 +4618,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 689000,
+     "precio": 315000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -4636,7 +4636,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 832000,
+     "precio": 413000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -4656,7 +4656,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 1079000,
+     "precio": 551000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -4692,7 +4692,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 930000,
+     "precio": 445000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -4710,7 +4710,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 1118000,
+     "precio": 583000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -4730,7 +4730,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 1450000,
+     "precio": 773000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -4766,7 +4766,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 995000,
+     "precio": 503000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -4784,7 +4784,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 1203000,
+     "precio": 658000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -4804,7 +4804,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 1560000,
+     "precio": 871000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -4840,7 +4840,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 507000,
+     "precio": 208000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -4858,7 +4858,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 611000,
+     "precio": 277000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -4878,7 +4878,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 793000,
+     "precio": 375000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -4914,7 +4914,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 605000,
+     "precio": 259000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -4932,7 +4932,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 735000,
+     "precio": 345000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -4952,7 +4952,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 969000,
+     "precio": 471000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -4988,7 +4988,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 520000,
+     "precio": 220000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -5006,7 +5006,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 631000,
+     "precio": 294000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -5026,7 +5026,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 819000,
+     "precio": 398000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -5062,7 +5062,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 689000,
+     "precio": 315000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -5080,7 +5080,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 832000,
+     "precio": 413000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -5100,7 +5100,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 1079000,
+     "precio": 551000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -5136,7 +5136,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 689000,
+     "precio": 288000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -5154,7 +5154,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 832000,
+     "precio": 385000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -5174,7 +5174,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 1118000,
+     "precio": 535000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -5210,7 +5210,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 449000,
+     "precio": 175000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -5228,7 +5228,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 540000,
+     "precio": 232000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -5248,7 +5248,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 709000,
+     "precio": 319000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -5284,7 +5284,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 462000,
+     "precio": 186000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -5302,7 +5302,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 556000,
+     "precio": 247000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -5322,7 +5322,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 735000,
+     "precio": 342000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -5358,7 +5358,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 657000,
+     "precio": 286000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -5376,7 +5376,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 787000,
+     "precio": 373000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -5396,7 +5396,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 1027000,
+     "precio": 505000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -5432,7 +5432,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 774000,
+     "precio": 344000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -5450,7 +5450,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 936000,
+     "precio": 459000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -5470,7 +5470,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 1235000,
+     "precio": 620000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -5506,7 +5506,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 663000,
+     "precio": 265000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -5524,7 +5524,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 806000,
+     "precio": 362000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -5544,7 +5544,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 1079000,
+     "precio": 500000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -5580,7 +5580,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 468000,
+     "precio": 192000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -5598,7 +5598,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 569000,
+     "precio": 259000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -5618,7 +5618,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 748000,
+     "precio": 353000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -5654,7 +5654,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 533000,
+     "precio": 231000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -5672,7 +5672,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 644000,
+     "precio": 306000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -5692,7 +5692,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 839000,
+     "precio": 415000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -5728,7 +5728,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 618000,
+     "precio": 270000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -5746,7 +5746,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 748000,
+     "precio": 357000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -5766,7 +5766,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 988000,
+     "precio": 489000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
@@ -5802,7 +5802,7 @@
     {
      "tipo": "basico",
      "nombre": "Kit Estándar",
-     "precio": 689000,
+     "precio": 315000,
      "desc": "Kit estándar para uso urbano regular",
      "cambio": null,
      "destacado": false,
@@ -5820,7 +5820,7 @@
     {
      "tipo": "premium",
      "nombre": "Kit Original",
-     "precio": 832000,
+     "precio": 413000,
      "desc": "El más solicitado · Calidad fabricante original",
      "cambio": null,
      "destacado": true,
@@ -5840,7 +5840,7 @@
     {
      "tipo": "plus",
      "nombre": "Kit Premium",
-     "precio": 1079000,
+     "precio": 551000,
      "desc": "Calidad premium · Máxima durabilidad",
      "cambio": null,
      "destacado": false,
